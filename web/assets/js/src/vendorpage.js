@@ -481,46 +481,46 @@ $(function(){
     })
 })(jQuery);
 
-/********************	PAGING FUNCTIONS	************************************************/
-
-$(document).ready(function(){
-	$('#op_buyer .paging:not(:first)').hide();
-	$('#op_seller .paging:not(:first)').hide();
-	$('#yp_buyer .paging:not(:first)').hide();
-	$('#yp_seller .paging:not(:first)').hide();
-	
-	$('#pagination-opbuyer').jqPagination({
-		paged: function(page) {
-			$('#op_buyer .paging').hide();
-			$($('#op_buyer .paging')[page-1]).show();
-		}
-	});
-	$('#pagination-opseller').jqPagination({
-		paged: function(page) {
-			$('#op_seller .paging').hide();
-			$($('#op_seller .paging')[page-1]).show();
-		}
-	});
-	$('#pagination-ypbuyer').jqPagination({
-		paged: function(page) {
-			$('#yp_buyer .paging').hide();
-			$($('#yp_buyer .paging')[page-1]).show();
-		}
-	});
-	$('#pagination-ypseller').jqPagination({
-		paged: function(page) {
-			$('#yp_seller .paging').hide();
-			$($('#yp_seller .paging')[page-1]).show();
-		}
-	});
-	
-});
-
-function triggerTab(x){
-	$('.idTabs a[href="#'+x+'"]').trigger('click');
-}
 
 (function ($) {
+
+    /********************   PAGING FUNCTIONS    ************************************************/
+    $(document).ready(function(){
+        $('#op_buyer .paging:not(:first)').hide();
+        $('#op_seller .paging:not(:first)').hide();
+        $('#yp_buyer .paging:not(:first)').hide();
+        $('#yp_seller .paging:not(:first)').hide();
+    
+        $('#pagination-opbuyer').jqPagination({
+            paged: function(page) {
+                $('#op_buyer .paging').hide();
+                $($('#op_buyer .paging')[page-1]).show();
+            }
+        });
+        $('#pagination-opseller').jqPagination({
+            paged: function(page) {
+                $('#op_seller .paging').hide();
+                $($('#op_seller .paging')[page-1]).show();
+            }
+        });
+        $('#pagination-ypbuyer').jqPagination({
+            paged: function(page) {
+                $('#yp_buyer .paging').hide();
+                $($('#yp_buyer .paging')[page-1]).show();
+            }
+        });
+        $('#pagination-ypseller').jqPagination({
+            paged: function(page) {
+                $('#yp_seller .paging').hide();
+                $($('#yp_seller .paging')[page-1]).show();
+            }
+        });
+    
+    });
+
+    function triggerTab(x){
+        $('.idTabs a[href="#'+x+'"]').trigger('click');
+    }
 
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
@@ -597,52 +597,53 @@ function triggerTab(x){
         $stick_cart_item.show();
     });
     
-})(jQuery);
 
-
-
-     $(document.body).on('click','.icon-grid',function() {
-            var view = $("div.view").attr("class");
+    $(document.body).on('click','.icon-grid',function() {
         
-            if(view == "view row row-items list")
-            {
-                $('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
-                $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
-                $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
-                $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
-            }
+        var view = $("div.view").attr("class");
+        
+        if(view == "view row row-items list")
+        {
+            $('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
+            $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
+        }
             
-            
-        });
+    });
+
     $(document).on('click','.icon-list',function() {    
             
-            var view = $("div.view").attr("class");
-            if(view == "view row row-items grid")
-            {
-                
-                $('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
-                $('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
-                $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
-                $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
-            };
+        var view = $("div.view").attr("class");
+
+        if(view == "view row row-items grid")
+        {            
+            $('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
+            $('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
+        };
     });
     
     
     
     var $window = $(window),
-       $stickyLeft = $('#the-sticky-div'),
-       leftTop = $stickyLeft.offset().top;
+    $stickyLeft = $('#the-sticky-div'),
+    leftTop = $stickyLeft.offset().top;
 
-       $window.scroll(function() {
-            $stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
-        });
+    $window.scroll(function() {
+        $stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
+    });
 
-/***** create wishlist modal *****/
+    /***** create wishlist modal *****/
 
-$(document).ready(function(){
-	 $('.wishlist_create').click(function (e) {
-		$("#create_wishlist").modal({position: ["25%","35%"]});
-		$('#create_wishlist').parent().removeAttr('style');
-		});
+    $(document).ready(function(){
 
-});
+    	$('.wishlist_create').click(function (e) {
+    		$("#create_wishlist").modal({position: ["25%","35%"]});
+    		$('#create_wishlist').parent().removeAttr('style');
+    	});
+
+    });
+
+})(jQuery);
