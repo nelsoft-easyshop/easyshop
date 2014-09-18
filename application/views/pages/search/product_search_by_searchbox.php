@@ -12,10 +12,7 @@
                 <div class="col-md-12">
                     <section class="top_margin product-page-section display-when-desktop">
                         <div class="wrapper">
-                            <div class="prod_categories">
-                                <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
-                                <?php echo $category_navigation; ?> 
-                            </div>
+                            <?php echo $category_navigation_desktop; ?>  
                             <div class="prob_cat_nav">
                                 <div class="category_nav product_content">
                                     <ul>
@@ -152,27 +149,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel-group " id="categories">
-                      <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                                Categories
-                                <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                        <li class="list-category"><a href="<?=base_url().'category/'.$value->getSlug(); ?>"><?=$value->getName();?></a></li> 
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                      </div>
-                    </div> 
+                    <?=$category_navigation_mobile;?>
                 </div>
             </div>
 
@@ -311,7 +288,8 @@
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
-</div>
+    <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
+</div> 
 
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

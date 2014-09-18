@@ -1683,19 +1683,26 @@
 
 <!-- Used by transaction response when password is not yet set-->
 <div id="tx_dialog" style="display:none;" title="Password Authentication">
-    <p>Continue submitting request?</p>
-    <p class="forward msg">Make sure you've received your order and is in good quality!</p>
-    <p class="return msg">When canceled you won't receive any payment for this product!</p>
-    <p class="cod msg">This transaction will be marked as completed!</p>
     
+    <p>Are you sure about submitting this request?</p>
+
     <div id="tx_dialog_pass_cont">
+     
         <label for="tx_password">Enter your password:</label>
         <input type="password" id="tx_password" name="tx_password">
         <span class="error red"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
     </div>
+    
+    <br/>
+    <div style='border-bottom: 1px solid #eee;'></div>
+
+    <p class="forward msg">Please, make sure you've received your order in good quality.</p>
+    <p class="return msg">When canceled you won't receive any payment for this product.</p>
+    <p class="cod msg">This transaction will be marked as completed.</p>
+    
     <div id="tx_dialog_loadingimg" style="text-align:center;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     <br/>
 </div>
@@ -2806,10 +2813,15 @@
                         $('#search_content').hide();
            
                     });
+
+                    $(document).ready(function() { 
+                        var shipping_comment_container= $('.shipping_comment_cont');
+                        $(shipping_comment_container).parents('#simplemodal-container').css('width','506px');
+                    });
                     
                     
 
-                    </script>
+</script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
