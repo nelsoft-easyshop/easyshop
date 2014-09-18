@@ -301,6 +301,7 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());                
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/about');
         $this->load->view('templates/footer');
 	}
 
