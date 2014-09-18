@@ -156,9 +156,12 @@ class cart extends MY_Controller
                 $formattedRelatedItem = array();
                 foreach($relatedItems as $relatedItem){
                     
+                    $defaultImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                         ->getDefaultImage($relatedItem->getIdProduct());
+                    
                     array_push($formattedRelatedItem, array('product' => $relatedItem->getName(),
                                                     'slug' => $relatedItem->getSlug(),
-                                                    'product_image_path' => '',
+                                                    'product_image_path' => $defaultImage->getProductImagePath(),
                                                     'price' => $relatedItem->getFinalPrice(),
                                                     'end_promo' => $relatedItem->getEndPromo(),
                                                     'original_price' => $relatedItem->getOriginalPrice(),
@@ -166,9 +169,7 @@ class cart extends MY_Controller
                                                     'percentage' => $relatedItem->getDiscountPercentage(),
                                                     ));
                 }
-                print_r($formattedRelatedItem);
-                exit();
-                    
+                
                 $images = array();
                 foreach($product->getImages() as $image){
                     $images[$image->getIdProductImage()] = $image->getProductImagePath();
@@ -187,17 +188,11 @@ class cart extends MY_Controller
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],
                     'sellerDetails' => $sellerDetails,
-                    'images' => $images
+                    'images' => $images,
+                    'relatedItems' => $formattedRelatedItem,
                 ];
                 
-
-                $formattedCartContents = array_merge($formattedCartContents, 
-                                                     [$rowId => $formattedCartItem]
-                                        );
-                                        
-                                        
-                                        
-              
+                $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
             }
         }
         
