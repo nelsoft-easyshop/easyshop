@@ -36,19 +36,22 @@
     <div class="vendor-sticky-nav">
         <div class="main-container">
             <ul class="vendor-nav">
+                <?php
+                    $url_id = $this->uri->segment(2, 0);
+                ?>
                 <li>
-                    <a href="" class="vendor-nav-active">
-                        <img src="<?=base_url()?>assets/images/img-sticky-nav-home-active.jpg" alt="Store">
+                    <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
+                        <img src="<?=base_url()?>assets/images/<?php if($url_id=="0"){ echo "img-sticky-nav-home-active"; }else{ echo "img-sticky-nav-home";}?>.jpg" alt="Store">
                     </a>
                 </li>
                 <li>
                     <a href="">Promo Page</a>
                 </li>
-                <li>
-                    <a href="">Seller Information</a>
+                <li >
+                    <a href="" class="<?php if($url_id=="about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
                 </li>
                 <li>
-                    <a href="">Contact</a>
+                    <a href="" class="<?php if($url_id=="contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
                 </li>
             </ul>
             <ul class="sticky-nav">
@@ -89,7 +92,6 @@
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
-
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
@@ -104,44 +106,33 @@
                     }, 500);
                     
                 }
-
                 $('.vendor-content-wrapper').addClass('fixed-vendor-content');
-
             } 
         else 
             {
                 $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
                 $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
             }
-
     });
-
     var $edit_profile_photo = $(".edit-profile-photo");
     var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
 
     $(document).mouseup(function (e) {
-
         if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
             && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
         {
            $edit_profile_photo_menu.hide(1);
         }
-
     });
-
     $edit_profile_photo.click(function() {
         $edit_profile_photo_menu.show();
     });
-
-    
 })(jQuery);
-	
-	var $window = $(window),
+    var $window = $(window),
        $stickyLeft = $('#the-sticky-div'),
        leftTop = $stickyLeft.offset().top;
 
-	   $window.scroll(function() {
-			$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
-		});
-	
+       $window.scroll(function() {
+            $stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
+        });
 </script>
