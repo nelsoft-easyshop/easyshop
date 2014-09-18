@@ -22,6 +22,26 @@ class product extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager']; 
     }
 
+    public function loadMoreProductInCategory($categorySlug)
+    {
+        // Loading Services
+        $searchProductService = $this->serviceContainer['search_product'];
+
+        // Loading Repositories
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
+        // Getting category details by slug
+        $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
+        $categoryId = $categoryDetails->getIdCat(); 
+        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+        $response['products'] = $searchProductService->getProductBySearch($getParameter);
+
+        $response['typeOfView'] = trim($this->input->get('typeview'));
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['count'] = count($response['products']);
+        echo json_encode($data);
+    }
 
     /**     
      *  Displays products in each category
@@ -30,90 +50,40 @@ class product extends MY_Controller
      */
     public function categoryPage($categorySlug)
     {
-
-        $searchProductService = $this->serviceContainer['search_product']; 
-        $productManager = $this->serviceContainer['product_manager']; 
-        $categoryManager = $this->serviceContainer['category_manager']; 
-        $collectionHelper = $this->serviceContainer['collection_helper'];
+        $searchProductService = $this->serviceContainer['search_product'];
+        $categoryManager = $this->serviceContainer['category_manager'];
         
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
-
-        $brand = trim($this->input->get('brand'));
-        $page = ($this->input->get('page')) ? trim($this->input->get('page')) : 0;
-        $startPrice = trim($this->input->get('startprice'));
-        $endPrice = trim($this->input->get('endprice'));
-        $memberId = $this->session->userdata('member_id');
-        $productListing = array();
-        $subCategoryList = array();
-        $breadcrumbs = array();
 
         if($categoryDetails){
             $categoryName = $categoryDetails->getName(); 
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $categoryList = $EsCatRepository->getChildCategoryRecursive($categoryId);
-            $productIds = $searchProductService->filterByCategory($categoryList,array(),FALSE);
-            $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
-            $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);  
-            
-            $filteredProducts = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProducts = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array();
-
-            $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProducts) : $discountedProducts;
-          
-            if($page){
-                $response['typeview'] = trim($this->input->get('typeview'));
-                $data['view'] = $this->load->view('pages/product/product_search_by_category2_final',$response,TRUE);
-                $data['count'] = count($response['products']);
-                die(json_encode($data));
-            }
-
+            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
 
-            foreach ($subCategory as $key => $value) { 
-                $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
-         
-                $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
-                $popularProduct = $EsProductRepository->getDetails($popularProductId,0,1);
-                $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
-                $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
-            }
-  
-            $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                        ->getParentCategoryRecursive($categoryId);
+            $subCategoryList = $searchProductService->getPopularProductOfCategory($subCategory);
 
-            $finalizedProductId = array();
-            $availableCondition = array();
-            foreach ($response['products'] as $key => $value) {
-                array_push($finalizedProductId, $value->getProduct()->getIdProduct());
-                array_push($availableCondition, $value->getProduct()->getCondition());
-            }
+            // get all product available
+            $response['products'] = $searchProductService->getProductBySearch($getParameter);
+            
+            // get all attributes to by products
+            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
-            $organizedAttribute = array();
-            if(count($finalizedProductId)>0){
-                $brands = $EsProductRepository->getBrands($finalizedProductId);
-                $attributes = $EsProductRepository->getAttributes($finalizedProductId);
-                $brands = $EsProductRepository->getBrands($finalizedProductId);
-                $organizedAttribute = $collectionHelper->organizeArray($attributes);
-                $organizedAttribute['Brand'] = $brands;
-                $organizedAttribute['Condition'] = array_unique($availableCondition);
-                ksort($organizedAttribute);
-            }
-
-            $response['attributes'] = $organizedAttribute;
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                 ->findBy(['parent' => 1]);
-
-            $response['parentCategory'] = $parentCategory;
+ 
             $response['subCategoryList'] = $subCategoryList;
-            $response['breadcrumbs'] = $breadcrumbs; 
             $response['categorySlug'] = $categorySlug;
             $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
             $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+            $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                        ->getParentCategoryRecursive($categoryId);
 
             $data = array( 
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),

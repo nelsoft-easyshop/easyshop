@@ -691,7 +691,11 @@ class Memberpage extends MY_Controller
                 'transact_num' => $this->input->post('transact_num'),
                 'courier' => $this->input->post('courier'),
                 'tracking_num' => $this->input->post('tracking_num'),
+<<<<<<< HEAD
                 'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
+=======
+                'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
+>>>>>>> dev
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
 

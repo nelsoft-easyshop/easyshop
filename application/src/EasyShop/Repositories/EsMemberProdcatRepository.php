@@ -40,4 +40,26 @@ class EsMemberProdcatRepository extends EntityRepository
 
         return $product;
     }
+
+    public function countCustomCategoryProduct($memberId, $memcatId)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT COUNT(pc.idMemprod)
+            FROM EasyShop\Entities\EsMemberProdcat pc
+            JOIN pc.memcat mc
+            JOIN mc.member m
+            JOIN pc.product p
+            WHERE mc.idMemcat = :memcat_id
+                AND m.idMember = :member_id
+                AND p.isDelete = 0
+                AND p.isDraft = 0
+        ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter("member_id", $memberId)
+                    ->setParameter("memcat_id", $memcatId);
+
+        return $query->getSingleScalarResult();
+    }
 }

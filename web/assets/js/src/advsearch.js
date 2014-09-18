@@ -192,12 +192,12 @@
                 else{
                     currentUrl = currentUrl +'&'+head+'='+ newValue;
                 }
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
             }
             else{
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
                 else{
@@ -259,23 +259,29 @@
 
 
      // START OF INFINITE SCROLLING FUNCTION 
-    var offset = 1;
-    var request_ajax = true;
-    var ajax_is_on = false;
+    
+    var currentUrl = $('#hidden-currentUrl').val();
+    var typeView = $('#hidden-typeView').val(); 
+    var emptySearch = $('#hidden-emptySearch').val();
+    var loadUrl = $('#hidden-loadUrl').val();
+
+    var offset = 1; 
+    var canRequestAjax = true;
+    var isEmptySearch = emptySearch != "" ? false : true;
     var objHeight=$(window).height()-50;
-    var last_scroll_top = 0;
+    var lastScroll = 0;
  
     var type = 1;
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
     $(window).scroll(function(event) {
         var st = $(this).scrollTop();
-        if(st > last_scroll_top){
+        if(st > lastScroll){
             if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
-                if (request_ajax === true && ajax_is_on === false) {
-                    ajax_is_on = true;
+                if (canRequestAjax === true && isEmptySearch === false) {
+                    isEmptySearch = true;
                     $.ajax({
-                        url: currentUrl+'&typeview='+typeView+'&page='+offset,
+                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get',
                         async: false,
                         dataType: 'json',
@@ -285,7 +291,7 @@
                                 $('#product_content').append(response.view);
                                 $('#move-product').detach().appendTo('#paste-product');
                                 offset++;
-                                ajax_is_on = false;
+                                isEmptySearch = false;
                             }
 
                            $(".loading_products").fadeOut();
@@ -294,10 +300,19 @@
                 }
             }
         }
-        last_scroll_top = st;
+        lastScroll = st;
     });
     // END OF INFINITE SCROLLING FUNCTION
-    // 
+
+    $("#accordion").on('click','.a-accordion-header',function() {
+        var attr = $("i.glyphicon").attr("class");
+        if(attr == "glyphicon glyphicon-chevron-down pull-right"){
+            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+        }else if(attr == "glyphicon glyphicon-chevron-up pull-right"){
+            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+        }
+    });
+
     $(function () {
         $.scrollUp({
                     scrollName: 'scrollUp', // Element ID

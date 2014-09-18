@@ -9,6 +9,8 @@ use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductShippingHead; 
 
+use Easyshop\Entities\EsProductItem;
+
 use EasyShop\Entities\EsMemberProdcat;
 
 use Doctrine\Common\Collections\Criteria;
@@ -178,12 +180,12 @@ class ProductManager
     
     
     /**
-     * Applies discount to a product
+     * Apply discounted price to product
      * This has been refactored with hydrate promo data
      * @param  array  $products [description]
-     * @return [type]           [description]
+     * @return mixed
      */
-    public function getDiscountedPrice($memberId,$products = array())
+    public function discountProducts($products)
     { 
         foreach ($products as $key => $value) { 
             $productObject = $value->getProduct();
@@ -195,7 +197,7 @@ class ProductManager
 
     /**
      * function that will get all possible keyword tied on selected product
-     * @return [type] [description]
+     * @return boolean
      */
     public function generateSearchKeywords($productId)
     {
@@ -210,7 +212,7 @@ class ProductManager
                                             ->getParentCategoryRecursive($category);
 
         $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributes($productId);
+                                            ->getAttributesByProductIds($productId);
 
         $organizedAttributes = $this->collectionHelper->organizeArray($attributes);
 
@@ -337,6 +339,46 @@ class ProductManager
         }
 
         return $vendorCategories;
+    }
+
+    /**
+     * Updates quantity of a particular product
+     * @return bool True on successful update
+     */
+    public function deductProductQuantity($productId,$itemId,$qty)
+    {
+
+        $item = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                            ->findOneBy(['product' => $productId,'idProductItem' => $itemId]);
+
+        $item->setQuantity($item->getQuantity() - $qty);
+        $this->em->flush();
+        return true;
+    }
+
+    /**
+     * Updates soldout status of a particular product
+     * @return bool True on successful update
+     */
+    public function updateSoldoutStatus($productId)
+    {
+
+        $quantity = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                ->createQueryBuilder('p')
+                                ->select("SUM(p.quantity) AS soldout")
+                                ->where('p.product = :productId')
+                                ->setParameter('productId',$productId)
+                                ->getQuery()
+                                ->getOneOrNullResult();
+
+        $item = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->find($productId);
+
+        $isSoldOut = intval($quantity['soldout']) <= 0 ? true : false;
+
+        $item->setIsSoldOut($isSoldOut);
+        $this->em->flush();
+        return true;
     }
 
 }

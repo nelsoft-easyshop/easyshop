@@ -100,6 +100,26 @@ class Kernel
         $container['user_manager'] = function ($c) use ($container) {
             return new \EasyShop\User\UserManager($container['entity_manager']);
         };
+        
+        //Account Manager
+        $container['account_manager'] = function ($c) use ($container) {
+            $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            $stringHelper = $container['string_utility'];
+            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
+                                                        $userManager, 
+                                                        $formFactory, 
+                                                        $formValidation, 
+                                                        $formErrorHelper,
+                                                        $stringHelper);        
+        };
+        
+        
+        
 
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';
@@ -184,7 +204,17 @@ class Kernel
 
         // Search product
         $container['search_product'] = function ($c) use($container) {
-            return new \EasyShop\Search\SearchProduct($container['entity_manager']);
+            $em = $container['entity_manager'];
+            $collectionHelper = $container['collection_helper'];
+            $productManager = $container['product_manager'];
+            $categoryManager = $container['category_manager'];
+
+            return new \EasyShop\Search\SearchProduct(
+                                                        $em
+                                                        ,$collectionHelper
+                                                        ,$productManager
+                                                        ,$categoryManager
+                                                    );
         };
 
         //Promo Manager
@@ -242,6 +272,21 @@ class Kernel
                 $container['entity_manager'],
                 $container['http_request']
                 );
+        };
+        
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+        };
+        
+        // Form Helper
+        $container['form_error_helper'] = function ($c) {
+            return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
+        };
+
+
+        // String Utility
+        $container['string_utility'] = function($c) {
+            return new EasyShop\Utility\StringUtility();
         };
 
         /* Register services END */
