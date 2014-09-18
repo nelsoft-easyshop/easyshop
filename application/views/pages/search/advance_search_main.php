@@ -18,7 +18,7 @@
             <ul>
                 <?php foreach ($subCategory as $key => $value):?>
                     <li style="border:0px">
-                        <a class="cbx" data-head="q_cat" data-value="<?=$value->getIdCat()?>" >
+                        <a class="cbx" data-head="category" data-value="<?=$value->getIdCat()?>" >
                             <input type='checkbox' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
                             <label for="cbx"><?=html_escape($value->getName())?></label>
                         </a>
@@ -54,10 +54,10 @@
                     <input style="" type="text" name="q_str" id="keywordTxt" value="<?=(isset($string))?html_escape($string):'';?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
                 </span>
                 <span class="adv_is">
-                    <select name="q_cat" id="selectCat" title="Select item category">
+                    <select name="category" id="selectCat" title="Select item category">
                         <option value="1">- All -</option>
                         <?php foreach ($parentCategory as $key => $value): ?>
-                            <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('q_cat')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
+                            <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -194,7 +194,6 @@
 <?php echo form_close();?>
 
 <!-- MOBILE VERSION SECTION -->
-
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
@@ -414,10 +413,10 @@
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
+    <input type="hidden" id="hidden-loadUrl" value="/advsrch/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div>
 
 <script src="/assets/js/src/bootstrap.js" type="text/javascript"></script> 
 <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-

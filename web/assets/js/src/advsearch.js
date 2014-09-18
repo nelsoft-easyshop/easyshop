@@ -192,12 +192,12 @@
                 else{
                     currentUrl = currentUrl +'&'+head+'='+ newValue;
                 }
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
             }
             else{
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
                 else{
@@ -263,6 +263,7 @@
     var currentUrl = $('#hidden-currentUrl').val();
     var typeView = $('#hidden-typeView').val(); 
     var emptySearch = $('#hidden-emptySearch').val();
+    var loadUrl = $('#hidden-loadUrl').val();
 
     var offset = 1; 
     var canRequestAjax = true;
@@ -280,7 +281,7 @@
                 if (canRequestAjax === true && isEmptySearch === false) {
                     isEmptySearch = true;
                     $.ajax({
-                        url: currentUrl+'&typeview='+typeView+'&page='+offset,
+                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get',
                         async: false,
                         dataType: 'json',

@@ -82,10 +82,12 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all product details with given product id
-     * @param  array  $productId
-     * @return array
+     * @param  array   $productIds
+     * @param  integer $offset
+     * @param  integer $perPage
+     * @return mixed
      */
-    public function getDetails($productIds = array(),$offset=0,$perPage=1)
+    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
     {   
         if(count($productIds) > 0){
             $this->em =  $this->_em;
@@ -112,11 +114,11 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Get All attributes of given productid
-     * @param  array  $productId
+     * Get all attributes of given productids
+     * @param  array  $productIds
      * @return array
      */
-    public function getAttributes($productId = array(),$filter = false,$additionalString = "",$parameters = array())
+    public function getAttributesByProductIds($productIds = array(),$filter = false,$additionalString = "",$parameters = array())
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -160,7 +162,7 @@ class EsProductRepository extends EntityRepository
             ) a
             WHERE product_id IN (:ids) " . $additionalString, $rsm);
 
-        $query->setParameter('ids', $productId); 
+        $query->setParameter('ids', $productIds); 
         if($filter){
             $counter = 0;
             foreach ($parameters as $paramKey => $paramValue) {
@@ -179,10 +181,10 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get All available brands in given products
-     * @param  array  $productId [description]
-     * @return [type]            [description]
+     * @param  array  $productIds
+     * @return mixed
      */
-    public function getBrands($productId = array())
+    public function getProductBrandsByProductIds($productIds = array())
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -190,7 +192,7 @@ class EsProductRepository extends EntityRepository
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsBrand','b','WITH','b.idBrand = p.brand')
                                 ->where(
-                                        $qb->expr()->in('p.idProduct', $productId)
+                                        $qb->expr()->in('p.idProduct', $productIds)
                                     )
                                 ->getQuery();
         $result = $qbResult->getResult();
@@ -336,28 +338,6 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Find Product By seller
-     * @return [type] [description]
-     */
-    public function findBySeller($seller)
-    {
-        $this->em =  $this->_em;
-        $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('p.idProduct')
-                                ->from('EasyShop\Entities\EsProduct','p')
-                                ->leftJoin('EasyShop\Entities\EsMember','m','WITH','p.member = m.idMember')
-                                ->where('p.isDraft = 0')
-                                ->andWhere('p.isDelete = 0')
-                                ->andWhere('m.username LIKE :username')
-                                ->setParameter('username', '%'.$seller.'%')
-                                ->getQuery();
-        $result = $qbResult->getResult(); 
-        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
-        return $resultNeeded;
-    }
-
-    /**
      * Returns the number of active products
      * 
      * @return int
@@ -378,7 +358,71 @@ class EsProductRepository extends EntityRepository
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getOneOrNullResult();
 
-        return $result['count'];
+        return $result['count']; 
+    }
+
+    /**
+     * Get product by default parameters
+     * @param  array $filterArray
+     * @param  array  $productIds
+     * @return array
+     */
+    public function getProductByParameterFiltering($filterArray,$productIds = array())
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('p.idProduct')
+                                ->from('EasyShop\Entities\EsProduct','p')
+                                ->leftJoin('EasyShop\Entities\EsMember','m',
+                                                    'WITH','p.member = m.idMember')
+                                ->leftJoin('EasyShop\Entities\EsProductShippingHead','sph',
+                                                    'WITH','p.idProduct = sph.product')
+                                ->where('p.isDraft = 0')
+                                ->andWhere('p.isDelete = 0');
+ 
+        if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->in('p.condition', $filterArray['condition'])
+                                    );
+        }
+ 
+        if(isset($filterArray['seller']) && $filterArray['seller']){
+            $qbResult = $qbResult->andWhere('m.username LIKE :username')
+                                ->setParameter('username', '%'.$filterArray['seller'].'%');
+        }
+
+        if(isset($filterArray['category']) 
+                && $filterArray['category'] > 1){ 
+            $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                        ->getChildCategoryRecursive($filterArray['category']);
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->in('p.cat', $categoryList)
+                                    );
+        }
+
+        if(isset($filterArray['brand']) && $filterArray['brand'][0]){
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->in('p.brand', $filterArray['brand'])
+                                    );
+        }
+
+        if(isset($filterArray['location']) && $filterArray['location'][0]){ 
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->in('sph.location', $filterArray['location'])
+                                    );
+        }
+
+        if(count($productIds)>1){
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->in('p.idProduct', $productIds)
+                                    );
+        }
+
+        $qbResult = $qbResult->getQuery();
+        $result = $qbResult->getResult(); 
+        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
+
+        return $resultNeeded; 
     }
 
     /**
@@ -413,12 +457,12 @@ class EsProductRepository extends EntityRepository
                             ->getQuery()
                             ->setMaxResults($offset)
                             ->setFirstResult($perPage);
-
+ 
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
 
-        return $resultNeeded;
-    }
+        return $resultNeeded; 
+    }  
 }
 
 
