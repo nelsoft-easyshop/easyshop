@@ -317,6 +317,7 @@ class EsProduct
      * @var \EasyShop\Entities\EsProductImage
      * @ORM\OneToMany(targetEntity="EasyShop\Entities\EsProductImage", mappedBy="product")
      **/
+
     private $images;
 
 
