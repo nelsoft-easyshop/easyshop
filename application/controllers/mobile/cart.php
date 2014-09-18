@@ -14,6 +14,13 @@ class cart extends MY_Controller
     private $cartManager;
     
     /**
+     * Product manager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+    
+    /**
      * The cart object
      * 
      * @var EasyShop\Cart\CartInterface
@@ -56,6 +63,7 @@ class cart extends MY_Controller
     {
         parent::__construct();
         $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->productManager = $this->serviceContainer['product_manager'];
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->cartImplementation = $this->cartManager->getCartObject();
         $this->em = $this->serviceContainer['entity_manager'];
@@ -143,7 +151,24 @@ class cart extends MY_Controller
                     'sellerContactNumber' => $member->getContactno(),
                     'sellerEmail ' => $member->getEmail()
                     );
-
+                    
+                $relatedItems = $this->productManager->getRecommendedProducts($product->getIdProduct(),5);
+                $formattedRelatedItem = array();
+                foreach($relatedItems as $relatedItem){
+                    
+                    array_push($formattedRelatedItem, array('product' => $relatedItem->getName(),
+                                                    'slug' => $relatedItem->getSlug(),
+                                                    'product_image_path' => '',
+                                                    'price' => $relatedItem->getFinalPrice(),
+                                                    'end_promo' => $relatedItem->getEndPromo(),
+                                                    'original_price' => $relatedItem->getOriginalPrice(),
+                                                    'sold_price' => $relatedItem->getSoldPrice(),
+                                                    'percentage' => $relatedItem->getDiscountPercentage(),
+                                                    ));
+                }
+                print_r($formattedRelatedItem);
+                exit();
+                    
                 $images = array();
                 foreach($product->getImages() as $image){
                     $images[$image->getIdProductImage()] = $image->getProductImagePath();
