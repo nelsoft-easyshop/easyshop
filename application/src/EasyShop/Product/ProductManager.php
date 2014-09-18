@@ -84,7 +84,7 @@ class ProductManager
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
         $this->promoManager->hydratePromoData($product);
-        
+
         return $product;
     }
 
@@ -178,11 +178,10 @@ class ProductManager
      */
     public function discountProducts($products)
     { 
-        foreach ($products as $key => $value) { 
-            $productObject = $value->getProduct();
-            $resultObject = $this->promoManager->hydratePromoData($productObject);
+        foreach ($products as $product) { 
+            $this->promoManager->hydratePromoData($product);
         } 
-        
+
         return $products;
     }
 
@@ -277,5 +276,41 @@ class ProductManager
         $this->em->flush();
         return true;
     }
+    
+    
+    /**
+     * Returns the recommended products list for a certain product
+     *
+     * @param integer $productId
+     * @param integer $limit
+     * @return \EasyShop\Entities\EsProduct
+     */
+    public function getRecommendedProducts($productId, $limit = null)
+    {    
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+
+        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->createQueryBuilder("p")
+                                ->select("p")
+                                ->where('p.cat = :category')
+                                ->andWhere("p.idProduct != :productId")
+                                ->setParameter('productId',$product->getIdProduct())
+                                ->setParameter('category',$product->getCat())
+                                ->orderBy('p.clickcount', 'DESC')
+                                ->getQuery();
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $products = $queryBuilder->getResult();
+        
+        foreach($products as $key => $product){
+            $products[$key] = $this->getProductDetails($product->getIdProduct());
+        }
+        
+        return $products;
+    }
+    
 }
 
