@@ -232,6 +232,15 @@ div.product-list{
 .advsearch input, .advsearch select{
     font-size: 13px;
 }
+#paste-product{
+    margin-top: 5px;
+}
+.cbx{
+    text-transform: capitalize;
+    color: #494949;
+    text-decoration: none !important;
+    font-size: 12px;
+}
 
 .adv_catpanel, .adv_leftpanel{
     vertical-align: middle !important;

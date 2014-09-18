@@ -1,11 +1,11 @@
 
 <link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
 
 <link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
-<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
 
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
@@ -20,7 +20,7 @@
                     <li style="border:0px">
                         <a class="cbx" data-head="category" data-value="<?=$value->getIdCat()?>" >
                             <input type='checkbox' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
-                            <label for="cbx"><?=html_escape($value->getName())?></label>
+                            <?=html_escape($value->getName())?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -379,28 +379,31 @@
             <div class="modal-body no-border">
                 <p class="h3-cat-title">Categories</p>
                 <?php if(isset($subCategory)): ?>
-                    <h3>Categories</h3> 
+                    <ul class="list-unstyled">
                     <?php foreach ($subCategory as $key => $value):?>
-                        <div class="span-filter pull-left">
+                        <li>
                             <a class="cbx" data-head="q_cat" data-value="<?=$value->getIdCat()?>" >
                                 <input type='checkbox' class='adv_catpanel' value="<?=html_escape($value->getIdCat())?>"> 
                                 <label for="cbx"><?=html_escape($value->getName())?></label>
                             </a>
-                        </div> 
+                        </li>
                     <?php endforeach; ?> 
+                    </ul>
                     <div class="clear"></div> 
                 <?php endif; ?>
                 <?php if(isset($attributes)): ?>
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                        <h3><?=$attrName?></h3> 
+                        <p class="h3-cat-title"><?=$attrName?></p>
+                        <ul class="list-unstyled">
                         <?php foreach ($attrListValue as $key => $value):?>
-                            <div class="span-filter pull-left">
+                           <li>
                                 <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
                                     <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
                                     <label for="cbx"><?=ucfirst($value);?></label>
                                 </a>
-                            </div>
+                            </li>
                         <?php endforeach; ?>
+                        </ul>
                         <div class="clear"></div> 
                     <?php endforeach; ?>
                 <?php endif; ?>
