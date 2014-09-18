@@ -267,12 +267,8 @@ class Home extends MY_Controller
                 , "defaultCatProd" => $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member'])
                 //, "customCatProd" => $this->getVendorCustomCatAndProd($arrVendorDetails['id_member'])
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
-
+                , "product_condition" => $this->lang->line('product_condition')
             );
-
-            //print('<pre>');
-            //print_r($data['arrVendorDetails']);
-            //die();
 
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');

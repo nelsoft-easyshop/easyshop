@@ -90,6 +90,17 @@ function ItemListAjax(CatDiv,page)
 }
 
 
+
+
+
+
+
+
+
+
+
+/********* DESIGNER ************/
+
 (function ($) {
 
     //create a stick nav

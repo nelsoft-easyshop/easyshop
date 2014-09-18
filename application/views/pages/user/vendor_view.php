@@ -228,15 +228,16 @@
 								<ul class="list-unstyled list-filter">
 									<li>
 										<p class="p-filter-name">By Condition</p>
-										<select class="select-filter">
-											<option>New</option>
-											<option>Used</option>
-											<option>New</option>
+										<select class="select-filter" name="condition-filter">
+                                            <option value="" selected></option>>
+                                            <?php foreach($product_condition as $condition):?>
+											    <option value="<?php echo $condition;?>"><?php echo $condition?></option>
+                                            <?php endforeach;?>
 										</select>
 									</li>
 									<li>
-										<p class="p-filter-name">By Condition</p>
-										from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
+										<p class="p-filter-name">By Price</p>
+										from <input type="text" class="input-filter-price" name="price-lower-filter"/> to <input type="text" class="input-filter-price" name="price-upper-filter"/>
 									</li>
 									<li>
 										<center>
@@ -363,102 +364,83 @@
                     <?php endif;?>
                 </div>
                 <?php $divCounter++; endforeach;?>
-
 <!--
-                <div class="view row row-items grid" id="fuck">
-                    <?php if($product_count > 0):?>
-                        <?php foreach($products as $catID=>$p):?>
-                            <?php foreach($p['products'] as $prod):?>
-                                <div class="panel panel-default panel-list-item">
-                                    <table width="100%">
-                                        <tr>
-											
-                                            <td width="20%" class="td-list-image" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
-                                                <a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
-												<div class="span-space">
-													<span class="span-discount-pin">10% OFF</span>
-                                                </div>
-												</a>
-                                            </td>
-											
-                                            <td width="55%" class="td-list-item-info">
-                                                <p class="p-list-item-name">
-                                                    
-                                                        <?php 
-                                                            $prod_name = html_escape($prod['name']);
-                                                            if(strlen($prod_name)>35){
-                                                        ?>
-															<a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
-                                                                <?php echo substr_replace( $prod_name, "...", 35);?>
-															</a>
-														<?php  
-                                                            }else{
-														?>
-															<a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
-                                                                <?php echo $prod_name;?>
-															</a>
-														<?php
-															}
-                                                        ?>
-                                                    
-													<script>
-														$(document).ready(function(){
-															$('[rel=tooltiplist]').tooltip({
-																placement : 'top'
-															});
-														});														
-													</script>
-                                                </p>
-                                                <p class="p-list-item-category">
-                                                    Electronics and Gadgets
-                                                </p>
-                                                <div class="div-list-desc-container">
-                                                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-                                                </div>
-                                            </td>
-                                            <td width="25%" class="td-list-price">
-                                                <p class="p-list-price">
-                                                    P <?php echo html_escape($prod['price'])?>
-                                                </p>
-                                                <div class="clear"></div>
-                                                <p class="p-list-discount">
-                                                    <s> P 1,200.00 </s>
-                                                </p>
-                                                <p class="p-discount">
-                                                    <span><s> P 1200.00 </s></span>
-                                                </p>
-                                                
-                                                <center>
-                                                    <button class="btn btn-default-cart">
-                                                        <span class="fa fa-shopping-cart"></span> ADD TO CART
-                                                    </button>
-                                                </center>
-                                            </div>
-                                        </div>
+                <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
+                <div class="view row row-items grid">
+                    <div class="panel panel-default panel-list-item">
+                        <table width="100%">
+                        <?php foreach($arrCat['products'] as $objProduct):?>
+                            <tr>
+                                <td width="20%" class="td-list-image" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
+                                    <a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+									<div class="span-space">
+										<span class="span-discount-pin">10% OFF</span>
                                     </div>
-                                </div>
-                            <?php endforeach;?>
+									</a>
+                                </td>
+								
+                                <td width="55%" class="td-list-item-info">
+                                    <p class="p-list-item-name">
+                                        
+                                            <?php 
+                                                $prod_name = html_escape($prod['name']);
+                                                if(strlen($prod_name)>35){
+                                            ?>
+												<a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
+                                                    <?php echo substr_replace( $prod_name, "...", 35);?>
+												</a>
+											<?php  
+                                                }else{
+											?>
+												<a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                    <?php echo $prod_name;?>
+												</a>
+											<?php
+												}
+                                            ?>
+                                        
+										<script>
+											$(document).ready(function(){
+												$('[rel=tooltiplist]').tooltip({
+													placement : 'top'
+												});
+											});														
+										</script>
+                                    </p>
+                                    <p class="p-list-item-category">
+                                        Electronics and Gadgets
+                                    </p>
+                                    <div class="div-list-desc-container">
+                                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                                    </div>
+                                </td>
+                                <td width="25%" class="td-list-price">
+                                    <p class="p-list-price">
+                                        P <?php echo html_escape($prod['price'])?>
+                                    </p>
+                                    <div class="clear"></div>
+                                    <p class="p-list-discount">
+                                        <s> P 1,200.00 </s>
+                                    </p>
+                                    <p class="p-discount">
+                                        <span><s> P 1200.00 </s></span>
+                                    </p>
+                                    
+                                    <center>
+                                        <button class="btn btn-default-cart">
+                                            <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                        </button>
+                                    </center>
+                                </td>
+                            </tr>
                         <?php endforeach;?>
-                    <?php endif;?>
+                        </table>
+                    </div>
                 </div>
---><!--
-				<center>
-					<ul class="pagination pagination-items">
-						<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
-						<li class="active"><a href="#"><span>1</span></a></li>
-						<li><a href="#"><span>2</span></a></li>
-						<li><a href="#"><span>3</span></a></li>
-						<li><a href="#"><span>4</span></a></li>
-						<li><a href="#"><span>5</span></a></li>
-						<li><a href="#"><span>6</span></a></li>
-						<li><a href="#"><span>7</span></a></li>
-						<li><a href="#"><span>&raquo;</span></a></li>
-					</ul>
-				</center>
-    -->
+                <?php endforeach;?>
+-->
             </div>
         </div>
-        
     </div>
     </div>
 </section>
