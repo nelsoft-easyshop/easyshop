@@ -520,6 +520,123 @@ function triggerTab(x){
 	$('.idTabs a[href="#'+x+'"]').trigger('click');
 }
 
+(function ($) {
+
+    //create a stick nav
+    var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
+    $(document).bind('ready scroll', function() {
+        var docScroll = $(document).scrollTop();
+        if (docScroll >= 455) 
+            {
+                if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
+                    $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
+                        top: '-155px'
+                    }).stop().animate({
+                        top: 0
+                    }, 500);
+                    
+                }
+
+                $('.vendor-content-wrapper').addClass('fixed-vendor-content');
+
+            } 
+        else 
+            {
+                $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
+                $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
+            }
+
+    });
+
+    var $edit_profile_photo = $(".edit-profile-photo");
+    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
+    var $header_cart_container = $(".header-cart-container");
+    var $header_cart_item_list = $(".header-cart-item-list");
+    var $sticky_cart = $(".sticky-cart");
+    var $stick_cart_item = $(".sticky-header-cart-item-list");
+
+    $(document).mouseup(function (e) {
+
+        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
+            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+           $edit_profile_photo_menu.hide(1);
+        }
+
+    });
+
+    $edit_profile_photo.click(function() {
+        $edit_profile_photo_menu.show();
+    });
+
+    $(document).mouseup(function (e) {
+
+        if (!$header_cart_item_list.is(e.target) // if the target of the click isn't the container...
+            && $header_cart_item_list.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+           $header_cart_item_list.hide(1);
+        }
+
+    });
+
+    $header_cart_container.click(function() {
+        $header_cart_item_list.show();
+    });
+
+    $(document).mouseup(function (e) {
+
+        if (!$stick_cart_item.is(e.target) // if the target of the click isn't the container...
+            && $stick_cart_item.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+           $stick_cart_item.hide(1);
+        }
+
+    });
+
+    $sticky_cart.click(function() {
+        $stick_cart_item.show();
+    });
+    
+})(jQuery);
+
+
+
+     $(document.body).on('click','.icon-grid',function() {
+            var view = $("div.view").attr("class");
+        
+            if(view == "view row row-items list")
+            {
+                $('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
+                $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
+                $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
+                $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
+            }
+            
+            
+        });
+    $(document).on('click','.icon-list',function() {    
+            
+            var view = $("div.view").attr("class");
+            if(view == "view row row-items grid")
+            {
+                
+                $('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
+                $('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
+                $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
+                $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
+            };
+    });
+    
+    
+    
+    var $window = $(window),
+       $stickyLeft = $('#the-sticky-div'),
+       leftTop = $stickyLeft.offset().top;
+
+       $window.scroll(function() {
+            $stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
+        });
+
 /***** create wishlist modal *****/
 
 $(document).ready(function(){
