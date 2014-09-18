@@ -14,10 +14,7 @@
             <div class="col-md-12">
                 <section class="top_margin product-page-section display-when-desktop">
                     <div class="wrapper">
-                        <div class="prod_categories">
-                            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png" class="drop-arrow"></div>
-                            <?php echo $category_navigation; ?> 
-                        </div> 
+                        <?php echo $category_navigation_desktop; ?>  
                         <div class="prod_cat_nav" id="prod_drop_nav">
                             <div class="category_nav">
                                 <ul>
@@ -204,27 +201,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel-group " id="categories">
-                    <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                                Categories
-                                <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="/assets/images/img_arrow_down.png">
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                    <a href="/category/<?=$value->getSlug(); ?>"><li class="list-category"><?=$value->getName();?></li></a>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?=$category_navigation_mobile;?>
                 <div class="bread_crumbs_m">
                     <ul style="margin-bottom: 10px;">
                         <li class="li_home" ><a href="/home" style="color: #f18200;">Home</a></li>
