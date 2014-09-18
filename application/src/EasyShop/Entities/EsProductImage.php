@@ -45,7 +45,7 @@ class EsProductImage
     /**
      * @var \EasyShop\Entities\EsProduct
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsProduct", inversedBy="idProduct")
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsProduct", inversedBy="images")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id", referencedColumnName="id_product")
      * })
