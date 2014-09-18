@@ -61,7 +61,7 @@ class cart extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
         
- 
+        /*
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
             $this->oauthServer->getResponse()->send();
@@ -70,6 +70,10 @@ class cart extends MY_Controller
         
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $this->cartData = unserialize($this->member->getUserdata());
+        */
+    
+          $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find(2);
         $this->cartData = unserialize($this->member->getUserdata());
     }
 
@@ -90,7 +94,7 @@ class cart extends MY_Controller
             $options = array();
             foreach($mobileCartContent->details->mapAttributes as $attribute => $attributeArray){
                 if(intval($attributeArray['isSelected']) === 1){
-                    $options[$key] = $attributeArray['value'].'~';
+                    $options[$key] = $attributeArray['value'].'~'.$attributeArray['price'];
                 }
                
             }
@@ -110,10 +114,73 @@ class cart extends MY_Controller
         print(json_encode($response,JSON_PRETTY_PRINT));
     }
 
-    
+    /**
+     * Returns the cart data
+     *
+     */
     public function getCartData()
     {
-        print(json_encode($this->cartData));
+        $cartData = $this->cartData;
+        $formattedCartContents = array();
+        foreach($cartData as $rowId => $cartItem){
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['idProduct' => $cartItem['id']]);
+            
+            if($product){
+                $member = $product->getMember();
+                       
+                $ratings = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                ->getAverageRatings($member->getIdMember());
+                $sellerRating = array();
+                $sellerRating['rateCount'] = $ratings['count'] ;
+                $sellerRating['rateDescription'][$this->lang->line('rating')[0]] = $ratings['rating1'];
+                $sellerRating['rateDescription'][$this->lang->line('rating')[1]] = $ratings['rating2'];
+                $sellerRating['rateDescription'][$this->lang->line('rating')[2]] = $ratings['rating3'];  
+                
+                $sellerDetails = array(
+                    'sellerName' => $member->getUsername(),
+                    'sellerRating' => $sellerRating,
+                    'sellerContactNumber' => $member->getContactno(),
+                    'sellerEmail ' => $member->getEmail()
+                    );
+
+                $images = array();
+                foreach($product->getImages() as $image){
+                    $images[$image->getIdProductImage()] = $image->getProductImagePath();
+                }
+          
+                $formattedCartItem = [
+                    'rowid' => $cartItem['rowid'],
+                    'productId' =>  $cartItem['id'],
+                    'productItemId' => $cartItem['product_itemID'],
+                    'maximumAvailability' => $cartItem['maxqty'],
+                    'slug' => $cartItem['slug'],
+                    'name' => $cartItem['name'],
+                    'quantity' => $cartItem['qty'],
+                    'description' => $product->getDescription(),
+                    'brand' => $product->getBrand()->getName(),
+                    'originalPrice' => $cartItem['original_price'],
+                    'finalPrice' => $cartItem['price'],
+                    'sellerDetails' => $sellerDetails,
+                    'images' => $images
+                ];
+                
+
+                $formattedCartContents = array_merge($formattedCartContents, 
+                                                     [$rowId => $formattedCartItem]
+                                        );
+                                        
+                                        
+                                        
+              
+            }
+        }
+        
+        
+        
+        print('<pre>');
+        print_r($formattedCartContents);
+      #  print(json_encode($this->cartData));
     }
 
 }
