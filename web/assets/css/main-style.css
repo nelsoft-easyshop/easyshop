@@ -34,10 +34,10 @@ section {
 }
 
 .btn {
-    transition: all 0.5s ease;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
 }
 
 .btn.btn-default-1 {
@@ -68,16 +68,20 @@ section {
     border-bottom: 2px solid #007c67;
     background-color: #00a388;
     color: #fff;
-	transition: all 0.5s ease;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 
 .btn.btn-default-3:hover {
     border-bottom: 2px solid #006655;
     background-color: #02846f;
     color: #fff;
+}
+
+.cart-icon {
+    background-position: -990px -250px;
 }
 
 /*** end global style ***/
@@ -389,10 +393,10 @@ section {
     text-align: center;
     vertical-align: middle;
 
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition:    all 0.4s ease-in-out;
-    -o-transition:      all 0.4s ease-in-out;
-    transition:        all 0.4s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+    transition:        all 0.3s ease-in-out;
 }
 
 .vendor-nav li a:hover {
@@ -520,7 +524,7 @@ section {
 .sticky-nav li:nth-child(3) input[type="submit"],
 .search-container input[type="submit"] {
     background-color: #ff893b;
-    background-position: -365px -250px;
+    background-position: -946px -250px;
     border: none;
     padding: 5px 12px;
     width: 45px;
@@ -636,6 +640,10 @@ section {
     text-overflow:ellipsis;
 }
 
+.header-cart-item-con a:hover {
+    text-decoration: none;
+}
+
 .header-cart-item-con a span {
     display: table-cell;
     max-height: 30px;
@@ -740,10 +748,10 @@ td.td-view.p-view.color-default{
 	padding-top: 4px !important;
 }
 .icon-view{
-	transition: all 0.5s ease;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 	margin-left: 5px;
 	margin-right: 2px;
 	font-size: 22px;
@@ -867,10 +875,10 @@ td.td-view.p-view.color-default{
 	color: #ffffff;
 	font-weight: bold;
 	width: 120px;
-	transition: all 0.5s fade;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s fade;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 .btn-filter:hover{
 	background: #272626;
@@ -892,10 +900,10 @@ td.td-view.p-view.color-default{
 	padding-right: 5px !important;
 	padding-left: 5px !important;
 	margin-bottom: 11px !important;
-	transition: all 0.5s fade;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s fade;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 
 .grid > .thumb > .panel-item{
@@ -904,9 +912,9 @@ td.td-view.p-view.color-default{
 	border-radius: 4px;
 	background: #ffffff;
 	transition: all 0.5s fade;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 .grid > .thumb > .panel-item:hover{
 	-webkit-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
@@ -965,10 +973,10 @@ td.td-view.p-view.color-default{
 	display:none;
 }
 .grid > .thumb > .panel-item > .div-item-info > .p-item-name > a{
-	transition: all 0.5s ease;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 
 .grid > .thumb > .panel-item > .div-item-info > .p-item-name > a:hover{
@@ -998,13 +1006,13 @@ td.td-view.p-view.color-default{
     border: 2px solid #585a59;
     background-color: #fff;
     color: #565656;
-	transition: all 0.5s ease;
+	transition: all 0.3s ease;
 	font-size: 10px;
 	margin-top: 6px;
 	font-weight: bold;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 
 .grid > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart:hover {
@@ -1015,10 +1023,10 @@ td.td-view.p-view.color-default{
 .list > .panel-list-item{
 	display: inline-block;
 	width: 100%;
-	transition: all 0.5s ease;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 	margin-bottom: 10px;
 	margin-left: 7px;
 }
@@ -1050,10 +1058,10 @@ td.td-view.p-view.color-default{
 	font-size: 18px;
 	margin: 0px;
 	margin-left: 20px;
-	transition: all 0.5s ease;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
 }
 
 .p-list-item-name > a:hover{
