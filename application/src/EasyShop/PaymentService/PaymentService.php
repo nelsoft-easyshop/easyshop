@@ -2,10 +2,24 @@
 
 namespace EasyShop\PaymentService;
 
-
+use EasyShop\Entities\EsAddress;
+use EasyShop\Entities\EsOrderShippingAddress;
 use EasyShop\Entities\EsLocationLookup;
+use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsOrderHistory;
+use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsOrderProductStatus;
+use EasyShop\Entities\EsOrderBillingInfo;
+use EasyShop\Entities\EsBillingInfo;
+use EasyShop\Entities\EsBankInfo;
+use EasyShop\Entities\EsOrderProductAttr;
+use EasyShop\Entities\EsOrderProductHistory;
+use EasyShop\Entities\EsPaymentGateway;
+use \DateTime;
 
 /**
  * Payment Service Class
@@ -22,19 +36,25 @@ class PaymentService
     private $gatewayPath = "EasyShop\PaymentGateways";
     
     /**
-     * Gateway instances holder
-     * ['name' => obj]
+     * Main payment method
      *
      * @var mixed
      */
+    private $primaryGateway = NULL;
 
     /**
-     * Gateway return value holder
-     * ['name' => returnval]
+     * Main payment method value holder
      *
      * @var mixed
      */
-    private $returnValue = [];
+    private $primaryReturnValue = NULL;
+
+    /**
+     * Secondary payment method (points)
+     *
+     * @var mixed
+     */
+    private $pointGateway = NULL;
 
     /**
      * Entity Manager instance
@@ -88,73 +108,47 @@ class PaymentService
     /**
      * Instantiate gateways
      *
-     * @param mixed $breakdown Parameters for each gateway
+     * @param mixed $paymentMethods Parameters for each gateway
      */
-    public function setBreakdown($breakdown)
+    public function initializeGateways($paymentMethods)
     {
-        foreach($breakdown as $breakdown){
-            $path = $this->gatewayPath . "\\" . $breakdown["method"] . "Gateway";
-            $obj = new $path($this->em, $this->request, $this->pointTracker, $this, $breakdown);
-            $this->gateways[$breakdown["name"]] = $obj; 
-            $this->returnValue[$breakdown["name"]] = NULL;
-        }
-    }
-
-
-    /**
-     * Returns all gateways being handled
-     *
-     * @return mixed
-     */
-    public function getAllGateways()
-    {
-        return $this->gateways;
-    }
-
-    /**
-     * Returns a certain gateway
-     *
-     * @param string $name Name of gateway to be retrieved
-     *
-     * @return EasyShop\PaymentGateways\AbstractGateway
-     */
-    // returns a certain gateway
-    public function getOneGateway($name)
-    {
-        return $this->gateways[$name];
-    }
-
-    /**
-     * Deletes a certain gateway
-     *
-     * @param string $name Name of gateway to be deleted
-     */
-    public function deleteGateway($name)
-    {
-        unset($this->gateways[$name]);
-    }
-
-    public function getReturnValue($name)
-    {
-        return $this->returnValue[$name];
-    }
-
-    /**
-     * Executes payment transaction for all registered gateways
-     */
-    public function pay()
-    {
-
-        foreach ($this->gateways as $gateway) {
-            $this->returnValue[array_search($gateway, $this->gateways)] = $gateway->pay();
+        // Search array for point gateway
+        $point = NULL;
+        foreach (array_keys($paymentMethods) as $key) {
+            if(strpos(strtolower($key), 'point') !== false){
+                $point = $key;
+                break;
+            }
         }
 
+        if($point !== NULL){
+                $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
+                    $this->em,
+                    $this->request,
+                    $this->pointTracker,
+                    $this,
+                    $paymentMethods[$point]
+                    );
+                unset($paymentMethods[$point]);
+        }
+
+        // Retrieve Primary gateway
+        $primaryGatewayValues = reset($paymentMethods);
+        $primaryGatewayKey = key($paymentMethods);
+        $path = $this->gatewayPath . "\\" . $primaryGatewayValues['method'] . "Gateway";
+        $this->primaryGateway = new $path(
+                    $this->em,
+                    $this->request,
+                    $this->pointTracker,
+                    $this,
+                    $primaryGatewayValues
+                    );
     }
 
     /**
      * Payment Order
      * 
-     * @param int $paymentType Specifies payment method
+     * @param int $paymentType Specifies payment method (included in gateway)
      * @param double $ItemTotalPrice Contains total price of items
      * @param string $member_id Contains member id
      * @param string $productstring Contains product descriptions
@@ -164,7 +158,7 @@ class PaymentService
      *
      * @return mixed
      */
-    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
+    public function persistPayment($ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
     {
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');
@@ -175,7 +169,8 @@ class PaymentService
         $productCount = $productCount;
         $dataResponse = $apiResponse;
         $transactionId = $tid;
-         
+        
+
         // start transaction
         $this->em->getConnection()->beginTransaction();
 
@@ -192,14 +187,20 @@ class PaymentService
                         ]);
 
             $response['o_message'] = 'Error Code: Payment001.1';
-            $locationLookup = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+            $locationLookupCity = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                        ->findOneBy(['idLocation' => $addr->getCity()]);
+
+            $locationLookupStateRegion = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                         ->findOneBy(['idLocation' => $addr->getStateregion()]);
+
+            $locationLookupCountry = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                        ->findOneBy(['idLocation' => $addr->getCountry()]);
             
             $response['o_message'] = 'Error Code: Payment001.2';
             $shipOrderAddr = new EsOrderShippingAddress();
-            $shipOrderAddr->setStateregion($locationLookup);
-            $shipOrderAddr->setCity($locationLookup);
-            $shipOrderAddr->setCountry($locationLookup);
+            $shipOrderAddr->setCity($locationLookupCity);
+            $shipOrderAddr->setStateregion($locationLookupStateRegion);
+            $shipOrderAddr->setCountry($locationLookupCountry);
             $shipOrderAddr->setAddress($addr->getAddress());
             $shipOrderAddr->setConsignee($addr->getConsignee());
             $shipOrderAddr->setMobile($addr->getMobile());
@@ -224,7 +225,7 @@ class PaymentService
                                     ->findOneBy(['idMember' => $memberId]);
 
             $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                            ->findOneBy(['idPaymentMethod' => $paymentType]);
+                                            ->find($gatewayReference->getPaymentType());
 
             $orderStatusObj = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
                                             ->findOneBy(['orderStatus' => $orderStatus]); 
@@ -287,8 +288,6 @@ class PaymentService
                                                 ->find($billingInfo->getBankId());
                     
                     $orderBillingInfo = new EsOrderBillingInfo();
-                    $orderBillingInfo->setOrderId($order->getIdOrder());
-                    $orderBillingInfo->setorderProductId($orderProduct->getIdOrderProduct());
                     $orderBillingInfo->setBankName($bankInfo->getBankName());
                     $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
                     $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
@@ -318,7 +317,7 @@ class PaymentService
                 $orderProduct->setStatus($ordProdStatus);
                 $orderProduct->setPaymentMethodCharge((string)$productExternalCharge);
                 $orderProduct->setNet((string)$net);
-                $orderProduct->setSellerBillingId($billingInfoId);
+                $orderProduct->setSellerBillingId($orderBillingInfo->getIdOrderBillingInfo());
                 $this->em->persist($orderProduct);
                 $this->em->flush();
                 
@@ -337,10 +336,15 @@ class PaymentService
                         $this->em->persist($orderProductAttr);
                         $this->em->flush();  
                     }
+                }
+
                 $response['o_message'] = 'Error Code: Payment009';
                 $orderProductHistory = new EsOrderProductHistory();
                 $orderProductHistory->setOrderProduct($orderProduct);
-                }
+                $orderProductHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $orderProductHistory->setOrderProductStatus($ordProdStatus);
+                $this->em->persist($orderProductHistory);
+                $this->em->flush();  
             }
             $response['o_message'] = 'Success! Transaction Saved';
             $response['o_success'] = true;
@@ -351,7 +355,6 @@ class PaymentService
             $response['invoice_no'] = $order->getInvoiceNo();
             $response['total'] = $order->getTotal();
             $response['dateadded'] = $order->getDateadded();
-
         } catch(Exception $e){
             $this->em->getConnection()->rollback();
         }
@@ -359,7 +362,7 @@ class PaymentService
     }
 
     /**
-     * Computes Shipping Fee and Reorganizes Data
+     * Computes Shipping Fee and Reorganizes Data (processData)
      * 
      * @param mixed $itemList List of items to compute shipping fee
      * @param string $address Used for shipping fee calcl
@@ -368,7 +371,7 @@ class PaymentService
      */
     public function computeFeeAndParseData($itemList,$address)
     {
-        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $city = ($address > 0 ? $address :  0);
         $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                     ->getParentLocation($city);
         $region = $cityDetails->getParent();
@@ -417,6 +420,7 @@ class PaymentService
         }
 
         $productstring = substr($productstring,4);
+
         return array(
             'totalPrice' => round(floatval($grandTotal),2), 
             'newItemList' => $itemList,
@@ -429,7 +433,7 @@ class PaymentService
     }
 
     /**
-     * Validate Cart Data
+     * Validate Cart Data (resetPriceAndQty)
      * 
      * @param mixed $carts User Session data
      * @param bool $condition Used for lock-related processing
@@ -468,7 +472,91 @@ class PaymentService
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
         }
 
-        return [$availableItemCount, $itemArray];
+        return ['itemCount' => $availableItemCount, 
+                'itemArray' => $itemArray];
+    }
+
+    /**
+     * Executes payment transaction for all registered gateways
+     *
+     * @param mixed $paymentMethods Parameters for each gateway
+     * @param mixed $validatedCart Validated cart content
+     * @param int $memberId User Member Id
+     *
+     * @return mixed
+     */    
+    public function pay($paymentMethods, $validatedCart, $memberId)
+    {
+        // Initialize gateways
+        $this->initializeGateways($paymentMethods);
+
+        // Set status response
+        $response['status'] = 'f';
+        $productCount = count($validatedCart['itemArray']);
+
+        // get address Id
+        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                    ->getShippingAddress(intval($memberId));
+
+        // Compute shipping fee
+        $prepareData = $this->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+
+        $grandTotal = $prepareData['totalPrice'];
+        $productString = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList']; 
+
+        $txnid = $this->primaryGateway->generateReferenceNumber($memberId);        
+        $response['txnid'] = $txnid;
+        if($validatedCart['itemCount'] === $productCount){
+            $returnValue = $this->primaryGateway->pay();
+
+            $return = $this->persistPayment(
+                $grandTotal, 
+                $memberId, 
+                $productString, 
+                $productCount, 
+                json_encode($itemList),
+                $txnid,
+                $this->primaryGateway
+                );
+
+            if($return['o_success'] <= 0){
+                 $returnValue['message'] = $return['o_message'];
+            }
+            else{
+                $v_order_id = $return['v_order_id'];
+                $invoice = $return['invoice_no'];
+                $response['status'] = 's';
+
+                foreach ($itemList as $key => $value) {  
+                    $itemComplete = $this->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                    $this->productManager->updateSoldoutStatus($value['id']);
+                }
+
+                /* remove item from cart function */ 
+                /* send notification function */ 
+                /* Record PointGateway */
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($v_order_id);
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->primaryGateway->getPaymentType());
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount($this->primaryGateway->getParameter('amount'));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+
+                $this->em->persist($paymentRecord);
+                $this->em->flush();
+            }
+        }
+        else{
+            $returnValue['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+        }
+
+        $response = array_merge($response, $returnValue);
+        return $response;
     }
 }
-
