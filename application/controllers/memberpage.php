@@ -1439,18 +1439,18 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     *  DEV AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     *  AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
      */
     public function vendorLoadProducts()
     {
         $prodLimit = 12;
         $vendorId = $this->input->get('vid');
         $vendorName = $this->input->get('vn');
-        $catId = $this->input->get('cid');
+        $catId = json_decode($this->input->get('cid'), true);
         $catType = $this->input->get('ct');
         $page = $this->input->get('p');
-        $oBy = $this->input->get('ob');
-        $o = $this->input->get('o');
+        $oBy = intval($this->input->get('ob'));
+        $o = intval($this->input->get('o'));
 
         $em = $this->serviceContainer["entity_manager"];
 
@@ -1468,14 +1468,18 @@ class Memberpage extends MY_Controller
 
         switch($oBy){
             case 1:
-                $orderBy = "p.idProduct";
+                $orderStr = "p.clickcount " . $order;
+                break;
+            case 2:
+                $orderStr = "p.createddate " . $order;
+                break;
+            case 3:
+                $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
                 break;
             default:
-                $orderBy = "p.idProduct";
+                $orderStr = "p.clickcount " . $order;
                 break;
         }
-
-        $orderStr = $orderBy . $order;
 
         switch($catType){
             // Custom
@@ -1495,9 +1499,30 @@ class Memberpage extends MY_Controller
                 break;
         }
 
-        $htmlData = $this->load->view("pages/product/test1", $products, true);
+        $arrCat = array(
+            'page' => $page,
+            'products' => $products,
+            'product_images' => array()
+        );
 
-        echo json_encode($htmlData);
+        // Generate product image array
+        foreach($products as $product){
+            $productId = $product->getIdProduct();
+            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
+                            ->getDefaultImage($productId);
+            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
+
+            if(!file_exists($imagePath)){
+                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
+            }
+            $arrCat['product_images'][$productId] = $imagePath;
+        }
+
+        $parseData = array('arrCat'=>$arrCat);
+
+        $serverResponse['htmlData'] = $this->load->view("pages/user/vendor_product_view", $parseData, true);
+
+        echo json_encode($serverResponse);
     }
 
     //DEV FUNCTION HANDLES EDIT PROFILE

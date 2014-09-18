@@ -285,18 +285,6 @@ class Home extends MY_Controller
     }
     
     /**
-     *  AJAX Handler function for loading products
-     */
-    /*public function getVendorProducts()
-    {
-        if( $this->input->post('') ){
-
-        }
-    }*/
-
-
-
-    /**
      *  Fetch Default categories and initial products for first load of page.
      *
      *  @return array
@@ -315,18 +303,25 @@ class Home extends MY_Controller
                                 ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
 
             $parentCat[$idCat]['products'] = $categoryProducts;            
-            $parentCat[$idCat]['non_categorized_count'] = $em->getRepository("EasyShop\Entities\EsProduct")
+            $parentCat[$idCat]['non_categorized_count'] = (int)$em->getRepository("EasyShop\Entities\EsProduct")
                                 ->countNotCustomCategorizedProducts($memberId, $category['child_cat']);
+
+            $parentCat[$idCat]['json_subcat'] = json_encode($category['child_cat'], JSON_FORCE_OBJECT);
 
             foreach($categoryProducts as $product){
                 $productId = $product->getIdProduct();
                 $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
                 $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
+
+                if(!file_exists($imagePath)){
+                    $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
+                }
+
                 $parentCat[$idCat]['product_images'][$productId] = $imagePath;
             }
         }
-      
+
         return $parentCat;
     }
 

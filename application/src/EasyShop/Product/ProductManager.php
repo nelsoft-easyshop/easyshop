@@ -309,7 +309,7 @@ class ProductManager
                 $vendorCategories[$vendorCategory['parent_cat']] = array(
                     'name' => $vendorCategory['p_cat_name'],
                     'slug' => $vendorCategory['p_cat_slug'],
-                    'child_cat' => array(),
+                    'child_cat' => array($vendorCategory['parent_cat']),
                     'products' => array(),
                     'product_count' => 0,
                     'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
@@ -321,7 +321,7 @@ class ProductManager
                 $vendorCategories[$vendorCategory['parent_cat']] = array(
                     'name' => 'Others',
                     'slug' => '',
-                    'child_cat' => array(),
+                    'child_cat' => array($vendorCategory['parent_cat']),
                     'products' => array(),
                     'product_count' => 0,
                     'cat_link' => '',
