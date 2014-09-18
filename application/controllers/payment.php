@@ -1287,6 +1287,40 @@ class Payment extends MY_Controller{
 
     }
 
+    /*
+        (v1) -> will only focus on PointGateway + 1 Other Gateway
+
+        This function should only serve as a bridge that calls PaymentService
+        and passes all the necessary variables (payment methods + cost of each,
+        session related data etc.)
+
+        $paymentMethods should be constructed as follows (v1):
+        [
+            'CODGateway' => ['method' => 'CashOnDelivery', 'amount' => 999]
+            [,'PointGateway' => ['method' => 'Point', 'amount' => 999]]
+        ]
+    */
+        
+    function pay($paymentMethods)
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+        
+        $carts = $this->session->all_userdata();
+
+        // Validate Cart Data
+        $paymentService = $this->serviceContainer['payment_service'];
+        $validatedCart = $paymentService->validateCartData($carts);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+
+        $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+
+        extract($response);
+
+        $this->generateFlash($txnid,$message,$status);
+        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+    }
 }
 
 
