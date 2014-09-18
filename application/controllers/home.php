@@ -267,7 +267,12 @@ class Home extends MY_Controller
                 , "defaultCatProd" => $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member'])
                 //, "customCatProd" => $this->getVendorCustomCatAndProd($arrVendorDetails['id_member'])
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
+
             );
+
+            //print('<pre>');
+            //print_r($data['arrVendorDetails']);
+            //die();
 
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
@@ -277,63 +282,25 @@ class Home extends MY_Controller
             $this->pagenotfound();
         }
 
-        //die();
-        //print(count($vendorDetails));
-        //print($vendorDetails->getUsername());
-
     }
-    /*public function userprofile()
+    
+    /**
+     *  AJAX Handler function for loading products
+     */
+    /*public function getVendorProducts()
     {
-        $this->load->model('memberpage_model');
+        if( $this->input->post('') ){
 
-        $sellerslug = $this->uri->segment(1);
-        $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
-        $session_data = $this->session->all_userdata();
-        $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-        delete_cookie('es_subscribe_result');
-
-        if($vendordetails){
-            $data['title'] = 'Vendor Profile | Easyshop.ph';
-            $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-            $data = array_merge($data, $this->fill_header());
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-            $sellerid = $vendordetails['id_member'];
-            $usersFollowing = $this->user_model->getFollowing($sellerid);
-            $usersFollower = $this->user_model->getFollowers($sellerid);
-            $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-            $data = array_merge($data,array(
-                    'vendordetails' => $vendordetails,
-                    'image_profile' => $this->memberpage_model->get_Image($sellerid),
-                    'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
-                    'active_count' => intval($user_product_count['active']),
-                    'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-                    'followers' =>  $usersFollower,
-                    'following' =>  $usersFollowing,
-                    'tab' => $tab,
-                    ));
-            $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-
-            $data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-            $data['product_count'] = count($data['products']);
-            $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
-            #if 0 : no entry - unfollowed, hence display follow
-            #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
-            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 && $vendordetails['store_name'] !== $vendordetails['username'] ? TRUE : FALSE;
-            $data['store_name'] = $data['hasStoreName'] ? $vendordetails['store_name'] : $vendordetails['username'];
-
-            $this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
-        }
-        else{
-            $this->pagenotfound();
         }
     }*/
 
+
+
+    /**
+     *  Fetch Default categories and initial products for first load of page.
+     *
+     *  @return array
+     */
     private function getVendorDefaultCatAndProd($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
@@ -347,8 +314,9 @@ class Home extends MY_Controller
             $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
 
-            $parentCat[$idCat]['products'] = $categoryProducts;
-            $parentCat[$idCat]['non_categorized_count'] = count($categoryProducts);
+            $parentCat[$idCat]['products'] = $categoryProducts;            
+            $parentCat[$idCat]['non_categorized_count'] = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($memberId, $category['child_cat']);
 
             foreach($categoryProducts as $product){
                 $productId = $product->getIdProduct();
@@ -358,10 +326,16 @@ class Home extends MY_Controller
                 $parentCat[$idCat]['product_images'][$productId] = $imagePath;
             }
         }
-        
+      
         return $parentCat;
     }
 
+    /**
+     *  NOT YET USED !!!
+     *  Fetch custom categories and initial products for first load of page.
+     *
+     *  @return array
+     */
     private function getVendorCustomCatAndProd($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
