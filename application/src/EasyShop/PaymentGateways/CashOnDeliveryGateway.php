@@ -15,9 +15,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 class CashOnDeliveryGateway extends AbstractGateway
 {
 
-
     private $paymentType;
-
 
     /**
      * Constructor
