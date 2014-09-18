@@ -266,7 +266,7 @@ class ProductManager
 
         $inventory = $this->getProductInventory($item);
 
-        $isSoldOut = intval($inventory[15]['quantity']) <= 0 ? true : false;
+        $isSoldOut = intval(reset($inventory)['quantity']) <= 0 ? true : false;
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;

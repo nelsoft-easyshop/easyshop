@@ -28,6 +28,14 @@ use \DateTime;
  */
 class PaymentService
 {
+
+    /**
+     * Payment Methods that require locks
+     *
+     * @var mixed
+     */
+    private $lockPaymentMethods = ['Dragonpay', 'PesoPay'];
+
     /**
      * Gateway path
      *
@@ -113,28 +121,22 @@ class PaymentService
     public function initializeGateways($paymentMethods)
     {
         // Search array for point gateway
-        $point = NULL;
         foreach (array_keys($paymentMethods) as $key) {
-            if(strpos(strtolower($key), 'point') !== false){
-                $point = $key;
-                break;
-            }
-        }
-
-        if($point !== NULL){
+            if(strpos(strtolower($key), 'point') !== false){                
                 $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
                     $this->em,
                     $this->request,
                     $this->pointTracker,
                     $this,
-                    $paymentMethods[$point]
+                    $paymentMethods[$key]
                     );
-                unset($paymentMethods[$point]);
+                unset($paymentMethods[$key]);
+                break;
+            }
         }
 
         // Retrieve Primary gateway
         $primaryGatewayValues = reset($paymentMethods);
-        $primaryGatewayKey = key($paymentMethods);
         $path = $this->gatewayPath . "\\" . $primaryGatewayValues['method'] . "Gateway";
         $this->primaryGateway = new $path(
                     $this->em,
@@ -155,6 +157,7 @@ class PaymentService
      * @param int $productCount Contains total count of products
      * @param string $apiResponse Contains response of api
      * @param string $tid Transaction id
+     *
      *
      * @return mixed
      */
@@ -440,8 +443,14 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$condition = FALSE)
+    function validateCartData($carts,$paymentMethod)
     {
+        $condition = false;
+
+        if(in_array($paymentMethod, $lockPaymentMethods)){
+            $condition = true;
+        }
+
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
 
@@ -508,8 +517,7 @@ class PaymentService
         $txnid = $this->primaryGateway->generateReferenceNumber($memberId);        
         $response['txnid'] = $txnid;
         if($validatedCart['itemCount'] === $productCount){
-            $returnValue = $this->primaryGateway->pay();
-
+            
             $return = $this->persistPayment(
                 $grandTotal, 
                 $memberId, 
@@ -519,6 +527,8 @@ class PaymentService
                 $txnid,
                 $this->primaryGateway
                 );
+
+            $returnValue = $this->primaryGateway->pay();
 
             if($return['o_success'] <= 0){
                  $returnValue['message'] = $return['o_message'];
@@ -560,3 +570,4 @@ class PaymentService
         return $response;
     }
 }
+

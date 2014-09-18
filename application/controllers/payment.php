@@ -1287,31 +1287,44 @@ class Payment extends MY_Controller{
 
     }
 
-    /*
-        (v1) -> will only focus on PointGateway + 1 Other Gateway
-
-        This function should only serve as a bridge that calls PaymentService
-        and passes all the necessary variables (payment methods + cost of each,
-        session related data etc.)
-
-        $paymentMethods should be constructed as follows (v1):
-        [
-            'CODGateway' => ['method' => 'CashOnDelivery', 'amount' => 999]
-            [,'PointGateway' => ['method' => 'Point', 'amount' => 999]]
-        ]
-    */
-        
-    function pay($paymentMethods)
+    /**
+     *  Universal Pay Method
+     *
+     *  This function should only serve as a bridge that calls PaymentService
+     *  and passes all the necessary variables (payment methods + cost of each,
+     *  session related data etc.)
+     * 
+     *  $paymentMethods should be constructed as follows:
+     *  
+     *  {
+     *      "CODGateway" : {
+     *              "method" : "CashOnDelivery", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      },
+     *      "PointGateway" : {
+     *              "method" : "Point", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      }
+     *  }
+     *   
+     */
+    function pay()
     {
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
         
         $carts = $this->session->all_userdata();
 
+        /* JSON Decode*/
+        //$paymentMethods = json_decode($this->input->post('paymentMethods'),true);
+
         // Validate Cart Data
         $paymentService = $this->serviceContainer['payment_service'];
-        $validatedCart = $paymentService->validateCartData($carts);
+
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
@@ -1322,7 +1335,6 @@ class Payment extends MY_Controller{
         redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 }
-
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */
