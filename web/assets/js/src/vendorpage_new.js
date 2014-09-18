@@ -44,5 +44,11 @@
         };
     });
 
+    $('.tab_categories').on('click', function(){
+        var divId = $(this).attr('data-link');
+        $('.div_product').hide();
+        $(divId).show();
+    });
+
 })(jQuery);
 

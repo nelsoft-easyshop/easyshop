@@ -410,7 +410,7 @@ class EsProductRepository extends EntityRepository
      *  Get user products that have no assigned custom category
      *
      *  @param integer $memberId
-     *  @param integer $catId
+     *  @param array $catId
      *
      *  @return array
      */
@@ -419,6 +419,13 @@ class EsProductRepository extends EntityRepository
         $em = $this->_em;
         $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
         $result = array();
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
 
         $dql = "
             SELECT p
@@ -431,14 +438,17 @@ class EsProductRepository extends EntityRepository
                     WHERE mc.member = :member_id
                 )
                 AND p.member = :member_id
-                AND p.cat = :cat_id
+                AND p.cat IN ( " . $catInCondition . " )
         ORDER BY " . $orderBy;
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
-                    ->setParameter('cat_id', $catId)
                     ->setFirstResult($page)
                     ->setMaxResults($prodLimit);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
 
         $paginator = new Paginator($query, $fetchJoinCollection = true);
 
@@ -448,6 +458,58 @@ class EsProductRepository extends EntityRepository
 
         return $result;
     }
+    /*public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.id_product DESC")
+    {
+        $em = $this->_em;
+        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        //$catInCondition = $catCount > 0 ? implode(',',array_fill(0,$catCount,'?')) : "";
+
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('name','name');
+        $rsm->addScalarResult('slug','slug');
+        $rsm->addScalarResult('price','price');
+        $rsm->addScalarResult('product_image_path','product_image_path');
+
+        $sql = "
+            SELECT p.name, p.slug, FORMAT(p.price, 2) as price, pi.product_image_path
+            FROM es_product p
+            LEFT JOIN es_product_image pi
+                ON pi.product_id = p.id_product
+            WHERE p.id_product NOT IN (
+                    SELECT pc.product_id
+                    FROM es_member_prodcat pc
+                    INNER JOIN es_member_cat mc
+                        ON mc.id_memcat = pc.memcat_id
+                    WHERE mc.member_id = :member_id
+                )
+                AND p.member_id = :member_id
+                AND p.cat_id IN ( " . $catInCondition . " )
+                AND p.is_draft = 0
+                AND p.is_delete = 0
+            ORDER BY " . $orderBy . 
+            " LIMIT :page, :prod_limit";
+
+        $query = $em->createNativeQuery($sql, $rsm)
+                    ->setParameter("member_id", $memberId)
+                    ->setParameter("cat_id", $catId)
+                    ->setParameter("prod_limit", $prodLimit)
+                    ->setParameter("page", $page);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+        
+        return $query->getResult();
+    }*/
+
 
     /**
      * Get popular items by seller or category based on click count
@@ -457,6 +519,7 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
+
     public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
     {
         $this->em =  $this->_em;

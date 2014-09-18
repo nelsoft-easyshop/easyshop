@@ -330,6 +330,12 @@ class ProductManager
             $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
         }
 
+        // Move OTHERS at the end of array
+        if(isset($vendorCategories[1])){
+            $vendorCategories[1001] = $vendorCategories[1];
+            unset($vendorCategories[1]);
+        }
+
         return $vendorCategories;
     }
 

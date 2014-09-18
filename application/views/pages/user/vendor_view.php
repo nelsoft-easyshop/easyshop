@@ -12,16 +12,20 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="<?=base_url()?><?php echo $imgAvatar;?>">
                         </div>
                     </div>
                 </div>
                 <div>
                     <h4><?php echo $storeNameDisplay;?></h4>
-                    <p><strong>Contact No. :</strong><?php echo $arrVendorDetails['contactno'];?></p>
+                    <p><strong>Contact No. :</strong><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A";?></p>
                     <p>
                         <span class="glyphicon glyphicon-map-marker"></span>
-                        <span class="cl-1"><strong>Location not set</strong></span>
+                        <?php if( $hasAddress ):?>
+                            <span class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ', ' . $arrVendorDetails['stateregionname']?></strong></span>    
+                        <?php else:?>
+                            <span class="cl-1"><strong>Location not set</strong></span>    
+                        <?php endif;?>
                     </p>
                     <div class="vendor-profile-btn">
                         <a href="" class="btn btn-default-2">
@@ -141,7 +145,9 @@
     <div class="container">
     <div class="row row-products">
         <div class="col-md-3 border-1">
-            das
+            <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                <div data-link="#def-<?php echo $catId?>" class="tab_categories"><?php echo $arrCat['name']?></div>
+            <?php endforeach;?>
         </div>
         <div class="col-md-9 col-products">
             <div class="div-products">
@@ -160,6 +166,146 @@
                     </select>
                 </div>
                 <div class="clear"></div>
+                
+
+                <?php 
+                    $divCounter = 0;
+                    foreach($defaultCatProd as $catId => $arrCat):
+                ?>
+                <div class="view row row-items grid div_product" id="def-<?php echo $catId?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
+                    <?php if($arrCat['non_categorized_count'] === 0): ?>
+                        <span>No items available for this category.</span>
+                    <?php else:?>
+                        <?php foreach($arrCat['products'] as $objProduct):?>
+                            <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                                <div class="panel-item">
+                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
+                                        <div class="div-item">
+                                            <span class="span-img-wrapper" style="background: url(<?=base_url()?><?php echo $arrCat['product_images'][$objProduct->getIdProduct()]?>) center no-repeat; background-cover: cover;">
+                                                <center>
+                                                    <div class="span-img-container">
+                                                        
+                                                    </div>
+                                                </center>
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <div class="div-item-info">
+                                        <p class="p-item-name">
+                                            <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
+                                                <?php 
+                                                    $prod_name = html_escape($objProduct->getName());
+                                                    if(strlen($prod_name)>17){
+                                                        
+                                                        echo substr_replace( $prod_name, "...", 17);
+                                                    
+                                                    }else{
+                                                        echo $prod_name;
+                                                    }
+                                                ?>
+                                            </a>
+                                        </p>
+                                        <p class="p-category">
+                                            Clothes and Accessories
+                                        </p>
+                                        <div class="div-amount">
+                                            <p class="p-price">
+                                                <span><s>  </s></span> P <?php echo html_escape($objProduct->getPrice())?>
+                                            </p>
+                                            <p class="p-discount">
+                                                <span><s> P 1200.00 </s></span>
+                                            </p>
+                                            
+                                            <center>
+                                                <button class="btn btn-default-cart">
+                                                    <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                                </button>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
+                    <?php endif;?>
+
+
+
+<!--
+                    <?php if($product_count > 0):?>
+                        <?php foreach($products as $catID=>$p):?>
+                            <?php foreach($p['products'] as $prod):?>
+                                <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                                    <div class="panel-item">
+                                        <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                            <div class="div-item">
+                                                <span class="span-img-wrapper" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
+                                                    <center>
+                                                        <div class="span-img-container">
+                                                            
+                                                        </div>
+                                                    </center>
+                                                </span>
+                                            </div>
+                                        </a>
+                                        <div class="div-item-info">
+                                            <p class="p-item-name">
+                                                <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                    <?php 
+                                                        $prod_name = html_escape($prod['name']);
+                                                        if(strlen($prod_name)>17){
+                                                            
+                                                            echo substr_replace( $prod_name, "...", 17);
+                                                        
+                                                        }else{
+                                                            echo $prod_name;
+                                                        }
+                                                    ?>
+                                                </a>
+                                            </p>
+                                            <p class="p-category">
+                                                Clothes and Accessories
+                                            </p>
+                                            <div class="div-amount">
+                                                <p class="p-price">
+                                                    <span><s>  </s></span> P <?php echo html_escape($prod['price'])?>
+                                                </p>
+                                                <p class="p-discount">
+                                                    <span><s> P 1200.00 </s></span>
+                                                </p>
+                                                
+                                                <center>
+                                                    <button class="btn btn-default-cart">
+                                                        <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                                    </button>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+                        <?php endforeach;?>
+                    <?php endif;?>
+-->
+
+
+                </div>
+                <?php $divCounter++; endforeach;?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
                 <div class="view row row-items grid" id="fuck">
                     <?php if($product_count > 0):?>
                         <?php foreach($products as $catID=>$p):?>
@@ -215,64 +361,9 @@
                             <?php endforeach;?>
                         <?php endforeach;?>
                     <?php endif;?>
-                    <?php if($product_count > 0):?>
-                        <?php foreach($products as $catID=>$p):?>
-                            <?php foreach($p['products'] as $prod):?>
-                                <div class="panel panel-default panel-list-item">
-                                    <table width="100%">
-                                        <tr>
-                                            <td width="20%" class="td-list-image">
-                                                <span class="span-discount-pin">10% OFF</span>
-                                                <span class="span-list-img">
-                                                    
-                                                    <img class=" img-item" src="<?=base_url()?><?php echo $prod['product_image_path']?>">
-                                                </span>
-                                            </td>
-                                            <td width="55%" class="td-list-item-info">
-                                                <p class="p-list-item-name">
-                                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
-                                                        <?php 
-                                                            $prod_name = html_escape($prod['name']);
-                                                            if(strlen($prod_name)>17){
-                                                                
-                                                                echo substr_replace( $prod_name, "...", 17);
-                                                            
-                                                            }else{
-                                                                echo $prod_name;
-                                                            }
-                                                        ?>
-                                                    </a>
-                                                </p>
-                                                <p class="p-list-item-category">
-                                                    Electronics and Gadgets
-                                                </p>
-                                                <div class="div-list-desc-container">
-                                                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-                                                </div>
-                                            </td>
-                                            <td width="25%" class="td-list-price">
-                                                <p class="p-list-price">
-                                                    P <?php echo html_escape($prod['price'])?>
-                                                </p>
-                                                <div class="clear"></div>
-                                                <p class="p-list-discount">
-                                                    <s>  </s>
-                                                </p>
-                                                <div class="clear"></div>
-                                                <p class="p-list-availability">
-                                                    Availability: <b class="color-in-stock">In Stock</b>
-                                                </p>
-                                                <button class="btn btn-default-1">
-                                                    <span class="fa fa-shopping-cart"></span> ADD TO CART
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            <?php endforeach;?>
-                        <?php endforeach;?>
-                    <?php endif;?>
                 </div>
+-->
+
             </div>
         </div>
         

@@ -261,17 +261,13 @@ class Home extends MY_Controller
 
             $data = array(
                 "arrVendorDetails" => $arrVendorDetails
-                , "imgAvatar" => $arrVendorDetails['imgurl'] . "/60x60.png"
+                , "imgAvatar" => $arrVendorDetails['imgurl'] . "/150x150.png"
                 , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member'])
                 //, "customCatProd" => $this->getVendorCustomCatAndProd($arrVendorDetails['id_member'])
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
             );
-
-            print("<pre>");
-            print_r($arrVendorDetails);
-            die();
 
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
@@ -345,17 +341,24 @@ class Home extends MY_Controller
         $prodLimit = $this->vendorProdPerPage;
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
-        
-        foreach($parentCat as $idCat=>$category){
+
+        foreach( $parentCat as $idCat=>$category ){
             $parentCat[$idCat]['non_categorized_count'] = 0;
-            foreach($category['child_cat'] as $childCat){
-                $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($memberId, $childCat, $prodLimit);
-                $parentCat[$idCat]["products"] = array_merge($parentCat[$idCat]["products"], $categoryProducts);
-                $parentCat[$idCat]['non_categorized_count'] += count($categoryProducts);
+            $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
+
+            $parentCat[$idCat]['products'] = $categoryProducts;
+            $parentCat[$idCat]['non_categorized_count'] = count($categoryProducts);
+
+            foreach($categoryProducts as $product){
+                $productId = $product->getIdProduct();
+                $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
+                                ->getDefaultImage($productId);
+                $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
+                $parentCat[$idCat]['product_images'][$productId] = $imagePath;
             }
         }
-
+        
         return $parentCat;
     }
 
