@@ -174,7 +174,7 @@ class cart extends MY_Controller
                 foreach($product->getImages() as $image){
                     $images[$image->getIdProductImage()] = $image->getProductImagePath();
                 }
-          
+
                 $formattedCartItem = [
                     'rowid' => $cartItem['rowid'],
                     'productId' =>  $cartItem['id'],
@@ -195,12 +195,8 @@ class cart extends MY_Controller
                 $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
             }
         }
-        
-        
-        
-        print('<pre>');
-        print_r($formattedCartContents);
-      #  print(json_encode($this->cartData));
+      
+        print(json_encode($formattedCartContents));
     }
 
 }

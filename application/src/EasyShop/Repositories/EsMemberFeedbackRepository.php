@@ -31,9 +31,12 @@ class EsMemberFeedbackRepository extends EntityRepository
             $averageRatings['rating2'] += intval($rating->getRating2());
             $averageRatings['rating3'] += intval($rating->getRating3());
         }
-        $averageRatings['rating1'] /= $averageRatings['count'];
-        $averageRatings['rating2'] /= $averageRatings['count'];
-        $averageRatings['rating3'] /= $averageRatings['count'];
+        if($averageRatings['count'] > 0){
+            $averageRatings['rating1'] /= $averageRatings['count'];
+            $averageRatings['rating2'] /= $averageRatings['count'];
+            $averageRatings['rating3'] /= $averageRatings['count'];
+        }
+
         return $averageRatings;
     }
 }
