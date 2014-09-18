@@ -1199,6 +1199,41 @@ td.td-view.p-view.color-default{
 .pagination-items > .active > a > span{
 	color: #ffffff !important;
 }
+
+/*** vendor footer ***/
+
+.vendor-footer-con {
+    background-color: #ecedf1;
+    border-bottom: 4px solid #ff893b;
+    padding-top: 35px;
+}
+
+.vendor-footer {
+    text-align: center;
+    height: 57px;
+    line-height: 57px;
+}
+
+.vendor-footer ul {
+    display: inline-block;
+    list-style: none;
+    margin: 0 auto;
+}
+
+.vendor-footer ul li {
+    font-size: 12px;
+    float: left;
+    padding: 0 28px;
+}
+
+.vendor-footer ul li a {
+    color: #565656;
+}
+
+.vendor-footer ul li a:hover {
+    text-decoration: none;
+}
+
 /*** end of Vendor style ***/
 
 @media only screen and (max-width : 979px) { 
