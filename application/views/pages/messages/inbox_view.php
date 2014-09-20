@@ -72,7 +72,6 @@
     <div id="modal-div-header">
         <button id="modal-close">X</button>
     </div>
-<<<<<<< HEAD
     <div id="modal-inside-container" class="mrgn-top-10">
         <div>
             <label>To : </label>
