@@ -12,12 +12,6 @@ interface GatewayInterface
 {
     public function pay();
 
-    public function getPaymentMethodName();
-
-    public function getAmountAllocated();
-
-    public function setAmountAllocated($newAmount);
-
     /*
         Breakdown = [$param_arr1, $param_arr2 ...]
             $param_arr1 -> parameter array for the first payment method

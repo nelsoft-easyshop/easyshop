@@ -54,9 +54,9 @@ class CashOnDeliveryGateway extends AbstractGateway
         return 0;
     }
 
-    public function generateReferenceNumber($member_id)
+    public function generateReferenceNumber($memberId)
     {
-        return 'COD-'.date('ymdhs').'-'.$member_id;
+        return 'COD-'.date('ymdhs').'-'.$memberId;
     }
 
     public function getOrderStatus()
