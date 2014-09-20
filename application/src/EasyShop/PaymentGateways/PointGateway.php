@@ -16,9 +16,9 @@ class PointGateway extends AbstractGateway
      * Constructor
      * 
      */
-    public function __construct($params = [])
+    public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
-        parent::__construct($params);
+        parent::__construct($em, $request, $pointTracker, $paymentService, $params);
     }
 
     /**
@@ -27,6 +27,7 @@ class PointGateway extends AbstractGateway
      */
     public function pay()
     {
+        
         // get id of action
         $actionId = $this->pointTracker->getActionId($this->parameters['pointtype']);
 
@@ -62,7 +63,14 @@ class PointGateway extends AbstractGateway
             $historyObj->setData($jsonData);
             $this->em->flush();
         }
+    
     }
+
+    // Dummy functions to adhere to abstract gateway
+    public function getExternalCharge(){};
+    public function getOrderStatus(){};
+    public function getOrderProductStatus(){};  
+    public function generateReferenceNumber(){};  
 }
 
 /*

@@ -3,6 +3,7 @@
 namespace EasyShop\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EsProduct
@@ -311,6 +312,20 @@ class EsProduct
      */
     private $soldPrice = '0.0000';
 
+    
+    /**
+     * @var \EasyShop\Entities\EsProductImage
+     * @ORM\OneToMany(targetEntity="EasyShop\Entities\EsProductImage", mappedBy="product")
+     **/
+
+    private $images;
+
+
+    public function __construct() 
+    {
+        $this->images = new ArrayCollection();
+    }
+    
     /**
      * Get idProduct
      *
@@ -1221,5 +1236,16 @@ class EsProduct
     {
         return $this->soldPrice;
     }
+    
+    /** 
+     * Returns the images of a product
+     *
+     * @return EasyShop\Entities\EsProductImage
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    
     
 }

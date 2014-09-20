@@ -19,12 +19,52 @@
             <input type="text" class="ui-form-control">
             <input type="submit" value="" class="span_bg">
         </div>
-        <div>
-            <div>
-                <span class="cart-items-con">
-                    <span class="cart-item">2 item(s)</span> in your cart
+        <div class="pos-rel mrgn-rght-8">
+            <div class="header-cart-container">
+                <span class="header-cart-items-con">
+                    <span class="header-cart-item">2 item(s)</span> in your cart
                 </span>
-                <span class="cart-icon-con fa fa-shopping-cart"></span>
+                <span class="header-cart-icon-con span_bg cart-icon"></span>
+            </div>
+            <div class="header-cart-item-list">
+                <p>Recently add item(s)</p>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="header-cart-lower-content">
+                    <div class="header-cart-shipping-total">
+                        <p>Shipping: <span>&#8369; 50.00</span></p>
+                        <p>Total: <span>&#8369; 100,500.00</span></p>
+                    </div>
+                    <div class="header-cart-buttons">
+                        <a href="" class="header-cart-lnk-cart">go to cart</a>
+                        <a href="" class="header-cart-lnk-checkout">checkout</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
         <div>
@@ -187,12 +227,52 @@
                     <input type="text" class="ui-form-control">
                     <input type="submit" value="" class="span_bg">
                 </li>
-                <li>
-                    <div>
-                        <span class="cart-items-con">
-                            <span class="cart-item">2 item(s)</span> in your cart
+                <li class="pos-rel">
+                    <div class="header-cart-container">
+                        <span class="header-cart-items-con sticky-cart">
+                            <span class="header-cart-item">2 item(s)</span> in your cart
                         </span>
-                        <span class="cart-icon-con fa fa-shopping-cart"></span>
+                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                    </div>
+                    <div class="sticky-header-cart-item-list">
+                        <p>Recently add item(s)</p>
+                        <div class="mrgn-bttm-15">
+                            <div class="header-cart-item-img">
+                                <a href="">
+                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                </a>
+                            </div>
+                            <div class="header-cart-item-con">
+                                <a href=""><span>Doraemon - blue</span></a>
+                                <span>x 1</span>
+                                <span class="header-cart-item-price">&#8369; 450.00</span>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mrgn-bttm-15">
+                            <div class="header-cart-item-img">
+                                <a href="">
+                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                </a>
+                            </div>
+                            <div class="header-cart-item-con">
+                                <a href=""><span>Doraemon - blue</span></a>
+                                <span>x 1</span>
+                                <span class="header-cart-item-price">&#8369; 450.00</span>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="header-cart-lower-content">
+                            <div class="header-cart-shipping-total">
+                                <p>Shipping: <span>&#8369; 50.00</span></p>
+                                <p>Total: <span>&#8369; 100,500.00</span></p>
+                            </div>
+                            <div class="header-cart-buttons">
+                                <a href="" class="header-cart-lnk-cart">go to cart</a>
+                                <a href="" class="header-cart-lnk-checkout">checkout</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -478,93 +558,19 @@
     </div>
     </div>
 </section>
+<section>
+    <div class="vendor-footer-con">
+        <div class="vendor-footer main-container border-top">
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="">Promo Page</a></li>
+                <li><a href="">Seller Information</a></li>
+                <li><a href="">Contact</a></li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+</section>
 <script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script type="text/javascript">
-(function ($) {
-
-    //create a stick nav
-    var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
-    $(document).bind('ready scroll', function() {
-        var docScroll = $(document).scrollTop();
-        if (docScroll >= 455) 
-            {
-                if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
-                    $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
-                        top: '-155px'
-                    }).stop().animate({
-                        top: 0
-                    }, 500);
-                    
-                }
-
-                $('.vendor-content-wrapper').addClass('fixed-vendor-content');
-
-            } 
-        else 
-            {
-                $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
-                $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
-            }
-
-    });
-
-    var $edit_profile_photo = $(".edit-profile-photo");
-    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
-
-    $(document).mouseup(function (e) {
-
-        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
-            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-           $edit_profile_photo_menu.hide(1);
-        }
-
-    });
-
-    $edit_profile_photo.click(function() {
-        $edit_profile_photo_menu.show();
-    });
-
-    
-})(jQuery);
-
-
-
-	 $(document.body).on('click','.icon-grid',function() {
-			var view = $("div.view").attr("class");
-		
-			if(view == "view row row-items list")
-			{
-				$('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
-				$('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
-				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
-				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
-			}
-			
-			
-		});
-	$(document).on('click','.icon-list',function() {	
-			
-			var view = $("div.view").attr("class");
-			if(view == "view row row-items grid")
-			{
-				
-				$('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
-				$('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
-				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
-				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
-			};
-	});
-	
-	
-	
-	var $window = $(window),
-       $stickyLeft = $('#the-sticky-div'),
-       leftTop = $stickyLeft.offset().top;
-
-	   $window.scroll(function() {
-			$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
-		});
-	
-</script>
+<script src="<?= base_url() ?>assets/js/src/vendorpage.js" type="text/javascript"></script>
