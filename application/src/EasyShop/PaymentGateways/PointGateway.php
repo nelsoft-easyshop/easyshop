@@ -67,10 +67,10 @@ class PointGateway extends AbstractGateway
     }
 
     // Dummy functions to adhere to abstract gateway
-    public function getExternalCharge(){};
-    public function getOrderStatus(){};
-    public function getOrderProductStatus(){};  
-    public function generateReferenceNumber(){};  
+    public function getExternalCharge(){}
+    public function getOrderStatus(){}
+    public function getOrderProductStatus(){}
+    public function generateReferenceNumber($memberId){}
 }
 
 /*

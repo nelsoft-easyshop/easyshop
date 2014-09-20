@@ -1,7 +1,7 @@
 
 <?php 
 foreach ($products as $key => $value):
-    $productEntity = $value->getProduct();
+    $productEntity = $value;
     $productName = html_escape($productEntity->getName());
     $productSlug = $productEntity->getSlug();
     $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -10,7 +10,7 @@ foreach ($products as $key => $value):
     $percentage = $productEntity->getDiscountPercentage();
     $isPromote = intval($productEntity->getIsPromote());
     $isFreeShipping = $productEntity->getIsFreeShipping(); 
-    $productImagePath = $value->getProductImagePath();
+    $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
 ?> 
     <div class="<?php echo $typeOfView; ?>"> 
         <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
@@ -64,7 +64,7 @@ foreach ($products as $key => $value):
 <div id="move-product">
     <?php foreach ($products as $key => $value): ?>
     <?php
-        $productEntity = $value->getProduct();
+        $productEntity = $value;
         $productName = html_escape($productEntity->getName());
         $productSlug = $productEntity->getSlug();
         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -73,7 +73,7 @@ foreach ($products as $key => $value):
         $percentage = $productEntity->getDiscountPercentage();
         $isPromote = intval($productEntity->getIsPromote());
         $isFreeShipping = $productEntity->getIsFreeShipping();
-        $productImagePath = $value->getProductImagePath();
+        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
     ?>
     <h3></h3>
     <div class="responsive-product panel panel-default no-border panel-items">
