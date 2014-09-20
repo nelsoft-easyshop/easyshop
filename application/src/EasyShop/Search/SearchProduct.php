@@ -220,8 +220,8 @@ class SearchProduct
         $organizedAttribute = array();
 
         foreach ($products as $key => $value) {
-            array_push($finalizedProductIds, $value->getProduct()->getIdProduct());
-            array_push($availableCondition, $value->getProduct()->getCondition());
+            array_push($finalizedProductIds, $value->getIdProduct());
+            array_push($availableCondition, $value->getCondition());
         }
 
         if(count($finalizedProductIds)>0){
@@ -268,8 +268,8 @@ class SearchProduct
         $data = new ArrayCollection($filteredProducts);
         $iterator = $data->getIterator();
         $iterator->uasort(function ($a, $b) use($productIds) {
-            $position1 = array_search($a->getProduct()->getIdProduct(), $productIds);
-            $position2 = array_search($b->getProduct()->getIdProduct(), $productIds);
+            $position1 = array_search($a->getIdProduct(), $productIds);
+            $position2 = array_search($b->getIdProduct(), $productIds);
             return $position1 - $position2;
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
@@ -277,6 +277,14 @@ class SearchProduct
         $discountedProduct = (count($collection) > 0) ? $productManager->discountProducts($collection) : array(); 
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
+        foreach ($productsResult as $key => $value) {
+            $productId = $value->getIdProduct();
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                        ->getDefaultImage($productId);
+            $value->getDirectory = $productImage->getDirectory();
+            $value->getFilename = $productImage->getFilename();
+        }
+        
         return $productsResult;
     }
 

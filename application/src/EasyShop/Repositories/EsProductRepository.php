@@ -94,13 +94,11 @@ class EsProductRepository extends EntityRepository
 
                 $sql = "
                     SELECT 
-                        i,p,m
+                        p,m
                     FROM 
-                        EasyShop\Entities\EsProductImage i
-                        JOIN i.product p
+                        EasyShop\Entities\EsProduct p
                         JOIN p.member m
                     WHERE p.idProduct IN (:ids)
-                    AND i.isPrimary = 1
                 ";
                 $query = $this->em->createQuery($sql)
                                     ->setParameter('ids', $productIds)
@@ -110,7 +108,7 @@ class EsProductRepository extends EntityRepository
                 return $results;
             }
             
-        return false;
+        return array();
     }
 
     /**
@@ -377,6 +375,8 @@ class EsProductRepository extends EntityRepository
                                                     'WITH','p.member = m.idMember')
                                 ->leftJoin('EasyShop\Entities\EsProductShippingHead','sph',
                                                     'WITH','p.idProduct = sph.product')
+                                ->leftJoin('EasyShop\Entities\EsBrand','b',
+                                                    'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0');
  
@@ -402,7 +402,7 @@ class EsProductRepository extends EntityRepository
 
         if(isset($filterArray['brand']) && $filterArray['brand'][0]){
             $qbResult = $qbResult->andWhere(
-                                        $qb->expr()->in('p.brand', $filterArray['brand'])
+                                        $qb->expr()->in('b.name', $filterArray['brand'])
                                     );
         }
 
