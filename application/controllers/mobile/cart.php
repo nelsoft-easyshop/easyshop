@@ -68,7 +68,6 @@ class cart extends MY_Controller
         $this->cartImplementation = $this->cartManager->getCartObject();
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
-        
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
@@ -79,7 +78,6 @@ class cart extends MY_Controller
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
         $this->cartData = unserialize($this->member->getUserdata());
-
     }
 
 
@@ -133,6 +131,7 @@ class cart extends MY_Controller
             
             if($product){
                 $member = $product->getMember();
+                $productId = $product->getIdProduct();
                        
                 $ratings = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
                                 ->getAverageRatings($member->getIdMember());
@@ -149,7 +148,7 @@ class cart extends MY_Controller
                     'sellerEmail ' => $member->getEmail()
                     );
                     
-                $relatedItems = $this->productManager->getRecommendedProducts($product->getIdProduct(),5);
+                $relatedItems = $this->productManager->getRecommendedProducts($productId,5);
                 $formattedRelatedItem = array();
                 foreach($relatedItems as $relatedItem){
                     
@@ -172,6 +171,36 @@ class cart extends MY_Controller
                     $images[$image->getIdProductImage()] = $image->getProductImagePath();
                 }
 
+                
+                $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getAttributesByProductIds($productId);
+                $mappedAttributes = array();
+                foreach($attributes as $attribute){
+                    $isSelected = false;
+                    $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
+
+                    foreach($cartItem['options'] as $head => $option){
+                        $explodedOption = explode('~',$option);
+                        $fieldValue = $explodedOption[0];
+                        $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
+                        if(($attribute['head'] == $head) &&
+                            ($attribute['value'] == $fieldValue) &&
+                            ($attribute['price'] == $fieldPrice)){
+                            $isSelected = true;
+                            break;
+                        }
+                    }
+
+                    array_push($mappedAttributes, array(
+                        'id' => $optionalIdentifier.$attribute['detail_id'],
+                        'value' => $attribute['value'],
+                        'name' => $attribute['head'],
+                        'price' => $attribute['price'],
+                        'imageId' => $attribute['image_id'],
+                        'isSelected' => $isSelected,
+                    ));
+                }
+                
                 $formattedCartItem = [
                     'rowid' => $cartItem['rowid'],
                     'productId' =>  $cartItem['id'],
@@ -187,12 +216,13 @@ class cart extends MY_Controller
                     'sellerDetails' => $sellerDetails,
                     'images' => $images,
                     'relatedItems' => $formattedRelatedItem,
+                    'mapAttributes' => $mappedAttributes
                 ];
                 
                 $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
             }
         }
-      
+       
         print(json_encode($formattedCartContents));
     }
 
