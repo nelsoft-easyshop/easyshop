@@ -80,7 +80,7 @@
                                         $percentage = $productEntity->getDiscountPercentage();
                                         $isPromote = intval($productEntity->getIsPromote());
                                         $isFreeShipping = $productEntity->getIsFreeShipping();
-                                        $productImagePath = $productEntity->getDirectory .'categoryview/'. $productEntity->getFilename;
+                                        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
 
                                         $typeOfView = "product";
                                         if(isset($_COOKIE['view'])){ 
@@ -171,7 +171,7 @@
                                 $percentage = $productEntity->getDiscountPercentage();
                                 $isPromote = intval($productEntity->getIsPromote());
                                 $isFreeShipping = $productEntity->getIsFreeShipping(); 
-                                $productImagePath = $productEntity->getDirectory .'categoryview/'. $productEntity->getFilename;
+                                $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                             ?>
                             <h3></h3>
                             <div class="responsive-product panel panel-default no-border panel-items">

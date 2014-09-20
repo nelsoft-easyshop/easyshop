@@ -281,8 +281,8 @@ class SearchProduct
             $productId = $value->getIdProduct();
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                         ->getDefaultImage($productId);
-            $value->getDirectory = $productImage->getDirectory();
-            $value->getFilename = $productImage->getFilename();
+            $value->directory = $productImage->getDirectory();
+            $value->imageFileName = $productImage->getFilename();
         }
         
         return $productsResult;

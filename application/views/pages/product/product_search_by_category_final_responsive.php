@@ -84,7 +84,7 @@
                                         $productEntity = $value;
                                         $popularProductName = html_escape($productEntity->getName());
                                         $popularProductSlug = html_escape($productEntity->getSlug());
-                                        $popularProductImage = $productEntity->getDirectory .'categoryview/'. $productEntity->getFilename;
+                                        $popularProductImage = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                                         $popularProductPrice = number_format($productEntity->getFinalPrice(),2,'.',',');
                                     }
                                 ?>
@@ -131,7 +131,7 @@
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
                             $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
-                            $productImagePath = $productEntity->getDirectory .'categoryview/'. $productEntity->getFilename;
+                            $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                                         
                             $typeOfView = "product";
                             if(isset($_COOKIE['view'])){ 
@@ -232,7 +232,7 @@
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
                             $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
-                            $productImagePath = $productEntity->getDirectory .'categoryview/'. $productEntity->getFilename;
+                            $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                         ?>
                         <h3></h3>
                         <div class="responsive-product panel panel-default no-border panel-items">
