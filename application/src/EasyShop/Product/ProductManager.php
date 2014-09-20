@@ -260,20 +260,12 @@ class ProductManager
      */
     public function updateSoldoutStatus($productId)
     {
-
-        $quantity = $this->em->getRepository('EasyShop\Entities\EsProductItem')
-                                ->createQueryBuilder('p')
-                                ->select("SUM(p.quantity) AS soldout")
-                                ->where('p.product = :productId')
-                                ->setParameter('productId',$productId)
-                                ->getQuery()
-                                ->getOneOrNullResult();
-
         $item = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->find($productId);
+                                 ->find($productId);
 
-        $isSoldOut = intval($quantity['soldout']) <= 0 ? true : false;
+        $inventory = $this->getProductInventory($item);
 
+        $isSoldOut = intval(reset($inventory)['quantity']) <= 0 ? true : false;
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;
