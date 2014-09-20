@@ -100,7 +100,7 @@
     height: auto !important;
     max-height: 415px !important;
     max-width: 1005px;
-    min-width: 600px !important;
+    min-width: 506px !important;
     background-color:#fff;
     padding: 5px;
     overflow: auto;
@@ -112,6 +112,10 @@
 
 #simplemodal-container .simplemodal-wrap {
     overflow: inherit !important;
+}
+
+.feedback-modal-container {
+    width: 506px !important;
 }
 
 .jcrop-holder{
@@ -209,6 +213,16 @@
     font-weight: bold;
     font-size: 16px;
 }
+
+.shipping_comment_cont input{
+    width: 300px;
+    border-radius: 3px;
+}
+
+.shipping_comment_cont textarea{
+    border-radius: 3px;
+}
+
 
 .shipping_comment_cont input, .shipping_comment_cont label,
 .payment_details_cont input, .payment_details_cont label{
