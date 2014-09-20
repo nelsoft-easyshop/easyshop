@@ -547,6 +547,7 @@ class Register_model extends CI_Model
 		$blank = '';
         $sth->bindParam(':username', $data['username']);
 		$sth->bindParam(':password', $data['password']);
+        $sth->bindParam(':fullname', $data['fullname']);
 		$sth->bindParam(':email', $data['email']);
 		$sth->bindParam(':contactno', $data['mobile']);
         $sth->execute();

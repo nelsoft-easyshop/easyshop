@@ -594,7 +594,7 @@ class payment_model extends CI_Model
 		$sth->bindParam(':id_location', $id_location,PDO::PARAM_INT);
      	$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-	 	   
+
 		return $row[0];
 	}
 

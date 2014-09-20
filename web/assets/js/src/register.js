@@ -3,7 +3,7 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-	  
+
 	  $('#username').on('focus', function() {
 		  $(document).bind('focusin.example click.example',function(e){
 			  if ($(e.target).closest('.username_info, #username').length) return;
@@ -22,7 +22,7 @@ $(document).ready(function(){
 		var fieldlength = $.trim($('#username').val()).length;
 		hidecheckx($(this));
 		$('.username_availability').html('');
-		
+
 		if($(this).hasClass('pass')){
 			$(this).removeClass('pass');
 		}
@@ -35,7 +35,7 @@ $(document).ready(function(){
 			$('.username_availability').html('');
 		}
 	  });
-	  
+
 	  $('div.pass-container').show();
 	  $('#password').focus(function() {
 		  $(document).bind('focusin.example click.example',function(e) {
@@ -56,7 +56,7 @@ $(document).ready(function(){
 					showx($('#cpassword'));
 				else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
 					showcheck($('#cpassword'));
-				
+
 				if( !$(this).hasClass('error') ){
 					$('div.pass-container').show();
 				}else{
@@ -73,7 +73,7 @@ $(document).ready(function(){
 		var code = e.keyCode || e.which
 		return code!=32;
 	  });
-	  
+
 	  $("#cpassword").on('paste', function(e){
 			e.preventDefault();
 		}).on('focusin input focusout',function(){
@@ -86,7 +86,7 @@ $(document).ready(function(){
 			var code = e.keyCode || e.which
 			return code!=32;
 		});
-	  
+
 	  $('#email').on('blur', function(){
 		var fieldlength = $.trim($('#email').val()).length;
 		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
@@ -100,7 +100,7 @@ $(document).ready(function(){
 		var fieldlength = $.trim($('#email').val()).length;
 		hidecheckx($(this));
 		$('.email_availability').html('');
-		
+
 		if($(this).hasClass('pass')){
 			$(this).removeClass('pass');
 		}
@@ -113,14 +113,14 @@ $(document).ready(function(){
 			$('.email_availability').html('');
 		}
 	  });
-	  
+
 	  /*
 	  $('#captcha_refresh').click(function(){
 		   $('#captcha_loading').css('display','inline');
 		   $.post(config.base_url+"register/recreate_captcha", function(data){
 			  $('#captcha_loading').css('display','none');
 			  $('#captcha_img').children().attr('src', data);
-		   });	
+		   });
 		   $('.red').html('');
 	  });
 	  */
@@ -128,17 +128,17 @@ $(document).ready(function(){
 
 /**********************************************************************************************/
 /****************************	FORM 1 VALIDATION	*******************************************/
-/**********************************************************************************************/	
+/**********************************************************************************************/
 $(document).ready(function(){
 
 	 jQuery.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
-     }, "Must contain numbers and letters"); 
-	 
+     }, "Must contain numbers and letters");
+
 	 jQuery.validator.addMethod("alphanumeric_underscore", function(value, element) {
         return this.optional(element) || /^\w+$/i.test(value);
 	 }, "Only letters, numbers, and underscores are allowed");
- 
+
 	 $("#register_form1").validate({
 		 rules: {
             username: {
@@ -196,15 +196,15 @@ $(document).ready(function(){
 				$('#register_form1_loadingimg').show();
 				form.submit();
 				$('#register_page1_btn').attr('disabled', true);
-			}			
+			}
 		 }
 	 });
-	 
-	 
+
+
 	$('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
-	 
+
 });
 /**********************************************************************************************/
 /****************************	Change Password VALIDATION	************************************/
@@ -212,9 +212,9 @@ $(document).ready(function(){
 $(document).ready(function(){
 
     jQuery.validator.addMethod("equals", function(value, element, param) {
-      return this.optional(element) || value === param; 
+      return this.optional(element) || value === param;
     }, jQuery.format(""));
- 
+
 	 $("#changepass").validate({
          ignore: "",
 		 rules: {
@@ -243,7 +243,7 @@ $(document).ready(function(){
 			}
 		 },
 		 errorElement: "span",
-		 errorPlacement: function(error, element) {     
+		 errorPlacement: function(error, element) {
 				error.addClass('red');
 				if(element.attr('name') == 'password'){
 					var added_span = $('<span/>',{'class':"red"});
@@ -251,15 +251,15 @@ $(document).ready(function(){
 					added_span.insertBefore(element.next());}
 				else
 					error.appendTo(element.parent());
-		 }	
-		 
+		 }
+
 	 });
-	 
-	 
+
+
 	$('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
-	 
+
 });
 
 
@@ -364,20 +364,20 @@ $(function() {
 	$( ".terms_and_conditions" ).click(function() {
         $('.dialog').dialog('open');
 	});
-    
+
 });
 
 /**********************************************************************************************/
 /****************************	Change Password VALIDATION	************************************/
 /**********************************************************************************************/
 $(document).ready(function(){
-	
+
 	$("#notify").delay(3000).fadeOut(2000);
 
     jQuery.validator.addMethod("equals", function(value, element, param) {
-      return this.optional(element) || value === param; 
+      return this.optional(element) || value === param;
     }, jQuery.format(""));
- 
+
 	 $("#identify_form").validate({
          ignore: "",
 		 rules: {
@@ -395,18 +395,18 @@ $(document).ready(function(){
 				equalTo: ""
 			}
 		 },
-		 
+
 		 errorElement: "span",
-		 errorPlacement: function(error, element) {     
+		 errorPlacement: function(error, element) {
 			error.addClass('red');
 			error.appendTo(element.parent());
-		 }	
-		 
+		 }
+
 	 });
-	 
-	 
+
+
 	$('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
-	 
+
 });
