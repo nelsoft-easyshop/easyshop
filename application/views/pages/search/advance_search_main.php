@@ -117,7 +117,7 @@
                 <?php if(count($products)>0): ?>
                     <?php 
                     foreach ($products as $key => $value):
-                        $productEntity = $value->getProduct();
+                        $productEntity = $value;
                         $productName = html_escape($productEntity->getName());
                         $productSlug = $productEntity->getSlug();
                         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -125,8 +125,8 @@
                         $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                         $percentage = $productEntity->getDiscountPercentage();
                         $isPromote = intval($productEntity->getIsPromote());
-                        $isFreeShipping = $productEntity->getIsFreeShipping(); 
-                        $productImagePath = $value->getProductImagePath();
+                        $isFreeShipping = $productEntity->getIsFreeShipping();
+                        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
 
                         $typeOfView = "product";
                         if(isset($_COOKIE['view'])){ 
@@ -291,7 +291,7 @@
                                 <?php if(count($products)>0): ?>
                                     <?php foreach ($products as $key => $value): ?>  
                                     <?php
-                                        $productEntity = $value->getProduct();
+                                        $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
                                         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -300,7 +300,7 @@
                                         $percentage = $productEntity->getDiscountPercentage();
                                         $isPromote = intval($productEntity->getIsPromote());
                                         $isFreeShipping = $productEntity->getIsFreeShipping();
-                                        $productImagePath = $value->getProductImagePath();
+                                        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                                     ?>
                                     <h3></h3>
                                     <div class="responsive-product panel panel-default no-border panel-items">
