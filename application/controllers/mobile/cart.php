@@ -95,7 +95,7 @@ class cart extends MY_Controller
         foreach($mobileCartContents as $mobileCartContent){
                               
             $options = array();
-            foreach($mobileCartContent->details->mapAttributes as $attribute => $attributeArray){
+            foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
                 if(intval($attributeArray['isSelected']) === 1){
                     $options[$key] = $attributeArray['value'].'~'.$attributeArray['price'];
                 }
@@ -103,18 +103,14 @@ class cart extends MY_Controller
             }
                   
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->findOneBy(['slug' => $mobileCartContent->id]);
+                                ->findOneBy(['slug' => $mobileCartContent->slug]);
      
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
             }
-            else{
-                array_push($response, [$mobileCartContent->id => 'Item does not exist']);
-            }
         }
         $this->cartImplementation->persist($this->member->getIdMember());
-
-        print(json_encode($response,JSON_PRETTY_PRINT));
+        $this->getCartData();
     }
 
     /**
