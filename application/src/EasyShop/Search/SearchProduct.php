@@ -224,7 +224,7 @@ class SearchProduct
             array_push($availableCondition, $value->getCondition());
         }
 
-        if(count($finalizedProductIds)>0){
+        if(!empty($finalizedProductIds)){
             $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
             $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
             $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
@@ -258,9 +258,10 @@ class SearchProduct
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
+        $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-        $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
+        $productIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
         $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
         
@@ -274,7 +275,7 @@ class SearchProduct
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
 
-        $discountedProduct = (count($collection) > 0) ? $productManager->discountProducts($collection) : array(); 
+        $discountedProduct = (!empty($collection)) ? $productManager->discountProducts($collection) : array(); 
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
         foreach ($productsResult as $key => $value) {
