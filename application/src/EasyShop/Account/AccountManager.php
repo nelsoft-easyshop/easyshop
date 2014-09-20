@@ -191,6 +191,7 @@ class AccountManager
             $member->setDatecreated(new DateTime('now'));
             $member->setLastmodifieddate(new DateTime('now'));
             $member->setLastLoginDatetime(new DateTime('now'));
+            $member->setLastFailedLoginDateTime(new DateTime('now'));
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             
