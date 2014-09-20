@@ -230,7 +230,7 @@ class Home extends MY_Controller
      * @return View
      */
     public function userprofile()
-    {
+    {		
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
@@ -240,47 +240,85 @@ class Home extends MY_Controller
         delete_cookie('es_subscribe_result');
 
         if($vendordetails){
-            $data['title'] = 'Vendor Profile | Easyshop.ph';
-            $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-            $data = array_merge($data, $this->fill_header());
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-            $sellerid = $vendordetails['id_member'];
-            $usersFollowing = $this->user_model->getFollowing($sellerid);
-            $usersFollower = $this->user_model->getFollowers($sellerid);
-            $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-            $data = array_merge($data,array(
-                    'vendordetails' => $vendordetails,
-                    'image_profile' => $this->memberpage_model->get_Image($sellerid),
-                    'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
-                    'active_count' => intval($user_product_count['active']),
-                    'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-                    'followers' =>  $usersFollower,
-                    'following' =>  $usersFollowing,
-                    'tab' => $tab,
-                    ));
-            $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
+		
+			$pageSection = $this->uri->segment(2);
+			if($pageSection === 'about'){
+				$this->aboutuser();
+			}
+			else if($pageSection === 'contact'){
+				$this->contactuser();
+			}
+			else{
+				$data['title'] = 'Vendor Profile | Easyshop.ph';
+				$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
+				$data = array_merge($data, $this->fill_header());
+				$data['render_logo'] = false;
+				$data['render_searchbar'] = false;
+				$this->load->view('templates/header', $data);
+				$sellerid = $vendordetails['id_member'];
+				$usersFollowing = $this->user_model->getFollowing($sellerid);
+				$usersFollower = $this->user_model->getFollowers($sellerid);
+				$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
+				$data = array_merge($data,array(
+						'vendordetails' => $vendordetails,
+						'image_profile' => $this->memberpage_model->get_Image($sellerid),
+						'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
+						'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
+						'active_count' => intval($user_product_count['active']),
+						'deleted_count' => intval($user_product_count['deleted']),
+						'sold_count' => intval($user_product_count['sold']),
+						'followers' =>  $usersFollower,
+						'following' =>  $usersFollowing,
+						'tab' => $tab,
+						));
+				$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 
-            $data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-            $data['product_count'] = count($data['products']);
-            $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
-            #if 0 : no entry - unfollowed, hence display follow
-            #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
-            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 && $vendordetails['store_name'] !== $vendordetails['username'] ? TRUE : FALSE;
-            $data['store_name'] = $data['hasStoreName'] ? $vendordetails['store_name'] : $vendordetails['username'];
+				$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
+				$data['product_count'] = count($data['products']);
+				$data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
+				#if 0 : no entry - unfollowed, hence display follow
+				#if 1 : has entry - followed, hence display unfollow
+				$data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
+				$data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 && $vendordetails['store_name'] !== $vendordetails['username'] ? TRUE : FALSE;
+				$data['store_name'] = $data['hasStoreName'] ? $vendordetails['store_name'] : $vendordetails['username'];
 
-            $this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
+				$this->load->view('pages/user/vendor_view', $data);
+				$this->load->view('templates/footer');
+			}
         }
         else{
             $this->pagenotfound();
         }
     }
+	
+	/**
+	 * Renders the user about page
+	 *
+	 */
+	private function aboutuser()
+	{
+        $data['title'] = 'Vendor Information | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/about');
+        $this->load->view('templates/footer');
+	}
 
+	/**
+	 * Renders the user contact page
+	 *
+	 */
+	private function contactuser()
+	{
+        $data['title'] = 'Vendor Contact | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/contact');
+        $this->load->view('templates/footer');
+    }
+	
     /**
      *  Fetch information to be display in feeds page
      *

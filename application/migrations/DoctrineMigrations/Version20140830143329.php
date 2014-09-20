@@ -257,7 +257,7 @@ class Version20140830143329 extends AbstractMigration
         
         $this->addSql("
         ALTER TABLE `es_order_billing_info` 
-            ADD COLUMN `order_product_id` INT(10) NOT NULL AFTER `id_es_order_billing_info`,
+            ADD COLUMN `order_product_id` INT(10) NOT NULL AFTER `id_order_billing_info`,
             ADD COLUMN `order_id` INT(10) NOT NULL AFTER `order_product_id`;
         ");
 
