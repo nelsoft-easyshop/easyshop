@@ -399,7 +399,7 @@
             else{
                 $this.find('.active').removeClass("active");
             }
-            
+                        
             var data_attr = [target.attr('data-attrid'),target.attr('data-type')];
             if(!isActiveBool){
                 target.addClass("active");
