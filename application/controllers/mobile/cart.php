@@ -183,9 +183,9 @@ class cart extends MY_Controller
                         $explodedOption = explode('~',$option);
                         $fieldValue = $explodedOption[0];
                         $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
-                        if(($attribute['head'] == $head) &&
-                            ($attribute['value'] == $fieldValue) &&
-                            ($attribute['price'] == $fieldPrice)){
+                        if(strtolower($attribute['head']) == strtolower($head) &&
+                            strtolower($attribute['value']) == strtolower($fieldValue) &&
+                            strtolower($attribute['price']) == strtolower($fieldPrice)){
                             $isSelected = true;
                             break;
                         }
