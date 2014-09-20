@@ -65,7 +65,7 @@ abstract class AbstractGateway implements GatewayInterface
     abstract public function getExternalCharge();
     abstract public function getOrderStatus();
     abstract public function getOrderProductStatus();
-    abstract public function generateReferenceNumber();
+    abstract public function generateReferenceNumber($memberId);
     
 
     /**
