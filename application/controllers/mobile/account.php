@@ -31,6 +31,7 @@ class Account extends MY_Controller {
     {
         $this->oauthServer->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
     }
+
     
     /**
      * Registers a user

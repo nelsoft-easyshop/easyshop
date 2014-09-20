@@ -319,9 +319,10 @@ class Kernel
             $userCredentialStorage = new EasyShop\OAuth\Storage\UserCredentials($container['account_manager']);
             $server = new OAuth2\Server($storage);
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
+            $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
         };
-
+        
         $container['string_utility'] = function ($c) {
             return new \EasyShop\Utility\StringUtility();
         };
