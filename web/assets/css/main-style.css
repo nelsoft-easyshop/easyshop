@@ -1188,6 +1188,10 @@ td.td-view.p-view.color-default{
   border-top-color: #003e91 !important;
 }
 
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #003e91 !important;
+}
+
 .tooltip.left .tooltip-arrow {
   
   border-left-color: #003e91 !important;
