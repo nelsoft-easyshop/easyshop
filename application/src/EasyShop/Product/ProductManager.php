@@ -295,8 +295,12 @@ class ProductManager
                                 ->select("p")
                                 ->where('p.cat = :category')
                                 ->andWhere("p.idProduct != :productId")
+                                ->andWhere("p.isDraft = :isDraft")
+                                ->andWhere("p.isDelete = :isDelete")
                                 ->setParameter('productId',$product->getIdProduct())
                                 ->setParameter('category',$product->getCat())
+                                ->setParameter('isDraft',0)
+                                ->setParameter('isDelete',0)
                                 ->orderBy('p.clickcount', 'DESC')
                                 ->getQuery();
         if($limit){
