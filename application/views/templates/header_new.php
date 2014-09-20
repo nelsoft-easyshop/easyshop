@@ -79,12 +79,52 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <input type="text" class="ui-form-control">
             <input type="submit" value="" class="span_bg">
         </div>
-        <div>
-            <div>
-                <span class="cart-items-con">
-                    <span class="cart-item">2 item(s)</span> in your cart
+        <div class="pos-rel mrgn-rght-8">
+            <div class="header-cart-container">
+                <span class="header-cart-items-con">
+                    <span class="header-cart-item">2 item(s)</span> in your cart
                 </span>
-                <span class="cart-icon-con fa fa-shopping-cart"></span>
+                <span class="header-cart-icon-con span_bg cart-icon"></span>
+            </div>
+            <div class="header-cart-item-list">
+                <p>Recently add item(s)</p>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="header-cart-lower-content">
+                    <div class="header-cart-shipping-total">
+                        <p>Shipping: <span>&#8369; 50.00</span></p>
+                        <p>Total: <span>&#8369; 100,500.00</span></p>
+                    </div>
+                    <div class="header-cart-buttons">
+                        <a href="" class="header-cart-lnk-cart">go to cart</a>
+                        <a href="" class="header-cart-lnk-checkout">checkout</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
         <div>
