@@ -47,9 +47,9 @@
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
-                                <li class=""><a href="<?=base_url()?>home">Home</a></li>
+                                <li class=""><a href="/">Home</a></li>
                                 <?php foreach($breadcrumbs as $crumbs): ?>
-                                <li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
+                                    <li> <a href="/category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
                                 <?php endforeach;?>
                                 <li class="bread_crumbs_last_child"><?php echo html_escape($product['product_name']);?></li>
                             </ul>
@@ -80,9 +80,9 @@
                     </div>
                     <div class="bread_crumbs_m">
                         <ul style="margin-bottom: 10px;">
-                            <li class="" ><a href="<?=base_url()?>home" style="color: #f18200;">Home</a></li>
+                            <li class="" ><a href="/" style="color: #f18200;">Home</a></li>
                             <?php foreach($breadcrumbs as $crumbs): ?>
-                            <li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
+                                <li> <a href="/category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
                             <?php endforeach;?>
                             <li class="bread_crumbs_last_child" style="font-size:11px !important;"><?php echo html_escape($product['product_name']);?></li>
                         </ul>
@@ -111,8 +111,8 @@
                                     </td>
                                     <td  width="40%" style="vertical-align:top; padding-right: 3px;">
                                         <span class="seller-name"> 
-                                            <a href="<?php echo base_url() . $product['sellerusername'];?>"> 
-                                                <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
+                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
                                                 <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                                             </a>
                                             <br/>
@@ -122,7 +122,7 @@
                                                 </span>
                                                 <br/>
                                                 <?php if(($vendorrating['rate_count'] <=0)):?>
-                                                <center><p style="margin-left: 13px;">No ratings received yet.</p></center>
+                                                    <center><p style="margin-left: 13px;">No ratings received yet.</p></center>
                                                 <?php else:?>
                                                     <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
                                                     <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
