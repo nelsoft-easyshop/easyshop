@@ -507,9 +507,6 @@ line-height: 30px !important;
     
 }
 
-.ui-loader-default > h1, .ui-loader-default >span {
-    display: none !important;
-}
 @media only screen and (max-width: 1024px) {
 
 .display-when-mobile-833{
