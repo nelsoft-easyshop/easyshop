@@ -11,16 +11,6 @@ namespace EasyShop\PaymentGateways;
 abstract class AbstractGateway implements GatewayInterface
 {
     /**
-     * @var int
-     */
-    protected $amountAllocated;
-
-    /**
-     * @var string
-     */
-    protected $paymentMethodName;
-
-    /**
      * @var mixed
      */
     protected $parameters;
@@ -33,37 +23,55 @@ abstract class AbstractGateway implements GatewayInterface
     protected $em;
 
     /**
+     * Http foundation Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
+
+    /**
+     * PointTracker instance
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
+    protected $pointTracker;
+
+    /**
+     * Payment Service instance
+     *
+     * @var EasyShop\PaymentService\PaymentService
+     */
+    protected $paymentService;
+
+    /**
      * Constructor
      * 
      */
-    protected function __construct($params = [])
+    protected function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->em = $em;
+        $this->request = $request;
+        $this->pointTracker = $pointTracker;
+        $this->paymentService = $paymentService;
         $this->setParameters($params);
-        $this->paymentMethodName = $this->parameters['method'];
-        $this->amountAllocated = $this->parameters['amount'];
     }
 
     /**
-     * Pay Method
+     * Abstract Methods
      */
+
+    
     abstract public function pay();
+    abstract public function getExternalCharge();
+    abstract public function getOrderStatus();
+    abstract public function getOrderProductStatus();
+    abstract public function generateReferenceNumber($memberId);
+    
 
-    public function getPaymentMethodName()
-    {
-        return $this->paymentMethodName;
-    }
-
-    public function getAmountAllocated()
-    {
-        return $this->amountAllocated;
-    }
-
-    public function setAmountAllocated($newAmount)
-    {
-        $this->amountAllocated = $newAmount;
-    }
-
+    /**
+     * Getters and Setters
+     */
+    
     public function setParameters($param = [])
     {
         foreach ($param as $key => $value) {
@@ -75,4 +83,5 @@ abstract class AbstractGateway implements GatewayInterface
     {
         return $this->parameters[$key];
     }
+
 }

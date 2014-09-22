@@ -23,6 +23,7 @@ class StringUtility
         parse_str($params, $arr);
         return $arr;
     }
+
     /**
     * Strips unwanted characters for a string encoding
     *

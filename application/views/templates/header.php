@@ -112,8 +112,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <?PHP echo $msgs['unread_msgs'];?>
                                 </span>
                             </a>
-                            <a href="<?=base_url()?>me" class="top_link_name prevent">
-                                <?php echo $uname; ?>
+                            <a href="/<?php echo html_escape($user['slug']); ?>" class="top_link_name prevent">
+                                <?php echo html_escape($user['username']); ?>
                             </a>
                         </li>
                         <li class="txt_res_hide">
@@ -196,22 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
                 
-                <select name="q_cat" id="q_cat">
+                <select name="category" id="category">
                     <option value="1">All Categories</option>
                     <?php
-                        foreach ($category_search as $keyrow) {
-                        $selected = "";
-                        if(isset($_GET['q_cat'])){
-                            if($_GET['q_cat'] == $keyrow['id_cat'])
-                            {
-                                $selected = "selected";
-                            }
-                        }
+                        foreach ($category_search as $keyrow):
+                        $selected = ($this->input->get('category') && $this->input->get('category') == $keyrow['id_cat'])?"selected":"";
                     ?>
-                    <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>"><?php echo $keyrow['name']; ?></option>
-                    <?php
-                        }
-                    ?>
+                        <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>">
+                            <?php echo $keyrow['name']; ?>
+                        </option>
+                    <?php endforeach;?>
                 </select>
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
                 </div>

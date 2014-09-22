@@ -3,16 +3,14 @@
 namespace EasyShop\FormValidation;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use EasyShop\FormValidation\Constraints as CustomAssert;
 
-/*
-    Constraint List can be found here:
-        http://symfony.com/doc/current/reference/constraints.html
-*/
 
 /**
  * Validation Rules Class
  *
- * @author LA Roberto
+ * refer to: http://symfony.com/doc/current/reference/constraints.html
+ * for the complete constraint list
  */
 class ValidationRules
 {
@@ -23,12 +21,20 @@ class ValidationRules
      * @var mixed
      */
     private $rules = [];
-
+    
+    /**
+     * The entity manager
+     *
+     */
+    private $em;
+     
+     
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct($em)
     {   
+        $this->em = $em;
         $this->initValidationRules();
     }
 
@@ -40,23 +46,54 @@ class ValidationRules
         $this->rules = array(
             'bug_report' => array(
                     'title' => array(
-                            new Assert\NotNull()
+                            new Assert\NotNull(["message" => "This field is required."])
                         ),
                     'description' => array(
-                            new Assert\NotNull()
+                            new Assert\NotNull(["message" => "This field is required."])
                         ),
-                    'file' => array(
-                            new Assert\File([
+                    'image' => array(
+                            new Assert\Image([
+                                'mimeTypes' => array('image/png','image/jpg','image/jpeg','image/gif'),
+                                'mimeTypesMessage' => 'This file is not a valid image. Accepted extensions are .png, .jpg, .jpeg and .gif only.',
                                 'maxSize' => '5M',
                                 'uploadIniSizeErrorMessage' => 'The file is too large. Allowed maximum size is 5 MB.'
                                 ])
                             )
                 ),
-            'dummy' => array(
-                    'field 1' => array(), // field 1
-                    'field 2' => array(), // field 2
-                    'field 3' => array() // field 3
-                )
+            'login' => array(
+                    'username' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'password' => array(
+                                new Assert\NotBlank(),
+                    ),
+                ),
+            'register' => array(
+                    'username' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5', 
+                                                   'max' => '25']),
+                                new CustomAssert\ContainsAlphanumericUnderscore(),
+                                new CustomAssert\IsUsernameUnique(),
+                    ),
+                    'password' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '6',]),
+                                new CustomAssert\IsValidPassword(),
+                    ),
+                    'contactno' => array(
+                                new Assert\Length(['min' => '11',
+                                                     'max' => '11']),
+                                new CustomAssert\IsMobileUnique(),
+                                new CustomAssert\IsValidMobile(),
+                    ),
+                    'email' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Email(),
+                                new CustomAssert\IsEmailUnique(),
+                    ),
+                    
+                ),
         );
     }
 

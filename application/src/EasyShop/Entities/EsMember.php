@@ -200,6 +200,19 @@ class EsMember
      * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
      */
     private $oauthProvider;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="failed_login_count", type="integer", nullable=true)
+     */
+    private $failedLoginCount = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_failed_login_datetime", type="datetime", nullable=true)
+     */
+    private $lastFailedLoginDatetime = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -796,7 +809,17 @@ class EsMember
     public function setOauthId($oauthId)
     {
         $this->oauthId = $oauthId;
+    }
 
+    /**
+     * Set failedLoginCount
+     *
+     * @param integer $failedLoginCount
+     * @return EsMember
+     */
+    public function setFailedLoginCount($failedLoginCount)
+    {
+        $this->failedLoginCount = $failedLoginCount;
         return $this;
     }
 
@@ -819,7 +842,27 @@ class EsMember
     public function setOauthProvider($oauthProvider)
     {
         $this->oauthProvider = $oauthProvider;
+    }
 
+    /**
+     * Get failedLoginCount
+     *
+     * @return integer 
+     */
+    public function getFailedLoginCount()
+    {
+        return $this->failedLoginCount;
+    }
+
+    /**
+     * Set lastFailedLoginDatetime
+     *
+     * @param \DateTime $lastFailedLoginDatetime
+     * @return EsMember
+     */
+    public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
+    {
+        $this->lastFailedLoginDatetime = $lastFailedLoginDatetime;
         return $this;
     }
 
@@ -831,6 +874,16 @@ class EsMember
     public function getOauthProvider()
     {
         return $this->oauthProvider;
+    }
+
+    /**
+     * Get lastFailedLoginDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getLastFailedLoginDatetime()
+    {
+        return $this->lastFailedLoginDatetime;
     }
 
     /**

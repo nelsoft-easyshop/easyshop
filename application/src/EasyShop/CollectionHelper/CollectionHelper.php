@@ -25,9 +25,59 @@ class CollectionHelper
             if(!array_key_exists($head,$organizeArray)){
                 $organizeArray[$head] = array();
             }
-            array_push($organizeArray[$head],  $value[$arrayKey[1]]);
+            $organizeArray[$head][] = $value[$arrayKey[1]]; 
+            $organizeArray[$head] = array_unique($organizeArray[$head]);
         }
 
         return $organizeArray;
+    }
+
+    /**
+     * Remove selected array from the given origin array
+     * reverse condition if the third parameter exist
+     * @param  mixed  $originArray
+     * @param  mixed  $arrayToRemove
+     * @param  boolean $reverseCondition
+     * @return mixed
+     */
+    public function removeArrayToArray($originArray,$arrayToRemove,$reverseCondition=TRUE)
+    {
+        foreach ($originArray as $key => $value) {
+            if($reverseCondition){
+                if(in_array($key, $arrayToRemove)){
+                    unset($originArray[$key]);
+                }
+            }
+            else{
+                if(!in_array($key, $arrayToRemove)){
+                    unset($originArray[$key]);
+                }
+            }
+        }
+
+        return $originArray;
+    }
+
+    /**
+     * Explode url paramter convert to multi-dimensional array
+     * @param  mixed $urlParameters
+     * @return mixed
+     */
+    public function explodeUrlValueConvertToArray($urlParameters,$ignoreParam = array())
+    {
+        $newFormedArray = [];
+        $paramterDelimiter = ",";
+        foreach ($urlParameters as $key => $value) {
+            $trimValue = trim($value);
+            if(!in_array($key, $ignoreParam)){
+                $convertedValue = explode($paramterDelimiter, $value);
+                $newFormedArray[$key] = $convertedValue;
+            }
+            else{
+                $newFormedArray[$key] = $value;
+            }
+        }
+
+        return $newFormedArray;
     }
 }

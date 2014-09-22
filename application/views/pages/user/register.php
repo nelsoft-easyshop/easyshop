@@ -96,7 +96,7 @@
 					    </li>
 					    <?php else: ?>
                             <li class='btn_login'>   
-                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($uname);?>'/></a>
+                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($user["username"]);?>'/></a>
                             </li>
                             
                         

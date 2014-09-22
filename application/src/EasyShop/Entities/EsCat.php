@@ -94,7 +94,10 @@ class EsCat
      */
     private $parent;
 
-
+    /**
+     * @var string
+     */
+    private $image = '';
 
     /**
      * Get idCat
@@ -335,4 +338,25 @@ class EsCat
     {
         return $this->parent;
     }
+
+    /**
+     *  Set $image
+     *
+     *  @param string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+    
+    /**
+     *  Get $image
+     *
+     *  @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+    
 }

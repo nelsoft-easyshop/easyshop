@@ -28,7 +28,30 @@ class EsPaymentMethod
      */
     private $name;
 
+    /**
+     * @var int
+     */
+    const PAYMENT_PAYPAL = 1;
 
+    /**
+     * @var int
+     */
+    const PAYMENT_DRAGONPAY = 2;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_CASHONDELIVERY = 3;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_PESOPAYCC = 4;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_DIRECTBANKDEPOSIT = 5;
 
     /**
      * Get idPaymentMethod
