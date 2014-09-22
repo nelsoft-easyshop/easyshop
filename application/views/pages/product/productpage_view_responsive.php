@@ -10,7 +10,7 @@
 
 
 <section style="color-gray">
-    <div class="container font-roboto" style="max-width:980px;">	
+    <div class="container font-roboto" style="max-width:980px;">
         <div class="row">
             <div class="col-md-12">
                 <section class="top_margin product-page-section display-when-desktop">
@@ -26,24 +26,10 @@
                                     <li class = <?php echo ((isset($breadcrumbs[0]['id_cat']) &&  $category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
                                 <?php endforeach;?>
                                 </ul>
-                                <span class="span_drop span_bg prod_cat_drop"></span>
+                                <span id="prod" class="span_drop span_bg prod_cat_drop"></span>
                             </div>
                         </div>
-                        <script>
-                                $("#prod_drop_nav").on('click','.prod_cat_drop',function() {
-                                    
-                                    var drop = $("div.category_nav").attr("class");
-
-                                    if(drop == "category_nav product_content")
-                                    {
-                                        $('.category_nav').removeClass("category_nav product_content").addClass("category_nav product_content category_nav_plus");
-                                        $('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
-                                    }else{
-                                        $('.category_nav').removeClass("category_nav product_content category_nav_plus").addClass("category_nav product_content");
-                                        $('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
-                                    }
-                                });
-                        </script>
+                       
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
@@ -99,238 +85,57 @@
             </div>
             
             <div class="col-md-7" style="position: relative; z-index: 1;">
-                <div class="panel panel-product-info display-when-desktop no-border" width="100%" >
+                <div class="display-when-mobile-833">
+                <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="row">
-                            <table width="100%">
-                                <tr>
-                                    <td width="60%" style="vertical-align:top; padding-left: 10px;">
-                                        <h1 class="id-class product-name" id="<?php echo $product['id_product'];?>"> 
-                                            <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
-                                        </h1>
-                                    </td>
-                                    <td  width="40%" style="vertical-align:top; padding-right: 3px;">
-                                        <span class="seller-name"> 
-                                            <a href="/<?php echo $product['sellerslug'];?>"> 
-                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
-                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
-                                            </a>
-                                            <br/>
-                                            <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
-                                                <span>
-                                                    <span class="span_bg prod_message"></span> 
-                                                </span>
-                                                <br/>
-                                                <?php if(($vendorrating['rate_count'] <=0)):?>
-                                                    <center><p style="margin-left: 13px;">No ratings received yet.</p></center>
-                                                <?php else:?>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="pull-right"><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
-                                                <?php endif;?>
-                                            </a>            
+                        <table width="100%">
+                            <tr>
+                                <td width="100%" class="v-align-top" colspan="2">
+                                    <h1 class="id-class product-name" id="<?php echo $product['id_product'];?>"> 
+                                        <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
+                                    </h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="60%" class="v-align-top td-price">
+                                    <div>PHP 
+                                        <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
+                                            <?php echo number_format($product['price'],2,'.',',');?> 
                                         </span> 
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="clear prod_inner_border"></div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php foreach($product_options as $key=>$product_option):?>
-                                    <?php if(count($product_option)>1): ?>
-                                        <div class="product_option"> 
-                                            <span class="label-option"><?php echo html_escape(str_replace("'", '', $key));?></span>
-                                            <div>
-                                                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                                                    <?php foreach($product_option as $i):?>
-                                                        <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-                                                            <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
-                                                        <?php endif; ?>
-                                                        
-                                                        <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
-                                                        <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
-                                                            </a>
-                                                        <?php endif; ?>
-                                                    <?php endforeach;?>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    <!-- Only echo a hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
-                                    <?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
-                                    
-                                        <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
-                                            <div>
-                                                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                                                    <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>" data-type="<?php echo ($product_option[0]['type'] === 'specific')?0:1;?>"><?php echo html_escape($product_option[0]['value']);?></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    <?php endif; ?>
-                                <?php endforeach;?>
-                                <!-- Quantity -->
-                                <div class="product_option"> <span class="label-option">Quantity</span>
-                                    <div class="">
-                                        <input type="text" value ="0" class="product_quantity no-border" />
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear prod_inner_border"></div>
-                        <div class="row">
-                            <div class="col-md-4 col-price">
-                                <div class="div-box-price">
-                                    <center>
-                                        <div class="pbt pbt1">Price</div>
-                                        <div>PHP 
-                                            <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
-                                                <?php echo number_format($product['price'],2,'.',',');?> 
-                                            </span> 
-                                        </div>
-                                        <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
-                                                || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
-                                            <div ><span class="recent_price font-10"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong class="font-10"> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
-                                        <?PHP endif;?>
-                                    </center>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-availability">
-                                <div class="div-box-price">
-                                    <center>
-                                        <p class="p-prod-label-availability">Availability</p>
-                                        <p>
-                                            <p class="quantity" data-qty="" data-default="false" id="p_availability"></p>
-                                        </p>
-                                    </center>
-                                </div>
-                            </div>
-                            <div class="col-md-5 col-buy">
-                                <div width="100%" class="div-buy-now">
-                                    <center>
-                                        <?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
-                                            <p class="buy_btn_sub"> Verify your email </p>
-                                        <?php elseif($logged_in && $uid == $product['sellerid']): ?>
-                                            <p class="buy_btn_sub"> This is your own listing </p>
-                                        <?php else: ?>
-                                            <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
-                                                    <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-10" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
-                                                <span class="font-10" width="100%">Item is listed as an ad only. *</span>
-                                            <?php else: ?>
-                                                    <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                                                <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
-                                            <?php endif; ?>
-                                        
-                                            
-                                        <?php endif;?>
-                                    </center>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear prod_inner_border"></div>
-                        <div class="row row-prod-info">
-                            <div class="prod_loc_areas">
-                                <p>
-                                    <strong class="location_message">Shipment Fee:</strong>
-                                    <select class="shiploc" id="shipment_locations">
-                                        <option class="default" selected="" value="0">Select Location</option>
-                                        <?php foreach($shiploc['area'] as $island=>$loc):?>
-                                            <option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
-                                            <?php foreach($loc as $region=>$subloc):?>
-                                                <option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-                                                <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                    <option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
-                                                <?php endforeach;?>
-                                            <?php endforeach;?>
-                                        <?php endforeach;?>
-                                    </select>
-                            
-                                    <?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
-                                        <span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span
-                                    <?php else:?>
-                                        <?PHP if($product['is_free_shipping']):  ?>
-                                            <span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
-                                        <?PHP else: ?>
-                                            <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
-                                        <?PHP endif; ?>
-                                    <?php endif; ?>
-                                </p>
-                            </div>
-                            <p class="product_content_payment"> 
-                                <strong>Payment:</strong><br />
-                                <?php if(isset($payment_method['cdb'])): ?>
-                                    <span class="mastercard"></span>
-                                    <span class="visa"></span>
-                                <?php endif; ?>
-                            
-                                <?php if(isset($payment_method['dragonpay'])) : ?>
-                                    <span class="dragonpay"></span>
-                                <?php endif; ?>
-                            
-                                <?php if(isset($payment_method['paypal'])) : ?>
-                                    <span class="paypal"></span>
-                                <?php endif; ?>
-                                <?php if( isset($payment_method['cod']) && intval($product['is_cod'],10) === 1): ?>
-                                        <span class="cod"></span>
-                                <?php endif; ?>
-                            </p>
-                        </div>
+                                    <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
+                                            || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
+                                        <div class="div-discount"><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
+                                    <?PHP endif;?>
+                                </td>
+                                <td width="40%" class="v-align-top td-price">
+                                    Availability: <span class="quantity quantity_m" data-qty="" data-default="false"></span>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <!--FOR MOBILE-->
-                <div class="display-when-mobile-833">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <table width="100%">
-                                <tr>
-                                    <td width="100%" class="v-align-top" colspan="2">
-                                        <h1 class="id-class product-name" id="<?php echo $product['id_product'];?>"> 
-                                            <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
-                                        </h1>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="60%" class="v-align-top td-price">
-                                        <div>PHP 
-                                            <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
-                                                <?php echo number_format($product['price'],2,'.',',');?> 
-                                            </span> 
-                                        </div>
-                                        <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
-                                                || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
-                                            <div class="div-discount"><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
-                                        <?PHP endif;?>
-                                    </td>
-                                    <td width="40%" class="v-align-top td-price">
-                                        Availability: <span class="quantity quantity_m" data-qty="" data-default="false"></span>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="panel-group panel-seller" id="seller-accordion">
-                        <div class="panel panel-default no-border">
+                <div class="panel-group panel-seller" id="seller-accordion">
+                    <div class="panel panel-default no-border">
                         <div class="panel-heading panel-seller-header">
                             <a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
                                 Seller: <?php echo html_escape($product['sellerusername']);?>
                                 <i class="glyphicon glyphicon-chevron-down pull-right"></i>
                             </a>
                             <script>
-                                        $("#seller-accordion").on('click','.a-accordion-header',function() {
-                                            
-                                            var attr = $("i.glyphicon").attr("class");
+                                    $("#seller-accordion").on('click','.a-accordion-header',function() {
+                                        
+                                        var attr = $("i.glyphicon").attr("class");
 
-                                            if(attr == "glyphicon glyphicon-chevron-down pull-right")
-                                            {
-                                                $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
-                                            }else{
-                                                $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
-                                            
-                                            }
-                                        });
-                                </script>
+                                        if(attr == "glyphicon glyphicon-chevron-down pull-right")
+                                        {
+                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+                                        }else{
+                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+                                        
+                                        }
+                                    });
+                            </script>
                         </div>
                         <div id="seller" class="panel-collapse collapse">
                             <div class="panel-body panel-seller-body">
@@ -384,97 +189,172 @@
                                                         </tr>
                                                     </table>
                                                 <?php endif;?>
-                                                    </a> 
+                                            </a> 
                                         </td>
                                     </tr>
                                 </table>
-                                
                             </div>
-                                
-                        </div>
                         </div>
                     </div>
-                    <div class="panel panel-default no-border">
-                        <div class="panel-body">
-                            <?php foreach($product_options as $key=>$product_option):?>
-                                <?php if(count($product_option)>1): ?>
-                                    <div class="product_option"> 
-                                        <span class="label-option"><?php echo html_escape(str_replace("'", '', $key));?></span>
-                                        <div>
-                                            <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                                                <?php foreach($product_option as $i):?>
-                                                    <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-                                                        <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
-                                                    <?php endif; ?>
-                                                    
-                                                    <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
-                                                    <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                <?php endforeach;?>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                <!-- Only echo a hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
-                                <?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
-                                
-                                    <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
-                                        <div>
-                                            <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                                                <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>" data-type="<?php echo ($product_option[0]['type'] === 'specific')?0:1;?>"><?php echo html_escape($product_option[0]['value']);?></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                <?php endif; ?>
-                                
-                            <?php endforeach;?>
-                        
-                            <!-- Quantity -->
-                            <div class="product_option product_option_quantity" style="width: 100% !important;">
-                                <table width="100%" >
+                </div>
+                </div>
+                <div class="panel panel-product-info no-border " width="100%" >
+                    <div class="panel-body">
+                        <div class="row display-when-desktop ">
+                            <table width="100%">
                                 <tr>
-                                <td style="width: 100px !important;"> 
-                                <span class="label-option">Quantity</span>
-                                </td>
-                                <td style="padding-top: 5px !important;">
-                                <input type="text" value ="0" class="product_quantity no-border" style="width: 100% !important;"/>
-                                </td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 100px !important; padding-top: 20px !important;" class="v-align-top">
-                                        <strong class="">Shipment Fee</strong>
+                                    <td width="60%" style="vertical-align:top; padding-left: 10px;">
+                                        <h1 class="id-class product-name" id="<?php echo $product['id_product'];?>"> 
+                                            <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
+                                        </h1>
                                     </td>
-                                    <td style="padding-top: 20px !important;">
-                                        <select class="shiploc" id="shipment_locations" style="width: 100%">
-                                            <option class="default" selected="" value="0">Select Location</option>
-                                            <?php foreach($shiploc['area'] as $island=>$loc):?>
-                                                <option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
-                                                <?php foreach($loc as $region=>$subloc):?>
-                                                    <option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-                                                    <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                        <option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                    <td  width="40%" style="vertical-align:top; padding-right: 3px;">
+                                        <span class="seller-name"> 
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
+                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
+                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+                                            </a>
+                                            <br/>
+                                            <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
+                                                <span>
+                                                    <span class="span_bg prod_message"></span> 
+                                                </span>
+                                                <br/>
+                                                <?php if(($vendorrating['rate_count'] <=0)):?>
+                                                    <center><p style="margin-left: 13px;">No ratings received yet.</p></center>
+                                                <?php else:?>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="pull-right"><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+                                                <?php endif;?>
+                                            </a>            
+                                        </span> 
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="clear prod_inner_border display-when-desktop "></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php foreach($product_options as $key=>$product_option):?>
+                                    <?php if(count($product_option)>1): ?>
+                                        <div class="product_option"> 
+                                            <span class="label-option"><?php echo html_escape(str_replace("'", '', $key));?></span>
+                                            <div>
+                                                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
+                                                    <?php foreach($product_option as $i):?>
+                                                        <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
+                                                            <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
+                                                        <?php endif; ?>
+                                                        
+                                                        <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
+                                                        <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
+                                                            </a>
+                                                        <?php endif; ?>
                                                     <?php endforeach;?>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    <!-- Only echo a hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
+                                    <?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
+                                    
+                                        <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
+                                            <div>
+                                                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
+                                                    <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>" data-type="<?php echo ($product_option[0]['type'] === 'specific')?0:1;?>"><?php echo html_escape($product_option[0]['value']);?></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    <?php endif; ?>
+                                <?php endforeach;?>
+                                <!-- Quantity -->
+                                <div class="product_option"> <span class="label-option">Quantity</span>
+                                    <div class="div-quantity-m">
+                                        <input type="text" value ="0" class="product_quantity no-border" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear prod_inner_border display-when-desktop "></div>
+                        <div class="row display-when-desktop ">
+                            <div class="col-md-4 col-price">
+                                <div class="div-box-price">
+                                    <center>
+                                        <div class="pbt pbt1">Price</div>
+                                        <div>PHP 
+                                            <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
+                                                <?php echo number_format($product['price'],2,'.',',');?> 
+                                            </span> 
+                                        </div>
+                                        <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
+                                                || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
+                                            <div ><span class="recent_price font-10"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong class="font-10"> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
+                                        <?PHP endif;?>
+                                    </center>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-availability">
+                                <div class="div-box-price">
+                                    <center>
+                                        <p class="p-prod-label-availability">Availability</p>
+                                        <p>
+                                            <p class="quantity" data-qty="" data-default="false" id="p_availability"></p>
+                                        </p>
+                                    </center>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-buy">
+                                <div width="100%" class="div-buy-now">
+                                    <center>
+                                        <?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
+                                            <p class="buy_btn_sub"> Verify your email </p>
+                                        <?php elseif($logged_in && $uid == $product['sellerid']): ?>
+                                            <p class="buy_btn_sub"> This is your own listing </p>
+                                        <?php else: ?>
+                                            <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
+                                                    <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-10" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
+                                                <span class="font-10" width="100%">Item is listed as an ad only. *</span>
+                                            <?php else: ?>
+                                                    <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                                                <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
+                                            <?php endif; ?>
+                                        
+                                            
+                                        <?php endif;?>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear prod_inner_border display-when-desktop "></div>
+                        <div class="row row-prod-info">
+                            <div class="prod_loc_areas">
+                                <p>
+                                    <strong class="location_message">Shipment Fee:</strong>
+                                    <select class="shiploc" id="shipment_locations">
+                                        <option class="default" selected="" value="0">Select Location</option>
+                                        <?php foreach($shiploc['area'] as $island=>$loc):?>
+                                            <option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
+                                            <?php foreach($loc as $region=>$subloc):?>
+                                                <option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                                <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                    <option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
                                                 <?php endforeach;?>
                                             <?php endforeach;?>
-                                        </select>
-                                        <br/>
-                                        <p class="p-ship-validation">
-                                            <?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
-                                                <span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span>
-                                            <?php else:?>
-                                                <?PHP if($product['is_free_shipping']):  ?>
-                                                    <div class="clear"></div><span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
-                                                <?PHP else: ?>
-                                                    <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
-                                                <?PHP endif; ?>
-                                            <?php endif; ?>
-                                        </p>
-                                    </td>
-                                </tr>
-                                </table>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <span class="span-ship">
+                                    <?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
+                                        <span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span>
+                                    <?php else:?>
+                                        <?PHP if($product['is_free_shipping']):  ?>
+                                            <span class="span-free"style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
+                                        <?PHP else: ?>
+                                            <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
+                                        <?PHP endif; ?>
+                                    <?php endif; ?>
+                                    </span>
+                                </p>
                             </div>
                             <p class="product_content_payment"> 
                                 <strong>Payment:</strong><br />
@@ -494,9 +374,11 @@
                                         <span class="cod"></span>
                                 <?php endif; ?>
                             </p>
-                            
                         </div>
                     </div>
+                </div>
+                <!--FOR MOBILE-->
+                <div class="display-when-mobile-833">
                     <div width="100%">
                         <center>
                             <?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
@@ -511,8 +393,6 @@
                                         <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled btn-lg btn-block" >Buy Now</a> <br/>
                                     <p class="font-10 span-deliver-confirm" width="100%">Delivers upon seller confirmation*</p>
                                 <?php endif; ?>
-                            
-                                
                             <?php endif;?>
                         </center>
                     </div>
