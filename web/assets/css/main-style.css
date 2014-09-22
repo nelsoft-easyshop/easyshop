@@ -306,7 +306,7 @@ section {
     cursor: pointer;
     height: 106px;
     position: absolute;
-    top: 0;
+    top: 46px;
     width: 104px;
 
     -webkit-border-radius: 4px;
@@ -348,10 +348,10 @@ section {
     background-color: #fff;
     border-top: 4px solid #4370cd;
     border-radius: 4px;
-    bottom: -70px;
+    bottom: 153px;
     display: none;
     font-size: 12px;
-    left: -20px;
+    left: 92px;
     min-width: 138px;
     position: absolute;
 
