@@ -45,28 +45,26 @@
             <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
         </span>
     <?php endif; ?>
-    <div id='myCarousel' class='carousel slide display-when-mobile-833' style='' style="padding: 0px !important">
-        <div class='carousel-inner' style="text-align: center; padding: 0px !important">
+    <!----SLIDER--->
+    <div id='myCarousel' class='carousel slide'>
+        <div class='carousel-inner'>
             <?php foreach($product_images as $image): ?>
             <!--SLIDE NON-ACTIVE CLASS-->
             <div class='item <?php echo (intval($image['is_primary']) === 1) ? 'active' : ''; ?>' >
                 <span class="span-container"><center><span class="span-container-img"><img src='/<?php echo $image['path']; ?>/<?php echo $image['file']; ?>' alt='Beach' class='img-responsive img-slider-2' /></span></center></span>
             </div>
             <?php endforeach;?>
-            
-        </div>
+        </div>    
+        <a class='carousel-control left' href='#myCarousel' data-slide='prev'>
+            <span class='glyphicon glyphicon-chevron-left'></span>
+        </a>
+        <a class='carousel-control right' href='#myCarousel' data-slide='next'>
+            <span class='glyphicon glyphicon-chevron-right'></span>
+        </a>
     </div>
+    <!----END OF SLIDER--->
     
-    <script>  
-        $(document).ready(function() {  
-            $("#myCarousel").swiperight(function() {  
-                $("#myCarousel").carousel('prev');  
-                });  
-            $("#myCarousel").swipeleft(function() {  
-                $("#myCarousel").carousel('next');  
-            });  
-        });  
-    </script>  
+    
     
 </div>
 
