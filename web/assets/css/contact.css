@@ -14,15 +14,15 @@ section {
 .row-contact{
     min-height: 560px;
 }
-
-.panel-contact-details{
-    min-height: 500px;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 4px;
-    padding: 25px 25px;
+.col-left-wing{
+    position: relative;
+    z-index:2;
 }
 
+.col-feedback-container{
+    position: relative;
+    z-index:1;
+}
 .panel-title-contact, .panel-title-feedback{
     text-transform:uppercase;
     font-weight: bold;
@@ -44,6 +44,95 @@ section {
 .td-contact-detail{
     vertical-align: top;
     padding-left: 10px;
+}
+
+.fa-edit-icon{
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -22px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+
+.fa-edit-icon:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.fa-cancel-edit{
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -22px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    display: none;
+    
+}
+
+.fa-cancel-edit:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.input-detail{
+    width: 100%;
+    border: solid #ececec 1px;
+    border-radius: 4px;
+    background: #ececec;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    resize:none;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.input-detail:focus{
+    border: solid #565656 1px;
+    background: #ffffff;
+}
+
+.input-detail-select{
+    height: 29px;
+}
+
+.display-inline{
+    display: inline !important;
+}
+
+.panel-contact-details{
+    min-height: 500px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+}
+
+#save-edit{
+    display: none;
+    margin-bottom: 15px;
+    font-weight: bold;
 }
 
 .span-social-media{
