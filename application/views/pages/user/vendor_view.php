@@ -579,20 +579,7 @@
         
     </div>
     </div>
+    
+    <script src="/assets/js/src/vendorpage.js" type="text/javascript"></script>
+    
 </section>
-<section>
-    <div class="vendor-footer-con">
-        <div class="vendor-footer main-container border-top">
-            <ul>
-                <li><a href="">Home</a></li>
-                <li><a href="">Promo Page</a></li>
-                <li><a href="">Seller Information</a></li>
-                <li><a href="">Contact</a></li>
-            </ul>
-            <div class="clear"></div>
-        </div>
-    </div>
-</section>
-<script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendorpage.js" type="text/javascript"></script>
