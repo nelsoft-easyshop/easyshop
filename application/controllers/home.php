@@ -242,6 +242,7 @@ class Home extends MY_Controller
         // Load Services
         $em = $this->serviceContainer["entity_manager"];
         $pm = $this->serviceContainer['product_manager'];
+        $um = $this->serviceContainer['user_manager'];
         $searchProductService = $this->serviceContainer['search_product'];
 
         // Load Repository 
@@ -254,7 +255,8 @@ class Home extends MY_Controller
                             ->getVendorDetails($vendorSlug);
 
         // User found - valid slug
-        if( !empty($arrVendorDetails) ){
+        if( !empty($arrVendorDetails) ){ 
+
             $headerData = $this->fill_header();
             $headerData = array_merge($headerData, array(
                 "title" => "Vendor Profile | Easyshop.ph",
@@ -280,7 +282,7 @@ class Home extends MY_Controller
                 $productView['defaultCatProd'][0]['products'] = $searchProduct;
                 // get all attributes to by products
                 $productView['searchProductAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
-            }
+            }  
 
             // Data for the view
             $data = array(
@@ -290,8 +292,10 @@ class Home extends MY_Controller
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
-
+                , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
+                , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
             ); 
+            
             // Load Location
             $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
             
