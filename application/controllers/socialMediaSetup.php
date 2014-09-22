@@ -11,15 +11,6 @@ class socialMediaSetup extends MY_Controller
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }
 
-    public function index()
-    {
-        $scope = $this->config->item('google', 'thirdPartyConfig');
-//        $data['login_url'] = $this->socialMediaManager->getLoginUrl('facebook', $scope['permission_to_access']);
-        $data['login_url'] = $this->socialMediaManager->getLoginUrl('google', $scope['permission_to_access']);
-
-        $this->load->view('pages/facebook/facebook_view', $data);
-    }
-
     /**
      * Register Facebook account to easyshop
      * @return mixed Returns the member entity if exist or successfully registered and false if sharing of email was declined
@@ -48,11 +39,12 @@ class socialMediaSetup extends MY_Controller
                 $response = $validateFacebookData;
             }
             $this->login($response);
-//            redirect('home');
-            exit();
+            redirect(base_url(), 'refresh');
+        }
+        else {
+            redirect(base_url() . 'login', 'refresh');
         }
 
-        return $response;
     }
 
     /**
@@ -86,11 +78,13 @@ class socialMediaSetup extends MY_Controller
                         $googleData->getId(),
                         'Google'
                     );
+
                 }
                 else {
                     $response = $validateGoogleData;
                 }
                 $this->login($response);
+                redirect(base_url(), 'refresh');
             }
         }
     }
@@ -102,20 +96,21 @@ class socialMediaSetup extends MY_Controller
     {
         $this->load->model('cart_model');
         $this->load->model('user_model');
-        $dataval = array('login_username' => $userData->getUsername(), 'login_password' => '');
-        $row = $this->user_model->verify_member($dataval);
-        $this->session->set_userdata('member_id', $row['o_memberid']);
-        $this->session->set_userdata('usersession', $row['o_session']);
-        $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($userData->getIdMember(),$this->session->userdata('cart_contents')));
+        $row = $this->user_model->VerifySocialMediaAccount($userData->getUsername(), $userData->getOauthId(), $userData->getOauthProvider());
+        if ($row['o_success'] >= 1) {
+            $this->session->set_userdata('member_id', $row['o_memberid']);
+            $this->session->set_userdata('usersession', $row['o_session']);
+            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
 
-        $em = $this->serviceContainer['entity_manager'];
-        $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
-        $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+            $em = $this->serviceContainer['entity_manager'];
+            $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+            $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
 
-        $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
-        $authenticatedSession->setMember($user)
-            ->setSession($session);
-        $em->persist($authenticatedSession);
-        $em->flush();
+            $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
+            $authenticatedSession->setMember($user)
+                ->setSession($session);
+            $em->persist($authenticatedSession);
+            $em->flush();
+        }
     }
 }

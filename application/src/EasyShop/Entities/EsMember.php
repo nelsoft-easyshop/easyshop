@@ -190,14 +190,14 @@ class EsMember
     private $storeName;
 
     /**
-     * @var integer
-     * @ORM\Column(name="oauth_id", type="integer", length=11, nullable=false)
+     * @var string
+     * @ORM\Column(name="oauth_id", type="string", length=255, nullable=false)
      */
     private $oauthId;
 
     /**
      * @var string
-     * @ORM\Column(name="oauth_provider", type="string", length=45, nullable=false)
+     * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
      */
     private $oauthProvider;
 

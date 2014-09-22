@@ -15,7 +15,10 @@ class Login extends MY_Controller
         $this->load->model('register_model');
         $this->load->model('user_model');
         $this->load->model('cart_model');
-        $this->load->library('encrypt');	
+        $this->load->library('encrypt');
+        session_start();
+        $this->load->config('thirdPartyConfig', TRUE);
+        $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }
     
     /**
@@ -24,12 +27,16 @@ class Login extends MY_Controller
      */
     function index() 
     {
+        $facebookScope = $this->config->item('facebook', 'thirdPartyConfig');
+        $googleScope = $this->config->item('google', 'thirdPartyConfig');
         $data = array(
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
         );
         $data = array_merge($data, $this->fill_header());
-        $response['url'] = $this->session->userdata('uri_string'); 
+        $response['url'] = $this->session->userdata('uri_string');
+        $response['facebook_login_url'] = $this->socialMediaManager->getLoginUrl('facebook', $facebookScope['permission_to_access']);
+        $response['google_login_url'] = $this->socialMediaManager->getLoginUrl('google', $googleScope['permission_to_access']);
         if($this->input->post('login_form')){
             $row = array();
             if($this->form_validation->run('login_form')){
@@ -46,6 +53,7 @@ class Login extends MY_Controller
             }  
         }
         $data['render_searchbar'] = false;
+
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/login_view',$response);
         $this->load->view('templates/footer');

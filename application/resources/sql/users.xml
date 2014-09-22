@@ -8,7 +8,11 @@
 <select id="user_login">
     CALL `es_sp_Login_user`(:username ,:password, :ip)
 </select>
-    
+
+<select id="socialMediaLogin">
+    CALL `es_sp_SocialMediaLogin_user`(:username, :oauthId, :oauthProvider, :ip)
+</select>
+
 <select id="changepass">
     CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
 </select>
@@ -62,7 +66,7 @@
 </select>
 
 <select id="signup_member">
-    CALL `es_sp_Signup_user` (:username, :password, :contactno, :email)
+    CALL `es_sp_Signup_user` (:username, :password, :contactno, :email, '0', '', '', '0', '')
 </select>
 
 <select id="check_contactinfo">

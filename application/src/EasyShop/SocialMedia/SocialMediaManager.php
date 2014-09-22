@@ -67,8 +67,8 @@ class SocialMediaManager
                 FacebookSession::setDefaultApplication($this->appId, $this->secret);
                 $session = $this->fbRedirectLoginHelper->getSessionFromRedirect();
                 $userProfile = (new \Facebook\FacebookRequest(
-                    $session, 'GET', '/me'
-                ))->execute()->getGraphObject(\Facebook\GraphUser::className());
+                            $session, 'GET', '/me'
+                        ))->execute()->getGraphObject(\Facebook\GraphUser::className());
                 break;
             case 'google' :
                 $googleData = new \Google_Service_Oauth2($this->googleClient);
@@ -125,7 +125,6 @@ class SocialMediaManager
     {
         $member = new EsMember();
         $member->setUsername($username);
-        $member->setPassword($oAuthId);
         $member->setFullname($fullname);
         $member->setGender($gender);
         $member->setEmail($email);
