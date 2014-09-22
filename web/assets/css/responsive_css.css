@@ -203,6 +203,10 @@
     margin-right: 0.3125em;
 }
 
+.mrgn-rght-8 { 
+    margin-right: 8px;
+}
+
 .mrgn-bttm-8 { /*** 8px **/
     margin-bottom: 0.5em;
 }

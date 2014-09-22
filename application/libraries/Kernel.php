@@ -242,10 +242,10 @@ class Kernel
  
         // Category Manager
         $container['category_manager'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
             $configLoader = $container['config_loader'];
 
-            return new \EasyShop\Category\CategoryManager($configLoader, $container['entity_manager']);
-
+            return new \EasyShop\Category\CategoryManager($configLoader,$em);
         };
         
         $container['config_loader'] = function ($c) {

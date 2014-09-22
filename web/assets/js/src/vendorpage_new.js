@@ -96,8 +96,7 @@ function ItemListAjax(CatDiv,page)
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
         var docScroll = $(document).scrollTop();
-        if (docScroll >= 455) 
-            {
+        if (docScroll >= 455){
                 if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
                     $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
                         top: '-155px'
@@ -106,12 +105,9 @@ function ItemListAjax(CatDiv,page)
                     }, 500);
                     
                 }
-
                 $('.vendor-content-wrapper').addClass('fixed-vendor-content');
-
             } 
-        else 
-            {
+        else{
                 $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
                 $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
             }
@@ -124,7 +120,9 @@ function ItemListAjax(CatDiv,page)
         {
             $('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
             $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-lg-3 col-md-4 col-xs-6 thumb");
-        }    
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
+        }
     });
 
     $(document).on('click','.icon-list',function() {   
@@ -133,6 +131,8 @@ function ItemListAjax(CatDiv,page)
         {
             $('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
             $('div.col-lg-3').removeClass("col-lg-3 col-md-4 col-xs-6 thumb").addClass("col-md-12 thumb");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
         };
     });
 
@@ -141,6 +141,17 @@ function ItemListAjax(CatDiv,page)
         $('.category-products').hide();
         $(divId).show();
     });
+
+    $(document).on('click','#edit-profile-btn',function() {
+        $('#display-banner-view').hide();
+        $('#edit-banner-view').show();
+    });
+
+    $(document).on('click','#banner-cancel-changes',function() {
+        $('#display-banner-view').show();
+        $('#edit-banner-view').hide();
+    });
+    
 
 })(jQuery);
 

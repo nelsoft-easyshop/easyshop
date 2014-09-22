@@ -12,10 +12,7 @@
                 <div class="col-md-12">
                     <section class="top_margin product-page-section display-when-desktop">
                         <div class="wrapper">
-                            <div class="prod_categories">
-                                <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
-                                <?php echo $category_navigation; ?> 
-                            </div>
+                            <?php echo $category_navigation_desktop; ?>  
                             <div class="prob_cat_nav">
                                 <div class="category_nav product_content">
                                     <ul>
@@ -74,7 +71,7 @@
                                 <div id="product_content">
                                     <?php 
                                     foreach ($products as $key => $value):
-                                        $productEntity = $value->getProduct();
+                                        $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
                                         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -82,8 +79,8 @@
                                         $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                                         $percentage = $productEntity->getDiscountPercentage();
                                         $isPromote = intval($productEntity->getIsPromote());
-                                        $isFreeShipping = $productEntity->getIsFreeShipping(); 
-                                        $productImagePath = $value->getProductImagePath();
+                                        $isFreeShipping = $productEntity->getIsFreeShipping();
+                                        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
 
                                         $typeOfView = "product";
                                         if(isset($_COOKIE['view'])){ 
@@ -152,27 +149,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel-group " id="categories">
-                      <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                                Categories
-                                <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                        <li class="list-category"><a href="<?=base_url().'category/'.$value->getSlug(); ?>"><?=$value->getName();?></a></li> 
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                      </div>
-                    </div> 
+                    <?=$category_navigation_mobile;?>
                 </div>
             </div>
 
@@ -185,7 +162,7 @@
                         <?php if(count($products) > 0): ?>
                             <?php foreach ($products as $key => $value): ?>
                             <?php
-                                $productEntity = $value->getProduct();
+                                $productEntity = $value;
                                 $productName = html_escape($productEntity->getName());
                                 $productSlug = $productEntity->getSlug();
                                 $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -193,8 +170,8 @@
                                 $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                                 $percentage = $productEntity->getDiscountPercentage();
                                 $isPromote = intval($productEntity->getIsPromote());
-                                $isFreeShipping = $productEntity->getIsFreeShipping();
-                                $productImagePath = $value->getProductImagePath();
+                                $isFreeShipping = $productEntity->getIsFreeShipping(); 
+                                $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                             ?>
                             <h3></h3>
                             <div class="responsive-product panel panel-default no-border panel-items">

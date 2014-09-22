@@ -98,4 +98,21 @@ class CategoryManager
 
         $this->em->flush();
     }
-}
+
+    /**
+     * Set the image/icon of the category
+     * @param mixed $categoryList
+     * @return mixed
+     */
+    public function setCategoryImage($categoryList)
+    {
+        foreach($categoryList as $key => $value){ 
+                $categoryImage = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                            ->findOneBy(['idCat' => $value->getIdCat()]);
+                $imagePath = ($categoryImage) ? $categoryImage->getPath() : "";
+                $value->setImage($imagePath); 
+        } 
+        
+        return $categoryList;
+    }
+} 

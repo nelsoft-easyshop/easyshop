@@ -91,18 +91,16 @@ class EsProductRepository extends EntityRepository
      */
     public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
     {   
-        if(count($productIds) > 0){
+        if(!empty($productIds)){
             $this->em =  $this->_em;
 
                 $sql = "
                     SELECT 
-                        i,p,m
+                        p,m
                     FROM 
-                        EasyShop\Entities\EsProductImage i
-                        JOIN i.product p
+                        EasyShop\Entities\EsProduct p
                         JOIN p.member m
                     WHERE p.idProduct IN (:ids)
-                    AND i.isPrimary = 1
                 ";
                 $query = $this->em->createQuery($sql)
                                     ->setParameter('ids', $productIds)
@@ -112,7 +110,7 @@ class EsProductRepository extends EntityRepository
                 return $results;
             }
             
-        return false;
+        return array();
     }
 
     /**
@@ -402,6 +400,8 @@ class EsProductRepository extends EntityRepository
                                                     'WITH','p.member = m.idMember')
                                 ->leftJoin('EasyShop\Entities\EsProductShippingHead','sph',
                                                     'WITH','p.idProduct = sph.product')
+                                ->leftJoin('EasyShop\Entities\EsBrand','b',
+                                                    'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0');
  
@@ -427,7 +427,7 @@ class EsProductRepository extends EntityRepository
 
         if(isset($filterArray['brand']) && $filterArray['brand'][0]){
             $qbResult = $qbResult->andWhere(
-                                        $qb->expr()->in('p.brand', $filterArray['brand'])
+                                        $qb->expr()->in('b.name', $filterArray['brand'])
                                     );
         }
 
@@ -437,7 +437,7 @@ class EsProductRepository extends EntityRepository
                                     );
         }
 
-        if(count($productIds)>1){
+        if(!empty($productIds)){
             $qbResult = $qbResult->andWhere(
                                         $qb->expr()->in('p.idProduct', $productIds)
                                     );
@@ -614,12 +614,12 @@ class EsProductRepository extends EntityRepository
                     ->where('p.isDraft = 0')
                     ->andWhere('p.isDelete = 0');
 
-        if($sellerId != 0){
+        if(intval($sellerId) !== 0){
             $query = $query->andWhere('p.member = :member')
                             ->setParameter('member', $sellerId);
         }
 
-        if (count($categoryId) != 0) { 
+        if (!empty($categoryId)) { 
             $query = $query->andWhere(
                                     $qb->expr()->in('p.cat', $categoryId)
                                 );

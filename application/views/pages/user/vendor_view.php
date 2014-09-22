@@ -19,19 +19,81 @@
             <input type="text" class="ui-form-control">
             <input type="submit" value="" class="span_bg">
         </div>
-        <div>
-            <div>
-                <span class="cart-items-con">
-                    <span class="cart-item">2 item(s)</span> in your cart
+        <div class="pos-rel mrgn-rght-8">
+            <div class="header-cart-container">
+                <span class="header-cart-items-con">
+                    <span class="header-cart-item">2 item(s)</span> in your cart
                 </span>
-                <span class="cart-icon-con fa fa-shopping-cart"></span>
+                <span class="header-cart-icon-con span_bg cart-icon"></span>
+            </div>
+            <div class="header-cart-item-list">
+                <p>Recently add item(s)</p>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="header-cart-lower-content">
+                    <div class="header-cart-shipping-total">
+                        <p>Shipping: <span>&#8369; 50.00</span></p>
+                        <p>Total: <span>&#8369; 100,500.00</span></p>
+                    </div>
+                    <div class="header-cart-buttons">
+                        <a href="" class="header-cart-lnk-cart">go to cart</a>
+                        <a href="" class="header-cart-lnk-checkout">checkout</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
         <div>
-            <div class="vendor-login-con">
+            <!-- <div class="vendor-login-con">
                 <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
                 <a href=""><strong>login</strong></a>  or 
                 <a href=""><strong>Create and account</strong></a>
+            </div> -->
+            <div class="vendor-login-con">
+                <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
+                <a href=""><span class="vendor-login-name"><strong>Seller2DaMax</strong></span></a>
+                <div class="new-user-nav-dropdown">
+                    <span class="user-nav-dropdown">Account Settings</span>
+                </div>
+                <ul class="nav-dropdown">
+                    <li>
+                        <a href="/me">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/me?me=pending">On-going Transactions</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a href="/me?me=settings">Settings</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a class="prevent" href="/login/logout">Logout</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
             </div>
         </div>
         <div class="clear"></div>
@@ -39,16 +101,16 @@
 </header>
 
 <section>
-    <div class="pos-rel">
+    <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg">
-            <img src="<?=base_url()?>assets/images/sample-vendor-img.jpg">
+            <img src="/assets/images/sample-vendor-img.jpg">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="/assets/images/img-default-vendor-profile-photo.jpg">
                         </div>
                     </div>
                 </div>
@@ -64,7 +126,7 @@
                         <?php endif;?>
                     </p>
                     <div class="vendor-profile-btn">
-                        <a href="" class="btn btn-default-3">
+                        <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
                             <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
                         </a>
                     </div>
@@ -72,7 +134,7 @@
             </div>
         </div>
     </div>
-    <div class="pos-rel" style="display:none;">
+    <div class="pos-rel" style="display:none;" id="edit-banner-view">
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
                 <a href="">
@@ -102,14 +164,26 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" class="form-control mrgn-bttm-8 seller-name" placeholder="Seller Name">
-                    <input type="text" class="form-control mrgn-bttm-8" placeholder="Contact No.">
+                    <input type="text" class="form-control mrgn-bttm-8 seller-name" value="<?=$storeNameDisplay; ?>" placeholder="Seller Name">
+                    <input type="text" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
-                        <input type="text" class="ui-form-control">
+                        <!-- State/Region Dropdown -->
+                        <select name="city" id="personal_city" class="address_dropdown cityselect">
+                            <option value="0">--- Select City ---</option>
+                            <option class="optionclone" value="" style="display:none;" disabled></option>
+                            
+                            <?php if($cityID != '' && $stateregionID != ''):?>
+                                <?php foreach($city_lookup[$stateregionID] as $lockey=>$city):?>
+                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                                <?php endforeach;?>
+                            <?php endif;?>
+                            
+                        </select>
+                        <!-- City Dropdown -->
                         <input type="text" class="ui-form-control">
                     </div>
                     <div class="vendor-profile-btn edit-profile-btn">
-                        <a href="" class="btn btn-default-1">Cancel</a>
+                        <a href="" id="banner-cancel-changes" class="btn btn-default-1">Cancel</a>
                         <a href="" class="btn btn-default-3">Save Changes</a>
                     </div>
                 </div>
@@ -158,12 +232,52 @@
                     <input type="text" class="ui-form-control">
                     <input type="submit" value="" class="span_bg">
                 </li>
-                <li>
-                    <div>
-                        <span class="cart-items-con">
-                            <span class="cart-item">2 item(s)</span> in your cart
+                <li class="pos-rel">
+                    <div class="header-cart-container">
+                        <span class="header-cart-items-con sticky-cart">
+                            <span class="header-cart-item">2 item(s)</span> in your cart
                         </span>
-                        <span class="cart-icon-con fa fa-shopping-cart"></span>
+                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                    </div>
+                    <div class="sticky-header-cart-item-list">
+                        <p>Recently add item(s)</p>
+                        <div class="mrgn-bttm-15">
+                            <div class="header-cart-item-img">
+                                <a href="">
+                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                </a>
+                            </div>
+                            <div class="header-cart-item-con">
+                                <a href=""><span>Doraemon - blue</span></a>
+                                <span>x 1</span>
+                                <span class="header-cart-item-price">&#8369; 450.00</span>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="mrgn-bttm-15">
+                            <div class="header-cart-item-img">
+                                <a href="">
+                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                </a>
+                            </div>
+                            <div class="header-cart-item-con">
+                                <a href=""><span>Doraemon - blue</span></a>
+                                <span>x 1</span>
+                                <span class="header-cart-item-price">&#8369; 450.00</span>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="header-cart-lower-content">
+                            <div class="header-cart-shipping-total">
+                                <p>Shipping: <span>&#8369; 50.00</span></p>
+                                <p>Total: <span>&#8369; 100,500.00</span></p>
+                            </div>
+                            <div class="header-cart-buttons">
+                                <a href="" class="header-cart-lnk-cart">go to cart</a>
+                                <a href="" class="header-cart-lnk-checkout">checkout</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -287,82 +401,7 @@
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
 
-                <!-- PRODUCT DISPLAY -->
-                <?php $prodLimit = 12; ?>
-                <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-                <div class="view row row-items grid category-products" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="2" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
-
-                    <?php if($arrCat['non_categorized_count'] === 0): ?>
-                        <span>No items available for this category.</span>
-                    <?php else:?>
-                        <div class="product-paging" data-page="1">
-                            <?php foreach($arrCat['products'] as $objProduct):?>
-                                <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-                                    <div class="panel-item">
-                                        <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
-                                            <div class="div-item">
-                                                <span class="span-img-wrapper" style="background: url(<?=base_url()?><?php echo $arrCat['product_images'][$objProduct->getIdProduct()]?>) center no-repeat; background-cover: cover;">
-                                                    <center>
-                                                        <div class="span-img-container">
-                                                            
-                                                        </div>
-                                                    </center>
-                                                </span>
-                                            </div>
-                                        </a>
-                                        <div class="div-item-info">
-                                            <p class="p-item-name">
-                                                <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
-                                                    <?php 
-                                                        $prod_name = html_escape($objProduct->getName());
-                                                        if(strlen($prod_name)>17){
-                                                            
-                                                            echo substr_replace( $prod_name, "...", 17);
-                                                        
-                                                        }else{
-                                                            echo $prod_name;
-                                                        }
-                                                    ?>
-                                                </a>
-                                            </p>
-                                            <p class="p-category">
-                                                Clothes and Accessories
-                                            </p>
-                                            <div class="div-amount">
-                                                <p class="p-price">
-                                                    <span><s>  </s></span> P <?php echo html_escape($objProduct->getPrice())?>
-                                                </p>
-                                                <p class="p-discount">
-                                                    <span><s> P 1200.00 </s></span>
-                                                </p>
-                                                
-                                                <center>
-                                                    <button class="btn btn-default-cart">
-                                                        <span class="fa fa-shopping-cart"></span> ADD TO CART
-                                                    </button>
-                                                </center>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach;?>
-                        </div>
-                        <div class="clear"></div>
-                        <div>
-                            <center>
-                                <ul class="pagination pagination-items">
-                                    <li class="pagination-maxleft"><a href="#bm"><span>&laquo;</span></a></li>
-                                    <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
-                                        <li class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>"><a href="#bm"><span><?php echo $i?></span></a></li>
-                                    <?php endfor;?>
-                                    <li class="pagination-maxright"><a href="#bm"><span>&raquo;</span></a></li>
-                                </ul>
-                            </center>
-                        </div>
-                    <?php endif;?>
-                </div>
-                <?php $divCounter++; endforeach;?>
+               <?=$viewProductCategory;?>
 
 <!--
                 <div class="view row row-items grid" id="fuck">
@@ -468,33 +507,7 @@
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
-
-    //create a stick nav
-    var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
-    $(document).bind('ready scroll', function() {
-        var docScroll = $(document).scrollTop();
-        if (docScroll >= 455) 
-            {
-                if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
-                    $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
-                        top: '-155px'
-                    }).stop().animate({
-                        top: 0
-                    }, 500);
-                    
-                }
-
-                $('.vendor-content-wrapper').addClass('fixed-vendor-content');
-
-            } 
-        else 
-            {
-                $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
-                $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
-            }
-
-    });
-
+ 
     var $edit_profile_photo = $(".edit-profile-photo");
     var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
 
@@ -514,43 +527,16 @@
 
     
 })(jQuery);
-
-
-
-	 $(document.body).on('click','.icon-grid',function() {
-			var view = $("div.view").attr("class");
-		
-			if(view == "view row row-items list")
-			{
-				$('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
-				$('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
-				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
-				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
-			}
-			
-			
-		});
-	$(document).on('click','.icon-list',function() {	
-			
-			var view = $("div.view").attr("class");
-			if(view == "view row row-items grid")
-			{
-				
-				$('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
-				$('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
-				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
-				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
-			};
-	});
+ 
 	
 	
-	
-	var $window = $(window),
-       $stickyLeft = $('#the-sticky-div'),
-       leftTop = $stickyLeft.offset().top;
+	// var $window = $(window),
+ //       $stickyLeft = $('#the-sticky-div'),
+ //       leftTop = $stickyLeft.offset().top;
 
-	   $window.scroll(function() {
-			$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
-		});
+	//    $window.scroll(function() {
+	// 		$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
+	// 	});
 	
 </script>
+ 
