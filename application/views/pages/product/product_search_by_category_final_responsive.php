@@ -29,17 +29,6 @@
                                 <span id="cat" class="span_bg prod_cat_drop2"></span>
                             </div>
                         </div>
-                        <script>
-                            $(function() {
-                                $( ".prod_cat_drop2" ).click(function() {
-                                  $( "#cat_nav" ).toggleClass("category_nav_plus");
-                                  $( "#cat" ).toggleClass("active_prod_cat_drop_arrow");
-                                });
-                            });
-           
-        
-                            
-                        </script>
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
@@ -409,7 +398,13 @@
             });
         } 
 
-        
+        $(function() {
+            $( ".prod_cat_drop2" ).click(function() {
+              $( "#cat_nav" ).toggleClass("category_nav_plus");
+              $( "#cat" ).toggleClass("active_prod_cat_drop_arrow");
+            });
+        });
+           
 
         $(function() {
             $('.jcarousel').jcarousel();
