@@ -269,7 +269,7 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');                
+        $defaultImagePath = $this->configLoader->getItem('image_path')['user_img_directory'];                
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
@@ -283,7 +283,7 @@ class UserManager
                 $imgFile = '/150x150.png';
                 break;
         }
-                
+
         if(!file_exists($imageURL.$imgFile)||(trim($imageURL) === '')){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
