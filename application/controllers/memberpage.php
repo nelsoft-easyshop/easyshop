@@ -823,7 +823,7 @@ class Memberpage extends MY_Controller
             $memberId = $this->session->userdata('member_id');
             $userMgr = $this->serviceContainer['user_manager'];
 
-            $isStorenameAvailable = $userMgr->setStoreName($memberId, $storeName);
+            $isStorenameAvailable = $userMgr->setUser->setStoreName($memberId, $storeName);
 
             $serverResponse['result'] = $isStorenameAvailable;
             $serverResponse['error'] = $isStorenameAvailable ? '' : 'Store name already used!';
@@ -1346,7 +1346,6 @@ class Memberpage extends MY_Controller
 
             $serverResponse["result"] = $boolResult;
             $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
-
         }
 
         echo json_encode($serverResponse);
