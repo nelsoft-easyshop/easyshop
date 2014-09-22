@@ -1,4 +1,4 @@
-<link type="text/css" href='<?=base_url()?>assets/css/contact.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/contact.css' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 
 <section class="bg-product-section color-default">
@@ -85,10 +85,11 @@
                             </tr>
                         </table>
                         <br/>
+                        <!--
                         <center>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/fb64.png" width="32" height="32" rel="tooltip" data-toggle="tooltip" title="Facebook" data-placement="bottom">
+                                    <img src="/assets/images/fb64.png" width="32" height="32" rel="tooltip" data-toggle="tooltip" title="Facebook" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
@@ -96,7 +97,7 @@
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/twitter64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Twitter" data-placement="bottom">
+                                    <img src="/assets/images/twitter64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Twitter" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
@@ -104,7 +105,7 @@
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/googleplus64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Google+" data-placement="bottom">
+                                    <img src="/assets/images/googleplus64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Google+" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
@@ -112,7 +113,7 @@
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/linkedin64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="LinkedIn" data-placement="bottom">
+                                    <img src="/assets/images/linkedin64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="LinkedIn" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
@@ -120,7 +121,7 @@
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/skype64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Skype" data-placement="bottom">
+                                    <img src="/assets/images/skype64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Skype" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
@@ -128,13 +129,14 @@
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/youtube64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="YouTube" data-placement="bottom">
+                                    <img src="/assets/images/youtube64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="YouTube" data-placement="bottom">
                                 </a>
                                 <script>
                                     $('[rel=tooltip]').tooltip() 
                                </script>
                             </span>
                         </center>
+                        -->
                     </div>
                 </div>
             </div>
@@ -147,36 +149,25 @@
                         <div class="col-xs-12">
                             <table width="100%">
                                 <tr>
-                                    <td width="33%">
-                                         Item Quality: 
-                                        <span class="span-rate">
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                        </span>
-                                    </td>
-                                    <td width="33%">
-                                        Communication: 
-                                        <span class="span-rate">
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static"></i>
-                                        </span>
-                                    </td>
-                                    <td width="34%" align="right">
-                                       Shipment Time: 
-                                        <span class="span-rate">
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static star-active"></i>
-                                            <i class="fa fa-star fa-star-rate-static"></i>
-                                        </span>
-                                    </td>
+                                
+                                    <?php $ratingCounter = 1; ?>
+                                    <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                        <td width="33%">
+                                            <?php echo html_escape($ratingHeader)?>: 
+                                            <span class="span-rate">
+                                                
+                                                <?php for($i = 0; $i < round($feedbacks['summary']['rating'.$ratingCounter]); $i++): ?>
+                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                <?php endfor; ?>
+                                                
+                                                <?php for($i = 0; $i < 5 - round($feedbacks['summary']['rating'.$ratingCounter]); $i++): ?>
+                                                    <i class="fa fa-star star-feed"></i>
+                                                <?php endfor; ?>
+                                                
+                                            </span>
+                                        </td>
+                                    <?php $ratingCounter++; ?>
+                                    <?php endforeach; ?>
                                 </tr>
                             </table>
                         </div>
@@ -202,198 +193,66 @@
                     <div class="div-feedback-list">
                         <div class="tab-content">
                             <div class="tab-pane active" id="as-buyer">
-                                <div class="row">
-                                    <div class="col-xs-2 no-padding">
-                                        <center>
-                                            <div class="div-user-image">
-                                                <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" class="img-user-image">
+                            
+                                <?php if(count($feedbacks['asBuyer']) > 0): ?>
+                                    <?php foreach($feedbacks['asBuyer'] as $feedback): ?>
+                                        <div class="row">
+                                            <div class="col-xs-2 no-padding">
+                                                <center>
+                                                    <div class="div-user-image">
+                                                        <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                                                    </div>
+                                                    <p class="p-user-name">
+                                                        <?php echo html_escape($feedback['username']); ?>
+                                                    </p>
+                                                    <p class="p-date-feedback">
+                                                        <?php echo $feedback['dateadded']->format('jS F, Y'); ?>
+                                                    </p>
+                                                </center>
                                             </div>
-                                            <p class="p-user-name">
-                                                Freddie
-                                            </p>
-                                            <p class="p-date-feedback">
-                                                18, September 2014
-                                            </p>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-10 col-feedback-container">
-                                        <div class="panel panel-default panel-feedback-item">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Item Quality: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Communication: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Shipment Time: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="col-xs-6 col-item-message">
-                                                    "trusted shop. thanks"
+                                            <div class="col-xs-10 col-feedback-container">
+                                                <div class="panel panel-default panel-feedback-item">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <table>
+                                                                <?php $ratingCounter = 1; ?>
+                                                                <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                                    <tr>
+                                                                        <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
+                                                                        <td>
+                                                                            <span>
+                                                                                <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                                <?php endfor; ?>
+                                                                                
+                                                                                <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed"></i>
+                                                                                <?php endfor; ?>
+                                    
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php $ratingCounter++; ?>
+                                                                <?php endforeach; ?>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-xs-6 col-item-message">
+                                                            <?php echo html_escape($feedback['feedbMsg']); ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-2 no-padding">
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="jumbotron no-feedback-list">
                                         <center>
-                                            <div class="div-user-image">
-                                                <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" class="img-user-image">
-                                            </div>
-                                            <p class="p-user-name">
-                                                Default Buyer
-                                            </p>
-                                            <p class="p-date-feedback">
-                                                18, September 2014
-                                            </p>
+                                            <span class="fa fa-clipboard fa-2x"></span>
+                                            <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
                                         </center>
                                     </div>
-                                    <div class="col-xs-10 col-feedback-container">
-                                        <div class="panel panel-default panel-feedback-item">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Item Quality: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Communication: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Shipment Time: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="col-xs-6 col-item-message">
-                                                    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-2 no-padding col-user">
-                                        <center>
-                                            <div class="div-user-image">
-                                                <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" class="img-user-image">
-                                            </div>
-                                            <p class="p-user-name">
-                                                Default Buyer
-                                            </p>
-                                            <p class="p-date-feedback">
-                                                18, September 2014
-                                            </p>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-10 col-feedback-container">
-                                        <div class="panel panel-default panel-feedback-item">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Item Quality: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Communication: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Shipment Time: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="col-xs-6 col-item-message">
-                                                    "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum"
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endif; ?>
+
                                 <center>
                                     <ul class="pagination pagination-items">
                                         <li class="disabled"><span>&laquo;</span></li>
@@ -426,149 +285,199 @@
                                     </ul>
                                 </center>
                             </div>
+                            
+
                             <div class="tab-pane" id="as-seller">
-                                <div class="jumbotron no-feedback-list">
-                                    <center>
-                                        <span class="fa fa-clipboard fa-2x"></span>
-                                        <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
-                                    </center>
-                                </div>
+                                <?php if(count($feedbacks['asSeller']) > 0): ?>
+                                    <?php foreach($feedbacks['asSeller'] as $feedback): ?>
+                                        <div class="row">
+                                            <div class="col-xs-2 no-padding">
+                                                <center>
+                                                    <div class="div-user-image">
+                                                        <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                                                    </div>
+                                                    <p class="p-user-name">
+                                                        <?php echo html_escape($feedback['username']); ?>
+                                                    </p>
+                                                    <p class="p-date-feedback">
+                                                        <?php echo $feedback['dateadded']->format('jS F, Y'); ?>
+                                                    </p>
+                                                </center>
+                                            </div>
+                                            <div class="col-xs-10 col-feedback-container">
+                                                <div class="panel panel-default panel-feedback-item">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <table>
+                                                                <?php $ratingCounter = 1; ?>
+                                                                <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                                    <tr>
+                                                                        <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
+                                                                        <td>
+                                                                            <span>
+                                                                                <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                                <?php endfor; ?>
+                                                                                
+                                                                                <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed"></i>
+                                                                                <?php endfor; ?>
+                                    
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php $ratingCounter++; ?>
+                                                                <?php endforeach; ?>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-xs-6 col-item-message">
+                                                            <?php echo html_escape($feedback['feedbMsg']); ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="jumbotron no-feedback-list">
+                                        <center>
+                                            <span class="fa fa-clipboard fa-2x"></span>
+                                            <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                        </center>
+                                    </div>
+                                <?php endif; ?>
                             </div>
+
                             <div class="tab-pane" id="for-other-buyer">
-                                <div class="row">
-                                    <div class="col-xs-2 no-padding col-user">
-                                        <center>
-                                            <div class="div-user-image">
-                                                <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" class="img-user-image">
+                                <?php if(count($feedbacks['forOthersAsBuyer']) > 0): ?>
+                                    <?php foreach($feedbacks['forOthersAsBuyer'] as $feedback): ?>
+                                        <div class="row">
+                                            <div class="col-xs-2 no-padding">
+                                                <center>
+                                                    <div class="div-user-image">
+                                                        <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                                                    </div>
+                                                    <p class="p-user-name">
+                                                        <?php echo html_escape($feedback['username']); ?>
+                                                    </p>
+                                                    <p class="p-date-feedback">
+                                                        <?php echo $feedback['dateadded']->format('jS F, Y'); ?>
+                                                    </p>
+                                                </center>
                                             </div>
-                                            <p class="p-user-name">
-                                                Default Buyer
-                                            </p>
-                                            <p class="p-date-feedback">
-                                                18, September 2014
-                                            </p>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-10 col-feedback-container">
-                                        <div class="panel panel-default panel-feedback-item">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Item Quality: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Communication: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Shipment Time: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="col-xs-6 col-item-message">
-                                                    "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum"
+                                            <div class="col-xs-10 col-feedback-container">
+                                                <div class="panel panel-default panel-feedback-item">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <table>
+                                                                <?php $ratingCounter = 1; ?>
+                                                                <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                                    <tr>
+                                                                        <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
+                                                                        <td>
+                                                                            <span>
+                                                                                <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                                <?php endfor; ?>
+                                                                                
+                                                                                <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed"></i>
+                                                                                <?php endfor; ?>
+                                    
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php $ratingCounter++; ?>
+                                                                <?php endforeach; ?>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-xs-6 col-item-message">
+                                                            <?php echo html_escape($feedback['feedbMsg']); ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="jumbotron no-feedback-list">
+                                        <center>
+                                            <span class="fa fa-clipboard fa-2x"></span>
+                                            <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                        </center>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
+
                             <div class="tab-pane" id="for-other-seller">
-                                <div class="row">
-                                    <div class="col-xs-2 no-padding col-user">
-                                        <center>
-                                            <div class="div-user-image">
-                                                <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" class="img-user-image">
+                                <?php if(count($feedbacks['forOthersAsSeller']) > 0): ?>
+                                    <?php foreach($feedbacks['forOthersAsSeller'] as $feedback): ?>
+                                        <div class="row">
+                                            <div class="col-xs-2 no-padding">
+                                                <center>
+                                                    <div class="div-user-image">
+                                                        <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                                                    </div>
+                                                    <p class="p-user-name">
+                                                        <?php echo html_escape($feedback['username']); ?>
+                                                    </p>
+                                                    <p class="p-date-feedback">
+                                                        <?php echo $feedback['dateadded']->format('jS F, Y'); ?>
+                                                    </p>
+                                                </center>
                                             </div>
-                                            <p class="p-user-name">
-                                                Default Buyer
-                                            </p>
-                                            <p class="p-date-feedback">
-                                                18, September 2014
-                                            </p>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-10 col-feedback-container">
-                                        <div class="panel panel-default panel-feedback-item">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <table>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Item Quality: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Communication: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="td-feedback-criteria">Shipment Time: </td>
-                                                            <td>
-                                                                <span>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                                    <i class="fa fa-star star-feed"></i>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <div class="col-xs-6 col-item-message">
-                                                    "eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum."
+                                            <div class="col-xs-10 col-feedback-container">
+                                                <div class="panel panel-default panel-feedback-item">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <table>
+                                                                <?php $ratingCounter = 1; ?>
+                                                                <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                                    <tr>
+                                                                        <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
+                                                                        <td>
+                                                                            <span>
+                                                                                <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                                <?php endfor; ?>
+                                                                                
+                                                                                <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                                                    <i class="fa fa-star star-feed"></i>
+                                                                                <?php endfor; ?>
+                                    
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php $ratingCounter++; ?>
+                                                                <?php endforeach; ?>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-xs-6 col-item-message">
+                                                            <?php echo html_escape($feedback['feedbMsg']); ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="jumbotron no-feedback-list">
+                                        <center>
+                                            <span class="fa fa-clipboard fa-2x"></span>
+                                            <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                        </center>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
+                
+                
+                
+                
+                
                 <div class="panel-feedback-message">
                     <p class="panel-title-feedback">
                         Leave A Feedback
@@ -645,10 +554,10 @@
         </div>
     </div>
 </section>
-<script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+
 <script>
 $(function () {
     $.scrollUp({
