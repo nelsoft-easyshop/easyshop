@@ -70,5 +70,39 @@ class EsLocationLookupRepository extends EntityRepository
         return $locationLookup->getParent();
     }
 
+    public function getLocationLookup()
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+ 
+        $qbResult = $qb->select('loc')
+                        ->from('EasyShop\Entities\EsLocationLookup','loc')
+                        ->where(
+                                    $qb->expr()->in('loc.type', [0,3,4])
+                                )
+                        ->orderBy('loc.location', 'ASC')
+                        ->getQuery();
+
+        $result = $qbResult->getResult();
+
+        foreach($result as $key => $value){
+            $locationType = intval($value->getType());
+            if($locationType === 0){ 
+                $data['countryName'] = $value->getLocation();
+                $data['countryId'] =  $value->getidLocation();
+            }
+            else if($locationType === 3){
+                $data['stateRegionLookup'][$value->getidLocation()] = $value->getLocation();
+            }
+            else if($locationType === 4){
+                $data['cityLookup'][$value->getParent()->getIdLocation()][$value->getidLocation()] = $value->getLocation();
+            }
+        }
+
+        $data['jsonCity'] = json_encode($data['cityLookup'], JSON_FORCE_OBJECT);
+
+        return $data;
+    }
+
 }
 
