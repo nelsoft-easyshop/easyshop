@@ -130,11 +130,13 @@
                             <span class="cl-1"><strong>Location not set</strong></span>
                         <?php endif;?>
                     </p>
+                    <?php if($isEditable): ?>
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
                             <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
                         </a>
                     </div>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
@@ -207,10 +209,12 @@
                             <?php endforeach;?>
                         </select>
                     </div>
+                    <?php if($isEditable): ?>
                     <div class="vendor-profile-btn edit-profile-btn">
                         <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1">Cancel</a>
                         <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3">Save Changes</a>
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

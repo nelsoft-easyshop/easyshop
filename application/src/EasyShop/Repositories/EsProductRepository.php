@@ -412,8 +412,12 @@ class EsProductRepository extends EntityRepository
         }
  
         if(isset($filterArray['seller']) && $filterArray['seller']){
+            $sellerString = '%'.$filterArray['seller'].'%';
+            if (strpos($filterArray['seller'],'seller:') !== false) {
+                $sellerString = str_replace("seller:","",$filterArray['seller']);
+            }
             $qbResult = $qbResult->andWhere('m.username LIKE :username')
-                                ->setParameter('username', '%'.$filterArray['seller'].'%');
+                                ->setParameter('username', $sellerString);
         }
 
         if(isset($filterArray['category']) 

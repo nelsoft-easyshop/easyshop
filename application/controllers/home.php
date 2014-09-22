@@ -266,8 +266,13 @@ class Home extends MY_Controller
             ));
 
             // Load Product By Category -- Refractor soon..
-            $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']); 
+            $collectionCategoryProduct = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']); 
 
+            $productView['defaultCatProd'] = $collectionCategoryProduct['parentCat'];
+            $productObjCollection = $collectionCategoryProduct['productObjCollection'];
+
+            $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $productObjCollection);
+ 
             // If searching in page
             if(count($_GET)>0){
                 $productView['defaultCatProd'][0]['name'] ='Search Result';
@@ -281,19 +286,19 @@ class Home extends MY_Controller
                 $searchProduct = $searchProductService->getProductBySearch($parameter);
                 $productView['defaultCatProd'][0]['products'] = $searchProduct;
                 // get all attributes to by products
-                $productView['searchProductAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
-            }  
+                $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
+            }
 
             // Data for the view
             $data = array(
-                "arrVendorDetails" => $arrVendorDetails
-                , "imgAvatar" => $arrVendorDetails['imgurl'] . "/150x150.png"
+                "arrVendorDetails" => $arrVendorDetails 
                 , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
                 , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
                 , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
+                , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
             ); 
             
             // Load Location
@@ -327,6 +332,8 @@ class Home extends MY_Controller
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
+        $productObjects = new stdClass();
+
         foreach( $parentCat as $idCat=>$category ){
             $parentCat[$idCat]['non_categorized_count'] = 0;
             $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
@@ -338,6 +345,7 @@ class Home extends MY_Controller
 
             $parentCat[$idCat]['json_subcat'] = json_encode($category['child_cat'], JSON_FORCE_OBJECT);
 
+            $productIdCollection = [];
             foreach($categoryProducts as $product => $value){
                 $productId = $value->getIdProduct();
                 $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
@@ -346,9 +354,11 @@ class Home extends MY_Controller
                 $value->imageFileName = $objImage->getFilename();
             }
 
+            $productObjects = (object) array_merge((array) $productObjects, (array) $categoryProducts);
         }
-
-        return $parentCat;
+        $dataReturn['parentCat'] = $parentCat;
+        $dataReturn['productObjCollection'] = $productObjects;
+        return $dataReturn;
     }
 	
 	/**
