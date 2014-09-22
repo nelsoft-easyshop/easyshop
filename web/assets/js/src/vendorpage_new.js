@@ -142,6 +142,28 @@ function ItemListAjax(CatDiv,page)
         $(divId).show();
     });
 
+
+    var $edit_profile_photo = $(".edit-profile-photo");
+    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
+
+    $(document).mouseup(function (e) {
+
+        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
+            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+           $edit_profile_photo_menu.hide(1);
+        }
+
+    });
+
+    $edit_profile_photo.click(function() {
+        $edit_profile_photo_menu.show();
+    });
+
+
+    // I Start Here....
+    // -- Ryan Vasquez.
+
     $(document).on('click','#edit-profile-btn',function() {
         $('#display-banner-view').hide();
         $('#edit-banner-view').show();
@@ -151,6 +173,44 @@ function ItemListAjax(CatDiv,page)
         $('#display-banner-view').show();
         $('#edit-banner-view').hide();
     });
+
+   
+    $(document).on('click','#banner-save-changes',function() {
+        $('#display-banner-view').show();
+        $('#edit-banner-view').hide();
+    });
+    
+
+    // Change of state region 
+    $('.address_dropdown').chosen({width:'200px'});
+
+    var cityFilter = function(stateregionselect,cityselect){
+        var stateregionID = stateregionselect.find('option:selected').attr('value'); 
+        cityselect.find('option.echo').remove();
+        if(stateregionID in jsonCity){ 
+            $('.cityselect').empty();
+            jQuery.each(jsonCity[stateregionID], function(k,v){
+                $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
+            });
+        }
+        else{
+            $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+        }
+
+        $('.cityselect').trigger('chosen:updated');
+    } 
+    
+    $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+
+    $('.stateregionselect').on('change', function(){
+        var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+        cityselect.val(0);
+        cityFilter( $(this), cityselect );
+    });
+
+    $('.stateregionselect,.cityselect').trigger('change');
+
+    // Change Profile Picture
     
 
 })(jQuery);

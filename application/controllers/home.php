@@ -263,6 +263,7 @@ class Home extends MY_Controller
                 "render_searchbar" => false
             ));
 
+            // Load Product By Category -- Refractor soon..
             $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']); 
 
             // If searching in page
@@ -280,9 +281,7 @@ class Home extends MY_Controller
                 // get all attributes to by products
                 $productView['searchProductAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
             }
-            // echo '<pre>';
-            // $response['locatioList'] = $EsLocationLookupRepository->getLocation();
-            // print_r($response['locatioList']);exit();
+
             // Data for the view
             $data = array(
                 "arrVendorDetails" => $arrVendorDetails
@@ -291,8 +290,11 @@ class Home extends MY_Controller
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
-            );
 
+            ); 
+            // Load Location
+            $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+            
             // Load Product View
             $data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
 

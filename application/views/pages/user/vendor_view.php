@@ -1,13 +1,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-<link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href='<?=base_url()?>assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href='<?=base_url()?>assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
 
+<!-- Load all css -->
+<link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
+<link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
+
+<!-- Load body -->
 <header class="new-header-con">
     <div class="main-container">
         <div>
             <a href="<?=base_url()?>">
-                <img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
             </a>
         </div>
         <div class="search-container">
@@ -167,24 +171,28 @@
                     <input type="text" class="form-control mrgn-bttm-8 seller-name" value="<?=$storeNameDisplay; ?>" placeholder="Seller Name">
                     <input type="text" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
+
                         <!-- State/Region Dropdown -->
-                        <select name="city" id="personal_city" class="address_dropdown cityselect">
-                            <option value="0">--- Select City ---</option>
-                            <option class="optionclone" value="" style="display:none;" disabled></option>
-                            
-                            <?php if($cityID != '' && $stateregionID != ''):?>
-                                <?php foreach($city_lookup[$stateregionID] as $lockey=>$city):?>
-                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
-                                <?php endforeach;?>
-                            <?php endif;?>
-                            
+                        <select name="c_stateregion" class="address_dropdown stateregionselect">
+                            <option value="0">--- Select State/Region ---</option> 
+                            <?php foreach($stateRegionLookup as $srkey=>$stateregion):?>
+                                <option class="echo" value="<?php echo $srkey?>" <?php echo $arrVendorDetails['stateregion'] == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
+                            <?php endforeach;?>
                         </select>
+
                         <!-- City Dropdown -->
-                        <input type="text" class="ui-form-control">
+                        <select name="c_city" class="address_dropdown cityselect">
+                            <option value="0">--- Select City ---</option> 
+                            <?php foreach($cityLookup as $parentkey=>$arr):?>
+                                <?php foreach($arr as $lockey=>$city):?>
+                                    <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $arrVendorDetails['city'] == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                                <?php endforeach;?>
+                            <?php endforeach;?>
+                        </select>
                     </div>
                     <div class="vendor-profile-btn edit-profile-btn">
                         <a href="" id="banner-cancel-changes" class="btn btn-default-1">Cancel</a>
-                        <a href="" class="btn btn-default-3">Save Changes</a>
+                        <a href="" id="banner-save-changes"class="btn btn-default-3">Save Changes</a>
                     </div>
                 </div>
             </div>
@@ -291,93 +299,93 @@
     <div class="container-non-responsive bg-product-section">
     <div class="row row-products">
         <div class="col-xs-3 no-padding col-left-wing">
-			<div class="left-wing">
-				<div class="panel-group panel-category border-0" id="category">
-					<div class="panel panel-default  border-0 no-padding">
-						<div class="panel-heading border-0 panel-category-heading" id="cat-header">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
-									CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
-								</a>
-							</h4>
-						</div>
-						<div id="category-list" class="panel-collapse collapse in">
-							<div class="panel-body border-0 no-padding">
-								<ul class="list-unstyled list-category">
+            <div class="left-wing">
+                <div class="panel-group panel-category border-0" id="category">
+                    <div class="panel panel-default  border-0 no-padding">
+                        <div class="panel-heading border-0 panel-category-heading" id="cat-header">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
+                                    CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="category-list" class="panel-collapse collapse in">
+                            <div class="panel-body border-0 no-padding">
+                                <ul class="list-unstyled list-category">
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><?php echo $arrCat['name']?></li></a>
                                     <?php endforeach;?>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<script>
-				 $("#cat-header").on('click','.a-category',function() {
-											
-					var attr = $("b.cat").attr("class");
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                 $("#cat-header").on('click','.a-category',function() {
+                                            
+                    var attr = $("b.cat").attr("class");
 
-					if(attr == "cat fa fa-minus-square-o pull-right")
-					{
-						$('b.cat').removeClass("cat fa fa-minus-square-o pull-right").addClass("cat fa fa-plus-square-o pull-right");
-						
-					}
-					else if(attr == "cat fa fa-plus-square-o pull-right"){
-						$('b.cat').removeClass("cat fa fa-plus-square-o pull-right").addClass("cat fa fa-minus-square-o pull-right");
-						
-					}
-				});
-				</script>
-				<div class="panel-group panel-category border-0" id="filter">
-					<div class="panel panel-default  border-0 no-padding" id="filter-header">
-						<div class="panel-heading border-0 panel-category-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
-									FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
-								</a>
-							</h4>
-						</div>
-						<div id="filter-list" class="panel-collapse collapse in">
-							<div class="panel-body border-0 no-padding">
-								<ul class="list-unstyled list-filter">
-									<li>
-										<p class="p-filter-name">By Condition</p>
-										<select class="select-filter">
-											<option>New</option>
-											<option>Used</option>
-											<option>New</option>
-										</select>
-									</li>
-									<li>
-										<p class="p-filter-name">By Condition</p>
-										from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
-									</li>
-									<li>
-										<center>
-											<input type="submit" class="btn-filter" value="filter"/>
-										</center>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<script>
-					 $("#filter-header").on('click','.a-filter',function() {
-												
-						var attr = $("b.fil").attr("class");
+                    if(attr == "cat fa fa-minus-square-o pull-right")
+                    {
+                        $('b.cat').removeClass("cat fa fa-minus-square-o pull-right").addClass("cat fa fa-plus-square-o pull-right");
+                        
+                    }
+                    else if(attr == "cat fa fa-plus-square-o pull-right"){
+                        $('b.cat').removeClass("cat fa fa-plus-square-o pull-right").addClass("cat fa fa-minus-square-o pull-right");
+                        
+                    }
+                });
+                </script>
+                <div class="panel-group panel-category border-0" id="filter">
+                    <div class="panel panel-default  border-0 no-padding" id="filter-header">
+                        <div class="panel-heading border-0 panel-category-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
+                                    FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="filter-list" class="panel-collapse collapse in">
+                            <div class="panel-body border-0 no-padding">
+                                <ul class="list-unstyled list-filter">
+                                    <li>
+                                        <p class="p-filter-name">By Condition</p>
+                                        <select class="select-filter">
+                                            <option>New</option>
+                                            <option>Used</option>
+                                            <option>New</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <p class="p-filter-name">By Condition</p>
+                                        from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
+                                    </li>
+                                    <li>
+                                        <center>
+                                            <input type="submit" class="btn-filter" value="filter"/>
+                                        </center>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                     $("#filter-header").on('click','.a-filter',function() {
+                                                
+                        var attr = $("b.fil").attr("class");
 
-						if(attr == "fil fa fa-minus-square-o pull-right")
-						{
-							$('b.fil').removeClass("fil fa fa-minus-square-o pull-right").addClass("fil fa fa-plus-square-o pull-right");
-						}
-						else if(attr == "fil fa fa-plus-square-o pull-right"){
-							$('b.fil').removeClass("fil fa fa-plus-square-o pull-right").addClass("fil fa fa-minus-square-o pull-right");
-						
-						}
-					});
-					</script>
-				</div>
-			</div>
+                        if(attr == "fil fa fa-minus-square-o pull-right")
+                        {
+                            $('b.fil').removeClass("fil fa fa-minus-square-o pull-right").addClass("fil fa fa-plus-square-o pull-right");
+                        }
+                        else if(attr == "fil fa fa-plus-square-o pull-right"){
+                            $('b.fil').removeClass("fil fa fa-plus-square-o pull-right").addClass("fil fa fa-minus-square-o pull-right");
+                        
+                        }
+                    });
+                    </script>
+                </div>
+            </div>
         </div>
         <div class="col-xs-9 col-products">
             <div class="div-products">
@@ -411,15 +419,15 @@
                                 <div class="panel panel-default panel-list-item">
                                     <table width="100%">
                                         <tr>
-											
+                                            
                                             <td width="20%" class="td-list-image" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
                                                 <a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
-												<div class="span-space">
-													<span class="span-discount-pin">10% OFF</span>
+                                                <div class="span-space">
+                                                    <span class="span-discount-pin">10% OFF</span>
                                                 </div>
-												</a>
+                                                </a>
                                             </td>
-											
+                                            
                                             <td width="55%" class="td-list-item-info">
                                                 <p class="p-list-item-name">
                                                     
@@ -427,26 +435,26 @@
                                                             $prod_name = html_escape($prod['name']);
                                                             if(strlen($prod_name)>35){
                                                         ?>
-															<a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
+                                                            <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
                                                                 <?php echo substr_replace( $prod_name, "...", 35);?>
-															</a>
-														<?php  
+                                                            </a>
+                                                        <?php  
                                                             }else{
-														?>
-															<a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                        ?>
+                                                            <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
                                                                 <?php echo $prod_name;?>
-															</a>
-														<?php
-															}
+                                                            </a>
+                                                        <?php
+                                                            }
                                                         ?>
                                                     
-													<script>
-														$(document).ready(function(){
-															$('[rel=tooltiplist]').tooltip({
-																placement : 'top'
-															});
-														});														
-													</script>
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                            $('[rel=tooltiplist]').tooltip({
+                                                                placement : 'top'
+                                                            });
+                                                        });                                                     
+                                                    </script>
                                                 </p>
                                                 <p class="p-list-item-category">
                                                     Electronics and Gadgets
@@ -481,19 +489,19 @@
                     <?php endif;?>
                 </div>
 --><!--
-				<center>
-					<ul class="pagination pagination-items">
-						<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
-						<li class="active"><a href="#"><span>1</span></a></li>
-						<li><a href="#"><span>2</span></a></li>
-						<li><a href="#"><span>3</span></a></li>
-						<li><a href="#"><span>4</span></a></li>
-						<li><a href="#"><span>5</span></a></li>
-						<li><a href="#"><span>6</span></a></li>
-						<li><a href="#"><span>7</span></a></li>
-						<li><a href="#"><span>&raquo;</span></a></li>
-					</ul>
-				</center>
+                <center>
+                    <ul class="pagination pagination-items">
+                        <li class="disabled"><a href="#"><span>&laquo;</span></a></li>
+                        <li class="active"><a href="#"><span>1</span></a></li>
+                        <li><a href="#"><span>2</span></a></li>
+                        <li><a href="#"><span>3</span></a></li>
+                        <li><a href="#"><span>4</span></a></li>
+                        <li><a href="#"><span>5</span></a></li>
+                        <li><a href="#"><span>6</span></a></li>
+                        <li><a href="#"><span>7</span></a></li>
+                        <li><a href="#"><span>&raquo;</span></a></li>
+                    </ul>
+                </center>
     -->
             </div>
         </div>
@@ -502,41 +510,11 @@
     </div>
 </section>
 
-<script type="text/javascript" src='<?=base_url()?>assets/js/src/vendorpage_new.js'></script>
-<script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script type="text/javascript">
-(function ($) {
- 
-    var $edit_profile_photo = $(".edit-profile-photo");
-    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
-
-    $(document).mouseup(function (e) {
-
-        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
-            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-           $edit_profile_photo_menu.hide(1);
-        }
-
-    });
-
-    $edit_profile_photo.click(function() {
-        $edit_profile_photo_menu.show();
-    });
-
-    
-})(jQuery);
- 
-	
-	
-	// var $window = $(window),
- //       $stickyLeft = $('#the-sticky-div'),
- //       leftTop = $stickyLeft.offset().top;
-
-	//    $window.scroll(function() {
-	// 		$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
-	// 	});
-	
+    var jsonCity = <?php echo $jsonCity;?>;
 </script>
- 
+
+<script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+<script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
+<script src="/assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
