@@ -16,7 +16,7 @@
                     <div class="wrapper">
                         <?php echo $category_navigation_desktop; ?>  
                         <div class="prod_cat_nav" id="prod_drop_nav">
-                            <div class="category_nav">
+                            <div id="cat_nav"class="category_nav">
                                 <ul>
                                 <?php foreach($parentCategory as $catKey => $catValue): ?>
                                     <li class="<?=($catValue->getIdCat() == $breadcrumbs[0]['idCat'])?'active':'';?>">
@@ -26,7 +26,7 @@
                                     </li>
                                 <?php endforeach;?>
                                 </ul>
-                                <span class="span_bg prod_cat_drop"></span>
+                                <span id="cat" class="span_bg prod_cat_drop2"></span>
                             </div>
                         </div>
                         <div class="clear"></div>
@@ -398,17 +398,13 @@
             });
         } 
 
-        $("#prod_drop_nav").on('click','.prod_cat_drop',function() {
-            var drop = $("div.category_nav").attr("class");
-            if(drop == "category_nav"){
-                $('.category_nav').removeClass("category_nav").addClass("category_nav category_nav_plus");
-                $('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
-            }
-            else{
-                $('.category_nav').removeClass("category_nav category_nav_plus").addClass("category_nav");
-                $('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
-            }
-        }); 
+        $(function() {
+            $( ".prod_cat_drop2" ).click(function() {
+              $( "#cat_nav" ).toggleClass("category_nav_plus");
+              $( "#cat" ).toggleClass("active_prod_cat_drop_arrow");
+            });
+        });
+           
 
         $(function() {
             $('.jcarousel').jcarousel();
