@@ -73,7 +73,7 @@ class UserManager
      * @param integer $integer
      * @param integer $type
      */
-    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL, $limit = PHP_INT_MAX)
+    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL, $limit = PHP_INT_MAX, $page = 0)
     {
  
         if($type === EsMemberFeedback::TYPE_ALL){
@@ -84,9 +84,9 @@ class UserManager
                 'youpost_seller' => array(),
                 'otherspost_seller' => array(),
                 'otherspost_buyer' => array(),
-                'rating1' => 0,
-                'rating2' => 0,
-                'rating3' => 0,
+                'rating1Summary' => 0,
+                'rating2Summary' => 0,
+                'rating3Summary' => 0,
                 'reviewForSellerCount' => 0,
                 'totalFeedbackCount' => 0,
             );
@@ -115,9 +115,9 @@ class UserManager
                 else if(intval($feedback['revieweeId']) === $memberId){
                     $feedbackDetails['from_memberId'] = $feedback['reviewerId'];
                     $feedbackDetails['from_membername'] = $feedback['reviewerUsername'];
-                    $data['rating1'] += $feedback['rating1'];
-                    $data['rating2'] += $feedback['rating2'];
-                    $data['rating3'] += $feedback['rating3'];
+                    $data['rating1Summary'] += $feedback['rating1'];
+                    $data['rating2Summary'] += $feedback['rating2'];
+                    $data['rating3Summary'] += $feedback['rating3'];
                     $data['reviewForSellerCount']++;
                     if($feedBackKind === 0){
                         $data['otherspost_seller'][$feedback['idOrder']]  = $feedbackDetails;
@@ -129,29 +129,29 @@ class UserManager
                 $data['totalFeedbackCount']++;
             }
             if($data['reviewForSellerCount'] !== 0 ){
-                $data['rating1Summary'] = round($data['rating1'] / $data['reviewForSellerCount']);
-                $data['rating2Summary'] = round($data['rating2'] / $data['reviewForSellerCount']);
-                $data['rating3Summary'] = round($data['rating3'] / $data['reviewForSellerCount']);
+                $data['rating1Summary'] = round($data['rating1Summary'] / $data['reviewForSellerCount']);
+                $data['rating2Summary'] = round($data['rating2Summary'] / $data['reviewForSellerCount']);
+                $data['rating3Summary'] = round($data['rating3Summary'] / $data['reviewForSellerCount']);
             }
             $feedbacks = $data;
         }
         else if($type === EsMemberFeedback::TYPE_AS_SELLER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksAsSeller($memberId, $limit);
+                                  ->getFeedbacksAsSeller($memberId, $limit, $page);
             
         }
         else if($type === EsMemberFeedback::TYPE_AS_BUYER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksAsBuyer($memberId, $limit);
+                                  ->getFeedbacksAsBuyer($memberId, $limit, $page);
         }
         else if($type === EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksForOthersAsSeller($memberId, $limit);
+                                  ->getFeedbacksForOthersAsSeller($memberId, $limit, $page);
         
         }
         else if($type === EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksForOthersAsBuyer($memberId, $limit);
+                                  ->getFeedbacksForOthersAsBuyer($memberId, $limit, $page);
         }   
         
         
