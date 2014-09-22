@@ -300,8 +300,6 @@ class Home extends MY_Controller
     private function aboutuser($sellerslug)
     {
         $limit = 15;
-        
-    
         $this->lang->load('resources');
 
         $data['title'] = 'User Information | Easyshop.ph';
@@ -332,13 +330,13 @@ class Home extends MY_Controller
                                                             array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
                                                                    'isHyperLink' => false), TRUE);
         $feedbacks['forOthersAsBuyer'] = $this->serviceContainer['user_manager']
-                                              ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER);
+                                              ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);
         $feedbacks['forOthersAsSeller'] = $this->serviceContainer['user_manager']
-                                               ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER);
+                                               ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);
         $feedbacks['asSeller']  = $this->serviceContainer['user_manager']
-                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER);
+                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);
         $feedbacks['asBuyer'] = $this->serviceContainer['user_manager']
-                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER);
+                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);
         
         $feedbackTabs = array(['id' => 'as-buyer', 'index' => 'asBuyer'],
                               ['id' => 'as-seller', 'index' => 'asSeller'],

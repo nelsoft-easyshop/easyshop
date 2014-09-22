@@ -53,7 +53,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $page
      * @param integer $limit
      */
-    public function getFeedbacksForOthersAsBuyer($memberId, $page = 0, $limit = 15)
+    public function getFeedbacksForOthersAsBuyer($memberId, $limit = 15, $page = 0)
     {
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
@@ -79,7 +79,6 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->setMaxResults($limit)
                             ->getQuery()
                             ->getResult();
-                
         return $feedbacks;
     }
     
@@ -90,7 +89,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $page
      * @param integer $limit
      */
-    public function getFeedbacksForOthersAsSeller($memberId,$page = 0, $limit = 15)
+    public function getFeedbacksForOthersAsSeller($memberId, $limit = 15, $page = 0)
     {
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
@@ -127,7 +126,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $page
      * @param integer $limit
      */
-    public function getFeedbacksAsBuyer($memberId, $page = 0, $limit = 15)
+    public function getFeedbacksAsBuyer($memberId, $limit = 15, $page = 0)
     {
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
@@ -164,7 +163,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $page
      * @param integer $limit
      */
-    public function getFeedbacksAsSeller($memberId, $page = 0, $limit = 15)
+    public function getFeedbacksAsSeller($memberId, $limit = 15, $page = 0)
     {
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();

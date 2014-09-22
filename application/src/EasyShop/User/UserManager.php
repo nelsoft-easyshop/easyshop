@@ -73,7 +73,7 @@ class UserManager
      * @param integer $integer
      * @param integer $type
      */
-    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL)
+    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL, $limit = PHP_INT_MAX)
     {
  
         if($type === EsMemberFeedback::TYPE_ALL){
@@ -137,21 +137,21 @@ class UserManager
         }
         else if($type === EsMemberFeedback::TYPE_AS_SELLER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksAsSeller($memberId);
+                                  ->getFeedbacksAsSeller($memberId, $limit);
             
         }
         else if($type === EsMemberFeedback::TYPE_AS_BUYER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksAsBuyer($memberId);
+                                  ->getFeedbacksAsBuyer($memberId, $limit);
         }
         else if($type === EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksForOthersAsSeller($memberId);
+                                  ->getFeedbacksForOthersAsSeller($memberId, $limit);
         
         }
         else if($type === EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                  ->getFeedbacksForOthersAsBuyer($memberId);
+                                  ->getFeedbacksForOthersAsBuyer($memberId, $limit);
         }   
         
         
