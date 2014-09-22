@@ -7,7 +7,9 @@
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-
+<script>
+    
+</script>
 
 <section style="color-gray">
     <div class="container font-roboto" style="max-width:980px;">
@@ -402,6 +404,9 @@
         
         <div class="row">
             <div class="col-md-10">
+            <script>
+                
+            </script>
                 <div id="tabs" class="display-when-desktop">
                     <ul>
                         <li><a href="#tabs-1">Product Details</a></li>
@@ -887,4 +892,3 @@
 <script type="text/javascript" src="/assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" ></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.countdown.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/jquery.mobile.custom.min.js"></script>
