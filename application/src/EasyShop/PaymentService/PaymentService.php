@@ -191,7 +191,7 @@ class PaymentService
     {
         // Search array for point gateway
         foreach (array_keys($paymentMethods) as $key) {
-            if(strpos(strtolower($key), 'point') !== false){                
+            if(strpos(strtolower($key), 'point') !== false){
                 $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
                     $this->em,
                     $this->request,
@@ -595,7 +595,8 @@ class PaymentService
                     ->getShippingAddress(intval($memberId));
 
         // Compute shipping fee
-        $prepareData = $this->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $this->pointGateway->getParameter('amount'));
+        $pointSpent = $this->pointGateway ? $this->pointGateway->getParameter('amount') : "0";
+        $prepareData = $this->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
 
         $grandTotal = $prepareData['totalPrice'];
 
@@ -678,20 +679,6 @@ class PaymentService
 
         $response = array_merge($response, $returnValue);
         return $response;
-    }
-
-    /**
-     * Queries DB for users current amount of points
-     *
-     * @param int $memberId User Member Id
-     *
-     * @return string
-     */ 
-    public function getMaxPoint($memberId)
-    {
-        $points = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                ->findOneBy(['member' => intval($memberId)]);
-        return $points->getPoint();
     }
 }
 

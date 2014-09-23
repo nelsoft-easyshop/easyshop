@@ -75,4 +75,4 @@ class CashOnDeliveryGateway extends AbstractGateway
         method:"CashOnDelivery", 
         lastDigit:$('input[name=paymentToken]').val().slice(-1)
 */
-        
+

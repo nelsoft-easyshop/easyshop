@@ -1,15 +1,4 @@
 $(document).ready(function(){
-
-    var maxPoints = 0;
-    var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-    // query for max points available for spending
-    $.post(config.base_url+'payment/getPoints', {points:"dummy", csrfname : csrftoken}, function(result){
-        maxPoints = parseInt(result);
-        $("#pointsAllocated").attr("max", parseInt(result));
-        $("#maxPoints").attr("value","Max point is " + result);
-    });
-
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
     $('.paypal_button').show();  
@@ -183,9 +172,6 @@ $(document).ready(function(){
                 var pointAllocated = $('#pointsAllocated').val();
 
                 if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
-
-                    // Cap points internally
-                    pointAllocated = parseInt(pointAllocated) > maxPoints ? maxPoints : pointAllocated;
 
                     var paymentMethod = JSON.stringify(
                     {

@@ -5,6 +5,7 @@ namespace EasyShop\PaymentGateways;
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 /**
  * Point Gateway Class
@@ -38,7 +39,7 @@ class PointGateway extends AbstractGateway
         $pointSpent =  $this->parameters['amount'];
 
         // if 'purchase', add items as JSON
-        if(intval($actionId) === 4){ 
+        if(intval($actionId) === EsPointType::TYPE_PURCHASE){ 
             $maxPointAllowable = "0.000";
             $pointBreakdown = [];
 
@@ -59,10 +60,10 @@ class PointGateway extends AbstractGateway
 
             // update user points!
             $historyObj = $this->pointTracker->spendUserPoint(
-            $memberId,
-            $actionId,
-            $pointSpent
-            );
+                $memberId,
+                $actionId,
+                $pointSpent
+                );
 
             // update history data field
             $historyObj->setData($jsonData);
