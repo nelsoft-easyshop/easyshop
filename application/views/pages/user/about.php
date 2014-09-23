@@ -139,13 +139,7 @@
                 
                 <div class="panel-about-seller">
                     <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                    </script>
                     <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                    </script>
                     <p class="panel-title-feedback">
                         About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
                     </p>
