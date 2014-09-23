@@ -363,6 +363,8 @@ function ItemListAjax(CatDiv,page)
                 $.modal.close();
             }
         });
+
+        $('#div_user_image_prev').parents('.simplemodal-container').addClass('edit-banner-container');
     }
 
     var showCoords = function(c)
