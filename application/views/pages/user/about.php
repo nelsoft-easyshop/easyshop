@@ -9,16 +9,11 @@
                     <div class="panel-contact-details">
                         <p class="panel-title-contact">
                             Details
-                            
-                        </p>
-                       <i class="fa fa-edit fa-edit-icon pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
-                       <script>
-                            $('[rel=tooltip]').tooltip() 
-                       </script>
+                       </p>
+                       <i class="fa fa-edit fa-edit-icon pull-right" id="meee" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
+                       
                        <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
-                       <script>
-                            $('[rel=tooltip]').tooltip() 
-                       </script>
+                      
                         <table width="100%" class="table-contact-details">
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
@@ -141,6 +136,33 @@
                 </div>
             </div>
             <div class="col-xs-9 col-feedback-container">
+                
+                <div class="panel-about-seller">
+                    <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
+                    <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+                    <p class="panel-title-feedback">
+                        About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
+                    </p>
+                    <div class="clear"></div>
+                    <div class="div-about-content">
+
+                        <p class="p-about">
+                            <?php echo html_escape($member->getStoreDesc()); ?>
+                        </p>
+                       
+                        <div class="div-about-edit-area">
+                            <?php echo form_open('home/doUpdateDescription') ?>
+                                <textarea class="input-lg input-message textarea-about" name='description' rows="12" placeholder='Say something about your shop...'"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
+                                <center>
+                                    <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
+                                </center>
+                                <input type='hidden' name='userId' value="<?php echo $member->getIdMember(); ?>" />
+                            <?php echo form_close(); ?>
+                        </div>
+                    </div>
+                </div>
+            
+            
                 <div class="panel-feedback-ratings">
                     <p class="panel-title-feedback">
                         Feedback Ratings

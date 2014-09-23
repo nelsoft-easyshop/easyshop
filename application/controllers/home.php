@@ -456,6 +456,25 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_new');
     }
     
+    
+    /**
+     * Updated store description
+     *
+     */
+    public function doUpdateDescription()
+    {
+        $description = $this->input->post('description');
+        $userId = intval($this->input->post('userId'));
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find($userId);
+        if($member){
+            $member->setStoreDesc($description);
+            $this->serviceContainer['entity_manager']->flush();
+            redirect('/'.$member->getSlug().'/about');
+        }
+
+    }
+    
     /**
      * Returns more feedback JSON
      *
