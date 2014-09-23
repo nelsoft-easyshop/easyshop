@@ -10,6 +10,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * Get all feedbacks of a member
      *
      * @param integer $memberId
+     * @return mixed
      */
     public function getAllFeedback($memberId)
     {
@@ -38,8 +39,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->orWhere('fb.forMemberid = :forMemberId')
                             ->setParameter('fromMemberId', $memberId)
                             ->setParameter('forMemberId', $memberId)
-                            
-                            ->orderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
                             ->getQuery()
                             ->getResult();
 
@@ -52,6 +53,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksForOthersAsBuyer($memberId, $limit = 15, $page = 0)
     {
@@ -74,7 +76,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->where('fb.member = :fromMemberId')
                             ->andWhere('fb.feedbKind = 0')
                             ->setParameter('fromMemberId', $memberId)
-                            ->orderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
                             ->setFirstResult($page * $limit)
                             ->setMaxResults($limit)
                             ->getQuery()
@@ -88,6 +91,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksForOthersAsSeller($memberId, $limit = 15, $page = 0)
     {
@@ -110,7 +114,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->where('fb.member = :fromMemberId')
                             ->andWhere('fb.feedbKind = 1')
                             ->setParameter('fromMemberId', $memberId)
-                            ->orderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
                             ->setFirstResult($page * $limit)
                             ->setMaxResults($limit)
                             ->getQuery()
@@ -125,6 +130,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksAsBuyer($memberId, $limit = 15, $page = 0)
     {
@@ -147,7 +153,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->where('fb.forMemberid = :forMemberid')
                             ->andWhere('fb.feedbKind = 1')
                             ->setParameter('forMemberid', $memberId)
-                            ->orderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
                             ->setFirstResult($page * $limit)
                             ->setMaxResults($limit)
                             ->getQuery()
@@ -162,6 +169,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksAsSeller($memberId, $limit = 15, $page = 0)
     {
@@ -184,7 +192,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->where('fb.forMemberid = :forMemberid')
                             ->andWhere('fb.feedbKind = 0')
                             ->setParameter('forMemberid', $memberId)
-                            ->orderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC')                           
                             ->setFirstResult($page * $limit)
                             ->setMaxResults($limit)
                             ->getQuery()

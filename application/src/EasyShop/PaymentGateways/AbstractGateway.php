@@ -60,14 +60,12 @@ abstract class AbstractGateway implements GatewayInterface
      * Abstract Methods
      */
 
-    
     abstract public function pay();
     abstract public function getExternalCharge();
     abstract public function getOrderStatus();
     abstract public function getOrderProductStatus();
     abstract public function generateReferenceNumber($memberId);
     
-
     /**
      * Getters and Setters
      */
@@ -79,9 +77,13 @@ abstract class AbstractGateway implements GatewayInterface
         }
     }
 
+    public function setParameter($key, $value)
+    {
+         $this->parameters[$key] = $value;
+    }
+
     public function getParameter($key)
     {
         return $this->parameters[$key];
     }
-
 }

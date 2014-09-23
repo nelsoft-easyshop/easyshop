@@ -274,9 +274,11 @@ class UserManager
      * @param integer $integer
      * @param integer $type
      */
-    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL, $limit = PHP_INT_MAX, $page = 0)
+    public function getFormattedFeedbacks($memberId, $type = EsMemberFeedback::TYPE_ALL, $limit = PHP_INT_MAX, $page = 1)
     {
- 
+        $page--;
+        $page = ($page < 0) ? 0 : $page;
+                
         if($type === EsMemberFeedback::TYPE_ALL){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
                               ->getAllFeedback($memberId);
@@ -355,7 +357,6 @@ class UserManager
                                   ->getFeedbacksForOthersAsBuyer($memberId, $limit, $page);
         }   
         
-        
         if($type !== EsMemberFeedback::TYPE_ALL){
             foreach($feedbacks as $key => $feedback){
                 $feedbacks[$key]['userImage'] = $this->getUserImage($feedback['userId'],'small');
@@ -376,7 +377,8 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');                
+        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');  
+
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
@@ -385,7 +387,6 @@ class UserManager
             case "small":
                 $imgFile = '/60x60.png';
                 break;
-            case NULL:
             default:
                 $imgFile = '/150x150.png';
                 break;

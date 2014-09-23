@@ -151,7 +151,13 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            // $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);
+
+            $maxPoint = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                            ->getMaxPoint(intval($member_id));
+
+            $data['maxPoint'] = $maxPoint;          
+            
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
@@ -1319,7 +1325,7 @@ class Payment extends MY_Controller{
         $carts = $this->session->all_userdata();
 
         /* JSON Decode*/
-        //$paymentMethods = json_decode($this->input->post('paymentMethods'),true);
+        $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
 
         // Validate Cart Data
         $paymentService = $this->serviceContainer['payment_service'];
@@ -1330,9 +1336,8 @@ class Payment extends MY_Controller{
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
         extract($response);
-
         $this->generateFlash($txnid,$message,$status);
-        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 }
 

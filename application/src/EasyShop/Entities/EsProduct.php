@@ -320,6 +320,12 @@ class EsProduct
 
     private $images;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="max_allowable_point", type="decimal", precision=15, scale=4, nullable=true)
+     */
+    private $maxAllowablePoint = '0.0000';
 
     public function __construct() 
     {
@@ -1247,5 +1253,26 @@ class EsProduct
         return $this->images;
     }
     
-    
+    /**
+     * Set maxAllowablePoint
+     *
+     * @param string $maxAllowablePoint
+     * @return EsProduct
+     */
+    public function setMaxAllowablePoint($maxAllowablePoint)
+    {
+        $this->maxAllowablePoint = $maxAllowablePoint;
+
+        return $this;
+    }
+
+    /**
+     * Get maxAllowablePoint
+     *
+     * @return string 
+     */
+    public function getMaxAllowablePoint()
+    {
+        return $this->maxAllowablePoint;
+    }
 }
