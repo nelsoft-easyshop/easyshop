@@ -304,9 +304,9 @@ section {
 .edit-profile-photo {
     background-color: rgba(0,0,0,.75);
     cursor: pointer;
-    height: 106px;
+    height: 110px;
     position: absolute;
-    top: 46px;
+    top: 0;
     width: 109px;
 
     -webkit-border-radius: 4px;
@@ -336,8 +336,13 @@ section {
     margin-top: 12px;
 }
 
-.edit-vendor-location input {
-    width: 49%;
+.edit-vendor-location .chosen-container-single {
+    width: 49% !important;
+}
+
+.edit-vendor-location .chosen-container-single .chosen-single {
+    height: 32px;
+    line-height: 32px;
 }
 
 .edit-profile-btn {
@@ -348,12 +353,12 @@ section {
     background-color: #fff;
     border-top: 4px solid #4370cd;
     border-radius: 4px;
-    bottom: 153px;
     display: none;
     font-size: 12px;
-    left: 92px;
+    left: -15px;
     min-width: 138px;
     position: absolute;
+    top: 115px;
 
     -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
     -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
@@ -373,6 +378,16 @@ section {
 .edit-profile-photo-menu > div a:hover {
     color: #4370cd;
     text-decoration: none;
+}
+
+/** edit photo modal **/
+
+.edit-banner-container {
+    max-height: 511px !important;
+}
+
+.jcrop-holder {
+    margin: 10px auto;
 }
 
 /*** vendor navigation ***/
