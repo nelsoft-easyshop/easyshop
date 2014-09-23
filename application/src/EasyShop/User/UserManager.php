@@ -186,7 +186,6 @@ class UserManager
             case "small":
                 $imgFile = '/60x60.png';
                 break;
-            case NULL:
             default:
                 $imgFile = '/150x150.png';
                 break;
