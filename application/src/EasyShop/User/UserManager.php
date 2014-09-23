@@ -181,7 +181,6 @@ class UserManager
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
-                $imageURL = $member->getStoreDesc();
                 $imgFile = '/banner.png';
                 break;
             case "small":
@@ -192,7 +191,7 @@ class UserManager
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile)||(trim($imageURL) === '')){
+        if(!file_exists($imageURL.$imgFile)){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
         else{
