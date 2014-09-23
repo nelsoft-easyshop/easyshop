@@ -25,7 +25,6 @@
                                     <span class="span-img-wrapper" style="background: url(<?php echo $objProduct->directory .'categoryview/'.$objProduct->imageFileName;?>) center no-repeat; background-cover: cover;">
                                         <center>
                                             <div class="span-img-container">
-                                                
                                             </div>
                                         </center>
                                     </span>
@@ -36,13 +35,7 @@
                                     <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
                                         <?php 
                                             $prod_name = html_escape($objProduct->getName());
-                                            if(strlen($prod_name)>17){
-                                                
-                                                echo substr_replace( $prod_name, "...", 17);
-                                            
-                                            }else{
-                                                echo $prod_name;
-                                            }
+                                            echo (strlen($prod_name)>17) ? substr_replace($prod_name, "...", 17) : $prod_name;
                                         ?>
                                     </a>
                                 </p>
@@ -59,7 +52,7 @@
                                     
                                     <center>
                                         <button class="btn btn-default-cart">
-                                            <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                            <span class="fa fa-shopping-cart"></span> BUY NOW
                                         </button>
                                     </center>
                                 </div>

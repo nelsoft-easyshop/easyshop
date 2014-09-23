@@ -401,4 +401,28 @@ class UserManager
         
         return $user_image;
     }
+
+    /**
+     * Remove user image and back to default image of easyshop
+     *
+     * @param integer $memberId
+     * @return boolean
+     */
+    public function removeUserImage($memberId)
+    {
+        // Get member object
+        $EsMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy(['idMember' => $memberId]);
+
+        if($EsMember !== null){
+            // Update user image
+            $EsMember->setImgurl(""); 
+            $this->em->flush();
+
+            return $this->getUserImage($memberId);
+        }
+        else{
+            return false;
+        }
+    }
 }

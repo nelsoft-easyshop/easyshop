@@ -1,10 +1,5 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 
-<!-- Load all css -->
-<link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
-
 <!-- Load body -->
 
 <div class="clear"></div>
@@ -33,22 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <script>
-                 $("#cat-header").on('click','.a-category',function() {
-                                            
-                    var attr = $("b.cat").attr("class");
 
-                    if(attr == "cat fa fa-minus-square-o pull-right")
-                    {
-                        $('b.cat').removeClass("cat fa fa-minus-square-o pull-right").addClass("cat fa fa-plus-square-o pull-right");
-                        
-                    }
-                    else if(attr == "cat fa fa-plus-square-o pull-right"){
-                        $('b.cat').removeClass("cat fa fa-plus-square-o pull-right").addClass("cat fa fa-minus-square-o pull-right");
-                        
-                    }
-                });
-                </script>
                 <div class="panel-group panel-category border-0" id="filter">
                     <div class="panel panel-default  border-0 no-padding" id="filter-header">
                         <div class="panel-heading border-0 panel-category-heading">
@@ -61,42 +41,30 @@
                         <div id="filter-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-filter">
+                                    <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
                                     <li>
                                         <p class="p-filter-name">By Condition</p>
-                                        <select class="select-filter">
-                                            <option>New</option>
-                                            <option>Used</option>
-                                            <option>New</option>
+                                        <select id="condition-filter" class="select-filter">
+                                            <option value="">--Select Condition--</option>
+                                        <?php foreach($this->lang->line('product_condition') as $x): ?>
+                                            <option value="<?php echo $x;?>"><?php echo $x; ?></option>
+                                        <?php endforeach; ?>
                                         </select>
                                     </li>
                                     <li>
-                                        <p class="p-filter-name">By Condition</p>
-                                        from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
+                                        <p class="p-filter-name">By Price</p>
+                                        from <input type="text" id="price1" class="price-field input-filter-price"/> 
+                                        to <input type="text" id="price2" class="price-field input-filter-price"/>
                                     </li>
                                     <li>
                                         <center>
-                                            <input type="submit" class="btn-filter" value="filter"/>
+                                            <input type="button" class="btn-filter" id="btnFilter" value="filter"/>
                                         </center>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <script>
-                     $("#filter-header").on('click','.a-filter',function() {
-                                                
-                        var attr = $("b.fil").attr("class");
-
-                        if(attr == "fil fa fa-minus-square-o pull-right")
-                        {
-                            $('b.fil').removeClass("fil fa fa-minus-square-o pull-right").addClass("fil fa fa-plus-square-o pull-right");
-                        }
-                        else if(attr == "fil fa fa-plus-square-o pull-right"){
-                            $('b.fil').removeClass("fil fa fa-plus-square-o pull-right").addClass("fil fa fa-minus-square-o pull-right");
-                        
-                        }
-                    });
-                    </script>
                 </div>
             </div>
         </div>
@@ -219,7 +187,6 @@
     
 </section>
 
-
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+ 
 <script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
 

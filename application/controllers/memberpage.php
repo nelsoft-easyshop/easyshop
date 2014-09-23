@@ -1486,8 +1486,7 @@ class Memberpage extends MY_Controller
         }
 
         switch($catType){
-            // Search
-            case 0:
+            case 0: // Search
                 if($oBy > 1){  
                     $parameter['sortby'] = $orderSearch;
                     $parameter['sorttype'] = $order;
@@ -1497,19 +1496,15 @@ class Memberpage extends MY_Controller
                 $parameter['page'] = $page - 1;
                 $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
                 break;
-
-            // Custom
-            case 1:
+            case 1: // Custom
                 $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                 ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr);
                 break;
-            // Default
-            case 2:
+            case 2: // Default
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
                 break;
-            // Default Cat
-            default:
+            default: // Default Cat
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
                 break;
@@ -1535,7 +1530,6 @@ class Memberpage extends MY_Controller
         }
 
         $parseData = array('arrCat'=>$arrCat);
-
         $serverResponse['htmlData'] = $this->load->view("pages/user/vendor_product_view", $parseData, true);
 
         echo json_encode($serverResponse);
@@ -1560,6 +1554,25 @@ class Memberpage extends MY_Controller
             print($um->errorInfo());
             print('<br>Chain disrupted.');
         }
+    }
+
+    public function removeUserImage()
+    {
+        $return['error'] = TRUE;
+        $return['msg'] = "Something went wrong please try again later.";
+        $return['img'] = "";
+        $memberId = $this->session->userdata('member_id');
+
+        $userMgr = $this->serviceContainer['user_manager'];
+
+        $remove = $userMgr->removeUserImage($memberId);
+        if($remove){
+            $return['error'] = FALSE;
+            $return['msg'] = "";
+            $return['img'] = $remove;
+        }
+
+        echo json_encode($return);
     }
 
 }
