@@ -11,14 +11,10 @@
                             Details
                             
                         </p>
-                       <i class="fa fa-edit fa-edit-icon pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
-                       <script>
-                            $('[rel=tooltip]').tooltip() 
-                       </script>
+                       <i class="fa fa-edit fa-edit-icon pull-right" id="meee" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
+                       
                        <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
-                       <script>
-                            $('[rel=tooltip]').tooltip() 
-                       </script>
+                      
                         <table width="100%" class="table-contact-details">
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
