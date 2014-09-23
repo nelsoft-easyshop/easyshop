@@ -86,10 +86,56 @@ section {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     display: none;
-    
 }
 
 .fa-cancel-edit:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.fa-edit-about{
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -15px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+
+.fa-edit-about:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.fa-cancel-about{
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -15px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    display: none;
+}
+
+.fa-cancel-about:hover{
     background: #fe893a !important;
     cursor: pointer;
 }
@@ -169,6 +215,34 @@ section {
     padding: 25px 25px;
     margin-top: 10px;
     margin-left: 30px;
+}
+
+.panel-about-seller{
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+    margin-top: 10px;
+    margin-left: 30px;
+    padding-bottom:30px;
+}
+
+.div-about-content{
+    margin-top: 15px;
+}
+
+.div-about-edit-area{
+    display: none;
+}
+
+.p-about{
+    line-height: 20px;
+}
+
+.textarea-about{
+    display: block;
+    font-size: 14px;
+    margin-bottom:5px;
 }
 
 .div-message-form{
