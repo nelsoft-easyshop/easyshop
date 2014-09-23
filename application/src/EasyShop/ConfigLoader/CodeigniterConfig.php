@@ -32,9 +32,12 @@ class CodeigniterConfig implements ConfigInterface
      */ 
     public function getConfigItem($configFile, $configItem = null)
     {
-        $this->CI->config->load($configFile, true);        
+        $this->CI->config->load($configFile, true);
         $configItem = ($configItem === null) ? $configFile : $configItem;
-        return $this->CI->config->item($configItem);
+        $result = $this->CI->config->item($configItem);
+        $result = $result ? $result : $this->CI->config->item($configFile)[$configItem];
+ 
+        return $result;
     }
 }
 
