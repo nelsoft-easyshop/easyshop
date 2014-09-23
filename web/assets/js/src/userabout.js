@@ -1,5 +1,8 @@
 $(function () {
-
+    $(function () {
+        $("[rel='tooltip']").tooltip();
+    });
+    
     $('.tab-content').on('click','.pagination-items li', function(){
 
         var page = $(this).data('page');
