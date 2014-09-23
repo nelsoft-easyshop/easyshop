@@ -160,6 +160,15 @@
 							<b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
 						</td>
 					</tr>
+                    <tr>
+                        <td colspan="2">
+                            Point Allocation:
+                        </td>
+                        <td colspan="2" align="right">
+                            <input type="number" id="pointsAllocated" name="pointsAllocated" min="0" value="100">
+                            <input type="text" id="maxPoints" disabled>
+                        </td>
+                    </tr>
 				</table>
 			</div>
 		</div>
