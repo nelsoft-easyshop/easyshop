@@ -400,7 +400,6 @@ class Home extends MY_Controller
                                                            ->find($userId);
         if($member){
             $member->setStoreDesc($description);
-            $this->serviceContainer['entity_manager']->persist($member);
             $this->serviceContainer['entity_manager']->flush();
             redirect('/'.$member->getSlug().'/about');
         }
