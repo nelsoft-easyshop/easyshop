@@ -71,13 +71,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </a>
         </div>
         <div class="search-container">
-            <select class="ui-form-control">
-                <option>On Seller's Page</option>
-                <option>Main Page</option>
-                <option>Other Page</option>
-            </select>
-            <input type="text" class="ui-form-control">
-            <input type="submit" value="" class="span_bg">
+           <form class="search-form">
+                <select class="ui-form-control search-type">
+                    <option value="1">On Seller's Page</option>
+                    <option value="2">Main Page</option> 
+                </select>
+                <input type="text" name="q_str" class="ui-form-control">
+                <input type="submit"  value="" class="submitSearch span_bg">
+            </form>
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">

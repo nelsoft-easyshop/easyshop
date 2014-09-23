@@ -10,6 +10,8 @@ use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 class EsProductRepository extends EntityRepository
 {
     /**
@@ -356,7 +358,30 @@ class EsProductRepository extends EntityRepository
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getOneOrNullResult();
 
-        return $result['count']; 
+        return $result['count'];
+    }    
+
+    /**
+     *  Get parent categories(default) of products uploaded by a specific user
+     *
+     *  @return array
+     */
+    public function getUserProductParentCategories($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_cat','parent_cat');
+        $rsm->addScalarResult('cat_id','cat_id');
+        $rsm->addScalarResult('prd_count','prd_count');
+        $rsm->addScalarResult('p_cat_name','p_cat_name');
+        $rsm->addScalarResult('p_cat_slug','p_cat_slug');
+        $rsm->addScalarResult('p_cat_img','p_cat_img');
+
+        $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId);
+
+        return $query->getResult();
     }
 
     /**
@@ -369,7 +394,7 @@ class EsProductRepository extends EntityRepository
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('p.idProduct')
+        $qbResult = $qb->select('DISTINCT p.idProduct')
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsMember','m',
                                                     'WITH','p.member = m.idMember')
@@ -387,8 +412,12 @@ class EsProductRepository extends EntityRepository
         }
  
         if(isset($filterArray['seller']) && $filterArray['seller']){
+            $sellerString = '%'.$filterArray['seller'].'%';
+            if (strpos($filterArray['seller'],'seller:') !== false) {
+                $sellerString = str_replace("seller:","",$filterArray['seller']);
+            }
             $qbResult = $qbResult->andWhere('m.username LIKE :username')
-                                ->setParameter('username', '%'.$filterArray['seller'].'%');
+                                ->setParameter('username', $sellerString);
         }
 
         if(isset($filterArray['category']) 
@@ -418,12 +447,180 @@ class EsProductRepository extends EntityRepository
                                     );
         }
 
+        if(isset($filterArray['sortby'])){
+
+            $order = "DESC";
+            if(isset($filterArray['sorttype']) 
+                && strtoupper($filterArray['sorttype']) == "ASC"){
+                $order = "ASC";
+            }
+
+            switch(strtoupper($filterArray['sortby'])){
+                case "NEW":
+                    $qbResult = $qbResult->orderBy('p.createddate', $order);
+                    break;
+                case "HOT":
+                    $qbResult = $qbResult->orderBy('p.isHot', $order)
+                                        ->addOrderBy(' p.clickcount',$order);
+                    break;
+                default:
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
+            }
+        }
+
         $qbResult = $qbResult->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
+        
         return $resultNeeded; 
     }
+
+    /**
+     *  Get user products that have no assigned custom category
+     *
+     *  @param integer $memberId
+     *  @param array $catId
+     *
+     *  @return array
+     */
+    public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC")
+    {
+        $em = $this->_em;
+        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
+        $result = array();
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $dql = "
+            SELECT p
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0
+                ORDER BY " . $orderBy;
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setFirstResult($page)
+                    ->setMaxResults($prodLimit);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+
+        foreach($paginator as $product){
+            $result[] = $product;
+        }
+
+        return $result;
+    }
+
+    public function countNotCustomCategorizedProducts($memberId, $catId)
+    {
+        $em = $this->_em;
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $rsm = new ResultSetMapping();
+
+        $dql = "
+            SELECT COUNT(p.idProduct)
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0";                
+
+        $query = $em->createQuery($dql)
+                    ->setParameter("member_id", $memberId);
+        
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        return $query->getSingleScalarResult();
+    }
+
+    /*public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.id_product DESC")
+    {
+        $em = $this->_em;
+        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        //$catInCondition = $catCount > 0 ? implode(',',array_fill(0,$catCount,'?')) : "";
+
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('name','name');
+        $rsm->addScalarResult('slug','slug');
+        $rsm->addScalarResult('price','price');
+        $rsm->addScalarResult('product_image_path','product_image_path');
+
+        $sql = "
+            SELECT p.name, p.slug, FORMAT(p.price, 2) as price, pi.product_image_path
+            FROM es_product p
+            LEFT JOIN es_product_image pi
+                ON pi.product_id = p.id_product
+            WHERE p.id_product NOT IN (
+                    SELECT pc.product_id
+                    FROM es_member_prodcat pc
+                    INNER JOIN es_member_cat mc
+                        ON mc.id_memcat = pc.memcat_id
+                    WHERE mc.member_id = :member_id
+                )
+                AND p.member_id = :member_id
+                AND p.cat_id IN ( " . $catInCondition . " )
+                AND p.is_draft = 0
+                AND p.is_delete = 0
+            ORDER BY " . $orderBy . 
+            " LIMIT :page, :prod_limit";
+
+        $query = $em->createNativeQuery($sql, $rsm)
+                    ->setParameter("member_id", $memberId)
+                    ->setParameter("cat_id", $catId)
+                    ->setParameter("prod_limit", $prodLimit)
+                    ->setParameter("page", $page);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+        
+        return $query->getResult();
+    }*/
+
 
     /**
      * Get popular items by seller or category based on click count
@@ -433,6 +630,7 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
+
     public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
     {
         $this->em =  $this->_em;

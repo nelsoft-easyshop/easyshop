@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 
 class Home extends MY_Controller 
 {
+ 
     
     /**
      * Number of feeds item per page
@@ -12,6 +13,13 @@ class Home extends MY_Controller
      * @var integer
      */
     public $feedsProdPerPage = 7;
+    
+    /**
+     * Product count for vendor page
+     *
+     * @var integer
+     */
+    private $vendorProdPerPage = 12;
 
     /**
      * Number of feedbacks loaded for a page
@@ -241,66 +249,127 @@ class Home extends MY_Controller
      * @return View
      */
     public function userprofile()
-    {		
-        $this->load->model('memberpage_model');
+    {
+        // Load Services
+        $em = $this->serviceContainer["entity_manager"];
+        $pm = $this->serviceContainer['product_manager'];
+        $um = $this->serviceContainer['user_manager'];
+        $searchProductService = $this->serviceContainer['search_product'];
 
-        $sellerslug = $this->uri->segment(1);
-        $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
+        // Load Repository 
+        $EsLocationLookupRepository = $em->getRepository('EasyShop\Entities\EsLocationLookup');
+
+        $vendorSlug = $this->uri->segment(1);
         $session_data = $this->session->all_userdata();
-        $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-        delete_cookie('es_subscribe_result');
 
-        if($vendordetails){
-        
-            $pageSection = $this->uri->segment(2);
-            if($pageSection === 'about'){
-                $this->aboutUser($sellerslug);
-            }
-            else if($pageSection === 'contact'){
-                $this->contactUser($sellerslug);
-            }
-            else{
-                $data['title'] = 'Vendor Profile | Easyshop.ph';
-                $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-                $data = array_merge($data, $this->fill_header());
-                $data['render_logo'] = false;
-                $data['render_searchbar'] = false;
-                $this->load->view('templates/header_new', $data);
-                $this->load->view('templates/header_vendor');
-                $sellerid = $vendordetails['id_member'];
-                $usersFollowing = $this->user_model->getFollowing($sellerid);
-                $usersFollower = $this->user_model->getFollowers($sellerid);
-                $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-                $data = array_merge($data,array(
-                        'vendordetails' => $vendordetails,
-                        'image_profile' => $this->memberpage_model->get_Image($sellerid),
-                        'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                        'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
-                        'active_count' => intval($user_product_count['active']),
-                        'deleted_count' => intval($user_product_count['deleted']),
-                        'sold_count' => intval($user_product_count['sold']),
-                        'followers' =>  $usersFollower,
-                        'following' =>  $usersFollowing,
-                        'tab' => $tab,
-                        ));
-                $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
+        $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                            ->getVendorDetails($vendorSlug);
 
-                $data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-                $data['product_count'] = count($data['products']);
-                $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
-                #if 0 : no entry - unfollowed, hence display follow
-                #if 1 : has entry - followed, hence display unfollow
-                $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
-                $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 && $vendordetails['store_name'] !== $vendordetails['username'] ? TRUE : FALSE;
-                $data['store_name'] = $data['hasStoreName'] ? $vendordetails['store_name'] : $vendordetails['username'];
+        // User found - valid slug
+        if( !empty($arrVendorDetails) ){ 
 
-                $this->load->view('pages/user/vendor_view', $data);
-                $this->load->view('templates/footer_new');
+            $headerData = $this->fill_header();
+            $headerData = array_merge($headerData, array(
+                "title" => "Vendor Profile | Easyshop.ph",
+                "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
+                "render_logo" => false,
+                "render_searchbar" => false
+            ));
+
+            $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
+ 
+            // If searching in page
+            if(count($_GET)>0){
+
+                $productView['isSearching'] = TRUE;
+                $parameter = $this->input->get();
+                $parameter['seller'] = "seller:".$vendorSlug;
+                $parameter['limit'] = 12;
+                
+                // getting all products
+                $searchProduct = $searchProductService->getProductBySearch($parameter);
+
+                $parameter['limit'] = PHP_INT_MAX;
+                $count = count($searchProductService->getProductBySearch($parameter));
+
+                $productView['defaultCatProd'][0]['name'] ='Search Result';
+                $productView['defaultCatProd'][0]['products'] = $searchProduct; 
+                $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
+                $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+                $productView['defaultCatProd'][0]['cat_type'] = 0;
             }
+            
+            // Data for the view
+            $data = array(
+                "arrVendorDetails" => $arrVendorDetails 
+                , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
+                , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
+                , "defaultCatProd" => $productView['defaultCatProd']
+                , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
+                , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
+                , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
+                , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
+            ); 
+            
+            // Load Location
+            $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+            
+            // Load Product View
+            $data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
+
+            // Load View
+            $this->load->view('templates/header_new', $headerData);
+            $this->load->view('templates/header_vendor',$data);
+            $this->load->view('pages/user/vendor_view', $data);
+            $this->load->view('templates/footer');
         }
+        // Load invalid link error page
         else{
             $this->pagenotfound();
         }
+
+    }
+    
+    /**
+     *  Fetch Default categories and initial products for first load of page.
+     *
+     *  @return array
+     */
+    private function getVendorDefaultCatAndProd($memberId)
+    {
+        $em = $this->serviceContainer['entity_manager'];
+        $pm = $this->serviceContainer['product_manager'];
+        $prodLimit = $this->vendorProdPerPage;
+
+        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+
+        $productObjects = new stdClass();
+
+        foreach( $parentCat as $idCat=>$category ){
+            $parentCat[$idCat]['non_categorized_count'] = 0;
+            $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
+
+            $parentCat[$idCat]['products'] = $categoryProducts;
+            $parentCat[$idCat]['cat_type'] = 2;
+            $parentCat[$idCat]['non_categorized_count'] = (int)$em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($memberId, $category['child_cat']);
+
+            $parentCat[$idCat]['json_subcat'] = json_encode($category['child_cat'], JSON_FORCE_OBJECT);
+
+            $productIdCollection = [];
+            foreach($categoryProducts as $product => $value){
+                $productId = $value->getIdProduct();
+                $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
+                                ->getDefaultImage($productId); 
+                $value->directory = $objImage->getDirectory();
+                $value->imageFileName = $objImage->getFilename();
+            }
+
+            $productObjects = (object) array_merge((array) $productObjects, (array) $categoryProducts);
+        }
+        
+        return $parentCat;
     }
 
 
@@ -475,6 +544,33 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_new');
     }
 	
+    /**
+     *  NOT YET USED !!!
+     *  Fetch custom categories and initial products for first load of page.
+     *
+     *  @return array
+     */
+    private function getVendorCustomCatAndProd($memberId)
+    {
+        $em = $this->serviceContainer['entity_manager'];
+        $prodLimit = $this->vendorProdPerPage;
+
+        $customCat = $em->getRepository("EasyShop\Entities\EsMemberCat")
+                        ->getCustomCategoriesArray($memberId);
+
+        foreach( $customCat as $category ){
+            $result[$category["id_memcat"]] = array(
+                "name" => $category["cat_name"],
+                "is_featured" => $category["is_featured"],
+                "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
+            );
+        }
+
+        return $result;
+    }
+
+
     /**
      *  Fetch information to be display in feeds page
      *
