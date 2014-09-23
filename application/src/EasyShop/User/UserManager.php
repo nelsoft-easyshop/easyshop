@@ -181,6 +181,7 @@ class UserManager
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
+                $imageURL = $member->getStoreDesc();
                 $imgFile = '/banner.png';
                 break;
             case "small":
