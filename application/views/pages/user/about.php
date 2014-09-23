@@ -13,11 +13,19 @@
                         </p>
                        <i class="fa fa-edit fa-edit-icon pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
                        <script>
-                            $('[rel=tooltip]').tooltip() 
+                            $(document).ready(function()){
+                                $('[rel=tooltip]').tooltip() ;
+                            });
+               
+                        
+                       
                        </script>
                        <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
                        <script>
-                            $('[rel=tooltip]').tooltip() 
+                             $(document).ready(function()){
+                                $('[rel=tooltip]').tooltip() ;
+                            });
+               
                        </script>
                         <table width="100%" class="table-contact-details">
                             <tr>
