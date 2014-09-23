@@ -10,6 +10,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * Get all feedbacks of a member
      *
      * @param integer $memberId
+     * @return mixed
      */
     public function getAllFeedback($memberId)
     {
@@ -52,6 +53,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksForOthersAsBuyer($memberId, $limit = 15, $page = 0)
     {
@@ -89,6 +91,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksForOthersAsSeller($memberId, $limit = 15, $page = 0)
     {
@@ -127,6 +130,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksAsBuyer($memberId, $limit = 15, $page = 0)
     {
@@ -165,6 +169,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $page
      * @param integer $limit
+     * @return mixed
      */
     public function getFeedbacksAsSeller($memberId, $limit = 15, $page = 0)
     {
