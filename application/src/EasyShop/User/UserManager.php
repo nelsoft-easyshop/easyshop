@@ -191,7 +191,7 @@ class UserManager
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile)||(trim($imageURL) === '')){
+        if(!file_exists($imageURL.$imgFile)){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
         else{
