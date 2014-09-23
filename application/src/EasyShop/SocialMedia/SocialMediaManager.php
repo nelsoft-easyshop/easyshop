@@ -8,6 +8,9 @@ use Facebook\FacebookSession;
 
 class SocialMediaManager
 {
+
+    const FACEBOOK = 1;
+    const GOOGLE = 2;
     /**
      * Entity Manager instance
      *
@@ -15,7 +18,7 @@ class SocialMediaManager
      */
     private $em;
 
-    public function __construct($appId, $secret, $fbRedirectLoginHelper,$googleClient, $em, $stringUtility)
+    public function __construct($appId, $secret, $fbRedirectLoginHelper, $googleClient, $em, $stringUtility)
     {
         $this->appId = $appId;
         $this->secret = $secret;
@@ -36,10 +39,10 @@ class SocialMediaManager
     public function getLoginUrl($account, $scope = array())
     {
         switch ($account) {
-            case 'facebook' :
+            case self::FACEBOOK :
                 $loginUrl = $this->fbRedirectLoginHelper->getLoginUrl($scope);
                 break;
-            case 'google' :
+            case self::GOOGLE :
                 $this->googleClient->setScopes($scope);
                 $loginUrl = $this->googleClient->createAuthUrl();
         }
@@ -63,14 +66,14 @@ class SocialMediaManager
     public function getAccount($account)
     {
         switch ($account) {
-            case 'facebook' :
+            case self::FACEBOOK :
                 FacebookSession::setDefaultApplication($this->appId, $this->secret);
                 $session = $this->fbRedirectLoginHelper->getSessionFromRedirect();
                 $userProfile = (new \Facebook\FacebookRequest(
                             $session, 'GET', '/me'
                         ))->execute()->getGraphObject(\Facebook\GraphUser::className());
                 break;
-            case 'google' :
+            case self::GOOGLE :
                 $googleData = new \Google_Service_Oauth2($this->googleClient);
                 $userProfile = $googleData->userinfo->get();
                 break;
@@ -133,6 +136,7 @@ class SocialMediaManager
         $member->setLastmodifieddate(new DateTime('now'));
         $member->setLastLoginDatetime(new DateTime('now'));
         $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
+        $member->setLastFailedLoginDatetime(new DateTime('now'));
         $member->setSlug($this->stringUtility->cleanString($username));
         $member->setOauthId($oAuthId);
         $member->setOauthProvider($oAuthProvider);
@@ -142,5 +146,4 @@ class SocialMediaManager
 
         return $member;
     }
-
 }
