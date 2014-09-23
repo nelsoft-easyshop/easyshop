@@ -254,10 +254,10 @@ class Home extends MY_Controller
         
             $pageSection = $this->uri->segment(2);
             if($pageSection === 'about'){
-                $this->aboutuser($sellerslug);
+                $this->aboutUser($sellerslug);
             }
             else if($pageSection === 'contact'){
-                $this->contactuser($sellerslug);
+                $this->contactUser($sellerslug);
             }
             else{
                 $data['title'] = 'Vendor Profile | Easyshop.ph';
@@ -310,7 +310,7 @@ class Home extends MY_Controller
      *
      * @param string $sellerslug
      */
-    private function aboutuser($sellerslug)
+    private function aboutUser($sellerslug)
     {
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
@@ -446,7 +446,7 @@ class Home extends MY_Controller
      * Renders the user contact page
      *
      */
-    private function contactuser()
+    private function contactUser()
     {
         $data['title'] = 'Vendor Contact | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());                
