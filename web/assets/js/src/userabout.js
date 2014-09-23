@@ -329,5 +329,21 @@ $(function () {
     $( ".s-1" ).mouseout(function() {
         $(".s-1").css("color","#d4d4d4");
     });
+    
+    $( ".fa-edit-about" ).click(function() {
+        $(".div-about-edit-area").css("display","inline");
+        $(".p-about").css("display","none");
+        $(".fa-cancel-about").css("display","inline");
+        $(".fa-edit-about").css("display","none");
+    });
+    
+    $( ".fa-cancel-about" ).click(function() {
+        $(".div-about-edit-area").css("display","none");
+        $(".p-about").css("display","inline");
+        $(".fa-cancel-about").css("display","none");
+        $(".fa-edit-about").css("display","inline");
+    });
+    
+    
 });
 
