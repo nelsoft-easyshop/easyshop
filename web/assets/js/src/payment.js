@@ -219,8 +219,7 @@ $(document).ready(function(){
                         dataType: 'html',
                         data: data,
                         success: function(d){
-                            //window.location.replace(d);
-                            console.log(d);
+                            window.location.replace(d);
                         }
                     });
                 }
