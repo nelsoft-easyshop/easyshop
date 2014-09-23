@@ -165,7 +165,7 @@
                             Point Allocation:
                         </td>
                         <td colspan="2" align="right">
-                            <input type="number" id="pointsAllocated" name="pointsAllocated" min="0" value="100">
+                            <input type="number" id="pointsAllocated" name="pointsAllocated" min="0" value="0">
                             <input type="text" id="maxPoints" disabled>
                         </td>
                     </tr>
