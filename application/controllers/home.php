@@ -376,7 +376,17 @@ class Home extends MY_Controller
                                                                               'id' => 'for-other-buyer',
                                                                               'ratingHeaders' => $ratingHeaders,
                                                                               ), TRUE);                                                             
-
+        
+        
+        $viewerId = $this->session->userdata('member_id');
+        if($viewerId){
+            $relations = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
+                                                                  ->getOrderRelations($viewerId, $idMember);
+            print_r($relations);
+        }
+        
+        
+        
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
