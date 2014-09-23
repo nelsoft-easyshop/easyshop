@@ -329,5 +329,5 @@ $(function () {
     $( ".s-1" ).mouseout(function() {
         $(".s-1").css("color","#d4d4d4");
     });
-    //END OF FOR RATING DEMO
 });
+
