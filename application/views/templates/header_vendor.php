@@ -1,14 +1,14 @@
 <section>
     <div class="pos-rel">
         <div class="vendor-main-bg">
-            <img src="<?=base_url()?>assets/images/sample-vendor-img.jpg">
+            <img src="/assets/images/sample-vendor-img.jpg">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="/assets/images/img-default-vendor-profile-photo.jpg">
                         </div>
                     </div>
                 </div>
@@ -128,52 +128,49 @@
         </div>
     </div>
 </section>
-<script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendorpage.js" type="text/javascript"></script>
+
+
 <script type="text/javascript">
-(function ($) {
-    //create a stick nav
-    var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
-    $(document).bind('ready scroll', function() {
-        var docScroll = $(document).scrollTop();
-        if (docScroll >= 455) 
-            {
-                if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
-                    $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
-                        top: '-155px'
-                    }).stop().animate({
-                        top: 0
-                    }, 500);
-                    
+
+    (function ($) {
+        //create a stick nav
+        var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
+        $(document).bind('ready scroll', function() {
+            var docScroll = $(document).scrollTop();
+            if (docScroll >= 455) 
+                {
+                    if (!$('.vendor-sticky-nav').hasClass('sticky-nav-fixed')) {
+                        $('.vendor-sticky-nav').addClass('sticky-nav-fixed').css({
+                            top: '-155px'
+                        }).stop().animate({
+                            top: 0
+                        }, 500);
+                        
+                    }
+                    $('.vendor-content-wrapper').addClass('fixed-vendor-content');
+                } 
+            else 
+                {
+                    $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
+                    $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
                 }
-                $('.vendor-content-wrapper').addClass('fixed-vendor-content');
-            } 
-        else 
-            {
-                $('.vendor-sticky-nav').removeClass('sticky-nav-fixed').removeAttr('style');
-                $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
-            }
-    });
-    var $edit_profile_photo = $(".edit-profile-photo");
-    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
-
-    $(document).mouseup(function (e) {
-        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
-            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-           $edit_profile_photo_menu.hide(1);
-        }
-    });
-    $edit_profile_photo.click(function() {
-        $edit_profile_photo_menu.show();
-    });
-})(jQuery);
-    var $window = $(window),
-       $stickyLeft = $('#the-sticky-div'),
-       leftTop = $stickyLeft.offset().top;
-
-       $window.scroll(function() {
-            $stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
         });
+        var $edit_profile_photo = $(".edit-profile-photo");
+        var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
+
+        $(document).mouseup(function (e) {
+            if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
+                && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $edit_profile_photo_menu.hide(1);
+            }
+        });
+        
+        $edit_profile_photo.click(function() {
+            $edit_profile_photo_menu.show();
+        });
+                
+    })(jQuery);
+
+
 </script>

@@ -16,6 +16,7 @@ class Home extends MY_Controller
      */
     private $vendorProdPerPage = 12;
 
+    public $feedbackPerPage = 15;
     
     /**
      * Load class dependencies
@@ -271,6 +272,7 @@ class Home extends MY_Controller
             $productView['defaultCatProd'] = $collectionCategoryProduct['parentCat'];
             $productObjCollection = $collectionCategoryProduct['productObjCollection'];
 
+            // Get all attributes of the available product
             $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $productObjCollection);
  
             // If searching in page
@@ -360,33 +362,131 @@ class Home extends MY_Controller
         $dataReturn['productObjCollection'] = $productObjects;
         return $dataReturn;
     }
-	
-	/**
-	 * Renders the user about page
-	 *
-	 */
-	private function aboutuser()
-	{
-        $data['title'] = 'Vendor Information | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());                
+
+
+       
+    /**
+     * Renders the user about page
+     *
+     * @param string $sellerslug
+     */
+    private function aboutuser($sellerslug)
+    {
+        $limit = $this->feedbackPerPage;
+        $this->lang->load('resources');
+
+        $data['title'] = 'User Information | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());      
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                 ->findOneBy(['slug' => $sellerslug]);
+        $idMember = $member->getIdMember();
+        $ratingHeaders = $this->lang->line('rating');
+
+        $allFeedbacks = $this->serviceContainer['user_manager']->getFormattedFeedbacks($idMember);
+        print_r($allFeedbacks);
+  
+        $feedbacks['summary'] = array(
+                                      'rating1' => $allFeedbacks['rating1Summary'],
+                                      'rating2' => $allFeedbacks['rating2Summary'],
+                                      'rating3' => $allFeedbacks['rating3Summary'],
+                                     );
+                        
+        $feedbacks['forOthersAsBuyerPagination'] = $this->load->view('/pagination/default',
+                                                            array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
+                                                                  'isHyperLink' => false), TRUE);
+        $feedbacks['forOthersAsSellerPagination'] = $this->load->view('/pagination/default',
+                                                            array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
+                                                                  'isHyperLink' => false), TRUE);
+        $feedbacks['asBuyerPagination'] = $this->load->view('/pagination/default',
+                                                            array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
+                                                                  'isHyperLink' => false), TRUE);
+        $feedbacks['asSellerPagination'] = $this->load->view('/pagination/default',
+                                                            array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
+                                                                   'isHyperLink' => false), TRUE);
+        $feedbacks['forOthersAsBuyer'] = $this->serviceContainer['user_manager']
+                                              ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);
+        $feedbacks['forOthersAsSeller'] = $this->serviceContainer['user_manager']
+                                               ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);
+        $feedbacks['asSeller']  = $this->serviceContainer['user_manager']
+                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);
+        $feedbacks['asBuyer'] = $this->serviceContainer['user_manager']
+                                      ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);
+        
+        $feedbackTabs = array(['id' => 'as-buyer', 'index' => 'asBuyer'],
+                              ['id' => 'as-seller', 'index' => 'asSeller'],
+                              ['id' => 'for-other-buyer', 'index' => 'forOthersAsBuyer'],
+                              ['id' => 'for-other-seller', 'index' => 'forOthersAsSeller']);
+     
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
-        $this->load->view('pages/user/about');
-        $this->load->view('templates/footer');
-	}
+        $this->load->view('pages/user/about', ['feedbacks' => $feedbacks,
+                                               'ratingHeaders' => $ratingHeaders,
+                                               'feedbackTabs' => $feedbackTabs,
+                                              ]);
+        $this->load->view('templates/footer_new');
+    }
+    
+    /**
+     * Returns more feedback JSON
+     *
+     * @return JSON
+     */
+    public function feedback()
+    {
+        $page = intval($this->input->get('page'));
+        $memberId = intval($this->input->get('memberId'));
+        $tab = $this->input->get('tab');
+        $limit = $this->feedbackPerPage;
+     
+        switch($tab){
+            case 'as-buyer':
+                $feedbackType =  EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER;
+                break;
+            case 'as-seller':
+                $feedbackType =  EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER;
+                break;
+            case 'for-other-buyer':
+                $feedbackType =  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER;
+                break;
+            case 'for-other-seller':
+                $feedbackType =  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER;
+                break;
+            default:
+                $feedbackType = null;
+                break;
+        }
+        
+        $feedbacks = array();
+        $pagination = null;
+        if($feedbackType !== null){
+            $feedbacks = $this->serviceContainer['user_manager']
+                             ->getFormattedFeedbacks($memberId, $feedbackType, $limit, $page);
+            $totalCount = count($this->serviceContainer['user_manager']
+                             ->getFormattedFeedbacks($memberId, $feedbackType));
+            print($totalCount);
+            $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil($totalCount/$limit),
+                                                                         'isHyperLink' => false,
+                                                                         'currentPage' => $page,
+                                                                        ), TRUE);
+        }
+        
+        echo json_encode(['feedbacks' => $feedbacks,
+                            'pagination' => $pagination]
+        );
+    }
 
-	/**
-	 * Renders the user contact page
-	 *
-	 */
-	private function contactuser()
-	{
+    /**
+     * Renders the user contact page
+     *
+     */
+    private function contactuser()
+    {
         $data['title'] = 'Vendor Contact | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());                
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/contact');
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_new');
     }
 	
     /**
