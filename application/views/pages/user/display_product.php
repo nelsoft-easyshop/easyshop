@@ -3,13 +3,14 @@
     <?php $prodLimit = 12; ?>
     <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
     <div class="view row row-items grid category-products" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
-        
-        <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-            <option value="1">Default Sorting</option>
-            <option value="2">Date Uploaded</option>
-            <option value="3">Hot</option>
-        </select>
-
+        <div class="vendor-select-con">
+            <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
+                <option value="1">Default Sorting</option>
+                <option value="2">Date Uploaded</option>
+                <option value="3">Hot</option>
+            </select>
+            <div class="clear"></div>
+        </div>
         <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
         <?php if($arrCat['non_categorized_count'] === 0): ?>

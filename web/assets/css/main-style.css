@@ -946,6 +946,11 @@ td.td-view.p-view.color-default{
 /** End of Left Column**/
 
 /** For Item **/
+.vendor-select-con {
+    margin-top: -48px;
+    margin-bottom: 20px;
+}
+
 .row-items{
     margin-left: 10px;
     margin-top: 16px;
