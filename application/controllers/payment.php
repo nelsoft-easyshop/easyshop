@@ -1319,7 +1319,7 @@ class Payment extends MY_Controller{
         $carts = $this->session->all_userdata();
 
         /* JSON Decode*/
-        //$paymentMethods = json_decode($this->input->post('paymentMethods'),true);
+        $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
 
         // Validate Cart Data
         $paymentService = $this->serviceContainer['payment_service'];
@@ -1330,9 +1330,18 @@ class Payment extends MY_Controller{
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
         extract($response);
-
         $this->generateFlash($txnid,$message,$status);
-        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+    }
+
+    /**
+     * Retrieves points of current user
+     */
+    function getPoints()
+    {
+        if($this->input->post('points')){
+            echo $this->serviceContainer['payment_service']->getMaxPoint($this->session->userdata('member_id'));
+        }
     }
 }
 
