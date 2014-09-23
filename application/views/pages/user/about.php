@@ -260,6 +260,16 @@
                                 <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
                             </div>
                         </div>
+                        
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <select class="input-lg input-message">
+                                    <option>Sample Data</option>
+                                    <option>Sample Data</option>
+                                </select>
+                            </div>
+                        </div>
+                        
                         <div class="row">
                             <center>
                                 <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
