@@ -9,70 +9,136 @@
                     <div class="panel-contact-details">
                         <p class="panel-title-contact">
                             Details
+                            
                         </p>
+                       <i class="fa fa-edit fa-edit-icon pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
+                       <script>
+                            $('[rel=tooltip]').tooltip() 
+                       </script>
+                       <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+                       <script>
+                            $('[rel=tooltip]').tooltip() 
+                       </script>
                         <table width="100%" class="table-contact-details">
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
-                                <td class="td-contact-detail">Seller2DaMax</td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact">Seller2DaMax</text>
+                                    <input type="text" class="input-detail" placeholder="Seller Name..." value="Seller2DaMax">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
-                                <td class="td-contact-detail">09171234567</td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact">09171234567</text>
+                                    <input type="text" class="input-detail" placeholder="Contact Number..." value="09171234567">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-print fa-2x"></i></td>
-                                <td class="td-contact-detail">+61 3 8376 6284</td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact">+61 3 8376 6284</text>
+                                    <input type="text" class="input-detail" placeholder="Fax Number..." value=" +61 3 8376 6284">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
-                                <td class="td-contact-detail">Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila</td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact">Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila</text>
+                                    <input type="text" class="input-detail" placeholder="Address Line..." value="Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila">
+                                    <select class="input-detail input-detail-select">
+                                        <option>- City -</option>
+                                        <option selected>Manila</option>
+                                        <option selected>Marikina</option>
+                                        <option selected>Pasay</option>
+                                        <option selected>Pasig</option>
+                                    </select>
+                                    <select class="input-detail input-detail-select">
+                                        <option>- Province -</option>
+                                        <option selected>Batangas </option>
+                                        <option>Quezon</option>
+                                        <option>Rizal</option>
+                                        <option>Romblon</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-envelope fa-2x"></i></td>
-                                <td class="td-contact-detail">nikonshop@support.com</td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact">nikonshop@support.com</text>
+                                    <input type="email" class="input-detail" placeholder="Email Address..." value="nikonshop@support.com">
+                                </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
-                                <td class="td-contact-detail"><a href="#">www.nikonshop.com.ph</a></td>
+                                <td class="td-contact-detail">
+                                    <text class="text-contact"><a href="#">www.nikonshop.com.ph</a></text>
+                                    <input type="text" class="input-detail" placeholder="Website..." value="www.nikonshop.com.ph">
+                                </td>
+                            </tr>
+                            <tr >
+                                <td colspan="2">
+                                    <center>
+                                        <input type="submit"  id="save-edit" class="btn btn-default-3" value="Save Changes" />
+                                    </center>
+                                </td>
                             </tr>
                         </table>
                         <br/>
                         <center>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/fb64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/fb64.png" width="32" height="32" rel="tooltip" data-toggle="tooltip" title="Facebook" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/twitter64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/twitter64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Twitter" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/googleplus64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/googleplus64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Google+" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/linkedin64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/linkedin64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="LinkedIn" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/skype64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/skype64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Skype" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                             <span class="span-social-media">
                                 <a href="#">
-                                    <img src="<?=base_url()?>assets/images/youtube64.png" width="32" height="32">
+                                    <img src="<?=base_url()?>assets/images/youtube64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="YouTube" data-placement="bottom">
                                 </a>
+                                <script>
+                                    $('[rel=tooltip]').tooltip() 
+                               </script>
                             </span>
                         </center>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-9">
+            <div class="col-xs-9 col-feedback-container">
                 <div class="panel-feedback-ratings">
                     <p class="panel-title-feedback">
                         Feedback Ratings
@@ -338,6 +404,24 @@
                                         <li><a href="#"><span>5</span></a></li>
                                         <li><a href="#"><span>6</span></a></li>
                                         <li><a href="#"><span>7</span></a></li>
+                                        <li><a href="#"><span>...</span></a></li>
+                                        <li><a href="#"><span>25</span></a></li>
+                                        <li><a href="#"><span>&raquo;</span></a></li>
+                                    </ul>
+                                </center>
+                                <center>
+                                    <ul class="pagination pagination-items">
+                                        <li><a href="#"><span>&laquo;</span></a></li>
+                                        <li><a href="#"><span>...</span></a></li>
+                                        <li class="active"><a href="#"><span>8</span></a></li>
+                                        <li><a href="#"><span>9</span></a></li>
+                                        <li><a href="#"><span>10</span></a></li>
+                                        <li><a href="#"><span>11</span></a></li>
+                                        <li><a href="#"><span>12</span></a></li>
+                                        <li><a href="#"><span>13</span></a></li>
+                                        <li><a href="#"><span>14</span></a></li>
+                                        <li><a href="#"><span>...</span></a></li>
+                                        <li><a href="#"><span>25</span></a></li>
                                         <li><a href="#"><span>&raquo;</span></a></li>
                                     </ul>
                                 </center>
@@ -568,20 +652,37 @@
 <script>
 $(function () {
     $.scrollUp({
-                scrollName: 'scrollUp', // Element ID
-                scrollDistance: 300, // Distance from top/bottom before showing element (px)
-                scrollFrom: 'top', // 'top' or 'bottom'
-                scrollSpeed: 300, // Speed back to top (ms)
-                easingType: 'linear', // Scroll to top easing (see http://easings.net/)
-                animation: 'fade', // Fade, slide, none
-                animationInSpeed: 100, // Animation in speed (ms)
-                animationOutSpeed: 100, // Animation out speed (ms)
-                scrollText: 'Back to top', // Text for element, can contain HTML
-                scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
-                scrollImg: false, // Set true to use image
-                activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
-                zIndex: 2147483647, // Z-Index for the overlay
-            });
+        scrollName: 'scrollUp', // Element ID
+        scrollDistance: 300, // Distance from top/bottom before showing element (px)
+        scrollFrom: 'top', // 'top' or 'bottom'
+        scrollSpeed: 300, // Speed back to top (ms)
+        easingType: 'linear', // Scroll to top easing (see http://easings.net/)
+        animation: 'fade', // Fade, slide, none
+        animationInSpeed: 100, // Animation in speed (ms)
+        animationOutSpeed: 100, // Animation out speed (ms)
+        scrollText: 'Back to top', // Text for element, can contain HTML
+        scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
+        scrollImg: false, // Set true to use image
+        activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+        zIndex: 2147483647, // Z-Index for the overlay
+    });
+    
+    $( ".fa-edit-icon" ).click(function() {
+        $(".input-detail").css("display","inline");
+        $(".fa-cancel-edit").css("display","inline");
+        $("#save-edit").css("display","inline");
+        $(".fa-edit").css("display","none");
+        $(".text-contact").css("display","none");
+     });
+    
+     $( ".fa-cancel-edit" ).click(function() {
+        $(".input-detail").css("display","none");
+        $(".fa-cancel-edit").css("display","none");
+        $("#save-edit").css("display","none");
+        $(".fa-edit").css("display","inline");
+        $(".text-contact").css("display","inline");
+     });
+    
     $( "#ab" ).click(function() {
         $(this).css("color","#fe893a");
         $("#as").css("color","#575759");

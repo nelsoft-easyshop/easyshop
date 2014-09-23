@@ -2593,6 +2593,14 @@ div.electronics_product_sides {
 .category_nav_minus {
     height: 35px;
 }
+.prod_cat_drop2 {
+background-position: -406px -306px;
+cursor: pointer;
+height: 35px;
+position: absolute;
+right: 0;
+width: 25px;
+}
 
 .prod_cat_drop {
   background-position: -406px -297px;
