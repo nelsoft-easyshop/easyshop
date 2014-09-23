@@ -151,7 +151,13 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            // $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);
+
+            $maxPoint = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                            ->getMaxPoint(intval($member_id));
+
+            $data['maxPoint'] = $maxPoint;          
+            
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
@@ -1332,16 +1338,6 @@ class Payment extends MY_Controller{
         extract($response);
         $this->generateFlash($txnid,$message,$status);
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
-    }
-
-    /**
-     * Retrieves points of current user
-     */
-    function getPoints()
-    {
-        if($this->input->post('points')){
-            echo $this->serviceContainer['payment_service']->getMaxPoint($this->session->userdata('member_id'));
-        }
     }
 }
 
