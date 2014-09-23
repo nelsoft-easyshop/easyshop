@@ -5,6 +5,9 @@
 !/web/assets/product/default
 /web/assets/product/product_description/*
 /application/src/EasyShop/Doctrine
+/web/*.xml.gz
+/web/filelist.txt
+/web/sitemap_index.xml
 
 /web/assets/temp_product
 /application/resources/local/*
