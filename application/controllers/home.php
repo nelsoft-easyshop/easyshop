@@ -239,9 +239,15 @@ class Home extends MY_Controller
      */
     public function userprofile()
     {
-        $this->load->model("memberpage_model");
+        // Load Services
         $em = $this->serviceContainer["entity_manager"];
         $pm = $this->serviceContainer['product_manager'];
+        $um = $this->serviceContainer['user_manager'];
+        $searchProductService = $this->serviceContainer['search_product'];
+
+        // Load Repository 
+        $EsLocationLookupRepository = $em->getRepository('EasyShop\Entities\EsLocationLookup');
+
         $vendorSlug = $this->uri->segment(1);
         $session_data = $this->session->all_userdata();
 
@@ -249,7 +255,8 @@ class Home extends MY_Controller
                             ->getVendorDetails($vendorSlug);
 
         // User found - valid slug
-        if( !empty($arrVendorDetails) ){
+        if( !empty($arrVendorDetails) ){ 
+
             $headerData = $this->fill_header();
             $headerData = array_merge($headerData, array(
                 "title" => "Vendor Profile | Easyshop.ph",
@@ -257,19 +264,52 @@ class Home extends MY_Controller
                 "render_logo" => false,
                 "render_searchbar" => false
             ));
-            $this->load->view('templates/header', $headerData);
 
+            // Load Product By Category -- Refractor soon..
+            $collectionCategoryProduct = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']); 
+
+            $productView['defaultCatProd'] = $collectionCategoryProduct['parentCat'];
+            $productObjCollection = $collectionCategoryProduct['productObjCollection'];
+
+            $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $productObjCollection);
+ 
+            // If searching in page
+            if(count($_GET)>0){
+                $productView['defaultCatProd'][0]['name'] ='Search Result';
+                $productView['defaultCatProd'][0]['non_categorized_count'] = 3;
+                $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+
+                $productView['isSearching'] = TRUE;
+                $parameter = $this->input->get();
+                $parameter['seller'] = "seller:".$vendorSlug;
+                 // getting all products
+                $searchProduct = $searchProductService->getProductBySearch($parameter);
+                $productView['defaultCatProd'][0]['products'] = $searchProduct;
+                // get all attributes to by products
+                $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
+            }
+
+            // Data for the view
             $data = array(
-                "arrVendorDetails" => $arrVendorDetails
-                , "imgAvatar" => $arrVendorDetails['imgurl'] . "/150x150.png"
+                "arrVendorDetails" => $arrVendorDetails 
                 , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
-                , "defaultCatProd" => $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member'])
-                //, "customCatProd" => $this->getVendorCustomCatAndProd($arrVendorDetails['id_member'])
+                , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
                 , "product_condition" => $this->lang->line('product_condition')
-            );
+                , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
+                , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
+                , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
+            ); 
+            
+            // Load Location
+            $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+            
+            // Load Product View
+            $data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
 
+            // Load View
+            $this->load->view('templates/header', $headerData);
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
@@ -293,6 +333,8 @@ class Home extends MY_Controller
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
+        $productObjects = new stdClass();
+
         foreach( $parentCat as $idCat=>$category ){
             $parentCat[$idCat]['non_categorized_count'] = 0;
             $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
@@ -304,23 +346,50 @@ class Home extends MY_Controller
 
             $parentCat[$idCat]['json_subcat'] = json_encode($category['child_cat'], JSON_FORCE_OBJECT);
 
-            foreach($categoryProducts as $product){
-                $productId = $product->getIdProduct();
+            $productIdCollection = [];
+            foreach($categoryProducts as $product => $value){
+                $productId = $value->getIdProduct();
                 $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
-                                ->getDefaultImage($productId);
-                $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
-
-                if(!file_exists($imagePath)){
-                    $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
-                }
-
-                $parentCat[$idCat]['product_images'][$productId] = $imagePath;
+                                ->getDefaultImage($productId); 
+                $value->directory = $objImage->getDirectory();
+                $value->imageFileName = $objImage->getFilename();
             }
+
+            $productObjects = (object) array_merge((array) $productObjects, (array) $categoryProducts);
         }
-
-        return $parentCat;
+        $dataReturn['parentCat'] = $parentCat;
+        $dataReturn['productObjCollection'] = $productObjects;
+        return $dataReturn;
     }
+	
+	/**
+	 * Renders the user about page
+	 *
+	 */
+	private function aboutuser()
+	{
+        $data['title'] = 'Vendor Information | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/about');
+        $this->load->view('templates/footer');
+	}
 
+	/**
+	 * Renders the user contact page
+	 *
+	 */
+	private function contactuser()
+	{
+        $data['title'] = 'Vendor Contact | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/contact');
+        $this->load->view('templates/footer');
+    }
+	
     /**
      *  NOT YET USED !!!
      *  Fetch custom categories and initial products for first load of page.

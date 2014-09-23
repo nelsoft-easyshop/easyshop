@@ -98,7 +98,8 @@ class Kernel
         
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager']);
+            return new \EasyShop\User\UserManager($container['entity_manager']
+                                                ,$container['config_loader']);
         };
         
         //Account Manager
@@ -242,10 +243,10 @@ class Kernel
  
         // Category Manager
         $container['category_manager'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
             $configLoader = $container['config_loader'];
 
-            return new \EasyShop\Category\CategoryManager($configLoader, $container['entity_manager']);
-
+            return new \EasyShop\Category\CategoryManager($configLoader,$em);
         };
         
         $container['config_loader'] = function ($c) {

@@ -148,16 +148,32 @@ class product_search extends MY_Controller {
         // get all attributes to by products
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
-        $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                            ->findBy(['parent' => 1]);
-        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+                            ->findBy(['parent' => 1]);
         
+        // Apply protected category
+        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+        
+        // Set image in every category
+        $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
+
+        // category navigation of desktop version
+        $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
+                array('parentCategory' =>  $response['parentCategory'],
+                    'environment' => 'desktop'), TRUE );
+
+        // category navigation of mobile version
+        $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
+                array('parentCategory' =>  $response['parentCategory'],
+                    'environment' => 'mobile'), TRUE );
+
         $data = array(
                 'title' => (($response['string']==='')?"Search":$response['string']).'| Easyshop.ph'
                 );
 
         $data = array_merge($data, $this->fill_header());
+
+        // Load view
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/search/product_search_by_searchbox',$response);
         $this->load->view('templates/footer'); 

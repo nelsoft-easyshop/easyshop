@@ -57,9 +57,10 @@ class UserManager
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($em)
+    public function __construct($em,$configLoader)
     {
         $this->em = $em;
+        $this->configLoader = $configLoader;
         $this->valid = true;
     }
 
@@ -256,6 +257,41 @@ class UserManager
         else{
             return false;
         }
+    }
+
+  /**
+     * Returns the image associated with a user
+     * 
+     * @param integer $memberId
+     * @param string $selector
+     */
+    public function getUserImage($memberId, $selector = NULL)
+    {
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->find($memberId);
+        $defaultImagePath = $this->configLoader->getItem('image_path')['user_img_directory'];                
+        $imageURL = $member->getImgurl();
+        switch($selector){
+            case "banner":
+                $imgFile = '/banner.png';
+                break;
+            case "small":
+                $imgFile = '/60x60.png';
+                break;
+            case NULL:
+            default:
+                $imgFile = '/150x150.png';
+                break;
+        }
+
+        if(!file_exists($imageURL.$imgFile)||(trim($imageURL) === '')){
+            $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
+        }
+        else{
+            $user_image = '/'.$imageURL.$imgFile.'?'.time();
+        }
+        
+        return $user_image;
     }
 
 }

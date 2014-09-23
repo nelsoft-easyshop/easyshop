@@ -214,22 +214,23 @@ class SearchProduct
      */
     public function getProductAttributesByProductIds($products = array())
     {   
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $finalizedProductIds = array();
         $availableCondition = array();
         $organizedAttribute = array();
+        if(!empty($products)){
+            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+            foreach ($products as $key => $value) {
+                array_push($finalizedProductIds, $value->getIdProduct());
+                array_push($availableCondition, $value->getCondition());
+            }
 
-        foreach ($products as $key => $value) {
-            array_push($finalizedProductIds, $value->getProduct()->getIdProduct());
-            array_push($availableCondition, $value->getProduct()->getCondition());
-        }
-
-        if(count($finalizedProductIds)>0){
-            $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
-            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
-            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
-            $organizedAttribute['Condition'] =  array_unique($availableCondition);
-            ksort($organizedAttribute);
+            if(!empty($finalizedProductIds)){
+                $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
+                $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
+                $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
+                $organizedAttribute['Condition'] =  array_unique($availableCondition);
+                ksort($organizedAttribute);
+            }
         }
     
         return $organizedAttribute;
@@ -258,9 +259,10 @@ class SearchProduct
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
+        $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-        $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
+        $productIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
         $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
         
@@ -268,15 +270,23 @@ class SearchProduct
         $data = new ArrayCollection($filteredProducts);
         $iterator = $data->getIterator();
         $iterator->uasort(function ($a, $b) use($productIds) {
-            $position1 = array_search($a->getProduct()->getIdProduct(), $productIds);
-            $position2 = array_search($b->getProduct()->getIdProduct(), $productIds);
+            $position1 = array_search($a->getIdProduct(), $productIds);
+            $position2 = array_search($b->getIdProduct(), $productIds);
             return $position1 - $position2;
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
 
-        $discountedProduct = (count($collection) > 0) ? $productManager->discountProducts($collection) : array(); 
+        $discountedProduct = (!empty($collection)) ? $productManager->discountProducts($collection) : array(); 
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
+        foreach ($productsResult as $key => $value) {
+            $productId = $value->getIdProduct();
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                        ->getDefaultImage($productId);
+            $value->directory = $productImage->getDirectory();
+            $value->imageFileName = $productImage->getFilename();
+        }
+        
         return $productsResult;
     }
 

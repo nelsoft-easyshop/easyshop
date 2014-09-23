@@ -14,12 +14,9 @@
             <div class="col-md-12">
                 <section class="top_margin product-page-section display-when-desktop">
                     <div class="wrapper">
-                        <div class="prod_categories">
-                            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png" class="drop-arrow"></div>
-                            <?php echo $category_navigation; ?> 
-                        </div> 
+                        <?php echo $category_navigation_desktop; ?>  
                         <div class="prod_cat_nav" id="prod_drop_nav">
-                            <div class="category_nav">
+                            <div id="cat_nav"class="category_nav">
                                 <ul>
                                 <?php foreach($parentCategory as $catKey => $catValue): ?>
                                     <li class="<?=($catValue->getIdCat() == $breadcrumbs[0]['idCat'])?'active':'';?>">
@@ -29,7 +26,7 @@
                                     </li>
                                 <?php endforeach;?>
                                 </ul>
-                                <span class="span_bg prod_cat_drop"></span>
+                                <span id="cat" class="span_bg prod_cat_drop2"></span>
                             </div>
                         </div>
                         <div class="clear"></div>
@@ -84,10 +81,11 @@
                             <div class="cc2">
                                 <?php foreach ($subCategoryList as $subCatKey => $subCatValue): 
                                     foreach ($subCatValue['item'] as $key => $value) {
-                                        $popularProductName = html_escape($value->getProduct()->getName());
-                                        $popularProductSlug = html_escape($value->getProduct()->getSlug());
-                                        $popularProductImage = $value->getProductImagePath();
-                                        $popularProductPrice = number_format($value->getProduct()->getFinalPrice(),2,'.',',');
+                                        $productEntity = $value;
+                                        $popularProductName = html_escape($productEntity->getName());
+                                        $popularProductSlug = html_escape($productEntity->getSlug());
+                                        $popularProductImage = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
+                                        $popularProductPrice = number_format($productEntity->getFinalPrice(),2,'.',',');
                                     }
                                 ?>
                                 <div>
@@ -124,7 +122,7 @@
                     <?php if(count($products) > 0): ?>
                         <?php 
                         foreach ($products as $key => $value):
-                            $productEntity = $value->getProduct();
+                            $productEntity = $value;
                             $productName = html_escape($productEntity->getName());
                             $productSlug = $productEntity->getSlug();
                             $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -133,8 +131,8 @@
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
                             $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
-                            $productImagePath = $value->getProductImagePath();
-
+                            $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
+                                        
                             $typeOfView = "product";
                             if(isset($_COOKIE['view'])){ 
                                 $typeOfView = ($_COOKIE['view'] == "product-list") ? "product-list" : "product";
@@ -204,27 +202,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel-group " id="categories">
-                    <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                                Categories
-                                <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="/assets/images/img_arrow_down.png">
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                    <a href="/category/<?=$value->getSlug(); ?>"><li class="list-category"><?=$value->getName();?></li></a>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?=$category_navigation_mobile;?>
                 <div class="bread_crumbs_m">
                     <ul style="margin-bottom: 10px;">
                         <li class="li_home" ><a href="/home" style="color: #f18200;">Home</a></li>
@@ -245,7 +223,7 @@
                     <?php if(count($products) > 0): ?>
                         <?php foreach ($products as $key => $value): ?>
                         <?php
-                            $productEntity = $value->getProduct();
+                            $productEntity = $value;
                             $productName = html_escape($productEntity->getName());
                             $productSlug = $productEntity->getSlug();
                             $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -254,7 +232,7 @@
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
                             $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
-                            $productImagePath = $value->getProductImagePath();
+                            $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                         ?>
                         <h3></h3>
                         <div class="responsive-product panel panel-default no-border panel-items">
@@ -420,17 +398,13 @@
             });
         } 
 
-        $("#prod_drop_nav").on('click','.prod_cat_drop',function() {
-            var drop = $("div.category_nav").attr("class");
-            if(drop == "category_nav"){
-                $('.category_nav').removeClass("category_nav").addClass("category_nav category_nav_plus");
-                $('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
-            }
-            else{
-                $('.category_nav').removeClass("category_nav category_nav_plus").addClass("category_nav");
-                $('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
-            }
-        }); 
+        $(function() {
+            $( ".prod_cat_drop2" ).click(function() {
+              $( "#cat_nav" ).toggleClass("category_nav_plus");
+              $( "#cat" ).toggleClass("active_prod_cat_drop_arrow");
+            });
+        });
+           
 
         $(function() {
             $('.jcarousel').jcarousel();
