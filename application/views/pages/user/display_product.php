@@ -2,7 +2,14 @@
  <!-- PRODUCT DISPLAY -->
     <?php $prodLimit = 12; ?>
     <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-    <div class="view row row-items grid category-products" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="2" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
+    <div class="view row row-items grid category-products" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
+        
+        <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
+            <option value="1">Default Sorting</option>
+            <option value="2">Date Uploaded</option>
+            <option value="3">Hot</option>
+        </select>
+
         <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
         <?php if($arrCat['non_categorized_count'] === 0): ?>
@@ -61,14 +68,18 @@
                 <?php endforeach;?>
             </div>
             <div class="clear"></div>
-            <div>
+            <div id="paginationDiv-<?php echo $catId?>">
                 <center>
                     <ul class="pagination pagination-items">
-                        <li class="pagination-maxleft"><a href="#bm"><span>&laquo;</span></a></li>
+                        <li data-group="<?php echo $catId?>" class="pagination-maxleft"><a href="javascript:void(0)"><span>&laquo;</span></a></li>
                         <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
-                            <li class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>"><a href="#bm"><span><?php echo $i?></span></a></li>
+                            <li data-group="<?php echo $catId?>" class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>">
+                                <a href="javascript:void(0)">
+                                    <span><?php echo $i?></span>
+                                </a>
+                            </li>
                         <?php endfor;?>
-                        <li class="pagination-maxright"><a href="#bm"><span>&raquo;</span></a></li>
+                        <li data-group="<?php echo $catId?>" class="pagination-maxright"><a href="javascript:void(0)"><span>&raquo;</span></a></li>
                     </ul>
                 </center>
             </div>

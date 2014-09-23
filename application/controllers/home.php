@@ -266,31 +266,29 @@ class Home extends MY_Controller
                 "render_searchbar" => false
             ));
 
-            // Load Product By Category -- Refractor soon..
-            $collectionCategoryProduct = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']); 
-
-            $productView['defaultCatProd'] = $collectionCategoryProduct['parentCat'];
-            $productObjCollection = $collectionCategoryProduct['productObjCollection'];
-
-            // Get all attributes of the available product
-            $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $productObjCollection);
+            $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
  
             // If searching in page
             if(count($_GET)>0){
-                $productView['defaultCatProd'][0]['name'] ='Search Result';
-                $productView['defaultCatProd'][0]['non_categorized_count'] = 3;
-                $productView['defaultCatProd'][0]['json_subcat'] = "{}";
 
                 $productView['isSearching'] = TRUE;
                 $parameter = $this->input->get();
                 $parameter['seller'] = "seller:".$vendorSlug;
-                 // getting all products
+                $parameter['limit'] = 12;
+                
+                // getting all products
                 $searchProduct = $searchProductService->getProductBySearch($parameter);
-                $productView['defaultCatProd'][0]['products'] = $searchProduct;
-                // get all attributes to by products
-                $productView['productAttribute'] = $searchProductService->getProductAttributesByProductIds( $searchProduct);
-            }
 
+                $parameter['limit'] = PHP_INT_MAX;
+                $count = count($searchProductService->getProductBySearch($parameter));
+
+                $productView['defaultCatProd'][0]['name'] ='Search Result';
+                $productView['defaultCatProd'][0]['products'] = $searchProduct; 
+                $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
+                $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+                $productView['defaultCatProd'][0]['cat_type'] = 0;
+            }
+            
             // Data for the view
             $data = array(
                 "arrVendorDetails" => $arrVendorDetails 
@@ -341,7 +339,8 @@ class Home extends MY_Controller
             $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
 
-            $parentCat[$idCat]['products'] = $categoryProducts;            
+            $parentCat[$idCat]['products'] = $categoryProducts;
+            $parentCat[$idCat]['cat_type'] = 2;
             $parentCat[$idCat]['non_categorized_count'] = (int)$em->getRepository("EasyShop\Entities\EsProduct")
                                 ->countNotCustomCategorizedProducts($memberId, $category['child_cat']);
 
@@ -358,9 +357,8 @@ class Home extends MY_Controller
 
             $productObjects = (object) array_merge((array) $productObjects, (array) $categoryProducts);
         }
-        $dataReturn['parentCat'] = $parentCat;
-        $dataReturn['productObjCollection'] = $productObjects;
-        return $dataReturn;
+        
+        return $parentCat;
     }
 
 

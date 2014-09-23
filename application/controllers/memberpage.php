@@ -1450,8 +1450,10 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('p');
         $oBy = intval($this->input->get('ob'));
         $o = intval($this->input->get('o'));
+        $parameter = json_decode($this->input->get('qs'),TRUE);
 
         $em = $this->serviceContainer["entity_manager"];
+        $searchProductService = $this->serviceContainer['search_product'];
 
         switch($o){
             case 1:
@@ -1470,17 +1472,32 @@ class Memberpage extends MY_Controller
                 $orderStr = "p.clickcount " . $order;
                 break;
             case 2:
+                $orderSearch = "NEW";
                 $orderStr = "p.createddate " . $order;
                 break;
             case 3:
+                $orderSearch = "HOT";
                 $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
                 break;
             default:
+                $orderSearch = "NULL";
                 $orderStr = "p.clickcount " . $order;
                 break;
         }
 
         switch($catType){
+            // Search
+            case 0:
+                if($oBy > 1){  
+                    $parameter['sortby'] = $orderSearch;
+                    $parameter['sorttype'] = $order;
+                }
+                $parameter['seller'] = "seller:".$vendorName;
+                $parameter['limit'] = 12;
+                $parameter['page'] = $page - 1;
+                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                break;
+
             // Custom
             case 1:
                 $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")

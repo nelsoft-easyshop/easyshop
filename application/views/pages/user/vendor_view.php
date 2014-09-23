@@ -417,18 +417,13 @@
                             <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-th-large fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-th-list fa-2x icon-view icon-list"></span></td>
                         </tr>
                     </table>
-                    
-                    <select id="sort_select" class="form-select-default color-default pull-right">
-                        <option value="1">Default Sorting</option>
-                        <option value="2">Date Uploaded</option>
-                        <option value="3">Hot</option>
-                    </select>
                 </div>
 
                 <div class="clear"></div>
                 
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
+                <input type="hidden" id="queryString" value='<?=json_encode($_GET); ?>' />
 
                <?=$viewProductCategory;?>
 
@@ -529,8 +524,6 @@
         
     </div>
     </div>
-    
-    <script src="/assets/js/src/vendorpage.js" type="text/javascript"></script>
     
 </section>
 

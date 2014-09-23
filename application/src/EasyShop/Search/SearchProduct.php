@@ -141,6 +141,9 @@ class SearchProduct
                             ,'sort'
                             ,'typeview'
                             ,'page'
+                            ,'limit'
+                            ,'sortby'
+                            ,'sorttype'
                         );
 
         $finalizedParamter = array();
@@ -191,12 +194,16 @@ class SearchProduct
                                 'category',
                                 'brand',
                                 'condition',
-                                'location', 
+                                'location',
+                                'sortby',
+                                'sorttype',
                             ); 
         $notExplodableFilter = array(
                                 'seller'
                                 ,'category'
                                 ,'q_str'
+                                ,'sortby'
+                                ,'sorttype'
                             );
 
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
@@ -243,28 +250,36 @@ class SearchProduct
      * @return mixed
      */
     public function getProductBySearch($parameters)
-    {    
+    {       
+        // Prepare services
         $searchProductService = $this;
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
 
+        // Prepare Repository
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
 
+        // Prepare variables
         $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
         $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
         $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?trim($parameters['startprice']):FALSE;
         $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?trim($parameters['endprice']):FALSE; 
-        $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;  
+        $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;
+        $sortBy = (isset($parameters['sortby']) && $parameters['sortby'])?trim($parameters['sortby']):FALSE;
+        $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
+        // Search for Product
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
         $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
+        $originalOrder = ($sortBy) ? $productIds : $originalOrder;
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
         $productIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
-        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
+        // Get product details
+        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,$perPage);
         
         // Sort object by original order of product id to retain weight order
         $data = new ArrayCollection($filteredProducts);
@@ -276,9 +291,12 @@ class SearchProduct
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
 
+        // apply actual price on each product with or without discount
         $discountedProduct = (!empty($collection)) ? $productManager->discountProducts($collection) : array(); 
+        // filter object remove product without in the range of the price
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
+        // assign each image and image path of the product
         foreach ($productsResult as $key => $value) {
             $productId = $value->getIdProduct();
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
