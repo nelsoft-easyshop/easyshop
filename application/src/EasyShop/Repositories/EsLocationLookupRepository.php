@@ -51,5 +51,42 @@ class EsLocationLookupRepository extends EntityRepository
 
         return $locationLookup->getParent();
     }
+
+    /**
+     * Retrieves locations with the given type
+     */
+    public function getAllLocationType($type)
+    {
+        $this->em = $this->_em;
+
+        $locations = $this->em->createQueryBuilder()
+                        ->select('l.location')
+                        ->from('EasyShop\Entities\EsLocationLookup','l')
+                        ->where('l.type=:type')
+                        ->orderBy('l.location','ASC')
+                        ->setParameter('type', $type)
+                        ->getQuery()
+                        ->getResult();
+
+        return $locations;
+    }
+
+    public function getCities($stateRegion)
+    {
+        $this->em = $this->_em;
+        
+        $state = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                ->findOneBy(["location" => $stateRegion]);
+
+        $locations = $this->em->createQueryBuilder()
+                        ->select('l.location')
+                        ->from('EasyShop\Entities\EsLocationLookup','l')
+                        ->where('l.parent=:parent')
+                        ->orderBy('l.location','ASC')
+                        ->setParameter('parent', $state->getIdLocation())
+                        ->getQuery()
+                        ->getResult();
+        return $locations;
+    }
 }
 
