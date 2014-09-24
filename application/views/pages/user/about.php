@@ -231,36 +231,19 @@
                                 <div class="col-xs-12">
                                     <table width="100%" class="table-rate">
                                         <tr>
-                                            <td width="33%">
-                                                Item Quality: 
-                                                <span class="span-rate">
-                                                    <i class="fa fa-star fa-star-rate i1"></i>
-                                                    <i class="fa fa-star fa-star-rate i2"></i>
-                                                    <i class="fa fa-star fa-star-rate i3"></i>
-                                                    <i class="fa fa-star fa-star-rate i4"></i>
-                                                    <i class="fa fa-star fa-star-rate i5"></i>
-                                                </span>
-                                            </td>
-                                            <td width="33%">
-                                                Communication: 
-                                                <span class="span-rate">
-                                                    <i class="fa fa-star fa-star-rate c-1"></i>
-                                                    <i class="fa fa-star fa-star-rate c-2"></i>
-                                                    <i class="fa fa-star fa-star-rate c-3"></i>
-                                                    <i class="fa fa-star fa-star-rate c-4"></i>
-                                                    <i class="fa fa-star fa-star-rate c-5"></i>
-                                                </span>
-                                            </td>
-                                            <td width="34%" align="right">
-                                            Shipment Time: 
-                                                <span class="span-rate">
-                                                    <i class="fa fa-star fa-star-rate s-1"></i>
-                                                    <i class="fa fa-star fa-star-rate s-2"></i>
-                                                    <i class="fa fa-star fa-star-rate s-3"></i>
-                                                    <i class="fa fa-star fa-star-rate s-4"></i>
-                                                    <i class="fa fa-star fa-star-rate s-5"></i>
-                                                </span>
-                                            </td>
+                                            <?php $count = 1; ?>
+                                            <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                <td width="33%" id='rating-header<?php echo $count?>'>
+                                                    <?php echo html_escape($ratingHeader); ?>
+                                                    <span class="span-rate feedback-ratings">
+                                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                                            <i class="fa fa-star fa-star-rate rating<?php echo $i ?>"></i>
+                                                        <?php endfor; ?>
+
+                                                    </span>
+                                                </td>
+                                            <?php $count++; ?>
+                                            <?php endforeach;?>
                                         </tr>
                                     </table>
                                 </div>

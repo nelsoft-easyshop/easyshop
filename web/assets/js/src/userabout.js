@@ -76,7 +76,16 @@ $(function () {
         $("#fob").css("color","#575759");
         $(this).css("color","#fe893a");
     });
-    //FOR RATING DEMO ONLY
+    
+    
+    
+    $(".feedback-ratings .fa-star-rate").mouseover(function(){
+        
+        
+    });
+    
+    
+
      $( ".i5" ).mouseover(function() {
         $(".i1").css("color","#fbd022");
         $(".i2").css("color","#fbd022");
@@ -84,6 +93,9 @@ $(function () {
         $(".i4").css("color","#fbd022");
         $(".i5").css("color","#fbd022");
     });
+     
+     
+     
      $( ".i5" ).click(function() {
         $(".i1").addClass(" star-active");
         $(".i2").addClass(" star-active");
@@ -332,6 +344,11 @@ $(function () {
     $( ".s-1" ).mouseout(function() {
         $(".s-1").css("color","#d4d4d4");
     });
+    
+    
+    
+    
+    
     
     $( ".fa-edit-about" ).click(function() {
         $(".div-about-edit-area").css("display","inline");
