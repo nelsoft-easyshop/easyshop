@@ -4,6 +4,8 @@ namespace EasyShop\PaymentGateways;
 
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 /**
  * Point Gateway Class
@@ -19,6 +21,7 @@ class PointGateway extends AbstractGateway
     public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
+        $this->setParameter('paymentType', EsPaymentMethod::PAYMENT_POINTS);
     }
 
     /**
@@ -27,43 +30,47 @@ class PointGateway extends AbstractGateway
      */
     public function pay()
     {
-        
+        $memberId = $this->parameters['memberId'];
+        $itemArray = $this->parameters['itemArray'];
+
         // get id of action
         $actionId = $this->pointTracker->getActionId($this->parameters['pointtype']);
 
-        // update user points!
-        $historyObj = $this->pointTracker->spendUserPoint(
-            $this->parameters['member_id'],
-            $actionId,
-            $this->parameters['amount']
-            );
+        $pointSpent =  $this->parameters['amount'];
 
         // if 'purchase', add items as JSON
-        if($this->parameters['pointtype'] == 'purchase'){ 
+        if(intval($actionId) === EsPointType::TYPE_PURCHASE){ 
+            $maxPointAllowable = "0.000";
+            $pointBreakdown = [];
 
-            // order products
-            $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                        ->findBy([
-                            'order' => $this->parameters['order_id'],
-                            'product' => array_keys($this->parameters['products'])
-                            ]);
-
-            $breakdown = [];
-            $tempArray = $this->parameters['products'];
-            foreach($orderProducts as $prods){
-                $data['order_product_id'] = $prods->getIdOrderProduct();
-                $data['points'] = $tempArray[$prods->getProduct()->getIdProduct()];
-                unset($tempArray[$prods->getProduct()->getIdProduct()]);
-                $breakdown[] = $data;
+            foreach ($itemArray as $item) {
+                $maxPointAllowable = bcadd($maxPointAllowable, $item['point']);
             }
 
-            $jsonData = json_encode($breakdown);
-            
+            // cap points with respect to total points of items
+            $pointSpent = intval($pointSpent) <= intval($maxPointAllowable) ? $pointSpent : $maxPointAllowable;
+
+            foreach ($itemArray as $item) {
+                $data["order_product_id"] = $item['order_id'];
+                $data["points"] = round(floatval(bcmul($pointSpent, bcdiv($item['point'], $maxPointAllowable, 10), 10)));
+                $pointBreakdown[] = $data;
+            }
+
+            $jsonData = json_encode($pointBreakdown);
+
+            // update user points!
+            $historyObj = $this->pointTracker->spendUserPoint(
+                $memberId,
+                $actionId,
+                $pointSpent
+                );
+
             // update history data field
             $historyObj->setData($jsonData);
             $this->em->flush();
         }
-    
+        
+        return $pointSpent;
     }
 
     // Dummy functions to adhere to abstract gateway
@@ -75,12 +82,8 @@ class PointGateway extends AbstractGateway
 
 /*
     Params needed
-        'name' => unique string for referencing this gateway,
-        'method' => 'Point', 
-        'amount' => amount allocated,
-        'member_id' => id of member
-        'pointtype' => type of point used
-        'products' => ['prod_id' => point, 'prod_id' => point]
-        'order_id' => order id of purchase 
+        method:"Point", 
+        amount:amount allocated,
+        pointtype:type of point used
 */
 

@@ -394,7 +394,7 @@ class EsProductRepository extends EntityRepository
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('p.idProduct')
+        $qbResult = $qb->select('DISTINCT p.idProduct')
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsMember','m',
                                                     'WITH','p.member = m.idMember')
@@ -447,10 +447,32 @@ class EsProductRepository extends EntityRepository
                                     );
         }
 
+        if(isset($filterArray['sortby'])){
+
+            $order = "DESC";
+            if(isset($filterArray['sorttype']) 
+                && strtoupper($filterArray['sorttype']) == "ASC"){
+                $order = "ASC";
+            }
+
+            switch(strtoupper($filterArray['sortby'])){
+                case "NEW":
+                    $qbResult = $qbResult->orderBy('p.createddate', $order);
+                    break;
+                case "HOT":
+                    $qbResult = $qbResult->orderBy('p.isHot', $order)
+                                        ->addOrderBy(' p.clickcount',$order);
+                    break;
+                default:
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
+            }
+        }
+
         $qbResult = $qbResult->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
+        
         return $resultNeeded; 
     }
 

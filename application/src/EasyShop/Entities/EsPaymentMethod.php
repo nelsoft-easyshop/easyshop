@@ -54,6 +54,11 @@ class EsPaymentMethod
     const PAYMENT_DIRECTBANKDEPOSIT = 5;
 
     /**
+     * @var int
+     */
+    const PAYMENT_POINTS = 6;
+
+    /**
      * Get idPaymentMethod
      *
      * @return integer 

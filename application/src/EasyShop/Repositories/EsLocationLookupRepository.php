@@ -99,8 +99,6 @@ class EsLocationLookupRepository extends EntityRepository
             }
         }
 
-        $data['jsonCity'] = json_encode($data['cityLookup'], JSON_FORCE_OBJECT);
-
         return $data;
     }
 

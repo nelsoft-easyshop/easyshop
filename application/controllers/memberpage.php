@@ -1450,11 +1450,16 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('p');
         $oBy = intval($this->input->get('ob'));
         $o = intval($this->input->get('o'));
+
         $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
         $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
         $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
 
+        $parameter = json_decode($this->input->get('qs'),TRUE);
+
+
         $em = $this->serviceContainer["entity_manager"];
+        $searchProductService = $this->serviceContainer['search_product'];
 
         switch($o){
             case 1:
@@ -1473,29 +1478,39 @@ class Memberpage extends MY_Controller
                 $orderStr = "p.clickcount " . $order;
                 break;
             case 2:
+                $orderSearch = "NEW";
                 $orderStr = "p.createddate " . $order;
                 break;
             case 3:
+                $orderSearch = "HOT";
                 $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
                 break;
             default:
+                $orderSearch = "NULL";
                 $orderStr = "p.clickcount " . $order;
                 break;
         }
 
         switch($catType){
-            // Custom
-            case 1:
+            case 0: // Search
+                if($oBy > 1){  
+                    $parameter['sortby'] = $orderSearch;
+                    $parameter['sorttype'] = $order;
+                }
+                $parameter['seller'] = "seller:".$vendorName;
+                $parameter['limit'] = 12;
+                $parameter['page'] = $page - 1;
+                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                break;
+            case 1: // Custom
                 $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                 ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
-            // Default
-            case 2:
+            case 2: // Default
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
-            // Default Cat
-            default:
+            default: // Default Cat
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
@@ -1521,7 +1536,6 @@ class Memberpage extends MY_Controller
         }
 
         $parseData = array('arrCat'=>$arrCat);
-
         $serverResponse['htmlData'] = $this->load->view("pages/user/vendor_product_view", $parseData, true);
 
         echo json_encode($serverResponse);
@@ -1546,6 +1560,25 @@ class Memberpage extends MY_Controller
             print($um->errorInfo());
             print('<br>Chain disrupted.');
         }
+    }
+
+    public function removeUserImage()
+    {
+        $return['error'] = TRUE;
+        $return['msg'] = "Something went wrong please try again later.";
+        $return['img'] = "";
+        $memberId = $this->session->userdata('member_id');
+
+        $userMgr = $this->serviceContainer['user_manager'];
+
+        $remove = $userMgr->removeUserImage($memberId);
+        if($remove){
+            $return['error'] = FALSE;
+            $return['msg'] = "";
+            $return['img'] = $remove;
+        }
+
+        echo json_encode($return);
     }
 
 }
