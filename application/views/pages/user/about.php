@@ -221,88 +221,95 @@
                     </div>
                 </div>
 
-                
-                <div class="panel-feedback-message">
-                    <p class="panel-title-feedback">
-                        Leave A Feedback
-                    </p>
-                    <div class="div-message-form">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <table width="100%" class="table-rate">
-                                    <tr>
-                                        <td width="33%">
-                                             Item Quality: 
-                                            <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate i1"></i>
-                                                <i class="fa fa-star fa-star-rate i2"></i>
-                                                <i class="fa fa-star fa-star-rate i3"></i>
-                                                <i class="fa fa-star fa-star-rate i4"></i>
-                                                <i class="fa fa-star fa-star-rate i5"></i>
-                                            </span>
-                                        </td>
-                                        <td width="33%">
-                                            Communication: 
-                                            <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate c-1"></i>
-                                                <i class="fa fa-star fa-star-rate c-2"></i>
-                                                <i class="fa fa-star fa-star-rate c-3"></i>
-                                                <i class="fa fa-star fa-star-rate c-4"></i>
-                                                <i class="fa fa-star fa-star-rate c-5"></i>
-                                            </span>
-                                        </td>
-                                        <td width="34%" align="right">
-                                           Shipment Time: 
-                                            <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate s-1"></i>
-                                                <i class="fa fa-star fa-star-rate s-2"></i>
-                                                <i class="fa fa-star fa-star-rate s-3"></i>
-                                                <i class="fa fa-star fa-star-rate s-4"></i>
-                                                <i class="fa fa-star fa-star-rate s-5"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
+                <?php if(count($orderRelations) > 0): ?>
+                    <div class="panel-feedback-message">
+                        <p class="panel-title-feedback">
+                            Leave A Feedback
+                        </p>
+                        <div class="div-message-form">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table width="100%" class="table-rate">
+                                        <tr>
+                                            <td width="33%">
+                                                Item Quality: 
+                                                <span class="span-rate">
+                                                    <i class="fa fa-star fa-star-rate i1"></i>
+                                                    <i class="fa fa-star fa-star-rate i2"></i>
+                                                    <i class="fa fa-star fa-star-rate i3"></i>
+                                                    <i class="fa fa-star fa-star-rate i4"></i>
+                                                    <i class="fa fa-star fa-star-rate i5"></i>
+                                                </span>
+                                            </td>
+                                            <td width="33%">
+                                                Communication: 
+                                                <span class="span-rate">
+                                                    <i class="fa fa-star fa-star-rate c-1"></i>
+                                                    <i class="fa fa-star fa-star-rate c-2"></i>
+                                                    <i class="fa fa-star fa-star-rate c-3"></i>
+                                                    <i class="fa fa-star fa-star-rate c-4"></i>
+                                                    <i class="fa fa-star fa-star-rate c-5"></i>
+                                                </span>
+                                            </td>
+                                            <td width="34%" align="right">
+                                            Shipment Time: 
+                                                <span class="span-rate">
+                                                    <i class="fa fa-star fa-star-rate s-1"></i>
+                                                    <i class="fa fa-star fa-star-rate s-2"></i>
+                                                    <i class="fa fa-star fa-star-rate s-3"></i>
+                                                    <i class="fa fa-star fa-star-rate s-4"></i>
+                                                    <i class="fa fa-star fa-star-rate s-5"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="NAME..."/>
+                            <div class="row">
+                                <div class="col-xs-6 col-message-1">
+                                    <input type="text" class="input-lg input-message" placeholder="NAME..."/>
+                                </div>
+                                <div class="col-xs-6 col-message-2">
+                                    <input type="text" class="input-lg input-message" placeholder="PHONE NUMBER..."/>
+                                </div>
                             </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="PHONE NUMBER..."/>
+                            <div class="row">
+                                <div class="col-xs-6 col-message-1">
+                                    <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
+                                </div>
+                                <div class="col-xs-6 col-message-2">
+                                    <input type="text" class="input-lg input-message" placeholder="WEBSITE..."/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
+                                </div>
                             </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="WEBSITE..."/>
+                            
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <select class="input-lg input-message">
+                                        <?php foreach($orderRelations as $order): ?>
+                                              <option>
+                                                    INVOICENO: <?php echo $order['invoiceNo'].' ~';  ?>
+                                                    DATE: <?php echo $order['dateadded']->format('jS F Y').' ~';  ?>
+                                                    <?php echo html_escape($order['productname']);  ?>
+                                              </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
+                            
+                            <div class="row">
+                                <center>
+                                    <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
+                                </center>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <select class="input-lg input-message">
-                                    <option>Sample Data</option>
-                                    <option>Sample Data</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <center>
-                                <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
-                            </center>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
+               
             </div>
             </div>
         </div>
