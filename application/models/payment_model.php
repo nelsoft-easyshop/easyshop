@@ -279,7 +279,7 @@ class payment_model extends CI_Model
 			case 'buyer':
 				$this->email->subject($this->lang->line('notification_subject_buyer'));
 				#user appended at template
-				$data['store_link'] = base_url();
+			    $data['store_link'] = base_url();
 				$data['msg_link'] = base_url() . "messages/#";
 				$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
 				break;
