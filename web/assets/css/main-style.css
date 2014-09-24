@@ -6,6 +6,28 @@ html, body{
 section {
     margin-top: 0;
 }
+
+ul,ol {
+    list-style-type:none;
+    padding:0;
+    margin:0;
+}
+
+a:active,
+a:hover,
+a:focus {
+    text-decoration:none;
+    color:#ff530d;
+}
+
+a:active,
+a:focus,
+input,
+select,
+textarea {
+    outline:none;
+}
+
 .container-non-responsive{
     margin-left: auto;
     margin-right: auto;
@@ -371,6 +393,43 @@ section {
 .edit-profile-photo-menu > div a:hover {
     color: #4370cd;
     text-decoration: none;
+}
+
+/** edit photo modal **/
+
+.edit-banner-container {
+    max-height: 511px !important;
+}
+
+.jcrop-holder {
+    background-color: #fff !important;
+    height: 395px !important;
+    margin: 10px auto;
+    width: auto !important;
+}
+
+.jcrop-holder img {
+    bottom: 0;
+    height: auto !important;
+    margin: auto !important;
+    max-height: 296px;   
+    max-width: 500px;
+    right: 0;
+    width: auto !important;
+}
+
+.jcrop-holder div + div + input + div > div {
+    height: auto !important;
+    max-height: 296px !important;
+}
+
+.jcrop-tracker {
+    bottom: 0;
+    height: auto !important;
+    left: 0 !important;
+    margin: auto;
+    right: 0;
+    top: 0 !important;    
 }
 
 /*** vendor navigation ***/
