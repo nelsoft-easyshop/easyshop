@@ -50,7 +50,7 @@
               <tr>
                 <td>
 				  <span style="display:inline-block;font-weight:bold;width:150px;">Purchased from : </span>{seller} <br> 
-				  <span style="display:inline-block;width:250px;margin-left:3em;"><a href="{store_link}{seller}" target="_blank" style="color:orange;">View Store</a> || <a href="{msg_link}{seller}" target="_blank" style="color:orange;">Send Message</a></span> <br><br>
+				  <span style="display:inline-block;width:250px;margin-left:3em;"><a href="{store_link}{seller_slug}" target="_blank" style="color:orange;">View Store</a> || <a href="{msg_link}{seller}" target="_blank" style="color:orange;">Send Message</a></span> <br><br>
 				  <span style="display:inline-block;font-weight:bold;width:150px;">Product Order #: </span>{order_product_id} <br>
                   <span style="display:inline-block;font-weight:bold;width:150px;">Product : </span>{name} <br>
 				  <span style="display:inline-block;font-weight:bold;width:150px;">Base Price :</span> Php {baseprice} <br>

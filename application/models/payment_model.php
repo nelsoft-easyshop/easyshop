@@ -270,7 +270,6 @@ class payment_model extends CI_Model
 	{
 		$this->load->library('email');	
 		$this->load->library('parser');
-		
 		$this->email->set_newline("\r\n");
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
@@ -279,13 +278,13 @@ class payment_model extends CI_Model
 			case 'buyer':
 				$this->email->subject($this->lang->line('notification_subject_buyer'));
 				#user appended at template
-				$data['store_link'] = base_url() . "vendor/";
+			    $data['store_link'] = base_url();
 				$data['msg_link'] = base_url() . "messages/#";
 				$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
 				break;
 			case 'seller':
 				$this->email->subject($this->lang->line('notification_subject_seller'));
-				$data['store_link'] = base_url() . "vendor/" . $data['buyer_name'];
+				$data['store_link'] = base_url() . $data['buyer_slug'];
 				$data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
 				$msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
 				break;
@@ -301,7 +300,7 @@ class payment_model extends CI_Model
 		
 		$this->email->message($msg);
 		$result = $this->email->send();
-		
+
 		$errmsg = $this->email->print_debugger();
 		
 		return $result;
@@ -363,6 +362,7 @@ class payment_model extends CI_Model
 		    'id_order' => $row[0]['id_order'],
 		    'dateadded' => $row[0]['dateadded'],
 		    'buyer_name' => $row[0]['buyer'],
+            'buyer_slug' => $row[0]['buyer_slug'],
 		    'buyer_email' => $row[0]['buyer_email'],
 		    'buyer_contactno' => $row[0]['buyer_contactno'],
 		    'totalprice' => $row[0]['totalprice'],
@@ -378,6 +378,7 @@ class payment_model extends CI_Model
 		    if(!isset($data['products'][$value['id_order_product']])){
 			    $data['products'][$value['id_order_product']] = array_slice($temp,6,11);
 			    $data['products'][$value['id_order_product']]['order_product_id'] = $temp['id_order_product'];
+                $data['products'][$value['id_order_product']]['seller_slug'] = $value['seller_slug'];
 		    }
 		    
 		    // Assemble data for seller
@@ -431,10 +432,12 @@ class payment_model extends CI_Model
 		
 		if($data['status'] === 1){ // if forward to seller
 			$parseData['user'] = $row[0]['buyer'];
+            $parseData['user_slug'] = $row[0]['buyer_slug'];
 			$parseData['email'] = $row[0]['seller_email'];
 			$parseData['mobile'] = trim($row[0]['seller_contactno']);
 		} else if($data['status'] === 2){ // if return to buyer
 			$parseData['user'] = $row[0]['seller'];
+            $parseData['user_slug'] = $row[0]['seller_slug'];
 			$parseData['email'] = $row[0]['buyer_email'];
 			$parseData['mobile'] = trim($row[0]['buyer_contactno']);
 		}
