@@ -381,13 +381,16 @@ section {
 }
 
 /** edit photo modal **/
-
+#div_user_image_prev {
+    height: 495px;
+    overflow-y: scroll;
+}
 .edit-banner-container {
     max-height: 511px !important;
 }
 
 .jcrop-holder {
-    margin: 10px auto;
+        margin: 10px auto;
 }
 
 /*** vendor navigation ***/
