@@ -318,7 +318,7 @@ class Home extends MY_Controller
         $data['title'] = 'User Information | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());      
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                 ->findOneBy(['slug' => $sellerslug]);
+                                                 ->findOneBy(['slug' => $sellerslug]);                                
         $idMember = $member->getIdMember();
         $ratingHeaders = $this->lang->line('rating');
 
@@ -377,22 +377,21 @@ class Home extends MY_Controller
                                                                               'ratingHeaders' => $ratingHeaders,
                                                                               ), TRUE);                                                             
         
-        
         $viewerId = $this->session->userdata('member_id');
+        $orderRelations = array();
         if($viewerId){
-            $relations = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
-                                                                  ->getOrderRelations($viewerId, $idMember);
-            print_r($relations);
+            $orderRelations = $this->serviceContainer['entity_manager']
+                                   ->getRepository('EasyShop\Entities\EsOrder')
+                                   ->getOrderRelations($viewerId, $idMember, true);
         }
-        
-        
-        
+
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
                                                'feedbackTabs' => $feedbackTabs,
                                                'member' => $member,
+                                               'orderRelations' => $orderRelations,
                                               ]);
         $this->load->view('templates/footer_new');
     }
