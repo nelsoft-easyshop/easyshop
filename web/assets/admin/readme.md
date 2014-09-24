@@ -1,0 +1,1 @@
+## Images for admin images
