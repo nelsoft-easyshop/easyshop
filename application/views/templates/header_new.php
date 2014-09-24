@@ -165,3 +165,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
+<script type='text/javascript'>
+
+    (function(){
+    
+        $(function () {
+   
+            var $user_nav_dropdown = $(".user-nav-dropdown");
+            var $nav_dropdown = $("ul.nav-dropdown");
+
+            $(document).mouseup(function (e) {
+
+                if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
+                    && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    $nav_dropdown.hide(1);
+                }
+
+            });
+
+            $user_nav_dropdown.click(function() {
+                $nav_dropdown.show();
+            });
+        
+        });
+
+    })(jQuery);
+
+
+</script>
+
