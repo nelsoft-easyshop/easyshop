@@ -270,7 +270,6 @@ class payment_model extends CI_Model
 	{
 		$this->load->library('email');	
 		$this->load->library('parser');
-		
 		$this->email->set_newline("\r\n");
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
