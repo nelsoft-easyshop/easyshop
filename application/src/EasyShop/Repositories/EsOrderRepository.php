@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder;
+use EasyShop\Entities\EsOrderStatus as orderStatus;
 use EasyShop\Entities\EsProduct;
 
 class EsOrderRepository extends EntityRepository
@@ -46,22 +47,49 @@ class EsOrderRepository extends EntityRepository
      *
      * @param integer $oneMemberId
      * @param integer $anotherMemberId
+     * @param bool $excludeReviewed
      * @return mixed
      */
-    public function getOrderRelations($oneMemberId, $anotherMemberId)
+    public function getOrderRelations($oneMemberId, $anotherMemberId, $excludeReviewed = false)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qbResult = $qb->select('o.idOrder, o.invoiceNo, o.transactionId, o.dateAdded')
-                        ->from('EasyShop\Entities\EsOrder','o')
-                        ->leftJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
-                        ->innerJoin('EasyShop\Entities\EsMember', 'buyer', 'with', 'o.buyer = buyer.idMember')
-                        ->innerJoin('EasyShop\Entities\EsMember', 'seller', 'with', 'op.seller = seller.idMember')
-                        ->where('buyer.idMember = :memberOne AND seller.idMember = :memberTwo')
-                        ->orWhere('buyer.idMember = :memberTwo AND seller.idMember = :memberOne')
-                        ->setParameter('buyerId', $oneMemberId)
-                        ->setParameter('sellerId', $anotherMemberId) 
-                        ->getQuery()
-                        ->getResult();
+        
+        
+        $queryBuilder = $qb->select('o.idOrder, o.invoiceNo, o.transactionId, o.dateadded, stat.name as orderStatusName',
+                                'stat.orderStatus', 'p.name as productname', 'feedback.idFeedback')
+                ->from('EasyShop\Entities\EsOrder','o')
+                ->leftJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
+                ->innerJoin('EasyShop\Entities\EsMember', 'buyer', 'with', 'o.buyer = buyer.idMember')
+                ->innerJoin('EasyShop\Entities\EsMember', 'seller', 'with', 'op.seller = seller.idMember')
+                ->innerJoin('EasyShop\Entities\EsOrderStatus', 'stat', 'with', 'o.orderStatus = stat.orderStatus' )
+                ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct');
+        if($excludeReviewed){
+            $queryBuilder->innerJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with', 'o.idOrder = feedback.order');
+        }
+        else{
+            $queryBuilder->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with', 'o.idOrder = feedback.order');
+        }
+
+        $qbResult = $queryBuilder->where(
+                        $qb->expr()->andX(
+                            $qb->expr()->neq('o.orderStatus', \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT),
+                            $qb->expr()->orX(
+                                $qb->expr()->andX(
+                                    $qb->expr()->eq('buyer.idMember',':memberOne'),
+                                    $qb->expr()->eq('seller.idMember',':memberTwo')
+                                ),
+                                $qb->expr()->andX(
+                                    $qb->expr()->eq('buyer.idMember',':memberTwo'),
+                                    $qb->expr()->eq('seller.idMember',':memberOne')
+                                )
+                            )
+                        )
+                    ) 
+                    ->setParameter('memberOne', $oneMemberId)
+                    ->setParameter('memberTwo', $anotherMemberId) 
+                    ->getQuery()
+                    ->getResult();
+
         return $qbResult;   
     }
     
