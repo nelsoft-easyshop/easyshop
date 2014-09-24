@@ -389,11 +389,20 @@ class Home extends MY_Controller
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                                               ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
 
+        if($addr === NULL){
+            $data['cities'] = [['location' => '']];
+            $data['streetAddr'] = '';
+        }
+        else{
+            $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                ->getCities($addr->getStateregion()->getLocation());
+            $data['streetAddr'] = $addr->getAddress();
+        }
+
         $data['regions'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getAllLocationType(3);
 
-        $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getCities($addr->getStateregion()->getLocation());
+        $userDetails = $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
 
         $idMember = $member->getIdMember();
         $ratingHeaders = $this->lang->line('rating');
@@ -461,7 +470,7 @@ class Home extends MY_Controller
                                                 'ratingHeaders' => $ratingHeaders,
                                                 'feedbackTabs' => $feedbackTabs,
                                                 'member' => $member,
-                                                'addr' => $addr,
+                                                'userDetails' => $userDetails,
                                             ]);
         $this->load->view('templates/footer_new');
     }
