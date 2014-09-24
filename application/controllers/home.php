@@ -30,6 +30,9 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
+        $this->load->library('session');
+        $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
     /**
@@ -260,6 +263,11 @@ class Home extends MY_Controller
                 $this->contactUser($sellerslug);
             }
             else{
+                $sellerid = $vendordetails['id_member'];
+                $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($sellerid));
+                $data['cart_size'] = $this->cartImplementation->getSize();
+                $data['total'] = $this->cartImplementation->getTotalPrice();
+
                 $data['title'] = 'Vendor Profile | Easyshop.ph';
                 $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
                 $data = array_merge($data, $this->fill_header());
@@ -267,7 +275,6 @@ class Home extends MY_Controller
                 $data['render_searchbar'] = false;
                 $this->load->view('templates/header_new', $data);
                 $this->load->view('templates/header_vendor');
-                $sellerid = $vendordetails['id_member'];
                 $usersFollowing = $this->user_model->getFollowing($sellerid);
                 $usersFollower = $this->user_model->getFollowers($sellerid);
                 $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
