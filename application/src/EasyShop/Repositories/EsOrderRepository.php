@@ -40,5 +40,32 @@ class EsOrderRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * Get the orders where two members are involved
+     *
+     * @param integer $oneMemberId
+     * @param integer $anotherMemberId
+     * @return mixed
+     */
+    public function getOrderRelations($oneMemberId, $anotherMemberId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qbResult = $qb->select('o.idOrder, o.invoiceNo, o.transactionId, o.dateAdded')
+                        ->from('EasyShop\Entities\EsOrder','o')
+                        ->leftJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
+                        ->innerJoin('EasyShop\Entities\EsMember', 'buyer', 'with', 'o.buyer = buyer.idMember')
+                        ->innerJoin('EasyShop\Entities\EsMember', 'seller', 'with', 'op.seller = seller.idMember')
+                        ->where('buyer.idMember = :memberOne AND seller.idMember = :memberTwo')
+                        ->orWhere('buyer.idMember = :memberTwo AND seller.idMember = :memberOne')
+                        ->setParameter('buyerId', $oneMemberId)
+                        ->setParameter('sellerId', $anotherMemberId) 
+                        ->getQuery()
+                        ->getResult();
+        return $qbResult;   
+    }
+    
 }
+
+
 
