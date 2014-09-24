@@ -5,8 +5,23 @@ var memconf = {
     vid: $('#vid').val(),
     vname: $('#vname').val(),
     order: 1,
-    orderBy: 1
+    orderBy: 1,
+    condition: "",
+    lprice: 0,
+    uprice: 0
 };
+
+/**
+* Function to handle display of Price Value
+**/
+function ReplaceNumberWithCommas(thisnumber){
+    //Seperates the components of the number
+    var n = thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
+}
 
 (function ($) {
 
@@ -46,6 +61,42 @@ var memconf = {
 
 })(jQuery);
 
+(function ($){
+
+    $('#filter-btn').on('click', function(){
+        var condition = $('#filter-condition').val();
+        var lprice = $.trim($('#filter-lprice').val());
+        lprice = lprice.replace(new RegExp(",", "g"), '');
+        lprice = parseFloat(lprice).toFixed(2);
+        var uprice = $.trim($('#filter-uprice').val());
+        uprice = uprice.replace(new RegExp(",", "g"), '');
+        uprice = parseFloat(uprice).toFixed(2);
+
+        memconf.condition = condition;
+
+        // CHECK for NaN conditions
+
+        if(lprice > 0){    
+            memconf.lprice = lprice;
+        }
+        else{
+            memconf.lprice = "";
+        }
+
+        if(uprice > 0){
+            memconf.uprice = uprice;
+        }
+        else{
+            memconf.uprice = "";
+        }
+
+        // trigger pagination ajax after
+        $('.product-paging[data-page="1"]').remove();
+        $('.category-products.active').find('li.pagination-indiv[data-page="1"]').trigger('click');
+    });
+
+})(jQuery);
+
 function ItemListAjax(CatDiv,page)
 {
     var catId = CatDiv.attr("data-catId");
@@ -58,7 +109,8 @@ function ItemListAjax(CatDiv,page)
         type: "GET",
         url: config.base_url+'memberpage/'+'vendorLoadProducts',
         data: "vid="+memconf.vid+"&vn="+memconf.vname+"&cid="+catId+"&ct="+catType+
-            "&p="+page+"&ob="+memconf.orderBy+"&o="+memconf.order+"&"+memconf.csrfname+"="+memconf.csrftoken,
+            "&p="+page+"&ob="+memconf.orderBy+"&o="+memconf.order+"&con="+memconf.condition+"&lp="+memconf.lprice+"&up="+memconf.uprice+
+            "&"+memconf.csrfname+"="+memconf.csrftoken,
         beforeSend: function(){
             loadingDiv.show();
             productPage.hide();
@@ -149,8 +201,8 @@ function ItemListAjax(CatDiv,page)
 
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
-        $('.category-products').hide();
-        $(divId).show();
+        $('.category-products').removeClass('active').hide();
+        $(divId).addClass('active').show();
     });
 
 

@@ -462,11 +462,14 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC")
+    public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
     {
         $em = $this->_em;
         $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
         $result = array();
+
+        $hasCondition = $hasLprice = $hasUprice = false;
+        $strCondition = $strLprice = $strUprice = "";
 
         $catCount = count($catId);
         $arrCatParam = array();
@@ -474,6 +477,21 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+
+        if($condition !== ""){
+            $strCondition = " AND p.condition LIKE :condition";
+            $hasCondition = true;
+        }
+
+        if($lprice !== ""){
+            $strLprice = " AND p.price > :lprice";
+            $hasLprice = true;
+        }
+
+        if($uprice !== ""){
+            $strUprice = " AND p.price < :uprice";
+            $hasUprice = true;
+        }
 
         $dql = "
             SELECT p
@@ -488,13 +506,30 @@ class EsProductRepository extends EntityRepository
                 AND p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
-                AND p.isDraft = 0
-                ORDER BY " . $orderBy;
+                AND p.isDraft = 0 " .
+                $strCondition . $strUprice . $strLprice .
+                " ORDER BY " . $orderBy;
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setFirstResult($page)
                     ->setMaxResults($prodLimit);
+
+        if($hasCondition){
+            //print('has condition . <br>');
+            //print($condition . '<br>');
+            $query->setParameter('condition', $condition);
+        }
+        if($hasLprice){
+            //print('has lprice <br>');
+            //print($lprice . '<br>');
+            $query->setParameter('lprice', $lprice);   
+        }
+        if($hasUprice){
+            //print('has uprice <br>');
+            //print($uprice . '<br>');
+            $query->setParameter('uprice', $uprice);
+        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);

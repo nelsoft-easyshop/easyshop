@@ -1450,6 +1450,9 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('p');
         $oBy = intval($this->input->get('ob'));
         $o = intval($this->input->get('o'));
+        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
+        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
+        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
 
         $em = $this->serviceContainer["entity_manager"];
 
@@ -1484,17 +1487,17 @@ class Memberpage extends MY_Controller
             // Custom
             case 1:
                 $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr);
+                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
             // Default
             case 2:
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
             // Default Cat
             default:
                 $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
                 break;
         }
 

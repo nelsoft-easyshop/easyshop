@@ -367,19 +367,20 @@
                                 <ul class="list-unstyled list-filter">
                                     <li>
                                         <p class="p-filter-name">By Condition</p>
-                                        <select class="select-filter">
-                                            <option>New</option>
-                                            <option>Used</option>
-                                            <option>New</option>
+                                        <select id="filter-condition" class="select-filter">
+                                            <option value="">-- Select Condition --</option>
+                                            <?php foreach($product_condition as $key=>$pc):?>
+                                                <option value="<?php echo $key;?>"><?php echo $pc?></option>
+                                            <?php endforeach;?>
                                         </select>
                                     </li>
                                     <li>
-                                        <p class="p-filter-name">By Condition</p>
-                                        from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
+                                        <p class="p-filter-name">By Price</p>
+                                        from <input id="filter-lprice" type="text" class="input-filter-price"/> to <input id="filter-uprice" type="text" class="input-filter-price"/>
                                     </li>
                                     <li>
                                         <center>
-                                            <input type="submit" class="btn-filter" value="filter"/>
+                                            <input id="filter-btn" type="button" class="btn-filter" value="filter"/>
                                         </center>
                                     </li>
                                 </ul>

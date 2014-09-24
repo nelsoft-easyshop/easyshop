@@ -292,7 +292,7 @@ class Home extends MY_Controller
             // Data for the view
             $data = array(
                 "arrVendorDetails" => $arrVendorDetails 
-                , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
+                //, "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
