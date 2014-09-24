@@ -87,9 +87,10 @@ class EsProductRepository extends EntityRepository
      * @param  array   $productIds
      * @param  integer $offset
      * @param  integer $perPage
+     * @param  boolean $applyLimit
      * @return mixed
      */
-    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
+    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
     {   
         if(!empty($productIds)){
             $this->em =  $this->_em;
@@ -103,9 +104,12 @@ class EsProductRepository extends EntityRepository
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)
-                                    ->setParameter('ids', $productIds)
-                                    ->setFirstResult($offset*$perPage)
-                                    ->setMaxResults($perPage);
+                                    ->setParameter('ids', $productIds);
+                if($applyLimit){
+                    $query->setFirstResult($offset*$perPage)
+                        ->setMaxResults($perPage);
+                }
+                
                 $results = $query->getResult();
                 return $results;
             }

@@ -358,6 +358,7 @@ class Home extends MY_Controller
             $productIdCollection = [];
             foreach($categoryProducts as $product => $value){
                 $productId = $value->getIdProduct();
+                $resultObject = $pm->getProductDetails($productId);
                 $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId); 
                 $value->directory = $objImage->getDirectory();

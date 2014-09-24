@@ -276,28 +276,37 @@ class SearchProduct
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-        $productIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
         // Get product details
-        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,$perPage);
+        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,$perPage,FALSE);
+
+        // apply actual price on each product with or without discount
+        $discountedProduct = (!empty($filteredProducts)) ? $productManager->discountProducts($filteredProducts) : array(); 
+        // filter object remove product without in the range of the price
+        $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
+
+        $finalizedProductIds = [];
+        foreach ($productsResult as $key => $value) {
+            array_push($finalizedProductIds, $value->getIdProduct());
+        }
+
+        $finalizedProductIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds; 
+
+        // Get product details
+        $filteredProducts = $EsProductRepository->getProductDetailsByIds($finalizedProductIds,$pageNumber,$perPage);
         
         // Sort object by original order of product id to retain weight order
         $data = new ArrayCollection($filteredProducts);
         $iterator = $data->getIterator();
-        $iterator->uasort(function ($a, $b) use($productIds) {
-            $position1 = array_search($a->getIdProduct(), $productIds);
-            $position2 = array_search($b->getIdProduct(), $productIds);
+        $iterator->uasort(function ($a, $b) use($finalizedProductIds) {
+            $position1 = array_search($a->getIdProduct(), $finalizedProductIds);
+            $position2 = array_search($b->getIdProduct(), $finalizedProductIds);
             return $position1 - $position2;
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
 
-        // apply actual price on each product with or without discount
-        $discountedProduct = (!empty($collection)) ? $productManager->discountProducts($collection) : array(); 
-        // filter object remove product without in the range of the price
-        $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
-
         // assign each image and image path of the product
-        foreach ($productsResult as $key => $value) {
+        foreach ($collection as $key => $value) {
             $productId = $value->getIdProduct();
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                         ->getDefaultImage($productId);
@@ -305,7 +314,7 @@ class SearchProduct
             $value->imageFileName = $productImage->getFilename();
         }
         
-        return $productsResult;
+        return $collection;
     }
 
     /**

@@ -44,10 +44,10 @@
                                 </p>
                                 <div class="div-amount">
                                     <p class="p-price">
-                                        <span><s>  </s></span> P <?php echo html_escape($objProduct->getPrice())?>
+                                        <span><s>  </s></span> P <?php echo html_escape($objProduct->getFinalPrice())?>
                                     </p>
                                     <p class="p-discount">
-                                        <span><s> P 1200.00 </s></span>
+                                        <span><s> P <?php echo html_escape($objProduct->getOriginalPrice())?> </s></span>
                                     </p>
                                     
                                     <center>
