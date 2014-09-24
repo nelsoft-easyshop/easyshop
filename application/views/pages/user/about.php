@@ -9,10 +9,15 @@
                         <p class="panel-title-contact">
                             Details
                        </p>
+
+                       <?php if($isEditable): ?>
+
                        <i class="fa fa-edit fa-edit-icon pull-right" id="meee" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
                        
                        <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
                       
+                       <?php endif; ?>
+
                         <table width="100%" class="table-contact-details">
 
                             <?php echo form_open('/' . html_escape($member->getUsername()) . '/about'); ?>
@@ -160,8 +165,11 @@
             <div class="col-xs-9 col-feedback-container">
                 
                 <div class="panel-about-seller">
+
+                    <?php if($isEditable): ?>
                     <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
                     <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+                    <?php endif; ?>
                     <p class="panel-title-feedback">
                         About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
                     </p>
