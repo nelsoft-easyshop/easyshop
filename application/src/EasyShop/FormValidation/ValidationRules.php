@@ -94,6 +94,37 @@ class ValidationRules
                     ),
                     
                 ),
+            'vendor_contact' => array(
+                    'shop_name' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
+                    ),
+                    'contact_number' => array(
+                                new Assert\NotBlank(),
+                                new CustomAssert\IsValidMobile(),
+                    ), 
+                    'street_address' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '250']),
+                    ),
+                    'city' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'region' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'support_email' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Email(),
+                        ),
+                    'website' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
+                        ),
+                ),
         );
     }
 
