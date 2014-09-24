@@ -1307,9 +1307,9 @@ class productUpload extends MY_Controller
                                         if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
                                             # -- ALGO START FOR INSERTION TO DATABASE --
                                             # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                foreach( $shipAttr[$groupkey] as $attrCombinationID){
+                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
+                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
+                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
                                                     $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
                                                 }
                                             }
