@@ -77,7 +77,6 @@ class cart extends MY_Controller
         
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
-        $this->cartData = unserialize($this->member->getUserdata());
     }
 
 
@@ -92,20 +91,18 @@ class cart extends MY_Controller
         
 
         $mobileCartContents = json_decode($this->input->post('cartData'));
-
+		$mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
         foreach($mobileCartContents as $mobileCartContent){
                               
             $options = array();
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
                 if(intval($attributeArray->isSelected) === 1){
-                    $options[$attributeArray->name] = $attributeArray->value.'~'.$attributeArray->price;
+                    $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
             }
-
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
-     
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
             }
@@ -120,8 +117,11 @@ class cart extends MY_Controller
      */
     public function getCartData()
     {
-        $cartData = $this->cartData;
-        $formattedCartContents = array();
+        $cartData = unserialize($this->member->getUserdata());
+        $cartData = $cartData ? $cartData : array();
+		
+		
+		$formattedCartContents = array();
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['idProduct' => $cartItem['id']]);
