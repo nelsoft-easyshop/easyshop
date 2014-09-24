@@ -21,12 +21,13 @@
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <span class="header-cart-items-con">
-                    <span class="header-cart-item">2 item(s)</span> in your cart
-                </span>
-                <span class="header-cart-icon-con span_bg cart-icon"></span>
-            </div>
-            <div class="header-cart-item-list">
+                <a href="" class="header-cart-wrapper">
+                    <span class="header-cart-items-con">
+                        <span class="header-cart-item">2 item(s)</span> in your cart
+                    </span>
+                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+                </a>
+                <div class="header-cart-item-list">
                 <p>Recently add item(s)</p>
                 <div class="mrgn-bttm-15">
                     <div class="header-cart-item-img">
@@ -66,6 +67,8 @@
                     <div class="clear"></div>
                 </div>
             </div>
+            </div>
+            
         </div>
         <div>
             <!-- <div class="vendor-login-con">
@@ -78,22 +81,22 @@
                 <a href=""><span class="vendor-login-name"><strong>Seller2DaMax</strong></span></a>
                 <div class="new-user-nav-dropdown">
                     <span class="user-nav-dropdown">Account Settings</span>
-                </div>
-                <ul class="nav-dropdown">
-                    <li>
-                        <a href="/me">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/me?me=pending">On-going Transactions</a>
-                    </li>
-                    <li class="nav-dropdown-border">
-                        <a href="/me?me=settings">Settings</a>
-                    </li>
-                    <li class="nav-dropdown-border">
-                        <a class="prevent" href="/login/logout">Logout</a>
-                    </li>
-                </ul>
+                    <ul class="nav-dropdown">
+                        <li>
+                            <a href="/me">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/me?me=pending">On-going Transactions</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a href="/me?me=settings">Settings</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a class="prevent" href="/login/logout">Logout</a>
+                        </li>
+                    </ul>
                 <div class="clear"></div>
+                </div>                
             </div>
         </div>
         <div class="clear"></div>
@@ -251,51 +254,53 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <span class="header-cart-items-con sticky-cart">
-                            <span class="header-cart-item">2 item(s)</span> in your cart
-                        </span>
-                        <span class="header-cart-icon-con span_bg cart-icon"></span>
-                    </div>
-                    <div class="sticky-header-cart-item-list">
-                        <p>Recently add item(s)</p>
-                        <div class="mrgn-bttm-15">
-                            <div class="header-cart-item-img">
-                                <a href="">
-                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                </a>
+                        <a href="/cart" class="header-cart-wrapper">
+                            <span class="header-cart-items-con sticky-cart">
+                                <span class="header-cart-item">2 item(s)</span> in your cart
+                            </span>                        
+                            <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        </a>
+                        <div class="sticky-header-cart-item-list">
+                            <p>Recently add item(s)</p>
+                            <div class="mrgn-bttm-15">
+                                <div class="header-cart-item-img">
+                                    <a href="">
+                                        <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                    </a>
+                                </div>
+                                <div class="header-cart-item-con">
+                                    <a href=""><span>Doraemon - blue</span></a>
+                                    <span>x 1</span>
+                                    <span class="header-cart-item-price">&#8369; 450.00</span>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="header-cart-item-con">
-                                <a href=""><span>Doraemon - blue</span></a>
-                                <span>x 1</span>
-                                <span class="header-cart-item-price">&#8369; 450.00</span>
+                            <div class="mrgn-bttm-15">
+                                <div class="header-cart-item-img">
+                                    <a href="">
+                                        <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                    </a>
+                                </div>
+                                <div class="header-cart-item-con">
+                                    <a href=""><span>Doraemon - blue</span></a>
+                                    <span>x 1</span>
+                                    <span class="header-cart-item-price">&#8369; 450.00</span>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="clear"></div>
+                            <div class="header-cart-lower-content">
+                                <div class="header-cart-shipping-total">
+                                    <p>Shipping: <span>&#8369; 50.00</span></p>
+                                    <p>Total: <span>&#8369; 100,500.00</span></p>
+                                </div>
+                                <div class="header-cart-buttons">
+                                    <a href="" class="header-cart-lnk-cart">go to cart</a>
+                                    <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
                         </div>
-                        <div class="mrgn-bttm-15">
-                            <div class="header-cart-item-img">
-                                <a href="">
-                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                </a>
-                            </div>
-                            <div class="header-cart-item-con">
-                                <a href=""><span>Doraemon - blue</span></a>
-                                <span>x 1</span>
-                                <span class="header-cart-item-price">&#8369; 450.00</span>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="header-cart-lower-content">
-                            <div class="header-cart-shipping-total">
-                                <p>Shipping: <span>&#8369; 50.00</span></p>
-                                <p>Total: <span>&#8369; 100,500.00</span></p>
-                            </div>
-                            <div class="header-cart-buttons">
-                                <a href="" class="header-cart-lnk-cart">go to cart</a>
-                                <a href="" class="header-cart-lnk-checkout">checkout</a>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
+                    </div>                   
                 </li>
             </ul>
             <div class="clear"></div>

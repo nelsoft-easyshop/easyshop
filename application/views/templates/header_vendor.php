@@ -77,10 +77,12 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <span class="header-cart-items-con sticky-cart">
-                            <span class="header-cart-item">2 item(s)</span> in your cart
-                        </span>
-                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        <a href="/cart">
+                            <span class="header-cart-items-con sticky-cart">
+                                <span class="header-cart-item">2 item(s)</span> in your cart
+                            </span>
+                            <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        </a>
                     </div>
                     <div class="sticky-header-cart-item-list">
                         <p>Recently add item(s)</p>

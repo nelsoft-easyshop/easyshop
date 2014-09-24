@@ -174,16 +174,20 @@ section {
     top: 15px;
 }
 
-.new-user-nav-dropdown + .nav-dropdown {
+.new-user-nav-dropdown:hover .nav-dropdown {
+    display: inline-block;
+}
+
+.new-user-nav-dropdown .nav-dropdown {
     right: 0px;
     width: 220px;
 }
 
-.new-user-nav-dropdown + .nav-dropdown li a {
+.new-user-nav-dropdown .nav-dropdown li a {
     color: #565656;
 }
 
-.new-user-nav-dropdown + .nav-dropdown li a:hover {
+.new-user-nav-dropdown .nav-dropdown li a:hover {
     color: #fff;
 }
 
@@ -371,6 +375,22 @@ section {
 .edit-profile-photo-menu > div a:hover {
     color: #4370cd;
     text-decoration: none;
+}
+
+.edit-vendor-location .chosen-container-single {
+    width: 49% !important;
+    text-align: left;
+}
+
+.edit-vendor-location .chosen-container-single .chosen-single {
+    height: 32px;
+    line-height: 32px;
+}
+
+.edit-vendor-location .chosen-container .chosen-results li.highlighted {
+    background-image: none;
+    background-color: #e0e0e0;
+    color: #565656;
 }
 
 /*** vendor navigation ***/
@@ -579,8 +599,14 @@ section {
     line-height: 31px;
 }
 
-.header-cart-container {
+.header-cart-wrapper {
     cursor: pointer;
+    display: inline-block;
+    padding-bottom: 6px;
+}
+
+.header-cart-wrapper:hover {
+    text-decoration: none;
 }
 
 .header-cart-items-con {
@@ -625,6 +651,11 @@ section {
     border-bottom-right-radius: 4px;
 }
 
+.header-cart-container:hover .header-cart-item-list,
+.header-cart-container:hover .sticky-header-cart-item-list {
+    display: inline-block;
+}
+
 .header-cart-item-list,
 .sticky-header-cart-item-list {
     background-color: #fff;
@@ -633,13 +664,17 @@ section {
     padding:15px;
     position: absolute;
     text-align: left;
-    top: 38px;
     right: 0;
-    width: 220px;
+    width: 241px;
 
     -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
     -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
     box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+}
+
+.sticky-header-cart-item-list {
+    top: 38px;
+    width: 248px;
 }
 
 .header-cart-item-list p,
