@@ -19,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div> 
                     <h4 class="storeName"><?=$storeNameDisplay?></h4>
                     <p><strong>Contact No. :</strong><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></p>
                     <p>
@@ -34,6 +34,13 @@
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
                             <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                        </a>
+                    </div>
+                    <?php else: ?>
+                    <div class="vendor-profile-btn">
+                        <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            Message
                         </a>
                     </div>
                     <?php endif;?>

@@ -1497,6 +1497,13 @@ class Memberpage extends MY_Controller
                     $parameter['sortby'] = $orderSearch;
                     $parameter['sorttype'] = $order;
                 }
+                if($condition != ""){
+                    $parameter['condition'] = $condition;
+                }
+                if(is_numeric($lprice) && is_numeric($uprice)){
+                    $parameter['startprice'] = $lprice;
+                    $parameter['endprice'] = $uprice;
+                }
                 $parameter['seller'] = "seller:".$vendorName;
                 $parameter['limit'] = 12;
                 $parameter['page'] = $page - 1;

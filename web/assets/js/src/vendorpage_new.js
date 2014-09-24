@@ -131,14 +131,14 @@ function ReplaceNumberWithCommas(thisnumber){
 
         memconf.condition = condition;
 
-        if(lprice > 0 && !isNaN(lprice)){    
+        if(!isNaN(lprice)){    
             memconf.lprice = lprice;
         }
         else{
             memconf.lprice = "";
         }
 
-        if(uprice > 0 && !isNaN(uprice)){
+        if(!isNaN(uprice)){
             memconf.uprice = uprice;
         }
         else{

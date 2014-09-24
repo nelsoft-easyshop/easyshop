@@ -271,8 +271,6 @@ class Home extends MY_Controller
             $headerData = array_merge($headerData, array(
                 "title" => "Vendor Profile | Easyshop.ph",
                 "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
-                "render_logo" => false,
-                "render_searchbar" => false
             ));
 
             $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
