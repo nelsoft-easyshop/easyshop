@@ -1,6 +1,5 @@
 <link type="text/css" href='/assets/css/contact.css' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
-
 <section class="bg-product-section color-default">
     <div class="container-non-responsive bg-product-section">
         <div class="row row-contact">
@@ -20,60 +19,58 @@
                             $('[rel=tooltip]').tooltip() 
                        </script>
                         <table width="100%" class="table-contact-details">
+
+                            <?php echo form_open('/' . html_escape($member->getUsername()) . '/about'); ?>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
                                 <td class="td-contact-detail">
-                                    <text class="text-contact">Seller2DaMax</text>
-                                    <input type="text" class="input-detail" placeholder="Seller Name..." value="Seller2DaMax">
+                                    <text class="text-contact"><?php echo html_escape($member->getStoreName()); ?></text>
+                                    <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" value="<?php echo html_escape($member->getStoreName()); ?>">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
                                 <td class="td-contact-detail">
-                                    <text class="text-contact">09171234567</text>
-                                    <input type="text" class="input-detail" placeholder="Contact Number..." value="09171234567">
+                                    <text class="text-contact"><?php echo html_escape($member->getContactno()); ?></text>
+                                    <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" value="<?php echo html_escape($member->getContactno()); ?>">
                                 </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td class="td-contact-icon"><i class="fa fa-print fa-2x"></i></td>
                                 <td class="td-contact-detail">
                                     <text class="text-contact">+61 3 8376 6284</text>
                                     <input type="text" class="input-detail" placeholder="Fax Number..." value=" +61 3 8376 6284">
                                 </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
                                 <td class="td-contact-detail">
-                                    <text class="text-contact">Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila</text>
-                                    <input type="text" class="input-detail" placeholder="Address Line..." value="Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila">
-                                    <select class="input-detail input-detail-select">
-                                        <option>- City -</option>
-                                        <option selected>Manila</option>
-                                        <option selected>Marikina</option>
-                                        <option selected>Pasay</option>
-                                        <option selected>Pasig</option>
+                                    <text class="text-contact"><?php echo html_escape($addr->getAddress()); ?></text>
+                                    <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" value="<?php echo html_escape($addr->getAddress()); ?>">
+                                    <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
+                                        <?php foreach($cities as $key => $value): ?>
+                                            <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $addr->getCity()->getLocation()? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
+                                        <?php endforeach; ?>
                                     </select>
-                                    <select class="input-detail input-detail-select">
-                                        <option>- Province -</option>
-                                        <option selected>Batangas </option>
-                                        <option>Quezon</option>
-                                        <option>Rizal</option>
-                                        <option>Romblon</option>
+                                    <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
+                                        <?php foreach($regions as $key => $value): ?>
+                                            <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $addr->getStateregion()->getLocation()? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
+                                        <?php endforeach; ?>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-envelope fa-2x"></i></td>
                                 <td class="td-contact-detail">
-                                    <text class="text-contact">nikonshop@support.com</text>
-                                    <input type="email" class="input-detail" placeholder="Email Address..." value="nikonshop@support.com">
+                                    <text class="text-contact"><?php echo html_escape($member->getSupportEmail()); ?></text>
+                                    <input type="email" class="input-detail" placeholder="Email Address..." name="supportEmail" value="<?php echo html_escape($member->getSupportEmail()); ?>">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
                                 <td class="td-contact-detail">
-                                    <text class="text-contact"><a href="#">www.nikonshop.com.ph</a></text>
-                                    <input type="text" class="input-detail" placeholder="Website..." value="www.nikonshop.com.ph">
+                                    <text class="text-contact"><a href="#"><?php echo html_escape($member->getWebsite()); ?></a></text>
+                                    <input type="text" class="input-detail" placeholder="Website..." name="website" value="<?php echo html_escape($member->getWebsite()); ?>">
                                 </td>
                             </tr>
                             <tr >
@@ -83,6 +80,31 @@
                                     </center>
                                 </td>
                             </tr>
+                            <?php if(count($errors) > 0 || $isValid): ?>
+                            <tr>
+                                <td colspan="2"> 
+                                    <?php if(count($errors) > 0): ?>
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <?php foreach($errors as $key => $value): ?>
+                                            <?php echo ucwords(str_replace('_', ' ', $key)) . ': ' . $value[0] . "<br/> <br/>" ?>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <?php else: ?>
+                                    <div class="alert alert-success alert-dismissable">
+                                       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                       </button>
+                                       <strong>Success!</strong> Details updated.
+                                    </div>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                            <?php echo form_close(); ?>
                         </table>
                         <br/>
                         <!--
