@@ -628,8 +628,9 @@ class productUpload extends MY_Controller
                 $explodearraynameoffiles = explode('||', $value);
                 $nameOfFile = $explodearraynameoffiles[0];
                 $arrayNameOnly[$key] = strtolower($nameOfFile); 
-
-                $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+                if($primaryId == $key){
+                    $primaryName = strtolower($nameOfFile); 
+                }
 
                 if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                     unset($arraynameoffiles[$key]);
@@ -870,7 +871,9 @@ class productUpload extends MY_Controller
         foreach($arraynameoffiles as $key => $value ) {
             $nameOfFile = explode('||', $value)[0];
             $arrayNameOnly[$key] = strtolower($nameOfFile); 
-            $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+            if($primaryId == $key){
+                $primaryName = strtolower($nameOfFile); 
+            }
 
             if(in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                 unset($arraynameoffiles[$key],$arrayNameOnly[$key]); 
