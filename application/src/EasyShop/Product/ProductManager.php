@@ -188,7 +188,7 @@ class ProductManager
     public function discountProducts($products)
     { 
         foreach ($products as $key => $value) {  
-            $resultObject = $this->promoManager->hydratePromoData($value);
+            $resultObject = $this->getProductDetails($value->getIdProduct());
         } 
         
         return $products;
