@@ -150,6 +150,7 @@ else {
     $route['homewebservice'] = 'webservice/homewebservice';
     $route['accountservice'] = 'webservice/accountservice';
     $route['productimages'] = 'webservice/productimages';
+    $route['synccsvimage'] = 'webservice/synccsvimage';
 }
 
 /* End of file routes.php */
