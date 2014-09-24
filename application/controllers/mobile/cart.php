@@ -90,18 +90,19 @@ class cart extends MY_Controller
     {
         $response = array();
         
+
         $mobileCartContents = json_decode($this->input->post('cartData'));
 
         foreach($mobileCartContents as $mobileCartContent){
                               
             $options = array();
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray['isSelected']) === 1){
-                    $options[$key] = $attributeArray['value'].'~'.$attributeArray['price'];
+                if(intval($attributeArray->isSelected) === 1){
+                    $options[$attributeArray->name] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
             }
-                  
+
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
      
