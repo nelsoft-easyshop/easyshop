@@ -18,11 +18,23 @@
         <?php else:?>
             <div class="product-paging" data-page="1">
                 <?php foreach($arrCat['products'] as $objProduct):?>
+                <?php 
+                    $escapeName = html_escape($objProduct->getName());
+                    $productName = (strlen($escapeName)>17) ? substr_replace($escapeName, "...", 17) : $escapeName;
+                    $productSlug = $objProduct->getSlug();
+                    $productPrice = number_format($objProduct->getFinalPrice(), 2,'.',','); 
+                    $originalPrice = number_format($objProduct->getOriginalPrice(),2,'.',',');
+                    $percentage = $objProduct->getDiscountPercentage();
+                    $isPromote = intval($objProduct->getIsPromote());
+                    $isFreeShipping = $objProduct->getIsFreeShipping();
+                    $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
+                ?>
+
                     <div class="col-lg-3 col-md-4 col-xs-6 thumb">
                         <div class="panel-item">
-                            <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
+                            <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                                 <div class="div-item">
-                                    <span class="span-img-wrapper" style="background: url(<?php echo $objProduct->directory .'categoryview/'.$objProduct->imageFileName;?>) center no-repeat; background-cover: cover;">
+                                    <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
                                         <center>
                                             <div class="span-img-container">
                                             </div>
@@ -32,11 +44,8 @@
                             </a>
                             <div class="div-item-info">
                                 <p class="p-item-name">
-                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
-                                        <?php 
-                                            $prod_name = html_escape($objProduct->getName());
-                                            echo (strlen($prod_name)>17) ? substr_replace($prod_name, "...", 17) : $prod_name;
-                                        ?>
+                                    <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
+                                        <?=$productName;?>
                                     </a>
                                 </p>
                                 <p class="p-category">
@@ -44,10 +53,10 @@
                                 </p>
                                 <div class="div-amount">
                                     <p class="p-price">
-                                        <span><s>  </s></span> P <?php echo html_escape($objProduct->getFinalPrice())?>
+                                        <span><s>  </s></span> P <?=$productPrice;?>
                                     </p>
                                     <p class="p-discount">
-                                        <span><s> P <?php echo html_escape($objProduct->getOriginalPrice())?> </s></span>
+                                        <span><s> P <?=$originalPrice?> </s></span>
                                     </p>
                                     
                                     <center>
