@@ -649,7 +649,6 @@ $(function(){
 })(jQuery);
 function proceedPayment(obj)
 {
-    var className = '.' + $(obj).attr('child');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     $.ajax({
         async: true,
@@ -666,3 +665,4 @@ function proceedPayment(obj)
         }
     });
 }
+\
