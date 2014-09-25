@@ -221,7 +221,7 @@
                     </div>
                 </div>
 
-                <?php if(count($orderRelations) > 0): ?>
+                <?php if(count($orderRelations) > 0 || true): ?>
                     <div class="panel-feedback-message">
                         <p class="panel-title-feedback">
                             Leave A Feedback
@@ -248,16 +248,16 @@
                                     </table>
                                 </div>
                             </div>
-                                                            
+                            <br/>                                
                             <?php echo form_open('/home/doCreateFeedback'); ?>
                             <div class="row">
-                                <div class="col-xs-6 col-message-1">
+                                <div class="col-xs-12 col-message-2">
                                     <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
                                 </div>
                             </div>                            
                             <div class="row">
-                                <div class="col-xs-12">
-                                    <select class="input-lg input-message" name="feeback-order">
+                                <div class="col-xs-12 col-message-2">
+                                    <select class="input-lg input-message input-error" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
                                               <option value="<?php $order['idOrder'] ?>">
@@ -270,7 +270,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
                                 </center>
                             </div>
                             <input type='hidden' name='userId' value='<?php $member->getIdMember() ?>' />
-                            <?php echo form_open('/home/doCreateFeedback'); ?>
+                            <?php echo form_close(); ?>
                         </div>
                     </div>
                
