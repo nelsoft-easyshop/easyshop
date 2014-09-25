@@ -443,7 +443,6 @@ section {
 
 .vendor-nav li a:hover {
     border-bottom: 3px solid #fe893a;
-    font-weight: bold;
     text-decoration: none;
 }
 
@@ -752,7 +751,8 @@ section {
 }
 
 .row-products{
-    min-height: 450px;
+    min-height: 480px;
+    margin-top: -50px;
 }
 
 .border-1
@@ -765,7 +765,7 @@ section {
     border-left: solid #cccbc7 1px;
     padding-left: 10px;
     padding-top: 10px;
-    margin-bottom: 10px;
+    min-height: 715px !important;
 }
 
 .div-product-view-option{
@@ -788,7 +788,8 @@ section {
 }
 
 td.td-view.p-view.color-default{
-    padding-top: 4px !important;
+    padding-top: 0px !important;
+    padding-right: 5px !important;
 }
 .icon-view{
     transition: all 0.5s ease;
@@ -796,8 +797,8 @@ td.td-view.p-view.color-default{
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     margin-left: 5px;
-    margin-right: 2px;
-    font-size: 22px;
+    margin-right: 5px;
+    font-size: 28px !important;
     color: #b9b9b9;
 }
 .icon-view:hover{
@@ -853,7 +854,7 @@ td.td-view.p-view.color-default{
     z-index:1;
 }
 .list-category > a > li{
-    padding:7px 15px;
+    padding:12px 15px;
     position:relative;
     z-index:1;
     border-top: solid #e0e0e0 1px;
@@ -882,33 +883,46 @@ td.td-view.p-view.color-default{
     color: #565656;
     font-weight: bold;
     margin: 0px;
+    margin-bottom: 10px;
 }
 
 .select-filter{
-    width: 221px;
-    padding: 2px;
+    width: 100%;
+    padding: 5px;
     border-radius: 4px;
     border: 0px;
     border:solid #ececec 1px;
     background: #ececec;
     outline: #565656;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
 }
 .select-filter:focus{
     border: solid #565656 1px;
+    background: #fff;
 }
 
 .input-filter-price{
-    width: 85px;
-    padding: 2px;
+    width: 110px;
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-radius: 4px;
     border: 0px;
     background: #ececec;
     border:solid #ececec 1px;
     outline: none;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
 }
 
 .input-filter-price:focus{
     border: solid #565656 1px;
+    background: #fff;
 }
 
 .btn-filter{
@@ -933,7 +947,7 @@ td.td-view.p-view.color-default{
     margin-left: 10px;
     margin-top: 16px;
     padding-left: 10px;
-    
+    min-height: 580px;
 }
 .grid > .panel-list-item{
     display: none;
@@ -1065,7 +1079,7 @@ td.td-view.p-view.color-default{
 /** End of Item **/
 .list > .panel-list-item{
     display: inline-block;
-    width: 100%;
+    width:830px;
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -1188,7 +1202,7 @@ td.td-view.p-view.color-default{
     background: #ff3e1e;
     padding: 6px 0px;
     text-align: center !important;
-    margin-left:98px;
+    margin-left:97px;
     margin-top:13px;
     font-size: 12px;
     width: 70px;
@@ -1207,6 +1221,10 @@ td.td-view.p-view.color-default{
     font-weight:bold;
     right: 0 !important;
     margin-right: 5px !important;
+}
+.span-new-tag{
+    font-weight: bold;
+    color: #02846f;
 }
 
 .btn-default-cart > span {
@@ -1233,6 +1251,14 @@ td.td-view.p-view.color-default{
   
   border-left-color: #003e91 !important;
 }
+
+.pagination-container{
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin-left: -10px;
+    padding: 0px;
+}
 .pagination-items > li > a > span{
     color: #565656;
     
@@ -1250,11 +1276,19 @@ td.td-view.p-view.color-default{
 #scrollUp{
     text-decoration: none !important;
     text-align: center !important;
-    width: 85px !important;
+    width: 38px;
+    height: 38px;
+    background: #ff893b url("../images/img_arrow_down_white2.png") center no-repeat!important;
+    transition: all 0.3s ease-in-out !important;
+    font-size: 26px !important;
+    padding: 5px 2px !important;
+    text-align: center !important;
+    color: #ffffff !important;
+    z-index: 999;
 }
 
 #scrollUp:hover{
-    background: #4370cc url(../images/img_scroll_up_arrow2.png) center 10px no-repeat !important;
+    background: #ff3d1f url("../images/img_arrow_down_white2.png") center no-repeat!important;
 }
 
 /*** vendor footer ***/
