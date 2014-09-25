@@ -263,7 +263,7 @@
                             </div>                            
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <select id="feedback-select" class="input-lg input-message" name="feeback-order">
+                                    <select id="feedback-select" class="input-lg input-message input-error" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
                                               <option value="<?php echo $order['idOrder'] ?>">
