@@ -82,7 +82,7 @@
 
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
-                <input type="hidden" id="queryString" value='<?=json_encode($_GET); ?>' />
+                <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
 
                 <?php $prodLimit = 12; ?>
                 <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
@@ -136,7 +136,7 @@
  
 <script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
 <script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
 
