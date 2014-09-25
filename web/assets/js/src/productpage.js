@@ -448,12 +448,12 @@
             
             
             if(price == 0.01){
-                $('.current_price')[0].innerHTML = 'FREE';
+                $('.current_price').html('FREE');
                 $('.currency').hide();
             }
             else{
                 $('.currency').show();
-                $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $('.current_price').html(price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
             
             /*
@@ -702,7 +702,7 @@
         });  
     
         $('.quantity').data('qty',total_qty);
-        $('.quantity')[0].innerHTML = total_qty;
+        $('.quantity').html(total_qty);
 
 
         $.each(firstAvailableCombination.product_attribute_ids, function(idx, value){
