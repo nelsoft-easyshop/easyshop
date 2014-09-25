@@ -757,13 +757,32 @@ class Home extends MY_Controller
                                                 ->findOneBy(['location' => $formData['region']]);
 
                 $member->setStoreName($formData['shop_name']);
-                $member->setContactno($formData['contact_number']);
-                $addr->setAddress($formData['street_address']);
-                $addr->setCity($city);
-                $addr->setStateregion($region);
+                $member->setContactno(substr($formData['contact_number'], 1));
                 $member->setWebsite($formData['website']);
-                $this->serviceContainer['entity_manager']->flush();
 
+                if($addr === NULL){
+                    $country = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                        ->find(1);
+
+                    $addr = new EasyShop\Entities\EsAddress();
+                    $addr->setAddress($formData['street_address']);
+                    $addr->setCity($city);
+                    $addr->setStateregion($region);
+                    $addr->setCountry($country);
+                    $addr->setIdMember($member);
+                    $addr->setMobile($member->getContactno());
+                    $addr->setType('0');
+
+                    $this->serviceContainer['entity_manager']->persist($addr);
+                }
+                else{
+                    $addr->setAddress($formData['street_address']);
+                    $addr->setCity($city);
+                    $addr->setStateregion($region);
+                    $addr->setMobile($member->getContactno());
+                }
+
+                $this->serviceContainer['entity_manager']->flush();
                 $data['isValid'] = true;
             }
             else{
