@@ -485,7 +485,7 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getVendorDefaultCategoryAndProducts($member->getIdMember());
+        $getUserProduct = $this->getUserDefaultCategoryProducts($member->getIdMember());
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
@@ -646,7 +646,7 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getVendorDefaultCategoryAndProducts($member->getIdMember());
+        $getUserProduct = $this->getUserDefaultCategoryProducts($member->getIdMember());
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 

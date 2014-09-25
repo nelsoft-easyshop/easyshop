@@ -146,6 +146,13 @@ class EsMemberRepository extends EntityRepository
         $query = $em->createNativeQuery($sql, $rsm)
             ->setParameter('vendorslug', $vendorSlug);
 
-        return $query->getResult()[0];
+        $result = $query->getResult();
+
+        if( !empty($result) ){
+            return $result[0];
+        }
+        else{
+            return array();
+        }
     }
 }
