@@ -266,7 +266,6 @@ class Home extends MY_Controller
 
         $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
                             ->getVendorDetails($vendorSlug);
-
         // User found - valid slug
         if( !empty($arrVendorDetails) ){
             $pageSection = $this->uri->segment(2);
@@ -279,7 +278,7 @@ class Home extends MY_Controller
             else{
                 $headerData = $this->fill_header();
                 $headerData = array_merge($headerData, array(
-                    "title" => "Vendor Profile | Easyshop.ph",
+                    "title" => html_escape($arrVendorDetails['store_name'])." | Easyshop.ph",
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
@@ -404,12 +403,12 @@ class Home extends MY_Controller
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
-        $data['title'] = 'User Information | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());   
+   
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->findOneBy(['slug' => $sellerslug]);                                
-
+        $data['title'] = 'About '.html_escape($member->getStoreName()).'| Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());   
         $idMember = $member->getIdMember();
         $ratingHeaders = $this->lang->line('rating');
 
@@ -576,8 +575,7 @@ class Home extends MY_Controller
         redirect('/'.$reviewee->getSlug().'/about');
     }
     
-    
-    
+
     /**
      * Returns more feedback JSON
      *
@@ -660,7 +658,7 @@ class Home extends MY_Controller
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $userDetails = $this->doUpdateUserDetails($sellerslug);
-        $data['title'] = 'Vendor Contact | Easyshop.ph';
+        $data['title'] = 'Contact '.html_escape($member->getStoreName()).'| Easyshop.ph';
         $data['message_recipient'] = $member;
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_new', $data);
