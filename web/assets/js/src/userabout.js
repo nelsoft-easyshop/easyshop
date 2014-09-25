@@ -140,7 +140,6 @@
         $(".fa-edit-about").css("display","inline");
     });
     
-    $();
-    
+
     
 })(jQuery);
