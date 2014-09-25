@@ -56,39 +56,43 @@ class EsOrderRepository extends EntityRepository
         
         
         $queryBuilder = $qb->select('o.idOrder, o.invoiceNo, o.transactionId, o.dateadded, stat.name as orderStatusName',
-                                'stat.orderStatus', 'p.name as productname', 'feedback.idFeedback')
+                                'stat.orderStatus', 'p.name as productname', 'COALESCE(COUNT(feedback.idFeedback), 0) as reviewCount')
                 ->from('EasyShop\Entities\EsOrder','o')
                 ->leftJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
                 ->innerJoin('EasyShop\Entities\EsMember', 'buyer', 'with', 'o.buyer = buyer.idMember')
                 ->innerJoin('EasyShop\Entities\EsMember', 'seller', 'with', 'op.seller = seller.idMember')
                 ->innerJoin('EasyShop\Entities\EsOrderStatus', 'stat', 'with', 'o.orderStatus = stat.orderStatus' )
-                ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct');
-        if($excludeReviewed){
-            $queryBuilder->innerJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with', 'o.idOrder = feedback.order');
-        }
-        else{
-            $queryBuilder->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with', 'o.idOrder = feedback.order');
-        }
-
-        $qbResult = $queryBuilder->where(
-                        $qb->expr()->andX(
-                            $qb->expr()->neq('o.orderStatus', \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT),
-                            $qb->expr()->orX(
-                                $qb->expr()->andX(
-                                    $qb->expr()->eq('buyer.idMember',':memberOne'),
-                                    $qb->expr()->eq('seller.idMember',':memberTwo')
-                                ),
-                                $qb->expr()->andX(
-                                    $qb->expr()->eq('buyer.idMember',':memberTwo'),
-                                    $qb->expr()->eq('seller.idMember',':memberOne')
+                ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
+                ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with', 'o.idOrder = feedback.order');
+                
+        $queryBuilder = $queryBuilder->where(
+                            $qb->expr()->andX(
+                                $qb->expr()->neq('o.orderStatus', \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT),
+                                $qb->expr()->orX(
+                                    $qb->expr()->andX(
+                                        $qb->expr()->eq('buyer.idMember',':memberOne'),
+                                        $qb->expr()->eq('seller.idMember',':memberTwo')
+                                    ),
+                                    $qb->expr()->andX(
+                                        $qb->expr()->eq('buyer.idMember',':memberTwo'),
+                                        $qb->expr()->eq('seller.idMember',':memberOne')
+                                    )
                                 )
                             )
-                        )
-                    ) 
-                    ->setParameter('memberOne', $oneMemberId)
-                    ->setParameter('memberTwo', $anotherMemberId) 
-                    ->getQuery()
-                    ->getResult();
+                        );
+        
+        if($excludeReviewed){
+            $queryBuilder = $queryBuilder->having('reviewCount = 0');
+        }
+        
+
+        $qbResult = $queryBuilder->setParameter('memberOne', $oneMemberId)
+                                ->setParameter('memberTwo', $anotherMemberId) 
+                                ->groupBy('o.idOrder')
+                                ->getQuery()
+                                ->getResult();
+
+        
 
         return $qbResult;   
     }
