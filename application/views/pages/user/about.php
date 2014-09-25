@@ -221,7 +221,7 @@
                     </div>
                 </div>
 
-                <?php if(count($orderRelations) > 0 || true): ?>
+                <?php if(count($orderRelations) > 0): ?>
                     <div class="panel-feedback-message">
                         <p class="panel-title-feedback">
                             Leave A Feedback
