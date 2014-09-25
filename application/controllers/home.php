@@ -289,7 +289,7 @@ class Home extends MY_Controller
                 }
 
                 // If searching in page
-                if(count($this->input->get())>0){
+                if($this->input->get()){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
@@ -309,7 +309,8 @@ class Home extends MY_Controller
                     $productView['defaultCatProd'][0]['cat_type'] = 0; 
                     $view = array(
                         'arrCat' => array(
-                            'products'=>$searchProduct
+                            'products'=>$searchProduct,
+                            'page' => 1
                         )
                     );
                     $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
