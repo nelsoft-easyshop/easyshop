@@ -8,7 +8,11 @@
 <select id="user_login">
     CALL `es_sp_Login_user`(:username ,:password, :ip)
 </select>
-    
+
+<select id="socialMediaLogin">
+    CALL `es_sp_SocialMediaLogin_user`(:username, :oauthId, :oauthProvider, :ip)
+</select>
+
 <select id="changepass">
     CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
 </select>
@@ -62,7 +66,7 @@
 </select>
 
 <select id="signup_member">
-    CALL `es_sp_Signup_user` (:username, :password, :contactno, :email)
+    CALL `es_sp_Signup_user` (:username, :password, :contactno, :email, '0', '', '', '0', '')
 </select>
 
 <select id="check_contactinfo">
@@ -235,7 +239,7 @@
 </select>
 
 <select id="getFeedback">
-    SELECT fb.member_id, from.username as member_name, fb.for_memberid, for.username as for_membername, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
+    SELECT fb.member_id, from.username as member_name, from.slug as member_slug, fb.for_memberid, for.username as for_membername, for.slug as for_memberslug, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
     FROM `es_member_feedback` fb
     LEFT JOIN `es_member` `from`
         ON from.id_member = fb.member_id
@@ -267,7 +271,7 @@
 <select id="getSellTransactionDetails">
     SELECT o.id_order, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, o.invoice_no, o.payment_method_id as payment_method, o.buyer_id, buyer.username as buyer,
         badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
-        COALESCE(fb.for_memberid,'0') as for_memberid, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed, o.is_flag
+        COALESCE(fb.for_memberid,'0') as for_memberid, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed, o.is_flag, buyer.slug as buyerslug
     FROM es_order o
     INNER JOIN es_order_product op
         ON o.id_order = op.order_id AND op.seller_id = :id
@@ -284,7 +288,7 @@
     WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
     GROUP BY o.id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.buyer_id,  buyer.username,
         badd.consignee, badd.mobile, badd.telephone,l0.location,l1.location,badd.address,lat,lng,
-        for_memberid, o.is_flag
+        for_memberid, o.is_flag, buyer.slug
     HAVING {response_stat}
     ORDER BY o.id_order {order_sequence_filter}
     {limit}
@@ -294,7 +298,8 @@
     SELECT op.id_order_product, op.product_id, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, DATE_FORMAT(sc.delivery_date, "%Y-%b-%d") as delivery_date, DATE_FORMAT(sc.expected_date, "%Y-%b-%d") as expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified, op.is_reject,
         <!--pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name,-->
         pi.product_image_path, opa.attr_name, opa.attr_value,
-        op.seller_id, seller.username as seller, COALESCE(fb.for_memberid,'0') as for_memberid
+        op.seller_id, seller.username as seller, COALESCE(fb.for_memberid,'0') as for_memberid,
+        seller.slug as sellerslug
     FROM es_order_product op
     INNER JOIN es_product p
         ON op.product_id = p.id_product

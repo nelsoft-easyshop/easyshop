@@ -64,6 +64,22 @@ class user_model extends CI_Model {
         return $row;
     }
 
+
+    public function VerifySocialMediaAccount($username, $oauthId, $oauthProvider)
+    {
+        $ip = $this->getRealIpAddr();
+        $query = $this->xmlmap->getFilenameID('sql/users', 'socialMediaLogin');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':username', $username);
+        $sth->bindParam(':oauthId', $oauthId);
+        $sth->bindParam(':oauthProvider', $oauthProvider);
+        $sth->bindParam(':ip', $ip);
+        $sth->execute();
+        $row = $sth->fetch();
+
+        return $row;
+    }
+
     public function logout()
     {
         $sid = $this->session->userdata('member_id');

@@ -16,10 +16,10 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-    <link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='<?=base_url()?>assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='<?=base_url()?>assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
-
+    <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
+    
     <!--[if lt IE 9]>
     <script>
     var e = ("abbr,article,aside,audio,canvas,datalist,details," +
@@ -79,22 +79,121 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <input type="text" class="ui-form-control">
             <input type="submit" value="" class="span_bg">
         </div>
-        <div>
-            <div>
-                <span class="cart-items-con">
-                    <span class="cart-item">2 item(s)</span> in your cart
-                </span>
-                <span class="cart-icon-con fa fa-shopping-cart"></span>
+        <div class="pos-rel mrgn-rght-8">
+            <div class="header-cart-container">
+                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                    <span class="header-cart-items-con ui-form-control">
+                        <span class="header-cart-item">2 item(s)</span> in your cart
+                    </span>
+                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+                </a>
+            </div>
+            <div class="header-cart-item-list">
+                <p>Recently add item(s)</p>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="mrgn-bttm-15">
+                    <div class="header-cart-item-img">
+                        <a href="">
+                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                        </a>
+                    </div>
+                    <div class="header-cart-item-con">
+                        <a href=""><span>Doraemon - blue</span></a>
+                        <span>x 1</span>
+                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="header-cart-lower-content">
+                    <div class="header-cart-shipping-total">
+                        <p>Shipping: <span>&#8369; 50.00</span></p>
+                        <p>Total: <span>&#8369; 100,500.00</span></p>
+                    </div>
+                    <div class="header-cart-buttons">
+                        <a href="" class="header-cart-lnk-cart">go to cart</a>
+                        <a href="" class="header-cart-lnk-checkout">checkout</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
         <div>
-            <div class="vendor-login-con">
-                <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
-                <a href=""><strong>login</strong></a>  or 
-                <a href=""><strong>Create and account</strong></a>
-            </div>
+           
+            <?php if(isset($logged_in) && $logged_in): ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
+                    <div class="new-user-nav-dropdown">
+                        <span class="user-nav-dropdown">Account Settings</span>
+                    </div>
+                    <ul class="nav-dropdown">
+                        <li>
+                            <a href="/me">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/me?me=pending">On-going Transactions</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a href="/me?me=settings">Settings</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a class="prevent" href="/login/logout">Logout</a>
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            <?php else: ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href="/login"><strong>login</strong></a>  or 
+                    <a href="/register"><strong>Create and account</strong></a>
+                </div>
+            <?php endif; ?>
+        
         </div>
         <div class="clear"></div>
     </div>
 </header>
+
+<script type='text/javascript'>
+
+    (function(){
+    
+        $(function () {
+   
+            var $user_nav_dropdown = $(".user-nav-dropdown");
+            var $nav_dropdown = $("ul.nav-dropdown");
+
+            $(document).mouseup(function (e) {
+
+                if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
+                    && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    $nav_dropdown.hide(1);
+                }
+
+            });
+
+            $user_nav_dropdown.click(function() {
+                $nav_dropdown.show();
+            });
+        
+        });
+
+    })(jQuery);
+
+
+</script>
 

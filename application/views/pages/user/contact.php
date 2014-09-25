@@ -3,74 +3,9 @@
 <section class="bg-product-section color-default">
     <div class="container-non-responsive bg-product-section">
         <div class="row row-contact">
-            <div class="col-xs-3 no-padding col-left-wing">
-                <div class="left-wing">
-                    <div class="panel-contact-details">
-                        <p class="panel-title-contact">
-                            Details
-                        </p>
-                        <table width="100%" class="table-contact-details">
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
-                                <td class="td-contact-detail">Seller2DaMax</td>
-                            </tr>
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
-                                <td class="td-contact-detail">09171234567</td>
-                            </tr>
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-print fa-2x"></i></td>
-                                <td class="td-contact-detail">+61 3 8376 6284</td>
-                            </tr>
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
-                                <td class="td-contact-detail">Unit 8C Marc 200 Tower 1973 Taft Ave. Malate, Manila</td>
-                            </tr>
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-envelope fa-2x"></i></td>
-                                <td class="td-contact-detail">nikonshop@support.com</td>
-                            </tr>
-                            <tr>
-                                <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
-                                <td class="td-contact-detail"><a href="#">www.nikonshop.com.ph</a></td>
-                            </tr>
-                        </table>
-                        <br/>
-                        <center>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/fb64.png" width="32" height="32">
-                                </a>
-                            </span>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/twitter64.png" width="32" height="32">
-                                </a>
-                            </span>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/googleplus64.png" width="32" height="32">
-                                </a>
-                            </span>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/linkedin64.png" width="32" height="32">
-                                </a>
-                            </span>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/skype64.png" width="32" height="32">
-                                </a>
-                            </span>
-                            <span class="span-social-media">
-                                <a href="#">
-                                    <img src="<?=base_url()?>assets/images/youtube64.png" width="32" height="32">
-                                </a>
-                            </span>
-                        </center>
-                    </div>
-                </div>
-            </div>
+            
+             <?php echo $userDetails; ?>
+
             <div class="col-xs-9">
                 <div class="panel-contact-message">
                     <p class="panel-title-contact">
@@ -110,3 +45,6 @@
         </div>
     </div>
 </section>
+
+
+

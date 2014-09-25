@@ -98,7 +98,8 @@ class Kernel
         
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager']);
+            return new \EasyShop\User\UserManager($container['entity_manager'], 
+                                                  $container['config_loader']);
         };
         
         //Account Manager
@@ -261,7 +262,34 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
- 
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+         };
+        $socialMediaConfig = require APPPATH . 'config/oauth.php';
+        $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
+            $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
+                $socialMediaConfig['facebook']['redirect_url'],
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret']
+            );
+            $googleClient = new Google_Client();
+            $googleClient->setAccessType('online');
+            $googleClient->setApplicationName('Easyshop');
+            $googleClient->setClientId($socialMediaConfig['google']['key']['appId']);
+            $googleClient->setClientSecret($socialMediaConfig['google']['key']['secret']);
+            $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
+            $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
+            $em = $container['entity_manager'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\SocialMedia\SocialMediaManager(
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret'],
+                $fbRedirectLoginHelper,
+                $googleClient,
+                $em,
+                $stringUtility
+            );
+        };
         // Category Manager
         $container['category_manager'] = function ($c) use($container) {
             $em = $container['entity_manager'];
@@ -305,13 +333,6 @@ class Kernel
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
         };
 
-
-        // String Utility
-        $container['string_utility'] = function($c) {
-            return new EasyShop\Utility\StringUtility();
-        };
-
-
         $container['oauth2_server'] = function ($c) use ($dbConfig, $container) {
             $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
             $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
@@ -321,15 +342,6 @@ class Kernel
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
-        };
-        
-        $container['string_utility'] = function ($c) {
-            return new \EasyShop\Utility\StringUtility();
-        };
-        
-        // Form Helper
-        $container['form_error_helper'] = function ($c) {
-            return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
         };
 
         /* Register services END */

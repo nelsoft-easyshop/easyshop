@@ -35,6 +35,25 @@ class EsPointType
      */
     private $point = '0';
 
+    /**
+     * @var integer
+     */
+    const TYPE_REGISTER = 1;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_LOGIN = 2;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_SHARE = 3;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_PURCHASE = 4;
 
 
     /**
