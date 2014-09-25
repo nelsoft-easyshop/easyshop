@@ -81,9 +81,7 @@
         
         <div class="row">
             <div class="col-md-5 col-zoom">
-                <?php
-                    include("product_image_gallery.php")
-                ?>
+                <?php include("product_image_gallery.php") ?>
             </div>
             
             <div class="col-md-7" style="position: relative; z-index: 1;">
