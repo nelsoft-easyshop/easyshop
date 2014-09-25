@@ -2,21 +2,29 @@
 
 class MessageController extends MY_Controller
 {
-    public $user_ID = null;
 
     function __construct()
     {
+        parent::__construct();
+
         $this->user_ID = $this->session->userdata('member_id');
         $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
-    public function getMessages()
-    {
-
-    }
+    /**
+     * Send Message
+     * @param recipient int
+     * @param msg string
+     * @return mixed
+     */
     public function send()
     {
-
+        $message = $this->messageManager->send(
+                                $this->user_ID,
+                                $this->input->post(''),
+                                $this->input->post('msg')
+                            );
+        Redirect('/home/contactUser' ,'refresh');
     }
 
 }

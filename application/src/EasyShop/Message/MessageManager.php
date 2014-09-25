@@ -1,4 +1,8 @@
 <?php
+namespace EasyShop\Message;
+
+use \DateTime;
+use EasyShop\Entities\EsMessages;
 
 class MessageManager {
 
@@ -14,8 +18,30 @@ class MessageManager {
         $this->em = $em;
     }
 
-    function send()
+    /**
+     * Add message
+     * @param $sender
+     * @param $recipient
+     * @param $userMessage
+     * @return boolean
+     */
+    function send($sender, $recipient, $userMessage)
     {
+        $senderObj = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                        ->find($sender);
+        $recipientObj = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                        ->find( $recipient);
+        $message = new EsMessages();
+        $message->setTo($recipientObj);
+        $message->setFrom($senderObj);
+        $message->setMessage($userMessage);
+        $message->setTimeSent(new DateTime('now'));
+        $message->setOpened(0);
 
+        $this->em->persist($message);
+        $this->em->flush();
+
+        return $message ? TRUE : FALSE;
     }
+
 }

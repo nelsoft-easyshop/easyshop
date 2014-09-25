@@ -30,6 +30,8 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
+        $this->user_ID = $this->session->userdata('member_id');
+        $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
     /**
@@ -467,16 +469,35 @@ class Home extends MY_Controller
      */
     private function contactUser()
     {
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy(['username' => $this->uri->segment(1)]);
         $data['title'] = 'Vendor Contact | Easyshop.ph';
-        $data['message_recipient'] = $this->uri->segment(1);
+        $data['message_recipient'] = $member;
         $data = array_merge($data, $this->fill_header());
-
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/contact');
         $this->load->view('templates/footer_new');
     }
-	
+
+    /**
+     * Send Message
+     * @param recipient int
+     * @param msg string
+     * @return mixed
+     */
+    public function sendMessage()
+    {
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+            ->find($this->input->post('recipient'));
+        $this->messageManager->send(
+            $this->user_ID,
+            $this->input->post('recipient'),
+            $this->input->post('msg')
+        );
+        Redirect('/'.$member->getSlug().'/contact' ,'refresh');
+    }
+
     /**
      *  Fetch information to be display in feeds page
      *
