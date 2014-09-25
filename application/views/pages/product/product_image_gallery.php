@@ -23,7 +23,7 @@
         <div class="jcarousel">
             <ul id="thumblist">
             <?php foreach($product_images as $image): ?>
-                <li> <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $image['path']; ?>small/<?php echo $image['file']; ?>',largeimage: '<?=base_url()?><?php echo $image['path']; ?><?php echo $image['file']; ?>'}"> <img src='<?=base_url()?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
+                <li> <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/<?php echo $image['path']; ?>small/<?php echo $image['file']; ?>',largeimage: '/<?php echo $image['path']; ?><?php echo $image['file']; ?>'}"> <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
             <?php endforeach;?>
             </ul>
         </div>
