@@ -55,11 +55,29 @@ class EsLocationLookupRepository extends EntityRepository
     /**
      * Retrieves locations with the given type
      */
-    public function getAllLocationType($type)
+    public function getAllLocationType($type, $format = FALSE)
     {
         $this->em = $this->_em;
 
-        $locations = $this->em->createQueryBuilder()
+        if($format){
+            $locations = $this->em->createQueryBuilder()
+                        ->select('l1.location as location1')
+                        ->addSelect('l2.location as location2')
+                        ->from('EasyShop\Entities\EsLocationLookup','l1')
+                        ->leftJoin('EasyShop\Entities\EsLocationLookup', 'l2','WITH','l2.parent = l1.idLocation AND l1.type = 3 AND l2.type = 4')
+                        ->where('l1.type =:type')
+                        ->setParameter('type', $type)
+                        ->getQuery()
+                        ->getResult();
+
+            $formattedLocations = [];
+            foreach ($locations as $index => $data) {
+                $formattedLocations[$data['location1']][] = $data['location2'];
+            }
+            $locations = $formattedLocations;
+        }
+        else{
+            $locations = $this->em->createQueryBuilder()
                         ->select('l.location')
                         ->from('EasyShop\Entities\EsLocationLookup','l')
                         ->where('l.type=:type')
@@ -67,7 +85,7 @@ class EsLocationLookupRepository extends EntityRepository
                         ->setParameter('type', $type)
                         ->getQuery()
                         ->getResult();
-
+        }
         return $locations;
     }
 
