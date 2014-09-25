@@ -306,6 +306,8 @@ class Home extends MY_Controller
                 , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
                 , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
                 , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
+                , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
+                , "isLoggedIn" => $headerData['logged_in'] ? 1 : 0
             ); 
             
             // Load Location
