@@ -84,7 +84,6 @@
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
                 <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
 
-                <?php $prodLimit = 12; ?>
                 <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
                 <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
                     <div class="vendor-select-con">

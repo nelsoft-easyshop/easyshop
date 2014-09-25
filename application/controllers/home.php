@@ -329,6 +329,7 @@ class Home extends MY_Controller
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
                     , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
+                    , "prodLimit" => $this->vendorProdPerPage
                 ); 
                 
                 // Load Location
