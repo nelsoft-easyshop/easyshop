@@ -26,19 +26,90 @@ class SyncCsvImage extends MY_Controller
     }
 
     /**
-     * Passess the posted data to upload_files method
-     *
+     * Passess the posted data to syncImages method
      */ 
     public function index()
     {
-        $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");
-
-        $this->syncImages($this->input->get());
+        if($this->input->get("product")){
+            $this->checkIfImagesExist($this->input->get());               
+        }
+        else {
+            $this->doUpload($this->input->get());  
+        }
     }
 
+    /**
+     * Upload images inside admin folder
+     */ 
+    public function doUpload($files) {
+        $this->upload->initialize(array(
+            "upload_path"   => "assets/admin",
+            "allowed_types" => "jpg|jpeg|png|gif",
+            "overwrite" => "true",
+            "remove_spaces" => "true"
+
+        ));
+
+        if(!$this->upload->do_multi_upload("image")){
+            $jsonpReturn = "jsonCallback({'sites':[{'success': '".$this->upload->display_errors()."',},]});";
+             
+        }   
+        else {
+            $jsonpReturn = "jsonCallback({'sites':[{'success': '"."success"."',},]});";
+
+        }   
+
+       return $this->output
+            ->set_content_type('application/json')
+            ->set_output($jsonpReturn);  
+    }
+
+    /**
+     * Checks if all of the listed images in the csv exists in the admin folder
+     * @param int $imagesId
+     * @return JSONP
+     */ 
+    public function checkIfImagesExist($checkImagesId)
+    {
+        $errorSummary = array();
+        foreach($checkImagesId["product"] as $ids)
+        {
+            $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
+            $values = $EsProductImagesRepository->getDefaultImage($ids);            
+            
+            $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
+
+            $path = "./assets/admin/$images";
+
+            if(file_exists($path)) {
+
+                continue;
+            }
+            else {
+                    $errorSummary[] = $images;
+                    $result =  $EsProductRepository->deleteProductFromAdmin($ids);
+            }
+        }
+        if(!empty($errorSummary)) {
+            $jsonp = "jsonCallback({'sites':[{'success': '".ucfirst(implode(",",$errorSummary))." does not exist in the image folder"."',},]});";
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($jsonp);        
+        }
+        else {
+            $this->syncImages($checkImagesId);
+        }
+    }
+
+    /**
+     * Creates directories and resizes images inside assets/product
+     * @param int $imagesId
+     * @return JSONP
+     */ 
     public function syncImages($imagesId)
     {
-
+        $errorSummary = array();
         foreach($imagesId["product"] as $ids)
         {
             $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
@@ -49,44 +120,44 @@ class SyncCsvImage extends MY_Controller
 
             $path = "./assets/admin/$images";
 
-            if(file_exists($path)) {
+            $date = date("Ymd");
+            $imageId =  $values->getIdProductImage();
+            $productId = $values->getProduct()->getIdProduct();
+            $memberId =  $values->getProduct()->getMember()->getIdMember();
 
-                $date = date("Ymd");
-                $imageId =  $values->getIdProductImage();
-                $productId = $values->getProduct()->getIdProduct();
-                $memberId =  $values->getProduct()->getMember()->getIdMember();
+            $filename = $productId.'_'.$memberId.'_'.$date;
+            $newfilename = $productId.'_'.$memberId.'_'.$date.".".$values->getProductImageType();
+            $imageDirectory = "./assets/product/$filename/".$newfilename;
+            $tempDirectory = "./assets/product/".$filename."/";                
 
-                $filename = $productId.'_'.$memberId.'_'.$date;
-                $newfilename = $productId.'_'.$memberId.'_'.$date.".".$values->getProductImageType();
-                $imageDirectory = "./assets/product/$filename/".$newfilename;
-                $tempDirectory = "./assets/product/".$filename."/";                
+            mkdir($tempDirectory.'categoryview/', 0777, true);
+            mkdir($tempDirectory.'small/', 0777, true);
+            mkdir($tempDirectory.'thumbnail/', 0777, true);
+            mkdir($tempDirectory.'other/', 0777, true);      
+                     
+            if(copy($path, $imageDirectory)){
 
-                mkdir($tempDirectory.'categoryview/', 0777, true);
-                mkdir($tempDirectory.'small/', 0777, true);
-                mkdir($tempDirectory.'thumbnail/', 0777, true);
-                mkdir($tempDirectory.'other/', 0777, true);      
-                         
-                if(copy($path, $imageDirectory)){
-
-                    $this->imageresize($imageDirectory, $tempDirectory."small",$this->img_dimension["small"]);
-                    $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
-                    $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
-                    $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
-                    continue;
-                }
-
+                $this->imageresize($imageDirectory, $tempDirectory."small",$this->img_dimension["small"]);
+                $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
+                $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
+                $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
+                $EsProductImagesRepository->renameImagesFromAdmin( $imageDirectory, $productId);                    
             }
-            else {
-                echo "$images does not exists";
-            }
+            
         }
-                    return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output("jsonCallback({'sites':[{'success': '"."success"."',},]});");         
 
+        $jsonp = "jsonCallback({'sites':[{'success': 'success',},]});";
+        return $this->output
+        ->set_content_type('application/json')
+        ->set_output($jsonp);         
 
     }
 
+    /**
+     * Creates directories, checks if the passed image name exists in the admin folder
+     * @param int $imagesId
+     * @return JSONP
+     */ 
     private function imageresize($imageDirectory, $newDirectory, $dimension)
     {
         $config['image_library'] = 'GD2';
