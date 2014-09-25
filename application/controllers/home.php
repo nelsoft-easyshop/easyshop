@@ -771,7 +771,7 @@ class Home extends MY_Controller
                     $addr->setCountry($country);
                     $addr->setIdMember($member);
                     $addr->setMobile($member->getContactno());
-                    $addr->setType('0');
+                    $addr->setType(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
 
                     $this->serviceContainer['entity_manager']->persist($addr);
                 }
