@@ -266,56 +266,77 @@ class Home extends MY_Controller
                             ->getVendorDetails($vendorSlug);
 
         // User found - valid slug
-        if( !empty($arrVendorDetails) ){ 
-            $headerData = $this->fill_header();
-            $headerData = array_merge($headerData, array(
-                "title" => "Vendor Profile | Easyshop.ph",
-                "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
-            ));
-
-            $productView['defaultCatProd'] = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
- 
-            // If searching in page
-            if(count($_GET)>0){
-
-                $productView['isSearching'] = TRUE;
-                $parameter = $this->input->get();
-                $parameter['seller'] = "seller:".$vendorSlug;
-                $parameter['limit'] = 12;
-                
-                // getting all products
-                $searchProduct = $searchProductService->getProductBySearch($parameter);
-
-                $parameter['limit'] = PHP_INT_MAX;
-                $count = count($searchProductService->getProductBySearch($parameter));
-
-                $productView['defaultCatProd'][0]['name'] ='Search Result';
-                $productView['defaultCatProd'][0]['products'] = $searchProduct; 
-                $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
-                $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                $productView['defaultCatProd'][0]['cat_type'] = 0;
+        if( !empty($arrVendorDetails) ){
+            $pageSection = $this->uri->segment(2);
+            if($pageSection === 'about'){
+                $this->aboutUser($vendorSlug);
             }
-            
-            // Data for the view
-            $data = array(
-                "arrVendorDetails" => $arrVendorDetails 
-                , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
-                , "defaultCatProd" => $productView['defaultCatProd']
-                , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
-                , "product_condition" => $this->lang->line('product_condition')
-                , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
-                , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
-                , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
-            ); 
-            
-            // Load Location
-            $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+            else if($pageSection === 'contact'){
+                $this->contactUser($vendorSlug);
+            }
+            else{
+                $headerData = $this->fill_header();
+                $headerData = array_merge($headerData, array(
+                    "title" => "Vendor Profile | Easyshop.ph",
+                    "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
+                ));
 
-            // Load View
-            $this->load->view('templates/header_new', $headerData);
-            $this->load->view('templates/header_vendor',$data);
-            $this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
+                $getUserProduct = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
+                $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
+
+                if ($getUserProduct['totalProductCount'] <= 0) { 
+                    redirect($vendorSlug.'/about'); 
+                }
+
+                // If searching in page
+                if(count($_GET)>0){
+
+                    $productView['isSearching'] = TRUE;
+                    $parameter = $this->input->get();
+                    $parameter['seller'] = "seller:".$vendorSlug;
+                    $parameter['limit'] = 12;
+                    
+                    // getting all products
+                    $searchProduct = $searchProductService->getProductBySearch($parameter);
+
+                    $parameter['limit'] = PHP_INT_MAX;
+                    $count = count($searchProductService->getProductBySearch($parameter));
+
+                    $productView['defaultCatProd'][0]['name'] ='Search Result';
+                    $productView['defaultCatProd'][0]['products'] = $searchProduct; 
+                    $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
+                    $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+                    $productView['defaultCatProd'][0]['cat_type'] = 0; 
+                    $view = array(
+                        'arrCat' => array(
+                            'products'=>$searchProduct
+                        )
+                    );
+                    $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                }
+                
+                // Data for the view
+                $data = array(
+                    "arrVendorDetails" => $arrVendorDetails 
+                    , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
+                    , "defaultCatProd" => $productView['defaultCatProd']
+                    , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
+                    , "product_condition" => $this->lang->line('product_condition')
+                    , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
+                    , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
+                    , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
+                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                ); 
+                
+                // Load Location
+                $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+
+                // Load View
+                $this->load->view('templates/header_new', $headerData);
+                $this->load->view('templates/header_vendor',$data);
+                $this->load->view('pages/user/vendor_view', $data);
+                $this->load->view('templates/footer');
+            }
         }
         // Load invalid link error page
         else{
@@ -338,11 +359,13 @@ class Home extends MY_Controller
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
         $categoryProducts = array();
+        $totalProductCount = 0; 
 
-        foreach( $parentCat as $idCat=>$categoryProperties ){
+        foreach( $parentCat as $idCat=>$categoryProperties ){ 
             $result = $pm->getVendorDefaultCatAndProd($memberId, $categoryProperties['child_cat']);
             $parentCat[$idCat]['products'] = $result['products'];
-            $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count'];
+            $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
+            $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
 
             $view = array(
@@ -355,7 +378,10 @@ class Home extends MY_Controller
             $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
 
-        return $parentCat;
+        $returnData['totalProductCount'] = $totalProductCount;
+        $returnData['parentCategory'] = $parentCat;
+
+        return $returnData;
     }
 
 
@@ -446,8 +472,29 @@ class Home extends MY_Controller
                                    ->getOrderRelations($viewerId, $idMember, true);
         }
         $isEditable = $viewerId && $member->getIdMember() === intval($viewerId);
+
+        // assign header_vendor data  
+        $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
+                                           ->getRepository('EasyShop\Entities\EsLocationLookup');
+        $arrVendorDetails = $this->serviceContainer['entity_manager']
+                                 ->getRepository("EasyShop\Entities\EsMember")
+                                 ->getVendorDetails($sellerslug);
+        $getUserProduct = $this->getVendorDefaultCatAndProd($member->getIdMember());
+
+        $headerVendorData = array(
+                    "arrVendorDetails" => $arrVendorDetails 
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
+                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
+                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
+                    , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
+                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                ); 
+
+        $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
+
         $this->load->view('templates/header_new', $data);
-        $this->load->view('templates/header_vendor');
+        $this->load->view('templates/header_vendor',$headerVendorData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
                                                'feedbackTabs' => $feedbackTabs,
@@ -576,7 +623,6 @@ class Home extends MY_Controller
                                                                     'ratingHeaders' => $ratingHeaders,
                                                                     ), TRUE); 
         
-        
         echo $feedbackTabs;
     }
 
@@ -586,11 +632,34 @@ class Home extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
+        // assign header_vendor data
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                   ->findOneBy(['slug' => $sellerslug]);  
+        $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
+                                           ->getRepository('EasyShop\Entities\EsLocationLookup');
+        $arrVendorDetails = $this->serviceContainer['entity_manager']
+                                 ->getRepository("EasyShop\Entities\EsMember")
+                                 ->getVendorDetails($sellerslug);
+        $getUserProduct = $this->getVendorDefaultCatAndProd($member->getIdMember());
+
+        $headerVendorData = array(
+                    "arrVendorDetails" => $arrVendorDetails 
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
+                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
+                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
+                    , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
+                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                ); 
+
+        $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
+ 
+
         $userDetails = $this->doUpdateUserDetails($sellerslug);
         $data['title'] = 'Vendor Contact | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());                
         $this->load->view('templates/header_new', $data);
-        $this->load->view('templates/header_vendor');
+        $this->load->view('templates/header_vendor',$headerVendorData);
         $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
         $this->load->view('templates/footer_new');
     }
