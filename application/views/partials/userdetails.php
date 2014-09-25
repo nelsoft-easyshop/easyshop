@@ -17,28 +17,28 @@
 
                 <?php echo form_open('/' . html_escape($member->getUsername()) . '/' . $targetPage); ?>
                 <tr id="storeNameRow">
-                    <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getStoreName()); ?></text>
                         <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($member->getStoreName()); ?>">
                     </td>
                 </tr>
                 <tr id="contactNoRow">
-                    <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getContactno()); ?></text>
                         <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($member->getContactno()); ?>">
                     </td>
                 </tr>
                 <!-- <tr>
-                    <td class="td-contact-icon"><i class="fa fa-print fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/fax.png" width="32px" height="32px" /></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact">+61 3 8376 6284</text>
                         <input type="text" class="input-detail" placeholder="Fax Number..." value=" +61 3 8376 6284">
                     </td>
                 </tr> -->
                 <tr id="addressRow">
-                    <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
                         <text class="text-contact"><?php echo html_escape($streetAddr); ?></text>
@@ -56,14 +56,14 @@
                     </td>
                 </tr>
                 <!-- <tr>
-                    <td class="td-contact-icon"><i class="fa fa-envelope fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/mail.png" width="32px" height="32px" /></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getSupportEmail()); ?></text>
                         <input type="email" class="input-detail" placeholder="Email Address..." name="supportEmail" value="<?php echo html_escape($member->getSupportEmail()); ?>">
                     </td>
                 </tr> -->
                 <tr id="websiteRow">
-                    <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
+                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><a href="#"><?php echo html_escape($member->getWebsite()); ?></a></text>
                         <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($member->getWebsite()); ?>">
