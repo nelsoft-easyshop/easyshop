@@ -19,7 +19,7 @@
                 </div>
                 <div> 
                     <h4 class="storeName"><?=$storeNameDisplay?></h4>
-                    <p><strong>Contact No. :</strong><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></p>
+                    <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
                         <span class="glyphicon glyphicon-map-marker"></span>
                         <?php if($hasAddress):?>
@@ -142,6 +142,7 @@
                 <?php
                     $url_id = $this->uri->segment(2, 0);
                 ?>
+                <?php if($noItem): ?>
                 <li>
                     <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
                         <img src="<?=base_url()?>assets/images/<?php if($url_id=="0"){ echo "img-sticky-nav-home-active"; }else{ echo "img-sticky-nav-home";}?>.jpg" alt="Store">
@@ -150,6 +151,7 @@
                 <li>
                     <a href="">Promo Page</a>
                 </li>
+                <?php endif; ?>
                 <li >
                     <a href="" class="<?php if($url_id=="about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
                 </li>

@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="clear"></div>
-                
+
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
                 <input type="hidden" id="queryString" value='<?=json_encode($_GET); ?>' />
@@ -121,13 +121,17 @@
                                 </ul>
                             </center>
                         </div>
-                    <?php endif;?>
+                   <?php endif;?>
+                    
                 </div>
+ 
                 <?php $divCounter++; endforeach;?> 
+ 
             </div>
         </div>
     </div>
     </div>
+ 
     
 </section>
 

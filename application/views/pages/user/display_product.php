@@ -37,13 +37,8 @@
                         </p>
                         <div class="div-amount">
                             <p class="p-price">
-                                <span><s>  </s></span> P <?=$productPrice;?>
+                                <span><s>  <?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s></span> P <?=$productPrice;?>
                             </p>
-                            <?php if($percentage && $percentage > 0):?>
-                            <p class="">
-                                <span><s> P <?=$originalPrice?> </s></span>
-                            </p>
-                            <?php endif;?>
                             <center>
                                 <button class="btn btn-default-cart">
                                     <span class="fa fa-shopping-cart"></span> BUY NOW
@@ -53,22 +48,7 @@
                     </div>
                 </div>
             </div>
-        <?php endforeach;?>
-    </div>
-
-    <div class="product-paging" data-page="<?php echo $arrCat['page']?>">
-        <?php foreach($arrCat['products'] as $objProduct):?>
-        <?php 
-            $escapeName = html_escape($objProduct->getName());
-            $productName = (strlen($escapeName)>17) ? substr_replace($escapeName, "...", 17) : $escapeName;
-            $productSlug = $objProduct->getSlug();
-            $productPrice = number_format($objProduct->getFinalPrice(), 2,'.',','); 
-            $originalPrice = number_format($objProduct->getOriginalPrice(),2,'.',',');
-            $percentage = $objProduct->getDiscountPercentage();
-            $isPromote = intval($objProduct->getIsPromote());
-            $isFreeShipping = $objProduct->getIsFreeShipping();
-            $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
-        ?>
+            
             <div class="panel panel-default panel-list-item">
                 <table width="100%">
                     <tr>
@@ -99,19 +79,13 @@
                             </div>
                         </td>
                         <td width="25%" class="td-list-price">
-                            <p class="p-list-price">
-                                P <?php echo $productPrice?>
-                            </p>
+                            <p class="p-list-price"> P <?php echo $productPrice?> </p>
                             <div class="clear"></div>
                             <p class="p-list-discount">
-                                <s> <?php echo $originalPrice?> </s>
+                                <s> P <?php echo $originalPrice?> </s>
                             </p>
-                            <p class="p-discount">
-                                <span><s> <?php echo $originalPrice?> </s></span>
-                            </p>
-                            
                             <center>
-                                <button class="btn btn-default-cart">
+                                <button class="btn btn-default-1">
                                     <span class="fa fa-shopping-cart"></span> ADD TO CART
                                 </button>
                             </center>
@@ -119,5 +93,9 @@
                     </tr>
                 </table>
             </div>
+            
+            
         <?php endforeach;?>
     </div>
+
+   

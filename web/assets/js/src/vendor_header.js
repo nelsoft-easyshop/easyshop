@@ -1,7 +1,8 @@
- 
 
 (function ($) {
- 
+    
+   
+
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
@@ -59,6 +60,9 @@
    
     $(document).on('click','#banner-save-changes',function() {
         
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+ 
         // get all variables
         var storName = $("#storeNameTxt").val();
         var mobileNumber = $("#mobileNumberTxt").val();
@@ -74,7 +78,7 @@
                     "&mobile="+mobileNumber+
                     "&stateregion="+stateRegion+
                     "&city="+city+
-                    "&"+memconf.csrfname+"="+memconf.csrftoken,
+                    "&"+csrfname+"="+csrftoken,
             success: function(data){
                 if(data.result){
                     // change all related display
@@ -82,6 +86,7 @@
                     $('#edit-banner-view').hide();
                     $(".storeName").html(storName);
                     $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
+                    $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
                 }
                 else{
                     // Display error
