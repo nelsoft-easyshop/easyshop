@@ -1,22 +1,11 @@
 (function ($) {
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
-
-        if($( "#isEditable" ).val() == true){        
-            if($( "#storeName" ).val() == "" || $( "#contactNo" ).val() == "" || $( "#streetAddr" ).val() == ""){
-                $( ".fa-edit-icon" ).click();
-            }
+      
+        if($( "#storeName" ).val() == "" || $( "#contactNo" ).val() == "" || $( "#streetAddr" ).val() == ""){
+            $( "#editIconOpen" ).click();
         }
         else{
-            if($( "#storeName" ).val() == ""){
-                $( "#storeNameRow" ).hide();
-            }
-            if($( "#contactNo" ).val() == ""){
-                $( "#contactNoRow" ).hide();
-            }
-            if($( "#streetAddr" ).val() == ""){
-                $( "#addressRow" ).hide();
-            }
             if($( "#website" ).val() == ""){
                 $( "#websiteRow" ).hide();
             }
@@ -33,11 +22,11 @@
         $("#citySelect").html(list);
     });   
 
-    $( ".fa-edit-icon" ).click(function() {
+    $( "#editIconOpen" ).click(function() {
         $(".input-detail").css("display","inline");
-        $(".fa-cancel-edit").css("display","inline");
+        $("#editIconClose").css("display","inline");
         $("#save-edit").css("display","inline");
-        $(".fa-edit").css("display","none");
+        $("#editIconOpen").css("display","none");
         $(".text-contact").css("display","none");
 
         if($( "#storeName" ).val() == ""){
@@ -54,11 +43,11 @@
         }
      });
     
-     $( ".fa-cancel-edit" ).click(function() {
+     $( "#editIconClose" ).click(function() {
         $(".input-detail").css("display","none");
-        $(".fa-cancel-edit").css("display","none");
+        $("#editIconClose").css("display","none");
         $("#save-edit").css("display","none");
-        $(".fa-edit").css("display","inline");
+        $("#editIconOpen").css("display","inline");
         $(".text-contact").css("display","inline");
 
         if($( "#storeName" ).val() == ""){
