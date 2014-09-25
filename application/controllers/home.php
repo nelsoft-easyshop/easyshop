@@ -262,8 +262,8 @@ class Home extends MY_Controller
                 $this->contactUser($sellerslug);
             }
             else{
-                $sellerid = $vendordetails['id_member'];
-                $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($sellerid));
+                $memberId = $this->session->userdata('member_id');
+                $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
                 $data['cart_size'] = $this->cartImplementation->getSize();
                 $data['total'] = $this->cartImplementation->getTotalPrice();
 
@@ -274,6 +274,7 @@ class Home extends MY_Controller
                 $data['render_searchbar'] = false;
                 $this->load->view('templates/header_new', $data);
                 $this->load->view('templates/header_vendor');
+                $sellerid = $vendordetails['id_member'];
                 $usersFollowing = $this->user_model->getFollowing($sellerid);
                 $usersFollower = $this->user_model->getFollowers($sellerid);
                 $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
@@ -381,7 +382,12 @@ class Home extends MY_Controller
                                                                               'pagination' => $pagination,
                                                                               'id' => 'for-other-buyer',
                                                                               'ratingHeaders' => $ratingHeaders,
-                                                                              ), TRUE);                                                             
+                                                                              ), TRUE);
+
+        $memberId = $this->session->userdata('member_id');
+        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
+        $data['cart_size'] = $this->cartImplementation->getSize();
+        $data['total'] = $this->cartImplementation->getTotalPrice();
 
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
@@ -473,8 +479,12 @@ class Home extends MY_Controller
      */
     private function contactUser()
     {
+        $memberId = $this->session->userdata('member_id');
         $data['title'] = 'Vendor Contact | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());                
+        $data = array_merge($data, $this->fill_header());
+        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
+        $data['cart_size'] = $this->cartImplementation->getSize();
+        $data['total'] = $this->cartImplementation->getTotalPrice();
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/contact');
