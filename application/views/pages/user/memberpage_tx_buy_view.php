@@ -99,7 +99,7 @@
 								<div class="transac_bought_con tx_cont">
 									<span class="transac_bought_con_col1">Bought from: </span>
 									<span class="transac_bought_con_col2">
-										<a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
+										<a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>">
 											<?php echo html_escape($product['seller']);?>
 										</a>
 									</span>

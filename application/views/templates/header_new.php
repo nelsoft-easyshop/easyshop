@@ -129,13 +129,70 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
         </div>
         <div>
-            <div class="vendor-login-con">
-                <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
-                <a href=""><strong>login</strong></a>  or 
-                <a href=""><strong>Create and account</strong></a>
-            </div>
+           
+            <?php if(isset($logged_in) && $logged_in): ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
+                    <div class="new-user-nav-dropdown">
+                        <span class="user-nav-dropdown">Account Settings</span>
+                    </div>
+                    <ul class="nav-dropdown">
+                        <li>
+                            <a href="/me">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/me?me=pending">On-going Transactions</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a href="/me?me=settings">Settings</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a class="prevent" href="/login/logout">Logout</a>
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            <?php else: ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href="/login"><strong>login</strong></a>  or 
+                    <a href="/register"><strong>Create and account</strong></a>
+                </div>
+            <?php endif; ?>
+        
         </div>
         <div class="clear"></div>
     </div>
 </header>
+
+<script type='text/javascript'>
+
+    (function(){
+    
+        $(function () {
+   
+            var $user_nav_dropdown = $(".user-nav-dropdown");
+            var $nav_dropdown = $("ul.nav-dropdown");
+
+            $(document).mouseup(function (e) {
+
+                if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
+                    && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    $nav_dropdown.hide(1);
+                }
+
+            });
+
+            $user_nav_dropdown.click(function() {
+                $nav_dropdown.show();
+            });
+        
+        });
+
+    })(jQuery);
+
+
+</script>
 
