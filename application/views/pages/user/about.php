@@ -233,11 +233,11 @@
                                         <tr>
                                             <?php $count = 1; ?>
                                             <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                                <td width="33%" id='rating-header<?php echo $count?>'>
+                                                <td width="33%" class='rating-header' id='rating-header<?php echo $count?>'>
                                                     <?php echo html_escape($ratingHeader); ?>
                                                     <span class="span-rate feedback-ratings">
                                                         <?php for($i = 1; $i <= 5; $i++): ?>
-                                                            <i class="fa fa-star fa-star-rate rating<?php echo $i ?>"></i>
+                                                            <i class="fa fa-star fa-star-rate" data-number="<?php echo $i ?>"></i>
                                                         <?php endfor; ?>
 
                                                     </span>
@@ -260,7 +260,7 @@
                                     <select class="input-lg input-message" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
-                                              <option value="<?php $order['idOrder'] ?>">
+                                              <option value="<?php echo $order['idOrder'] ?>">
                                                     <?php echo html_escape($order['productname']); ?>
                                                     <?php echo '(Invoice: '.$order['invoiceNo'].')';  ?>
                                                     on <?php echo $order['dateadded']->format('F j, Y');  ?>
@@ -279,8 +279,11 @@
                                     <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
                                 </center>
                             </div>
-                            <input type='hidden' name='userId' value='<?php $member->getIdMember() ?>' />
-                            <?php echo form_open('/home/doCreateFeedback'); ?>
+                            <input type='hidden' name='userId' value='<?php echo $member->getIdMember() ?>' />
+                            <input type='hidden' name='rating1' value='0' id='input-rating-header1'/>
+                            <input type='hidden' name='rating2' value='0' id='input-rating-header2'/>
+                            <input type='hidden' name='rating3' value='0' id='input-rating-header3'/>
+                            <?php echo form_close(); ?>
                         </div>
                     </div>
                
@@ -297,5 +300,5 @@
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/userabout.js?ver="<?=ES_FILE_VERSION?>></script>
+<script type="text/javascript" src="/assets/js/src/userabout.js?ver=<?php echo ES_FILE_VERSION?>"></script>
 
