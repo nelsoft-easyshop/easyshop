@@ -53,7 +53,7 @@ class Memberpage extends MY_Controller
         
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
@@ -694,7 +694,7 @@ class Memberpage extends MY_Controller
                 'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
-            
+
             $result = $this->payment_model->checkOrderProductBasic($postData);
             
             if( count($result) == 1 ){ // insert comment
@@ -760,24 +760,29 @@ class Memberpage extends MY_Controller
      */
     public function vendorSubscription()
     {
-        $memberID = $this->session->userdata('member_id');
+        $um = $this->serviceContainer['user_manager'];
+
+        $memberId = $this->session->userdata('member_id');
         $sellername = $this->input->post('name');
-        
-        $checkData = $this->memberpage_model->checkVendorSubscription($memberID,$sellername);
-        
-        switch( $checkData['stat'] ){
-            case 'unfollowed':
-            case 'followed':
-                $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-                $serverResponse['result'] = $boolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-                break;
-            case 'error':
-                $serverResponse['result'] = 'fail';
-                $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
-            break;
+
+        $subscriptionStatus = $um->getVendorSubscriptionStatus($memberId, $sellername);
+
+        $boolResult = false;
+        $serverResponse = array(
+            'result' => 'fail'
+            , 'error' => "Failed to check subscription status."
+        );
+
+        if($subscriptionStatus === "followed"){
+            $boolResult = $um->unsubscribeToVendor($memberId, $sellername);
         }
-        
+        else if($subscriptionStatus === "unfollowed"){
+            $boolResult = $um->subscribeToVendor($memberId, $sellername);
+        }
+
+        $serverResponse['result'] = $boolResult ? 'success':'fail';
+        $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+
         echo json_encode($serverResponse);
     }
     
@@ -823,7 +828,7 @@ class Memberpage extends MY_Controller
             $memberId = $this->session->userdata('member_id');
             $userMgr = $this->serviceContainer['user_manager'];
 
-            $isStorenameAvailable = $userMgr->setStoreName($memberId, $storeName);
+            $isStorenameAvailable = $userMgr->setUser->setStoreName($memberId, $storeName);
 
             $serverResponse['result'] = $isStorenameAvailable;
             $serverResponse['error'] = $isStorenameAvailable ? '' : 'Store name already used!';
@@ -1318,6 +1323,166 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonData);
     }
     
+    /**
+     *  Handles details in vendorpage
+     *
+     *  @return JSON
+     */
+    public function updateVendorDetails()
+    {
+        $serverResponse = array(
+            "result" => FALSE,
+            "error" => ""
+        );
+
+        if( $this->input->post("vendor_details") ){
+            $memberId = $this->session->userdata("member_id");
+            $storeName = strval($this->input->post("store_name"));
+            $mobileNum = strval($this->input->post("mobile"));
+            $stateRegionId = $this->input->post("stateregion");
+            $cityId = $this->input->post("city");
+
+            $um = $this->serviceContainer['user_manager'];
+            $boolResult = $um->setUser($memberId)
+                            ->setStoreName($storeName)
+                            ->setMobile($mobileNum)
+                            ->setAddressTable($stateRegionId, $cityId, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
+                            ->save();
+
+            $serverResponse["result"] = $boolResult;
+            $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
+        }
+
+        echo json_encode($serverResponse);
+    }
+
+    /**
+     *  AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     */
+    public function vendorLoadProducts()
+    {
+        $prodLimit = 12;
+
+        $vendorId = $this->input->get('vendorId');
+        $vendorName = $this->input->get('vendorName');
+        $catId = json_decode($this->input->get('catId'), true);
+        $catType = $this->input->get('catType');
+        $page = $this->input->get('page');
+        $rawOrderBy = intval($this->input->get('orderby'));
+        $rawOrder = intval($this->input->get('order'));
+        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
+
+        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
+        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lp')) : "";
+        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('up')) : "";
+
+        $parameter = json_decode($this->input->get('queryString'),TRUE);
+
+        $em = $this->serviceContainer["entity_manager"];
+        $searchProductService = $this->serviceContainer['search_product'];
+        $pm = $this->serviceContainer["product_manager"];
+
+        switch($rawOrder){
+            case 1:
+                $order = "DESC";
+                break;
+            case 2:
+                $order = "ASC";
+                break;
+            default:
+                $order = "DESC";
+                break;
+        }
+
+        switch($rawOrderBy){
+            case 1:
+                $orderBy = array("clickcount" => $order);
+                break;
+            case 2:
+                $orderSearch = "NEW";
+                $orderBy = array("createddate" => $order);
+                break;
+            case 3:
+                $orderSearch = "HOT";
+                $orderBy = array("isHot"=>$order, "clickcount"=>$order);
+                break;
+            default:
+                $orderSearch = "NULL";
+                $orderBy = array("clickcount"=>$order);
+                break;
+        }
+
+        switch($catType){
+            case 0: // Search
+                if($rawOrderBy > 1){
+                    $parameter['sortby'] = $orderSearch;
+                    $parameter['sorttype'] = $order;
+                }
+                if($condition != ""){
+                    $parameter['condition'] = $condition;
+                }
+                if(is_numeric($lprice) && is_numeric($uprice)){
+                    $parameter['startprice'] = $lprice;
+                    $parameter['endprice'] = $uprice;
+                }
+                $parameter['seller'] = "seller:".$vendorName;
+                $parameter['limit'] = 12;
+                $parameter['page'] = $page - 1;
+                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                $productCount = 0;
+                break;
+            case 1: // Custom - NOT YET USED
+                //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                //                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                //$productCount = 0;
+                break;
+            case 2: // Default Categories
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
+                break;
+            default: // Default Categories
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
+                break;
+        }
+
+        $arrCat = array(
+            'page' => $page,
+            'products' => $products
+        );
+
+        $parseData = array('arrCat'=>$arrCat);
+        
+        $serverResponse = array(
+            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
+            , 'isCount' => $isCount
+            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+        );
+
+        echo json_encode($serverResponse);
+    }
+  
+    public function removeUserImage()
+    {
+        $return['error'] = TRUE;
+        $return['msg'] = "Something went wrong please try again later.";
+        $return['img'] = "";
+        $memberId = $this->session->userdata('member_id');
+
+        $userMgr = $this->serviceContainer['user_manager'];
+
+        $remove = $userMgr->removeUserImage($memberId);
+        if($remove){
+            $return['error'] = FALSE;
+            $return['msg'] = "";
+            $return['img'] = $remove;
+        }
+
+        echo json_encode($return);
+    }
+
 }
 
 /* End of file memberpage.php */
