@@ -244,7 +244,8 @@ section {
 
 .p-about{
     line-height: 20px;
-    
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .textarea-about{
