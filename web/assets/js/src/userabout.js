@@ -1,4 +1,5 @@
-$(function () {
+(function(){
+    
     $(function () {
         $("[rel='tooltip']").tooltip();
     });
@@ -365,5 +366,5 @@ $(function () {
     });
     
     
-});
-
+    
+})(jQuery);
