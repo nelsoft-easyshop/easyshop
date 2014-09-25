@@ -62,7 +62,7 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter = $this->input->get() ? $this->input->get() : array();
             $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
