@@ -137,6 +137,19 @@ section {
     width: 220px;
 }
 
+.message-count-con {
+    color: #fff;
+    background-color: #ff613a;
+    border-radius: 90px;
+    height: 20px;
+    left: -5px;
+    line-height: 20px;
+    position: absolute;
+    text-align: center;
+    top: -5px;
+    width: 20px;
+}
+
 .vendor-login-con a {
     color: #fff;
     font-weight: bold;
@@ -174,21 +187,27 @@ section {
     top: 15px;
 }
 
-.new-user-nav-dropdown:hover .nav-dropdown {
+.vendor-login-con:hover .nav-dropdown {
     display: inline-block;
 }
 
-.new-user-nav-dropdown .nav-dropdown {
+.vendor-login-con .nav-dropdown {
     right: 0px;
     width: 220px;
 }
 
-.new-user-nav-dropdown .nav-dropdown li a {
+.vendor-login-con .nav-dropdown li a {
     color: #565656;
 }
 
-.new-user-nav-dropdown .nav-dropdown li a:hover {
+.vendor-login-con .nav-dropdown li a:hover {
     color: #fff;
+}
+
+.nav-dropdown-border .message-count-con {
+    left: auto;
+    top: 7px;
+    right: 7px;
 }
 
 /*** Vendor style ***/
@@ -275,6 +294,20 @@ section {
 .vendor-profile-btn a:first-child {
     margin-right: 4%;
 }
+
+.icon-message-btn {
+    background: url(../images/img-icon-mail.png) no-repeat top left;
+    display: inline-block;
+    height: 18px;
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 18px;
+}
+
+.vendor-profile-btn .btn-default-1:hover .icon-message-btn {
+    background: url(../images/img-icon-mail-hover.png) no-repeat top left;
+}
+
 /*** vendor profile edit ***/
 
 .edit-cover-photo {
@@ -463,7 +496,6 @@ section {
 
 .vendor-nav li a:hover {
     border-bottom: 3px solid #fe893a;
-    font-weight: bold;
     text-decoration: none;
 }
 
@@ -547,6 +579,7 @@ section {
     display: inline-block;
     height: 22px;
     line-height: 22px;
+    margin: 0;
     overflow: hidden;
     padding: 0 10px;
     text-overflow: ellipsis;
@@ -586,7 +619,7 @@ section {
 .sticky-nav li:nth-child(3) input[type="submit"],
 .search-container input[type="submit"] {
     background-color: #ff893b;
-    background-position: -946px -250px;
+    background-position: -949px -250px;
     border: none;
     padding: 5px 12px;
     width: 45px;
@@ -603,6 +636,7 @@ section {
     cursor: pointer;
     display: inline-block;
     padding-bottom: 6px;
+    text-align: center;
 }
 
 .header-cart-wrapper:hover {
@@ -610,22 +644,16 @@ section {
 }
 
 .header-cart-items-con {
-    border: 1px solid #e2e2e2;
+    border-radius: 4px 0 0 4px;
     display: inline-block;
     color: #868487;
     font-size: 0.75em;
     height: 33px;
-    line-height: 33px;
+    line-height: 26px;
     margin-right: -5px;
     padding: 0px 12px;
     vertical-align: middle;
     width: 148px;
-    -moz-border-radius-topleft: 4px;
-    -webkit-border-top-left-radius: 4px;
-     border-top-left-radius: 4px;
-    -moz-border-radius-bottomleft: 4px;
-    -webkit-border-bottom-left-radius: 4px;
-    border-bottom-left-radius: 4px;
 }
 
 .header-cart-item {

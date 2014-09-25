@@ -21,8 +21,8 @@
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <a href="" class="header-cart-wrapper">
-                    <span class="header-cart-items-con">
+                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                    <span class="header-cart-items-con ui-form-control">
                         <span class="header-cart-item">2 item(s)</span> in your cart
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
@@ -77,26 +77,32 @@
                 <a href=""><strong>Create and account</strong></a>
             </div> -->
             <div class="vendor-login-con">
+                <div class="message-count-con">1</div>
                 <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
                 <a href=""><span class="vendor-login-name"><strong>Seller2DaMax</strong></span></a>
                 <div class="new-user-nav-dropdown">
                     <span class="user-nav-dropdown">Account Settings</span>
-                    <ul class="nav-dropdown">
-                        <li>
-                            <a href="/me">Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="/me?me=pending">On-going Transactions</a>
-                        </li>
-                        <li class="nav-dropdown-border">
-                            <a href="/me?me=settings">Settings</a>
-                        </li>
-                        <li class="nav-dropdown-border">
-                            <a class="prevent" href="/login/logout">Logout</a>
-                        </li>
-                    </ul>
+                    
                 <div class="clear"></div>
-                </div>                
+                </div>
+                <ul class="nav-dropdown">
+                    <li>
+                        <a href="/me">Dashboard</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a href="/me?me=pending">On-going Transactions</a>
+                    </li>
+                    <li class="nav-dropdown-border pos-rel">
+                        <a href="<?=base_url()?>messages">Message</a>
+                        <div class="message-count-con">1</div>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a href="/me?me=settings">Settings</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a class="prevent" href="/login/logout">Logout</a>
+                    </li>
+                </ul>                
             </div>
         </div>
         <div class="clear"></div>
@@ -113,7 +119,7 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -121,7 +127,7 @@
                     <h4>Air 21</h4>
                     <p><strong>Contact No. :</strong>09171234567</p>
                     <p>
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <img src="<?=base_url()?>/assets/images/img-icon-marker.png" alt="marker">
                         <span class="cl-1"><strong>Location not set</strong></span>
                     </p>
                     <div class="vendor-profile-btn">
@@ -129,7 +135,7 @@
                             <span class="glyphicon glyphicon-plus-sign"></span> Follow
                         </a>
                         <a href="" class="btn btn-default-1">
-                            <span class="glyphicon glyphicon-envelope"></span> Message
+                            <span class="icon-message-btn"></span> Message
                         </a>
                     </div>
                 </div>
@@ -146,7 +152,7 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -154,12 +160,12 @@
                     <h4>Air 21</h4>
                     <p><strong>Contact No. :</strong>09171234567</p>
                     <p>
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <img src="<?=base_url()?>/assets/images/img-icon-marker.png">
                         <span class="cl-1"><strong>Location not set</strong></span>
                     </p>
                     <div class="vendor-profile-btn">
                         <a href="" class="btn btn-default-3">
-                            <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                            <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                     </div>
                 </div>
@@ -191,7 +197,7 @@
                                 <div><a href="">Upload Photo</a></div>
                                 <div><a href="">Remove Photo</a></div>
                             </div>
-                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" alt="Profile Photo">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -234,14 +240,14 @@
             <ul class="sticky-nav">
                 <li>
                     <div class="vendor-profile-img-con">
-                        <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" alt="Profile Photo">
+                        <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                     </div>
                     <h4>Air 21</h4>
                 </li>
                 <li>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.jpg"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li>
                     <select class="ui-form-control">
@@ -254,8 +260,8 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <a href="/cart" class="header-cart-wrapper">
-                            <span class="header-cart-items-con sticky-cart">
+                        <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                            <span class="header-cart-items-con sticky-cart ui-form-control">
                                 <span class="header-cart-item">2 item(s)</span> in your cart
                             </span>                        
                             <span class="header-cart-icon-con span_bg cart-icon"></span>
