@@ -760,24 +760,29 @@ class Memberpage extends MY_Controller
      */
     public function vendorSubscription()
     {
-        $memberID = $this->session->userdata('member_id');
+        $um = $this->serviceContainer['user_manager'];
+
+        $memberId = $this->session->userdata('member_id');
         $sellername = $this->input->post('name');
-        
-        $checkData = $this->memberpage_model->checkVendorSubscription($memberID,$sellername);
-        
-        switch( $checkData['stat'] ){
-            case 'unfollowed':
-            case 'followed':
-                $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-                $serverResponse['result'] = $boolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-                break;
-            case 'error':
-                $serverResponse['result'] = 'fail';
-                $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
-            break;
+
+        $subscriptionStatus = $um->getVendorSubscriptionStatus($memberId, $sellername);
+
+        $boolResult = false;
+        $serverResponse = array(
+            'result' => 'fail'
+            , 'error' => "Failed to check subscription status."
+        );
+
+        if($subscriptionStatus === "followed"){
+            $boolResult = $um->unsubscribeToVendor($memberId, $sellername);
         }
-        
+        else if($subscriptionStatus === "unfollowed"){
+            $boolResult = $um->subscribeToVendor($memberId, $sellername);
+        }
+
+        $serverResponse['result'] = $boolResult ? 'success':'fail';
+        $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+
         echo json_encode($serverResponse);
     }
     
@@ -1458,148 +1463,7 @@ class Memberpage extends MY_Controller
 
         echo json_encode($serverResponse);
     }
-    /*public function vendorLoadProducts()
-    {
-        $prodLimit = 12;
-
-        $vendorId = $this->input->get('vid');
-        $vendorName = $this->input->get('vn');
-        $catId = json_decode($this->input->get('cid'), true);
-        $catType = $this->input->get('ct');
-        $page = $this->input->get('p');
-        $oBy = intval($this->input->get('ob'));
-        $o = intval($this->input->get('o'));
-        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
-
-        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
-        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
-        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
-
-        $parameter = json_decode($this->input->get('qs'),TRUE);
-
-        $em = $this->serviceContainer["entity_manager"];
-        $searchProductService = $this->serviceContainer['search_product'];
-        $pm = $this->serviceContainer["product_manager"];
-
-        switch($o){
-            case 1:
-                $order = "DESC";
-                break;
-            case 2:
-                $order = "ASC";
-                break;
-            default:
-                $order = "DESC";
-                break;
-        }
-
-        switch($oBy){
-            case 1:
-                $orderStr = "p.clickcount " . $order;
-                break;
-            case 2:
-                $orderSearch = "NEW";
-                $orderStr = "p.createddate " . $order;
-                break;
-            case 3:
-                $orderSearch = "HOT";
-                $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
-                break;
-            default:
-                $orderSearch = "NULL";
-                $orderStr = "p.clickcount " . $order;
-                break;
-        }
-
-        switch($catType){
-            case 0: // Search
-                if($oBy > 1){
-                    $parameter['sortby'] = $orderSearch;
-                    $parameter['sorttype'] = $order;
-                }
-                if($condition != ""){
-                    $parameter['condition'] = $condition;
-                }
-                if(is_numeric($lprice) && is_numeric($uprice)){
-                    $parameter['startprice'] = $lprice;
-                    $parameter['endprice'] = $uprice;
-                }
-                $parameter['seller'] = "seller:".$vendorName;
-                $parameter['limit'] = 12;
-                $parameter['page'] = $page - 1;
-                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
-                $productCount = 0;
-                break;
-            case 1: // Custom
-                $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                $productCount = 0;
-                break;
-            case 2: // Default
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
-                break;
-            default: // Default Cat
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
-                break;
-        }
-
-        $arrCat = array(
-            'page' => $page,
-            'products' => $products,
-            'product_images' => array()
-        );
-
-        // Generate product image array
-        foreach($products as $product){
-            $productId = $product->getIdProduct();
-            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
-                            ->getDefaultImage($productId);
-            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
-
-            if(!file_exists($imagePath)){
-                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
-            }
-            $arrCat['product_images'][$productId] = $imagePath;
-        }
-
-        $parseData = array('arrCat'=>$arrCat);
-        
-        $serverResponse = array(
-            'htmlData' => $this->load->view("pages/user/vendor_product_view", $parseData, true)
-            , 'isCount' => $isCount
-            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
-        );
-
-        echo json_encode($serverResponse);
-    }*/
-
-    //DEV FUNCTION HANDLES EDIT PROFILE
-    public function vendorDetailController()
-    {
-        $um = $this->serviceContainer['user_manager'];
-
-        $boolResult = $um->setUser(128)
-                        //->setStoreName("EasyShopINC.")
-                        //->setMobile("")
-                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123","Stephen", 9177050441)
-                        ->save();
-
-        if($boolResult){
-            echo $um->showDetails();
-            print('<br>Chain completed.');
-        }
-        else{
-            print($um->errorInfo());
-            print('<br>Chain disrupted.');
-        }
-    }
-
+  
     public function removeUserImage()
     {
         $return['error'] = TRUE;
@@ -1619,89 +1483,11 @@ class Memberpage extends MY_Controller
         echo json_encode($return);
     }
 
-    /**
-     *  DEV Generates Default categories with uncategorized products appended
-     */
-    public function simDefCat()
+    public function checkSubscriptionStat()
     {
-        $prodLimit = 12;
-        // MemberID = vendor ID
-        //$memberId = $this->session->userdata("member_id"); // EXAMPLE ONLY
-        $pm = $this->serviceContainer['product_manager'];
-        $em = $this->serviceContainer['entity_manager'];
+        $um = $this->serviceContainer['user_manager'];
 
-        $parentCat = $pm->getAllUserProductParentCategory($memberId);
-
-        // Append non categorized products to parent category
-        foreach($parentCat as $idCat=>$category){
-            $parentCat[$idCat]['non_categorized_count'] = 0;
-            foreach($category['child_cat'] as $childCat){
-                $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($memberId, $childCat, $prodLimit);
-                $parentCat[$idCat]["products"] = array_merge($parentCat[$idCat]["products"], $categoryProducts);
-                $parentCat[$idCat]['non_categorized_count'] += count($categoryProducts);
-            }
-        }
-
-        // Display Test
-        foreach($parentCat as $catkey=>$cat){
-            print("<br><br>");
-            foreach($cat as $label => $val){
-                if($label === "products"){
-                    print("products" . "  : <br>");
-                    foreach($val as $product){
-                        print($product->getName() . "<br>");
-                    }
-                }
-                else{
-                    print($label . "  : ");
-                    if(is_array($val)){
-                        print_r($val);
-                    }
-                    else{
-                        print($val . "<br>");
-                    }
-                    
-                }
-            }
-        }
-        die();
-    }
-
-    /**
-     *  DEV Generate custom categories with products appended
-     */
-    public function simCustomCat()
-    {
-        $prodLimit = 12;
-        // MemberID = vendor ID
-        //$memberId = $this->session->userdata("member_id"); // EXAMPLE ONLY
-        $em = $this->serviceContainer["entity_manager"];
-        $result = array();
-
-        $customCat = $em->getRepository("EasyShop\Entities\EsMemberCat")
-                        ->getCustomCategoriesArray($memberId);
-
-        foreach( $customCat as $category ){
-            $result[$category["id_memcat"]] = array(
-                "name" => $category["cat_name"],
-                "is_featured" => $category["is_featured"],
-                "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
-            );
-        }
-
-        print("<pre>");
-
-        //DISPLAY
-        foreach($result as $id=>$category){
-            print("<br><br>Cat ID: " . $id . "<br>");
-            print("Name: " . $category["name"] . "<br>");
-            foreach($category["products"] as $prod){
-                print($prod->getName() . "<br>");
-            }
-        }
-        die();
+        $um->getVendorSubscriptionStatus(128,123);
     }
 
 }

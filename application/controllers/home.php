@@ -337,6 +337,29 @@ class Home extends MY_Controller
                 $this->load->view('pages/user/vendor_view', $data);
                 $this->load->view('templates/footer');
             }
+
+            // Data for the view
+            $data = array(
+                "arrVendorDetails" => $arrVendorDetails 
+                , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
+                , "defaultCatProd" => $productView['defaultCatProd']
+                , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
+                , "product_condition" => $this->lang->line('product_condition')
+                , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
+                , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
+                , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
+                , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
+                , "isLoggedIn" => $headerData['logged_in'] ? 1 : 0
+            ); 
+            
+            // Load Location
+            $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
+
+            // Load View
+            $this->load->view('templates/header_new', $headerData);
+            $this->load->view('templates/header_vendor',$data);
+            $this->load->view('pages/user/vendor_view', $data);
+            $this->load->view('templates/footer');
         }
         // Load invalid link error page
         else{

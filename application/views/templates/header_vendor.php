@@ -41,6 +41,16 @@
                             Message
                         </a>
                     </div>
+                    <div >
+                        <span class="subscription_btn" style="display: <?php echo $subscriptionStatus === 'followed' ? '' : 'none'  ?>">Unfollow</span>
+                        <span id="follow_btn" class="subscription_btn" style="display: <?php echo $subscriptionStatus === 'unfollowed' ? '' : 'none'  ?>">Follow</span>
+                        <?php echo form_open('');?>
+                            <input type="hidden" id="subscribe_status" value="<?php echo $subscriptionStatus?>">
+                            <input type="hidden" id="vendor_name" name="name" value="<?php echo $arrVendorDetails['username']?>">
+                            <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn?>">
+                            <input type="hidden" name="vendorlink" value="<?php echo $arrVendorDetails['userslug']?>">
+                        <?php echo form_close();?>
+                    </div>
                     <?php endif;?>
                 </div>
             </div>

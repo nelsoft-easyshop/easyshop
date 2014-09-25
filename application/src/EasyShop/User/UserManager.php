@@ -9,6 +9,7 @@ use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
+use EasyShop\Entities\EsVendorSubscribe;
 
 /**
  *  User Manager Class
@@ -425,4 +426,67 @@ class UserManager
             return false;
         }
     }
+
+    /**
+     *  Check if user is subscribed to vendor
+     *
+     *  @return string
+     */
+    public function getVendorSubscriptionStatus($memberId, $sellername)
+    {
+        $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                ->findOneBy(array("username"=>$sellername));
+
+        if(empty($vendorEntity)){
+            return false;
+        }
+
+        $subscriptionEntity = $this->em->getRepository("EasyShop\Entities\EsVendorSubscribe")
+                                        ->findOneBy(array("memberId" => $memberId, "vendorId" => $vendorEntity->getIdMember()));
+
+        if(!empty($subscriptionEntity)){
+            return "followed";
+        }
+        else{
+            return "unfollowed";
+        }
+    }
+
+    public function subscribeToVendor($memberId, $sellername)
+    {
+        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $memberId);
+        $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                ->findOneBy(array("username"=>$sellername));
+
+        if(empty($memberEntity) || empty($vendorEntity) ){
+            return false;
+        }
+
+        $subscriptionEntity = new EsVendorSubscribe();
+        $subscriptionEntity->setMemberId($memberId)
+                            ->setVendorId($vendorEntity->getIdMember());
+        $this->em->persist($subscriptionEntity);
+        $this->em->flush();
+
+        return true;
+    }
+
+    public function unsubscribeToVendor($memberId, $sellername)
+    {
+        $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                ->findOneBy(array("username"=>$sellername));
+
+        $subscriptionEntity = $this->em->getRepository("EasyShop\Entities\EsVendorSubscribe")
+                                        ->findOneBy(array(
+                                                    "memberId"=>$memberId
+                                                    ,"vendorId"=>$vendorEntity->getIdMember()
+                                                ));
+        if(!empty($subscriptionEntity)){
+            $this->em->remove($subscriptionEntity);
+            $this->em->flush();
+        }
+
+        return true;
+    }
+
 }
