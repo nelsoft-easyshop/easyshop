@@ -190,6 +190,17 @@ class EsMember
     private $storeName;
 
     /**
+     * @var string
+     * @ORM\Column(name="oauth_id", type="string", length=255, nullable=false)
+     */
+    private $oauthId;
+
+    /**
+     * @var string
+     * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
+     */
+    private $oauthProvider;
+    /**
      * @var integer
      *
      * @ORM\Column(name="failed_login_count", type="integer", nullable=true)
@@ -806,6 +817,17 @@ class EsMember
     }
 
     /**
+     * Set OauthId
+     *
+     * @param string $oauthId
+     * @return EsMember
+     */
+    public function setOauthId($oauthId)
+    {
+        $this->oauthId = $oauthId;
+    }
+
+    /**
      * Set failedLoginCount
      *
      * @param integer $failedLoginCount
@@ -814,8 +836,28 @@ class EsMember
     public function setFailedLoginCount($failedLoginCount)
     {
         $this->failedLoginCount = $failedLoginCount;
-
         return $this;
+    }
+
+    /**
+     * Get OauthId
+     *
+     * @return string
+     */
+    public function getOauthId()
+    {
+        return $this->oauthId;
+    }
+
+    /**
+     * Set OauthProvider
+     *
+     * @param string $oauthProvider
+     * @return string
+     */
+    public function setOauthProvider($oauthProvider)
+    {
+        $this->oauthProvider = $oauthProvider;
     }
 
     /**
@@ -837,8 +879,17 @@ class EsMember
     public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
     {
         $this->lastFailedLoginDatetime = $lastFailedLoginDatetime;
-
         return $this;
+    }
+
+    /**
+     * Get getOauthProvider
+     *
+     * @return string
+     */
+    public function getOauthProvider()
+    {
+        return $this->oauthProvider;
     }
 
     /**
@@ -850,7 +901,6 @@ class EsMember
     {
         return $this->lastFailedLoginDatetime;
     }
-
 
     /**
      * Add session
