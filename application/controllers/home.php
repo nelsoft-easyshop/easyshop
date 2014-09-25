@@ -391,6 +391,7 @@ class Home extends MY_Controller
                                                'ratingHeaders' => $ratingHeaders,
                                                'feedbackTabs' => $feedbackTabs,
                                                'member' => $member,
+                                               'viewer' => $data['user'],
                                                'orderRelations' => $orderRelations,
                                               ]);
         $this->load->view('templates/footer_new');

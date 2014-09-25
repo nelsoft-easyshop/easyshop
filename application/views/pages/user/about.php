@@ -248,28 +248,30 @@
                                     </table>
                                 </div>
                             </div>
+                                                            
+                            <?php echo form_open('/home/doCreateFeedback'); ?>
                             <div class="row">
                                 <div class="col-xs-6 col-message-1">
-                                    <input type="text" class="input-lg input-message" placeholder="NAME..."/>
+                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
                                 </div>
                             </div>                            
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <select class="input-lg input-message">
-                                        <option>Select the transaction you want to review</option>
+                                    <select class="input-lg input-message" name="feeback-order">
+                                        <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
-                                              <option>
+                                              <option value="<?php $order['idOrder'] ?>">
                                                     <?php echo html_escape($order['productname']); ?>
                                                     <?php echo '(Invoice: '.$order['invoiceNo'].')';  ?>
                                                     on <?php echo $order['dateadded']->format('F j, Y');  ?>
                                               </option>
                                         <?php endforeach; ?>
-                                    </select>
+                                    </select>                                 
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
+                                    <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -277,8 +279,12 @@
                                     <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
                                 </center>
                             </div>
+                            <input type='hidden' name='userId' value='<?php $member->getIdMember() ?>' />
+                            <?php echo form_open('/home/doCreateFeedback'); ?>
                         </div>
                     </div>
+               
+  
                 <?php endif; ?>
                
             </div>
