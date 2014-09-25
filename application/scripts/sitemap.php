@@ -87,7 +87,7 @@
         
          
          
-        $sql="SELECT CONCAT('vendor/',username) as url FROM es_member";
+        $sql="SELECT slug as url FROM es_member";
         $rs=$conn->query($sql);
         if($rs === false) {
             exit('SQL Query Error: '  . $conn->error);

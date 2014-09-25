@@ -12,7 +12,7 @@
 						</div>
 						<div class="transac_title_col3">
 							<strong>Sold to: </strong>
-							<a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo html_escape($transact['buyer'])?></a> <br />
+							<a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer'])?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>

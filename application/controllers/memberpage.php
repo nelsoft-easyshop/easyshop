@@ -53,7 +53,7 @@ class Memberpage extends MY_Controller
         
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
@@ -691,7 +691,7 @@ class Memberpage extends MY_Controller
                 'transact_num' => $this->input->post('transact_num'),
                 'courier' => $this->input->post('courier'),
                 'tracking_num' => $this->input->post('tracking_num'),
-                'expected_date' => date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))),
+                'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
             

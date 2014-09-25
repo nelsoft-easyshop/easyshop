@@ -111,8 +111,10 @@
                             <div class="col-sm-10 col-sm-pull-1 col-md-10 col-md-pull-1 col-sm-offset-1 col-md-offset-1">
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
-                                        <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
-                                        <span class="text-center">Log In with Facebook</span>
+                                        <a href="<?=$facebook_login_url?>">
+                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
+                                            <span class="text-center">Log In with Facebook</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -121,8 +123,10 @@
                             <div class="col-sm-10 col-sm-pull-1 col-md-10 col-md-pull-1 col-sm-offset-1 col-md-offset-1">
                                 <div class="log-in-btn log-in-google">
                                     <div>
-                                        <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
-                                        <span class="text-center">Log In with Google</span>
+                                        <a href="<?=$google_login_url?>">
+                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
+                                            <span class="text-center">Log In with Google</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

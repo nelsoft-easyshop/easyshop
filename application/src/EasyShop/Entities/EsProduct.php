@@ -3,6 +3,7 @@
 namespace EasyShop\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EsProduct
@@ -311,6 +312,26 @@ class EsProduct
      */
     private $soldPrice = '0.0000';
 
+    
+    /**
+     * @var \EasyShop\Entities\EsProductImage
+     * @ORM\OneToMany(targetEntity="EasyShop\Entities\EsProductImage", mappedBy="product")
+     **/
+
+    private $images;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="max_allowable_point", type="decimal", precision=15, scale=4, nullable=true)
+     */
+    private $maxAllowablePoint = '0.0000';
+
+    public function __construct() 
+    {
+        $this->images = new ArrayCollection();
+    }
+    
     /**
      * Get idProduct
      *
@@ -1222,4 +1243,36 @@ class EsProduct
         return $this->soldPrice;
     }
     
+    /** 
+     * Returns the images of a product
+     *
+     * @return EasyShop\Entities\EsProductImage
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    
+    /**
+     * Set maxAllowablePoint
+     *
+     * @param string $maxAllowablePoint
+     * @return EsProduct
+     */
+    public function setMaxAllowablePoint($maxAllowablePoint)
+    {
+        $this->maxAllowablePoint = $maxAllowablePoint;
+
+        return $this;
+    }
+
+    /**
+     * Get maxAllowablePoint
+     *
+     * @return string 
+     */
+    public function getMaxAllowablePoint()
+    {
+        return $this->maxAllowablePoint;
+    }
 }

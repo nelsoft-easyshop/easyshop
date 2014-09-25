@@ -17,11 +17,20 @@ class CategoryManager
     private $configLoader;
 
     /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+
+    /**
      * Constructor.
      */
-    public function __construct($configLoader)
+    public function __construct($configLoader,$em)
     {
         $this->configLoader = $configLoader;
+        $this->em = $em;
     }
 
     /**
@@ -41,6 +50,18 @@ class CategoryManager
             }
         } 
 
+        return $categoryList;
+    }
+
+    public function setCategoryImage($categoryList)
+    {
+        foreach($categoryList as $key => $value){ 
+                $categoryImage = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                            ->findOneBy(['idCat' => $value->getIdCat()]);
+                $imagePath = ($categoryImage) ? $categoryImage->getPath() : "";
+                $value->setImage($imagePath); 
+        } 
+        
         return $categoryList;
     }
 }

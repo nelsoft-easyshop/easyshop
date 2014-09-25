@@ -151,7 +151,13 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            // $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);
+
+            $maxPoint = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                            ->getMaxPoint(intval($member_id));
+
+            $data['maxPoint'] = $maxPoint;          
+            
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
@@ -1039,7 +1045,7 @@ class Payment extends MY_Controller{
             $sellerEmail = $seller['email'];
             $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
             $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
-
+            $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
 
             #Send message via easyshop_messaging to seller
             if($this->user_model->getUserById($sender)){        
@@ -1287,8 +1293,53 @@ class Payment extends MY_Controller{
 
     }
 
-}
+    /**
+     *  Universal Pay Method
+     *
+     *  This function should only serve as a bridge that calls PaymentService
+     *  and passes all the necessary variables (payment methods + cost of each,
+     *  session related data etc.)
+     * 
+     *  $paymentMethods should be constructed as follows:
+     *  
+     *  {
+     *      "CODGateway" : {
+     *              "method" : "CashOnDelivery", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      },
+     *      "PointGateway" : {
+     *              "method" : "Point", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      }
+     *  }
+     *   
+     */
+    function pay()
+    {
+        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+        
+        $carts = $this->session->all_userdata();
 
+        /* JSON Decode*/
+        $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
+
+        // Validate Cart Data
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+
+        $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+
+        extract($response);
+        $this->generateFlash($txnid,$message,$status);
+        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+    }
+}
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */

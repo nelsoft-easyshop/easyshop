@@ -2,25 +2,6 @@
 
 namespace EasyShop\PaymentGateways;
 
-use Doctrine\ORM\Query\ResultSetMapping;
-use EasyShop\Entities\EsAddress;
-use EasyShop\Entities\EsOrderShippingAddress;
-use EasyShop\Entities\EsLocationLookup;
-use EasyShop\Entities\EsOrder;
-use EasyShop\Entities\EsMember;
-use EasyShop\Entities\EsPaymentMethod;
-use EasyShop\Entities\EsOrderStatus;
-use EasyShop\Entities\EsOrderHistory;
-use EasyShop\Entities\EsOrderProduct;
-use EasyShop\Entities\EsProduct;
-use EasyShop\Entities\EsOrderProductStatus;
-use EasyShop\Entities\EsOrderBillingInfo;
-use EasyShop\Entities\EsBillingInfo;
-use EasyShop\Entities\EsBankInfo;
-use EasyShop\Entities\EsOrderProductAttr;
-use EasyShop\Entities\EsOrderProductHistory;
-use \DateTime;
-
 
 /**
  * Base payment gateway class
@@ -29,16 +10,6 @@ use \DateTime;
  */
 abstract class AbstractGateway implements GatewayInterface
 {
-    /**
-     * @var int
-     */
-    protected $amountAllocated;
-
-    /**
-     * @var string
-     */
-    protected $paymentMethodName;
-
     /**
      * @var mixed
      */
@@ -70,7 +41,7 @@ abstract class AbstractGateway implements GatewayInterface
      *
      * @var EasyShop\PaymentService\PaymentService
      */
-    protected $paymentService
+    protected $paymentService;
 
     /**
      * Constructor
@@ -83,38 +54,22 @@ abstract class AbstractGateway implements GatewayInterface
         $this->pointTracker = $pointTracker;
         $this->paymentService = $paymentService;
         $this->setParameters($params);
-        $this->paymentMethodName = $this->parameters['method'];
-        $this->amountAllocated = $this->parameters['amount'];
     }
 
     /**
      * Abstract Methods
      */
+
     abstract public function pay();
     abstract public function getExternalCharge();
     abstract public function getOrderStatus();
     abstract public function getOrderProductStatus();
-    abstract public function generateReferenceNumber();
-
-
+    abstract public function generateReferenceNumber($memberId);
+    
     /**
      * Getters and Setters
      */
-    public function getPaymentMethodName()
-    {
-        return $this->paymentMethodName;
-    }
-
-    public function getAmountAllocated()
-    {
-        return $this->amountAllocated;
-    }
-
-    public function setAmountAllocated($newAmount)
-    {
-        $this->amountAllocated = $newAmount;
-    }
-
+    
     public function setParameters($param = [])
     {
         foreach ($param as $key => $value) {
@@ -122,9 +77,13 @@ abstract class AbstractGateway implements GatewayInterface
         }
     }
 
+    public function setParameter($key, $value)
+    {
+         $this->parameters[$key] = $value;
+    }
+
     public function getParameter($key)
     {
         return $this->parameters[$key];
     }
-
 }
