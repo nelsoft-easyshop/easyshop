@@ -33,7 +33,7 @@ class product extends MY_Controller
         // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter = $this->input->get() ? $this->input->get() : array();
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
         $response['products'] = $searchProductService->getProductBySearch($getParameter);
 
