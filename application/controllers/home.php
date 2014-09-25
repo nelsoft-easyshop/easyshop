@@ -405,14 +405,15 @@ class Home extends MY_Controller
      */
     public function doUpdateDescription()
     {
+        $em = $this->serviceContainer['entity_manager'];
         $description = $this->input->post('description');
         $userId = intval($this->input->post('userId'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($userId);
-        if($member){
+        if($member && ($member->getIdMember() === intval($this->session->userdata('member_id')))){
             $member->setStoreDesc($description);
             $member->setLastmodifieddate(new DateTime('now'));                        
-            $this->serviceContainer['entity_manager']->flush();
+            $em->flush();
         }
         redirect('/'.$member->getSlug().'/about');
 
