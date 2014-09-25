@@ -27,8 +27,8 @@
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
                     <td class="td-contact-detail">
 
-                        <p class="text-contact"><?php echo html_escape($member->getContactno()); ?></p>
-                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($member->getContactno()); ?>">
+                        <p class="text-contact"><?php echo html_escape($contactNo); ?></p>
+                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
 
                     </td>
                 </tr>
@@ -43,7 +43,9 @@
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
-                        <p class="text-contact"><?php echo html_escape($streetAddr); ?></p>
+
+                        <p class="text-contact"><?php echo html_escape($streetAddr . ', ' . $city . ', ' . $region); ?></p>
+
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
                             <?php foreach($cities as $key => $value): ?>
