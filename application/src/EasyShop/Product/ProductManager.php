@@ -388,6 +388,7 @@ class ProductManager
         // Condition parameters passed
         $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $productLimit;
         $condition = strval($condition);
+
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
 
@@ -419,21 +420,21 @@ class ProductManager
 
         if($lprice !== ""){
             if(!$hasWhere){
-                $criteria->where(Criteria::expr()->gte("soldPrice", $lprice));
+                $criteria->where(Criteria::expr()->gte("finalPrice", $lprice));
                 $hasWhere = TRUE;
             }
             else{
-                $criteria->andWhere(Criteria::expr()->gte("soldPrice", $lprice));
+                $criteria->andWhere(Criteria::expr()->gte("finalPrice", $lprice));
             }
         }
 
         if($uprice !== ""){
             if(!$hasWhere){
-                $criteria->where(Criteria::expr()->lte("soldPrice", $uprice));
+                $criteria->where(Criteria::expr()->lte("finalPrice", $uprice));
                 $hasWhere = TRUE;
             }
             else{
-                $criteria->andWhere(Criteria::expr()->lte("soldPrice", $uprice));
+                $criteria->andWhere(Criteria::expr()->lte("finalPrice", $uprice));
             }   
         }
 

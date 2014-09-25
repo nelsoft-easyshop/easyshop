@@ -299,7 +299,6 @@ class Home extends MY_Controller
             // Data for the view
             $data = array(
                 "arrVendorDetails" => $arrVendorDetails 
-                //, "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
                 , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
                 , "defaultCatProd" => $productView['defaultCatProd']
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
@@ -311,9 +310,6 @@ class Home extends MY_Controller
             
             // Load Location
             $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
-            
-            // Load Product View
-            //$data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
 
             // Load View
             $this->load->view('templates/header_new', $headerData);
@@ -347,10 +343,12 @@ class Home extends MY_Controller
             $result = $pm->getVendorDefaultCatAndProd($memberId, $categoryProperties['child_cat']);
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count'];
+            $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
 
             $view = array(
                 'arrCat' => array(
-                    'products'=>$result['products']
+                    'products'=>$result['products'],
+                    'page' => 1
                 )
             );
 

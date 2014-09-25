@@ -1,4 +1,4 @@
-    <div class="product-paging" data-page="1">
+    <div class="product-paging" data-page="<?php echo $arrCat['page']?>">
         <?php foreach($arrCat['products'] as $objProduct):?>
         <?php 
             $escapeName = html_escape($objProduct->getName());

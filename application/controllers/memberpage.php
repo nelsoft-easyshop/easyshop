@@ -1391,22 +1391,18 @@ class Memberpage extends MY_Controller
 
         switch($oBy){
             case 1:
-                //$orderStr = "p.clickcount " . $order;
                 $orderBy = array("clickcount" => $order);
                 break;
             case 2:
                 $orderSearch = "NEW";
-                //$orderStr = "p.createddate " . $order;
                 $orderBy = array("createddate" => $order);
                 break;
             case 3:
                 $orderSearch = "HOT";
-                //$orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
                 $orderBy = array("isHot"=>$order, "clickcount"=>$order);
                 break;
             default:
                 $orderSearch = "NULL";
-                //$orderStr = "p.clickcount " . $order;
                 $orderBy = array("clickcount"=>$order);
                 break;
         }
@@ -1438,44 +1434,24 @@ class Memberpage extends MY_Controller
             case 2: // Default Categories
                 $result = $pm->getVendorDefaultCatAndProd($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
-                $productCount = $result[];
-
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                $productCount = $result['filtered_product_count'];
                 break;
             default: // Default Categories
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCatAndProd($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
                 break;
         }
 
         $arrCat = array(
             'page' => $page,
-            'products' => $products,
-            'product_images' => array()
+            'products' => $products
         );
-
-        // Generate product image array
-        /*foreach($products as $product){
-            $productId = $product->getIdProduct();
-            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
-                            ->getDefaultImage($productId);
-            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
-
-            if(!file_exists($imagePath)){
-                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
-            }
-            $arrCat['product_images'][$productId] = $imagePath;
-        }*/
 
         $parseData = array('arrCat'=>$arrCat);
         
         $serverResponse = array(
-            'htmlData' => $this->load->view("pages/user/vendor_product_view", $parseData, true)
+            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount
             , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
         );
