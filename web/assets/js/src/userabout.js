@@ -27,6 +27,22 @@
         });
     });
     
+    $(function(){
+        
+        $('#feedback-select').on('change', function(){
+             $feedbackSelect.removeClass("input-error");
+        });
+        
+        $( "#feedback-form" ).submit(function( event ) {
+            $feedbackSelect = $('#feedback-select');
+            if($feedbackSelect.val() == 0){
+                $feedbackSelect.addClass("input-error");
+                event.preventDefault();
+            }
+ 
+        });
+    });
+    
     $.scrollUp({
         scrollName: 'scrollUp', // Element ID
         scrollDistance: 300, // Distance from top/bottom before showing element (px)
