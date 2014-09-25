@@ -155,15 +155,17 @@
                         <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
+                <!--
                 <li>
-                    <a href="">Promo Page</a>
+                    <a href="/">Promo Page</a>
                 </li>
+                -->
                 <?php endif; ?>
                 <li >
-                    <a href="" class="<?php if($url_id=="about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
+                    <a href="/<?php echo $arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
                 </li>
                 <li>
-                    <a href="" class="<?php if($url_id=="contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
+                    <a href="/<?php echo $arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
                 </li>
             </ul>
             <ul class="sticky-nav">
@@ -245,7 +247,7 @@
 </section> 
 
 <!-- Load Js Files -->
-<script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type="text/javascript">
