@@ -27,6 +27,7 @@ section {
     text-transform:uppercase;
     font-weight: bold;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .table-contact-details{
@@ -205,6 +206,7 @@ section {
     border-radius: 4px;
     padding: 25px 25px;
     margin-top: 10px;
+    margin-bottom: 20px;
     margin-left: 30px;
 }
 
@@ -214,6 +216,7 @@ section {
     border-radius: 4px;
     padding: 25px 25px;
     margin-top: 10px;
+    margin-bottom: 20px;
     margin-left: 30px;
 }
 
@@ -223,12 +226,13 @@ section {
     border-radius: 4px;
     padding: 25px 25px;
     margin-top: 10px;
+    margin-bottom: 20px;
     margin-left: 30px;
     padding-bottom:30px;
 }
 
 .div-about-content{
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .div-about-edit-area{
@@ -237,6 +241,7 @@ section {
 
 .p-about{
     line-height: 20px;
+    
 }
 
 .textarea-about{
@@ -326,9 +331,51 @@ section {
 .table-rate{
     margin-bottom:7px;
 }
+.table-rate-seller{
+    margin-top: 15px;
+}
+
+.table-rate-seller-leave{
+    margin-top: 0px;
+}
+.td-rate-average {
+    padding-right: 5px;
+}
+
+.tdr-1{
+    text-align: left;
+     width: 140px;
+}
+
+.td-2, .td-3{
+    padding-left: 50px;
+}
+
+.tdr-2{
+    text-align: left;
+     width: 140px;
+}
+.tdr-3{
+    text-align:right;
+    padding-left:0px; 
+    width: 140px;
+}
+
+.td-rate-seller{
+    vertical-align: middle !important;
+}
+.v-align-middle{
+    vertical-align: middle !important;
+}
+
+.span-rate-c{
+    margin: 0px;
+    margin-top: -3px;
+    font-size: 13px;
+}
 
 .span-rate{
-    padding-left: 15px;
+    padding-left: 10px;
 }
 
 .fa-star{
@@ -382,7 +429,7 @@ section {
 }
 
 .div-feedback-list{
-    border-top: solid #fe893a 2px;
+    border-top: solid #fe893a 3px;
     padding-top: 30px;
     margin-top: 20px;
 }
@@ -418,9 +465,10 @@ section {
 }
 
 .star-feed{
-    font-size: 17px;
-    padding-right: 7px;
+    font-size: 24px;
+    padding-right: 0px;
 }
+
 
 .col-item-message{
     min-height: 90px;
@@ -464,4 +512,12 @@ section {
     display: table;
     vertical-align:middle;
     width: 100% !important;
+}
+
+.jumbotron{
+    margin-bottom: 0px !important;
+}
+
+.pagination{
+    margin: 10px !important;
 }

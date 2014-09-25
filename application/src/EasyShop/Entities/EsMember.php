@@ -204,6 +204,22 @@ class EsMember
     private $lastFailedLoginDatetime = 'CURRENT_TIMESTAMP';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="support_email", type="string", length=255, nullable=true)
+     */
+    private $supportEmail = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     */
+    private $website = '';
+
+
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
@@ -868,4 +884,51 @@ class EsMember
     {
         return $this->session;
     }
+
+    /**
+     * Set Support Email
+     *
+     * @param string $supportEmail
+     * @return EsMember
+     */
+    public function setSupportEmail($supportEmail)
+    {
+        $this->supportEmail = $supportEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get Support Email
+     *
+     * @return string 
+     */
+    public function getSupportEmail()
+    {
+        return $this->supportEmail;
+    }
+
+    /**
+     * Set Website
+     *
+     * @param string $website
+     * @return EsMember
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * Get Website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
 }

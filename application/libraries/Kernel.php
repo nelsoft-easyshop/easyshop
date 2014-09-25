@@ -171,8 +171,8 @@ class Kernel
         };
 
         //Validation Rules Service
-        $container['form_validation'] = function ($c) {
-            return new \EasyShop\FormValidation\ValidationRules();
+        $container['form_validation'] = function ($c) use($container) {
+            return new \EasyShop\FormValidation\ValidationRules($container['entity_manager']);
         };
 
         //Request Service
