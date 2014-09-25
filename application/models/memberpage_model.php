@@ -270,7 +270,7 @@ class memberpage_model extends CI_Model
         else{
             $config['image_library'] = 'gd2';
             $config['source_image'] = $path.'/usersize.png';
-            $config['maintain_ratio'] = true;
+            $config['maintain_ratio'] = false;
             
             $imageData = $this->upload->data();
             
@@ -371,8 +371,8 @@ class memberpage_model extends CI_Model
             
             //Resize to standard banner size
             $config['new_image'] = $path.'/banner.png';
-            $config['width'] = 980;
-            $config['height'] = 270;
+            $config['width'] = 1475;
+            $config['height'] = 366;
             $this->image_lib->initialize($config);  
             $this->image_lib->resize();	
         }
