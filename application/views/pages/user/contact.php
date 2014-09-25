@@ -144,28 +144,19 @@
                     <div class="div-message-form">
                         <div class="row">
                             <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="NAME..."/>
-                            </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="PHONE NUMBER..."/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
-                            </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="WEBSITE..."/>
+                                <input type="text" class="input-lg input-message" placeholder="NAME..." value="<?=$user['username']?>" disabled="disabled"/>
+                                <input type="hidden" value="<?=$message_recipient?>" id="msg_recipient">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
+                                <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..." id="message"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <center>
-                                <input type="submit" class="btn btn-send" value="SEND MESSAGE">
+                                <input type="button" class="btn btn-send" id="btn-send-msg" value="SEND MESSAGE">
+                                <img src="/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
                             </center>
                         </div>
                     </div>
@@ -175,20 +166,4 @@
         </div>
     </div>
 </section>
-<script>
-    $( ".fa-edit-icon" ).click(function() {
-        $(".input-detail").css("display","inline");
-        $(".fa-cancel-edit").css("display","inline");
-        $("#save-edit").css("display","inline");
-        $(".fa-edit").css("display","none");
-        $(".text-contact").css("display","none");
-     });
-    
-     $( ".fa-cancel-edit" ).click(function() {
-        $(".input-detail").css("display","none");
-        $(".fa-cancel-edit").css("display","none");
-        $("#save-edit").css("display","none");
-        $(".fa-edit").css("display","inline");
-        $(".text-contact").css("display","inline");
-     });
-</script>
+<script src="/assets/js/src/vendorpage_contact.js"></script>

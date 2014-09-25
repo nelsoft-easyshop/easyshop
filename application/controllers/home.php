@@ -468,7 +468,9 @@ class Home extends MY_Controller
     private function contactUser()
     {
         $data['title'] = 'Vendor Contact | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());                
+        $data['message_recipient'] = $this->uri->segment(1);
+        $data = array_merge($data, $this->fill_header());
+
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/contact');
