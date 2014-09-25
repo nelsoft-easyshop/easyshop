@@ -169,15 +169,15 @@
                     </p>
                     <div class="row">
                         <div class="col-xs-12">
-                            <table width="100%">
+                            <table width="" class="table-rate-seller">
                                 <tr>
-                                
                                     <?php $ratingCounter = 1; ?>
                                     <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                        <td width="33%">
-                                            <?php echo html_escape($ratingHeader)?>: 
+                                        <td class="td-rater td-rate-seller td-<?php echo $ratingCounter;?>">
+                                            <p class="span-rate-c"><?php echo html_escape($ratingHeader)?>: </p>
+                                        </td>
+                                        <td class="td-rate-average v-align-middle tdr-<?php echo $ratingCounter;?>" width="170px">
                                             <span class="span-rate">
-                                                
                                                 <?php for($i = 0; $i < round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
                                                     <i class="fa fa-star star-feed star-active"></i>
                                                 <?php endfor; ?>
@@ -185,7 +185,6 @@
                                                 <?php for($i = 0; $i < 5 - round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
                                                     <i class="fa fa-star star-feed"></i>
                                                 <?php endfor; ?>
-                                                
                                             </span>
                                         </td>
                                     <?php $ratingCounter++; ?>
@@ -229,11 +228,13 @@
                     <div class="div-message-form">
                         <div class="row">
                             <div class="col-xs-12">
-                                <table width="100%" class="table-rate">
-                                    <tr>
-                                        <td width="33%">
-                                             Item Quality: 
-                                            <span class="span-rate">
+                                <table class="table-rate-seller-leave">
+                                <tr>
+                                        <td class="td-rater td-rate-seller td-1">
+                                            <p class="span-rate-c">Item Quality: </p>
+                                        </td>
+                                        <td class="td-rate-average v-align-middle tdr-1">
+                                           <span class="span-rate">
                                                 <i class="fa fa-star fa-star-rate i1"></i>
                                                 <i class="fa fa-star fa-star-rate i2"></i>
                                                 <i class="fa fa-star fa-star-rate i3"></i>
@@ -241,9 +242,11 @@
                                                 <i class="fa fa-star fa-star-rate i5"></i>
                                             </span>
                                         </td>
-                                        <td width="33%">
-                                            Communication: 
-                                            <span class="span-rate">
+                                        <td class="td-rater td-rate-seller td-2">
+                                            <p class="span-rate-c">Communication: </p>
+                                        </td>
+                                        <td class="td-rate-average v-align-middle tdr-2">
+                                           <span class="span-rate">
                                                 <i class="fa fa-star fa-star-rate c-1"></i>
                                                 <i class="fa fa-star fa-star-rate c-2"></i>
                                                 <i class="fa fa-star fa-star-rate c-3"></i>
@@ -251,14 +254,16 @@
                                                 <i class="fa fa-star fa-star-rate c-5"></i>
                                             </span>
                                         </td>
-                                        <td width="34%" align="right">
-                                           Shipment Time: 
-                                            <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate s-1"></i>
-                                                <i class="fa fa-star fa-star-rate s-2"></i>
-                                                <i class="fa fa-star fa-star-rate s-3"></i>
-                                                <i class="fa fa-star fa-star-rate s-4"></i>
-                                                <i class="fa fa-star fa-star-rate s-5"></i>
+                                        <td class="td-rater td-rate-seller td-3">
+                                            <p class="span-rate-c">Shipment Time: </p>
+                                        </td>
+                                        <td class="td-rate-average v-align-middle tdr-3">
+                                           <span class="span-rate">
+                                                <i class="fa fa-star fa-star-rate c-1"></i>
+                                                <i class="fa fa-star fa-star-rate c-2"></i>
+                                                <i class="fa fa-star fa-star-rate c-3"></i>
+                                                <i class="fa fa-star fa-star-rate c-4"></i>
+                                                <i class="fa fa-star fa-star-rate c-5"></i>
                                             </span>
                                         </td>
                                     </tr>
