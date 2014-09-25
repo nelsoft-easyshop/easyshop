@@ -93,8 +93,10 @@
     
       
     $( ".feedback-ratings .fa-star-rate" ).click(function() {
+        var ratingHeaderCount = $(this).closest('.rating-header').attr('id');
+        $('#input-'+ratingHeaderCount).val($(this).data('number'));
         $(this).addClass("star-active"); 
-        $( this ).prevAll().addClass("star-active"); 
+        $(this).prevAll().addClass("star-active"); 
         $(this).nextAll().removeClass("star-active");
     });
     
@@ -115,6 +117,7 @@
         $(".fa-edit-about").css("display","inline");
     });
     
+    $();
     
     
 })(jQuery);
