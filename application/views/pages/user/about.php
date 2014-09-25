@@ -252,16 +252,19 @@
                                 <div class="col-xs-6 col-message-1">
                                     <input type="text" class="input-lg input-message" placeholder="NAME..."/>
                                 </div>
-                                <div class="col-xs-6 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="PHONE NUMBER..."/>
-                                </div>
-                            </div>
+                            </div>                            
                             <div class="row">
-                                <div class="col-xs-6 col-message-1">
-                                    <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
-                                </div>
-                                <div class="col-xs-6 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="WEBSITE..."/>
+                                <div class="col-xs-12">
+                                    <select class="input-lg input-message">
+                                        <option>Select the transaction you want to review</option>
+                                        <?php foreach($orderRelations as $order): ?>
+                                              <option>
+                                                    <?php echo html_escape($order['productname']); ?>
+                                                    <?php echo '(Invoice: '.$order['invoiceNo'].')';  ?>
+                                                    on <?php echo $order['dateadded']->format('F j, Y');  ?>
+                                              </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -269,21 +272,6 @@
                                     <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
                                 </div>
                             </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <select class="input-lg input-message">
-                                        <?php foreach($orderRelations as $order): ?>
-                                              <option>
-                                                    INVOICENO: <?php echo $order['invoiceNo'].' ~';  ?>
-                                                    DATE: <?php echo $order['dateadded']->format('jS F Y').' ~';  ?>
-                                                    <?php echo html_escape($order['productname']);  ?>
-                                              </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                            
                             <div class="row">
                                 <center>
                                     <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
