@@ -1,4 +1,4 @@
-<link type="text/css" href='/assets/css/contact.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/contact.css?ver=<?php echo ES_FILE_VERSION ?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
     <div class="container-non-responsive bg-product-section">
@@ -8,11 +8,11 @@
 
             <div class="col-xs-9 col-feedback-container">
                 
+               
                 <div class="panel-about-seller">
-
                     <?php if($isEditable): ?>
-                    <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
-                    <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+                        <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
+                        <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
                     <?php endif; ?>
                     <p class="panel-title-feedback">
                         About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
@@ -23,7 +23,6 @@
                         <p class="p-about">
                             <?php echo html_escape($member->getStoreDesc()); ?>
                         </p>
-                       
                         <div class="div-about-edit-area">
                             <?php echo form_open('home/doUpdateDescription') ?>
                                 <textarea class="input-lg input-message textarea-about" name='description' rows="12" placeholder='Say something about your shop...'"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
@@ -33,8 +32,12 @@
                                 <input type='hidden' name='userId' value="<?php echo $member->getIdMember(); ?>" />
                             <?php echo form_close(); ?>
                         </div>
+                        <input type='hidden' id='open-description' value='<?php echo $isEditable && (!$member->getStoreDesc() || strlen($member->getStoreDesc() === 0))  ? 'true' : 'false' ?>'/>
                     </div>
+                    
                 </div>
+
+            
             
             
                 <div class="panel-feedback-ratings">
@@ -94,84 +97,78 @@
                     </div>
                 </div>
 
-                
-                <div class="panel-feedback-message">
-                    <p class="panel-title-feedback">
-                        Leave A Feedback
-                    </p>
-                    <div class="div-message-form">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <table class="table-rate-seller-leave">
-                                <tr>
-                                        <td class="td-rater td-rate-seller td-1">
-                                            <p class="span-rate-c">Item Quality: </p>
-                                        </td>
-                                        <td class="td-rate-average v-align-middle tdr-1">
-                                           <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate i1"></i>
-                                                <i class="fa fa-star fa-star-rate i2"></i>
-                                                <i class="fa fa-star fa-star-rate i3"></i>
-                                                <i class="fa fa-star fa-star-rate i4"></i>
-                                                <i class="fa fa-star fa-star-rate i5"></i>
-                                            </span>
-                                        </td>
-                                        <td class="td-rater td-rate-seller td-2">
-                                            <p class="span-rate-c">Communication: </p>
-                                        </td>
-                                        <td class="td-rate-average v-align-middle tdr-2">
-                                           <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate c-1"></i>
-                                                <i class="fa fa-star fa-star-rate c-2"></i>
-                                                <i class="fa fa-star fa-star-rate c-3"></i>
-                                                <i class="fa fa-star fa-star-rate c-4"></i>
-                                                <i class="fa fa-star fa-star-rate c-5"></i>
-                                            </span>
-                                        </td>
-                                        <td class="td-rater td-rate-seller td-3">
-                                            <p class="span-rate-c">Shipment Time: </p>
-                                        </td>
-                                        <td class="td-rate-average v-align-middle tdr-3">
-                                           <span class="span-rate">
-                                                <i class="fa fa-star fa-star-rate c-1"></i>
-                                                <i class="fa fa-star fa-star-rate c-2"></i>
-                                                <i class="fa fa-star fa-star-rate c-3"></i>
-                                                <i class="fa fa-star fa-star-rate c-4"></i>
-                                                <i class="fa fa-star fa-star-rate c-5"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
+                <?php if(count($orderRelations) > 0): ?>
+                    <div class="panel-feedback-message">
+                        <p class="panel-title-feedback">
+                            Leave A Feedback
+                        </p>
+                        <div class="div-message-form">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table width="100%" class="table-rate">
+                                        <tr>
+                                            <?php $count = 1; ?>
+                                            <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                                <td width="33%" class='rating-header' id='rating-header<?php echo $count?>'>
+                                                    <?php echo html_escape($ratingHeader); ?>
+                                                    <span class="span-rate feedback-ratings">
+                                                        <?php for($i = 1; $i <= 5; $i++): ?>
+                                                            <i class="fa fa-star fa-star-rate" data-number="<?php echo $i ?>"></i>
+                                                        <?php endfor; ?>
+
+                                                    </span>
+                                                </td>
+                                            <?php $count++; ?>
+                                            <?php endforeach;?>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="NAME..."/>
+                                                            
+                            <?php echo form_open('/home/doCreateFeedback', ['id' => 'feedback-form']); ?>
+                            <div class="row">
+                                <div class="col-xs-12 col-message-2">
+                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
+                                </div>
+                            </div>                            
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <select id="feedback-select" class="input-lg input-message" name="feeback-order">
+                                        <option value="0">Select the transaction you want to review</option>
+                                        <?php foreach($orderRelations as $order): ?>
+                                              <option value="<?php echo $order['idOrder'] ?>">
+                                                    <?php echo html_escape($order['productname']); ?>
+                                                    <?php echo '(Invoice: '.$order['invoiceNo'].')';  ?>
+                                                    on <?php echo $order['dateadded']->format('F j, Y');  ?>
+                                              </option>
+                                        <?php endforeach; ?>
+                                    </select>    
+                                    <span id="feedback-order-error-icon" class="glyphicon glyphicon-remove form-control-feedback error-color" style="top: 0px !important; right: 17px;"></span>
+                                    <br/>
+                                    
+                                </div>
                             </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="PHONE NUMBER..."/>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-message-1">
-                                <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
+                            <div class="row">
+                                <center>
+                                    <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
+                                </center>
                             </div>
-                            <div class="col-xs-6 col-message-2">
-                                <input type="text" class="input-lg input-message" placeholder="WEBSITE..."/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <center>
-                                <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
-                            </center>
+                            <input type='hidden' name='userId' value='<?php echo $member->getIdMember() ?>' />
+                            <input type='hidden' name='rating1' value='0' id='input-rating-header1'/>
+                            <input type='hidden' name='rating2' value='0' id='input-rating-header2'/>
+                            <input type='hidden' name='rating3' value='0' id='input-rating-header3'/>
+                            <?php echo form_close(); ?>
                         </div>
                     </div>
-                </div>
+               
+  
+                <?php endif; ?>
+               
             </div>
             </div>
         </div>
@@ -182,5 +179,5 @@
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/userabout.js?ver="<?=ES_FILE_VERSION?>></script>
+<script type="text/javascript" src="/assets/js/src/userabout.js?ver=<?php echo ES_FILE_VERSION?>"></script>
 

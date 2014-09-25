@@ -321,7 +321,7 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());   
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug]);
+                                                           ->findOneBy(['slug' => $sellerslug]);                                
 
         $idMember = $member->getIdMember();
         $ratingHeaders = $this->lang->line('rating');
@@ -376,21 +376,32 @@ class Home extends MY_Controller
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
                                                                    'isHyperLink' => false), TRUE);
         $feedbackTabs['forOthersAsBuyer'] = $this->load->view('/partials/feedback', array(
-                                                                            'isActive' => false,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'for-other-buyer',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);                                                             
-
+                                                                              'isActive' => false,
+                                                                              'feedbacks' => $feedbacks,
+                                                                              'pagination' => $pagination,
+                                                                              'id' => 'for-other-buyer',
+                                                                              'ratingHeaders' => $ratingHeaders,
+                                                                              ), TRUE);                                                             
+        
+        $viewerId = $this->session->userdata('member_id');
+        $orderRelations = array();
+        if($viewerId){
+            $orderRelations = $this->serviceContainer['entity_manager']
+                                   ->getRepository('EasyShop\Entities\EsOrder')
+                                   ->getOrderRelations($viewerId, $idMember, true);
+        }
+        $isEditable = $viewerId && $member->getIdMember() === intval($viewerId);
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
-                                                'ratingHeaders' => $ratingHeaders,
-                                                'feedbackTabs' => $feedbackTabs,
-                                                'member' => $member,
-                                                'userDetails' => $userDetails,
-                                            ]);
+                                               'ratingHeaders' => $ratingHeaders,
+                                               'feedbackTabs' => $feedbackTabs,
+                                               'member' => $member,
+                                               'viewer' => $data['user'],
+                                               'orderRelations' => $orderRelations,
+                                               'isEditable' =>  $isEditable,
+                                               'userDetails' => $userDetails,
+                                              ]);
         $this->load->view('templates/footer_new');
     }
     
@@ -401,17 +412,63 @@ class Home extends MY_Controller
      */
     public function doUpdateDescription()
     {
+        $em = $this->serviceContainer['entity_manager'];
         $description = $this->input->post('description');
         $userId = intval($this->input->post('userId'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($userId);
-        if($member){
+        if($member && ($member->getIdMember() === intval($this->session->userdata('member_id')))){
             $member->setStoreDesc($description);
-            $this->serviceContainer['entity_manager']->flush();
-            redirect('/'.$member->getSlug().'/about');
+            $member->setLastmodifieddate(new DateTime('now'));                        
+            $em->flush();
         }
+        redirect('/'.$member->getSlug().'/about');
 
     }
+    
+    /**
+     * Creates a feedback
+     *
+     */
+    public function doCreateFeedback()
+    {
+        $em = $this->serviceContainer['entity_manager'];
+        $reviewer = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find(intval($this->session->userdata('member_id')));
+        $reviewee = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find(intval($this->input->post('userId')));
+        $orderToReview = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
+                                                           ->find(intval($this->input->post('feeback-order')));   
+             
+        $message = $this->input->post('feedback-message');
+                
+        if($reviewer && $reviewee && $orderToReview && strlen($message) > 0){
+            if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
+            }
+            else if($reviewee->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
+            }
+            else{
+                return false;
+            }
+            $feedback = new EasyShop\Entities\EsMemberFeedback();
+            $feedback->setMember($reviewer);
+            $feedback->setForMemberid($reviewee);
+            $feedback->setOrder($orderToReview);
+            $feedback->setFeedbMsg($message);
+            $feedback->setDateadded(new DateTime('now'));
+            $feedback->setRating1(intval($this->input->post('rating1')));
+            $feedback->setRating2(intval($this->input->post('rating2')));
+            $feedback->setRating3(intval($this->input->post('rating3')));
+            $feedback->setFeedbKind($feedbackType);
+            $em->persist($feedback);
+            $em->flush();
+        }
+        redirect('/'.$reviewee->getSlug().'/about');
+    }
+    
+    
     
     /**
      * Returns more feedback JSON
