@@ -254,16 +254,16 @@
                                     </table>
                                 </div>
                             </div>
-                                                            
+                            <br/>                                
                             <?php echo form_open('/home/doCreateFeedback'); ?>
                             <div class="row">
-                                <div class="col-xs-6 col-message-1">
+                                <div class="col-xs-12 col-message-2">
                                     <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
                                 </div>
                             </div>                            
                             <div class="row">
-                                <div class="col-xs-12">
-                                    <select class="input-lg input-message" name="feeback-order">
+                                <div class="col-xs-12 col-message-2">
+                                    <select class="input-lg input-message input-error" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
                                               <option value="<?php echo $order['idOrder'] ?>">
@@ -276,7 +276,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
                                 </div>
                             </div>
@@ -285,10 +285,12 @@
                                     <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
                                 </center>
                             </div>
+
                             <input type='hidden' name='userId' value='<?php echo $member->getIdMember() ?>' />
                             <input type='hidden' name='rating1' value='0' id='input-rating-header1'/>
                             <input type='hidden' name='rating2' value='0' id='input-rating-header2'/>
                             <input type='hidden' name='rating3' value='0' id='input-rating-header3'/>
+
                             <?php echo form_close(); ?>
                         </div>
                     </div>
