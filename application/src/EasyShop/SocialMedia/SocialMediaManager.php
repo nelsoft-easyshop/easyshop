@@ -146,4 +146,15 @@ class SocialMediaManager
 
         return $member;
     }
+
+    /**
+     * Create session that was previously implemented in stored procedure
+     * @param $memberId
+     * @return mixed
+     */
+    public function createSession($memberId)
+    {
+        $date =  new DateTime('now');
+        return sha1($memberId + $date->format('Y-m-d H:i:s'));
+    }
 }

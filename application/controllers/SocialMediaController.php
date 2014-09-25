@@ -6,6 +6,7 @@ class SocialMediaController extends MY_Controller
     function __construct()
     {
         parent::__construct();
+
         session_start();
         $this->load->library('session');
         $this->load->config('oauth', TRUE);
@@ -94,23 +95,21 @@ class SocialMediaController extends MY_Controller
      */
     public function login($userData)
     {
-        $this->load->model('cart_model');
-        $this->load->model('user_model');
-        $row = $this->user_model->VerifySocialMediaAccount($userData->getUsername(), $userData->getOauthId(), $userData->getOauthProvider());
-        if ($row['o_success'] >= 1) {
-            $this->session->set_userdata('member_id', $row['o_memberid']);
-            $this->session->set_userdata('usersession', $row['o_session']);
-            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
+        $session = $this->socialMediaManager->createSession($userData->getIdMember());
+        $em = $this->serviceContainer['entity_manager'];
+        $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
+        $cartData = unserialize($user->getUserdata());
+        $cartData = $cartData ? $cartData : array();
 
-            $em = $this->serviceContainer['entity_manager'];
-            $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
-            $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+        $this->session->set_userdata('member_id', $userData->getIdMember());
+        $this->session->set_userdata('usersession', $session);
+        $this->session->set_userdata('cart_contents', $cartData);
 
-            $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
-            $authenticatedSession->setMember($user)
-                ->setSession($session);
-            $em->persist($authenticatedSession);
-            $em->flush();
-        }
+        $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+        $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
+        $authenticatedSession->setMember($user)
+            ->setSession($session);
+        $em->persist($authenticatedSession);
+        $em->flush();
     }
 }
