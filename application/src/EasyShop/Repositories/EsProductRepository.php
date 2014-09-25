@@ -9,6 +9,9 @@ use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
+use EasyShop\Entities\EsOptionalAttrdetail;
+use EasyShop\Entities\EsOptionalAttrhead;
+
 
 class EsProductRepository extends EntityRepository
 {
@@ -463,6 +466,46 @@ class EsProductRepository extends EntityRepository
 
         return $resultNeeded; 
     }  
+
+    /**
+     * Delete products that do not have images inside admin folder
+     * @param  integer $id
+     */    
+
+    public function deleteProductFromAdmin($id)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder()
+                            ->select('pi')
+                            ->from('EasyShop\Entities\EsOptionalAttrhead','pi')
+                            ->where('pi.product = :productId')
+                            ->setParameter('productId', $id)
+                            ->getQuery();
+
+        $result = $qb->getOneOrNullResult();
+
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProductImage e 
+            WHERE e.product = ?1");
+        $query->setParameter(1, $id);
+        $query->execute();
+
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsOptionalAttrdetail e 
+            WHERE e.head = ?2");
+        $query->setParameter(2, $result->getIdOptionalAttrhead());
+        $query->execute();
+
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsOptionalAttrhead e 
+            WHERE e.product = ?3");
+        $query->setParameter(3, $id);
+        $query->execute();
+
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
+            WHERE e.idProduct = ?4");
+        $query->setParameter(4, $id);
+        $query->execute();        
+
+
+    }
 }
 
 
