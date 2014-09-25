@@ -15,7 +15,7 @@
 
             <table width="100%" class="table-contact-details">
 
-                <?php echo form_open('/' . html_escape($member->getUsername()) . '/about'); ?>
+                <?php echo form_open('/' . html_escape($member->getUsername()) . '/' . $targetPage); ?>
                 <tr>
                     <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
                     <td class="td-contact-detail">
@@ -40,6 +40,7 @@
                 <tr>
                     <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
                     <td class="td-contact-detail">
+                        <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
                         <text class="text-contact"><?php echo html_escape($streetAddr); ?></text>
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" value="<?php echo html_escape($streetAddr); ?>">
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
@@ -54,13 +55,13 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td class="td-contact-icon"><i class="fa fa-envelope fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getSupportEmail()); ?></text>
                         <input type="email" class="input-detail" placeholder="Email Address..." name="supportEmail" value="<?php echo html_escape($member->getSupportEmail()); ?>">
                     </td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
                     <td class="td-contact-detail">
@@ -157,3 +158,6 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="/assets/js/src/usercontact.js?ver="<?=ES_FILE_VERSION?>></script>
+
