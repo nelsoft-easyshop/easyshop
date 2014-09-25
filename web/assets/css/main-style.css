@@ -233,6 +233,7 @@ section {
     display: table-cell;
     height: 110px;
     position: relative;
+    text-align: center;
     vertical-align: middle;
     width: 109px;
 }
@@ -382,11 +383,71 @@ section {
 
 /** edit photo modal **/
 #div_user_image_prev {
-    height: 495px;
-    overflow-y: scroll;
+    text-align: center;
 }
+
+#div_user_image_prev h1 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.img-editor-container {
+    height: 340px;
+    border-bottom: 1px solid #cecece;
+    margin-bottom: 20px;
+}
+
+.img-editor-container img {
+    width: auto;
+    height: auto;
+    max-width: 500px;
+    max-height: 320px;
+}
+
+#div_user_image_prev span {
+    background-color: #fff;
+    color: #565656;
+    display: inline-block;
+    margin-right: 14px;
+    padding: 6px 12px;
+    width: 136px;
+}
+
+#div_user_image_prev span:hover {
+    background-color: #585a59;
+    color: #fff;
+}
+
+#div_user_image_prev button {
+    background-color: #00a388;
+    border-bottom: 2px solid #007c67;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    height: auto;
+    line-height: 23px;
+    margin: 0;
+    width: 136px;
+}
+
+#div_user_image_prev button:hover {
+    border-bottom: 2px solid #006655;
+    background-color: #02846f;
+    color: #fff;
+}
+
+#div_user_image_prev button:focus {
+    outline: none;
+}
+
+#simplemodal-container a.modalCloseImg {
+    background: url(../images/img-close.png) no-repeat;
+}
+
 .edit-banner-container {
-    max-height: 511px !important;
+    max-height: 489px !important;
 }
 
 .jcrop-holder {
@@ -539,7 +600,7 @@ section {
 }
 
 .sticky-nav .vendor-profile-img-con img {
-    max-height: 30px;
+    max-height: 25px;
     max-width: 33px;
 }
 
