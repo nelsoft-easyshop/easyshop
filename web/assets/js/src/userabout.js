@@ -1,5 +1,11 @@
 (function(){
     
+    $(function() {
+        if($('#open-description').val() == 'true'){
+            $( ".fa-edit-about" ).click();
+        }
+    });
+    
     $(function () {
         $("[rel='tooltip']").tooltip();
     });

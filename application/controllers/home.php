@@ -384,7 +384,7 @@ class Home extends MY_Controller
                                    ->getRepository('EasyShop\Entities\EsOrder')
                                    ->getOrderRelations($viewerId, $idMember, true);
         }
-
+        $isEditable = $viewerId && $member->getIdMember() === intval($viewerId);
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor');
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
@@ -393,6 +393,7 @@ class Home extends MY_Controller
                                                'member' => $member,
                                                'viewer' => $data['user'],
                                                'orderRelations' => $orderRelations,
+                                               'isEditable' =>  $isEditable,
                                               ]);
         $this->load->view('templates/footer_new');
     }
