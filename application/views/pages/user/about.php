@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <?php if(count($orderRelations) > 0): ?>
+                <?php if(count($orderRelations) > 0 || true): ?>
                     <div class="panel-feedback-message">
                         <p class="panel-title-feedback">
                             Leave A Feedback
@@ -133,7 +133,7 @@
                             </div>                            
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <select id="feedback-select" class="input-lg input-message" name="feeback-order">
+                                    <select id="feedback-select" class="input-lg input-message input-error" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
                                               <option value="<?php echo $order['idOrder'] ?>">
@@ -142,7 +142,10 @@
                                                     on <?php echo $order['dateadded']->format('F j, Y');  ?>
                                               </option>
                                         <?php endforeach; ?>
-                                    </select>                                 
+                                    </select>    
+                                    <span class="glyphicon glyphicon-remove form-control-feedback error-color" style="top: 0px !important; right: 17px;"></span>
+                                    <br/>
+                                    
                                 </div>
                             </div>
                             <div class="row">
