@@ -36,15 +36,16 @@ section {
 }
 
 .td-contact-icon{
-    vertical-align: top;
+    vertical-align: middle;
     padding-right: 15px;
     padding-bottom: 25px;
     text-align: center;
 }
 
 .td-contact-detail{
-    vertical-align: top;
+    vertical-align: middle;
     padding-left: 10px;
+    padding-bottom: 25px;
 }
 
 .fa-edit-icon{
@@ -153,6 +154,7 @@ section {
     resize:none;
     margin-bottom: 10px;
     display: none;
+    margin-top:10px;
 }
 
 .input-detail:focus{
@@ -162,6 +164,7 @@ section {
 
 .input-detail-select{
     height: 29px;
+    
 }
 
 .display-inline{
