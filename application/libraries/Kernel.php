@@ -80,7 +80,7 @@ class Kernel
             
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
-        
+
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
@@ -118,9 +118,11 @@ class Kernel
                                                         $formErrorHelper,
                                                         $stringHelper);        
         };
-        
-        
-        
+
+        $container['message_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            return new \EasyShop\Message\MessageManager($em);
+        };
 
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';

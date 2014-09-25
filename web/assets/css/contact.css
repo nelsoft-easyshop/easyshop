@@ -276,6 +276,7 @@ section {
     width: 100%;
     border: solid #ececec 1px;
     border-radius: 4px;
+    margin-top: 3%;
     background: #ececec;
     transition: all 0.5s ease;
     -webkit-transition: all 0.5s ease;
