@@ -1103,6 +1103,10 @@ td.td-view.p-view.color-default{
     color: #fff;
 }
 /** End of Item **/
+.list > .product-paging > .thumb > .panel-item{
+    display: none;
+}
+
 .list > .panel-list-item{
     display: inline-block;
     width:830px;
@@ -1252,6 +1256,7 @@ td.td-view.p-view.color-default{
     font-weight: bold;
     color: #02846f;
 }
+
 
 .btn-default-cart > span {
     padding-right: 4px;
