@@ -434,11 +434,11 @@ class Home extends MY_Controller
     {
         $em = $this->serviceContainer['entity_manager'];
         $reviewer = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->find($this->session->userdata('member_id'));
+                                                           ->find(intval($this->session->userdata('member_id')));
         $reviewee = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->find($this->input->post('userId'));
+                                                           ->find(intval($this->input->post('userId')));
         $orderToReview = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
-                                                           ->find($this->input->post('feeback-order'));   
+                                                           ->find(intval($this->input->post('feeback-order')));   
              
         $message = $this->input->post('feedback-message');
                 
@@ -452,7 +452,7 @@ class Home extends MY_Controller
             else{
                 return false;
             }
-            $feedback = new EasyShop\Entities\EsMemberFeedback;
+            $feedback = new EasyShop\Entities\EsMemberFeedback();
             $feedback->setMember($reviewer);
             $feedback->setForMemberid($reviewee);
             $feedback->setOrder($orderToReview);
