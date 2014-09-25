@@ -17,7 +17,7 @@ class EsPointRepository extends EntityRepository
     public function getMaxPoint($memberId)
     {
         $points = $this->_em->getRepository('EasyShop\Entities\EsPoint')
-                ->findOneBy(['member' => intval($memberId)]);
-        return $points->getPoint();
+                            ->findOneBy(['member' => intval($memberId)]);
+        return $points ? $points->getPoint() : 0;
     }
 }
