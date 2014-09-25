@@ -68,6 +68,7 @@
                     </div>
                 </div>
             </div>
+ 
         </div>
         <div class="col-xs-9 col-products">
             <div class="div-products">
@@ -121,13 +122,32 @@
                                 </ul>
                             </center>
                         </div>
+
                     <?php endif;?>
+                    
                 </div>
+                <div class="pagination-container">
+                    <center>
+                        <ul class="pagination pagination-items">
+                            <li class="disabled"><a href="#"><span>&laquo;</span></a></li>
+                            <li class="active"><a href="#"><span>1</span></a></li>
+                            <li><a href="#"><span>2</span></a></li>
+                            <li><a href="#"><span>3</span></a></li>
+                            <li><a href="#"><span>4</span></a></li>
+                            <li><a href="#"><span>5</span></a></li>
+                            <li><a href="#"><span>6</span></a></li>
+                            <li><a href="#"><span>7</span></a></li>
+                            <li><a href="#"><span>&raquo;</span></a></li>
+                        </ul>
+                    </center>
+                </div> 
                 <?php $divCounter++; endforeach;?> 
+ 
             </div>
         </div>
     </div>
     </div>
+ 
     
 </section>
 
