@@ -30,7 +30,6 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
-        $this->load->library('session');
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
     }

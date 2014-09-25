@@ -87,12 +87,11 @@
                         <?PHP else : ?>
                             <p>Recently add item(s)</p>
                             <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                <?PHP if(sizeof($cart_items) - 1 == $cnt || sizeof($cart_items) - 1 == $cnt +1) : ?>
+                                <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
                                     <div class="mrgn-bttm-15">
                                         <div class="header-cart-item-img">
                                             <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                <!--                                    <span><img src="/--><?php //echo $row['imagePath']; ?><!--thumbnail/--><?php //echo $row['imageFile']; ?><!--" alt="Doraemon"></span>-->
+                                                <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
                                             </a>
                                         </div>
                                         <div class="header-cart-item-con">
