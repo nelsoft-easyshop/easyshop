@@ -8,7 +8,7 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="/assets/images/img-default-vendor-profile-photo.jpg">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                     <h4>Air 21</h4>
                     <p><strong>Contact No. :</strong>09171234567</p>
                     <p>
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <img src="<?=base_url()?>/assets/images/img-icon-marker.png">
                         <span class="cl-1"><strong>Location not set</strong></span>
                     </p>
                     <div class="vendor-profile-btn">
@@ -24,7 +24,7 @@
                             <span class="glyphicon glyphicon-plus-sign"></span> Follow
                         </a>
                         <a href="" class="btn btn-default-1">
-                            <span class="glyphicon glyphicon-envelope"></span> Message
+                            <span class="icon-message-btn"></span> Message
                         </a>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 ?>
                 <li>
                     <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="<?=base_url()?>assets/images/<?php if($url_id=="0"){ echo "img-sticky-nav-home-active"; }else{ echo "img-sticky-nav-home";}?>.jpg" alt="Store">
+                        <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <li>
@@ -57,14 +57,14 @@
             <ul class="sticky-nav">
                 <li>
                     <div class="vendor-profile-img-con">
-                        <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" alt="Profile Photo">
+                        <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.png" alt="Profile Photo">
                     </div>
                     <h4>Air 21</h4>
                 </li>
                 <li>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.jpg"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li>
                     <select class="ui-form-control">
@@ -77,10 +77,12 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <span class="header-cart-items-con sticky-cart">
-                            <span class="header-cart-item">2 item(s)</span> in your cart
-                        </span>
-                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                            <span class="header-cart-items-con sticky-cart ui-form-control">
+                                <span class="header-cart-item">2 item(s)</span> in your cart
+                            </span>
+                            <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        </a>
                     </div>
                     <div class="sticky-header-cart-item-list">
                         <p>Recently add item(s)</p>

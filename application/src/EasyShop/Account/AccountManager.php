@@ -114,7 +114,7 @@ class AccountManager
                         ->setMethod('POST')
                         ->add('username', 'text', array('constraints' => $rules['username']))
                         ->add('password', 'text', array('constraints' => $rules['password']))
-                        ->getForm();;
+                        ->getForm();
         
         $form->submit([ 'username' => $username,
                         'password' => $password
@@ -224,6 +224,5 @@ class AccountManager
 
         return $result['hash'];
     }
-    
-        
+
 }

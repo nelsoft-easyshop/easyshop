@@ -81,10 +81,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <span class="header-cart-items-con">
-                    <span class="header-cart-item">2 item(s)</span> in your cart
-                </span>
-                <span class="header-cart-icon-con span_bg cart-icon"></span>
+                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                    <span class="header-cart-items-con ui-form-control">
+                        <span class="header-cart-item">2 item(s)</span> in your cart
+                    </span>
+                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+                </a>
             </div>
             <div class="header-cart-item-list">
                 <p>Recently add item(s)</p>
