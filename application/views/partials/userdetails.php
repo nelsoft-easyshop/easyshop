@@ -41,7 +41,7 @@
                     <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
-                        <text class="text-contact"><?php echo html_escape($streetAddr); ?></text>
+                        <text class="text-contact"><?php echo html_escape($streetAddr . ', ' . $city . ', ' . $region); ?></text>
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
                             <?php foreach($cities as $key => $value): ?>
