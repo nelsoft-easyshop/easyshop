@@ -32,7 +32,7 @@ section {
 
 .table-contact-details{
     margin-top: 25px;
-    border-bottom: solid #e2e2e2 1px;
+    border-bottom: solid #e2e2e2 0px;
 }
 
 .td-contact-icon{
@@ -169,7 +169,7 @@ section {
 }
 
 .panel-contact-details{
-    min-height: 500px;
+    min-height: 150px;
     width: 100%;
     background: #ffffff;
     border-radius: 4px;
