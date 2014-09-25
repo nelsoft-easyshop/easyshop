@@ -269,11 +269,8 @@ function ItemListAjax(CatDiv,page)
     });
 
     $(document).on('click','.icon-grid',function() {
-        console.log('grid clicked');
-        //var view = $("div.view").attr("class");
         var div = $("div.view");
         
-        //if(view == "view row row-items list")
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
         {
             div.removeClass("view row row-items list").addClass("view row row-items grid");
@@ -284,12 +281,8 @@ function ItemListAjax(CatDiv,page)
     });
 
     $(document).on('click','.icon-list',function() {   
-        console.log('list clicked');
-
-        //var view = $("div.view").attr("class");
         var div = $("div.view");
     
-        //if(view == "view row row-items grid")
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
         {
             div.removeClass("view row row-items grid").addClass("view row row-items list");

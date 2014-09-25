@@ -10,6 +10,8 @@
             $isPromote = intval($objProduct->getIsPromote());
             $isFreeShipping = $objProduct->getIsFreeShipping();
             $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
+            $briefDesc = html_escape($objProduct->getBrief());
+            $immediateCat = $objProduct->getCat()->getName();
         ?>
             <div class="col-lg-3 col-md-4 col-xs-6 thumb">
                 <div class="panel-item">
@@ -55,7 +57,9 @@
                         <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
                             <a href="<?php echo base_url() . 'item/' . $productSlug?>">
                                 <div class="span-space">
-                                    <span class="span-discount-pin">10% OFF</span>
+                                    <?php if($percentage && $percentage > 0):?>
+                                    <span class="span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                    <?php endif;?>
                                 </div>
                             </a>
                         </td>
@@ -72,17 +76,17 @@
                                 <?php endif;?>
                             </p>
                             <p class="p-list-item-category">
-                                Electronics and Gadgets
+                                <?php echo $immediateCat?>
                             </p>
                             <div class="div-list-desc-container">
-                                Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                                <?php echo $briefDesc;?>
                             </div>
                         </td>
                         <td width="25%" class="td-list-price">
                             <p class="p-list-price"> P <?php echo $productPrice?> </p>
                             <div class="clear"></div>
                             <p class="p-list-discount">
-                                <s> P <?php echo $originalPrice?> </s>
+                                <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                             </p>
                             <center>
                                 <button class="btn btn-default-1">
