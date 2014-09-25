@@ -243,7 +243,7 @@ class Home extends MY_Controller
     }
     
     /**
-     * Renders memberpage
+     * Renders vendorpage
      *
      * @param string $tab
      * @return View

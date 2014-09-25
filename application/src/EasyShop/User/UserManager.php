@@ -452,6 +452,11 @@ class UserManager
         }
     }
 
+    /**
+     *  Insert entry into es_vendor_subscribe
+     *
+     *  @return boolean
+     */
     public function subscribeToVendor($memberId, $sellername)
     {
         $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $memberId);
@@ -471,6 +476,11 @@ class UserManager
         return true;
     }
 
+    /**
+     *  Delete entry in es_vendor_subscribe
+     *
+     *  @return boolean
+     */
     public function unsubscribeToVendor($memberId, $sellername)
     {
         $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")

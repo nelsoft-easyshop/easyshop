@@ -379,6 +379,8 @@ class ProductManager
      *
      *  @param integer $memberId
      *  @param array $arrCatId 
+     *
+     *  @return array - filter count of products and array of product objects
      */
     public function getVendorDefaultCatAndProd($memberId, $arrCatId, $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
     {

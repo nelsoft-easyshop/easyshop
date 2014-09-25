@@ -25,6 +25,9 @@ function ReplaceNumberWithCommas(thisnumber){
     return n.join(".");
 }
 
+/**
+ *  Behavioral functions
+ */
 (function ($) {
 
     $('.sort_select').on('change',function(){
@@ -81,6 +84,9 @@ function ReplaceNumberWithCommas(thisnumber){
 
 })(jQuery);
 
+/**
+ *  Filter Button function
+ */
 (function ($){
 
     $('#filter-btn').on('click', function(){
@@ -105,6 +111,9 @@ function ReplaceNumberWithCommas(thisnumber){
 
 })(jQuery);
 
+/**
+ *  Subscription Functions
+ */
 (function ($){
 
     $('.subscription_btn').on('click', function(){

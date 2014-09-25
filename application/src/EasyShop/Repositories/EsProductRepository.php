@@ -489,13 +489,10 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getNotCustomCategorizedProducts($memberId, $catId, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
+    public function getNotCustomCategorizedProducts($memberId, $catId)
     {
         $em = $this->_em;
         $result = array();
-
-        $hasCondition = $hasLprice = $hasUprice = false;
-        $strCondition = $strLprice = $strUprice = "";
 
         $catCount = count($catId);
         $arrCatParam = array();
@@ -503,21 +500,6 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
-
-        if($condition !== ""){
-            $strCondition = " AND p.condition LIKE :condition";
-            $hasCondition = true;
-        }
-
-        if($lprice !== ""){
-            $strLprice = " AND p.price > :lprice";
-            $hasLprice = true;
-        }
-
-        if($uprice !== ""){
-            $strUprice = " AND p.price < :uprice";
-            $hasUprice = true;
-        }
 
         $dql = "
             SELECT p.idProduct
@@ -532,22 +514,10 @@ class EsProductRepository extends EntityRepository
                 AND p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
-                AND p.isDraft = 0 " .
-                $strCondition . $strUprice . $strLprice .
-                " ORDER BY " . $orderBy;
+                AND p.isDraft = 0 ";
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
-
-        if($hasCondition){
-            $query->setParameter('condition', $condition);
-        }
-        if($hasLprice){
-            $query->setParameter('lprice', $lprice);   
-        }
-        if($hasUprice){
-            $query->setParameter('uprice', $uprice);
-        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
@@ -561,202 +531,7 @@ class EsProductRepository extends EntityRepository
 
         return $result;
     }
-    /*public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
-    {
-        $em = $this->_em;
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
-        $result = array();
-
-        $hasCondition = $hasLprice = $hasUprice = false;
-        $strCondition = $strLprice = $strUprice = "";
-
-        $catCount = count($catId);
-        $arrCatParam = array();
-        for($i=1;$i<=$catCount;$i++){
-            $arrCatParam[] = ":i" . $i;
-        }
-        $catInCondition = implode(',',$arrCatParam);
-
-        if($condition !== ""){
-            $strCondition = " AND p.condition LIKE :condition";
-            $hasCondition = true;
-        }
-
-        if($lprice !== ""){
-            $strLprice = " AND p.price > :lprice";
-            $hasLprice = true;
-        }
-
-        if($uprice !== ""){
-            $strUprice = " AND p.price < :uprice";
-            $hasUprice = true;
-        }
-
-        $dql = "
-            SELECT p
-            FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
-                AND p.cat IN ( " . $catInCondition . " )
-                AND p.isDelete = 0
-                AND p.isDraft = 0 " .
-                $strCondition . $strUprice . $strLprice .
-                " ORDER BY " . $orderBy;
-
-        $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId)
-                    ->setFirstResult($page)
-                    ->setMaxResults($prodLimit);
-
-        if($hasCondition){
-            $query->setParameter('condition', $condition);
-        }
-        if($hasLprice){
-            $query->setParameter('lprice', $lprice);   
-        }
-        if($hasUprice){
-            $query->setParameter('uprice', $uprice);
-        }
-
-        for($i=1;$i<=$catCount;$i++){
-            $query->setParameter('i'.$i, $catId[$i-1]);
-        }
-
-        $paginator = new Paginator($query, $fetchJoinCollection = true);
-
-        foreach($paginator as $product){
-            $result[] = $product;
-        }
-
-        return $result;
-    }*/
-
-    public function countNotCustomCategorizedProducts($memberId, $catId, $condition="", $lprice="", $uprice="")
-    {
-        $em = $this->_em;
-
-        $catCount = count($catId);
-        $arrCatParam = array();
-        for($i=1;$i<=$catCount;$i++){
-            $arrCatParam[] = ":i" . $i;
-        }
-        $catInCondition = implode(',',$arrCatParam);
-
-        $hasCondition = $hasLprice = $hasUprice = false;
-        $strCondition = $strLprice = $strUprice = "";
-
-        if($condition !== ""){
-            $strCondition = " AND p.condition LIKE :condition";
-            $hasCondition = true;
-        }
-
-        if($lprice !== ""){
-            $strLprice = " AND p.price > :lprice";
-            $hasLprice = true;
-        }
-
-        if($uprice !== ""){
-            $strUprice = " AND p.price < :uprice";
-            $hasUprice = true;
-        }
-
-        $rsm = new ResultSetMapping();
-
-        $dql = "
-            SELECT COUNT(p.idProduct)
-            FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
-                AND p.cat IN ( " . $catInCondition . " )
-                AND p.isDelete = 0
-                AND p.isDraft = 0 " .
-                $strCondition . $strUprice . $strLprice;                
-
-        $query = $em->createQuery($dql)
-                    ->setParameter("member_id", $memberId);
-        
-        if($hasCondition){
-            $query->setParameter('condition', $condition);
-        }
-        if($hasLprice){
-            $query->setParameter('lprice', $lprice);   
-        }
-        if($hasUprice){
-            $query->setParameter('uprice', $uprice);
-        }
-
-        for($i=1;$i<=$catCount;$i++){
-            $query->setParameter('i'.$i, $catId[$i-1]);
-        }
-
-        return $query->getSingleScalarResult();
-    }
-
-    /*public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.id_product DESC")
-    {
-        $em = $this->_em;
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
-
-        $catCount = count($catId);
-        $arrCatParam = array();
-        //$catInCondition = $catCount > 0 ? implode(',',array_fill(0,$catCount,'?')) : "";
-
-        for($i=1;$i<=$catCount;$i++){
-            $arrCatParam[] = ":i" . $i;
-        }
-        $catInCondition = implode(',',$arrCatParam);
-
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('name','name');
-        $rsm->addScalarResult('slug','slug');
-        $rsm->addScalarResult('price','price');
-        $rsm->addScalarResult('product_image_path','product_image_path');
-
-        $sql = "
-            SELECT p.name, p.slug, FORMAT(p.price, 2) as price, pi.product_image_path
-            FROM es_product p
-            LEFT JOIN es_product_image pi
-                ON pi.product_id = p.id_product
-            WHERE p.id_product NOT IN (
-                    SELECT pc.product_id
-                    FROM es_member_prodcat pc
-                    INNER JOIN es_member_cat mc
-                        ON mc.id_memcat = pc.memcat_id
-                    WHERE mc.member_id = :member_id
-                )
-                AND p.member_id = :member_id
-                AND p.cat_id IN ( " . $catInCondition . " )
-                AND p.is_draft = 0
-                AND p.is_delete = 0
-            ORDER BY " . $orderBy . 
-            " LIMIT :page, :prod_limit";
-
-        $query = $em->createNativeQuery($sql, $rsm)
-                    ->setParameter("member_id", $memberId)
-                    ->setParameter("cat_id", $catId)
-                    ->setParameter("prod_limit", $prodLimit)
-                    ->setParameter("page", $page);
-
-        for($i=1;$i<=$catCount;$i++){
-            $query->setParameter('i'.$i, $catId[$i-1]);
-        }
-        
-        return $query->getResult();
-    }*/
-
-
+    
     /**
      * Get popular items by seller or category based on click count
      * @param  $offset   [description]
