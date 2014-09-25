@@ -25,7 +25,7 @@
                             <div class="category_nav product_content">
                                 <ul>
                                 <?php foreach($main_categories as $category): ?>
-                                    <li class = <?php echo ((isset($breadcrumbs[0]['id_cat']) &&  $category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
+                                    <li class = <?php echo ((isset($breadcrumbs[0]['id_cat']) &&  $category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="/category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
                                 <?php endforeach;?>
                                 </ul>
                                 <span id="prod" class="span_drop span_bg prod_cat_drop"></span>
@@ -52,7 +52,7 @@
                             <h4 class="panel-title panel-title-category">
                             Categories
                             <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                <img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
+                                <img class="pull-right" src="/assets/images/img_arrow_down.png">
                             </a>
                             </h4>
                         </div>
@@ -144,12 +144,12 @@
                                 <table width="100%" class="font-12">
                                     <tr>
                                         <td class="v-align-top" width="10%">
-                                            <a href="<?php echo base_url() . $product['sellerusername'];?>"> 
-                                                <img class="seller-img seller-img-m" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+                                            <a href="/<?php echo $product['sellerusername'];?>"> 
+                                                <img class="seller-img seller-img-m" src="/<?php echo  $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
                                             </a>
                                         </td>
                                         <td class="v-align-top td-seller-info">
-                                            <a href="<?php echo base_url() . $product['sellerusername'];?>"> 
+                                            <a href="/<?php echo $product['sellerusername'];?>"> 
                                                 <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                                             </a>
                                             <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
@@ -170,7 +170,7 @@
                                                                 <span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span>
                                                             </td>
                                                             <td style="td-rating">
-                                                                <span class="rating_value rating_value_m"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+                                                                <span class="rating_value rating_value_m"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="/assets/images/star-on.png" alt="*" title="">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -178,7 +178,7 @@
                                                                 <span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span>
                                                             </td>
                                                             <td style="td-rating">
-                                                                <span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+                                                                <span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="/assets/images/star-on.png" alt="*" title="">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -186,7 +186,7 @@
                                                                 <span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span>
                                                             </td>
                                                             <td style="td-rating">
-                                                                <span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+                                                                <span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="/assets/images/star-on.png" alt="*" title="">
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -225,9 +225,9 @@
                                                 <?php if(($vendorrating['rate_count'] <=0)):?>
                                                     <center><p style="margin-left: 13px;">No ratings received yet.</p></center>
                                                 <?php else:?>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
-                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="pull-right"><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="/assets/images/star-on.png" alt="*" title=""></span></p>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="/assets/images/star-on.png" alt="*" title=""></span></p>
+                                                    <p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="pull-right"><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="/assets/images/star-on.png" alt="*" title=""></span></p>
                                                 <?php endif;?>
                                             </a>            
                                         </span> 
@@ -246,7 +246,7 @@
                                                 <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
                                                     <?php foreach($product_option as $i):?>
                                                         <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-                                                            <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
+                                                            <a href="#" rel="{gallery: 'gal1', smallimage: '/<?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '/<?php echo $i['img_path'].$i['img_file']; ?>'}">
                                                         <?php endif; ?>
                                                         
                                                         <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
@@ -469,7 +469,7 @@
                         <div class="reviews_title">
                             <h3>Product reviews</h3>
                             <?php if($logged_in && $uid != $product['sellerid'] && in_array($uid,$allowed_reviewers) ):?>
-                            <p class="write_review"> <img src="<?=base_url()?>assets/images/img_edit.png">Write a review </p>
+                            <p class="write_review"> <img src="/assets/images/img_edit.png">Write a review </p>
                             <?php elseif($uid == $product['sellerid']): ?>
                             <p class=""><!-- Unable to review own product --></p>
                             <?php else: ?>
@@ -514,7 +514,7 @@
                                     </center>
                                     
                                     
-                                    <img src="<?=base_url()?>assets/images/bx_loader.gif" id="load_submitreview" style="position: relative; top:-200px; left:50%; display:none"/>
+                                    <img src="/assets/images/bx_loader.gif" id="load_submitreview" style="position: relative; top:-200px; left:50%; display:none"/>
                                 <?php echo form_close(); ?>
                             </div>
                             <div class="clear"></div>
@@ -524,11 +524,11 @@
                                 <table width="100%">
                                     <tr>
                                         <td style="vertical-align:top;">
-                                            <p> <img src="<?=base_url()?>assets/images/img_success.png"> </p>
+                                            <p> <img src="/>assets/images/img_success.png"> </p>
                                         </td>
                                         <td width="98%">
                                             <p><strong>Your review has been submitted. Reload the page to view your review. </strong></p>
-                                            <p><strong><a href="<?php echo base_url()?>item/<?php echo $product['slug'];?>">Click here to return to the product page.</a></strong></p>
+                                            <p><strong><a href="/item/<?php echo $product['slug'];?>">Click here to return to the product page.</a></strong></p>
                                         </td>
                                     </tr>
                                 </table>
@@ -549,10 +549,10 @@
                                         <p><?php echo $review['reviewer']?> | <?php echo $review['datesubmitted']?></p>
                                         <p>Rating:
                                             <?php for($i = $review['rating'];$i>0;$i--):?>
-                                                <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+                                                <img src="/assets/images/star-on.png" alt="*" title="">
                                             <?php endfor;?>
                                             <?php for($i = 5-$review['rating'];$i>0;$i--):?>
-                                                <img src="<?=base_url()?>assets/images/star-off.png" alt="" title="">
+                                                <img src="/assets/images/star-off.png" alt="" title="">
                                             <?php endfor;?>
                                         </p>
                                     </div>
@@ -593,7 +593,7 @@
                                                 <span class="reply_save orange_btn3">Save</span> 
                                                 
                                                 <span class="reply_cancel">Cancel</span>
-                                                <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:45%; margin-bottom: 15px; display:none"/>
+                                                <img src="/assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:45%; margin-bottom: 15px; display:none"/>
                                                 <div class="clear"></div>
                                                 <?php echo form_close();?>
                                             </div>
@@ -605,7 +605,7 @@
                                 <div class="clear"></div>
                                 <div class="review_last"> 
                                     <span id="see_more_reviews" style="font-weight:bold;"><a href="">See more reviews.</a></span> 
-                                    <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
+                                    <img src="/assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
                                     <br/><br/>
                                 </diV>
                             <?php endif; ?>
@@ -728,7 +728,7 @@
                                     
                                     <p class="p-panel-head pull-left">Product Review</p>
                                     <?php if($logged_in && $uid != $product['sellerid'] && in_array($uid,$allowed_reviewers) ):?>
-                                    <p class="write_review pull-right"> <img src="<?=base_url()?>assets/images/img_edit.png">Write a review </p>
+                                    <p class="write_review pull-right"> <img src="/assets/images/img_edit.png">Write a review </p>
                                     <?php elseif($uid == $product['sellerid']): ?>
                                     <p class=""><!-- Unable to review own product --></p>
                                     <?php else: ?>
@@ -750,10 +750,10 @@
                                             <p class="p-date-review"><?php echo $review['reviewer']?> | <?php echo $review['datesubmitted']?></p>
                                             <p class="p-rating">
                                                 <?php for($i = $review['rating'];$i>0;$i--):?>
-                                                    <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+                                                    <img src="/assets/images/star-on.png" alt="*" title="">
                                                 <?php endfor;?>
                                                 <?php for($i = 5-$review['rating'];$i>0;$i--):?>
-                                                    <img src="<?=base_url()?>assets/images/star-off.png" alt="" title="">
+                                                    <img src="/assets/images/star-off.png" alt="" title="">
                                                 <?php endfor;?>
                                             </p>
                                             <p class="p-review-content">
@@ -790,7 +790,7 @@
                                                     <textarea class="reply_field_m form-control no-border" name="reply_field" cols=50 rows=4></textarea>
                                                     
                                                     <span class="reply_save_m orange_btn3">Save</span> 
-                                                    <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="savereply_loadingimg_m" style="position: relative; top:12px; left:15px; display:none"/>
+                                                    <img src="/assets/images/orange_loader_small.gif" id="savereply_loadingimg_m" style="position: relative; top:12px; left:15px; display:none"/>
                                                     <span class="reply_cancel_m orange_btn3">Cancel</span>
                                                     <?php echo form_close();?>
                                                 </div>
@@ -801,7 +801,7 @@
                                     <div> 
                                         <center>
                                         <span id="see_more_reviews_m" style="font-weight:bold;"><a href="">See more reviews.</a></span> 
-                                        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="more_review_loading_img_m" style="position: relative; top:12px; left:15px; display:none; "/>
+                                        <img src="/assets/images/orange_loader_small.gif" id="more_review_loading_img_m" style="position: relative; top:12px; left:15px; display:none; "/>
                                         <br/><br/>
                                         </center>
                                     </div>
@@ -823,12 +823,12 @@
                         <?PHP foreach ($recommended_items as $row): ?>                
                         <li style="display: inline-block;">
                             <span class="rec_item_container">
-                            <a href="<?=base_url()."item/".$row['slug'];?>" class="lnk_rec_item">
-                                <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+                            <a href="<?= "/item/".$row['slug'];?>" class="lnk_rec_item">
+                                <img class="rec_item_img" src="/<?= $row['path'].'categoryview/'.$row['file']?>">
                             </a>
                             </span>
                             <p style="vertical-align: middle; margin-top: 5px;">
-                                <a href="<?=base_url()."item/".$row['slug'];?>">
+                                <a href="<?="/item/".$row['slug'];?>">
                                     <span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
                                 </a><br />
                                 <span class="price"> PHP <?=number_format($row['price'],2,'.',',');?></span>
