@@ -31,6 +31,7 @@
         
         $('#feedback-select').on('change', function(){
              $feedbackSelect.removeClass("input-error");
+             $('#feedback-order-error-icon').hide();
         });
         
         $( "#feedback-form" ).submit(function( event ) {
