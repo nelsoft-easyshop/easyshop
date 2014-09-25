@@ -1351,6 +1351,297 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
 
+    /**
+     *  AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     */
+    public function vendorLoadProducts()
+    {
+        $prodLimit = 12;
+
+        $vendorId = $this->input->get('vid');
+        $vendorName = $this->input->get('vn');
+        $catId = json_decode($this->input->get('cid'), true);
+        $catType = $this->input->get('ct');
+        $page = $this->input->get('p');
+        $oBy = intval($this->input->get('ob'));
+        $o = intval($this->input->get('o'));
+        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
+
+        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
+        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
+        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
+
+        $parameter = json_decode($this->input->get('qs'),TRUE);
+
+        $em = $this->serviceContainer["entity_manager"];
+        $searchProductService = $this->serviceContainer['search_product'];
+        $pm = $this->serviceContainer["product_manager"];
+
+        switch($o){
+            case 1:
+                $order = "DESC";
+                break;
+            case 2:
+                $order = "ASC";
+                break;
+            default:
+                $order = "DESC";
+                break;
+        }
+
+        switch($oBy){
+            case 1:
+                //$orderStr = "p.clickcount " . $order;
+                $orderBy = array("clickcount" => $order);
+                break;
+            case 2:
+                $orderSearch = "NEW";
+                //$orderStr = "p.createddate " . $order;
+                $orderBy = array("createddate" => $order);
+                break;
+            case 3:
+                $orderSearch = "HOT";
+                //$orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
+                $orderBy = array("isHot"=>$order, "clickcount"=>$order);
+                break;
+            default:
+                $orderSearch = "NULL";
+                //$orderStr = "p.clickcount " . $order;
+                $orderBy = array("clickcount"=>$order);
+                break;
+        }
+
+        switch($catType){
+            case 0: // Search
+                if($oBy > 1){
+                    $parameter['sortby'] = $orderSearch;
+                    $parameter['sorttype'] = $order;
+                }
+                if($condition != ""){
+                    $parameter['condition'] = $condition;
+                }
+                if(is_numeric($lprice) && is_numeric($uprice)){
+                    $parameter['startprice'] = $lprice;
+                    $parameter['endprice'] = $uprice;
+                }
+                $parameter['seller'] = "seller:".$vendorName;
+                $parameter['limit'] = 12;
+                $parameter['page'] = $page - 1;
+                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                $productCount = 0;
+                break;
+            case 1: // Custom - NOT YET USED
+                //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                //                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                //$productCount = 0;
+                break;
+            case 2: // Default Categories
+                $result = $pm->getVendorDefaultCatAndProd($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result[];
+
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                break;
+            default: // Default Categories
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                break;
+        }
+
+        $arrCat = array(
+            'page' => $page,
+            'products' => $products,
+            'product_images' => array()
+        );
+
+        // Generate product image array
+        /*foreach($products as $product){
+            $productId = $product->getIdProduct();
+            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
+                            ->getDefaultImage($productId);
+            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
+
+            if(!file_exists($imagePath)){
+                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
+            }
+            $arrCat['product_images'][$productId] = $imagePath;
+        }*/
+
+        $parseData = array('arrCat'=>$arrCat);
+        
+        $serverResponse = array(
+            'htmlData' => $this->load->view("pages/user/vendor_product_view", $parseData, true)
+            , 'isCount' => $isCount
+            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+        );
+
+        echo json_encode($serverResponse);
+    }
+    /*public function vendorLoadProducts()
+    {
+        $prodLimit = 12;
+
+        $vendorId = $this->input->get('vid');
+        $vendorName = $this->input->get('vn');
+        $catId = json_decode($this->input->get('cid'), true);
+        $catType = $this->input->get('ct');
+        $page = $this->input->get('p');
+        $oBy = intval($this->input->get('ob'));
+        $o = intval($this->input->get('o'));
+        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
+
+        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
+        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
+        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
+
+        $parameter = json_decode($this->input->get('qs'),TRUE);
+
+        $em = $this->serviceContainer["entity_manager"];
+        $searchProductService = $this->serviceContainer['search_product'];
+        $pm = $this->serviceContainer["product_manager"];
+
+        switch($o){
+            case 1:
+                $order = "DESC";
+                break;
+            case 2:
+                $order = "ASC";
+                break;
+            default:
+                $order = "DESC";
+                break;
+        }
+
+        switch($oBy){
+            case 1:
+                $orderStr = "p.clickcount " . $order;
+                break;
+            case 2:
+                $orderSearch = "NEW";
+                $orderStr = "p.createddate " . $order;
+                break;
+            case 3:
+                $orderSearch = "HOT";
+                $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
+                break;
+            default:
+                $orderSearch = "NULL";
+                $orderStr = "p.clickcount " . $order;
+                break;
+        }
+
+        switch($catType){
+            case 0: // Search
+                if($oBy > 1){
+                    $parameter['sortby'] = $orderSearch;
+                    $parameter['sorttype'] = $order;
+                }
+                if($condition != ""){
+                    $parameter['condition'] = $condition;
+                }
+                if(is_numeric($lprice) && is_numeric($uprice)){
+                    $parameter['startprice'] = $lprice;
+                    $parameter['endprice'] = $uprice;
+                }
+                $parameter['seller'] = "seller:".$vendorName;
+                $parameter['limit'] = 12;
+                $parameter['page'] = $page - 1;
+                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                $productCount = 0;
+                break;
+            case 1: // Custom
+                $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                $productCount = 0;
+                break;
+            case 2: // Default
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                break;
+            default: // Default Cat
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
+                $productCount = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->countNotCustomCategorizedProducts($vendorId, $catId, $condition, $lprice, $uprice);
+                break;
+        }
+
+        $arrCat = array(
+            'page' => $page,
+            'products' => $products,
+            'product_images' => array()
+        );
+
+        // Generate product image array
+        foreach($products as $product){
+            $productId = $product->getIdProduct();
+            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
+                            ->getDefaultImage($productId);
+            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
+
+            if(!file_exists($imagePath)){
+                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
+            }
+            $arrCat['product_images'][$productId] = $imagePath;
+        }
+
+        $parseData = array('arrCat'=>$arrCat);
+        
+        $serverResponse = array(
+            'htmlData' => $this->load->view("pages/user/vendor_product_view", $parseData, true)
+            , 'isCount' => $isCount
+            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+        );
+
+        echo json_encode($serverResponse);
+    }*/
+
+    //DEV FUNCTION HANDLES EDIT PROFILE
+    public function vendorDetailController()
+    {
+        $um = $this->serviceContainer['user_manager'];
+
+        $boolResult = $um->setUser(128)
+                        //->setStoreName("EasyShopINC.")
+                        //->setMobile("")
+                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123","Stephen", 9177050441)
+                        ->save();
+
+        if($boolResult){
+            echo $um->showDetails();
+            print('<br>Chain completed.');
+        }
+        else{
+            print($um->errorInfo());
+            print('<br>Chain disrupted.');
+        }
+    }
+
+    public function removeUserImage()
+    {
+        $return['error'] = TRUE;
+        $return['msg'] = "Something went wrong please try again later.";
+        $return['img'] = "";
+        $memberId = $this->session->userdata('member_id');
+
+        $userMgr = $this->serviceContainer['user_manager'];
+
+        $remove = $userMgr->removeUserImage($memberId);
+        if($remove){
+            $return['error'] = FALSE;
+            $return['msg'] = "";
+            $return['img'] = $remove;
+        }
+
+        echo json_encode($return);
+    }
 
     /**
      *  DEV Generates Default categories with uncategorized products appended
@@ -1435,157 +1726,6 @@ class Memberpage extends MY_Controller
             }
         }
         die();
-    }
-
-    /**
-     *  AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
-     */
-    public function vendorLoadProducts()
-    {
-        $prodLimit = 12;
-        $vendorId = $this->input->get('vid');
-        $vendorName = $this->input->get('vn');
-        $catId = json_decode($this->input->get('cid'), true);
-        $catType = $this->input->get('ct');
-        $page = $this->input->get('p');
-        $oBy = intval($this->input->get('ob'));
-        $o = intval($this->input->get('o'));
-
-        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
-        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
-        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
-
-        $parameter = json_decode($this->input->get('qs'),TRUE);
-
-
-        $em = $this->serviceContainer["entity_manager"];
-        $searchProductService = $this->serviceContainer['search_product'];
-
-        switch($o){
-            case 1:
-                $order = "DESC";
-                break;
-            case 2:
-                $order = "ASC";
-                break;
-            default:
-                $order = "DESC";
-                break;
-        }
-
-        switch($oBy){
-            case 1:
-                $orderStr = "p.clickcount " . $order;
-                break;
-            case 2:
-                $orderSearch = "NEW";
-                $orderStr = "p.createddate " . $order;
-                break;
-            case 3:
-                $orderSearch = "HOT";
-                $orderStr = "p.isHot " . $order . ", p.clickcount " . $order;
-                break;
-            default:
-                $orderSearch = "NULL";
-                $orderStr = "p.clickcount " . $order;
-                break;
-        }
-
-        switch($catType){
-            case 0: // Search
-                if($oBy > 1){  
-                    $parameter['sortby'] = $orderSearch;
-                    $parameter['sorttype'] = $order;
-                }
-                if($condition != ""){
-                    $parameter['condition'] = $condition;
-                }
-                if(is_numeric($lprice) && is_numeric($uprice)){
-                    $parameter['startprice'] = $lprice;
-                    $parameter['endprice'] = $uprice;
-                }
-                $parameter['seller'] = "seller:".$vendorName;
-                $parameter['limit'] = 12;
-                $parameter['page'] = $page - 1;
-                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
-                break;
-            case 1: // Custom
-                $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                break;
-            case 2: // Default
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                break;
-            default: // Default Cat
-                $products = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                break;
-        }
-
-        $arrCat = array(
-            'page' => $page,
-            'products' => $products,
-            'product_images' => array()
-        );
-
-        // Generate product image array
-        foreach($products as $product){
-            $productId = $product->getIdProduct();
-            $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
-                            ->getDefaultImage($productId);
-            $imagePath = $objImage->getDirectory() . 'categoryview/' . $objImage->getFilename();
-
-            if(!file_exists($imagePath)){
-                $imagePath = "assets/product/default/categoryview/default_product_img.jpg";
-            }
-            $arrCat['product_images'][$productId] = $imagePath;
-        }
-
-        $parseData = array('arrCat'=>$arrCat);
-        $serverResponse['htmlData'] = $this->load->view("pages/user/vendor_product_view", $parseData, true);
-
-        echo json_encode($serverResponse);
-    }
-
-    //DEV FUNCTION HANDLES EDIT PROFILE
-    public function vendorDetailController()
-    {
-        $um = $this->serviceContainer['user_manager'];
-
-        $boolResult = $um->setUser(128)
-                        //->setStoreName("EasyShopINC.")
-                        //->setMobile("")
-                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123","Stephen", 9177050441)
-                        ->save();
-
-        if($boolResult){
-            echo $um->showDetails();
-            print('<br>Chain completed.');
-        }
-        else{
-            print($um->errorInfo());
-            print('<br>Chain disrupted.');
-        }
-    }
-
-    public function removeUserImage()
-    {
-        $return['error'] = TRUE;
-        $return['msg'] = "Something went wrong please try again later.";
-        $return['img'] = "";
-        $memberId = $this->session->userdata('member_id');
-
-        $userMgr = $this->serviceContainer['user_manager'];
-
-        $remove = $userMgr->removeUserImage($memberId);
-        if($remove){
-            $return['error'] = FALSE;
-            $return['msg'] = "";
-            $return['img'] = $remove;
-        }
-
-        echo json_encode($return);
     }
 
 }

@@ -341,33 +341,14 @@ class Home extends MY_Controller
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
-        $productObjects = new stdClass();
+        $categoryProducts = array();
 
-        foreach( $parentCat as $idCat=>$category ){
-            $parentCat[$idCat]['non_categorized_count'] = 0;
-            $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
-                                ->getNotCustomCategorizedProducts($memberId, $category['child_cat'], $prodLimit);
-
-            $parentCat[$idCat]['products'] = $categoryProducts;
-            $parentCat[$idCat]['cat_type'] = 2;
-            $parentCat[$idCat]['non_categorized_count'] = (int)$em->getRepository("EasyShop\Entities\EsProduct")
-                                ->countNotCustomCategorizedProducts($memberId, $category['child_cat']);
-
-            $parentCat[$idCat]['json_subcat'] = json_encode($category['child_cat'], JSON_FORCE_OBJECT);
-
-            $productIdCollection = [];
-            foreach($categoryProducts as $product => $value){
-                $productId = $value->getIdProduct();
-                $resultObject = $pm->getProductDetails($productId);
-                $objImage = $em->getRepository("EasyShop\Entities\EsProductImage")
-                                ->getDefaultImage($productId); 
-                $value->directory = $objImage->getDirectory();
-                $value->imageFileName = $objImage->getFilename();
-            }
-
-            $productObjects = (object) array_merge((array) $productObjects, (array) $categoryProducts);
+        foreach( $parentCat as $idCat=>$categoryProperties ){
+            $result = $pm->getVendorDefaultCatAndProd($memberId, $categoryProperties['child_cat']);
+            $parentCat[$idCat]['products'] = $result['products'];
+            $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count'];
         }
-        
+
         return $parentCat;
     }
 

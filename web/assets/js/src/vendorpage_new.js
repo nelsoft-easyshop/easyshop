@@ -9,7 +9,8 @@ var memconf = {
     orderBy: 1,
     condition: "",
     lprice: "",
-    uprice: ""
+    uprice: "",
+    countfiltered: 0
 };
 
 /**
@@ -130,20 +131,9 @@ function ReplaceNumberWithCommas(thisnumber){
         uprice = parseFloat(uprice).toFixed(2);
 
         memconf.condition = condition;
-
-        if(!isNaN(lprice)){    
-            memconf.lprice = lprice;
-        }
-        else{
-            memconf.lprice = "";
-        }
-
-        if(!isNaN(uprice)){
-            memconf.uprice = uprice;
-        }
-        else{
-            memconf.uprice = "";
-        }
+        memconf.lprice = !isNaN(lprice) ? lprice : "";
+        memconf.uprice = !isNaN(uprice) ? uprice : "";
+        memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
         activeCategoryProductsDiv.find('.product-paging').remove();
         activeCategoryProductsDiv.find('li.pagination-indiv[data-page="1"]').trigger('click');
@@ -199,7 +189,7 @@ function ItemListAjax(CatDiv,page)
         url: config.base_url+'memberpage/'+'vendorLoadProducts',
         data: "vid="+memconf.vid+"&vn="+memconf.vname+"&cid="+catId+"&ct="+catType+
             "&p="+page+"&ob="+memconf.orderBy+"&o="+memconf.order+"&qs="+currentQueryString+"&con="+memconf.condition+"&lp="+memconf.lprice+"&up="+memconf.uprice+
-            "&"+memconf.csrfname+"="+memconf.csrftoken,
+            "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken,
         beforeSend: function(){
             loadingDiv.show();
             productPage.hide();
@@ -219,11 +209,18 @@ function ItemListAjax(CatDiv,page)
                 return false;
             }
 
-            if(productPage.lengt > 0){
+            if(productPage.length > 0){
                 CatDiv.find('.product-paging:last').after(obj.htmlData);    
             }
             else{
                 CatDiv.find('.loading_div').after(obj.htmlData);
+            }
+
+            if(obj.isCount){
+                CatDiv.find('.pagination-indiv:gt('+(obj.pageCount-1)+')').hide();
+            }
+            else{
+                CatDiv.find('.pagination-indiv').show();
             }
             
         } 

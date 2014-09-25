@@ -312,7 +312,8 @@ class ProductManager
                     'products' => array(),
                     'product_count' => 0,
                     'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
-                    'cat_img' => $categoryImage
+                    'cat_img' => $categoryImage,
+                    'cat_type' => 2
                 );
             }
             // For products whose parent is 'PARENT'
@@ -324,7 +325,8 @@ class ProductManager
                     'products' => array(),
                     'product_count' => 0,
                     'cat_link' => '',
-                    'cat_img' => $defaultCatImg
+                    'cat_img' => $defaultCatImg,
+                    'cat_type' => 2
                 );
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
@@ -371,6 +373,103 @@ class ProductManager
         $this->em->flush();
         return true;
     }
+
+    /**
+     *  Fetch products under parent category, based on child cat ids ($arrCatId)
+     *
+     *  @param integer $memberId
+     *  @param array $arrCatId 
+     */
+    public function getVendorDefaultCatAndProd($memberId, $arrCatId, $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
+    {
+        // Container for products fetched
+        $categoryProducts = array();
+
+        // Condition parameters passed
+        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $productLimit;
+        $condition = strval($condition);
+        $lprice = str_replace(",", "", (string)$lprice);
+        $uprice = str_replace(",", "", (string)$uprice);
+
+        $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                        ->getNotCustomCategorizedProducts($memberId, $arrCatId);
+        
+        // Fetch product object and append image
+        foreach($categoryProductIds as $productId){
+            $product = $this->getProductDetails($productId);
+            $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
+                                ->getDefaultImage($productId);
+            $product->directory = $objImage->getDirectory();
+            $product->imageFileName = $objImage->getFilename();
+
+            $categoryProducts[] = $product;
+        }
+
+        // Flag for triggering andWhere in criteria
+        $hasWhere = FALSE;
+
+        $arrCollectionProducts = new ArrayCollection($categoryProducts);
+        $criteria = new Criteria();
+
+        // Start appending filter conditions
+        if($condition !== ""){
+            $criteria->where(Criteria::expr()->eq("condition", $condition));
+            $hasWhere = TRUE;
+        }
+
+        if($lprice !== ""){
+            if(!$hasWhere){
+                $criteria->where(Criteria::expr()->gte("soldPrice", $lprice));
+                $hasWhere = TRUE;
+            }
+            else{
+                $criteria->andWhere(Criteria::expr()->gte("soldPrice", $lprice));
+            }
+        }
+
+        if($uprice !== ""){
+            if(!$hasWhere){
+                $criteria->where(Criteria::expr()->lte("soldPrice", $uprice));
+                $hasWhere = TRUE;
+            }
+            else{
+                $criteria->andWhere(Criteria::expr()->lte("soldPrice", $uprice));
+            }   
+        }
+
+        // Generate orderby criteria - Implemented to handle multiple conditions
+        $criteriaOrderBy = array();
+        foreach($orderBy as $sortBy=>$sort){
+            if($sort === "ASC"){
+                $criteriaOrderBy[$sortBy] = Criteria::ASC;
+            }
+            else{
+                $criteriaOrderBy[$sortBy] = Criteria::DESC;
+            }
+        }
+        $criteria->orderBy($criteriaOrderBy);
+
+        // Count product result after filtering
+        $filteredProductsCount = count($arrCollectionProducts->matching($criteria));
+
+        // Filter number of results (pagination)
+        $criteria->setFirstResult($page)
+                ->setMaxResults($productLimit);
+
+        // Push products to be displayed
+        $displayProducts = $arrCollectionProducts->matching($criteria);
+
+        // Generate result array
+        $result = array(
+            'products' => $displayProducts,
+            'filtered_product_count' => $filteredProductsCount
+        );
+
+        return $result;
+    }
+
+
+
 
 }
 
