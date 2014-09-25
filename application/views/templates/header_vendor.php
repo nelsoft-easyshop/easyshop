@@ -37,10 +37,10 @@
                     <?php else: ?>
                     <div class="vendor-profile-btn">
                         <span class="subscription_btn btn btn-default-2" style="display: <?php echo $subscriptionStatus === 'followed' ? '' : 'none'  ?>">
-                            <span class="glyphicon glyphicon-plus-sign"></span>Unfollow
+                            <span class="glyphicon glyphicon-minus-sign"></span>Unfollow
                         </span>
                         <span id="follow_btn" class="subscription_btn btn btn-default-2" style="display: <?php echo $subscriptionStatus === 'unfollowed' ? '' : 'none'  ?>">
-                            <span class="glyphicon glyphicon-minus-sign"></span>Follow
+                            <span class="glyphicon glyphicon-plus-sign"></span>Follow
                         </span>                       
 
                         <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
