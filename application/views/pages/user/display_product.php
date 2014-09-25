@@ -55,3 +55,69 @@
             </div>
         <?php endforeach;?>
     </div>
+
+    <div class="product-paging" data-page="<?php echo $arrCat['page']?>">
+        <?php foreach($arrCat['products'] as $objProduct):?>
+        <?php 
+            $escapeName = html_escape($objProduct->getName());
+            $productName = (strlen($escapeName)>17) ? substr_replace($escapeName, "...", 17) : $escapeName;
+            $productSlug = $objProduct->getSlug();
+            $productPrice = number_format($objProduct->getFinalPrice(), 2,'.',','); 
+            $originalPrice = number_format($objProduct->getOriginalPrice(),2,'.',',');
+            $percentage = $objProduct->getDiscountPercentage();
+            $isPromote = intval($objProduct->getIsPromote());
+            $isFreeShipping = $objProduct->getIsFreeShipping();
+            $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
+        ?>
+            <div class="panel panel-default panel-list-item">
+                <table width="100%">
+                    <tr>
+                        <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
+                            <a href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                <div class="span-space">
+                                    <span class="span-discount-pin">10% OFF</span>
+                                </div>
+                            </a>
+                        </td>
+                        <td width="55%" class="td-list-item-info">
+                            <p class="p-list-item-name">
+                                <?php if(strlen($escapeName)>35): ?>
+                                    <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
+                                        <?php echo substr_replace( $escapeName, "...", 35);?>
+                                    </a>
+                                <?php else: ?>
+                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                        <?php echo $escapeName;?>
+                                    </a>
+                                <?php endif;?>
+                            </p>
+                            <p class="p-list-item-category">
+                                Electronics and Gadgets
+                            </p>
+                            <div class="div-list-desc-container">
+                                Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                            </div>
+                        </td>
+                        <td width="25%" class="td-list-price">
+                            <p class="p-list-price">
+                                P <?php echo $productPrice?>
+                            </p>
+                            <div class="clear"></div>
+                            <p class="p-list-discount">
+                                <s> <?php echo $originalPrice?> </s>
+                            </p>
+                            <p class="p-discount">
+                                <span><s> <?php echo $originalPrice?> </s></span>
+                            </p>
+                            
+                            <center>
+                                <button class="btn btn-default-cart">
+                                    <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                </button>
+                            </center>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        <?php endforeach;?>
+    </div>

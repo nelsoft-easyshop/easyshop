@@ -217,12 +217,15 @@ function ItemListAjax(CatDiv,page)
             }
     });
 
-    $(document.body).on('click','.icon-grid',function() {
-        var view = $("div.view").attr("class");
-    
-        if(view == "view row row-items list")
+    $(document).on('click','.icon-grid',function() {
+        console.log('grid clicked');
+        //var view = $("div.view").attr("class");
+        var div = $("div.view");
+        
+        //if(view == "view row row-items list")
+        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
         {
-            $('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
+            div.removeClass("view row row-items list").addClass("view row row-items grid");
             $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-lg-3 col-md-4 col-xs-6 thumb");
             $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
             $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
@@ -230,14 +233,25 @@ function ItemListAjax(CatDiv,page)
     });
 
     $(document).on('click','.icon-list',function() {   
-        var view = $("div.view").attr("class");
-        if(view == "view row row-items grid")
+        console.log('list clicked');
+
+        //var view = $("div.view").attr("class");
+        var div = $("div.view");
+    
+        //if(view == "view row row-items grid")
+        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
         {
-            $('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
+            div.removeClass("view row row-items grid").addClass("view row row-items list");
             $('div.col-lg-3').removeClass("col-lg-3 col-md-4 col-xs-6 thumb").addClass("col-md-12 thumb");
             $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
             $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
         };
+    });
+
+    $(document).ready(function(){
+        $('[rel=tooltiplist]').tooltip({
+            placement : 'top'
+        });
     });
 
     $("#cat-header").on('click','.a-category',function() {
