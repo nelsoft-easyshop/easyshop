@@ -59,22 +59,6 @@
         activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
         zIndex: 2147483647, // Z-Index for the overlay
     });
-
-    $( ".fa-edit-icon" ).click(function() {
-        $(".input-detail").css("display","inline");
-        $(".fa-cancel-edit").css("display","inline");
-        $("#save-edit").css("display","inline");
-        $(".fa-edit-icon").css("display","none");
-        $(".text-contact").css("display","none");
-     });
-    
-     $( ".fa-cancel-edit" ).click(function() {
-        $(".input-detail").css("display","none");
-        $(".fa-cancel-edit").css("display","none");
-        $("#save-edit").css("display","none");
-        $(".fa-edit-icon").css("display","inline");
-        $(".text-contact").css("display","inline");
-     });
     
     $( "#ab" ).click(function() {
         $(this).css("color","#fe893a");

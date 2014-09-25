@@ -858,6 +858,12 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full');
     }
 
+    /**
+     *  Handles Vendor Contact Detail View
+     *
+     *  @param string $sellerslug
+     *
+     */
     public function doUpdateUserDetails($sellerslug)
     {
         $formValidation = $this->serviceContainer['form_validation'];
@@ -874,7 +880,7 @@ class Home extends MY_Controller
                         ->add('street_address', 'text', array('constraints' => $rules['street_address']))
                         ->add('city', 'text', array('constraints' => $rules['city']))
                         ->add('region', 'text', array('constraints' => $rules['region']))
-                        ->add('website', 'text', array('constraints' => $rules['website']))
+                        ->add('website', 'text')
                         ->getForm();
 
         if($this->input->post('storeName') || $this->input->post('contactNumber') || $this->input->post('streetAddress') || 
@@ -904,13 +910,32 @@ class Home extends MY_Controller
                                                 ->findOneBy(['location' => $formData['region']]);
 
                 $member->setStoreName($formData['shop_name']);
-                $member->setContactno($formData['contact_number']);
-                $addr->setAddress($formData['street_address']);
-                $addr->setCity($city);
-                $addr->setStateregion($region);
+                $member->setContactno(substr($formData['contact_number'], 1));
                 $member->setWebsite($formData['website']);
-                $this->serviceContainer['entity_manager']->flush();
 
+                if($addr === NULL){
+                    $country = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                        ->find(1);
+
+                    $addr = new EasyShop\Entities\EsAddress();
+                    $addr->setAddress($formData['street_address']);
+                    $addr->setCity($city);
+                    $addr->setStateregion($region);
+                    $addr->setCountry($country);
+                    $addr->setIdMember($member);
+                    $addr->setMobile($member->getContactno());
+                    $addr->setType(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
+
+                    $this->serviceContainer['entity_manager']->persist($addr);
+                }
+                else{
+                    $addr->setAddress($formData['street_address']);
+                    $addr->setCity($city);
+                    $addr->setStateregion($region);
+                    $addr->setMobile($member->getContactno());
+                }
+
+                $this->serviceContainer['entity_manager']->flush();
                 $data['isValid'] = true;
             }
             else{
@@ -929,7 +954,13 @@ class Home extends MY_Controller
                                               ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
 
         if($addr === NULL){
-            $data['cities'] = [['location' => '']];
+            // Default region is Abra
+            $defaultRegion = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->find(39);
+
+            $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                ->getCities($defaultRegion->getLocation());
+
             $data['streetAddr'] = '';
             $data['city'] = '';
             $data['region'] = '';
@@ -947,6 +978,8 @@ class Home extends MY_Controller
 
         $data['cityList'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getAllLocationType(3,true);
+
+        $data['contactNo'] = '0' . $member->getContactno();
 
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    

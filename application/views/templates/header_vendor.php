@@ -152,7 +152,7 @@
                 <?php if($noItem): ?>
                 <li>
                     <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="<?=base_url()?>assets/images/<?php if($url_id=="0"){ echo "img-sticky-nav-home-active"; }else{ echo "img-sticky-nav-home";}?>.jpg" alt="Store">
+                        <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <li>
@@ -174,9 +174,9 @@
                     <h4><?=$storeNameDisplay?></h4>
                 </li>
                 <li>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.jpg"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.jpg"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li> 
                     <form class="search-form">
@@ -190,10 +190,12 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <span class="header-cart-items-con sticky-cart">
-                            <span class="header-cart-item">2 item(s)</span> in your cart
-                        </span>
-                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                            <span class="header-cart-items-con sticky-cart ui-form-control">
+                                <span class="header-cart-item">2 item(s)</span> in your cart
+                            </span>
+                            <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        </a>
                     </div>
                     <div class="sticky-header-cart-item-list">
                         <p>Recently add item(s)</p>

@@ -32,19 +32,20 @@ section {
 
 .table-contact-details{
     margin-top: 25px;
-    border-bottom: solid #e2e2e2 1px;
+    border-bottom: solid #e2e2e2 0px;
 }
 
 .td-contact-icon{
-    vertical-align: top;
+    vertical-align: middle;
     padding-right: 15px;
     padding-bottom: 25px;
     text-align: center;
 }
 
 .td-contact-detail{
-    vertical-align: top;
+    vertical-align: middle;
     padding-left: 10px;
+    padding-bottom: 25px;
 }
 
 .fa-edit-icon{
@@ -153,6 +154,7 @@ section {
     resize:none;
     margin-bottom: 10px;
     display: none;
+    margin-top:10px;
 }
 
 .input-detail:focus{
@@ -162,6 +164,7 @@ section {
 
 .input-detail-select{
     height: 29px;
+    
 }
 
 .display-inline{
@@ -169,7 +172,7 @@ section {
 }
 
 .panel-contact-details{
-    min-height: 500px;
+    min-height: 100px;
     width: 100%;
     background: #ffffff;
     border-radius: 4px;
@@ -241,7 +244,8 @@ section {
 
 .p-about{
     line-height: 20px;
-    
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .textarea-about{
@@ -532,4 +536,9 @@ section {
 
 .pagination{
     margin: 10px !important;
+}
+
+.text-contact{
+    word-wrap: break-word;
+    width: 200px;
 }

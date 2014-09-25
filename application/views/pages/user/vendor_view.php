@@ -1,7 +1,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 
 <!-- Load body -->
-
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
     <div class="container-non-responsive bg-product-section">
@@ -59,7 +58,6 @@
                                     <li>
                                         <center>
                                             <input id="filter-btn" type="button" class="btn-filter" value="filter"/>
-
                                         </center>
                                     </li>
                                 </ul>
