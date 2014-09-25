@@ -118,7 +118,7 @@ class EsAddress
     /**
      * @var integer
      */
-    const TYPE_DELIVERY = 0;
+    const TYPE_DELIVERY = 1;
 
 
     /**
