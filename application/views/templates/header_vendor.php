@@ -81,9 +81,12 @@
                                     <input type='hidden' name='vendor' value='1' id='vendor-hidden'>
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
-                                    <span> Crop your Photo! </span>
-                                    <img src="" id="user_image_prev">
-                                    <button>OK</button>
+                                    <h1>Position and scale your photo</h1>
+                                    <div class="img-editor-container">
+                                        <img src="" id="user_image_prev">
+                                    </div>
+                                    <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+                                    <button class="btn btn-default-3">Apply</button>
                                 </div>
                             </div>
 
