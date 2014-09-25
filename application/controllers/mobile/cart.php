@@ -119,9 +119,9 @@ class cart extends MY_Controller
     {
         $cartData = unserialize($this->member->getUserdata());
         $cartData = $cartData ? $cartData : array();
-		
-		
-		$formattedCartContents = array();
+        
+        
+        $formattedCartContents = array();
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['idProduct' => $cartItem['id']]);
