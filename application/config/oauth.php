@@ -7,7 +7,7 @@ $config = array(
             'appId'  => '781007275276393',
             'secret' => '45ef9229f399e330b2c91eb474825044'
             ),
-        'redirect_url' => 'https://easyshop.com/SocialMediaController/registerFacebookUser',
+        'redirect_url' => 'https://staging.easyshop.ph/SocialMediaController/registerFacebookUser',
         'permission_to_access' => array(
             'email'
             ),
@@ -18,7 +18,7 @@ $config = array(
             'secret' => 'M93sKhVwLMP6otEdcbM5lQvw',
             'apiKey' => 'AIzaSyAPUvSDrq59kJO4-a47SbqG1WPCEbVghSQ'
         ),
-        'redirect_url' => 'https://easyshop.com/SocialMediaController/registerGoogleAccount',
+        'redirect_url' => 'https://staging.easyshop.ph/SocialMediaController/registerGoogleAccount',
         'permission_to_access' => array(
             'email',
             'https://www.googleapis.com/auth/userinfo.profile'
