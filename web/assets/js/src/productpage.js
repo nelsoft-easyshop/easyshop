@@ -489,8 +489,8 @@
                     value_arr.push([x.id, x.is_other]);
                 });
                 if(value_arr.sort().join(',') === sel_id.sort().join(',')){
-                    $('#p_itemid').val(index);
-                    $('.quantity')[0].innerHTML = value.quantity;
+                    $('#p_itemid').val(index);                    
+                    $('.quantity').html(value.quantity);
                     if(parseInt(value.quantity,10) > 0){
                         $('.fm1.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                     }
