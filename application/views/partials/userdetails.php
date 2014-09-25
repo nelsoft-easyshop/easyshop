@@ -7,9 +7,9 @@
            <input type="hidden" id="isEditable" value="<?php echo html_escape($isEditable)?>"/>
            <?php if($isEditable): ?>
 
-           <i class="fa fa-edit fa-edit-icon pull-right" id="meee" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
+           <i class="fa fa-edit fa-edit-icon pull-right" id="editIconOpen" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
            
-           <i class="fa fa-ban fa-cancel-edit pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+           <i class="fa fa-ban fa-cancel-edit pull-right" id="editIconClose"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
           
            <?php endif; ?>
 
@@ -26,8 +26,8 @@
                 <tr id="contactNoRow">
                     <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
                     <td class="td-contact-detail">
-                        <text class="text-contact"><?php echo html_escape($member->getContactno()); ?></text>
-                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($member->getContactno()); ?>">
+                        <text class="text-contact"><?php echo html_escape($contactNo); ?></text>
+                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
                     </td>
                 </tr>
                 <!-- <tr>
