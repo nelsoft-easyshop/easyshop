@@ -289,7 +289,7 @@ class Home extends MY_Controller
                 }
 
                 // If searching in page
-                if(count($_GET)>0){
+                if(count($this->input->get())>0){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
@@ -364,7 +364,7 @@ class Home extends MY_Controller
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCatAndProd($memberId, $categoryProperties['child_cat']);
+            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat']);
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
@@ -481,7 +481,7 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getVendorDefaultCatAndProd($member->getIdMember());
+        $getUserProduct = $this->getVendorDefaultCategoryAndProducts($member->getIdMember());
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
@@ -642,7 +642,7 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getVendorDefaultCatAndProd($member->getIdMember());
+        $getUserProduct = $this->getVendorDefaultCategoryAndProducts($member->getIdMember());
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 

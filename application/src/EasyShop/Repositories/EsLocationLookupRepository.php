@@ -78,7 +78,9 @@ class EsLocationLookupRepository extends EntityRepository
         $qbResult = $qb->select('loc')
                         ->from('EasyShop\Entities\EsLocationLookup','loc')
                         ->where(
-                                    $qb->expr()->in('loc.type', [0,3,4])
+                                    $qb->expr()->in('loc.type', [EsLocationLookup::TYPE_COUNTRY
+                                                                ,EsLocationLookup::TYPE_STATEREGION
+                                                                ,EsLocationLookup::TYPE_CITY])
                                 )
                         ->orderBy('loc.location', 'ASC')
                         ->getQuery();

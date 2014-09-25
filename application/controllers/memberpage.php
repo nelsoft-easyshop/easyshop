@@ -1346,7 +1346,7 @@ class Memberpage extends MY_Controller
             $boolResult = $um->setUser($memberId)
                             ->setStoreName($storeName)
                             ->setMobile($mobileNum)
-                            ->setAddressTable($stateRegionId, $cityId, "", 0)
+                            ->setAddressTable($stateRegionId, $cityId, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
                             ->save();
 
             $serverResponse["result"] = $boolResult;
@@ -1437,12 +1437,12 @@ class Memberpage extends MY_Controller
                 //$productCount = 0;
                 break;
             case 2: // Default Categories
-                $result = $pm->getVendorDefaultCatAndProd($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
             default: // Default Categories
-                $result = $pm->getVendorDefaultCatAndProd($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;

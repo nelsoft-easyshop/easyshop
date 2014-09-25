@@ -100,6 +100,11 @@ class EsCat
     private $image = '';
 
     /**
+     *  @var integer
+     */
+    const CUSTOM_TYPE = 2;
+
+    /**
      * Get idCat
      *
      * @return integer 

@@ -16,6 +16,7 @@ use EasyShop\Entities\EsMemberProdcat;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Easyshop\Entities\EsProducItemLock;
+use EasyShop\Entities\EsCat;
 
 /**
  * Product Manager Class
@@ -313,7 +314,7 @@ class ProductManager
                     'product_count' => 0,
                     'cat_link' => '/category/' . $vendorCategory['p_cat_slug'],
                     'cat_img' => $categoryImage,
-                    'cat_type' => 2
+                    'cat_type' => EsCat::CUSTOM_TYPE
                 );
             }
             // For products whose parent is 'PARENT'
@@ -326,7 +327,7 @@ class ProductManager
                     'product_count' => 0,
                     'cat_link' => '',
                     'cat_img' => $defaultCatImg,
-                    'cat_type' => 2
+                    'cat_type' => EsCat::CUSTOM_TYPE
                 );
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
