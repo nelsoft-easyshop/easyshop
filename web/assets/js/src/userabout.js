@@ -35,26 +35,6 @@ $(function () {
         activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
         zIndex: 2147483647, // Z-Index for the overlay
     });
-    
-    $( "#regionSelect" ).change(function() {
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var stateRegion = $( "#regionSelect" ).val();
-        $.ajax({
-            url:"/home/getCityLocation",
-            type:"POST",
-            dataType:"JSON",
-            data: {stateRegion:stateRegion, csrfname:csrftoken},
-            success:function(data){
-                var list = '';
-                $("#citySelect").empty();
-                for (var key in data) {
-                    list += "<option value='" + data[key]['location'] + "'>" + data[key]['location'] + "</option>";
-                }
-                $("#citySelect").html(list);
-            },
-        });
-    });
 
     $( ".fa-edit-icon" ).click(function() {
         $(".input-detail").css("display","inline");
