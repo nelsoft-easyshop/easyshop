@@ -4,7 +4,7 @@
             <p class="panel-title-contact">
                 Details
            </p>
-
+           <input type="hidden" id="isEditable" value="<?php echo html_escape($isEditable)?>"/>
            <?php if($isEditable): ?>
 
            <i class="fa fa-edit fa-edit-icon pull-right" id="meee" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
@@ -16,18 +16,18 @@
             <table width="100%" class="table-contact-details">
 
                 <?php echo form_open('/' . html_escape($member->getUsername()) . '/' . $targetPage); ?>
-                <tr>
+                <tr id="storeNameRow">
                     <td class="td-contact-icon"><i class="fa fa-user fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getStoreName()); ?></text>
-                        <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" value="<?php echo html_escape($member->getStoreName()); ?>">
+                        <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($member->getStoreName()); ?>">
                     </td>
                 </tr>
-                <tr>
+                <tr id="contactNoRow">
                     <td class="td-contact-icon"><i class="fa fa-phone fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><?php echo html_escape($member->getContactno()); ?></text>
-                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" value="<?php echo html_escape($member->getContactno()); ?>">
+                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($member->getContactno()); ?>">
                     </td>
                 </tr>
                 <!-- <tr>
@@ -37,12 +37,12 @@
                         <input type="text" class="input-detail" placeholder="Fax Number..." value=" +61 3 8376 6284">
                     </td>
                 </tr> -->
-                <tr>
+                <tr id="addressRow">
                     <td class="td-contact-icon"><i class="fa fa-map-marker fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
                         <text class="text-contact"><?php echo html_escape($streetAddr); ?></text>
-                        <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" value="<?php echo html_escape($streetAddr); ?>">
+                        <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
                             <?php foreach($cities as $key => $value): ?>
                                 <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $city? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
@@ -62,11 +62,11 @@
                         <input type="email" class="input-detail" placeholder="Email Address..." name="supportEmail" value="<?php echo html_escape($member->getSupportEmail()); ?>">
                     </td>
                 </tr> -->
-                <tr>
+                <tr id="websiteRow">
                     <td class="td-contact-icon"><i class="fa fa-globe fa-2x"></i></td>
                     <td class="td-contact-detail">
                         <text class="text-contact"><a href="#"><?php echo html_escape($member->getWebsite()); ?></a></text>
-                        <input type="text" class="input-detail" placeholder="Website..." name="website" value="<?php echo html_escape($member->getWebsite()); ?>">
+                        <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($member->getWebsite()); ?>">
                     </td>
                 </tr>
                 <tr >

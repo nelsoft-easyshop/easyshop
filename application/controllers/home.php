@@ -705,6 +705,12 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full');
     }
 
+    /**
+     *  Handles Vendor Contact Detail View
+     *
+     *  @param string $sellerslug
+     *
+     */
     public function doUpdateUserDetails($sellerslug)
     {
         $formValidation = $this->serviceContainer['form_validation'];
