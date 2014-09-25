@@ -87,9 +87,10 @@ class EsProductRepository extends EntityRepository
      * @param  array   $productIds
      * @param  integer $offset
      * @param  integer $perPage
+     * @param  boolean $applyLimit
      * @return mixed
      */
-    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
+    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
     {   
         if(!empty($productIds)){
             $this->em =  $this->_em;
@@ -103,9 +104,12 @@ class EsProductRepository extends EntityRepository
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)
-                                    ->setParameter('ids', $productIds)
-                                    ->setFirstResult($offset*$perPage)
-                                    ->setMaxResults($perPage);
+                                    ->setParameter('ids', $productIds);
+                if($applyLimit){
+                    $query->setFirstResult($offset*$perPage)
+                        ->setMaxResults($perPage);
+                }
+                
                 $results = $query->getResult();
                 return $results;
             }
@@ -478,13 +482,86 @@ class EsProductRepository extends EntityRepository
 
     /**
      *  Get user products that have no assigned custom category
+     *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
      *  @param array $catId
      *
      *  @return array
      */
-    public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
+    public function getNotCustomCategorizedProducts($memberId, $catId, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
+    {
+        $em = $this->_em;
+        $result = array();
+
+        $hasCondition = $hasLprice = $hasUprice = false;
+        $strCondition = $strLprice = $strUprice = "";
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        if($condition !== ""){
+            $strCondition = " AND p.condition LIKE :condition";
+            $hasCondition = true;
+        }
+
+        if($lprice !== ""){
+            $strLprice = " AND p.price > :lprice";
+            $hasLprice = true;
+        }
+
+        if($uprice !== ""){
+            $strUprice = " AND p.price < :uprice";
+            $hasUprice = true;
+        }
+
+        $dql = "
+            SELECT p.idProduct
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0 " .
+                $strCondition . $strUprice . $strLprice .
+                " ORDER BY " . $orderBy;
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId);
+
+        if($hasCondition){
+            $query->setParameter('condition', $condition);
+        }
+        if($hasLprice){
+            $query->setParameter('lprice', $lprice);   
+        }
+        if($hasUprice){
+            $query->setParameter('uprice', $uprice);
+        }
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        $rawResult = $query->getResult();
+
+        foreach( $rawResult as $row ){
+            $result[] = $row['idProduct'];
+        }
+
+        return $result;
+    }
+    /*public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.clickcount DESC", $condition="", $lprice="", $uprice="")
     {
         $em = $this->_em;
         $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
@@ -538,18 +615,12 @@ class EsProductRepository extends EntityRepository
                     ->setMaxResults($prodLimit);
 
         if($hasCondition){
-            //print('has condition . <br>');
-            //print($condition . '<br>');
             $query->setParameter('condition', $condition);
         }
         if($hasLprice){
-            //print('has lprice <br>');
-            //print($lprice . '<br>');
             $query->setParameter('lprice', $lprice);   
         }
         if($hasUprice){
-            //print('has uprice <br>');
-            //print($uprice . '<br>');
             $query->setParameter('uprice', $uprice);
         }
 
@@ -564,9 +635,9 @@ class EsProductRepository extends EntityRepository
         }
 
         return $result;
-    }
+    }*/
 
-    public function countNotCustomCategorizedProducts($memberId, $catId)
+    public function countNotCustomCategorizedProducts($memberId, $catId, $condition="", $lprice="", $uprice="")
     {
         $em = $this->_em;
 
@@ -576,6 +647,24 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+
+        $hasCondition = $hasLprice = $hasUprice = false;
+        $strCondition = $strLprice = $strUprice = "";
+
+        if($condition !== ""){
+            $strCondition = " AND p.condition LIKE :condition";
+            $hasCondition = true;
+        }
+
+        if($lprice !== ""){
+            $strLprice = " AND p.price > :lprice";
+            $hasLprice = true;
+        }
+
+        if($uprice !== ""){
+            $strUprice = " AND p.price < :uprice";
+            $hasUprice = true;
+        }
 
         $rsm = new ResultSetMapping();
 
@@ -592,11 +681,22 @@ class EsProductRepository extends EntityRepository
                 AND p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
-                AND p.isDraft = 0";                
+                AND p.isDraft = 0 " .
+                $strCondition . $strUprice . $strLprice;                
 
         $query = $em->createQuery($dql)
                     ->setParameter("member_id", $memberId);
         
+        if($hasCondition){
+            $query->setParameter('condition', $condition);
+        }
+        if($hasLprice){
+            $query->setParameter('lprice', $lprice);   
+        }
+        if($hasUprice){
+            $query->setParameter('uprice', $uprice);
+        }
+
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
         }

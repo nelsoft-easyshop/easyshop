@@ -1,82 +1,101 @@
-
- <!-- PRODUCT DISPLAY -->
-    <?php $prodLimit = 12; ?>
-    <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-    <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
-        <div class="vendor-select-con">
-            <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-                <option value="1">Default Sorting</option>
-                <option value="2">Date Uploaded</option>
-                <option value="3">Hot</option>
-            </select>
-            <div class="clear"></div>
-        </div>
-        <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
-
-        <?php if($arrCat['non_categorized_count'] === 0): ?>
-            <span>No items available for this category.</span>
-        <?php else:?>
-            <div class="product-paging" data-page="1">
-                <?php foreach($arrCat['products'] as $objProduct):?>
-                    <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-                        <div class="panel-item">
-                            <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
-                                <div class="div-item">
-                                    <span class="span-img-wrapper" style="background: url(<?php echo $objProduct->directory .'categoryview/'.$objProduct->imageFileName;?>) center no-repeat; background-cover: cover;">
-                                        <center>
-                                            <div class="span-img-container">
-                                            </div>
-                                        </center>
-                                    </span>
-                                </div>
+    <div class="product-paging" data-page="<?php echo $arrCat['page']?>">
+        <?php foreach($arrCat['products'] as $objProduct):?>
+        <?php 
+            $escapeName = html_escape($objProduct->getName());
+            $productName = (strlen($escapeName)>17) ? substr_replace($escapeName, "...", 17) : $escapeName;
+            $productSlug = $objProduct->getSlug();
+            $productPrice = number_format($objProduct->getFinalPrice(), 2,'.',','); 
+            $originalPrice = number_format($objProduct->getOriginalPrice(),2,'.',',');
+            $percentage = $objProduct->getDiscountPercentage();
+            $isPromote = intval($objProduct->getIsPromote());
+            $isFreeShipping = $objProduct->getIsFreeShipping();
+            $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
+        ?>
+            <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                <div class="panel-item">
+                    <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
+                        <div class="div-item">
+                            <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
+                                <?php if($percentage && $percentage > 0):?>
+                                <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                <?php endif; ?>
+                                <center>
+                                    <div class="span-img-container">
+                                    </div>
+                                </center>
+                            </span>
+                        </div>
+                    </a>
+                    <div class="div-item-info">
+                        <p class="p-item-name">
+                            <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
+                                <?=$productName;?>
                             </a>
-                            <div class="div-item-info">
-                                <p class="p-item-name">
-                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $objProduct->getSlug()?>">
-                                        <?php 
-                                            $prod_name = html_escape($objProduct->getName());
-                                            echo (strlen($prod_name)>17) ? substr_replace($prod_name, "...", 17) : $prod_name;
-                                        ?>
-                                    </a>
-                                </p>
-                                <p class="p-category">
-                                    Clothes and Accessories
-                                </p>
-                                <div class="div-amount">
-                                    <p class="p-price">
-                                        <span><s>  </s></span> P <?php echo html_escape($objProduct->getPrice())?>
-                                    </p>
-                                    <p class="p-discount">
-                                        <span><s> P 1200.00 </s></span>
-                                    </p>
-                                    
-                                    <center>
-                                        <button class="btn btn-default-cart">
-                                            <span class="fa fa-shopping-cart"></span> BUY NOW
-                                        </button>
-                                    </center>
-                                </div>
-                            </div>
+                        </p>
+                        <p class="p-category">
+                            Clothes and Accessories
+                        </p>
+                        <div class="div-amount">
+                            <p class="p-price">
+                                <span><s>  <?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s></span> P <?=$productPrice;?>
+                            </p>
+                            <center>
+                                <button class="btn btn-default-cart">
+                                    <span class="fa fa-shopping-cart"></span> BUY NOW
+                                </button>
+                            </center>
                         </div>
                     </div>
-                <?php endforeach;?>
+                </div>
             </div>
-            <div class="clear"></div>
-            <div id="paginationDiv-<?php echo $catId?>">
-                <center>
-                    <ul class="pagination pagination-items">
-                        <li data-group="<?php echo $catId?>" class="pagination-maxleft"><a href="javascript:void(0)"><span>&laquo;</span></a></li>
-                        <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
-                            <li data-group="<?php echo $catId?>" class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>">
-                                <a href="javascript:void(0)">
-                                    <span><?php echo $i?></span>
-                                </a>
-                            </li>
-                        <?php endfor;?>
-                        <li data-group="<?php echo $catId?>" class="pagination-maxright"><a href="javascript:void(0)"><span>&raquo;</span></a></li>
-                    </ul>
-                </center>
+            
+            <div class="panel panel-default panel-list-item">
+                <table width="100%">
+                    <tr>
+                        <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
+                            <a href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                <div class="span-space">
+                                    <span class="span-discount-pin">10% OFF</span>
+                                </div>
+                            </a>
+                        </td>
+                        <td width="55%" class="td-list-item-info">
+                            <p class="p-list-item-name">
+                                <?php if(strlen($escapeName)>35): ?>
+                                    <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
+                                        <?php echo substr_replace( $escapeName, "...", 35);?>
+                                    </a>
+                                <?php else: ?>
+                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                        <?php echo $escapeName;?>
+                                    </a>
+                                <?php endif;?>
+                            </p>
+                            <p class="p-list-item-category">
+                                Electronics and Gadgets
+                            </p>
+                            <div class="div-list-desc-container">
+                                Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                            </div>
+                        </td>
+                        <td width="25%" class="td-list-price">
+                            <p class="p-list-price"> P <?php echo $productPrice?> </p>
+                            <div class="clear"></div>
+                            <p class="p-list-discount">
+                                <s> P <?php echo $originalPrice?> </s>
+                            </p>
+                            <center>
+                                <button class="btn btn-default-1">
+                                    <span class="fa fa-shopping-cart"></span> ADD TO CART
+                                </button>
+                            </center>
+                        </td>
+                    </tr>
+                </table>
             </div>
-        <?php endif;?>
+            
+            
+        <?php endforeach;?>
     </div>
-    <?php $divCounter++; endforeach;?>
+
+   
