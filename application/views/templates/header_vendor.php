@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div> 
-                    <h4 class="storeName"><?=$storeNameDisplay?></h4>
+                    <h4 class="storeName"><?=html_escape($storeNameDisplay)?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
                         <span class="glyphicon glyphicon-map-marker"></span>
@@ -31,7 +31,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
-                            <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                            <img src="/assets/images/img-vendor-icon-edit.jpg"> Edit Profile
                         </a>
                     </div>
                     <?php else: ?>
@@ -64,7 +64,7 @@
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
                 <a href="javascript:void(0)" id="banner_edit">
-                    <img src="<?=base_url()?>assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
+                    <img src="/assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
@@ -96,7 +96,7 @@
 
                             <div class="edit-profile-photo">
                                 <div>
-                                    <img src="<?=base_url()?>assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
+                                    <img src="/assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=$storeNameDisplay; ?>" placeholder="Seller Name">
+                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
                     <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
@@ -171,12 +171,12 @@
                     <div class="vendor-profile-img-con">
                         <img src="<?=$avatarImage?>" alt="Profile Photo">
                     </div>
-                    <h4><?=$storeNameDisplay?></h4>
+                    <h4><?=html_escape($storeNameDisplay);?></h4>
                 </li>
                 <li>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                    <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                    <a href=""><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href=""><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href=""><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li> 
                     <form class="search-form">
@@ -202,7 +202,7 @@
                         <div class="mrgn-bttm-15">
                             <div class="header-cart-item-img">
                                 <a href="">
-                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                    <span><img src="/assets/images/img_doraemon.png" alt="Doraemon"></span>
                                 </a>
                             </div>
                             <div class="header-cart-item-con">
@@ -215,7 +215,7 @@
                         <div class="mrgn-bttm-15">
                             <div class="header-cart-item-img">
                                 <a href="">
-                                    <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                    <span><img src="/assets/images/img_doraemon.png" alt="Doraemon"></span>
                                 </a>
                             </div>
                             <div class="header-cart-item-con">
@@ -246,7 +246,7 @@
 
 <!-- Load Js Files -->
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type="text/javascript">
     var jsonCity = <?php echo json_encode($cityLookup);?>;

@@ -1,7 +1,5 @@
 
 (function ($) {
-    
-   
 
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
@@ -282,4 +280,3 @@
     }
 
 })(jQuery);
- 
