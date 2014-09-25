@@ -227,7 +227,7 @@
                     </div>
                 </div>
 
-                <?php if(count($orderRelations) > 0): ?>
+                <?php if(count($orderRelations) > 0 || true): ?>
                     <div class="panel-feedback-message">
                         <p class="panel-title-feedback">
                             Leave A Feedback
@@ -272,7 +272,10 @@
                                                     on <?php echo $order['dateadded']->format('F j, Y');  ?>
                                               </option>
                                         <?php endforeach; ?>
-                                    </select>                                 
+                                    </select>    
+                                    <span class="glyphicon glyphicon-remove form-control-feedback error-color" style="top: 0px !important; right: 17px;"></span>
+                                    <br/>
+                                    
                                 </div>
                             </div>
                             <div class="row">
