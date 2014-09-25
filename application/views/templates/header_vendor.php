@@ -36,15 +36,19 @@
                     </div>
                     <?php else: ?>
                     <div class="vendor-profile-btn">
+                        <span class="subscription_btn btn btn-default-2" style="display: <?php echo $subscriptionStatus === 'followed' ? '' : 'none'  ?>">
+                            <span class="glyphicon glyphicon-minus-sign"></span>Unfollow
+                        </span>
+                        <span id="follow_btn" class="subscription_btn btn btn-default-2" style="display: <?php echo $subscriptionStatus === 'unfollowed' ? '' : 'none'  ?>">
+                            <span class="glyphicon glyphicon-plus-sign"></span>Follow
+                        </span>                       
+
                         <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
                             <span class="glyphicon glyphicon-envelope"></span>
                             Message
                         </a>
-                    </div>
-                    <div >
-                        <span class="subscription_btn" style="display: <?php echo $subscriptionStatus === 'followed' ? '' : 'none'  ?>">Unfollow</span>
-                        <span id="follow_btn" class="subscription_btn" style="display: <?php echo $subscriptionStatus === 'unfollowed' ? '' : 'none'  ?>">Follow</span>
-                        <?php echo form_open('');?>
+
+                         <?php echo form_open('');?>
                             <input type="hidden" id="subscribe_status" value="<?php echo $subscriptionStatus?>">
                             <input type="hidden" id="vendor_name" name="name" value="<?php echo $arrVendorDetails['username']?>">
                             <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn?>">
