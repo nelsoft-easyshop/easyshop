@@ -315,7 +315,7 @@
                                             <p class="buy_btn_sub"> This is your own listing </p>
                                         <?php else: ?>
                                             <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
-                                                    <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-10" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
+                                                    <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
                                                 <span class="font-10" width="100%">Item is listed as an ad only. *</span>
                                             <?php else: ?>
                                                     <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
