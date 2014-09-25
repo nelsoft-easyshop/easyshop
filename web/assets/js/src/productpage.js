@@ -193,7 +193,7 @@
         $(".product_quantity").numeric({negative : false});
         
         $(".product_quantity").keyup(function(){
-            var obj = $('.quantity')[0].innerHTML;
+            var obj = $('.quantity').html();
             obj = (obj === '')?'0':obj;
             if(parseInt($(this).val(),10) >   parseInt(obj,10)){
                 $(".product_quantity").val(parseInt(obj,10));
@@ -499,13 +499,13 @@
                 }
                 else{
                 $('.fm1.orange_btn3').removeClass("enabled").addClass("disabled");
-                $('.quantity')[0].innerHTML = $('.quantity').data('qty');
+                $('.quantity').html( $('.quantity').data('qty') );
                 }
             });
             
             if((allAttributeSelected)&&(!qty_match_found)){
                 $('.fm1.orange_btn3').removeClass("enabled").addClass("disabled");
-                $('.quantity')[0].innerHTML = 0;
+                $('.quantity').html(0);
             }
         
             //** Determine shipment location
