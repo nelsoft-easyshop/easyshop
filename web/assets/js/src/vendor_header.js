@@ -227,7 +227,7 @@
 
                 if(imageUploadType  == "avatar"){
                     jcrop_api = $.Jcrop($('#user_image_prev'),{
-                        aspectRatio: width/height,
+                        aspectRatio: 1,
                         boxWidth: 500,
                         boxHeight: 500,
                         minSize: [width*0.1,height*0.1],
@@ -239,7 +239,7 @@
                 }
                 else{
                     jcrop_api = $.Jcrop($('#user_image_prev'),{
-                        aspectRatio: 980/270,
+                        aspectRatio: 1475/366,
                         allowSelect: false,
                         setSelect:[0,0,width*0.5,height*0.5],
                         boxWidth: 500,
