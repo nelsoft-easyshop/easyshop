@@ -41,7 +41,7 @@
                 ?>
                 <li>
                     <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="<?=base_url()?>assets/images/<?php if($url_id=="0"){ echo "img-sticky-nav-home-active"; }else{ echo "img-sticky-nav-home";}?>.jpg" alt="Store">
+                        <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <li>

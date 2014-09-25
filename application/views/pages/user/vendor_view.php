@@ -506,7 +506,7 @@
                                     <table width="100%">
                                         <tr>
                                             
-                                            <td width="20%" class="td-list-image" style="border: solid red 1px; background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
+                                            <td width="20%" class="td-list-image" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
                                                 <a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
                                                 <div class="span-space">
                                                     <span class="span-discount-pin">10% OFF</span>
