@@ -3,7 +3,7 @@
 <!-- Load body -->
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
-    <div class="container-non-responsive bg-product-section">
+<div class="container-non-responsive bg-product-section">
     <div class="row row-products">
         <div class="col-xs-3 no-padding col-left-wing">
             <div class="left-wing">
@@ -27,7 +27,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="panel-group panel-category border-0" id="filter">
                     <div class="panel panel-default  border-0 no-padding" id="filter-header">
                         <div class="panel-heading border-0 panel-category-heading">
@@ -119,15 +118,15 @@
                             </center>
                         </div>
                    <?php endif;?>
-                    
+
                 </div>
- 
-                <?php $divCounter++; endforeach;?> 
- 
+
+                <?php $divCounter++; endforeach;?>
+
             </div>
         </div>
     </div>
-    </div>
+</div>
  
     
 </section>

@@ -38,6 +38,8 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
+        $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->cartImplementation = $this->cartManager->getCartObject();
         $this->user_ID = $this->session->userdata('member_id');
         $this->messageManager = $this->serviceContainer['message_manager'];
     }
@@ -331,11 +333,15 @@ class Home extends MY_Controller
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
                     , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
                     , "prodLimit" => $this->vendorProdPerPage
-                ); 
-                
+                );
+
                 // Load Location
                 $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
 
+                $memberId = $this->session->userdata('member_id');
+                $headerData['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
+                $headerData['cart_size'] = $this->cartImplementation->getSize();
+                $headerData['total'] = $this->cartImplementation->getTotalPrice();
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
@@ -467,8 +473,8 @@ class Home extends MY_Controller
                                                                               'pagination' => $pagination,
                                                                               'id' => 'for-other-buyer',
                                                                               'ratingHeaders' => $ratingHeaders,
-                                                                              ), TRUE);                                                             
-        
+                                                                              ), TRUE);
+
         $viewerId = $this->session->userdata('member_id');
         $orderRelations = array();
         if($viewerId){
@@ -497,6 +503,11 @@ class Home extends MY_Controller
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
+
+        $memberId = $this->session->userdata('member_id');
+        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
+        $data['cart_size'] = $this->cartImplementation->getSize();
+        $data['total'] = $this->cartImplementation->getTotalPrice();
 
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
@@ -636,6 +647,13 @@ class Home extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
+        $memberId = $this->session->userdata('member_id');
+        $data['title'] = 'Vendor Contact | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());
+        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
+        $data['cart_size'] = $this->cartImplementation->getSize();
+        $data['total'] = $this->cartImplementation->getTotalPrice();
+
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                    ->findOneBy(['slug' => $sellerslug]);  
@@ -661,6 +679,7 @@ class Home extends MY_Controller
         $data['title'] = 'Contact '.html_escape($member->getStoreName()).'| Easyshop.ph';
         $data['message_recipient'] = $member;
         $data = array_merge($data, $this->fill_header());
+
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
         $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
