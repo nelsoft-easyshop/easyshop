@@ -313,7 +313,7 @@ class Home extends MY_Controller
             $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
             
             // Load Product View
-            $data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
+            //$data['viewProductCategory'] = $this->load->view("pages/user/display_product",$productView,TRUE);
 
             // Load View
             $this->load->view('templates/header_new', $headerData);
@@ -347,6 +347,14 @@ class Home extends MY_Controller
             $result = $pm->getVendorDefaultCatAndProd($memberId, $categoryProperties['child_cat']);
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count'];
+
+            $view = array(
+                'arrCat' => array(
+                    'products'=>$result['products']
+                )
+            );
+
+            $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
 
         return $parentCat;
