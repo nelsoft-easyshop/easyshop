@@ -1328,7 +1328,7 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function vendorDetails()
+    public function updateVendorDetails()
     {
         $serverResponse = array(
             "result" => FALSE,
@@ -1363,26 +1363,26 @@ class Memberpage extends MY_Controller
     {
         $prodLimit = 12;
 
-        $vendorId = $this->input->get('vid');
-        $vendorName = $this->input->get('vn');
-        $catId = json_decode($this->input->get('cid'), true);
-        $catType = $this->input->get('ct');
-        $page = $this->input->get('p');
-        $oBy = intval($this->input->get('ob'));
-        $o = intval($this->input->get('o'));
+        $vendorId = $this->input->get('vendorId');
+        $vendorName = $this->input->get('vendorName');
+        $catId = json_decode($this->input->get('catId'), true);
+        $catType = $this->input->get('catType');
+        $page = $this->input->get('page');
+        $rawOrderBy = intval($this->input->get('orderby'));
+        $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
 
-        $condition = $this->input->get('con') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
-        $lprice = $this->input->get('lp') !== "" ? floatval($this->input->get('lp')) : "";
-        $uprice = $this->input->get('up') !== "" ? floatval($this->input->get('up')) : "";
+        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
+        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lp')) : "";
+        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('up')) : "";
 
-        $parameter = json_decode($this->input->get('qs'),TRUE);
+        $parameter = json_decode($this->input->get('queryString'),TRUE);
 
         $em = $this->serviceContainer["entity_manager"];
         $searchProductService = $this->serviceContainer['search_product'];
         $pm = $this->serviceContainer["product_manager"];
 
-        switch($o){
+        switch($rawOrder){
             case 1:
                 $order = "DESC";
                 break;
@@ -1394,7 +1394,7 @@ class Memberpage extends MY_Controller
                 break;
         }
 
-        switch($oBy){
+        switch($rawOrderBy){
             case 1:
                 $orderBy = array("clickcount" => $order);
                 break;
@@ -1414,7 +1414,7 @@ class Memberpage extends MY_Controller
 
         switch($catType){
             case 0: // Search
-                if($oBy > 1){
+                if($rawOrderBy > 1){
                     $parameter['sortby'] = $orderSearch;
                     $parameter['sorttype'] = $order;
                 }
@@ -1481,13 +1481,6 @@ class Memberpage extends MY_Controller
         }
 
         echo json_encode($return);
-    }
-
-    public function checkSubscriptionStat()
-    {
-        $um = $this->serviceContainer['user_manager'];
-
-        $um->getVendorSubscriptionStatus(128,123);
     }
 
 }

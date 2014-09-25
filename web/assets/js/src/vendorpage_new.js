@@ -211,8 +211,8 @@ function ItemListAjax(CatDiv,page)
     memconf.ajaxStat = jQuery.ajax({
         type: "GET",
         url: config.base_url+'memberpage/'+'vendorLoadProducts',
-        data: "vid="+memconf.vid+"&vn="+memconf.vname+"&cid="+catId+"&ct="+catType+
-            "&p="+page+"&ob="+memconf.orderBy+"&o="+memconf.order+"&qs="+currentQueryString+"&con="+memconf.condition+"&lp="+memconf.lprice+"&up="+memconf.uprice+
+        data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
+            "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
             "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken,
         beforeSend: function(){
             loadingDiv.show();

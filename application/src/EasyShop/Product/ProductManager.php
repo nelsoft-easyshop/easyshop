@@ -311,7 +311,7 @@ class ProductManager
                     'child_cat' => array($vendorCategory['parent_cat']),
                     'products' => array(),
                     'product_count' => 0,
-                    'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
+                    'cat_link' => '/category/' . $vendorCategory['p_cat_slug'],
                     'cat_img' => $categoryImage,
                     'cat_type' => 2
                 );
@@ -333,10 +333,11 @@ class ProductManager
             $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
         }
 
-        // Move OTHERS at the end of array
+        // Move OTHERS at the end of array - unset and reset only to push at end of array
         if(isset($vendorCategories[1])){
-            $vendorCategories[1001] = $vendorCategories[1];
+            $temp = $vendorCategories[1];
             unset($vendorCategories[1]);
+            $vendorCategories[1] = $temp;
         }
 
         return $vendorCategories;
@@ -382,7 +383,7 @@ class ProductManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getVendorDefaultCatAndProd($memberId, $arrCatId, $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
+    public function getVendorDefaultCategoryAndProducts($memberId, $arrCatId, $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
     {
         // Container for products fetched
         $categoryProducts = array();

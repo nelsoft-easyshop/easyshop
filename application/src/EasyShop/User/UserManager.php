@@ -135,7 +135,7 @@ class UserManager
         if( $isValidMobile || $mobileNum === "" ){
             if( $mobileNum !== "" ){
                 $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->getUsedMobile($this->memberId, $mobileNum);
+                                    ->getUserExistingMobile($this->memberId, $mobileNum);
             }
 
             // If mobile not used

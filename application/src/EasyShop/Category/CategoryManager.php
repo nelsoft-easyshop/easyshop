@@ -69,7 +69,7 @@ class CategoryManager
         $this->em->persist($category);
         $this->em->flush();
 
-        return $category->getIdMemcat();
+        return $category;
     }
 
     /**

@@ -51,7 +51,7 @@
                          <?php echo form_open('');?>
                             <input type="hidden" id="subscribe_status" value="<?php echo $subscriptionStatus?>">
                             <input type="hidden" id="vendor_name" name="name" value="<?php echo $arrVendorDetails['username']?>">
-                            <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn?>">
+                            <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
                             <input type="hidden" name="vendorlink" value="<?php echo $arrVendorDetails['userslug']?>">
                         <?php echo form_close();?>
                     </div>

@@ -73,7 +73,7 @@
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
-            url: config.base_url+'memberpage/'+'vendorDetails',
+            url: config.base_url+'memberpage/'+'updateVendorDetails',
             data: "vendor_details=1&store_name="+storName+
                     "&mobile="+mobileNumber+
                     "&stateregion="+stateRegion+

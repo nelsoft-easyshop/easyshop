@@ -281,7 +281,7 @@ class Home extends MY_Controller
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
-                $getUserProduct = $this->getVendorDefaultCatAndProd($arrVendorDetails['id_member']);
+                $getUserProduct = $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member']);
                 $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
 
                 if ($getUserProduct['totalProductCount'] <= 0) { 
@@ -327,7 +327,7 @@ class Home extends MY_Controller
                     , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
-                    , "isLoggedIn" => $headerData['logged_in'] ? 1 : 0
+                    , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
                 ); 
                 
                 // Load Location
@@ -337,7 +337,7 @@ class Home extends MY_Controller
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
                 $this->load->view('pages/user/vendor_view', $data);
-                $this->load->view('templates/footer');
+                $this->load->view('templates/footer_new');
             }
         }
         // Load invalid link error page
@@ -352,7 +352,7 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    private function getVendorDefaultCatAndProd($memberId)
+    private function getUserDefaultCategoryProducts($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
         $pm = $this->serviceContainer['product_manager'];

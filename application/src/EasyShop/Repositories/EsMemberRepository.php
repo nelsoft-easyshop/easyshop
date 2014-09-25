@@ -58,7 +58,10 @@ class EsMemberRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function getUsedMobile($memberId, $mobileNum)
+    /**
+     *  
+     */
+    public function getUserExistingMobile($memberId, $mobileNum)
     {
         $em = $this->_em;
         $dql = "

@@ -10,6 +10,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class EsMemberProdcatRepository extends EntityRepository
 {
+    /**
+     *  Fetch Custom categorized products
+     *
+     *  @return array - array of objects
+     */
     public function getCustomCategoryProduct($memberId, $memcatId, $prodLimit, $page = 0, $orderBy = "p.idProduct DESC")
     {
         $product = array();
@@ -41,6 +46,11 @@ class EsMemberProdcatRepository extends EntityRepository
         return $product;
     }
 
+    /**
+     *  Count number of products under custom category
+     *
+     *  @return integer
+     */
     public function countCustomCategoryProduct($memberId, $memcatId)
     {
         $em = $this->_em;
