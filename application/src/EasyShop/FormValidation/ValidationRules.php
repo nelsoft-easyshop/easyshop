@@ -115,10 +115,6 @@ class ValidationRules
                     'region' => array(
                                 new Assert\NotBlank(),
                     ),
-                    'support_email' => array(
-                                new Assert\NotBlank(),
-                                new Assert\Email(),
-                        ),
                     'website' => array(
                                 new Assert\NotBlank(),
                                 new Assert\Length(['min' => '5',
