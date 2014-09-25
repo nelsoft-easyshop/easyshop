@@ -172,7 +172,7 @@ section {
 }
 
 .panel-contact-details{
-    min-height: 150px;
+    min-height: 100px;
     width: 100%;
     background: #ffffff;
     border-radius: 4px;
@@ -244,7 +244,8 @@ section {
 
 .p-about{
     line-height: 20px;
-    
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .textarea-about{
@@ -535,4 +536,9 @@ section {
 
 .pagination{
     margin: 10px !important;
+}
+
+.text-contact{
+    word-wrap: break-word;
+    width: 200px;
 }
