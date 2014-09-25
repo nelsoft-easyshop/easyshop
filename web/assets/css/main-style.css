@@ -265,7 +265,8 @@ section {
     margin-top: 39px;
 }
 
-.vendor-profile-btn a {
+.vendor-profile-btn a,
+.vendor-profile-btn .subscription_btn {
     font-weight: bold;
     max-width: 133px;
     width: 47%;
@@ -274,6 +275,11 @@ section {
 .vendor-profile-btn a:first-child {
     margin-right: 4%;
 }
+
+.subscription_btn span {
+    margin-right: 5px;
+}
+
 /*** vendor profile edit ***/
 
 .edit-cover-photo {
