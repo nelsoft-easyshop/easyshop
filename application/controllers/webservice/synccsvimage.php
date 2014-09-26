@@ -122,7 +122,6 @@ class SyncCsvImage extends MY_Controller
             $path = "./assets/admin/$images";
 
             $date = date("Ymd");
-            $imageId =  $values->getIdProductImage();
             $productId = $values->getProduct()->getIdProduct();
             $memberId =  $values->getProduct()->getMember()->getIdMember();
 
