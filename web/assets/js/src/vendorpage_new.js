@@ -350,9 +350,9 @@ function ItemListAjax(CatDiv,page)
         $( "#toggle-filter" ).click(function() {
           $( "#filter-list1" ).slideToggle( "slow" );
         });
-$( ".icon-list" ).click(function() {
+        $( ".icon-list" ).click(function() {
           $( ".panel-item" ).hide();
-          $( ".panel-list-item" ).fadeIn( "fast" );
+          $( ".panel-list-item" ).fadeIn( "slow" );
         });
         
         $( ".icon-grid" ).click(function() {
