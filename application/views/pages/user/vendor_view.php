@@ -20,7 +20,8 @@
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><?php echo $arrCat['name']?></li></a>
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><span class="fa fa-caret-right active-category"></span>  <?php echo $arrCat['name']?> </li></a>
+                                        
                                     <?php endforeach;?>
                                 </ul>
                             </div>
@@ -52,7 +53,7 @@
                                     </li>
                                     <li>
                                         <p class="p-filter-name">By Price</p>
-                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field"/>
+                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field" placeholder="0.00"/>
                                     </li>
                                     <li>
                                         <center>
