@@ -31,16 +31,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-group panel-category border-0" id="filter">
-                    <div class="panel panel-default  border-0 no-padding" id="filter-header">
+                <div class="panel-group panel-category border-0">
+                    <div class="panel panel-danger border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" id="toggle-filter" class="a-filter" data-parent="#filter">
+                                <a  id="toggle-filter" class="a-filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
                         </div>
-                        <div id="filter-list" class="panel-collapse collapse in">
+                        <div id="filter-list1">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-filter">
                                     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
