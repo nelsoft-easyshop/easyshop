@@ -50,7 +50,7 @@
         </span>
         <div class="claim-bg">
             <div id="prod_image">
-                <img src="/<?PHP echo  $product[0]['path']?>">
+                <img src="/<?=$product['path']?>">
             </div>
             <div class="claim-details">
                 <p>To claim your price, complete the registration form and visit<br>
@@ -209,7 +209,7 @@
                 <h2>Congratulations!</h2>
                 <div class="claim-bg">
                     <div id="prod_image">
-                        <img src="/assets/product/3_2_20140820/3_2_201408201818000.png">
+                        <img src="">
                     </div>
                     <div class="claim-details">
                         <h3></h3>

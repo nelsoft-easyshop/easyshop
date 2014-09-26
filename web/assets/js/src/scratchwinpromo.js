@@ -41,7 +41,6 @@
                             $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize/claim/' + code.val().trim());
                         }
                         else {
-                            alert('success');
                             $('#scratch-win-claim').slideDown();
                             $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize?code=' + code.val().trim());
                         }
@@ -80,7 +79,7 @@
                     csrfname:csrftoken
                 },
                 success:function(data){
-                    if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
+                    if(data === false ){
                         alert("An error occured,Try refreshing the site.");
                     }
                 }
@@ -96,9 +95,6 @@
                     paymentToken:paymentToken
                 },
                 success:function(data){
-                    if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
-                        alert("An error occured,Try refreshing the site.");
-                    }
                 }
             });
             $.ajax({

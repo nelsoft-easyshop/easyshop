@@ -6,6 +6,7 @@ class ScratchCard extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
         $this->load->library('session');
@@ -53,7 +54,7 @@ class ScratchCard extends MY_Controller
     public function claimScratchCardPrize()
     {
         if (!$this->session->userdata('usersession') && !$this->check_cookie()) {
-            redirect(base_url().'login', 'refresh');
+            redirect('/login', 'refresh');
         }
         if (!($this->input->get('code'))) {
             redirect('/Scratch-And-Win', 'refresh');
@@ -69,7 +70,6 @@ class ScratchCard extends MY_Controller
         else if (intval($viewData['product']['c_id_code']) !== 0) {
             $viewData['product'] = 'purchase-limit-error';
         }
-
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');

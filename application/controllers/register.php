@@ -201,8 +201,7 @@ class Register extends MY_Controller
             }
             else {
                 $this->session->set_userdata('uri_string', $referrer);
-                header("Location: /login");
-                die();
+                redirect('/login', 'refresh');
             }
         }
     } 

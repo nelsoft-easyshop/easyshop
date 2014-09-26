@@ -577,26 +577,26 @@ class payment_model extends CI_Model
 		return $row;
 	}
 	
-	function getCityOrRegionOrMajorIsland($id_location)
-	{ 
-		$query = "
-		SELECT 
-		  a.*
-		  , b.location AS parent_location 
-		FROM
-		  `es_location_lookup` a
-		  , es_location_lookup b 
-		WHERE a.`parent_id` = b.`id_location`
-		AND a.`id_location` = :id_location
-		";
-		$sth = $this->db->conn_id->prepare($query);
- 
-		$sth->bindParam(':id_location', $id_location,PDO::PARAM_INT);
-     	$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+    function getCityOrRegionOrMajorIsland($id_location)
+    {
+        $query = "
+        SELECT
+          a.*
+          , b.location AS parent_location
+        FROM
+          `es_location_lookup` a
+          , es_location_lookup b
+        WHERE a.`parent_id` = b.`id_location`
+        AND a.`id_location` = :id_location
+        ";
+        $sth = $this->db->conn_id->prepare($query);
 
-		return $row[0];
-	}
+        $sth->bindParam(':id_location', $id_location,PDO::PARAM_INT);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $row[0];
+    }
 
 	// Used by add feedback - memberpage
 	function checkTransaction($temp){
