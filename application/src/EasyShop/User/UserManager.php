@@ -259,7 +259,7 @@ class UserManager
      */
     private function isValidMobile(&$mobileNum)
     {
-        $isValidMobile = preg_match('/^(08|09)[0-9]{9}/', $mobileNum);
+        $isValidMobile = preg_match('/^(08|09)[0-9]{9}$/', $mobileNum);
 
         if($isValidMobile){
             $mobileNum = ltrim($mobileNum,"0");
