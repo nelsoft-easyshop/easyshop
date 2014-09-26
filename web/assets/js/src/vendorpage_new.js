@@ -65,8 +65,13 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
+        var $this = $(this);
+        var siblings = $(this).siblings('.tab_categories');
+
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
+        $this.find('.selected-category').show();
+        siblings.find('.selected-category').hide();
     });
 
     $(document).on('change',".price-field",function () {
