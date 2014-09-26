@@ -94,7 +94,7 @@ class SyncCsvImage extends MY_Controller
             }
         }
         if(!empty($errorSummary)) {
-            $jsonp = "jsonCallback({'sites':[{'success': Please upload '".ucfirst(implode(",",$errorSummary))." before adding the product"."',},]});";
+            $jsonp = "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($jsonp);        
