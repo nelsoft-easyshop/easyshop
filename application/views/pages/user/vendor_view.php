@@ -33,7 +33,7 @@
                 </div>
                 <div class="panel-group panel-category border-0">
                     <div class="panel panel-danger border-0 no-padding">
-                        <div class="panel-heading border-0 panel-category-heading">
+                        <div class="panel-heading border-0 panel-category-heading" id="filter-header">
                             <h4 class="panel-title">
                                 <a  id="toggle-filter" class="a-filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
