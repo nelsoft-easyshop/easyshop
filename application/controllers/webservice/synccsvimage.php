@@ -71,11 +71,12 @@ class SyncCsvImage extends MY_Controller
      */ 
     public function checkIfImagesExist($checkImagesId)
     {
+        $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
+
         $errorSummary = array();
         foreach($checkImagesId["product"] as $ids)
         {
-            $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
-            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
             $values = $EsProductImagesRepository->getDefaultImage($ids);            
             
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
