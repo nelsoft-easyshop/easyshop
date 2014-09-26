@@ -244,6 +244,7 @@
 <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script type="text/javascript">
     var jsonCity = <?php echo json_encode($cityLookup);?>;
 </script>
