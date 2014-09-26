@@ -111,7 +111,7 @@ class SyncCsvImage extends MY_Controller
      */ 
     public function syncImages($imagesId)
     {
-        $errorSummary = array();      
+      
         foreach($imagesId["product"] as $ids)
         {
 
