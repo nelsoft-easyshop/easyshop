@@ -110,10 +110,11 @@ class SyncCsvImage extends MY_Controller
     public function syncImages($imagesId)
     {
         $errorSummary = array();
+        $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');        
         foreach($imagesId["product"] as $ids)
         {
-            $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
-            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
             $values = $EsProductImagesRepository->getDefaultImage($ids);            
             
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
