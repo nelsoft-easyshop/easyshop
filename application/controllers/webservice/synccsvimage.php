@@ -94,7 +94,7 @@ class SyncCsvImage extends MY_Controller
             }
         }
         if(!empty($errorSummary)) {
-            $jsonp = "jsonCallback({'sites':[{'success': '".ucfirst(implode(",",$errorSummary))." does not exist in the image folder"."',},]});";
+            $jsonp = "jsonCallback({'sites':[{'success': Please upload '".ucfirst(implode(",",$errorSummary))." before adding the product"."',},]});";
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($jsonp);        
