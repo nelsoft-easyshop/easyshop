@@ -178,7 +178,7 @@ class UserManager
             return true;
         }
         else{
-            $this->err = "Store name already used!"
+            $this->err = "Store name already used!";
             return false;
         }
     }
