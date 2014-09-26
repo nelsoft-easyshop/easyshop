@@ -22,7 +22,10 @@ class SyncCsvImage extends MY_Controller
         $this->img_dimension['usersize'] = array(1024,768);
         $this->img_dimension['small'] = array(400,535);
         $this->img_dimension['categoryview'] = array(220,200);
-        $this->img_dimension['thumbnail'] = array(60,80);        
+        $this->img_dimension['thumbnail'] = array(60,80);       
+        $this->EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+        $this->EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
+
     }
 
     /**
@@ -71,13 +74,11 @@ class SyncCsvImage extends MY_Controller
      */ 
     public function checkIfImagesExist($checkImagesId)
     {
-        $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
 
         $errorSummary = array();
         foreach($checkImagesId["product"] as $ids)
         {
-            $values = $EsProductImagesRepository->getDefaultImage($ids);            
+            $values = $this->EsProductImagesRepository->getDefaultImage($ids);            
             
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
 
@@ -89,7 +90,7 @@ class SyncCsvImage extends MY_Controller
             }
             else {
                     $errorSummary[] = $images;
-                    $result =  $EsProductRepository->deleteProductFromAdmin($ids);
+                    $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
             }
         }
         if(!empty($errorSummary)) {
@@ -110,13 +111,11 @@ class SyncCsvImage extends MY_Controller
      */ 
     public function syncImages($imagesId)
     {
-        $errorSummary = array();
-        $EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');        
+        $errorSummary = array();      
         foreach($imagesId["product"] as $ids)
         {
 
-            $values = $EsProductImagesRepository->getDefaultImage($ids);            
+            $values = $this->EsProductImagesRepository->getDefaultImage($ids);            
             
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
 
@@ -143,7 +142,7 @@ class SyncCsvImage extends MY_Controller
                 $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
                 $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
                 $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
-                $EsProductImagesRepository->renameImagesFromAdmin( $imageDirectory, $productId);                    
+                $this->EsProductImagesRepository->renameImagesFromAdmin( $imageDirectory, $productId);                    
             }
             
         }
