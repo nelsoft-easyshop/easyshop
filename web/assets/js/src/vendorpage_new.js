@@ -329,5 +329,12 @@ function ItemListAjax(CatDiv,page)
         }
     });
 
-  
+    $(document).ready(function(){
+        $( "#toggle-cat" ).click(function() {
+          $( "#category-list" ).slideToggle( "slow" );
+        });
+        $( "#toggle-filter" ).click(function() {
+          $( "#filter-list" ).slideToggle( "slow" );
+        });
+    });
 })(jQuery);
