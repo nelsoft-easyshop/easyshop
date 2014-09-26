@@ -11,7 +11,7 @@
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
+                                <a data-toggle="collapse" id="toggle-cat" class="a-category" data-parent="#category">
                                     CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
@@ -31,7 +31,7 @@
                     <div class="panel panel-default  border-0 no-padding" id="filter-header">
                         <div class="panel-heading border-0 panel-category-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
+                                <a data-toggle="collapse" id="toggle-filter" class="a-filter" data-parent="#filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
@@ -133,7 +133,7 @@
 
  
 <script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src='/assets/js/src/jquery-1.8.2.js' type="text/javascript"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
