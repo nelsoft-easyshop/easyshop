@@ -21,7 +21,7 @@
                     <h4 class="storeName"><?=html_escape($storeNameDisplay)?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <img src="/assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
                         <?php else:?>
@@ -31,7 +31,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
-                            <img src="/assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                     </div>
                     <?php else: ?>
@@ -44,7 +44,7 @@
                         </span>                       
 
                         <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
-                            <span class="glyphicon glyphicon-envelope"></span>
+                            <span class="icon-message-btn"></span>
                             Message
                         </a>
 
