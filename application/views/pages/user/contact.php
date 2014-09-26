@@ -8,7 +8,13 @@
 
             <div class="col-xs-9">
                 <div class="panel-contact-message">
-                <?PHP if ($message_recipient->getUsername() !== $user['username']) : ?>
+                <?PHP if ( !isset($user['username']) ) : ?>
+                    <div class="jumbotron no-feedback-list">
+                        <center>
+                            <strong>Please log in to send a message.</strong>
+                        </center>
+                    </div>
+                <?PHP elseif ($message_recipient->getUsername() !== $user['username']) : ?>
                     <p class="panel-title-contact">
                         Leave A Message
                     </p>
