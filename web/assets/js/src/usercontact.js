@@ -1,8 +1,8 @@
 (function ($) {
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
-      
-        if($( "#storeName" ).val() == "" || $( "#contactNo" ).val() == "" || $( "#streetAddr" ).val() == ""){
+
+        if($( "#storeName" ).val() == "" || $( "#contactNo" ).val() == "" || $( "#streetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
             $( "#editIconOpen" ).click();
         }
         else{
