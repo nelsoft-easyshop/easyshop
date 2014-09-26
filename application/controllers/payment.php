@@ -1059,7 +1059,7 @@ class Payment extends MY_Controller{
             $sellerEmail = $seller['email'];
             $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
             $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
-
+            $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
 
             #Send message via easyshop_messaging to seller
             if($this->user_model->getUserById($sender)){        
