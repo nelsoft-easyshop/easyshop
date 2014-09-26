@@ -1,3 +1,6 @@
+// global jsonCity
+var jsonCity = jQuery.parseJSON($('#json_city').val());
+
 (function ($) {
 
     // Numeric characters only. Disable negative
