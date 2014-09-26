@@ -15,13 +15,13 @@
                     <div class="div-message-form">
                         <?php echo form_open('home/sendMessage'); ?>
                         <div class="row">
-                            <div class="col-xs-6 col-message-1">
+                            <div class="col-xs-12 col-message-2">
                                 <input type="text" class="input-lg input-message" placeholder="NAME..." value="<?=$user['username']?>" disabled="disabled"/>
                                 <input type="hidden" name="recipient" value="<?=$message_recipient->getIdMember()?>" id="msg_recipient">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-12 col-message-2">
                                 <textarea class="input-lg input-message" name="msg" rows="7" placeholder="MESSAGE..." id="message"></textarea>
                             </div>
                         </div>
