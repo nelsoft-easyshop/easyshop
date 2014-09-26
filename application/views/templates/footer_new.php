@@ -13,7 +13,7 @@
         </section>
 
         <script type="text/javascript" src="/assets/js/src/bootstrap.js" ></script>
-
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
     </body>
 </html>
 
