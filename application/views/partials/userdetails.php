@@ -53,7 +53,7 @@
                     <td class="td-contact-detail">
 
                         <p class="text-contact"><?php echo html_escape($contactNo); ?></p>
-                        <input type="text" class="input-detail" maxlength="11" clplaceholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
+                        <input type="text" class="input-detail" maxlength="11" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
 
                     </td>
                 </tr>
