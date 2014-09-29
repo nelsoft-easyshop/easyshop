@@ -43,7 +43,8 @@ class Cart extends MY_Controller
 
             $data['title'] = 'Cart | Easyshop.ph';
             $data['cart_items'] = $cartContents;
-            $data['total'] = $this->cartImplementation->getTotalPrice();
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+            $data['total'] = $cartSize ? $this->cartImplementation->getTotalPrice() : 0;
 
             $this->load->view('templates/header', $data);
             #$this->load->view('templates/checkout_progressbar');
