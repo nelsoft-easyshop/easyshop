@@ -104,7 +104,7 @@
         </div> 
         
         <?php if(isset($products)): ?>
-        <div class="adv_ctr"><strong style="font-size:14px"><?=count($products);?></strong> result<?=(number_format(count($products)) > 1)?"s":"";?>  found</div>
+        <div class="adv_ctr"><strong style="font-size:14px"><?=$productCount;?></strong> result<?=(number_format($productCount) > 1)?"s":"";?>  found</div>
         <?php endif; ?>
 
         <!-- Buttons start -->

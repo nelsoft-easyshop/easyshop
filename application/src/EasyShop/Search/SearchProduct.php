@@ -77,7 +77,7 @@ class SearchProduct
         $stringCollection = array();
         $ids = array(); 
 
-        if($clearString == ""){
+        if(trim($clearString) != ""){
             $explodedString = explode(' ', trim($clearString)); 
             $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
             $stringCollection[1] = trim($clearString);
@@ -97,7 +97,7 @@ class SearchProduct
                 array_push($ids, $value->getIdProduct());
             }
         }
-
+        
         return $ids;
     }
 

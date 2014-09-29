@@ -71,11 +71,18 @@ class product_search extends MY_Controller {
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
         $memberId = $this->session->userdata('member_id');
 
-        if(count($_GET)>0){ 
+        if(count($_GET)>0){
+
+            $parameter = $this->input->get();
+
             // getting all products
-            $response['products'] = $searchProductService->getProductBySearch($this->input->get());
+            $response['products'] = $searchProductService->getProductBySearch($parameter);
             // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+        
+            // get total product Count
+            $parameter['limit'] = PHP_INT_MAX;
+            $response['productCount'] = count($searchProductService->getProductBySearch($parameter));
         }
 
         // Load sub category to display
@@ -142,9 +149,15 @@ class product_search extends MY_Controller {
 
         $response['string'] = ($this->input->get('q_str')) ? trim($this->input->get('q_str')) : "";
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
+        $parameter = $this->input->get();
 
         // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($this->input->get()); 
+        $response['products'] = $searchProductService->getProductBySearch($parameter); 
+
+        // get total product Count
+        $parameter['limit'] = PHP_INT_MAX;
+        $response['productCount'] = count($searchProductService->getProductBySearch($parameter));
+
         // get all attributes to by products
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
