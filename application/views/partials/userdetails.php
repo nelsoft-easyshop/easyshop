@@ -5,6 +5,7 @@
                 Details
            </p>
            <input type="hidden" id="isEditable" value="<?php echo html_escape($isEditable)?>"/>
+           <input type="hidden" id="errorCount" value="<?php echo html_escape(count($errors))?>"/>
            <?php if($isEditable): ?>
 
            <i class="fa fa-edit fa-edit-icon pull-right" id="editIconOpen" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor details"></i>
@@ -14,13 +15,37 @@
            <?php endif; ?>
 
             <table width="100%" class="table-contact-details">
+                <?php if(count($errors) > 0 || $isValid): ?>
+                <tr>
+                    <td colspan="2"> 
+                        <?php if(count($errors) > 0): ?>
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                &times;
+                            </button>
+                            <?php foreach($errors as $key => $value): ?>
+                                <?php echo ucwords(str_replace('_', ' ', $key)) . ': ' . $value[0] . "<br/> <br/>" ?>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <?php else: ?>
+                        <div class="alert alert-success alert-dismissable">
+                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                &times;
+                           </button>
+                           <strong>Success!</strong> Details updated.
+                        </div>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
 
                 <?php echo form_open('/' . html_escape($member->getUsername()) . '/' . $targetPage); ?>
                 <tr id="storeNameRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><?php echo html_escape($member->getStoreName()); ?></p>
-                        <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($member->getStoreName()); ?>">
+                        <p class="text-contact"><?php echo html_escape($storeName); ?></p>
+                        <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($storeName); ?>">
                     </td>
                 </tr>
                 <tr id="contactNoRow">
@@ -69,8 +94,8 @@
                 <tr id="websiteRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><a href="#"><?php echo html_escape($member->getWebsite()); ?></a></p>
-                        <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($member->getWebsite()); ?>">
+                        <p class="text-contact"><a href="#"><?php echo html_escape($website); ?></a></p>
+                        <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($website); ?>">
                     </td>
                 </tr>
                 <tr >
@@ -80,30 +105,6 @@
                         </center>
                     </td>
                 </tr>
-                <?php if(count($errors) > 0 || $isValid): ?>
-                <tr>
-                    <td colspan="2"> 
-                        <?php if(count($errors) > 0): ?>
-                        <div class="alert alert-danger">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                &times;
-                            </button>
-                            <?php foreach($errors as $key => $value): ?>
-                                <?php echo ucwords(str_replace('_', ' ', $key)) . ': ' . $value[0] . "<br/> <br/>" ?>
-                            <?php endforeach; ?>
-                        </div>
-
-                        <?php else: ?>
-                        <div class="alert alert-success alert-dismissable">
-                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                &times;
-                           </button>
-                           <strong>Success!</strong> Details updated.
-                        </div>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endif; ?>
                 <?php echo form_close(); ?>
             </table>
             <br/>
