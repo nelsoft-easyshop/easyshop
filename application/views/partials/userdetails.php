@@ -53,7 +53,7 @@
                     <td class="td-contact-detail">
 
                         <p class="text-contact"><?php echo html_escape($contactNo); ?></p>
-                        <input type="text" class="input-detail" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
+                        <input type="text" class="input-detail" maxlength="11" clplaceholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
 
                     </td>
                 </tr>
@@ -165,4 +165,4 @@
 </div>
 
 <script type="text/javascript" src="/assets/js/src/usercontact.js?ver="<?=ES_FILE_VERSION?>></script>
-
+<script type="text/javascript" src="https://easyshop.ph.local/assets/js/src/vendor/jquery.numeric.js"></script>
