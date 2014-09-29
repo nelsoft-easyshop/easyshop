@@ -8,8 +8,9 @@ ob_end_clean();
 require_once(dirname(__FILE__).'/../src/EasyShop/Product/ProductManager.php');
 include_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
- 
-$productManager = new Easyshop\Product\ProductManager();
+$CI =& get_instance();
+
+$productManager = $CI->kernel->serviceContainer['product_manager'];
 
 $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
 
