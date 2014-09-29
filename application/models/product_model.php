@@ -26,7 +26,6 @@ class product_model extends CI_Model
     {
         $query = 'SELECT id_cat,parent_id,slug,name,description FROM es_cat where id_cat not in (1)';
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':id_cat', $id);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
