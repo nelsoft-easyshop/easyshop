@@ -547,20 +547,9 @@ section {
     float: left;
 }
 
-.vendor-nav li:first-child {
-    width: 70px;
-}
-
-.vendor-nav li:nth-child(2) {
-    width: 116px;
-}
-
-.vendor-nav li:nth-child(3) {
-    width: 150px;
-}
-
-.vendor-nav li:nth-child(4) {
-    width: 86px;
+.vendor-nav li:first-child a {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .vendor-nav li a {
@@ -570,6 +559,7 @@ section {
     font-size: 0.95em;
     height: 55px;
     line-height: 55px;
+    padding: 0 21px;
     position: relative;
     text-align: center;
     vertical-align: middle;
@@ -588,15 +578,6 @@ section {
 .vendor-nav li a.vendor-nav-active {
     color: #fe893a;
     border-bottom: 3px solid #fe893a;
-}
-
-.vendor-nav  img {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .fixed-vendor-content {
