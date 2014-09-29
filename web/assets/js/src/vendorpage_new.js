@@ -260,7 +260,7 @@ function ItemListAjax(CatDiv,page)
 /********* DESIGNER ************/
 
 (function ($) {
-
+   
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
@@ -282,7 +282,7 @@ function ItemListAjax(CatDiv,page)
             }
     });
 
-    $(document).ready(function(){
+    $(".row-items").ready(function(){
         $('[rel=tooltiplist]').tooltip({
             placement : 'top'
         });
@@ -311,7 +311,7 @@ function ItemListAjax(CatDiv,page)
     });
     
     
-    $(document).on('click','.icon-grid',function() {
+    $(".div-product-view-option").on('click','.icon-grid',function() {
         var div = $("div.view");
         
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
@@ -324,7 +324,7 @@ function ItemListAjax(CatDiv,page)
         }
     });
 
-    $(document).on('click','.icon-list',function() {   
+    $(".div-product-view-option").on('click','.icon-list',function() {   
         var div = $("div.view");
     
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
@@ -337,16 +337,19 @@ function ItemListAjax(CatDiv,page)
         };
     });
     
-    $(document).ready(function(){
+    $("#left-wing").ready(function(){
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
         $( "#toggle-filter" ).click(function() {
           $( "#filter-list1" ).slideToggle( "slow" );
         });
+    });
+        
+    $(".div-product-view-option").ready(function(){
         $( ".icon-list" ).click(function() {
           $( ".panel-item" ).hide();
-          $( ".panel-list-item" ).fadeIn( "slow" );
+          $( ".panel-list-item" ).fadeIn( "fast" );
         });
         
         $( ".icon-grid" ).click(function() {
@@ -355,5 +358,5 @@ function ItemListAjax(CatDiv,page)
         });
     
     });
+    
 })(jQuery);
-
