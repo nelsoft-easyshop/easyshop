@@ -547,20 +547,9 @@ section {
     float: left;
 }
 
-.vendor-nav li:first-child {
-    width: 70px;
-}
-
-.vendor-nav li:nth-child(2) {
-    width: 116px;
-}
-
-.vendor-nav li:nth-child(3) {
-    width: 150px;
-}
-
-.vendor-nav li:nth-child(4) {
-    width: 86px;
+.vendor-nav li:first-child a {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .vendor-nav li a {
@@ -570,6 +559,7 @@ section {
     font-size: 0.95em;
     height: 55px;
     line-height: 55px;
+    padding: 0 21px;
     position: relative;
     text-align: center;
     vertical-align: middle;
