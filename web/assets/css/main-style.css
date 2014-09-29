@@ -31,7 +31,8 @@ section {
     font-size: 1.125em;
     color: #565656;
     margin: 0 auto;
-    width: 1190px;
+    width: 1200px;
+    padding: 0 5px;
 /*    max-width: 1190px;
     width: 100%;*/
 }
@@ -1495,17 +1496,17 @@ td.td-view.p-view.color-default{
 
 @media only screen and (max-width : 979px) { 
     header {
-        width: 1190px !important;
+        width: 1200px !important;
     }
-    .main-container {
+    /* .main-container {
             padding-left: 5px;
             padding-right: 5px;
-           /* width: 97%;*/
+           width: 97%;
     }
 
     .vendor-main {
         top: 44px;
-    }
+    }*/
     
 }
 
