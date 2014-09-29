@@ -61,7 +61,7 @@
                                 </div>
                             <?php else: ?>
                                 <div class="adv_ctr">
-                                    <strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong>
+                                    <strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result<?=(number_format(count($products)) > 1)?"s":"";?> found for <strong><?php echo html_escape($string);?></strong>
                                 </div>
                                 <div id="list" class="list "></div>
                                 <div id="grid" class="grid grid-active"></div>
@@ -155,7 +155,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="search_result_m">
-                        <p class="search_result "><strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong></p>
+                        <p class="search_result "><strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result<?=(number_format(count($products)) > 1)?"s":"";?> found for <strong><?php echo html_escape($string);?></strong></p>
                     </div>
                     <br/>
                     <div id="paste-product">
