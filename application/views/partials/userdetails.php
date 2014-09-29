@@ -45,16 +45,16 @@
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
                         <p class="text-contact"><?php echo html_escape($storeName); ?></p>
+                        <input type="hidden" id="displayStoreName" value="<?php echo html_escape($storeName)?>"/>
                         <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($storeName); ?>">
                     </td>
                 </tr>
                 <tr id="contactNoRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
                     <td class="td-contact-detail">
-
                         <p class="text-contact"><?php echo html_escape($contactNo); ?></p>
                         <input type="text" class="input-detail" maxlength="11" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
-
+                        <input type="hidden" id="displayContactNo" value="<?php echo html_escape($contactNo)?>"/>
                     </td>
                 </tr>
                 <!-- <tr>
@@ -70,6 +70,9 @@
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
                         <p class="text-contact"><?php echo html_escape($streetAddr . ', ' . $city . ', ' . $region); ?></p>
+                        <input type="hidden" id="displayStreetAddr" value="<?php echo html_escape($streetAddr)?>"/>
+                        <input type="hidden" id="displayCity" value="<?php echo html_escape($city)?>"/>
+                        <input type="hidden" id="displayRegion" value="<?php echo html_escape($region)?>"/>
 
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
                         <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
@@ -95,6 +98,7 @@
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
                         <p class="text-contact"><a href="#"><?php echo html_escape($website); ?></a></p>
+                        <input type="hidden" id="displayWebsite" value="<?php echo html_escape($website)?>"/>
                         <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($website); ?>">
                     </td>
                 </tr>
