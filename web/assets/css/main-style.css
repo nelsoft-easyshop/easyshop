@@ -580,15 +580,6 @@ section {
     border-bottom: 3px solid #fe893a;
 }
 
-.vendor-nav  img {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 .fixed-vendor-content {
     margin-top: 100px;
 }
