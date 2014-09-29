@@ -6,12 +6,12 @@
 <div class="container-non-responsive bg-product-section">
     <div class="row row-products">
         <div class="col-xs-3 no-padding col-left-wing">
-            <div class="left-wing">
+            <div class="left-wing" id="left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
+                                <a data-toggle="collapse" id="toggle-cat" class="a-category" data-parent="#category">
                                     CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
@@ -19,24 +19,28 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
-                                    <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><?php echo $arrCat['name']?></li></a>
-                                    <?php endforeach;?>
+                                    <?php $showArrow=true; foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
+                                            <li>
+                                                <span style="display: <?php echo $showArrow? '' : 'none' ?>" class="fa fa-caret-right active-category selected-category"></span>  <?php echo $arrCat['name']?> 
+                                            </li>
+                                        </a>
+                                    <?php $showArrow = false; endforeach;?>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel-group panel-category border-0" id="filter">
-                    <div class="panel panel-default  border-0 no-padding" id="filter-header">
-                        <div class="panel-heading border-0 panel-category-heading">
+                <div class="panel-group panel-category border-0">
+                    <div class="panel panel-danger border-0 no-padding">
+                        <div class="panel-heading border-0 panel-category-heading" id="filter-header">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
+                                <a  id="toggle-filter" class="a-filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
                         </div>
-                        <div id="filter-list" class="panel-collapse collapse in">
+                        <div id="filter-list1">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-filter">
                                     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -52,7 +56,7 @@
                                     </li>
                                     <li>
                                         <p class="p-filter-name">By Price</p>
-                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field"/>
+                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field" placeholder="0.00"/>
                                     </li>
                                     <li>
                                         <center>
@@ -133,8 +137,7 @@
 
  
 <script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src='/assets/js/src/jquery-1.8.2.js' type="text/javascript"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
-

@@ -30,7 +30,7 @@
                     </a>
                     <div class="div-item-info">
                         <p class="p-item-name">
-                            <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
+                            <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>" rel="tooltiplist" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
                                 <?=$productName;?>
                             </a>
                         </p>
@@ -55,10 +55,10 @@
                 <table width="100%">
                     <tr>
                         <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
-                            <a href="<?php echo base_url() . 'item/' . $productSlug?>">
+                            <a target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
                                 <div class="span-space">
                                     <?php if($percentage && $percentage > 0):?>
-                                    <span class="span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                    <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
                                     <?php endif;?>
                                 </div>
                             </a>
@@ -88,11 +88,9 @@
                             <p class="p-list-discount">
                                 <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                             </p>
-                            <center>
-                                <button class="btn btn-default-1">
-                                    <span class="fa fa-shopping-cart"></span> ADD TO CART
-                                </button>
-                            </center>
+                            <button class="btn btn-default-1">
+                                <span class="fa fa-shopping-cart"></span> ADD TO CART
+                            </button>
                         </td>
                     </tr>
                 </table>

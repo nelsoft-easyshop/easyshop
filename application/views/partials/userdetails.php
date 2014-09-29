@@ -1,5 +1,5 @@
 <div class="col-xs-3 no-padding col-left-wing">
-    <div class="left-wing">
+    <div class="left-wing-contact">
         <div class="panel-contact-details">
             <p class="panel-title-contact">
                 Details
