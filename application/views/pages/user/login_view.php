@@ -20,7 +20,7 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
