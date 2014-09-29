@@ -76,23 +76,26 @@ class SearchProduct
         $clearString = preg_replace('/[^A-Za-z0-9]+/', ' ', $queryString);  
         $stringCollection = array();
         $ids = array(); 
-        $explodedString = explode(' ', trim($clearString)); 
-        $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
-        $stringCollection[1] = trim($clearString);
-        $stringCollection[2] = '"'.trim($clearString).'"';
-        $stringCollection[3] = str_replace(' ', '', trim($clearString));
-        
-        if($queryString == ""){
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findBy(['isDraft' => 0,'isDelete' => 0]);
-        }
-        else{
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection);
-        }
 
-        foreach ($products as $key => $value) {
-            array_push($ids, $value->getIdProduct());
+        if($clearString == ""){
+            $explodedString = explode(' ', trim($clearString)); 
+            $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
+            $stringCollection[1] = trim($clearString);
+            $stringCollection[2] = '"'.trim($clearString).'"';
+            $stringCollection[3] = str_replace(' ', '', trim($clearString));
+
+            if($queryString == ""){
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->findBy(['isDraft' => 0,'isDelete' => 0]);
+            }
+            else{
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->findByKeyword($stringCollection);
+            }
+
+            foreach ($products as $key => $value) {
+                array_push($ids, $value->getIdProduct());
+            }
         }
 
         return $ids;
