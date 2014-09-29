@@ -416,7 +416,7 @@ class EsProductRepository extends EntityRepository
         }
  
         if(isset($filterArray['seller']) && $filterArray['seller']){
-            $sellerString = '%'.$filterArray['seller'].'%';
+            $sellerString = $filterArray['seller'];
             if (strpos($filterArray['seller'],'seller:') !== false) {
                 $sellerString = str_replace("seller:","",$filterArray['seller']);
             }

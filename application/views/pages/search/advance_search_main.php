@@ -103,7 +103,7 @@
             </div>
         </div> 
         
-        <?php if(count($products)>0): ?>
+        <?php if(isset($products)): ?>
         <div class="adv_ctr"><strong style="font-size:14px"><?=count($products);?></strong> result<?=(number_format(count($products)) > 1)?"s":"";?>  found</div>
         <?php endif; ?>
 
