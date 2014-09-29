@@ -224,12 +224,18 @@ section {
     height: 365px;
     text-align: center;
     overflow: hidden;
+    position: relative;
     min-width: 1190px;
     width: 100%;
 }
 
 .vendor-main-bg img {
-    margin:0 auto;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .vendor-profile-content {
