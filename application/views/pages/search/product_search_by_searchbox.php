@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <div class="clear"></div>
-
     <section style="color-gray display-when-desktop">
         <div class="container container-responsive">
             <div class="row">
@@ -156,8 +155,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="search_result_m">
-                        <p class="search_result "></p>
+                        <p class="search_result "><strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong></p>
                     </div>
+                    <br/>
                     <div id="paste-product">
                         <?php if(count($products) > 0): ?>
                             <?php foreach ($products as $key => $value): ?>
@@ -257,22 +257,24 @@
                     </h4>
                 </div>
                 <div class="modal-body no-border">
-                    <h3>Price</h3>
+                    <h3 class="h3-filter-price">Price</h3>
                     <input type="text" id="rprice1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
                     to
                     <input type="text" id="rprice2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
                     <input class="rprice" type="button" value=">>"/>
                     <?php if(count($products) > 0): ?>
                         <?php foreach ($attributes as $attrName => $attrListValue):?>
-                        <h3 class="title h3-filter"><?=$attrName?></h3> 
+                         <h3 class="title h3-filter"><?=$attrName?></h3> 
+                        <ul class="list-unstyled"> 
                             <?php foreach ($attrListValue as $key => $value):?>
-                                <div class="span-filter pull-left">
-                                    <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <label for="cbx"><?=ucfirst($value);?></label>
-                                    </a>
-                                </div>
+                            <li>
+                                <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                    <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
+                                </a>
+                            </li>
                             <?php endforeach; ?>
+                        </ul>
                             <div class="clear"></div> 
                         <?php endforeach; ?>
                     <?php else: ?>

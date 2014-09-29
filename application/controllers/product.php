@@ -33,7 +33,7 @@ class product extends MY_Controller
         // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter = $this->input->get() ? $this->input->get() : array();
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
         $response['products'] = $searchProductService->getProductBySearch($getParameter);
 
@@ -62,7 +62,7 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter = $this->input->get() ? $this->input->get() : array();
             $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
@@ -423,7 +423,7 @@ class product extends MY_Controller
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/productpage_view', $data);
+            $this->load->view('pages/product/productpage_view_responsive', $data);
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';

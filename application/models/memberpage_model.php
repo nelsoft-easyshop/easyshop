@@ -270,7 +270,7 @@ class memberpage_model extends CI_Model
         else{
             $config['image_library'] = 'gd2';
             $config['source_image'] = $path.'/usersize.png';
-            $config['maintain_ratio'] = true;
+            $config['maintain_ratio'] = false;
             
             $imageData = $this->upload->data();
             
@@ -371,8 +371,8 @@ class memberpage_model extends CI_Model
             
             //Resize to standard banner size
             $config['new_image'] = $path.'/banner.png';
-            $config['width'] = 980;
-            $config['height'] = 270;
+            $config['width'] = 1475;
+            $config['height'] = 366;
             $this->image_lib->initialize($config);  
             $this->image_lib->resize();	
         }
@@ -668,6 +668,7 @@ class memberpage_model extends CI_Model
                 if( !isset($data[$r['id_order']]['users'][$p['seller_id']]) ){
                     $data[$r['id_order']]['users'][$p['seller_id']] = array(
                         'name' => $p['seller'],
+                        'slug' => $p['sellerslug'],
                         'has_feedb' => (int)$p['for_memberid'] === 0 ? 0 : 1
                     );
                 }
@@ -678,6 +679,7 @@ class memberpage_model extends CI_Model
                     $product['has_shipping_summary'] = 0;
                     $product['seller_id'] = $p['seller_id'];
                     $product['seller'] = $p['seller'];
+                    $product['seller_slug'] = $p['sellerslug'];
                     if( trim(strlen($p['courier']))>0 && trim(strlen($p['datemodified']))>0 ){
                         $product['has_shipping_summary'] = 1;
                     }
@@ -750,6 +752,7 @@ class memberpage_model extends CI_Model
             if( !isset($data[$r['id_order']]) ){
                 $data[$r['id_order']] = array_slice($r,1,6);
                 $data[$r['id_order']]['is_flag'] = $r['is_flag'];
+                $data[$r['id_order']]['buyer_slug'] = $r['buyerslug'];
                 $data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
             }
             
@@ -757,6 +760,7 @@ class memberpage_model extends CI_Model
             if( !isset($data[$r['id_order']]['users'][$r['buyer_id']]) ){
                 $data[$r['id_order']]['users'][$r['buyer_id']] = array(
                     'name' => $r['buyer'],
+                    'slug' => $r['buyerslug'],
                     'has_feedb' => (int)$r['for_memberid'] === 0 ? 0 : 1,
                     'address' => array_slice($r,7,8)
                 );
@@ -982,7 +986,8 @@ class memberpage_model extends CI_Model
             if($result['member_id'] == $member_id){ //you post feedback
                 unset($result['member_id']);
                 unset($result['member_name']);
-                $temp = array_slice($result,0,7);
+                unset($result['member_slug']);
+                $temp = array_slice($result,0,8);
                 $temp['user_image'] = $this->get_image($result['for_memberid'], 'feedback');
                 if($result['feedb_kind'] == 0){ //you are buyer
                     $data['youpost_buyer'][$result['order_id']][] = $temp;
@@ -994,7 +999,8 @@ class memberpage_model extends CI_Model
             else if($result['for_memberid'] == $member_id){ //others post feedback
                 unset($result['for_memberid']);
                 unset($result['for_membername']);
-                $temp = array_slice($result,0,7);
+                unset($result['for_memberslug']);
+                $temp = array_slice($result,0,8);
                 $temp['user_image'] = $this->get_image($result['member_id'], 'feedback');
                 $data['rating1'] += $result['rating1'];
                 $data['rating2'] += $result['rating2'];

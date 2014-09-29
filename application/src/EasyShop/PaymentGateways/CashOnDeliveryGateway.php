@@ -26,7 +26,6 @@ class CashOnDeliveryGateway extends AbstractGateway
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
     }
 
-
     /**
      * Pay method for Cash On Delivery Gateway Class
      * 
@@ -45,7 +44,7 @@ class CashOnDeliveryGateway extends AbstractGateway
             $response['textType'] = 'cashondelivery';
             $response['message'] = 'Your payment has been completed through Cash on Delivery.';
         }
-        $this->paymentType = $response['paymentType'];
+        $this->setParameter('paymentType', $response['paymentType']);
         return $response;
     }
 
@@ -69,9 +68,11 @@ class CashOnDeliveryGateway extends AbstractGateway
         return EsOrderStatus::STATUS_PAID;
     }
 
-    public function getPaymentType()
-    {
-        return $this->paymentType;
-    }
-
 }
+
+/*
+    Params needed
+        method:"CashOnDelivery", 
+        lastDigit:$('input[name=paymentToken]').val().slice(-1)
+*/
+

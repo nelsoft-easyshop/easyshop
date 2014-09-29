@@ -196,7 +196,7 @@ class CartManager
             $serialValidatedOptions = serialize($itemData['options']);
             $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
 
-            if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] || 
+            if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] ||
                 $serialRawOptions !== $serialValidatedOptions ||
                 $itemData['member_id'] === $memberId || $product->getIsDraft() ||
                 $product->getIsDelete() || $itemData['qty'] === 0)
@@ -208,7 +208,7 @@ class CartManager
             }
 
         }
-                    
+
         $this->cart->persist($memberId);
         return  $this->cart->getContents();
             
@@ -227,7 +227,7 @@ class CartManager
         $promoBoughtCount = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                 ->getPromoPurchaseCountForMember($memberId, $product->getPromoType());
         $promoConfig = $this->promoManager->getPromoConfig($product->getPromoType());
-        
+
         if(($promoBoughtCount >= $promoConfig['purchase_limit']) || 
            ($product->getIsPromote() && !$promoConfig['is_buyable_outside_promo'] && !$product->getStartPromo())
         ){

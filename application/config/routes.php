@@ -122,6 +122,8 @@ else {
 
     #PAYMENT CASH ON DELIVERY
     $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    #UNIVERSAL PAYMENT
+    $route['(?i)pay/pay'] = 'payment/pay';  
     #PAYMENT DIRECT BANK DEPOSIT
     $route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
     #PAYMENT PAYPAL

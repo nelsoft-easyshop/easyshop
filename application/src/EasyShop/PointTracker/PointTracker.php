@@ -109,7 +109,7 @@ class PointTracker
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['m' => $userId]);
+                                ->findOneBy(['member' => $userId]);
 
         // Get Member object
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -125,7 +125,7 @@ class PointTracker
 
             // Update points history table
             $pointHistory = new EsPointHistory();
-            $pointHistory->setM($user);
+            $pointHistory->setMember($user);
             $pointHistory->setType($deduct);
             $pointHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
             $pointHistory->setPoint(-$points);

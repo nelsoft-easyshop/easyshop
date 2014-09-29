@@ -67,6 +67,13 @@ class EsProduct
     /**
      * @var string
      *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="price", type="decimal", precision=15, scale=4, nullable=false)
      */
     private $price = '0.0000';
@@ -212,13 +219,6 @@ class EsProduct
     private $isSoldOut = '0';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="is_meetup", type="boolean", nullable=false)
@@ -320,6 +320,12 @@ class EsProduct
 
     private $images;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="max_allowable_point", type="decimal", precision=15, scale=4, nullable=true)
+     */
+    private $maxAllowablePoint = '0.0000';
 
     public function __construct() 
     {
@@ -472,6 +478,29 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
     }
 
     /**
@@ -958,29 +987,6 @@ class EsProduct
     }
 
     /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
-    }
-
-    /**
      * Set isMeetup
      *
      * @param boolean $isMeetup
@@ -1247,5 +1253,26 @@ class EsProduct
         return $this->images;
     }
     
-    
+    /**
+     * Set maxAllowablePoint
+     *
+     * @param string $maxAllowablePoint
+     * @return EsProduct
+     */
+    public function setMaxAllowablePoint($maxAllowablePoint)
+    {
+        $this->maxAllowablePoint = $maxAllowablePoint;
+
+        return $this;
+    }
+
+    /**
+     * Get maxAllowablePoint
+     *
+     * @return string 
+     */
+    public function getMaxAllowablePoint()
+    {
+        return $this->maxAllowablePoint;
+    }
 }

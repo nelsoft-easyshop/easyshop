@@ -34,7 +34,10 @@ class CodeigniterConfig implements ConfigInterface
     {
         $this->CI->config->load($configFile, true);
         $configItem = ($configItem === null) ? $configFile : $configItem;
-        return $this->promoConfig = $this->CI->config->item($configItem);
+        $result = $this->CI->config->item($configItem);
+        $result = $result ? $result : $this->CI->config->item($configFile)[$configItem];
+ 
+        return $result;
     }
 }
 

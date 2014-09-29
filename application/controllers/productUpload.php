@@ -628,8 +628,9 @@ class productUpload extends MY_Controller
                 $explodearraynameoffiles = explode('||', $value);
                 $nameOfFile = $explodearraynameoffiles[0];
                 $arrayNameOnly[$key] = strtolower($nameOfFile); 
-
-                $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+                if($primaryId == $key){
+                    $primaryName = strtolower($nameOfFile); 
+                }
 
                 if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                     unset($arraynameoffiles[$key]);
@@ -875,7 +876,9 @@ class productUpload extends MY_Controller
         foreach($arraynameoffiles as $key => $value ) {
             $nameOfFile = explode('||', $value)[0];
             $arrayNameOnly[$key] = strtolower($nameOfFile); 
-            $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+            if($primaryId == $key){
+                $primaryName = strtolower($nameOfFile); 
+            }
 
             if(in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                 unset($arraynameoffiles[$key],$arrayNameOnly[$key]); 
@@ -1314,9 +1317,9 @@ class productUpload extends MY_Controller
                                         if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
                                             # -- ALGO START FOR INSERTION TO DATABASE --
                                             # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                foreach( $shipAttr[$groupkey] as $attrCombinationID){
+                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
+                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
+                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
                                                     $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
                                                 }
                                             }

@@ -129,8 +129,7 @@
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
 
-        if(!isNaN(price1) && !isNaN(price2)){
-            currentUrl = removeParam("price", currentUrl);
+        if(!isNaN(price1) && !isNaN(price2)){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
@@ -157,7 +156,6 @@
         currentUrl = removeParam("endprice", currentUrl);
 
         if(!isNaN(price1) && !isNaN(price2)){
-            currentUrl = removeParam("price", currentUrl);
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 

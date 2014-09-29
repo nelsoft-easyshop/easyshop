@@ -14,6 +14,41 @@ class EsMemberFeedback
 {
     /**
      * @var integer
+     */
+    const TYPE_AS_SELLER  = 1;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_AS_BUYER  = 2;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_FOR_OTHERS_AS_SELLER  = 3;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_FOR_OTHERS_AS_BUYER  = 4;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_ALL  = 5;
+
+    /**
+     * @var integer
+     */
+    const REVIEWER_AS_BUYER = 0;
+  
+    /**
+     * @var integer
+     */
+    const REVIEWER_AS_SELLER = 1;
+    
+    /**
+     * @var integer
      *
      * @ORM\Column(name="id_feedback", type="integer", nullable=false)
      * @ORM\Id

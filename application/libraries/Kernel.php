@@ -80,7 +80,7 @@ class Kernel
             
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
-        
+
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
@@ -98,7 +98,8 @@ class Kernel
         
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager']);
+            return new \EasyShop\User\UserManager($container['entity_manager']
+                                                ,$container['config_loader']);
         };
         
         //Account Manager
@@ -117,9 +118,11 @@ class Kernel
                                                         $formErrorHelper,
                                                         $stringHelper);        
         };
-        
-        
-        
+
+        $container['message_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            return new \EasyShop\Message\MessageManager($em);
+        };
 
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';
@@ -170,8 +173,8 @@ class Kernel
         };
 
         //Validation Rules Service
-        $container['form_validation'] = function ($c) {
-            return new \EasyShop\FormValidation\ValidationRules();
+        $container['form_validation'] = function ($c) use($container) {
+            return new \EasyShop\FormValidation\ValidationRules($container['entity_manager']);
         };
 
         //Request Service
@@ -239,7 +242,34 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
- 
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+         };
+        $socialMediaConfig = require APPPATH . 'config/oauth.php';
+        $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
+            $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
+                $socialMediaConfig['facebook']['redirect_url'],
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret']
+            );
+            $googleClient = new Google_Client();
+            $googleClient->setAccessType('online');
+            $googleClient->setApplicationName('Easyshop');
+            $googleClient->setClientId($socialMediaConfig['google']['key']['appId']);
+            $googleClient->setClientSecret($socialMediaConfig['google']['key']['secret']);
+            $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
+            $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
+            $em = $container['entity_manager'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\SocialMedia\SocialMediaManager(
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret'],
+                $fbRedirectLoginHelper,
+                $googleClient,
+                $em,
+                $stringUtility
+            );
+        };
         // Category Manager
         $container['category_manager'] = function ($c) use($container) {
             $em = $container['entity_manager'];
@@ -281,12 +311,6 @@ class Kernel
         // Form Helper
         $container['form_error_helper'] = function ($c) {
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
-        };
-
-
-        // String Utility
-        $container['string_utility'] = function($c) {
-            return new EasyShop\Utility\StringUtility();
         };
 
         /* Register services END */

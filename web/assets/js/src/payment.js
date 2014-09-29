@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
     $('.paypal_button').show();  
@@ -149,22 +148,77 @@ $(document).ready(function(){
 // -- CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.payment_cod',function () {
-        if($('#chk_cod').is(':checked')){
-            var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+         if($('#chk_cod').is(':checked')){
+             var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
 
-            if(r == true){
-               $(this).val('Please wait...'); 
-               $(this).attr('disabled','disabled');
-                $('#codFrm').submit();
+             if(r == true){
+                $(this).val('Please wait...'); 
+                $(this).attr('disabled','disabled');
+                 $('#codFrm').submit();
+             }
+         }else{
+            $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+             "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+             "box-shadow": "0px 0px 2px 2px #FF0000"});
+             $('#cod > .chck_privacy > p').empty();
+             $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
+         }
+     });
+    
+    /*
+        $(document).on('click','.payment_cod',function () {
+            if($('#chk_cod').is(':checked')){
+                var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+                var action = config.base_url + "pay/pay"; 
+                var pointAllocated = $('#pointsAllocated').val();
+
+                if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
+
+                    var paymentMethod = JSON.stringify(
+                    {
+                        CODGateway:{
+                            method:"CashOnDelivery", 
+                            lastDigit:$('input[name=paymentToken]').val().slice(-1)
+                        },
+                        PointGateway:{
+                            method:"Point",
+                            amount:pointAllocated,
+                            pointtype: "purchase"
+                        }
+                    });
+                }
+                else{
+                    var paymentMethod = JSON.stringify(
+                    {
+                        CODGateway:{
+                            method:"CashOnDelivery", 
+                            lastDigit:$('input[name=paymentToken]').val().slice(-1)
+                        }
+                    });
+                }
+                var data = $('#codFrm').serialize() + "&paymentMethods=" + paymentMethod;
+                if(r == true){
+                   $(this).val('Please wait...'); 
+                   $(this).attr('disabled','disabled');
+                    $.ajax({
+                        url: action,
+                        type: 'POST',
+                        dataType: 'html',
+                        data: data,
+                        success: function(d){
+                            window.location.replace(d);
+                        }
+                    });
+                }
+            }else{
+               $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"});
+                $('#cod > .chck_privacy > p').empty();
+                $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
             }
-        }else{
-           $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-            "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-            "box-shadow": "0px 0px 2px 2px #FF0000"});
-            $('#cod > .chck_privacy > p').empty();
-            $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
-        }
-    });
+        });
+    */
 
 // -- END OF CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
 

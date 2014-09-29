@@ -16,10 +16,10 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-    <link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='<?=base_url()?>assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='<?=base_url()?>assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
-
+    <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
+    
     <!--[if lt IE 9]>
     <script>
     var e = ("abbr,article,aside,audio,canvas,datalist,details," +
@@ -71,70 +71,124 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </a>
         </div>
         <div class="search-container">
-            <select class="ui-form-control">
-                <option>On Seller's Page</option>
-                <option>Main Page</option>
-                <option>Other Page</option>
-            </select>
-            <input type="text" class="ui-form-control">
-            <input type="submit" value="" class="span_bg">
+           <form class="search-form">
+                <select class="ui-form-control search-type">
+                    <option value="1">On Seller's Page</option>
+                    <option value="2">Main Page</option> 
+                </select>
+                <input type="text" name="q_str" class="ui-form-control">
+                <input type="submit"  value="" class="submitSearch span_bg">
+            </form>
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <span class="header-cart-items-con">
-                    <span class="header-cart-item">2 item(s)</span> in your cart
-                </span>
-                <span class="header-cart-icon-con span_bg cart-icon"></span>
-            </div>
-            <div class="header-cart-item-list">
-                <p>Recently add item(s)</p>
-                <div class="mrgn-bttm-15">
-                    <div class="header-cart-item-img">
-                        <a href="">
-                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                        </a>
+                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                    <span class="header-cart-items-con ui-form-control">
+                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                    </span>
+                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+                </a>
+                <div class="sticky-header-cart-item-list">
+                    <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                    <p>You have no item in cart</p>
+                    <?PHP else : ?>
+                        <p>Recently add item(s)</p>
+                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
+                            <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                    <div class="mrgn-bttm-15">
+                        <div class="header-cart-item-img">
+                            <a href="/item/<?=$cart_items[$cnt]['slug']?>">
+                                <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                            </a>
+                        </div>
+                        <div class="header-cart-item-con">
+                            <a href=""><span><?=$cart_items[$cnt]['name']?></span></a>
+                            <span>x <?=$cart_items[$cnt]['qty']?></span>
+                            <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                        </div>
+                        <div class="clear"></div>
                     </div>
-                    <div class="header-cart-item-con">
-                        <a href=""><span>Doraemon - blue</span></a>
-                        <span>x 1</span>
-                        <span class="header-cart-item-price">&#8369; 450.00</span>
+                            <?PHP endif; ?>
+                    <?PHP endfor; ?>
+                    <div class="header-cart-lower-content">
+                        <div class="header-cart-shipping-total">
+                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                        </div>
+                        <div class="header-cart-buttons">
+                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                        </div>
+                        <div class="clear"></div>
                     </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="mrgn-bttm-15">
-                    <div class="header-cart-item-img">
-                        <a href="">
-                            <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                        </a>
-                    </div>
-                    <div class="header-cart-item-con">
-                        <a href=""><span>Doraemon - blue</span></a>
-                        <span>x 1</span>
-                        <span class="header-cart-item-price">&#8369; 450.00</span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="header-cart-lower-content">
-                    <div class="header-cart-shipping-total">
-                        <p>Shipping: <span>&#8369; 50.00</span></p>
-                        <p>Total: <span>&#8369; 100,500.00</span></p>
-                    </div>
-                    <div class="header-cart-buttons">
-                        <a href="" class="header-cart-lnk-cart">go to cart</a>
-                        <a href="" class="header-cart-lnk-checkout">checkout</a>
-                    </div>
-                    <div class="clear"></div>
+                    <?PHP endif;?>
                 </div>
             </div>
         </div>
         <div>
-            <div class="vendor-login-con">
-                <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
-                <a href=""><strong>login</strong></a>  or 
-                <a href=""><strong>Create and account</strong></a>
-            </div>
+            <?php if(isset($logged_in) && $logged_in): ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
+                    <div class="new-user-nav-dropdown">
+                        <span class="user-nav-dropdown">Account Settings</span>
+                    </div>
+                    <ul class="nav-dropdown">
+                        <li>
+                            <a href="/me">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="/me?me=pending">On-going Transactions</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a href="/me?me=settings">Settings</a>
+                        </li>
+                        <li class="nav-dropdown-border">
+                            <a class="prevent" href="/login/logout">Logout</a>
+                        </li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+            <?php else: ?>
+                <div class="vendor-login-con">
+                    <img src="/assets/images/img-default-icon-user.jpg"> 
+                    <a href="/login"><strong>login</strong></a>  or 
+                    <a href="/register"><strong>Create and account</strong></a>
+                </div>
+            <?php endif; ?>
+        
         </div>
         <div class="clear"></div>
     </div>
 </header>
+
+<script type='text/javascript'>
+
+    (function(){
+    
+        $(function () {
+   
+            var $user_nav_dropdown = $(".user-nav-dropdown");
+            var $nav_dropdown = $("ul.nav-dropdown");
+
+            $(document).mouseup(function (e) {
+
+                if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
+                    && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
+                {
+                    $nav_dropdown.hide(1);
+                }
+
+            });
+
+            $user_nav_dropdown.click(function() {
+                $nav_dropdown.show();
+            });
+        
+        });
+
+    })(jQuery);
+
+
+</script>
 
