@@ -6,7 +6,7 @@
 <div class="container-non-responsive bg-product-section">
     <div class="row row-products">
         <div class="col-xs-3 no-padding col-left-wing">
-            <div class="left-wing">
+            <div class="left-wing" id="left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -141,4 +141,3 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
-
