@@ -6,6 +6,7 @@ class ScratchCard extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
         $this->load->library('session');
@@ -21,7 +22,7 @@ class ScratchCard extends MY_Controller
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';
-        $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
+        $viewData['deals_banner'] = $this->load->view('templates/dealspage/scratchAndWin', $banner_data = array(), TRUE);
 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);
@@ -29,20 +30,20 @@ class ScratchCard extends MY_Controller
     }
 
     /**
-     * checks if the code exist in DB
+     * checks if the code exist
      *
      * @param code
      * @return json
      */
     public function validateScratchCardCode()
     {
-        $result = $this->product_model->validateBuyAtZeroCode($this->input->post('code'));
-        $result[0]['logged_in'] = true;
+        $result = $this->product_model->validateScratchCardCode($this->input->post('code'));
+        $result['logged_in'] = true;
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            $result[0]['logged_in'] = false;
+            $result['logged_in'] = false;
         }
 
-        echo json_encode(!$result[0] ? false : $result[0]);
+        echo json_encode(!$result ? false : $result);
     }
 
     /**
@@ -52,22 +53,43 @@ class ScratchCard extends MY_Controller
      */
     public function claimScratchCardPrize()
     {
-        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            redirect(base_url().'login', 'refresh');
+        if (!$this->session->userdata('usersession') && !$this->check_cookie()) {
+            redirect('/login', 'refresh');
+        }
+        if (!($this->input->get('code'))) {
+            redirect('/Scratch-And-Win', 'refresh');
         }
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
-        $viewData['product'] = $this->product_model->validateCode($this->input->get('code'));
-
+        $viewData['product'] = $this->product_model->validateScratchCardCode($this->input->get('code'));
+        if (!$viewData['product']) {
+            redirect('/Scratch-And-Win', 'refresh');
+        }
+        else if (intval($viewData['product']['c_id_code']) !== 0) {
+            $viewData['product'] = 'purchase-limit-error';
+        }
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
     }
 
+    /**
+     * ajax - tie up code to member
+     *
+     * @param memberId
+     * @param code
+     * @return boolean
+     */
+    public function tieUpMemberToCode()
+    {
+        $result = $this->product_model->tieUpMemberToCode(
+            $this->session->userdata('member_id'),
+            $this->input->post('code')
+        );
+
+        echo json_encode($result);
+    }
+
 }
-
-/* End of file ScratchCard.php */
-/* Location: ./application/controllers/promo/ScratchCard.php */
-
