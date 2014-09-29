@@ -282,11 +282,6 @@ function ItemListAjax(CatDiv,page)
             }
     });
 
-    
-    
-    
-    
-    
     $(document).ready(function(){
         $('[rel=tooltiplist]').tooltip({
             placement : 'top'
@@ -342,7 +337,6 @@ function ItemListAjax(CatDiv,page)
         };
     });
     
-    
     $(document).ready(function(){
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
@@ -362,3 +356,4 @@ function ItemListAjax(CatDiv,page)
     
     });
 })(jQuery);
+
