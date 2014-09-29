@@ -113,6 +113,8 @@
                     <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
+                        <input type="hidden" id="json_city" value='<?php echo json_encode($cityLookup, JSON_HEX_APOS)?>'>
+
                         <!-- State/Region Dropdown -->
                         <select name="c_stateregion" class="address_dropdown stateregionselect" data-origval="<?php echo $arrVendorDetails['stateregion']?>">
                             <option value="0">--- Select State/Region ---</option> 
@@ -244,9 +246,7 @@
 <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type="text/javascript">
-    var jsonCity = <?php echo json_encode($cityLookup);?>;
-</script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script src='/assets/js/src/vendor_header.js' type="text/javascript"></script>
 
  

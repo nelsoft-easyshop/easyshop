@@ -178,6 +178,7 @@ class UserManager
             return true;
         }
         else{
+            $this->err = "Store name already used!";
             return false;
         }
     }
@@ -258,7 +259,7 @@ class UserManager
      */
     private function isValidMobile(&$mobileNum)
     {
-        $isValidMobile = preg_match('/^(08|09)[0-9]{9}/', $mobileNum);
+        $isValidMobile = preg_match('/^(08|09)[0-9]{9}$/', $mobileNum);
 
         if($isValidMobile){
             $mobileNum = ltrim($mobileNum,"0");

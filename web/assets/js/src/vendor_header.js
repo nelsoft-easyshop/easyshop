@@ -1,3 +1,18 @@
+// global jsonCity
+var jsonCity = jQuery.parseJSON($('#json_city').val());
+
+(function ($) {
+
+    // Numeric characters only. Disable negative
+    $('#mobileNumberTxt').numeric({negative : false});
+
+    // Disable decimal point
+    $('#mobileNumberTxt').on('keypress', function(e){
+        var code = e.keyCode || e.which;
+        return (code != 46);
+    });
+
+})(jQuery);
 
 (function ($) {
 
