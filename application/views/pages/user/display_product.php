@@ -55,10 +55,10 @@
                 <table width="100%">
                     <tr>
                         <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
-                            <a href="<?php echo base_url() . 'item/' . $productSlug?>">
+                            <a target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
                                 <div class="span-space">
                                     <?php if($percentage && $percentage > 0):?>
-                                    <span class="span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                    <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
                                     <?php endif;?>
                                 </div>
                             </a>
