@@ -72,14 +72,14 @@
                         <p class="text-contact"><?php echo html_escape($streetAddr . ', ' . $city . ', ' . $region); ?></p>
 
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
-                        <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
-                            <?php foreach($cities as $key => $value): ?>
-                                <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $city? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
-                            <?php endforeach; ?>
-                        </select>
                         <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
                             <?php foreach($regions as $key => $value): ?>
                                 <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $region? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
+                            <?php endforeach; ?>
+                        </select>
+                        <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
+                            <?php foreach($cities as $key => $value): ?>
+                                <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $city? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
                             <?php endforeach; ?>
                         </select>
                     </td>
