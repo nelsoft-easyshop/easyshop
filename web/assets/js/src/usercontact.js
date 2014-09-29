@@ -12,6 +12,12 @@
         }
      });
 
+    $(" #contactNo ").numeric(
+        {decimal: false, negative: false}, 
+        function(){
+            this.value = ""; this.focus();
+        });
+
     $( "#regionSelect" ).change(function() {
         var data = window.cities[$( "#regionSelect" ).val()];
         var list = '';
@@ -82,4 +88,5 @@
         }
      });
 })(jQuery);
+
 
