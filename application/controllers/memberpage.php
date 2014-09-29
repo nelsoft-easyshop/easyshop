@@ -1332,7 +1332,8 @@ class Memberpage extends MY_Controller
     {
         $serverResponse = array(
             "result" => FALSE,
-            "error" => ""
+            "error" => "",
+            "data" => array()
         );
 
         if( $this->input->post("vendor_details") ){
@@ -1351,6 +1352,12 @@ class Memberpage extends MY_Controller
 
             $serverResponse["result"] = $boolResult;
             $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
+            $serverResponse["new_data"] = array(
+                    "store_name" => $storeName
+                    , "mobile" => $mobileNum
+                    , "state_region_id" => $stateRegionId
+                    , "city_id" => $cityId
+            );
         }
 
         echo json_encode($serverResponse);

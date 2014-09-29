@@ -109,12 +109,12 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
-                    <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>">
+                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" data-origval="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
+                    <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
                         <!-- State/Region Dropdown -->
-                        <select name="c_stateregion" class="address_dropdown stateregionselect">
+                        <select name="c_stateregion" class="address_dropdown stateregionselect" data-origval="<?php echo $arrVendorDetails['stateregion']?>">
                             <option value="0">--- Select State/Region ---</option> 
                             <?php foreach($stateRegionLookup as $srkey=>$stateregion):?>
                                 <option class="echo" value="<?php echo $srkey?>" <?php echo $arrVendorDetails['stateregion'] == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
@@ -122,7 +122,7 @@
                         </select>
 
                         <!-- City Dropdown -->
-                        <select name="c_city" class="address_dropdown cityselect">
+                        <select name="c_city" class="address_dropdown cityselect" data-origval="<?php echo $arrVendorDetails['city']?>">
                             <option value="0">--- Select City ---</option> 
                             <?php foreach($cityLookup as $parentkey=>$arr):?>
                                 <?php foreach($arr as $lockey=>$city):?>
