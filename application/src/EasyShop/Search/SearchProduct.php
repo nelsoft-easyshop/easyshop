@@ -114,7 +114,7 @@ class SearchProduct
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
    
         foreach ($arrayItems as $key => $value) {
-            $price = round(floatval($value->getPrice()),2); 
+            $price = round(floatval($value->getFinalPrice()),2); 
             if($price < $minPrice || $price > $maxPrice){
                 unset($arrayItems[$key]);
             }
@@ -266,8 +266,8 @@ class SearchProduct
         // Prepare variables
         $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
         $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
-        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?trim($parameters['startprice']):FALSE;
-        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?trim($parameters['endprice']):FALSE; 
+        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
+        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?str_replace( ',', '', trim($parameters['endprice'])):FALSE; 
         $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;
         $sortBy = (isset($parameters['sortby']) && $parameters['sortby'])?trim($parameters['sortby']):FALSE;
         $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;

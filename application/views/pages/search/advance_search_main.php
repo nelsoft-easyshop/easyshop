@@ -96,9 +96,9 @@
                 </span>
                 <span class="adv_us">
                     <label>Price:</label>
-                    <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                    <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                     to
-                    <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                    <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                 </span>
             </div>
         </div> 
@@ -108,8 +108,8 @@
         <?php endif; ?>
 
         <!-- Buttons start -->
-        <div id="list" class="list list-active" title="List"></div>
-        <div id="grid" class="grid" title="Grid"></div>
+        <div id="list" class="list <?=($_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+        <div id="grid" class="grid <?=($_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
         <!-- Buttons end -->
         <div class="clear"></div> 
         <div id="product_content">
@@ -269,9 +269,9 @@
                                     <tr>
                                         <td class="td-search-label">Price: </td>
                                         <td class="td-search-input">
-                                            <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                                            <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                                             to
-                                            <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                                            <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                                         </td>
                                     </tr> 
                                     <tr>

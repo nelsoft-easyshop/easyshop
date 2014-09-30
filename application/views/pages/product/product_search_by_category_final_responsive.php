@@ -114,8 +114,8 @@
                 <div class="clear"></div>
                 <p class="search_result margin-left-42"> </p>
                 <div class="pull-right div-view-buttons">
-                    <div id="list" class="list "></div>
-                    <div id="grid" class="grid grid-active"></div>
+                    <div id="list" class="list <?=($_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+                    <div id="grid" class="grid <?=($_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
                 </div>
                 <div class="clear"></div>
                 <div id="product_content" class="margin-left-42">
