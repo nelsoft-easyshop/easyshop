@@ -1302,6 +1302,11 @@ class productUpload extends MY_Controller
                             }
                         }
                     }
+
+                    // Reorder array values for proper checking of equality
+                    sort($clientProductItemID);
+                    sort($dbProductItemID);
+                    
                     #If ProductItemID matches for client and server, also verifies that all attributes have been checked
                     #or provided with a shipping location
                     if( $clientProductItemID == $dbProductItemID ){
