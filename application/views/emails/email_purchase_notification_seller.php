@@ -16,13 +16,13 @@
                 <p style="margin-top:-10px; margin-bottom:-20px;">
                     <!--FOR MOBILE SCREEN SIZE-->
                     <span>
-                        <a href="{store_link}">
-                            <img src="images/appbar.home.png" width="30" height="30"/>
+                        <a href="{store_link}" style="text-decoration: none;">
+                            <img src="images/appbar.home.png" width="20" height="20"/>
                         </a>
                     </span>
                     <span>
-                        <a href="{msg_link}">
-                            <img src="images/appbar.message.png" width="30" height="30"/>
+                        <a href="{msg_link}" style="text-decoration: none;">
+                            <img src="images/appbar.message.png" width="20" height="20"/>
                         </a>
                     </span>
                 </p>

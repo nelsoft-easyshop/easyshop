@@ -7,19 +7,6 @@
                 </center>
             </div>
             <br/>
-            <p style="margin-top:-10px; margin-bottom:-20px;">
-                <!--FOR MOBILE SCREEN SIZE-->
-                <span>
-                    <a href="{store_link}">
-                        <img src="images/appbar.home.png" width="30" height="30"/>
-                    </a>
-                </span>
-                <span>
-                    <a href="{msg_link}">
-                        <img src="images/appbar.message.png" width="30" height="30"/>
-                    </a>
-                </span>
-            </p>
             <div style="margin-top: 20px; font-size: 13px;">
                 
                 <p>
@@ -91,6 +78,17 @@
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
                                                             {seller} 
+                                                            <span>
+                                                                <a href="{store_link}{seller}" style="text-decoration: none;">
+                                                                    <img src="images/appbar.home.png" width="15" height="15"/>
+                                                                </a>
+                                                            </span>
+                                                            <span>
+                                                                <a href="{store_link}{seller}/contact" style="text-decoration: none;">
+                                                                    <img src="images/appbar.message.png" width="15" height="15"/>
+                                                                </a>
+                                                            </span>
+                                                            
                                                         </td>
                                                     </tr>
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
