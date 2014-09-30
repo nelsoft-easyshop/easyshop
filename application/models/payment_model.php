@@ -272,21 +272,26 @@ class payment_model extends CI_Model
         $this->load->library('parser');
         $this->email->set_newline("\r\n");
         $this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
-        $this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
-        
+        $workingDirectory = getcwd();
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/header-img.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/appbar.home.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/appbar.message.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/facebook.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/twitter.png", "inline");
+
         switch($string){
             case 'buyer':
                 $this->email->subject($this->lang->line('notification_subject_buyer'));
                 #user appended at template
                 $data['store_link'] = base_url();
                 $data['msg_link'] = base_url() . "messages/#";
-                $msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
+                $msg = $this->parser->parse('emails/email_purchase_notification_buyer',$data,true);
                 break;
             case 'seller':
                 $this->email->subject($this->lang->line('notification_subject_seller'));
                 $data['store_link'] = base_url() . $data['buyer_slug'];
                 $data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
-                $msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
+                $msg = $this->parser->parse('emails/email_purchase_notification_seller',$data,true);
                 break;
             case 'return_payment':
                 $this->email->subject($this->lang->line('notification_returntobuyer'));
@@ -302,7 +307,6 @@ class payment_model extends CI_Model
         $result = $this->email->send();
 
         $errmsg = $this->email->print_debugger();
-        
         return $result;
     }
 
@@ -318,6 +322,9 @@ class payment_model extends CI_Model
         */
     function sendNotificationMobile($mobile, $msg)
     {
+        return true;
+        
+        
         $fields = array();
         $fields["api"] = "dgsMQ8q77hewW766aqxK";
         
