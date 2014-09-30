@@ -45,7 +45,7 @@ class Cart extends MY_Controller{
             $go=$_POST['opt'];
         }
         if($out_opt !== intval($_POST['length'])){
-            $result=sha1(md5("hinditanggap"));
+            $result = false;
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];

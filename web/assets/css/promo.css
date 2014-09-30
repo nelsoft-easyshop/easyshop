@@ -1,8 +1,8 @@
 .scratch-win-form span,
 .scratch-win-form input,
 .scratch-win-form button,
-#scratch-win-error h2,
-#scratch-win-error p,
+.scratch-win-error h2,
+.scratch-win-error p,
 #scratch-win-claim h2,
 #scratch-win-claim,
 .scratch-congrats,
@@ -15,7 +15,7 @@
     margin-top: 1% !important;
 }
 .scratch-congrats{
-    width: 61%;
+    width: 80%;
 }
 .head-cngrts{
     width: 27%;
@@ -23,12 +23,21 @@
 #scratch-win-claim{
     width: 60%;
 }
+.margin-top-10{
+    margin: 5% auto 0 !important;
+}
 #scratch-win-claim h2{
     padding: 1% 0 3% 0;
     width: 35%;
 }
-#scratch-win-error p{
+.scratch-win-error p{
     width: 65%;
+}
+.scratch-win-error h2{
+    width: 8%;
+}
+.scratch-win-error{
+    display: none;
 }
 .scratch-win-form span{
     width: 15%;
@@ -64,6 +73,12 @@
     max-width: 980px;
     position: relative;
     width: 79%;
+}
+.scratch-win-form p{
+    margin: 0 auto;
+    max-width: 980px;
+    position: relative;
+    width: 83%;
 }
 .scratch-win-form > ol > li {
     padding: 1%;
@@ -129,13 +144,31 @@
     width: 20%;
 }
 .scratch-win-btn{
-
 }
-.easytreats_banner {
-    background: url("../../assets/images/img_easy_treat_v1.jpg") no-repeat scroll center top #FFFFFF;
-    height: 205px;
-    margin-bottom: 3%;
+.scratchAndWinBanner {
+    background:url("../images/Scratch_and_win_baner.jpg") no-repeat scroll center top / 100% 83% #ffffff;
+    height: 365px;
     margin-top: 2%;
     position: relative;
-    width: 980px;
- }
+    width: 100%;
+}
+#promo-prizes-tbl > th , td {
+    border: 1px solid;
+    margin-left: 5%;
+    text-align: center;
+    width: 45%;
+}
+#promo-prizes-tbl th {
+    border: 1px solid;
+    padding-left: 2%;
+    text-align: center;
+}
+.tbl-red{
+    background-color: rgba(170, 0, 0, 0.71);
+}
+.error-claim{
+    width: 57% !important;
+    left: 20% !important;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}

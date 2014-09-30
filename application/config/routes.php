@@ -133,9 +133,9 @@ else {
     #MAINTENANCE ROUTE
     $route['(?i)maintenance'] = 'home/splash';
 
-    #PROMO CATEGORY PAGE
+    #PROMO PAGE
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
-    $route['(?i)scratch-and-win'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
