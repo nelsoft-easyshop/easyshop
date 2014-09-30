@@ -1,3 +1,18 @@
+// global jsonCity
+var jsonCity = jQuery.parseJSON($('#json_city').val());
+
+(function ($) {
+
+    // Numeric characters only. Disable negative
+    $('#mobileNumberTxt').numeric({negative : false});
+
+    // Disable decimal point
+    $('#mobileNumberTxt').on('keypress', function(e){
+        var code = e.keyCode || e.which;
+        return (code != 46);
+    });
+
+})(jQuery);
 
 (function ($) {
 
@@ -44,8 +59,20 @@
     });
 
     $(document).on('click','#banner-cancel-changes',function() {
+        var storeNameField = $('#storeNameTxt');
+        var mobileField = $('#mobileNumberTxt');
+        var stateRegionSelect = $('.stateregionselect');
+        var citySelect = $('.cityselect');
+
         $('#display-banner-view').show();
         $('#edit-banner-view').hide();
+
+        // Reset displayed values to original
+        storeNameField.val(storeNameField.attr('data-origval'));
+        mobileField.val(mobileField.attr('data-origval'));
+        stateRegionSelect.val(stateRegionSelect.attr('data-origval')).trigger("chosen:updated");
+        cityFilter(stateRegionSelect, citySelect);
+        citySelect.val(citySelect.attr('data-origval')).trigger("chosen:updated");
     });
 
     // Search button click
@@ -85,6 +112,12 @@
                     $(".storeName").html(storName);
                     $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
+
+                    // Update custom attr origval for "Cancel" functionality
+                    $("#storeNameTxt").attr('data-origval', data.new_data.store_name);
+                    $("#mobileNumberTxt").attr('data-origval', data.new_data.mobile);
+                    $(".stateregionselect").attr('data-origval', data.new_data.state_region_id);
+                    $(".cityselect").attr('data-origval',data.new_data.city_id);
                 }
                 else{
                     // Display error

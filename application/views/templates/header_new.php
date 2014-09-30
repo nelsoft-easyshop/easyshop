@@ -88,7 +88,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                 </a>
-                <div class="sticky-header-cart-item-list">
+                <div class="header-cart-item-list">
                     <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
                     <p>You have no item in cart</p>
                     <?PHP else : ?>
@@ -128,6 +128,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div>
             <?php if(isset($logged_in) && $logged_in): ?>
                 <div class="vendor-login-con">
+                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                        <span id="unread-messages-count" class="msg_countr message-count-con">
+                    <?=$msgs['unread_msgs'];?>
+                    </span>
+                    <?php endif;?>
                     <img src="/assets/images/img-default-icon-user.jpg"> 
                     <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
                     <div class="new-user-nav-dropdown">
@@ -142,6 +147,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </li>
                         <li class="nav-dropdown-border">
                             <a href="/me?me=settings">Settings</a>
+                        </li>
+                        <li class="nav-dropdown-border pos-rel">
+                            <a href="/messages">Message</a>
+                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                            <div id="unread-messages-count" class="msg_countr message-count-con">
+                            <?=$msgs['unread_msgs'];?>
+                            </div>
+                            <?php endif;?>
                         </li>
                         <li class="nav-dropdown-border">
                             <a class="prevent" href="/login/logout">Logout</a>
@@ -161,6 +174,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="clear"></div>
     </div>
 </header>
+
+        <script type="text/javascript" src="/assets/js/src/bootstrap.js" ></script>
 
 <script type='text/javascript'>
 

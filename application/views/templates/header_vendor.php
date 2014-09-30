@@ -21,7 +21,7 @@
                     <h4 class="storeName"><?=html_escape($storeNameDisplay)?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
-                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <img src="/assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
                         <?php else:?>
@@ -31,7 +31,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
-                            <img src="/assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                     </div>
                     <?php else: ?>
@@ -44,7 +44,7 @@
                         </span>                       
 
                         <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
-                            <span class="glyphicon glyphicon-envelope"></span>
+                            <span class="icon-message-btn"></span>
                             Message
                         </a>
 
@@ -109,12 +109,14 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
-                    <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>">
+                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" data-origval="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
+                    <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
+                        <input type="hidden" id="json_city" value='<?php echo json_encode($cityLookup, JSON_HEX_APOS)?>'>
+
                         <!-- State/Region Dropdown -->
-                        <select name="c_stateregion" class="address_dropdown stateregionselect">
+                        <select name="c_stateregion" class="address_dropdown stateregionselect" data-origval="<?php echo $arrVendorDetails['stateregion']?>">
                             <option value="0">--- Select State/Region ---</option> 
                             <?php foreach($stateRegionLookup as $srkey=>$stateregion):?>
                                 <option class="echo" value="<?php echo $srkey?>" <?php echo $arrVendorDetails['stateregion'] == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
@@ -122,7 +124,7 @@
                         </select>
 
                         <!-- City Dropdown -->
-                        <select name="c_city" class="address_dropdown cityselect">
+                        <select name="c_city" class="address_dropdown cityselect" data-origval="<?php echo $arrVendorDetails['city']?>">
                             <option value="0">--- Select City ---</option> 
                             <?php foreach($cityLookup as $parentkey=>$arr):?>
                                 <?php foreach($arr as $lockey=>$city):?>
@@ -151,7 +153,7 @@
                 ?>
                 <?php if($noItem): ?>
                 <li>
-                    <a href="" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
+                    <a href="/<?=$arrVendorDetails['userslug']?>" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
                         <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
@@ -162,10 +164,10 @@
                 -->
                 <?php endif; ?>
                 <li >
-                    <a href="/<?php echo $arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
                 </li>
                 <li>
-                    <a href="/<?php echo $arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
                 </li>
             </ul>
             <ul class="sticky-nav">
@@ -176,9 +178,9 @@
                     <h4><?=html_escape($storeNameDisplay);?></h4>
                 </li>
                 <li>
-                    <a href=""><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                    <a href=""><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                    <a href=""><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li> 
                     <form class="search-form">
@@ -244,9 +246,7 @@
 <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type="text/javascript">
-    var jsonCity = <?php echo json_encode($cityLookup);?>;
-</script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script src='/assets/js/src/vendor_header.js' type="text/javascript"></script>
 
  

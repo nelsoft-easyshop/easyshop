@@ -52,11 +52,11 @@ class EsProductRepository extends EntityRepository
                 , `weight`
             FROM (
                     SELECT 
-                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3) +
+                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 10) +
                         (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
-                        MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) +
+                        (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 5) +
                         (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
-                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5) +
+                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 15) +
                         (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) +
                         ((REPLACE (`search_keyword`, ' ', '') LIKE :param3 )  * 0.005)
                          AS weight,
@@ -416,7 +416,7 @@ class EsProductRepository extends EntityRepository
         }
  
         if(isset($filterArray['seller']) && $filterArray['seller']){
-            $sellerString = '%'.$filterArray['seller'].'%';
+            $sellerString = $filterArray['seller'];
             if (strpos($filterArray['seller'],'seller:') !== false) {
                 $sellerString = str_replace("seller:","",$filterArray['seller']);
             }

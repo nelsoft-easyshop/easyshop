@@ -1332,7 +1332,8 @@ class Memberpage extends MY_Controller
     {
         $serverResponse = array(
             "result" => FALSE,
-            "error" => ""
+            "error" => "",
+            "data" => array()
         );
 
         if( $this->input->post("vendor_details") ){
@@ -1351,6 +1352,12 @@ class Memberpage extends MY_Controller
 
             $serverResponse["result"] = $boolResult;
             $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
+            $serverResponse["new_data"] = array(
+                    "store_name" => $storeName
+                    , "mobile" => $mobileNum
+                    , "state_region_id" => $stateRegionId
+                    , "city_id" => $cityId
+            );
         }
 
         echo json_encode($serverResponse);
@@ -1372,9 +1379,9 @@ class Memberpage extends MY_Controller
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
 
-        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
-        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lp')) : "";
-        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('up')) : "";
+        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
+        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
+        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
 
         $parameter = json_decode($this->input->get('queryString'),TRUE);
 
