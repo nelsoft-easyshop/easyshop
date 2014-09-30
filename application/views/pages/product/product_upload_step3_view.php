@@ -388,6 +388,9 @@
     </div>
     <!-- CLOSE step3_shipping_options-->
 
+    <input type="hidden" id="checkData" value='<?=$json_check_data?>'>
+    <input type="hidden" id="shippingPreference" value='<?=$json_shippingpreference?>'>
+
     <div style="margin-top: 3em;text-align:center;">
         <input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
         <input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
@@ -409,11 +412,6 @@
     <?php echo form_close();?>
 
     <div class="clear"></div>  
-
-<script type="text/javascript">
-var shippingPreference = <?php echo $json_shippingpreference;?>;
-var checkData = <?php echo $json_check_data;?>;
-</script>
 
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
