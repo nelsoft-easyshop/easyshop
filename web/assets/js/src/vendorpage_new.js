@@ -68,8 +68,14 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
+        var pagingDiv = $(divId).find('.product-paging');
+
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
+
+        if(pagingDiv.length === 0){
+            ItemListAjax($(divId), 1);
+        }
     });
 
     $(document).on('change',".price-field",function () {

@@ -1435,9 +1435,11 @@ class Memberpage extends MY_Controller
                 $parameter['seller'] = "seller:".$vendorName;
                 $parameter['limit'] = $prodLimit;
                 $parameter['page'] = $page - 1;
-                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
+                $products = $searchProductService->getProductBySearch($parameter);
                 $parameter['limit'] = PHP_INT_MAX;
-                $productCount = count($searchProduct = $searchProductService->getProductBySearch($parameter));
+                $parameter['page'] = 0;
+                $tempCountContainer = $searchProductService->getProductBySearch($parameter);
+                $productCount = count($tempCountContainer);
                 break;
             case 1: // Custom - NOT YET USED
                 //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
@@ -1469,6 +1471,11 @@ class Memberpage extends MY_Controller
             , 'isHyperLink' => false
             , 'currentPage' => $page
         );
+
+        /*print('<pre>');
+        print($productCount);
+        print_r($paginationData);
+        die();*/
 
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)

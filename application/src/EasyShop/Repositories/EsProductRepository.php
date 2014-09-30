@@ -97,10 +97,11 @@ class EsProductRepository extends EntityRepository
 
                 $sql = "
                     SELECT 
-                        p,m
+                        p,m,c
                     FROM 
                         EasyShop\Entities\EsProduct p
                         JOIN p.member m
+                        JOIN p.cat c
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)
