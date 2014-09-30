@@ -179,7 +179,7 @@ class CartManager
 
         if(!$member || !$member->getIsEmailVerify()){
             $this->cart->destroy();
-            return false;
+            return array();
         }
     
         $cartContents = $this->cart->getContents();       
