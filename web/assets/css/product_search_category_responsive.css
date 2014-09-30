@@ -236,9 +236,17 @@ div.product-list{
 .cbx{
     font-weight: normal !important;
 }
+
+.cbx > label{
+    margin-top: 3px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
 .cbx:hover{
     color: #f37d03 !important;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .tbl-price{
