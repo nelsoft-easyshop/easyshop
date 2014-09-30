@@ -239,11 +239,14 @@
                         <table>
                             <tr>
                                 <td>
-                                    <a href="#">
-                                    <img src="images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                    <a href="https://www.facebook.com/EasyShopPhilippines">
+                                        <img src="images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                    </a>
                                 </td>
                                 <td>
-                                    <img src="images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                    <a href="https://twitter.com/EasyShopPH">
+                                        <img src="images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                    </a>
                                 </td>
                             </tr>
                         </table>
