@@ -69,12 +69,12 @@
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
-                        <p class="text-contact"><?php echo html_escape($streetAddr . ', ' . $city . ', ' . $region); ?></p>
+                        <p class="text-contact"><?php echo html_escape($streetAddr . $city . ', ' . $region); ?></p>
                         <input type="hidden" id="displayStreetAddr" value="<?php echo html_escape($streetAddr)?>"/>
                         <input type="hidden" id="displayCity" value="<?php echo html_escape($city)?>"/>
                         <input type="hidden" id="displayRegion" value="<?php echo html_escape($region)?>"/>
 
-                        <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape($streetAddr); ?>">
+                        <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape(substr($streetAddr, 0, -2)); ?>">
                         <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
                             <?php foreach($regions as $key => $value): ?>
                                 <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $region? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
