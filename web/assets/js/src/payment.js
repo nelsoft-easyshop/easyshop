@@ -41,12 +41,76 @@ $(document).ready(function(){
 
 // -- PAYPAL PROCESS PAYMENT SECTION -- // 
 
+    // $(document).on('click','.paypal',function () {
+    //     var action = config.base_url + "pay/setting/paypal"; 
+    //     var csrftoken = $("meta[name='csrf-token']").attr('content');
+    //     var csrfname = $("meta[name='csrf-name']").attr('content');
+    //     var type = $(this).data('type');
+
+    //     if(type == 1){
+    //         if(!$('#chk_paypal1').is(':checked')){
+    //             $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+    //                 "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+    //                 "box-shadow": "0px 0px 2px 2px #FF0000"});
+    //             $('#paypal > .chck_privacy > p').empty();
+    //             $('#paypal > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
+
+    //             return false;
+    //         }
+    //     }else{
+    //         if(!$('#chk_paypal2').is(':checked')){
+    //             $("#chk_paypal2").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+    //                 "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+    //                 "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+    //             $('#cdb > .chck_privacy > p').empty();
+    //             $('#cdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
+
+    //             return false;
+    //         }
+    //     }
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: action, 
+    //         dataType: "json",
+    //         data:   csrfname+"="+csrftoken+"&paypal="+type, 
+    //         beforeSend: function(jqxhr, settings) { 
+    //             $('.paypal_loader').show();
+    //             $('.paypal_button').hide();
+    //         },
+    //         success: function(d) {
+    //             if (d.e == 1) { 
+    //                 window.location.replace(d.d);
+    //             }else{
+    //                 alert(d.d);
+    //                 if(d.d == 'Item quantity not available.'){
+    //                     location.reload();
+    //                 }
+    //                 $('.paypal_loader').hide();
+    //                 $('.paypal_button').show();
+    //             }
+             
+    //         }, 
+    //         error: function (request, status, error) {
+    //                 alert('We are currently experiencing problems.','Please try again after a few minutes.');
+    //                 $('.paypal_loader').hide();
+    //                 $('.paypal_button').show();      
+    //         }
+    //     });
+    // });
+
     $(document).on('click','.paypal',function () {
-        var action = config.base_url + "pay/setting/paypal"; 
+        var action = config.base_url + "pay/pay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
-
+        var paymentMethod = JSON.stringify(
+                    {
+                        PaypalGateway:{
+                            method:"PayPal", 
+                            type:$(this).data('type')
+                        }
+                    });
         if(type == 1){
             if(!$('#chk_paypal1').is(':checked')){
                 $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
@@ -73,7 +137,7 @@ $(document).ready(function(){
             type: "POST",
             url: action, 
             dataType: "json",
-            data:   csrfname+"="+csrftoken+"&paypal="+type, 
+            data:   csrfname+"="+csrftoken+"&paymentMethods="+paymentMethod, 
             beforeSend: function(jqxhr, settings) { 
                 $('.paypal_loader').show();
                 $('.paypal_button').hide();
@@ -108,9 +172,7 @@ $(document).ready(function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
-    
-
-
+        
         if($('#chk_dp').is(':checked')){
             $(this).val('Please wait...'); 
             $(this).attr('disabled','disabled');

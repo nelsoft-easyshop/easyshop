@@ -60,7 +60,7 @@ abstract class AbstractGateway implements GatewayInterface
      * Abstract Methods
      */
 
-    abstract public function pay();
+    abstract public function pay($validatedCart, $memberId, $paymentService);
     abstract public function getExternalCharge();
     abstract public function getOrderStatus();
     abstract public function getOrderProductStatus();

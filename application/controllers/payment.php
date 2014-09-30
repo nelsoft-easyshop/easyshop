@@ -1311,10 +1311,10 @@ class Payment extends MY_Controller{
      */
     function pay()
     {
-        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
-        }
-        
+         
+        // if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
+        //     redirect(base_url().'home', 'refresh');
+        // }
         $carts = $this->session->all_userdata();
 
         /* JSON Decode*/
@@ -1328,9 +1328,9 @@ class Payment extends MY_Controller{
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
-        extract($response);
-        $this->generateFlash($txnid,$message,$status);
-        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+        //extract($response);
+        //$this->generateFlash($txnid,$message,$status);
+        //echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 }
 

@@ -4,6 +4,8 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
+use EasyShop\Entities\EsProductItemLock;
+use EasyShop\Entities\EsOrder;
 
 class EsProductItemLockRepository extends EntityRepository
 {
@@ -28,4 +30,15 @@ class EsProductItemLockRepository extends EntityRepository
 
              
     }
+
+    // public function releaseAllLock($memberId)
+    // {
+        
+    // }
 }
+
+// $query = " DELETE FROM `es_product_item_lock` WHERE id_item_lock IN (
+//                 SELECT * FROM (
+//                     SELECT b.`id_item_lock` FROM es_order a, `es_product_item_lock` b WHERE a.buyer_id = :member_id AND a.`order_status` = 99 AND a.`id_order` = b.`order_id`) 
+//                 AS tbl)
+//         ";

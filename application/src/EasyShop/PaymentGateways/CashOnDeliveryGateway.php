@@ -30,9 +30,14 @@ class CashOnDeliveryGateway extends AbstractGateway
      * Pay method for Cash On Delivery Gateway Class
      * 
      */
-    public function pay()
+    public function pay($validatedCart, $memberId, $paymentService)
     {
-        $response = [];
+        // Set status response
+        $response['status'] = 'f';
+        
+        // Point Gateway
+        $pointGateway = $paymentService->getPointGateway();
+
         $lastDigit = $this->getParameter('lastDigit');
         if(intval($lastDigit) === 2){
             $response['paymentType'] = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
@@ -44,7 +49,74 @@ class CashOnDeliveryGateway extends AbstractGateway
             $response['textType'] = 'cashondelivery';
             $response['message'] = 'Your payment has been completed through Cash on Delivery.';
         }
+        
         $this->setParameter('paymentType', $response['paymentType']);
+        
+        $productCount = count($validatedCart['itemArray']);
+
+        // get address Id
+        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                    ->getShippingAddress(intval($memberId));
+
+        // Compute shipping fee
+        $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
+        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
+
+        $grandTotal = $prepareData['totalPrice'];
+
+        $this->setParameter('amount', $grandTotal);
+
+        $productString = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList']; 
+
+
+        $txnid = $this->generateReferenceNumber($memberId);
+        $response['txnid'] = $txnid;
+
+
+        if($validatedCart['itemCount'] === $productCount){
+            $return = $paymentService->persistPayment(
+                $grandTotal, 
+                $memberId, 
+                $productString, 
+                $productCount, 
+                json_encode($itemList),
+                $txnid,
+                $this
+                );
+
+            if($return['o_success'] <= 0){
+                $response['message'] = $return['o_message'];
+            }
+            else{
+                $v_order_id = $return['v_order_id'];
+                $invoice = $return['invoice_no'];
+                $response['status'] = 's';
+
+                foreach ($itemList as $key => $value) {  
+                    $itemComplete = $this->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                    $this->productManager->updateSoldoutStatus($value['id']);
+                }
+
+                /* remove item from cart function */ 
+                /* send notification function */ 
+
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($v_order_id);
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->getParameter('paymentType'));
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount($this->getParameter('amount'));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+
+                $this->em->persist($paymentRecord);
+                $this->em->flush();
+            }
+        }
         return $response;
     }
 

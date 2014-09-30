@@ -1,0 +1,270 @@
+<?php
+
+namespace EasyShop\PaymentGateways;
+
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+
+class PayPalGateway extends AbstractGateway
+{
+
+    private $PayPalMode; 
+    private $PayPalApiUsername; 
+    private $PayPalApiPassword; 
+    private $PayPalApiSignature;
+
+    public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
+    {
+        parent::__construct($em, $request, $pointTracker, $paymentService, $params);
+        
+        if(strtolower(ENVIRONMENT) === 'production'){
+            // LIVE
+            $this->PayPalMode             = ''; 
+            $this->PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+            $this->PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+            $this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+        }
+        else{
+            // SANDBOX
+            $this->PayPalMode             = 'sandbox'; 
+            $this->PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
+            $this->PayPalApiPassword      = '1396000698'; 
+            $this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';
+        }
+    }
+
+    public function getMode()
+    {
+        $API_Mode = urlencode($this->PayPalMode);
+        
+        if($API_Mode === 'sandbox'){
+            $paypalMode = '.sandbox';
+        }
+        else{
+            $paypalMode = '';
+        }
+
+        return $paypalMode;
+    }
+
+    private function PPHttpPost($methodName, $nvpStr)
+    {
+        // Set up API credentials
+        $API_UserName = urlencode($this->PayPalApiUsername);
+        $API_Password = urlencode($this->PayPalApiPassword);
+        $API_Signature = urlencode($this->PayPalApiSignature);
+        
+        $API_Endpoint = "https://api-3t".$this->getMode().".paypal.com/nvp";
+        $version = urlencode('98.0');
+
+        // set curl parameters
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+
+        // turn off server and peer verification
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        // Set the API operation, version, and API signature in the request.
+        $nvpreq = "METHOD=$methodName&VERSION=$version&PWD=$API_Password&USER=$API_UserName&SIGNATURE=$API_Signature$nvpStr";
+        // Set the request as a POST FIELD for curl.
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
+
+        // Get response from the server
+        $httpResponse = curl_exec($ch);
+
+        if(!$httpResponse) {
+            exit("$methodName failed: ".curl_error($ch).'('.curl_errno($ch).')');
+        }
+
+        // Extract the response detail
+        $httpResponseAr = explode("&", $httpResponse);
+
+        $httpParsedResponseAr = array();
+        foreach ($httpResponseAr as $i => $value) {
+            $tmpAr = explode("=", $value);
+            if(sizeof($tmpAr) > 1) {
+                $httpParsedResponseAr[$tmpAr[0]] = $tmpAr[1];
+            }
+        }
+
+        if((0 === sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
+            exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
+        }
+
+        return $httpParsedResponseAr;
+    }
+
+    // setExpressCheckout
+    public function pay($validatedCart, $memberId, $paymentService)
+    {
+        header('Content-type: application/json');
+        if(!$memberId){
+            redirect(base_url().'home', 'refresh');
+        }
+
+        // Point Gateway
+        $pointGateway = $paymentService->getPointGateway();
+
+
+
+        $PayPalMode = $this->getMode(); 
+        $paypalReturnURL = base_url().'pay/paypal'; 
+        $paypalCancelURL = base_url().'payment/review'; 
+        // RELEASE ALL LOCK
+        // $remove = $this->payment_model->releaseAllLock($member_id);
+
+        $productCount = count($validatedCart['itemArray']);
+        $cnt = 0;
+        $paypalType = $this->getParameter('type');
+        $dataitem = '';
+        $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+
+        // paymentType
+        $this->setParameter('paymentType', $paymentType);
+
+        if($productCount <= 0){
+            echo '{"e":"0","d":"There are no items in your cart."}';
+            exit();
+        }
+
+        if($validatedCart['itemCount'] !== $productCount){
+            echo '{"e":"0","d":"One of the items in your cart is unavailable."}';
+            exit();
+        } 
+
+        $shippingAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                ->findOneBy(['idMember'=>$memberId, 'type'=>'1']);
+
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->find(intval($memberId));
+
+        // get address Id
+        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                    ->getShippingAddress(intval($memberId));
+
+        $name = $shippingAddress->getConsignee();
+        $street = $shippingAddress->getAddress();
+        $cityDescription = $shippingAddress->getCity()->getLocation();
+        $email = $member->getEmail();
+        $telephone = $shippingAddress->getTelephone();
+        $regionDesc = $shippingAddress->getStateregion()->getLocation();
+
+        // echo $name . "|" . $street . "|" . $cityDescription . "|" . $email . "|" . $telephone . "|" . $regionDesc;
+
+        // die();
+
+        // Compute shipping fee
+        $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
+        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
+        
+        $shipping_amt = round(floatval($prepareData['othersumfee']),2);
+        $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+        $toBeLocked = $prepareData['toBeLocked'];
+        $grandTotal= $itemTotalPrice+$shipping_amt; 
+        $thereIsPromote = $prepareData['thereIsPromote'];
+        $this->setParameter('amount', $grandTotal);
+        if($thereIsPromote <= 0 && $grandTotal < '50'){
+            die('{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}');
+        }
+
+        foreach ($itemList as $key => $value) {
+            $value['price'] = round(floatval($value['price']),2);
+            $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
+            '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
+            '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
+            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
+            $cnt++;
+        }
+
+        $padata =   
+        '&RETURNURL='.urlencode($paypalReturnURL).
+        '&CANCELURL='.urlencode($paypalCancelURL).
+        '&PAYMENTACTION=Sale'. 
+        '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode('PHP').
+        '&CURRENCYCODE='.urlencode('PHP').
+        $dataitem. 
+        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($itemTotalPrice).   
+        '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
+        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
+        '&SOLUTIONTYPE='.urlencode('Sole').
+        '&ALLOWNOTE=0'.
+        '&NOSHIPPING=1'.
+        '&PAYMENTREQUEST_0_SHIPTONAME='.urlencode($name).
+        '&PAYMENTREQUEST_0_SHIPTOSTREET='.urlencode($street).
+        '&PAYMENTREQUEST_0_SHIPTOCITY='.urlencode($cityDescription).
+        '&PAYMENTREQUEST_0_SHIPTOSTATE='.urlencode($regionDesc).
+        '&PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE=PH'.
+        '&PAYMENTREQUEST_0_SHIPTOZIP='.urlencode('').
+        '&PAYMENTREQUEST_0_EMAIL='.urlencode($email).
+        '&EMAIL='.urlencode($email).
+        '&PAYMENTREQUEST_0_SHIPTOPHONENUM='.urlencode($telephone);
+
+        $padata .= ($paypalType == 2 ? '&LANDINGPAGE='.urlencode('Billing') : '&LANDINGPAGE='.urlencode('Login'));
+
+        // echo $padata;
+
+        $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $padata);
+        // var_dump($httpParsedResponseAr);
+        if("SUCCESS" === strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" === strtoupper($httpParsedResponseAr["ACK"]))
+        {   
+            $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
+            $return = $paymentService->persistPayment(
+                $grandTotal, 
+                $memberId, 
+                $productstring, 
+                $productCount, 
+                json_encode($itemList),
+                $transactionID,
+                $this
+                );
+
+            if($return['o_success'] > 0){
+                $orderId = $return['v_order_id'];
+                //$locked = $this->lockItem($toBeLocked,$orderId,'insert');
+                $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
+                die('{"e":"1","d":"'.$paypalurl.'"}');
+            }
+            else{
+                die('{"e":"0","d":"'.$return['o_message'].'"}');
+            }        
+        }
+        else{
+            
+            die('{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}');
+        }
+    }
+
+    public function getExternalCharge()
+    {
+        return ($this->getParameter('amount') * 0.044) + 15; 
+    }
+
+    public function generateReferenceNumber($memberId)
+    {
+        // return 'COD-'.date('ymdhs').'-'.$memberId;
+    }
+
+    public function getOrderStatus()
+    {
+        return EsOrderStatus::STATUS_DRAFT;
+    }
+
+    public function getOrderProductStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
+    }
+}
+
+/*
+    Params needed
+        method:"PayPal", 
+        type:$(this).data('type')
+*/
