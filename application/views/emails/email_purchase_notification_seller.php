@@ -111,14 +111,14 @@
                                     </tr>
                                 </table>
                                 <br/>
-                                
+                                <p style="color: #fff; background-color: #428bca; padding:10px; font-weight: bold; text-align: center;">
+                                    SOLD ITEMS
+                                </p>
                                 <table border='0' width="100%">
-                               
+                                    
                                     <tr>
                                         <td style="padding: 10px; vertical-align: top; width:50%">
-                                        <p style="color: #fff; background-color: #428bca; padding:10px; font-weight: bold; text-align: center;">
-                                            SOLD ITEMS
-                                        </p>
+                                        
                                         <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                             {products}
                                             
@@ -172,14 +172,24 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight:bold;">
-                                                    Product Specifications: 
+                                                    <td style="font-weight:bold; vertical-align: top;">
+                                                    PRODUCT SPECIFICATIONS
                                                     </td>
-                                                    {attr}
-                                                        <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        {attr_name} : {attr_value}
-                                                        </td>
-                                                    {/attr}
+                                                    
+                                                </tr>
+                                                {attr}
+                                                <tr>
+                                                    <td style="font-weight:bold; text-transform: capitalize;">
+                                                    {attr_name}: 
+                                                    </td>
+                                                    <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
+                                                    {attr_value}
+                                                    </td>
+                                                </tr>
+                                                {/attr}
+                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                    <td colspan='2'>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight:bold">
