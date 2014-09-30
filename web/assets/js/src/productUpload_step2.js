@@ -591,7 +591,7 @@ function processAttributes()
     var $rangeSlider = $("#range_1");
     $rangeSlider.ionRangeSlider({
         min: 0,
-        max: 100,
+        max: 99,
         type: 'single',
         step: 1,
         postfix: "%",
