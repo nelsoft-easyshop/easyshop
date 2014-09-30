@@ -77,6 +77,7 @@
                                                             Purchased from:
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
+                                                            {seller} 
                                                             <span>
                                                                 <a href="{store_link}{seller}" style="text-decoration: none;">
                                                                     <img src="images/appbar.home.png" width="15" height="15"/>
@@ -87,7 +88,7 @@
                                                                     <img src="images/appbar.message.png" width="15" height="15"/>
                                                                 </a>
                                                             </span>
-                                                            {seller} 
+                                                            
                                                         </td>
                                                     </tr>
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
