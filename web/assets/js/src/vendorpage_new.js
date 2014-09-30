@@ -33,29 +33,32 @@ function ReplaceNumberWithCommas(thisnumber){
     $('.sort_select').on('change',function(){
         memconf.orderBy = $(this).val();
         var group = $(this).data('group');
-        $('#def-'+group+' > .product-paging').remove();
-        $('#paginationDiv-'+group+' > center > ul > .pagination-indiv:first').trigger('click');
+        var catDiv = $('.category-products.active');
+        $('.product-paging').remove();
+        ItemListAjax(catDiv,1);
     }); 
 
-    $('.pagination-maxleft').on('click', function(){
-        $(this).siblings('.pagination-indiv:first').trigger('click');
-    });
-    $('.pagination-maxright').on('click', function(){
-        $(this).siblings('.pagination-indiv:last').trigger('click');
+    $('.pagination-container').on('click', '.extremes', function(){
+        var page = $(this).attr('data-page');
+        $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
     });
 
-    $('.pagination-indiv').on('click', function(){
+    $('.pagination-container').on('click', '.individual', function(){
         var page = $(this).data('page');
-        var group = $(this).data('group');
-
-        var pageDiv = $('#def-'+group+' > .product-paging[data-page="'+page+'"]');
         var catDiv = $(this).closest('div.category-products');
+        var pageDiv = catDiv.find('.product-paging[data-page="'+page+'"]');
+        var paginationContainer = catDiv.find('.pagination-container');
 
-        $(this).siblings('.pagination-indiv').removeClass('active');
+        $(this).siblings('.individual').removeClass('active');
         $(this).addClass('active');
 
         if(pageDiv.length === 1){
-            $('#def-'+group+' > .product-paging').hide();
+            var lastPage = $(this).parent('ul').attr('data-lastpage');
+            var previousPage = page - 1 < 1 ? 1 : page - 1;
+            var nextPage = page + 1 <= lastPage ? page + 1 : lastPage;
+            catDiv.find('.product-paging').hide();
+            paginationContainer.find('.extremes.previous').attr('data-page', previousPage);
+            paginationContainer.find('.extremes.next').attr('data-page', nextPage);
             pageDiv.show();
         }
         else{
@@ -65,8 +68,14 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
+        var pagingDiv = $(divId).find('.product-paging');
+
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
+
+        if(pagingDiv.length === 0){
+            ItemListAjax($(divId), 1);
+        }
     });
 
     $(document).on('change',".price-field",function () {
@@ -91,7 +100,6 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
-
         var condition = $('#filter-condition').val();
         var lprice = $.trim($('#filter-lprice').val());
         lprice = lprice.replace(new RegExp(",", "g"), '');
@@ -105,8 +113,8 @@ function ReplaceNumberWithCommas(thisnumber){
         memconf.uprice = !isNaN(uprice) ? uprice : "";
         memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
-        activeCategoryProductsDiv.find('.product-paging').remove();
-        activeCategoryProductsDiv.find('li.pagination-indiv[data-page="1"]').trigger('click');
+        $('.product-paging').remove();
+        ItemListAjax(activeCategoryProductsDiv,1);
     });
 
 })(jQuery);
@@ -155,6 +163,7 @@ function ItemListAjax(CatDiv,page)
     var loadingDiv = CatDiv.find('div.loading_div');
     var productPage = CatDiv.find('.product-paging');
     var currentQueryString = $("#queryString").val();
+    var paginationContainer = CatDiv.find('.pagination-container');
 
     memconf.ajaxStat = jQuery.ajax({
         type: "GET",
@@ -188,14 +197,8 @@ function ItemListAjax(CatDiv,page)
                 CatDiv.find('.loading_div').after(obj.htmlData);
             }
 
-            if(obj.isCount){
-                CatDiv.find('.pagination-indiv:gt('+(obj.pageCount-1)+')').hide();
-            }
-            else{
-                CatDiv.find('.pagination-indiv').show();
-            }
-            
-        } 
+            $(paginationContainer).children('center').html(obj.paginationData);
+        }
     });
 }
 

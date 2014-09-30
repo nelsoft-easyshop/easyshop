@@ -55,11 +55,11 @@
 ?>
 
 
-<ul class="pagination pagination-items">
+<ul class="pagination pagination-items" data-lastpage="<?php echo $lastPage?>">
 
     <?php if($lastPage > 0): ?>
         <?php $previousPage = ($currentPage - 1) > 1 ? ($currentPage - 1) : 1; ?>
-        <li data-page='<?php echo $previousPage ?>'>
+        <li data-page='<?php echo $previousPage ?>' class="extremes previous">
             <a href='<?php echo $isHyperLink ? $url.'?page='.$previousPage : 'javascript:void(0)' ?>'>
                 <span> &laquo; </span>
             </a>
@@ -67,7 +67,7 @@
     <?php endif; ?>
 
     <?php for($i = $start ; $i <= $end; $i++): ?>
-        <li class='<?php echo $i === $currentPage ? 'active' : '' ?>' data-page='<?php echo $i ?>'>
+        <li class='<?php echo (int)$i === (int)$currentPage ? 'active' : '' ?> individual' data-page='<?php echo $i ?>'>
             <a href='<?php echo $isHyperLink ? $url.'?page='.$i : 'javascript:void(0)' ?>'>
                 <span><?php echo $i ?></span>
             </a>
@@ -76,7 +76,7 @@
     
     <?php if($lastPage > 0): ?>
         <?php $nextPage = ($currentPage + 1) <= $lastPage ? ($currentPage + 1) : $lastPage; ?>
-        <li data-page='<?php echo $nextPage ?>'>
+        <li data-page='<?php echo $nextPage ?>' class="extremes next">
             <a href='<?php echo $isHyperLink ? $url.'?page='.$nextPage : 'javascript:void(0)' ?>'>
                 <span> &raquo; </span>
             </a>
