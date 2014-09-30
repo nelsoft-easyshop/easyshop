@@ -1119,7 +1119,9 @@ td.td-view.p-view.color-default{
     padding-left: 15px;
     min-height: 580px !important;
 }
-
+.product-paging{
+    min-height: 600px;
+}
 .grid > .product-paging > .panel-list-item{
     display: none;
 

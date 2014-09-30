@@ -1433,10 +1433,13 @@ class Memberpage extends MY_Controller
                     $parameter['endprice'] = $uprice;
                 }
                 $parameter['seller'] = "seller:".$vendorName;
-                $parameter['limit'] = 12;
+                $parameter['limit'] = $prodLimit;
                 $parameter['page'] = $page - 1;
-                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
-                $productCount = 0;
+                $products = $searchProductService->getProductBySearch($parameter);
+                $parameter['limit'] = PHP_INT_MAX;
+                $parameter['page'] = 0;
+                $tempCountContainer = $searchProductService->getProductBySearch($parameter);
+                $productCount = count($tempCountContainer);
                 break;
             case 1: // Custom - NOT YET USED
                 //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
@@ -1459,13 +1462,21 @@ class Memberpage extends MY_Controller
             'page' => $page,
             'products' => $products
         );
-
         $parseData = array('arrCat'=>$arrCat);
         
+        $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
+
+        $paginationData = array(
+            'lastPage' => $pageCount
+            , 'isHyperLink' => false
+            , 'currentPage' => $page
+        );
+
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount
-            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+            , 'pageCount' => $pageCount
+            , 'paginationData' => $this->load->view("pagination/default", $paginationData, true)
         );
 
         echo json_encode($serverResponse);

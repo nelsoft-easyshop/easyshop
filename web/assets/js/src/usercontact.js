@@ -70,15 +70,10 @@
             $( "#contactNo" ).val($("#displayContactNo").val());
         }
 
-        if($( "#displayStreetAddr" ).val() == ""){
-            $( "#addressRow" ).hide();
-        }
-        else{
-            $( "#streetAddr" ).val($("#displayStreetAddr").val());
-            $( "#regionSelect" ).val($("#displayRegion").val());
-            $( "#regionSelect" ).change();
-            $( "#citySelect" ).val($("#displayCity").val());
-        }
+        $( "#streetAddr" ).val($("#displayStreetAddr").val());
+        $( "#regionSelect" ).val($("#displayRegion").val());
+        $( "#regionSelect" ).change();
+        $( "#citySelect" ).val($("#displayCity").val());
 
         if($( "#displayWebsite" ).val() == ""){
             $( "#websiteRow" ).hide();

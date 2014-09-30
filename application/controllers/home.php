@@ -309,7 +309,14 @@ class Home extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = 0; 
+                    $productView['defaultCatProd'][0]['cat_type'] = EasyShop\Entities\EsCat::CUSTOM_TYPE_OTHERS;
+
+                    $paginationData = array(
+                        'lastPage' => ceil($count/$this->vendorProdPerPage)
+                        ,'isHyperLink' => false
+                    );
+                    $productView['defaultCatProd'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
@@ -347,6 +354,7 @@ class Home extends MY_Controller
                 $headerData['cart_items'] = $cart;
                 $headerData['cart_size'] = $cartSize;
                 $headerData['total'] = $headerData['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
@@ -383,6 +391,13 @@ class Home extends MY_Controller
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
+
+            // Generate pagination view
+            $paginationData = array(
+                'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
+                ,'isHyperLink' => false
+            );
+            $parentCat[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 
             $view = array(
                 'arrCat' => array(
@@ -971,7 +986,7 @@ class Home extends MY_Controller
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['streetAddr'] = $addr->getAddress();
+            $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
             $data['city'] = $addr->getCity()->getLocation();
             $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1036,7 +1051,7 @@ class Home extends MY_Controller
             }
             $data['storeName'] = $this->input->post('storeName');
             $data['contactNo'] = $this->input->post('contactNumber');
-            $data['streetAddr'] = $this->input->post('streetAddress');
+            $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
             $data['region'] = $this->input->post('regionSelect');
             $data['city'] = $this->input->post('citySelect');
             $data['website'] = $this->input->post('website');
