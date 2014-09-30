@@ -40,10 +40,18 @@ class EsProductImageRepository extends EntityRepository
      * @return EasyShop\Entities\EsProductImage
      *
      */
-    public function renameImagesFromAdmin($filename, $productId)
+    public function renameImagesAndSlugsFromAdmin($newSlug, $filename, $productId)
     {
 
         $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $q = $qb->update('EasyShop\Entities\EsProduct','pi')
+                ->set('pi.slug', $qb->expr()->literal($newSlug))
+                ->where('pi.idProduct = :productId')
+                ->setParameter('productId', $productId)
+                ->getQuery();
+        $p = $q->execute();   
+
 
         $qb = $this->em->createQueryBuilder();
         $q = $qb->update('EasyShop\Entities\EsProductImage','pi')
