@@ -1170,6 +1170,20 @@ input.cc_check {
 	color: #ffffff;
 }
 
+.cart-item-image-con{
+    width: 70px;
+    height: 70px;
+    border: solid #e7e7e7 1px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cart-item-image{
+    width: 70px;
+    height: auto;
+}
+
 @media only screen and (max-width: 979px) {
 
 .display-when-mobile{
