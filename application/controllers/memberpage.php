@@ -1459,13 +1459,21 @@ class Memberpage extends MY_Controller
             'page' => $page,
             'products' => $products
         );
-
         $parseData = array('arrCat'=>$arrCat);
         
+        $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
+
+        $paginationData = array(
+            'lastPage' => $pageCount
+            , 'isHyperLink' => false
+            , 'currentPage' => $page
+        );
+
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount
-            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+            , 'pageCount' => $pageCount
+            , 'paginationData' => $this->load->view("pagination/default", $paginationData, true)
         );
 
         echo json_encode($serverResponse);
