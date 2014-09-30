@@ -735,7 +735,6 @@ class payment_model extends CI_Model
 
     public function removeToCart($id,$itemsToDelete)
     {
->>>>>>> rb-9.2
         $cart_items = $this->cart_model->cartdata($id);
 
         foreach($cart_items as $c_key => $c_row){

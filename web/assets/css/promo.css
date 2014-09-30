@@ -6,7 +6,8 @@
 #scratch-win-claim h2,
 #scratch-win-claim,
 .scratch-congrats,
-.head-cngrts{
+.head-cngrts,
+.promo-gallery{
     display: block;
     float: none !important;
     width: 40%;
@@ -14,11 +15,13 @@
     position: relative;
     margin-top: 1% !important;
 }
-.scratch-congrats{
+.scratch-congrats,.promo-gallery{
     width: 80%;
 }
 .head-cngrts{
     width: 27%;
+    text-align: center;
+    padding-bottom: 1%;
 }
 #scratch-win-claim{
     width: 60%;
@@ -85,6 +88,7 @@
 }
 .scratch-win-form > input {
     padding: 1%;
+    background-color: white;
 }
 .scratch-win-form > button {
     background-color: #F48000 !important;
@@ -131,7 +135,7 @@
 .claim-details p{
     font-size: 12px;
 }
-.claim-details a{
+#scratch-win-claim-link{
     background-color: #3dc6b2;
     color: #ffffff;
     font-size: 19px;
@@ -143,11 +147,20 @@
     top: 30px;
     width: 20%;
 }
-.scratch-win-btn{
+.promo-print {
+    background-color: #3dc6b2;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: bold;
+    height: 15px;
+    left: 33%;
+    padding: 2% 8%;
+    position: relative;
+    top: 18px;
 }
 .scratchAndWinBanner {
-    background:url("../images/Scratch_and_win_baner.jpg") no-repeat scroll center top / 100% 83% #ffffff;
-    height: 365px;
+    background:url("../images/Scratch_and_win_baner.jpg") no-repeat scroll center top / 100% 100% #ffffff;
+    height: 180px;
     margin-top: 2%;
     position: relative;
     width: 100%;
@@ -171,4 +184,51 @@
     left: 20% !important;
     margin-top: 2%;
     margin-bottom: 2%;
+}
+.promo-gallery-data{
+    width: 32%;
+    display: inline-block;
+    height: 360px;
+    margin-top: 1.3%;
+    border:1px solid #e7e7e7;
+}
+.promo-img{
+    width: 100%;
+    padding: 16%;
+}
+.promo-gallery-data p,.promo-gallery-data span{
+    font-weight: bold;
+    margin-left: 8%;
+    margin-bottom: 0px;
+}
+.promo-gallery-data span{
+    color: #f90000;
+    font-size: 16px;
+}
+.promo-gallery-data a{
+    border: 2px solid #8b8b8b;
+    border-radius: 6px;
+    color: black;
+    display: block;
+    font-size: 11px;
+    margin: 5% 25%;
+    padding: 4%;
+    text-decoration: none;
+    text-indent: 4px;
+    width: 50%;
+}
+.shop-now-img{
+    background: url("../images/global_sprite.png") repeat scroll -47px -249px rgba(0, 0, 0, 0);
+    padding: 12%;
+}
+.promo-gallery-header{
+    background: url("../images/promo/header.png") repeat scroll rgba(0, 0, 0, 0);
+    padding: 6%;
+}
+.promo-gallery-header-container{
+    margin-left: 10%;
+    width: 74%;
+}
+.left {
+    margin-left: 1.4%;
 }

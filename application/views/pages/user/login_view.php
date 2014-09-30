@@ -3,7 +3,7 @@
 <div class="clear"></div>
 <div class="clear mrgn-top-35"></div>
     <div class="wrapper login_content">
-        <div class="login-tli-con">
+        <div class="login-tli-con" style="display: none">
             <div class="border-all border-rad-3">
                 <div class="border-bottom bg-cl-f7f7f7">
                     <div class="pd-tb-20 pd-lr-20">

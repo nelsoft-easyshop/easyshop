@@ -15,7 +15,7 @@
                     <img src="/<?=$product['product_image_path']?>">
                 </div>
                 <div class="claim-details">
-                    <p>To claim your price, complete the registration form and visit<br>
+                    <p>To claim your prize, complete the registration form and visit<br>
                         Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                         Malate, Manila<br>
                         Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
@@ -46,23 +46,86 @@
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
         <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?=$product['product']?>"
-                data_price="<?=$product['price']?>" data_code="<?PHP echo $_GET['code'];?>">
+                data_price="<?=$product['price']?>" data_code="<?=$_GET['code'];?>">
         </span>
         <div class="claim-bg">
             <div id="prod_image">
-                <img src="/<?=$product['path']?>">
+                <img src="/<?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
-                <p>To claim your price, complete the registration form and visit<br>
+                <p>To claim your prize, complete the <a href="/">registration</a> form and visit<br>
                     Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                     Malate, Manila<br>
-                    Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
+                    Don't forget to print this page and bring the <br>
+                    winning scratch card and two (2) valid ID's<br>
                     You may claim your prize until March 1, 2015.<br>
                     Contact us for more information: (02) 353-0062 or (02)353-8337.
                 </p>
+                <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
             </div>
         </div>
         <input type="text" id="paymentToken" value="<?php echo md5(uniqid(mt_rand(), true)).'3';?>" style="display: none">
+    </div>
+    <div class="promo-gallery">
+        <div class="promo-gallery-header-container">
+            <div class="promo-gallery-header"></div>
+        </div>
+        <div class="promo-gallery-row">
+            <div class="promo-gallery-data">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/1.png">
+                    <p>LG OPTIMUS PRO LITE (BLACK)</p>
+                    <span>Php 9,855.00</span>
+                    <br>
+                    <a href="/item/lg-optimus-g-pro-lite-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+            <div class="promo-gallery-data left">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/2.png">
+                    <p>LG NEXUS 5</p>
+                    <span>Php 15,900.00</span>
+                    <br>
+                    <a href="/item/lg-nexus-5"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+            <div class="promo-gallery-data left">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/3.png">
+                    <p>iPHONE APPLE 5C 16G</p>
+                    <span>Php 23,300.00</span>
+                    <a href="/item/apple-iphone-5c-16gb-1"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+        </div>
+        <div class="promo-gallery-row">
+            <div class="promo-gallery-data">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/4.png">
+                    <p>LENOVO S820 (RED)</p>
+                    <span>Php 10,399.00</span>
+                    <br>
+                    <a href="/item/lenovo-s820-red"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+            <div class="promo-gallery-data left">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/5.png">
+                    <p>LENOVO A316I (BLACK)</p>
+                    <span>Php 3,899.00</span>
+                    <br>
+                    <a href="/item/lenovo-a316i-android-42-4gb-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+            <div class="promo-gallery-data left">
+                <div>
+                    <img class="promo-img" src="/./assets/images/promo/6.png">
+                    <p>LG OPTIMUS L5 II (BLACK)</p>
+                    <span>Php 5,890.00</span>
+                    <a href="/item/lg-optimus-l5-ii-e450-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                </div>
+            </div>
+        </div>
     </div>
     <?PHP endif; ?>
 <?PHP else: ?>
@@ -151,11 +214,6 @@
                     <li>Only residents of the Republic of the Philippines are eligible to participate in this promotion.</li>
                 </ol>
                 <br>
-<!--                <p>-->
-<!--                    Visit <a href="/">www.Easyshop.ph</a> for more details or you may <br>-->
-<!--                    call our customer service at (02)353-0062 or <br>-->
-<!--                    (02)353-8337.-->
-<!--                </p>-->
             </div>
             <div class="scratch-win-error error">
                 <h2>Sorry</h2>
@@ -178,10 +236,11 @@
                         <img src="/">
                     </div>
                     <div class="claim-details">
-                        <p>To claim your price, complete the registration form and visit<br>
+                        <p>To claim your prize, complete the <a href="/">registration</a> form and visit<br>
                             Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                             Malate, Manila<br>
-                            Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
+                            Don't forget to print this page and bring the <br>
+                            winning scratch card and two (2) valid ID's<br>
                             You may claim your prize until March 1, 2015.<br>
                             Contact us for more information: (02) 353-0062 or (02)353-8337.
                         </p>
