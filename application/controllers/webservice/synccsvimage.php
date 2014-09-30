@@ -3,6 +3,7 @@
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsAdminImages;
 
 class SyncCsvImage extends MY_Controller 
 {
@@ -25,6 +26,7 @@ class SyncCsvImage extends MY_Controller
         $this->img_dimension['thumbnail'] = array(60,80);       
         $this->EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
         $this->EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
+        $this->EsAdminImagesRepository = $this->em->getRepository('EasyShop\Entities\EsAdminImages');            
 
     }
 
@@ -45,6 +47,7 @@ class SyncCsvImage extends MY_Controller
      * Upload images inside admin folder
      */ 
     public function doUpload($files) {
+
         $this->upload->initialize(array(
             "upload_path"   => "assets/admin",
             "allowed_types" => "jpg|jpeg|png|gif",
@@ -52,12 +55,13 @@ class SyncCsvImage extends MY_Controller
             "remove_spaces" => "true"
 
         ));
-
         if(!$this->upload->do_multi_upload("image")){
             $jsonpReturn = "jsonCallback({'sites':[{'success': '".$this->upload->display_errors()."',},]});";
-             
         }   
         else {
+            foreach($_FILES['image']['name'] as $names){
+                $this->EsAdminImagesRepository->insertImages($names);
+            }            
             $jsonpReturn = "jsonCallback({'sites':[{'success': '"."success"."',},]});";
 
         }   
@@ -91,6 +95,7 @@ class SyncCsvImage extends MY_Controller
             else {
                     $errorSummary[] = $images;
                     $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
+
             }
         }
         if(!empty($errorSummary)) {
@@ -111,7 +116,7 @@ class SyncCsvImage extends MY_Controller
      */ 
     public function syncImages($imagesId)
     {
-      
+        $this->load->model('product_model');
         foreach($imagesId["product"] as $ids)
         {
 
@@ -124,6 +129,13 @@ class SyncCsvImage extends MY_Controller
             $date = date("Ymd");
             $productId = $values->getProduct()->getIdProduct();
             $memberId =  $values->getProduct()->getMember()->getIdMember();
+
+
+            //Generate slug using the 'createSlug' method under product_model
+            $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findOneBy(['idProduct' => $productId]);
+            $slug =  $productObject->getSlug();
+            $newSlug = $this->product_model->createSlug($slug);
 
             $filename = $productId.'_'.$memberId.'_'.$date;
             $newfilename = $productId.'_'.$memberId.'_'.$date.".".$values->getProductImageType();
@@ -141,7 +153,7 @@ class SyncCsvImage extends MY_Controller
                 $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
                 $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
                 $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
-                $this->EsProductImagesRepository->renameImagesFromAdmin( $imageDirectory, $productId);                    
+                $this->EsProductImagesRepository->renameImagesAndSlugsFromAdmin($newSlug, $imageDirectory, $productId);                    
             }
             
         }
