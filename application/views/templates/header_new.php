@@ -172,6 +172,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
+        <script type="text/javascript" src="/assets/js/src/bootstrap.js" ></script>
+
 <script type='text/javascript'>
 
     (function(){
