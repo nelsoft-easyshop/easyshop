@@ -145,7 +145,7 @@ section {
     background-color: #ff613a;
     border-radius: 90px;
     height: 20px;
-    left: 0;
+    left: 0px;
     line-height: 20px;
     position: absolute;
     text-align: center;
@@ -772,6 +772,7 @@ section {
     text-align: left;
     right: 0;
     width: 241px;
+    top: 38px;
 
     -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
     -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
@@ -779,7 +780,6 @@ section {
 }
 
 .sticky-header-cart-item-list {
-    top: 38px;
     width: 248px;
 }
 

@@ -21,7 +21,7 @@
                     <h4 class="storeName"><?=html_escape($storeNameDisplay)?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
-                        <img src="<?=base_url()?>/assets/images/img-icon-marker.png" alt="marker">
+                        <img src="/assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
                         <?php else:?>

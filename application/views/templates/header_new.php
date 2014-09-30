@@ -128,9 +128,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div>
             <?php if(isset($logged_in) && $logged_in): ?>
                 <div class="vendor-login-con">
-                    <span id="unread-messages-count" class="msg_countr message-count-con">
-                        <?PHP echo $msgs['unread_msgs'];?>
+                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                        <span id="unread-messages-count" class="msg_countr message-count-con">
+                    <?=$msgs['unread_msgs'];?>
                     </span>
+                    <?php endif;?>
                     <img src="/assets/images/img-default-icon-user.jpg"> 
                     <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
                     <div class="new-user-nav-dropdown">
@@ -146,12 +148,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <li class="nav-dropdown-border">
                             <a href="/me?me=settings">Settings</a>
                         </li>
-                        </li>
                         <li class="nav-dropdown-border pos-rel">
-                            <a href="<?=base_url()?>messages">Message</a>
+                            <a href="/messages">Message</a>
+                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
                             <div id="unread-messages-count" class="msg_countr message-count-con">
-                                <?PHP echo $msgs['unread_msgs'];?>
+                            <?=$msgs['unread_msgs'];?>
                             </div>
+                            <?php endif;?>
                         </li>
                         <li class="nav-dropdown-border">
                             <a class="prevent" href="/login/logout">Logout</a>
