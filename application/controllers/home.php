@@ -971,7 +971,7 @@ class Home extends MY_Controller
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['streetAddr'] = $addr->getAddress();
+            $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
             $data['city'] = $addr->getCity()->getLocation();
             $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1036,7 +1036,7 @@ class Home extends MY_Controller
             }
             $data['storeName'] = $this->input->post('storeName');
             $data['contactNo'] = $this->input->post('contactNumber');
-            $data['streetAddr'] = $this->input->post('streetAddress');
+            $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
             $data['region'] = $this->input->post('regionSelect');
             $data['city'] = $this->input->post('citySelect');
             $data['website'] = $this->input->post('website');
