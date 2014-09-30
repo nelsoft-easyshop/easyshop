@@ -51,7 +51,7 @@
             <div class="inputRow">
                 <span class="adv_is">   
                     <label>Keyword: </label>
-                    <input style="" type="text" name="q_str" id="keywordTxt" value="<?=(isset($string))?html_escape($string):'';?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
+                    <input type="text" name="q_str" id="keywordTxt" value="<?=html_escape($this->input->get('q_str'))?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
                 </span>
                 <span class="adv_is">
                     <select name="category" id="selectCat" title="Select item category">
