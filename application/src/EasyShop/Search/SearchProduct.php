@@ -73,18 +73,18 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = preg_replace('/[^A-Za-z0-9]+/', ' ', $queryString);  
+        $clearString = str_replace('"', '', $queryString);
         $stringCollection = array();
         $ids = array(); 
 
         if(trim($clearString) != ""){
             $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
-            $stringCollection[1] = trim($clearString);
+            $stringCollection[0] = '"+'.implode('*" "+', $explodedString) .'*"';
+            $stringCollection[1] = '"'.implode('" "', $explodedString).'"';
             $stringCollection[2] = '"'.trim($clearString).'"';
             $stringCollection[3] = str_replace(' ', '', trim($clearString));
 
-            if($queryString == ""){
+            if(trim($queryString) === ""){
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->findBy(['isDraft' => 0,'isDelete' => 0]);
             }
