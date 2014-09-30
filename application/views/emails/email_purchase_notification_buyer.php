@@ -140,17 +140,15 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-weight:bold; vertical-align: top;">
+                                                        <td style="font-weight:bold; vertical-align: top;" colspan="2">
                                                         PRODUCT SPECIFICATIONS
                                                         </td>
                                                     </tr>
                                                     {attr}
                                                     <tr>
-                                                        <td style="font-weight:bold; text-transform: capitalize;">
-                                                        {attr_name}: 
-                                                        </td>
-                                                        <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        {attr_value}
+                                                        <td style="font-weight:bold; text-transform: capitalize;padding-left:10px;" colspan="2">
+                                                            <span>{attr_name}: </span> 
+                                                            <span style="font-weight: normal">{attr_value}</span>
                                                         </td>
                                                     </tr>
                                                     {/attr}
