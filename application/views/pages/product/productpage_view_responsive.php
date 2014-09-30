@@ -17,10 +17,7 @@
             <div class="col-md-12">
                 <section class="top_margin product-page-section display-when-desktop">
                     <div class="wrapper">
-                        <div class="prod_categories">
-                            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
-                            <?php echo $category_navigation; ?>
-                        </div> 
+                        <?php echo $category_navigation_desktop ?>
                         <div class="prod_cat_nav" id="prod_drop_nav">
                             <div class="category_nav product_content">
                                 <ul>
@@ -46,35 +43,7 @@
                     <br/>
                 </section>
                 <div class="display-when-mobile-833">
-                    <div class="panel-group " id="categories">
-                        <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                            Categories
-                            <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                <img class="pull-right" src="/assets/images/img_arrow_down.png">
-                            </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <li class="list-category">Category 1</li>
-                                    <li class="list-category">Category 2</li>
-                                </ul>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="bread_crumbs_m">
-                        <ul style="margin-bottom: 10px;">
-                            <li class="" ><a href="/" style="color: #f18200;">Home</a></li>
-                            <?php foreach($breadcrumbs as $crumbs): ?>
-                                <li> <a href="/category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
-                            <?php endforeach;?>
-                            <li class="bread_crumbs_last_child" style="font-size:11px !important;"><?php echo html_escape($product['product_name']);?></li>
-                        </ul>
-                    </div>
+                    <?php echo $category_navigation_mobile; ?>
                 </div>
             </div>
         </div>
