@@ -66,7 +66,12 @@ class CodeigniterCart implements CartInterface
     public function getSize($isUnique = false)
     {
         if(!$isUnique){
-            return $this->cart->total_items();
+            $size = 0;
+            $cartData = $this->cart->contents();
+            foreach($cartData as $cartItem){
+                $size += $cartItem['qty'];     
+                return $size;
+            }
         }
         else{
             return sizeof($this->cart->contents());
@@ -80,7 +85,11 @@ class CodeigniterCart implements CartInterface
      */
     public function getTotalPrice()
     {
-        $total =  $this->cart->total();
+        $cartData = $this->cart->contents();
+        $total = 0;
+        foreach($cartData as $cartItem){
+           $total += $cartItem['price'] * $cartItem['qty'];
+        }
         return number_format($total, 2,'.',',');
     }
     

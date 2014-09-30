@@ -280,7 +280,7 @@ class Home extends MY_Controller
             else{
                 $headerData = $this->fill_header();
                 $headerData = array_merge($headerData, array(
-                    "title" => html_escape($arrVendorDetails['store_name'])." | Easyshop.ph",
+                    "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
@@ -309,7 +309,14 @@ class Home extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = 0; 
+                    $productView['defaultCatProd'][0]['cat_type'] = EasyShop\Entities\EsCat::CUSTOM_TYPE_OTHERS;
+
+                    $paginationData = array(
+                        'lastPage' => ceil($count/$this->vendorProdPerPage)
+                        ,'isHyperLink' => false
+                    );
+                    $productView['defaultCatProd'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
@@ -347,6 +354,7 @@ class Home extends MY_Controller
                 $headerData['cart_items'] = $cart;
                 $headerData['cart_size'] = $cartSize;
                 $headerData['total'] = $headerData['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
@@ -384,6 +392,13 @@ class Home extends MY_Controller
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
 
+            // Generate pagination view
+            $paginationData = array(
+                'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
+                ,'isHyperLink' => false
+            );
+            $parentCat[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+
             $view = array(
                 'arrCat' => array(
                     'products'=>$result['products'],
@@ -414,13 +429,12 @@ class Home extends MY_Controller
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
-   
-
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->findOneBy(['slug' => $sellerslug]);                                
-        $data['title'] = 'About '.html_escape($member->getStoreName()).'| Easyshop.ph';
+        $data['title'] = 'About '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());   
         $idMember = $member->getIdMember();
+        $memberUsername = $member->getUsername();
         $ratingHeaders = $this->lang->line('rating');
 
         $allFeedbacks = $this->serviceContainer['user_manager']->getFormattedFeedbacks($idMember);
@@ -499,14 +513,16 @@ class Home extends MY_Controller
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
-                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
                     , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
                     , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
                     , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
+                    , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                 ); 
-
+                
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $cart = array();
         $cartSize = 0;
@@ -657,8 +673,8 @@ class Home extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
-        $data['title'] = 'Vendor Contact | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());
+       
+        $data = $this->fill_header();
         $cart = array();
         $cartSize = 0;
         if ($this->session->userdata('usersession')) {
@@ -672,7 +688,12 @@ class Home extends MY_Controller
 
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $sellerslug]);  
+                                                   ->findOneBy(['slug' => $sellerslug]);
+        $data['title'] = 'Contact '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';                                           
+                                         
+        $memberUsername = $member->getUsername();
+        $memberId = $member->getIdMember();
+        $viewerId = $this->session->userdata('member_id');
         $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
                                            ->getRepository('EasyShop\Entities\EsLocationLookup');
         $arrVendorDetails = $this->serviceContainer['entity_manager']
@@ -682,12 +703,14 @@ class Home extends MY_Controller
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
-                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
-                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
-                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
-                    , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
+                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($memberId)
+                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($memberId,"banner")
+                    , "isEditable" => ($viewerId && $memberId == $viewerId) ? TRUE : FALSE
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
+                    , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
@@ -963,7 +986,7 @@ class Home extends MY_Controller
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['streetAddr'] = $addr->getAddress();
+            $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
             $data['city'] = $addr->getCity()->getLocation();
             $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1028,7 +1051,7 @@ class Home extends MY_Controller
             }
             $data['storeName'] = $this->input->post('storeName');
             $data['contactNo'] = $this->input->post('contactNumber');
-            $data['streetAddr'] = $this->input->post('streetAddress');
+            $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
             $data['region'] = $this->input->post('regionSelect');
             $data['city'] = $this->input->post('citySelect');
             $data['website'] = $this->input->post('website');

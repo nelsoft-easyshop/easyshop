@@ -83,16 +83,16 @@
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
                 <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
 
+                <div class="vendor-select-con">
+                    <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
+                        <option value="1">Default Sorting</option>
+                        <option value="2">Date Uploaded</option>
+                        <option value="3">Hot</option>
+                    </select>
+                    <div class="clear"></div>
+                </div>
                 <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-                <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
-                    <div class="vendor-select-con">
-                        <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-                            <option value="1">Default Sorting</option>
-                            <option value="2">Date Uploaded</option>
-                            <option value="3">Hot</option>
-                        </select>
-                        <div class="clear"></div>
-                    </div>
+                <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>" data-group="<?php echo $catId?>">
                     <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
                     <?php if($arrCat['non_categorized_count'] === 0): ?>
@@ -102,9 +102,10 @@
                         <?=$arrCat['product_html_data'];?>
 
                         <div class="clear"></div>
-                        <div id="paginationDiv-<?php echo $catId?>">
+                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
                             <center>
-                                <ul class="pagination pagination-items">
+                                <?php echo $arrCat['pagination']?>
+                                <!--<ul class="pagination pagination-items">
                                     <li data-group="<?php echo $catId?>" class="pagination-maxleft"><a href="javascript:void(0)"><span>&laquo;</span></a></li>
                                     <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
                                         <li data-group="<?php echo $catId?>" class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>">
@@ -114,7 +115,7 @@
                                         </li>
                                     <?php endfor;?>
                                     <li data-group="<?php echo $catId?>" class="pagination-maxright"><a href="javascript:void(0)"><span>&raquo;</span></a></li>
-                                </ul>
+                                </ul>-->
                             </center>
                         </div>
                    <?php endif;?>

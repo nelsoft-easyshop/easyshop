@@ -12,8 +12,6 @@
             </div>
         </section>
 
-        <script type="text/javascript" src="/assets/js/src/bootstrap.js" ></script>
-
     </body>
 </html>
 

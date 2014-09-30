@@ -51,7 +51,7 @@
             <div class="inputRow">
                 <span class="adv_is">   
                     <label>Keyword: </label>
-                    <input style="" type="text" name="q_str" id="keywordTxt" value="<?=(isset($string))?html_escape($string):'';?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
+                    <input type="text" name="q_str" id="keywordTxt" value="<?=html_escape($this->input->get('q_str'))?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
                 </span>
                 <span class="adv_is">
                     <select name="category" id="selectCat" title="Select item category">
@@ -96,20 +96,20 @@
                 </span>
                 <span class="adv_us">
                     <label>Price:</label>
-                    <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                    <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                     to
-                    <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                    <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                 </span>
             </div>
-        </div>
-
-        <?php if(isset($cntr)): ?>
-            <div class="adv_ctr"><strong style="font-size:14px"><?php echo ($cntr>0)?number_format($cntr):'No';?></strong> result<?php echo  ($cntr>1 || $cntr === 0)?'s':'';?> found</div>
-        <?php endif ?>
+        </div> 
         
+        <?php if(isset($products)): ?>
+        <div class="adv_ctr"><strong style="font-size:14px"><?=$productCount;?></strong> result<?=(number_format($productCount) > 1)?"s":"";?>  found</div>
+        <?php endif; ?>
+
         <!-- Buttons start -->
-        <div id="list" class="list list-active" title="List"></div>
-        <div id="grid" class="grid" title="Grid"></div>
+        <div id="list" class="list <?=($_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+        <div id="grid" class="grid <?=($_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
         <!-- Buttons end -->
         <div class="clear"></div> 
         <div id="product_content">
@@ -269,9 +269,9 @@
                                     <tr>
                                         <td class="td-search-label">Price: </td>
                                         <td class="td-search-input">
-                                            <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                                            <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                                             to
-                                            <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                                            <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                                         </td>
                                     </tr> 
                                     <tr>
