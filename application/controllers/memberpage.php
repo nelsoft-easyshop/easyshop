@@ -1472,11 +1472,6 @@ class Memberpage extends MY_Controller
             , 'currentPage' => $page
         );
 
-        /*print('<pre>');
-        print($productCount);
-        print_r($paginationData);
-        die();*/
-
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount
