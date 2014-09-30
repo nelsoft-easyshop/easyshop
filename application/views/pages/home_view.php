@@ -32,7 +32,7 @@
            
                 <map name='<?php echo $idx?>_image_map'>
                     <!-- COORDS: left, top, right, bottom -->
-                    <area style='color:' shape="rect" coords="<?=$row['imagemap']['coordinate']?>" href="<?= $row['imagemap']['target']?>" alt="<?=$row['imagemap']['target']?>">
+                    <area style='color:' shape="rect" coords="<?=$row['imagemap']['coordinate']?>" href="<?= $row['imagemap']['target']?>" alt="<?=$row['imagemap']['target']?>" target="_blank">
                 </map>
                 
             <?PHP endforeach; ?>
