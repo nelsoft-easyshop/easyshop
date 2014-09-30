@@ -82,20 +82,21 @@ class SyncCsvImage extends MY_Controller
         $errorSummary = array();
         foreach($checkImagesId["product"] as $ids)
         {
+
             $values = $this->EsProductImagesRepository->getDefaultImage($ids);            
             
-            $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
+            if($values){
+                $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
+            }
 
             $path = "./assets/admin/$images";
 
             if(file_exists($path)) {
-
                 continue;
             }
             else {
-                    $errorSummary[] = $images;
-                    $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
-
+                $errorSummary[] = $images;
+                $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
             }
         }
         if(!empty($errorSummary)) {
@@ -120,42 +121,44 @@ class SyncCsvImage extends MY_Controller
         foreach($imagesId["product"] as $ids)
         {
 
-            $values = $this->EsProductImagesRepository->getDefaultImage($ids);            
+            $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
             
-            $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
+            foreach($imagesValues as $values) {
+                $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
 
-            $path = "./assets/admin/$images";
+                $path = "./assets/admin/$images";
 
-            $date = date("Ymd");
-            $productId = $values->getProduct()->getIdProduct();
-            $memberId =  $values->getProduct()->getMember()->getIdMember();
+                $date = date("Ymd");
+                $productId = $values->getProduct()->getIdProduct();
+                $memberId =  $values->getProduct()->getMember()->getIdMember();
+                $productImageId = $values->getIdProductImage();
+                //Generate slug using the 'createSlug' method under product_model
+                $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->findOneBy(['idProduct' => $productId]);
+                $slug =  $productObject->getSlug();
+                $newSlug = $this->product_model->createSlug($slug);
 
+                $filename = $productId.'_'.$memberId.'_'.$date;
+                $newfilename = $productId.'_'.$memberId.'_'.$date.".".$values->getProductImageType();
+                $imageDirectory = "./assets/product/$filename/".$newfilename;
+                $tempDirectory = "./assets/product/".$filename."/";                
 
-            //Generate slug using the 'createSlug' method under product_model
-            $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findOneBy(['idProduct' => $productId]);
-            $slug =  $productObject->getSlug();
-            $newSlug = $this->product_model->createSlug($slug);
+                if(!file_exists($tempDirectory)){
+                    mkdir($tempDirectory.'categoryview/', 0777, true);
+                    mkdir($tempDirectory.'small/', 0777, true);
+                    mkdir($tempDirectory.'thumbnail/', 0777, true);
+                    mkdir($tempDirectory.'other/', 0777, true);                  
+                }
+    
+                if(copy($path, $imageDirectory)){
 
-            $filename = $productId.'_'.$memberId.'_'.$date;
-            $newfilename = $productId.'_'.$memberId.'_'.$date.".".$values->getProductImageType();
-            $imageDirectory = "./assets/product/$filename/".$newfilename;
-            $tempDirectory = "./assets/product/".$filename."/";                
-
-            mkdir($tempDirectory.'categoryview/', 0777, true);
-            mkdir($tempDirectory.'small/', 0777, true);
-            mkdir($tempDirectory.'thumbnail/', 0777, true);
-            mkdir($tempDirectory.'other/', 0777, true);      
-                     
-            if(copy($path, $imageDirectory)){
-
-                $this->imageresize($imageDirectory, $tempDirectory."small",$this->img_dimension["small"]);
-                $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
-                $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
-                $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
-                $this->EsProductImagesRepository->renameImagesAndSlugsFromAdmin($newSlug, $imageDirectory, $productId);                    
-            }
-            
+                    $this->imageresize($imageDirectory, $tempDirectory."small",$this->img_dimension["small"]);
+                    $this->imageresize($imageDirectory, $tempDirectory."categoryview",$this->img_dimension["categoryview"]);
+                    $this->imageresize($imageDirectory, $tempDirectory."thumbnail",$this->img_dimension["thumbnail"]);
+                    $this->imageresize($imageDirectory, $tempDirectory,$this->img_dimension["usersize"]);
+                    $this->EsProductImagesRepository->renameImagesAndSlugsFromAdmin($newSlug, $imageDirectory, $productId, $productImageId);                    
+                }
+            } 
         }
 
         $jsonp = "jsonCallback({'sites':[{'success': 'success',},]});";
