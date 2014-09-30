@@ -139,6 +139,11 @@ class product_search extends MY_Controller {
      */
     public function searchfaster()
     { 
+        // Check if search is empty if true redirect to all category view
+        if(trim($this->input->get('q_str')) === "" && intval(trim($this->input->get('category'))) <= 1){
+            redirect('cat/all');
+        }
+
         // Load Repository
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
