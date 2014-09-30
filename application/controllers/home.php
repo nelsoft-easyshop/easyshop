@@ -280,7 +280,7 @@ class Home extends MY_Controller
             else{
                 $headerData = $this->fill_header();
                 $headerData = array_merge($headerData, array(
-                    "title" => html_escape($arrVendorDetails['store_name'])." | Easyshop.ph",
+                    "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
@@ -416,7 +416,7 @@ class Home extends MY_Controller
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->findOneBy(['slug' => $sellerslug]);                                
-        $data['title'] = 'About '.html_escape($member->getStoreName()).' | Easyshop.ph';
+        $data['title'] = 'About '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());   
         $idMember = $member->getIdMember();
         $memberUsername = $member->getUsername();
@@ -658,8 +658,8 @@ class Home extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
-        $data['title'] = 'Vendor Contact | Easyshop.ph';
-        $data = array_merge($data, $this->fill_header());
+       
+        $data = $this->fill_header();
         $cart = array();
         $cartSize = 0;
         if ($this->session->userdata('usersession')) {
@@ -674,6 +674,8 @@ class Home extends MY_Controller
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                    ->findOneBy(['slug' => $sellerslug]);
+        $data['title'] = 'Contact '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';                                           
+                                         
         $memberUsername = $member->getUsername();
         $memberId = $member->getIdMember();
         $viewerId = $this->session->userdata('member_id');
