@@ -1,5 +1,5 @@
 <?PHP
-use EasyShop\Entities\EsMember;
+use Doctrine\ORM\EntityManager;
 class ScratchCard extends MY_Controller
 {
 
@@ -92,4 +92,24 @@ class ScratchCard extends MY_Controller
         echo json_encode($result);
     }
 
+    /**
+     * ajax - update fullname
+     * @param fullname
+     * @return boolean
+     */
+    public function updateFulname()
+    {
+        $memberId = $this->session->all_userdata()['member_id'];
+        $em = $this->serviceContainer['entity_manager'];
+        $member = $em->find('\EasyShop\Entities\EsMember', ['idMember'=>$memberId]);
+        $member->setFullname($this->input->post('fullname'));
+        $em->persist($member);
+        $em->flush();
+        $result = FALSE;
+        if($member->getFullname() === $this->input->post('fullname')) {
+            $result = true;
+        }
+
+        echo json_encode($result);
+    }
 }

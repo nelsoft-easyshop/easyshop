@@ -63,13 +63,13 @@
                 </p>
                 <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
             </div>
-            <div id="div_user_image_prev">
+            <div id="div-promo-modal">
                 <h1>Update your Fullname :</h1>
-                <div class="img-editor-container">
+                <div class="div-promo-modal-container">
                     <input type="text" id="promo-fullname">
                 </div>
                 <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
-                <button class="btn btn-default-3">Apply</button>
+                <button class="btn btn-default-3" id="apply-fullname">Apply</button>
             </div>
         </div>
         <input type="text" id="paymentToken" value="<?php echo md5(uniqid(mt_rand(), true)).'3';?>" style="display: none">

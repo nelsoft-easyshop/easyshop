@@ -99,7 +99,7 @@ $config = array(
         ),
         '5' =>array(
             'calculation_id' => '5',
-            'purchase_limit' => PHP_INT_MAX,
+            'purchase_limit' => 1,
             'payment_method' => array(),
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,

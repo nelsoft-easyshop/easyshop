@@ -232,3 +232,51 @@
 .left {
     margin-left: 1.4%;
 }
+#div-promo-modal{
+    display: none;
+}
+#div-promo-modal h1 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    text-align: center;
+}
+.div-promo-modal-container {
+    border-bottom: 1px solid #cecece;
+    height: 55px;
+    margin-bottom: 20px;
+}
+.div-promo-modal-container input{
+    margin-left:50px;
+    background-color: #ffffff;
+}
+#div-promo-modal span {
+    background-color: #fff;
+    color: #565656;
+    display: inline-block;
+    margin-right: 14px;
+    padding: 6px 12px;
+    width: 136px;
+}
+#div-promo-modal button {
+    background-color: #00a388;
+    border-bottom: 2px solid #007c67;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    height: auto;
+    line-height: 23px;
+    margin: 0;
+    width: 136px;
+}
+.btn.btn-default-1 {
+    border: 2px solid #565656;
+    background-color: #fff;
+    color: #565656;
+}
+.btn.btn-default-1:hover {
+    background-color: #585a59;
+    color: #fff;
+}
