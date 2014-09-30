@@ -335,6 +335,13 @@ class SearchProduct
             $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
             $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
             $popularProduct = $EsProductRepository->getProductDetailsByIds($popularProductId,0,1);
+            foreach ($popularProduct as $keyProduct => $valueProduct) {
+                $productId = $valueProduct->getIdProduct();
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                            ->getDefaultImage($productId);
+                $valueProduct->directory = $productImage->getDirectory();
+                $valueProduct->imageFileName = $productImage->getFilename();
+            }
             $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
             $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
         }
