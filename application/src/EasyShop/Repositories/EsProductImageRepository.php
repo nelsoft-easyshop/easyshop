@@ -33,6 +33,26 @@ class EsProductImageRepository extends EntityRepository
     }
 
     /**
+     * Returns the images of a product
+     *
+     * @param integer $productId
+     * @return EasyShop\Entities\EsProductImage
+     *
+     */
+    public function getProductImages($productId)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder()
+                            ->select('pi')
+                            ->from('EasyShop\Entities\EsProductImage','pi')
+                            ->where('pi.product = :productId')
+                            ->setParameter('productId', $productId)
+                            ->getQuery();
+
+        $result = $qb->getResult();
+        return $result;
+    }
+    /**
      * Rename images uploaded from the admin side throuh csv
      *
      * @param string $filename
@@ -40,7 +60,7 @@ class EsProductImageRepository extends EntityRepository
      * @return EasyShop\Entities\EsProductImage
      *
      */
-    public function renameImagesAndSlugsFromAdmin($newSlug, $filename, $productId)
+    public function renameImagesAndSlugsFromAdmin($newSlug, $filename, $productId, $productImageId)
     {
 
         $this->em =  $this->_em;
@@ -57,7 +77,9 @@ class EsProductImageRepository extends EntityRepository
         $q = $qb->update('EasyShop\Entities\EsProductImage','pi')
                 ->set('pi.productImagePath', $qb->expr()->literal($filename))
                 ->where('pi.product = :productId')
+                ->andWhere('pi.idProductImage = :idImage')
                 ->setParameter('productId', $productId)
+                ->setParameter('idImage', $productImageId)
                 ->getQuery();
         $p = $q->execute();        
 
