@@ -15,8 +15,8 @@
                     <img src="/<?=$product['product_image_path']?>">
                 </div>
                 <div class="claim-details">
-                    <p>To claim your prize, complete the registration form and visit<br>
-                        Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
+                    <p>To claim your prize,<br>
+                        visit Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                         Malate, Manila<br>
                         Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
                         You may claim your prize until March 1, 2015.<br>
@@ -53,9 +53,9 @@
                 <img src="/<?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
-                <p>To claim your prize, complete the <a href="/">registration</a> form and visit<br>
-                    Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
-                    Malate, Manila<br>
+                <p>To claim your prize,  <?=$user['fullname'] ?'': 'complete the <a href="javascript:void(0)" id="register">registration</a> form and '?>visit
+                    <br>Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,<br>
+                    Malate, Manila
                     Don't forget to print this page and bring the <br>
                     winning scratch card and two (2) valid ID's<br>
                     You may claim your prize until March 1, 2015.<br>

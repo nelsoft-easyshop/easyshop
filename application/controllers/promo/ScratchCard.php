@@ -1,5 +1,5 @@
 <?PHP
-
+use EasyShop\Entities\EsMember;
 class ScratchCard extends MY_Controller
 {
 
