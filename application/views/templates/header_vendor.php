@@ -178,9 +178,9 @@
                     <h4><?=html_escape($storeNameDisplay);?></h4>
                 </li>
                 <li>
-                    <a href=""><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                    <a href=""><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                    <a href=""><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li> 
                     <form class="search-form">
