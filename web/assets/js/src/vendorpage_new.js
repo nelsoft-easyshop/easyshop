@@ -65,8 +65,13 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
+        var $this = $(this);
+        var siblings = $(this).siblings('.tab_categories');
+
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
+        $this.find('.selected-category').show();
+        siblings.find('.selected-category').hide();
     });
 
     $(document).on('change',".price-field",function () {
@@ -255,7 +260,7 @@ function ItemListAjax(CatDiv,page)
 /********* DESIGNER ************/
 
 (function ($) {
-
+   
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
@@ -277,31 +282,7 @@ function ItemListAjax(CatDiv,page)
             }
     });
 
-    $(document).on('click','.icon-grid',function() {
-        var div = $("div.view");
-        
-        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
-        {
-            div.removeClass("view row row-items list").addClass("view row row-items grid");
-            $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-lg-3 col-md-4 col-xs-6 thumb");
-            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
-            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
-        }
-    });
-
-    $(document).on('click','.icon-list',function() {   
-        var div = $("div.view");
-    
-        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
-        {
-            div.removeClass("view row row-items grid").addClass("view row row-items list");
-            $('div.col-lg-3').removeClass("col-lg-3 col-md-4 col-xs-6 thumb").addClass("col-md-12 thumb");
-            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
-            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
-        };
-    });
-
-    $(document).ready(function(){
+    $(".row-items").ready(function(){
         $('[rel=tooltiplist]').tooltip({
             placement : 'top'
         });
@@ -328,6 +309,54 @@ function ItemListAjax(CatDiv,page)
             $('b.fil').removeClass("fil fa fa-plus-square-o pull-right").addClass("fil fa fa-minus-square-o pull-right");
         }
     });
+    
+    
+    $(".div-product-view-option").on('click','.icon-grid',function() {
+        var div = $("div.view");
+        
+        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
+        {
+            $( "#filter-list" ).slideToggle( "slow" );
+            div.removeClass("view row row-items list").addClass("view row row-items grid");
+            $('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-lg-3 col-md-4 col-xs-6 thumb");
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
+        }
+    });
 
-  
+    $(".div-product-view-option").on('click','.icon-list',function() {   
+        var div = $("div.view");
+    
+        if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
+        {
+            div.removeClass("view row row-items grid").addClass("view row row-items list");
+            $('div.col-lg-3').removeClass("col-lg-3 col-md-4 col-xs-6 thumb").addClass("col-md-12 thumb");
+            $('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
+            $('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
+
+        };
+    });
+    
+    $("#left-wing").ready(function(){
+        $( "#toggle-cat" ).click(function() {
+          $( "#category-list" ).slideToggle( "slow" );
+        });
+        $( "#toggle-filter" ).click(function() {
+          $( "#filter-list1" ).slideToggle( "slow" );
+        });
+    });
+        
+    $(".div-product-view-option").ready(function(){
+        $( ".icon-list" ).click(function() {
+          $( ".panel-item" ).hide();
+          $( ".panel-list-item" ).fadeIn( "fast" );
+        });
+        
+        $( ".icon-grid" ).click(function() {
+          $( ".panel-list-item" ).hide();
+          $( ".panel-item" ).fadeIn( "fast" );
+        });
+    
+    });
+    
 })(jQuery);
