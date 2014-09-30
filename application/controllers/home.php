@@ -414,13 +414,12 @@ class Home extends MY_Controller
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
-   
-
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->findOneBy(['slug' => $sellerslug]);                                
-        $data['title'] = 'About '.html_escape($member->getStoreName()).'| Easyshop.ph';
+        $data['title'] = 'About '.html_escape($member->getStoreName()).' | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());   
         $idMember = $member->getIdMember();
+        $memberUsername = $member->getUsername();
         $ratingHeaders = $this->lang->line('rating');
 
         $allFeedbacks = $this->serviceContainer['user_manager']->getFormattedFeedbacks($idMember);
@@ -499,14 +498,16 @@ class Home extends MY_Controller
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
-                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
                     , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
                     , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
                     , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
+                    , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                 ); 
-
+                
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $cart = array();
         $cartSize = 0;
@@ -672,7 +673,10 @@ class Home extends MY_Controller
 
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $sellerslug]);  
+                                                   ->findOneBy(['slug' => $sellerslug]);
+        $memberUsername = $member->getUsername();
+        $memberId = $member->getIdMember();
+        $viewerId = $this->session->userdata('member_id');
         $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
                                            ->getRepository('EasyShop\Entities\EsLocationLookup');
         $arrVendorDetails = $this->serviceContainer['entity_manager']
@@ -682,12 +686,14 @@ class Home extends MY_Controller
 
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
-                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername()
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
-                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
-                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
-                    , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
+                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($memberId)
+                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($memberId,"banner")
+                    , "isEditable" => ($viewerId && $memberId == $viewerId) ? TRUE : FALSE
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
+                    , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
