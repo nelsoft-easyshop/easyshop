@@ -7,7 +7,19 @@
                 </center>
             </div>
             <br/>
-
+            <p style="margin-top:-10px; margin-bottom:-20px;">
+                <!--FOR MOBILE SCREEN SIZE-->
+                <span>
+                    <a href="{store_link}">
+                        <img src="images/appbar.home.png" width="30" height="30"/>
+                    </a>
+                </span>
+                <span>
+                    <a href="{msg_link}">
+                        <img src="images/appbar.message.png" width="30" height="30"/>
+                    </a>
+                </span>
+            </p>
             <div style="margin-top: 20px; font-size: 13px;">
                 
                 <p>
@@ -55,22 +67,21 @@
                                         <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Total Price :
                                         </td>
-                                            PHP {totalprice}
+                                        <td style=" padding-left: 20px !important; padding-bottom:15px !important; width:20%;">
+                                            PHP {totalprice} 
+                                        </td>
                                     </tr>
       
                                 </table>
                                 <br/>
-                                
+                                <p style="color: #fff; background-color: #428bca; padding:10px; font-weight: bold; text-align: center;">
+                                    PURCHASED ITEMS
+                                </p>
                                 <table border='0' width="100%">
                                
                                     <tr>
                                         <td style="padding: 10px; vertical-align: top; width:50%">
-                                            <p style="color: #fff; background-color: #428bca; padding:10px; font-weight: bold; text-align: center;">
-                                                PURCHASED ITEMS
-                                            </p>
-                                        
-                                        
-
+                                            
                                         <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                                 {products}
                                                 <table width="100%" style="border-collapse: collapse; font-size: 12px;">
@@ -130,20 +141,21 @@
                                                             PHP {finalprice} 
                                                         </td>
                                                     </tr>
-                                                    
                                                     <tr>
-                                                        <td style="font-weight:bold;">
-                                                        Product Specifications: 
+                                                        <td style="font-weight:bold; vertical-align: top;">
+                                                        PRODUCT SPECIFICATIONS
                                                         </td>
-                                                        
-                                                        {attr}
-                                                            <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                            {attr_name} :</span> {attr_value} 
-                                                            </td>
-                                                        {/attr} 
-                                                        
-                                                        
                                                     </tr>
+                                                    {attr}
+                                                    <tr>
+                                                        <td style="font-weight:bold; text-transform: capitalize;">
+                                                        {attr_name}: 
+                                                        </td>
+                                                        <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
+                                                        {attr_value}
+                                                        </td>
+                                                    </tr>
+                                                    {/attr}
                                                 </table>
                                                 <hr/>
                                                 {/products}
