@@ -52,66 +52,76 @@
                 }
             });
         });
-        if($('#checker').length){
-            var i_id = $("#checker").attr("data_id");
-            var i_name = $("#checker").attr("data_name");
-            var i_qty = 1;
-            var i_price = $("#checker").attr("data_price");
-            var i_code = $("#checker").attr("data_code");
-            var i_opt = {};
-            var length = 0;
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var max_qty = 1;
-            $.ajax({
-                async:false,
-                url: "/cart/add_item",
-                type:"POST",
-                dataType:"JSON",
-                data:{
-                    id: i_id,
-                    qty: i_qty,
-                    price: i_price,
-                    opt: i_opt,
-                    name: i_name,
-                    length: length,
-                    max_qty: max_qty,
-                    promo_code: i_code,
-                    csrfname:csrftoken
-                },
-                success:function(data){
-                    if(data === false ){
-                        alert("An error occured,Try refreshing the site.");
-                    }
+        $(document).on('click', '#register', function(){
+            $('#div_user_image_prev').modal({
+                escClose: false,
+                containerCss:{
+                    maxWidth: 600,
+                    minWidth: 505,
+                    maxHeight: 200
                 }
             });
-            $.ajax({
-                async:false,
-                url: "/payment/payCashOnDelivery",
-                type:"POST",
-                dataType:"JSON",
-                data:{
-                    csrfname:csrftoken,
-                    promo_type:5,
-                    paymentToken:paymentToken
-                },
-                success:function(data){
-                }
-            });
-            $.ajax({
-                async:false,
-                url: "/promo/ScratchCard/tieUpMemberToCode",
-                type:"POST",
-                dataType:"JSON",
-                data:{
-                    csrfname:csrftoken,
-                    code:$("#checker").attr("data_code")
-                },
-                success:function(data){
-                    if(data == false){
-                        alert("An error occured,Try refreshing the site.");
-                    }
-                }
-            });
-        }
+        });
+//        if($('#checker').length){
+//            var i_id = $("#checker").attr("data_id");
+//            var i_name = $("#checker").attr("data_name");
+//            var i_qty = 1;
+//            var i_price = $("#checker").attr("data_price");
+//            var i_code = $("#checker").attr("data_code");
+//            var i_opt = {};
+//            var length = 0;
+//            var csrftoken = $("meta[name='csrf-token']").attr('content');
+//            var max_qty = 1;
+//            $.ajax({
+//                async:false,
+//                url: "/cart/add_item",
+//                type:"POST",
+//                dataType:"JSON",
+//                data:{
+//                    id: i_id,
+//                    qty: i_qty,
+//                    price: i_price,
+//                    opt: i_opt,
+//                    name: i_name,
+//                    length: length,
+//                    max_qty: max_qty,
+//                    promo_code: i_code,
+//                    csrfname:csrftoken
+//                },
+//                success:function(data){
+//                    if(data === false ){
+//                        alert("An error occured,Try refreshing the site.");
+//                    }
+//                }
+//            });
+//            $.ajax({
+//                async:false,
+//                url: "/payment/payCashOnDelivery",
+//                type:"POST",
+//                dataType:"JSON",
+//                data:{
+//                    csrfname:csrftoken,
+//                    promo_type:5,
+//                    paymentToken:paymentToken
+//                },
+//                success:function(data){
+//                }
+//            });
+//            $.ajax({
+//                async:false,
+//                url: "/promo/ScratchCard/tieUpMemberToCode",
+//                type:"POST",
+//                dataType:"JSON",
+//                data:{
+//                    csrfname:csrftoken,
+//                    code:$("#checker").attr("data_code")
+//                },
+//                success:function(data){
+//                    if(data == false){
+//                        alert("An error occured,Try refreshing the site.");
+//                    }
+//                }
+//            });
+//        }
     })
 })(jQuery)
