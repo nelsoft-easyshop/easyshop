@@ -118,6 +118,8 @@
     });
     
     $( ".fa-cancel-about" ).click(function() {
+        var $description = $('#description');
+        $description.val($description.data('value'));
         $(".div-about-edit-area").css("display","none");
         $(".p-about").css("display","inline");
         $(".fa-cancel-about").css("display","none");

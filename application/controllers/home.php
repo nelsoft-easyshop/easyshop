@@ -337,11 +337,16 @@ class Home extends MY_Controller
 
                 // Load Location
                 $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
-
-                $memberId = $this->session->userdata('member_id');
-                $headerData['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
-                $headerData['cart_size'] = $this->cartImplementation->getSize();
-                $headerData['total'] = $this->cartImplementation->getTotalPrice();
+                $cart = array();
+                $cartSize = 0;
+                if ($this->session->userdata('usersession')) {
+                    $memberId = $this->session->userdata('member_id');
+                    $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+                    $cartSize = $this->cartImplementation->getSize(TRUE);
+                }
+                $headerData['cart_items'] = $cart;
+                $headerData['cart_size'] = $cartSize;
+                $headerData['total'] = $headerData['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
@@ -503,11 +508,16 @@ class Home extends MY_Controller
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
-
-        $memberId = $this->session->userdata('member_id');
-        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
-        $data['cart_size'] = $this->cartImplementation->getSize();
-        $data['total'] = $this->cartImplementation->getTotalPrice();
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
 
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
@@ -647,12 +657,18 @@ class Home extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
-        $memberId = $this->session->userdata('member_id');
         $data['title'] = 'Vendor Contact | Easyshop.ph';
         $data = array_merge($data, $this->fill_header());
-        $data['cart_items'] = array_values($this->cartManager->getValidatedCartContents($memberId));
-        $data['cart_size'] = $this->cartImplementation->getSize();
-        $data['total'] = $this->cartImplementation->getTotalPrice();
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
 
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
@@ -906,10 +922,10 @@ class Home extends MY_Controller
     {
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
-        $errors = [];
         $rules = $formValidation->getRules('vendor_contact');
         $data['isValid'] = false;
         $data['targetPage'] = 'about';
+        $data['errors'] = [];
 
         $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                         ->setMethod('POST')
@@ -920,6 +936,37 @@ class Home extends MY_Controller
                         ->add('region', 'text', array('constraints' => $rules['region']))
                         ->add('website', 'text')
                         ->getForm();
+
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                               ->findOneBy(['slug' => $sellerslug]);
+
+        $data['storeName'] = $member->getStoreName();
+        $data['contactNo'] = '0' . $member->getContactno();
+        $data['website'] = $member->getWebsite();
+        $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
+
+        $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
+                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
+
+        if($addr === NULL){
+            // Default region is Abra
+            $defaultRegion = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->find(39);
+
+            $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                ->getCities($defaultRegion->getLocation());
+
+            $data['streetAddr'] = '';
+            $data['city'] = '';
+            $data['region'] = '';
+        }
+        else{
+            $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                ->getCities($addr->getStateregion()->getLocation());
+            $data['streetAddr'] = $addr->getAddress();
+            $data['city'] = $addr->getCity()->getLocation();
+            $data['region'] = $addr->getStateregion()->getLocation();
+        }
 
         if($this->input->post('storeName') || $this->input->post('contactNumber') || $this->input->post('streetAddress') || 
             $this->input->post('website') || $this->input->post('citySelect') || $this->input->post('regionSelect')){
@@ -977,38 +1024,17 @@ class Home extends MY_Controller
                 $data['isValid'] = true;
             }
             else{
-                $errors = $this->serviceContainer['form_error_helper']->getFormErrors($form);
+                $data['errors'] = $this->serviceContainer['form_error_helper']->getFormErrors($form);
             }
-        }
-
-        $data['errors'] = $errors;
-
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug]);
-
-        $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
-
-        $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                                              ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
-
-        if($addr === NULL){
-            // Default region is Abra
-            $defaultRegion = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->find(39);
+            $data['storeName'] = $this->input->post('storeName');
+            $data['contactNo'] = $this->input->post('contactNumber');
+            $data['streetAddr'] = $this->input->post('streetAddress');
+            $data['region'] = $this->input->post('regionSelect');
+            $data['city'] = $this->input->post('citySelect');
+            $data['website'] = $this->input->post('website');
 
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getCities($defaultRegion->getLocation());
-
-            $data['streetAddr'] = '';
-            $data['city'] = '';
-            $data['region'] = '';
-        }
-        else{
-            $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getCities($addr->getStateregion()->getLocation());
-            $data['streetAddr'] = $addr->getAddress();
-            $data['city'] = $addr->getCity()->getLocation();
-            $data['region'] = $addr->getStateregion()->getLocation();
+                            ->getCities($data['region']);
         }
 
         $data['regions'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
@@ -1017,11 +1043,10 @@ class Home extends MY_Controller
         $data['cityList'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getAllLocationType(3,true);
 
-        $data['contactNo'] = '0' . $member->getContactno();
-
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
 }
 
 /* End of file home.php */
 /* Location: ./application/controllers/home.php */
+

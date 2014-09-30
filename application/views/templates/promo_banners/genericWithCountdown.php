@@ -1,7 +1,7 @@
 
 <div class="genericWithCountdown_prod_alert_box" style="float:right; width: 545px;">
     <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our
-        <a href="https://www.facebook.com/EasyShopPhilippines">Facebook page</a></strong>
+        <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448/?type=1">Facebook page</a></strong>
 </div>
 
 <?php if($start_promo): ?>
