@@ -239,8 +239,7 @@ class productUpload extends MY_Controller
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
         $response['memid'] = $member_id = $this->session->userdata('member_id');
         $dir    = './assets/product/'; 
-        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/';
-        $other_category_name = $this->input->post("othernamecategory");
+        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
         $product = $this->product_model->getProductEdit($product_id, $member_id);
         $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
 
@@ -257,7 +256,7 @@ class productUpload extends MY_Controller
         }
 
         // Loading Categories breadcrumbs
-        $otherCategory  = $response['otherCategory'] = $this->input->post('othernamecategory');
+        $otherCategory  = $response['otherCategory'] = html_escape($this->input->post('othernamecategory'));
         $breadcrumbs = '';
         $parents = $this->product_model->getParentId($cat_id); 
 
