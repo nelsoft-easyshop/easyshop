@@ -309,7 +309,7 @@ class Home extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = 0;
+                    $productView['defaultCatProd'][0]['cat_type'] = EasyShop\Entities\EsCat::CUSTOM_TYPE_OTHERS;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
