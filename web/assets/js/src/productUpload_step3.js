@@ -1,3 +1,11 @@
+(function ($) {
+
+    shippingPreference = jQuery.parseJSON($('#shippingPreference').val());
+    checkData = jQuery.parseJSON($('#checkData').val());
+
+})(jQuery);
+
+
 $(function(){
     $('#step2_link').on('click', function(){
         $('#edit_step2').submit();
