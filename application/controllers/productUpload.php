@@ -1268,7 +1268,7 @@ class productUpload extends MY_Controller
             # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
             $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
             foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = (int)$arr['id_product_item'];
+                $dbProductItemID[] = $arr['id_product_item'];
             }
             
             # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
@@ -1298,7 +1298,7 @@ class productUpload extends MY_Controller
                     foreach( $shipAttr  as $grouparr){
                         foreach( $grouparr as $pid){
                             if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = (int)$pid;
+                                $clientProductItemID[] = $pid;
                             }
                         }
                     }
