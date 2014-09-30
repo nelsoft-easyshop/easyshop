@@ -1268,7 +1268,7 @@ class productUpload extends MY_Controller
             # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
             $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
             foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = $arr['id_product_item'];
+                $dbProductItemID[] = (int)$arr['id_product_item'];
             }
             
             # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
@@ -1298,10 +1298,15 @@ class productUpload extends MY_Controller
                     foreach( $shipAttr  as $grouparr){
                         foreach( $grouparr as $pid){
                             if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = $pid;
+                                $clientProductItemID[] = (int)$pid;
                             }
                         }
                     }
+
+                    // Reorder array values for proper checking of equality
+                    sort($clientProductItemID);
+                    sort($dbProductItemID);
+                    
                     #If ProductItemID matches for client and server, also verifies that all attributes have been checked
                     #or provided with a shipping location
                     if( $clientProductItemID == $dbProductItemID ){
