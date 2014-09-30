@@ -965,8 +965,8 @@ class Home extends MY_Controller
                                 ->getCities($defaultRegion->getLocation());
 
             $data['streetAddr'] = '';
-            $data['city'] = '';
-            $data['region'] = '';
+            $data['city'] = 'Bangued (Capital)';
+            $data['region'] = 'Abra';
         }
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
