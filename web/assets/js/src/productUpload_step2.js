@@ -1291,10 +1291,16 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('#form_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimage',
             type: "POST", 
-            dataType: "json",         
-            uploadProgress : function(event, position, total, percentComplete) {
-                canProceed = false;
-                console.log(percentComplete);
+            dataType: "json",             
+            xhr: function(){
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt){
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                    }
+                }, false);
+                return xhr;
             },
             success :function(d) {   
                 filescntret = d.fcnt;
