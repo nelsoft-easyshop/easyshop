@@ -1433,10 +1433,11 @@ class Memberpage extends MY_Controller
                     $parameter['endprice'] = $uprice;
                 }
                 $parameter['seller'] = "seller:".$vendorName;
-                $parameter['limit'] = 12;
+                $parameter['limit'] = $prodLimit;
                 $parameter['page'] = $page - 1;
                 $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
-                $productCount = 0;
+                $parameter['limit'] = PHP_INT_MAX;
+                $productCount = count($searchProduct = $searchProductService->getProductBySearch($parameter));
                 break;
             case 1: // Custom - NOT YET USED
                 //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
