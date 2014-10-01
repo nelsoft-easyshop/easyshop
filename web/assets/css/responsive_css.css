@@ -3068,11 +3068,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 80% !important;
     }
 
-    .pop-image-remove-container .remove-attr-image {
-        background-color: #ffb2b2;
-        border-radius: 3px;
-    }
-
     .add-property-value {
         display: inline-block;
         margin-top: 5px;
@@ -3324,20 +3319,24 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 @media (max-width: 756px) {
-  /*** product upload step 3 ***/
-  .del_shipping_input {
+    .pop-image-remove-container .remove-attr-image {
+        background-color: #ffb2b2;
+        border-radius: 3px;
+    }
+    /*** product upload step 3 ***/
+    .del_shipping_input {
     line-height: inherit;
-  }
-  .del_shipping_input .del_bgs3 {
+    }
+    .del_shipping_input .del_bgs3 {
 
-  }
-  .del_shipping_input .del_bgs3 + span {
+    }
+    .del_shipping_input .del_bgs3 + span {
     display: none;
-  } 
-  .prefsel_css .col-xs-12 .shipping_preference {
+    } 
+    .prefsel_css .col-xs-12 .shipping_preference {
       width: 50%;
       float: right;
-  }
+    }
 }
 @media (max-width: 480px) {
   /*** product upload step 3 ***/   
