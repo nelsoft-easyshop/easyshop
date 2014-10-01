@@ -60,6 +60,24 @@ class UserManager
      * @var Object
      */
     private $configLoader;
+
+    /**
+     * Form Validation
+     * @var [type]
+     */
+    private $formValidation;
+
+    /**
+     * Form Factory service
+     * @var [type]
+     */
+    private $formFactory;
+
+    /**
+     * Form error helper
+     * @var [type]
+     */
+    private $formErrorHelper;
     
     /**
      *  Constructor. Retrieves Entity Manager instance
@@ -67,11 +85,14 @@ class UserManager
      * @param Doctrine\Orm\EntityManager $em
      * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
      */
-    public function __construct($em,$configLoader)
+    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->valid = true;
+        $this->formValidation = $formValidation;
+        $this->formFactory = $formFactory;
+        $this->formErrorHelper = $formErrorHelper;
     }
 
     /**
@@ -498,6 +519,106 @@ class UserManager
         }
 
         return true;
+    }
+
+    /**
+     * Update or insert address of the user
+     * @param string   $streetAddress   [description]
+     * @param integer  $region          [description]
+     * @param integer  $city            [description]
+     * @param integer  $memberId        [description]
+     * @param integer  $type            [description]
+     * @param string   $consignee       [description]
+     * @param string   $mobileNumber    [description]
+     * @param string   $telephoneNumber [description]
+     * @param interger $country
+     */
+    public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "",$country = 1)
+    { 
+        $formValidation = $this->formValidation; 
+        $formFactory = $this->formFactory;
+        $rules = $formValidation->getRules('user_shipping_address'); 
+        $data['isSuccessful'] = false;
+
+        if(intval($type)===EsAddress::TYPE_DELIVERY){
+
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                ->setMethod('POST')
+                                ->add('consignee', 'text', array('constraints' => $rules['consignee']))
+                                ->add('mobile_number', 'text', array('constraints' => $rules['mobile_number']))
+                                ->add('telephone_number', 'text')
+                                ->add('street_address', 'text', array('constraints' => $rules['street_address']))
+                                ->add('region', 'text', array('constraints' => $rules['region'])) 
+                                ->add('city', 'text', array('constraints' => $rules['city']))
+                                ->getForm();
+
+            $form->submit([ 
+                'consignee' => $consignee,
+                'mobile_number' => $mobileNumber,
+                'telephone_number' => $streetAddress,
+                'street_address' => $streetAddress,
+                'region' => $region,
+                'city' => $city,
+            ]);
+
+            $data['errors'] = [];
+            if($form->isValid()){
+
+                $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                            ->findOneBy([
+                                                'idMember' => $memberId, 
+                                                'type' => EsAddress::TYPE_DELIVERY
+                                            ]);
+
+                $memberIdObject = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                            ->find($memberId);
+
+                $stateRegionObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($region);
+
+                $cityObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($city);
+
+                $countryObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($country);
+
+                // Update existing shipping address of the user 
+                if( $addressEntity !== null ){
+                    $esAddress = $addressEntity; 
+                }
+                // Insert shipping address to database
+                else{
+                    $esAddress = new EsAddress();
+                }
+                    $esAddress->setAddress($streetAddress);
+                    $esAddress->setCountry($countryObject);
+                    $esAddress->setStateregion($stateRegionObject);
+                    $esAddress->setCity($cityObject);
+                    $esAddress->setIdMember($memberIdObject);
+                    $esAddress->setType(EsAddress::TYPE_DELIVERY);
+                    $esAddress->setConsignee($consignee);
+                    $esAddress->setMobile(substr($mobileNumber,1));
+                    $esAddress->setTelephone($telephoneNumber);
+                    $this->em->persist($esAddress);
+                    $this->em->flush();
+
+                $data['isSuccessful'] = true;
+            }
+            else{
+                 $data['errors'] = $this->formErrorHelper->getFormErrors($form);
+            }
+        }
+
+        $mobileErrors = [];
+        $errCounter = 0;
+        foreach ($data['errors'] as $key => $value) {
+            $mobileErrors[$errCounter]['type'] = $key;
+            $mobileErrors[$errCounter]['message'] = $value;
+            $errCounter++;
+        }
+        $data['mobile_errors'] = $mobileErrors;
+        
+        return $data;
     }
 
 }

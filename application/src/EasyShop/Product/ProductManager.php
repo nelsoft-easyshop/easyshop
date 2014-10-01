@@ -373,8 +373,7 @@ class ProductManager
         $this->em->flush();
         return true;
     }
-<<<<<<< HEAD
-    
+
     
     /**
      * Returns the recommended products list for a certain product
@@ -413,7 +412,6 @@ class ProductManager
         
         return $products;
     }
-    
 
     /**
      *  Fetch products under parent category, based on child cat ids ($arrCatId)
