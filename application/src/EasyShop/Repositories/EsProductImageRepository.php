@@ -85,5 +85,18 @@ class EsProductImageRepository extends EntityRepository
 
         return $p;
     }
+
+    /**
+     * Method used for reverting rubbish data from admin product csv uploads
+     * @param int $id
+     */
+    public function deleteImageByProductId($id)
+    {
+        $query = $this->_em->createQuery("DELETE FROM EasyShop\Entities\EsProductImage e 
+        WHERE e.product = ?1");
+        $query->setParameter(1, $id);
+        $query->execute();
+
+    }
     
 }
