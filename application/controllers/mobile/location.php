@@ -5,6 +5,16 @@ if (!defined('BASEPATH'))
 
 class location extends MY_Controller 
 {
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+   
+     /**
+     * Mobile location constructor
+     */
     function __construct() 
     {
         parent::__construct(); 
@@ -12,6 +22,10 @@ class location extends MY_Controller
         header('Content-type: application/json');
     }
 
+    /**
+     * Get all location and arrange recursive based on it's parent location
+     * @return json
+     */
     public function getAllLocation()
     {
         // Load Repository 
@@ -38,5 +52,4 @@ class location extends MY_Controller
     
         echo json_encode($modifiedArray,JSON_PRETTY_PRINT);
     }
-
 }

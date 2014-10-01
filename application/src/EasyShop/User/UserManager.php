@@ -523,23 +523,24 @@ class UserManager
 
     /**
      * Update or insert address of the user
-     * @param string  $streetAddress   [description]
-     * @param integer $region          [description]
-     * @param integer $city            [description]
-     * @param integer $memberId        [description]
-     * @param integer $type            [description]
-     * @param string  $consignee       [description]
-     * @param string  $mobileNumber    [description]
-     * @param string  $telephoneNumber [description]
+     * @param string   $streetAddress   [description]
+     * @param integer  $region          [description]
+     * @param integer  $city            [description]
+     * @param integer  $memberId        [description]
+     * @param integer  $type            [description]
+     * @param string   $consignee       [description]
+     * @param string   $mobileNumber    [description]
+     * @param string   $telephoneNumber [description]
+     * @param interger $country
      */
-    public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "")
+    public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "",$country = 1)
     { 
         $formValidation = $this->formValidation; 
         $formFactory = $this->formFactory;
         $rules = $formValidation->getRules('user_shipping_address'); 
         $data['isSuccessful'] = false;
 
-        if(intval($type)===1){
+        if(intval($type)===EsAddress::TYPE_DELIVERY){
 
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
@@ -566,7 +567,7 @@ class UserManager
                 $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
                                             ->findOneBy([
                                                 'idMember' => $memberId, 
-                                                'type' => 1
+                                                'type' => EsAddress::TYPE_DELIVERY
                                             ]);
 
                 $memberIdObject = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -578,6 +579,9 @@ class UserManager
                 $cityObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                             ->find($city);
 
+                $countryObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($country);
+
                 // Update existing shipping address of the user 
                 if( $addressEntity !== null ){
                     $esAddress = $addressEntity; 
@@ -587,10 +591,11 @@ class UserManager
                     $esAddress = new EsAddress();
                 }
                     $esAddress->setAddress($streetAddress);
+                    $esAddress->setCountry($countryObject);
                     $esAddress->setStateregion($stateRegionObject);
                     $esAddress->setCity($cityObject);
                     $esAddress->setIdMember($memberIdObject);
-                    $esAddress->setType($type);
+                    $esAddress->setType(EsAddress::TYPE_DELIVERY);
                     $esAddress->setConsignee($consignee);
                     $esAddress->setMobile(substr($mobileNumber,1));
                     $esAddress->setTelephone($telephoneNumber);

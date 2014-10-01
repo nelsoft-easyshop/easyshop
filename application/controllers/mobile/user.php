@@ -3,14 +3,40 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsAddress;
+
 class user extends MY_Controller 
 {
+
+    /**
+     * The oauth2 server
+     *
+     */
+    private $oauthServer;
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+    
+    /**
+     * The authenticated member
+     *
+     * @var EasyShop\Entities\EsMember
+     */
+    private $member;
+
+    /**
+     * Mobile location constructor
+     */
     function __construct() 
     {
         parent::__construct();
+        header('Content-type: application/json');
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager'];
-        header('Content-type: application/json');
 
         //Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
@@ -22,10 +48,14 @@ class user extends MY_Controller
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']); 
     }
 
+    /**
+     * Get address shipping of the user
+     * @return JSON
+     */
     public function getAddress()
     { 
         $userShippingAddress = $this->em->getRepository("EasyShop\Entities\EsAddress")
-                        ->findOneBy(["idMember"=>$this->member->getIdMember(),"type"=>"1"]);
+                        ->findOneBy(["idMember"=>$this->member->getIdMember(),"type"=> EsAddress::TYPE_DELIVERY]);
      
         $address['delivery_address']['consignee_name'] = $userShippingAddress->getConsignee();
         $address['delivery_address']['mobile'] = $userShippingAddress->getMobile();
@@ -38,6 +68,10 @@ class user extends MY_Controller
         echo json_encode($address,JSON_PRETTY_PRINT);
     }
 
+    /**
+     * Set user shipping address
+     * @return  JSON
+     */
     public function setShippingAddress()
     {   
         // Load services
@@ -51,9 +85,10 @@ class user extends MY_Controller
         $region = ($this->input->post('region')) ? trim($this->input->post('region')) : "";
         $city = ($this->input->post('city')) ? trim($this->input->post('city')) : "";
         $memberId = $this->member->getIdMember();
-        $type = 1;
+        $type = EsAddress::TYPE_DELIVERY;
         $result = $userManager->setAddress($streetAddress,$region,$city,$memberId,$type,$consignee,$mobileNumber,$telephoneNumber);
         unset($result['errors']);
+
         echo json_encode($result,JSON_PRETTY_PRINT);
     }
 }

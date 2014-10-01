@@ -5,6 +5,29 @@ if (!defined('BASEPATH'))
 
 class mobilePayment extends MY_Controller 
 {
+    /**
+     * The oauth2 server
+     *
+     */
+    private $oauthServer;
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+    
+    /**
+     * The authenticated member
+     *
+     * @var EasyShop\Entities\EsMember
+     */
+    private $member;
+
+    /**
+     * Mobile payment constructor
+     */
     function __construct() 
     {
         parent::__construct();
@@ -13,14 +36,13 @@ class mobilePayment extends MY_Controller
         header('Content-type: application/json');
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
-        // if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
-        //     $this->oauthServer->getResponse()->send();
-        //     die;
-        // }
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            $this->oauthServer->getResponse()->send();
+            die;
+        }
         
-        // $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
-        // $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
-        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find(128);
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']); 
 
         // Loading required model
         $this->load->model('payment_model');
@@ -41,6 +63,7 @@ class mobilePayment extends MY_Controller
         else{
             show_error("Unable to load the requested controller class: ".$class_name);
         } 
+
         return $CI->$object_name = new $class_name();
     }
 
