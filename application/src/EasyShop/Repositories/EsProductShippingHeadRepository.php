@@ -27,6 +27,18 @@ class EsProductShippingHeadRepository extends EntityRepository
 
         return intval($result['shipping_total']);
     }
+    
+    /**
+     * Method used for reverting rubbish data from admin product csv uploads
+     * @param int $id
+     */
+    public function deleteShippingHeadByProductId($id)
+    {
+        $query = $this->_em->createQuery("DELETE FROM EasyShop\Entities\EsProductShippingHead e 
+            WHERE e.product = ?6");
+        $query->setParameter(6, $id);
+        $query->execute();       
+    }
 
 }
 
