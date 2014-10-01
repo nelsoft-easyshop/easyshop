@@ -62,6 +62,7 @@ class EsMemberFeedbackRepository extends EntityRepository
         
         $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
@@ -100,6 +101,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
@@ -139,6 +141,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
@@ -178,6 +181,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
