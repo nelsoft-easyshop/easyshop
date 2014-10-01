@@ -289,11 +289,13 @@
                                 <span class="username_availability"></span>
                             </div>
                         </div>
-                        <div class="reg2_fullname" style="display: <?= $is_promo ? '' : 'none'?>">
-                            <h4>Fullname</h4>
-                            <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield" autocomplete="off" value="<?= $is_promo ? '' : 'promo-registration'?>">
-                            <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
-                        </div>
+                        <?php if($is_promo):?>
+                            <div class="reg2_fullname" style="display: inline-block>">
+                                <h4>Fullname</h4>
+                                <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield" autocomplete="off" value="">
+                                <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
+                            </div>
+                        <?php endif; ?>
                         <div class="reg2_password">
                             <h4 class="txt_cp">Password</h4>
                             <input type="password" placeholder="" id="password" name="password" class="reqfield">
