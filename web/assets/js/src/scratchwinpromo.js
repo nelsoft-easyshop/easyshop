@@ -52,6 +52,7 @@
                 }
             });
         });
+
         $(document).on('click', '#register', function(){
             $('#div-promo-modal').modal({
                 escClose: false,
@@ -70,7 +71,7 @@
                 return false;
             }
             $.ajax({
-                url : '/promo/ScratchCard/updateFulname',
+                url : '/promo/ScratchCard/updateFullname',
                 dataType : 'json',
                 type: 'POST',
                 data: {fullname:fullname, csrfname:csrftoken},
@@ -78,13 +79,14 @@
                     if(result === true){
                         $.modal.close();
                         alert('Registration complete.');
+                        success();
                     }else{
                         alert('Something went wrong, try again.');
                     }
                 }
             });
         });
-        if($('#checker').length){
+        var success = function() {
             var i_id = $("#checker").attr("data_id");
             var i_name = $("#checker").attr("data_name");
             var i_qty = 1;
@@ -144,6 +146,10 @@
                     }
                 }
             });
+        }
+
+        if ($('#checker').attr('run_js') === '1') {
+           success();
         }
     })
 })(jQuery)

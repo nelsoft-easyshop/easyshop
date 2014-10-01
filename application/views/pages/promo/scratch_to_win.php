@@ -46,7 +46,7 @@
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
         <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?=$product['product']?>"
-                data_price="<?=$product['price']?>" data_code="<?=$_GET['code'];?>">
+                data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user['fullname'] ? TRUE : FALSE ?>">
         </span>
         <div class="claim-bg">
             <div id="prod_image">
@@ -79,60 +79,18 @@
             <div class="promo-gallery-header"></div>
         </div>
         <div class="promo-gallery-row">
+            <?PHP foreach($gadgets_galore as $product) : ?>
             <div class="promo-gallery-data">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/1.png">
-                    <p>LG OPTIMUS PRO LITE (BLACK)</p>
-                    <span>Php 9,855.00</span>
-                    <br>
-                    <a href="/item/lg-optimus-g-pro-lite-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                <div class="img-container">
+                    <img class="promo-img" src="/<?=html_escape($product['product_image_path'])?>">
                 </div>
+                <p><?=html_escape($product['product_name'])?></p>
+                <span>Php <?= number_format($product['price'], 2, '.', ',')?></span>
+                <br>
+                <a href="/item/<?=html_escape($product['slug'])?>"><img class="shop-now-img"> &nbsp SHOP NOW</a>
             </div>
-            <div class="promo-gallery-data left">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/2.png">
-                    <p>LG NEXUS 5</p>
-                    <span>Php 15,900.00</span>
-                    <br>
-                    <a href="/item/lg-nexus-5"><img class="shop-now-img"> &nbsp SHOP NOW</a>
-                </div>
-            </div>
-            <div class="promo-gallery-data left">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/3.png">
-                    <p>iPHONE APPLE 5C 16G</p>
-                    <span>Php 23,300.00</span>
-                    <a href="/item/apple-iphone-5c-16gb-1"><img class="shop-now-img"> &nbsp SHOP NOW</a>
-                </div>
-            </div>
-        </div>
-        <div class="promo-gallery-row">
-            <div class="promo-gallery-data">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/4.png">
-                    <p>LENOVO S820 (RED)</p>
-                    <span>Php 10,399.00</span>
-                    <br>
-                    <a href="/item/lenovo-s820-red"><img class="shop-now-img"> &nbsp SHOP NOW</a>
-                </div>
-            </div>
-            <div class="promo-gallery-data left">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/5.png">
-                    <p>LENOVO A316I (BLACK)</p>
-                    <span>Php 3,899.00</span>
-                    <br>
-                    <a href="/item/lenovo-a316i-android-42-4gb-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
-                </div>
-            </div>
-            <div class="promo-gallery-data left">
-                <div>
-                    <img class="promo-img" src="/./assets/images/promo/6.png">
-                    <p>LG OPTIMUS L5 II (BLACK)</p>
-                    <span>Php 5,890.00</span>
-                    <a href="/item/lg-optimus-l5-ii-e450-black"><img class="shop-now-img"> &nbsp SHOP NOW</a>
-                </div>
-            </div>
+            <?PHP endforeach; ?>
+
         </div>
     </div>
     <?PHP endif; ?>
