@@ -46,7 +46,7 @@ class SyncCsvImage extends MY_Controller
     /**
      * Upload images inside admin folder
      */ 
-    public function doUpload($files) {
+    private function doUpload($files) {
 
         $this->upload->initialize(array(
             "upload_path"   => "assets/admin",
@@ -76,7 +76,7 @@ class SyncCsvImage extends MY_Controller
      * @param int $imagesId
      * @return JSONP
      */ 
-    public function checkIfImagesExist($checkImagesId)
+    private function checkIfImagesExist($checkImagesId)
     {
 
         $errorSummary = array();
@@ -115,7 +115,7 @@ class SyncCsvImage extends MY_Controller
      * @param int $imagesId
      * @return JSONP
      */ 
-    public function syncImages($imagesId)
+    private function syncImages($imagesId)
     {
         $this->load->model('product_model');
         foreach($imagesId["product"] as $ids)
