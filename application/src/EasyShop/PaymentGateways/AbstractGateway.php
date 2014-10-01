@@ -86,4 +86,9 @@ abstract class AbstractGateway implements GatewayInterface
     {
         return $this->parameters[$key];
     }
+
+    public function showParameters()
+    {
+        return $this->parameters;
+    }
 }

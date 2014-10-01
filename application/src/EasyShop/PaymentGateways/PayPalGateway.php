@@ -110,10 +110,9 @@ class PayPalGateway extends AbstractGateway
         // Point Gateway
         $pointGateway = $paymentService->getPointGateway();
 
-
-
         $PayPalMode = $this->getMode(); 
-        $paypalReturnURL = base_url().'pay/paypal'; 
+        // $paypalReturnURL = base_url().'pay/paypal'; 
+        $paypalReturnURL = base_url().'pay/postBackPayPal'; 
         $paypalCancelURL = base_url().'payment/review'; 
         // RELEASE ALL LOCK
         // $remove = $this->payment_model->releaseAllLock($member_id);
@@ -153,10 +152,6 @@ class PayPalGateway extends AbstractGateway
         $email = $member->getEmail();
         $telephone = $shippingAddress->getTelephone();
         $regionDesc = $shippingAddress->getStateregion()->getLocation();
-
-        // echo $name . "|" . $street . "|" . $cityDescription . "|" . $email . "|" . $telephone . "|" . $regionDesc;
-
-        // die();
 
         // Compute shipping fee
         $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
@@ -209,10 +204,7 @@ class PayPalGateway extends AbstractGateway
 
         $padata .= ($paypalType == 2 ? '&LANDINGPAGE='.urlencode('Billing') : '&LANDINGPAGE='.urlencode('Login'));
 
-        // echo $padata;
-
         $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $padata);
-        // var_dump($httpParsedResponseAr);
         if("SUCCESS" === strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" === strtoupper($httpParsedResponseAr["ACK"]))
         {   
             $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
@@ -242,15 +234,126 @@ class PayPalGateway extends AbstractGateway
         }
     }
 
+    public function postBackMethod($validatedCart, $memberId, $paymentService)
+    {
+        // Point Gateway
+        $pointGateway = $paymentService->getPointGateway();
+
+        $getItems = $this->getParameter("getArray");
+
+        $response['status'] = 'f';
+        $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+        $apiResponse = $productstring = ''; 
+
+        $productCount = count($validatedCart['itemArray']);
+
+        // get address Id
+        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                    ->getShippingAddress(intval($memberId));
+
+        if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
+            $payerid = $getItems['PayerID'];
+            $token = $getItems['token'];
+            //$return = $this->payment_model->selectFromEsOrder($token,$paymentType);
+            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                ->findOneBy(['transactionId' => $token, 'paymentMethod' => $paymentType]);
+
+            $invoice = $return->getInvoiceNo();
+            $orderId = $return->getIdOrder();
+
+            // Compute shipping fee
+            $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
+            $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
+
+            $itemList = $prepareData['newItemList'];
+            $grandTotal = $prepareData['totalPrice'];
+            $productstring = $prepareData['productstring']; 
+            $toBeLocked = $prepareData['toBeLocked'];
+            // $lockCountExist = $this->payment_model->lockcount($orderId);
+            $lockCountExist = 10;
+
+            if($lockCountExist >= 1){
+                // $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+                if($validatedCart['itemCount'] === $productCount){
+
+                    $padata = '&TOKEN='.urlencode($token).
+                    '&PAYERID='.urlencode($payerid).
+                    '&PAYMENTACTION='.urlencode("SALE").
+                    '&AMT='.urlencode($grandTotal).
+                    '&CURRENCYCODE='.urlencode('PHP');
+
+                    $httpParsedResponseArGECD = $this->PPHttpPost('GetExpressCheckoutDetails', $padata); 
+                    $httpParsedResponseArDECP = $this->PPHttpPost('DoExpressCheckoutPayment', $padata); 
+
+                    if(("SUCCESS" == strtoupper($httpParsedResponseArDECP["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseArDECP["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"]))){
+                        $response['txnid'] = $txnid = urldecode($httpParsedResponseArDECP["TRANSACTIONID"]);
+                        $nvpStr = "&TRANSACTIONID=".$txnid;
+
+                        $httpParsedResponseAr = $this->PPHttpPost('GetTransactionDetails', $nvpStr);
+
+                        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
+
+                            # START SAVING TO DATABASE HERE 
+                            // foreach ($itemList as $key => $value) {     
+                            //     $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                            //     $this->product_model->update_soldout_status($value['id']);
+                            // }
+
+                            $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
+                            //$complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,0,$flag);
+                            $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                                ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,0,$flag);
+
+                            if($complete){
+                                $orderHistory = array(
+                                    'order_id' => $orderId,
+                                    'order_status' => 0,
+                                    'comment' => 'Paypal transaction confirmed'
+                                    );
+                                // $this->payment_model->addOrderHistory($orderHistory); 
+                                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
+                                                ->addOrderHistory($orderHistory);
+                                $response['message'] = 'Your payment has been completed through Paypal';
+                                $response['status'] = 's';
+                                // $this->removeItemFromCart(); 
+                                // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+                            }
+                            else{
+                                $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
+                            }
+                        }
+                        else{
+                            $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
+                        }
+                    }
+                    else{
+                        $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
+                    }
+                }
+                else{
+                    $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+                }
+            }
+            else{
+                $response['message'] = 'Your session is already expired for this payment.';
+            }
+        }
+        else{
+            $response['message'] = 'Some parameters are missing.';
+        }
+
+        // echo "SUCCESSSSSSSSSSSSSSS";
+        return $response;
+        // $this->generateFlash($txnid,$message,$status);
+        // redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
+    }
+
     public function getExternalCharge()
     {
         return ($this->getParameter('amount') * 0.044) + 15; 
     }
 
-    public function generateReferenceNumber($memberId)
-    {
-        // return 'COD-'.date('ymdhs').'-'.$memberId;
-    }
+    public function generateReferenceNumber($memberId){}
 
     public function getOrderStatus()
     {

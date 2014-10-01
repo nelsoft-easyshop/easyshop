@@ -627,6 +627,18 @@ class PaymentService
         return $response;
     }
 
+    public function postBack($paymentMethods, $validatedCart, $memberId)
+    {
+        // Initialize gateways
+        $this->initializeGateways($paymentMethods);
+
+        // Execute payment gateway postback method
+        $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this);
+
+        return $returnValue;
+
+    }
+
     public function getPointGateway()
     {
         return $this->pointGateway;

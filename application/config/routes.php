@@ -129,6 +129,7 @@ else {
     #PAYMENT PAYPAL
     $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
     $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
+    $route['(?i)pay/postBackPayPal'] = 'payment/postBackPayPal';  # la roberto
 
     $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 

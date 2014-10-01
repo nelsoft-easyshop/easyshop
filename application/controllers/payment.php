@@ -1311,7 +1311,6 @@ class Payment extends MY_Controller{
      */
     function pay()
     {
-         
         // if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
         //     redirect(base_url().'home', 'refresh');
         // }
@@ -1328,9 +1327,33 @@ class Payment extends MY_Controller{
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
-        //extract($response);
-        //$this->generateFlash($txnid,$message,$status);
-        //echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+        extract($response);
+        $this->generateFlash($txnid,$message,$status);
+        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+    }
+
+    public function postBackPayPal()
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+
+        $carts = $this->session->all_userdata();
+
+        // Create a fake decoded JSON for payment service
+        $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
+
+        // Validate Cart Data
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+
+        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+    
+        extract($response);
+        $this->generateFlash($txnid,$message,$status);
+        redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 }
 
