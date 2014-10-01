@@ -579,38 +579,20 @@ class EsProductRepository extends EntityRepository
      * Delete products that do not have images inside admin folder
      * @param  integer $id
      */    
-
     public function deleteProductFromAdmin($id)
     {
         $this->em =  $this->_em;
+
+        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
+                                    ->deleteAttrDetailByProductId($id);
+
+        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrhead')
+                                    ->deleteAttrHeadById($id);                                    
+
+        $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                    ->deleteImageByProductId($id);     
+
         $qb = $this->em->createQueryBuilder()
-                            ->select('pi')
-                            ->from('EasyShop\Entities\EsOptionalAttrhead','pi')
-                            ->where('pi.product = :productId')
-                            ->setParameter('productId', $id)
-                            ->getQuery();
-
-        $queryResult = $qb->getResult();
-        foreach ($queryResult as $result ) {
-
-            $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsOptionalAttrdetail e 
-                WHERE e.head = ?2");
-            $query->setParameter(2, $result->getIdOptionalAttrhead());
-            $query->execute();
-        }   
-     
-        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsOptionalAttrhead e 
-            WHERE e.product = ?3");
-        $query->setParameter(3, $id);
-        $query->execute();
-                 
-
-        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProductImage e 
-        WHERE e.product = ?1");
-        $query->setParameter(1, $id);
-        $query->execute();
-
-       $qb = $this->em->createQueryBuilder()
                             ->select('pi')
                             ->from('EasyShop\Entities\EsProductItem','pi')
                             ->where('pi.product = :productId')
@@ -619,20 +601,14 @@ class EsProductRepository extends EntityRepository
 
         $result = $qb->getOneOrNullResult();
 
-        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProductShippingDetail e 
-        WHERE e.productItem = ?5");
-        $query->setParameter(5, $result->getIdProductItem());
-        $query->execute();  
+        $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                    ->deleteShippingDetailByProductItem($result);         
 
-        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProductShippingHead e 
-            WHERE e.product = ?6");
-        $query->setParameter(6, $id);
-        $query->execute();        
+        $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
+                                    ->deleteShippingHeadByProductId($id);  
 
-        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProductItem e 
-            WHERE e.product = ?7");
-        $query->setParameter(7, $id);
-        $query->execute();           
+        $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                    ->deleteProductItemByProductID($id);            
 
         $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
             WHERE e.idProduct = ?8");
@@ -641,6 +617,7 @@ class EsProductRepository extends EntityRepository
 
 
     }
+
 }
 
 
