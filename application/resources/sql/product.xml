@@ -1061,7 +1061,7 @@ FROM
                 AND b.`is_delete` = 0
                 AND b.`is_draft` = 0
                 AND b.id_product NOT IN ({product_ids})
-            ORDER BY createddate DESC) AS tbl 
+            ORDER BY b.lastmodifieddate DESC) AS tbl 
         UNION
         ALL 
         SELECT 
@@ -1134,7 +1134,7 @@ FROM
     INNER JOIN es_product_image pi
         ON pi.product_id = p.id_product AND pi.is_primary = 1
     WHERE p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.createddate DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT {limit}
 </select>
  
