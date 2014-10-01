@@ -73,6 +73,9 @@ function ReplaceNumberWithCommas(thisnumber){
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
 
+        $('.tab_categories').find('.selected-marker').hide();
+        $(this).find('.selected-marker').show();
+
         if(pagingDiv.length === 0){
             ItemListAjax($(divId), 1);
         }

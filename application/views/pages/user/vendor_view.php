@@ -19,9 +19,13 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
-                                    <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><span class="fa fa-caret-right active-category"></span>  <?php echo $arrCat['name']?></li></a>
-                                    <?php endforeach;?>
+                                    <?php $isSelected = true; foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
+                                            <li>
+                                                <span style="display: <?php echo $isSelected ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                                            </li>
+                                        </a>
+                                    <?php $isSelected = false; endforeach;?>
                                 </ul>
                             </div>
                         </div>
