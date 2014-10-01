@@ -25,7 +25,7 @@
                         </p>
                         <div class="div-about-edit-area">
                             <?php echo form_open('home/doUpdateDescription') ?>
-                                <textarea class="input-lg input-message textarea-about" name='description' rows="12" placeholder='Say something about your shop...'"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
+                                <textarea class="input-lg input-message textarea-about" name='description' rows="12" id="description" placeholder="'Say something about your shop...'" data-value="<?php echo html_escape($member->getStoreDesc()); ?>"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
                                 <center>
                                     <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
                                 </center>
@@ -132,7 +132,7 @@
                                 </div>
                             </div>                            
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <select id="feedback-select" class="input-lg input-message" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
                                 </div>
                             </div>

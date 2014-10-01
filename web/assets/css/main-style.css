@@ -1,7 +1,22 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,700,300);
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Lt.ttf);
+font-weight: normal;
+}
+
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
+font-weight: bold;
+}
+
 /*** global style ***/
 html, body{
+    font-family: 'Helvetica', Arial, Calibri;
     background: #ebedf0;
 }
 
@@ -36,7 +51,8 @@ section {
     font-size: 1.125em;
     color: #565656;
     margin: 0 auto;
-    width: 1190px;
+    width: 1200px;
+    padding: 0 5px;
 /*    max-width: 1190px;
     width: 100%;*/
 }
@@ -149,7 +165,7 @@ section {
     background-color: #ff613a;
     border-radius: 90px;
     height: 20px;
-    left: -5px;
+    left: 0px;
     line-height: 20px;
     position: absolute;
     text-align: center;
@@ -229,12 +245,22 @@ section {
     height: 365px;
     text-align: center;
     overflow: hidden;
+    position: relative;
     min-width: 1190px;
     width: 100%;
 }
 
 .vendor-main-bg img {
-    margin:0 auto;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#banner_edit img {
+    position: relative;
 }
 
 .vendor-profile-content {
@@ -552,20 +578,9 @@ section {
     float: left;
 }
 
-.vendor-nav li:first-child {
-    width: 70px;
-}
-
-.vendor-nav li:nth-child(2) {
-    width: 116px;
-}
-
-.vendor-nav li:nth-child(3) {
-    width: 150px;
-}
-
-.vendor-nav li:nth-child(4) {
-    width: 86px;
+.vendor-nav li:first-child a {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .vendor-nav li a {
@@ -575,6 +590,7 @@ section {
     font-size: 0.95em;
     height: 55px;
     line-height: 55px;
+    padding: 0 21px;
     position: relative;
     text-align: center;
     vertical-align: middle;
@@ -593,15 +609,6 @@ section {
 .vendor-nav li a.vendor-nav-active {
     color: #fe893a;
     border-bottom: 3px solid #fe893a;
-}
-
-.vendor-nav  img {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .fixed-vendor-content {
@@ -785,6 +792,7 @@ section {
     text-align: left;
     right: 0;
     width: 241px;
+    top: 38px;
 
     -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
     -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
@@ -792,7 +800,6 @@ section {
 }
 
 .sticky-header-cart-item-list {
-    top: 38px;
     width: 248px;
 }
 
@@ -907,7 +914,7 @@ section {
 
 .row-products{
     min-height: 480px;
-    margin-top: -30px;
+    margin-top: -20px;
 }
 
 .border-1
@@ -925,6 +932,7 @@ section {
 
 .div-product-view-option{
     height: 30px;
+    margin-bottom: 10px;
 }
 
 .bg-product-section{
@@ -942,7 +950,7 @@ section {
     vertical-align: middle !important;
 }
 
-td.td-view.p-view.color-default{
+td.td-view.p-view2.color-default{
     padding-top: 0px !important;
     padding-right: 5px !important;
 }
@@ -1014,6 +1022,14 @@ td.td-view.p-view.color-default{
     position:relative;
     z-index:2;
 }
+
+
+.active-category{
+    font-size: 17px;
+    color: #ff893b;
+    padding-right: 5px;
+}
+
 .list-category{
     margin-top: -1px !important;
     margin-bottom: 0px !important;
@@ -1113,6 +1129,11 @@ td.td-view.p-view.color-default{
 .btn-filter:hover{
     background: #272626;
 }
+
+.a-filter, .a-category{
+    cursor: pointer;
+}
+
 /** End of Left Column**/
 
 /** For Item **/
@@ -1127,7 +1148,9 @@ td.td-view.p-view.color-default{
     padding-left: 15px;
     min-height: 580px !important;
 }
-
+.product-paging{
+    min-height: 600px;
+}
 .grid > .product-paging > .panel-list-item{
     display: none;
 
@@ -1136,6 +1159,7 @@ td.td-view.p-view.color-default{
     padding-right: 5px !important;
     padding-left: 5px !important;
     margin-bottom: 11px !important;
+
 }
 
 .grid > .product-paging > .thumb > .panel-item{
@@ -1266,7 +1290,7 @@ td.td-view.p-view.color-default{
 
 .list > .product-paging > .panel-list-item{
     display: inline-block;
-    width:825px;
+    width:830px;
     margin-bottom: 10px;
     margin-left: 7px;
     transition: all 0.5s ease;
@@ -1516,17 +1540,17 @@ td.td-view.p-view.color-default{
 
 @media only screen and (max-width : 979px) { 
     header {
-        width: 1190px !important;
+        width: 1200px !important;
     }
-    .main-container {
+    /* .main-container {
             padding-left: 5px;
             padding-right: 5px;
-           /* width: 97%;*/
+           width: 97%;
     }
 
     .vendor-main {
         top: 44px;
-    }
+    }*/
     
 }
 

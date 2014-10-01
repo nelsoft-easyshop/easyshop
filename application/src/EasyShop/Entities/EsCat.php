@@ -105,6 +105,11 @@ class EsCat
     const CUSTOM_TYPE = 2;
 
     /**
+     *  @var integer
+     */
+    const CUSTOM_TYPE_OTHERS = 0;
+
+    /**
      * Get idCat
      *
      * @return integer 

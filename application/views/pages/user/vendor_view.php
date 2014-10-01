@@ -11,7 +11,7 @@
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" id="toggle-cat" class="a-category" data-parent="#category">
+                                <a id="toggle-cat" class="a-category" data-parent="#category">
                                     CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
@@ -19,13 +19,13 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
-                                    <?php $showArrow=true; foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                                    <?php $isSelected = true; foreach( $defaultCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
                                             <li>
-                                                <span style="display: <?php echo $showArrow? '' : 'none' ?>" class="fa fa-caret-right active-category selected-category"></span>  <?php echo $arrCat['name']?> 
+                                                <span style="display: <?php echo $isSelected ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
                                         </a>
-                                    <?php $showArrow = false; endforeach;?>
+                                    <?php $isSelected = false; endforeach;?>
                                 </ul>
                             </div>
                         </div>
@@ -35,12 +35,12 @@
                     <div class="panel panel-danger border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="filter-header">
                             <h4 class="panel-title">
-                                <a  id="toggle-filter" class="a-filter">
+                                <a id="toggle-filter" class="a-filter" data-parent="#filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
                         </div>
-                        <div id="filter-list1">
+                        <div id="filter-list1" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-filter">
                                     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -75,7 +75,7 @@
                 <div class="div-product-view-option">
                     <table class="p-view color-default pull-left">
                         <tr>
-                            <td class="td-view p-view color-default">VIEW STYLE:</td>
+                            <td class="td-view p-view2 color-default">VIEW STYLE:</td>
                             <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-th-large fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-th-list fa-2x icon-view icon-list"></span></td>
                         </tr>
                     </table>
@@ -87,16 +87,16 @@
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
                 <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
 
+                <div class="vendor-select-con">
+                    <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
+                        <option value="1">Default Sorting</option>
+                        <option value="2">Date Uploaded</option>
+                        <option value="3">Hot</option>
+                    </select>
+                    <div class="clear"></div>
+                </div>
                 <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-                <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>">
-                    <div class="vendor-select-con">
-                        <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-                            <option value="1">Default Sorting</option>
-                            <option value="2">Date Uploaded</option>
-                            <option value="3">Hot</option>
-                        </select>
-                        <div class="clear"></div>
-                    </div>
+                <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>" data-group="<?php echo $catId?>">
                     <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
                     <?php if($arrCat['non_categorized_count'] === 0): ?>
@@ -106,9 +106,10 @@
                         <?=$arrCat['product_html_data'];?>
 
                         <div class="clear"></div>
-                        <div id="paginationDiv-<?php echo $catId?>">
+                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
                             <center>
-                                <ul class="pagination pagination-items">
+                                <?php echo $arrCat['pagination']?>
+                                <!--<ul class="pagination pagination-items">
                                     <li data-group="<?php echo $catId?>" class="pagination-maxleft"><a href="javascript:void(0)"><span>&laquo;</span></a></li>
                                     <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
                                         <li data-group="<?php echo $catId?>" class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>">
@@ -118,7 +119,7 @@
                                         </li>
                                     <?php endfor;?>
                                     <li data-group="<?php echo $catId?>" class="pagination-maxright"><a href="javascript:void(0)"><span>&raquo;</span></a></li>
-                                </ul>
+                                </ul>-->
                             </center>
                         </div>
                    <?php endif;?>

@@ -73,28 +73,31 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = preg_replace('/[^A-Za-z0-9]+/', ' ', $queryString);  
+        $clearString = str_replace('"', '', $queryString);
         $stringCollection = array();
         $ids = array(); 
-        $explodedString = explode(' ', trim($clearString)); 
-        $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
-        $stringCollection[1] = trim($clearString);
-        $stringCollection[2] = '"'.trim($clearString).'"';
-        $stringCollection[3] = str_replace(' ', '', trim($clearString));
+
+        if(trim($clearString) != ""){
+            $explodedString = explode(' ', trim($clearString)); 
+            $stringCollection[0] = '"+'.implode('*" "+', $explodedString) .'*"';
+            $stringCollection[1] = '"'.implode('" "', $explodedString).'"';
+            $stringCollection[2] = '"'.trim($clearString).'"';
+            $stringCollection[3] = str_replace(' ', '', trim($clearString));
+
+            if(trim($queryString) === ""){
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->findBy(['isDraft' => 0,'isDelete' => 0]);
+            }
+            else{
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->findByKeyword($stringCollection);
+            }
+
+            foreach ($products as $key => $value) {
+                array_push($ids, $value->getIdProduct());
+            }
+        }
         
-        if($queryString == ""){
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findBy(['isDraft' => 0,'isDelete' => 0]);
-        }
-        else{
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection);
-        }
-
-        foreach ($products as $key => $value) {
-            array_push($ids, $value->getIdProduct());
-        }
-
         return $ids;
     }
 
@@ -111,7 +114,7 @@ class SearchProduct
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
    
         foreach ($arrayItems as $key => $value) {
-            $price = round(floatval($value->getPrice()),2); 
+            $price = round(floatval($value->getFinalPrice()),2); 
             if($price < $minPrice || $price > $maxPrice){
                 unset($arrayItems[$key]);
             }
@@ -263,8 +266,8 @@ class SearchProduct
         // Prepare variables
         $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
         $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
-        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?trim($parameters['startprice']):FALSE;
-        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?trim($parameters['endprice']):FALSE; 
+        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
+        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?str_replace( ',', '', trim($parameters['endprice'])):FALSE; 
         $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;
         $sortBy = (isset($parameters['sortby']) && $parameters['sortby'])?trim($parameters['sortby']):FALSE;
         $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
@@ -332,6 +335,13 @@ class SearchProduct
             $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
             $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
             $popularProduct = $EsProductRepository->getProductDetailsByIds($popularProductId,0,1);
+            foreach ($popularProduct as $keyProduct => $valueProduct) {
+                $productId = $valueProduct->getIdProduct();
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                            ->getDefaultImage($productId);
+                $valueProduct->directory = $productImage->getDirectory();
+                $valueProduct->imageFileName = $productImage->getFilename();
+            }
             $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
             $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
         }

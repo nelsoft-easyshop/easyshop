@@ -29,7 +29,7 @@
                 <div class="col-md-2 row-main">
                     <div class="wrapper" id="main_search_container">
                         <div class="left_attribute">
-                            <?php if(count($products) > 0): ?>
+                            <?php if($productCount > 0): ?>
                                 <h3>Price</h3>
                                 <input type="text" id="price1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
                                 to
@@ -55,16 +55,16 @@
                         </div>
                      
                         <div class="right_product">
-                            <?php if(count($products) <= 0): ?>
+                            <?php if($productCount <= 0): ?>
                                 <div style='margin-bottom: 100px;'>
                                     <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo html_escape($string);?></span> did not return any results. </span>
                                 </div>
                             <?php else: ?>
                                 <div class="adv_ctr">
-                                    <strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong>
+                                    <strong style="font-size:14px"><?=$productCount ;?></strong> result<?=(number_format($productCount) > 1)?"s":"";?> found for <strong><?php echo html_escape($string);?></strong>
                                 </div>
-                                <div id="list" class="list "></div>
-                                <div id="grid" class="grid grid-active"></div>
+                                <div id="list" class="list <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+                                <div id="grid" class="grid <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
                                 <div class="clear"></div>
 
                                 <div id="product_content">
@@ -154,12 +154,14 @@
 
             <div class="row">
                 <div class="col-md-12">
+                    <?php if($productCount > 0): ?>
                     <div class="search_result_m">
-                        <p class="search_result "><strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong></p>
+                        <p class="search_result "><strong style="font-size:14px"><?=$productCount;?></strong> result<?=($productCount > 1)?"s":"";?> found for <strong><?php echo html_escape($string);?></strong></p>
                     </div>
+                    <?php endif; ?>
                     <br/>
                     <div id="paste-product">
-                        <?php if(count($products) > 0): ?>
+                        <?php if($productCount > 0): ?>
                             <?php foreach ($products as $key => $value): ?>
                             <?php
                                 $productEntity = $value;
@@ -262,7 +264,7 @@
                     to
                     <input type="text" id="rprice2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
                     <input class="rprice" type="button" value=">>"/>
-                    <?php if(count($products) > 0): ?>
+                    <?php if($productCount > 0): ?>
                         <?php foreach ($attributes as $attrName => $attrListValue):?>
                          <h3 class="title h3-filter"><?=$attrName?></h3> 
                         <ul class="list-unstyled"> 

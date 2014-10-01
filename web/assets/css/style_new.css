@@ -1166,4 +1166,7 @@ div.reply_content_shown > p {
 	z-index:9999999;
 }
 
-
+.cbx:hover,.cbx > label:hover,.cbx > input:hover {
+    text-decoration: none;
+    cursor: pointer;
+}

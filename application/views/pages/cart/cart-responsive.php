@@ -22,8 +22,9 @@
                 <td width="7%">
                     <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
                        data-image="<?= base_url() ?><?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
-                        <img class="img-responsive thumbnail no-border thumbnail-item"
-                             src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>">
+                        <span class="cart-item-image-con">
+                            <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                        </span>
                     </a>
                 </td>
                 <td style="align:left;">
@@ -116,8 +117,9 @@
                                         <td width="50%">
                                             <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
                                                data-image="/<?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>">
-                                                <img class="img-responsive thumbnail no-border thumbnail-item"
-                                                     src="/<?php echo $row['imagePath'];  ?>categoryview/<?php echo $row['imageFile']; ?>">
+                                                <span class="cart-item-image-con">
+                                                    <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                                                </span>
                                             </a>
                                         </td>
                                         <td style="vertical-align: top; text-align:right;" align="right" width="50%">

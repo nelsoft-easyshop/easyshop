@@ -1,3 +1,18 @@
+// global jsonCity
+var jsonCity = jQuery.parseJSON($('#json_city').val());
+
+(function ($) {
+
+    // Numeric characters only. Disable negative
+    $('#mobileNumberTxt').numeric({negative : false});
+
+    // Disable decimal point
+    $('#mobileNumberTxt').on('keypress', function(e){
+        var code = e.keyCode || e.which;
+        return (code != 46);
+    });
+
+})(jQuery);
 
 (function ($) {
 
@@ -44,8 +59,20 @@
     });
 
     $(document).on('click','#banner-cancel-changes',function() {
+        var storeNameField = $('#storeNameTxt');
+        var mobileField = $('#mobileNumberTxt');
+        var stateRegionSelect = $('.stateregionselect');
+        var citySelect = $('.cityselect');
+
         $('#display-banner-view').show();
         $('#edit-banner-view').hide();
+
+        // Reset displayed values to original
+        storeNameField.val(storeNameField.attr('data-origval'));
+        mobileField.val(mobileField.attr('data-origval'));
+        stateRegionSelect.val(stateRegionSelect.attr('data-origval')).trigger("chosen:updated");
+        cityFilter(stateRegionSelect, citySelect);
+        citySelect.val(citySelect.attr('data-origval')).trigger("chosen:updated");
     });
 
     // Search button click
@@ -85,6 +112,12 @@
                     $(".storeName").html(storName);
                     $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
+
+                    // Update custom attr origval for "Cancel" functionality
+                    $("#storeNameTxt").attr('data-origval', data.new_data.store_name);
+                    $("#mobileNumberTxt").attr('data-origval', data.new_data.mobile);
+                    $(".stateregionselect").attr('data-origval', data.new_data.state_region_id);
+                    $(".cityselect").attr('data-origval',data.new_data.city_id);
                 }
                 else{
                     // Display error
@@ -278,5 +311,60 @@
         $('#image_w').val(0);
         $('#image_h').val(0);
     }
+
+})(jQuery);
+
+
+/**
+ *  Subscription Functions
+ */
+(function ($){
+
+    $('.subscription_btn').on('click', function(){
+        var $this = $(this);
+        var form = $(this).siblings('form');
+        var sibling = $(this).siblings('.subscription_btn');
+        var isLoggedIn = parseInt($('#is_loggedin').val());
+        var vendorLink = form.find('input[name="vendorlink"]').val();
+
+        if(isLoggedIn){
+            $.post(config.base_url+"memberpage/vendorSubscription", $(form).serializeArray(), function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('There was an error while processing your request. Please try again later.');
+                    return false;
+                }
+
+                if(obj.result === 'success'){
+                    $this.hide();
+                    sibling.show();
+                }
+                else{
+                    alert(obj.error);
+                }
+            });
+        }
+        else{
+            $.removeCookie('es_vendor_subscribe');
+            $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
+            window.location.href = config.base_url + 'login';
+        }
+
+    });
+
+    $(document).ready(function(){
+        var vendorLink = $.cookie('es_vendor_subscribe');
+        var logInStatus = parseInt($('#is_loggedin').val());
+        var subscribeStatus = $('#subscribe_status').val();
+        var vendorName = $('#vendor_name').val();
+
+        if( typeof vendorLink !== "undefined" && logInStatus && subscribeStatus === "unfollowed"){
+            $('#follow_btn').trigger('click');
+            alert("You are now following " + vendorName + "'s store!");
+            $.removeCookie('es_vendor_subscribe');
+        }
+    });
 
 })(jQuery);

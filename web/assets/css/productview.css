@@ -506,6 +506,9 @@ line-height: 30px !important;
     border: solid #e6e6e6 1px;
     
 }
+.zoomPad{
+    min-width: 400px !important;
+}
 
 @media only screen and (max-width: 1024px) {
 

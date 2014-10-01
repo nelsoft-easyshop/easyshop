@@ -1332,7 +1332,8 @@ class Memberpage extends MY_Controller
     {
         $serverResponse = array(
             "result" => FALSE,
-            "error" => ""
+            "error" => "",
+            "data" => array()
         );
 
         if( $this->input->post("vendor_details") ){
@@ -1351,6 +1352,12 @@ class Memberpage extends MY_Controller
 
             $serverResponse["result"] = $boolResult;
             $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
+            $serverResponse["new_data"] = array(
+                    "store_name" => $storeName
+                    , "mobile" => $mobileNum
+                    , "state_region_id" => $stateRegionId
+                    , "city_id" => $cityId
+            );
         }
 
         echo json_encode($serverResponse);
@@ -1372,9 +1379,9 @@ class Memberpage extends MY_Controller
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
 
-        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('con')] : "";
-        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lp')) : "";
-        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('up')) : "";
+        $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
+        $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
+        $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
 
         $parameter = json_decode($this->input->get('queryString'),TRUE);
 
@@ -1426,10 +1433,13 @@ class Memberpage extends MY_Controller
                     $parameter['endprice'] = $uprice;
                 }
                 $parameter['seller'] = "seller:".$vendorName;
-                $parameter['limit'] = 12;
+                $parameter['limit'] = $prodLimit;
                 $parameter['page'] = $page - 1;
-                $products = $searchProduct = $searchProductService->getProductBySearch($parameter);
-                $productCount = 0;
+                $products = $searchProductService->getProductBySearch($parameter);
+                $parameter['limit'] = PHP_INT_MAX;
+                $parameter['page'] = 0;
+                $tempCountContainer = $searchProductService->getProductBySearch($parameter);
+                $productCount = count($tempCountContainer);
                 break;
             case 1: // Custom - NOT YET USED
                 //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
@@ -1452,13 +1462,21 @@ class Memberpage extends MY_Controller
             'page' => $page,
             'products' => $products
         );
-
         $parseData = array('arrCat'=>$arrCat);
         
+        $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
+
+        $paginationData = array(
+            'lastPage' => $pageCount
+            , 'isHyperLink' => false
+            , 'currentPage' => $page
+        );
+
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount
-            , 'pageCount' => $productCount > 0 ? ceil($productCount/$prodLimit) : 1
+            , 'pageCount' => $pageCount
+            , 'paginationData' => $this->load->view("pagination/default", $paginationData, true)
         );
 
         echo json_encode($serverResponse);

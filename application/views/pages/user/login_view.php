@@ -20,7 +20,7 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-7 col-md-7">
                                     <input type="text" id="login_username" name="login_username" class="ui-form-control">
-                                    <span id="username_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
+                                    <span id="username_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"></span>
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-10">
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-7 col-md-7">
                                 <input type="password" id="login_password" name="login_password" class="ui-form-control"> 
-                                    <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"> </span>
+                                    <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"> </span>
                                     <span id="login_error" class="red" style="font-weight:bold;display:block"><?php echo (isset($form_error)?$form_error:'');?>  </span>
                                 </div>
                             </div>
