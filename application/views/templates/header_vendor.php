@@ -109,8 +109,8 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" id="storeNameTxt" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" data-origval="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
-                    <input type="text" id="mobileNumberTxt" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
+                    <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" data-origval="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
+                    <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
                         <input type="hidden" id="json_city" value='<?php echo json_encode($cityLookup, JSON_HEX_APOS)?>'>
