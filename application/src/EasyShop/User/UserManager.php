@@ -522,14 +522,15 @@ class UserManager
     }
 
     /**
-     * Set shipping address of the user.
-     * @param [type] $consignee       [description]
-     * @param [type] $mobileNumber    [description]
-     * @param [type] $streetAddress   [description]
-     * @param [type] $region          [description]
-     * @param [type] $city            [description]
-     * @param [type] $memberId        [description]
-     * @param string $telephoneNumber [description]
+     * Update or insert address of the user
+     * @param string  $streetAddress   [description]
+     * @param integer $region          [description]
+     * @param integer $city            [description]
+     * @param integer $memberId        [description]
+     * @param integer $type            [description]
+     * @param string  $consignee       [description]
+     * @param string  $mobileNumber    [description]
+     * @param string  $telephoneNumber [description]
      */
     public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "")
     { 
