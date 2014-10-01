@@ -342,6 +342,18 @@ class Home extends MY_Controller
                     , "prodLimit" => $this->vendorProdPerPage
                 );
 
+                //Determine active Div for first load
+                $showFirstDiv = TRUE;
+                foreach($data['defaultCatProd'] as $catId => $catDetails){
+                    if( isset($productView['isSearching']) ){
+                        $data['defaultCatProd'][$catId]['isActive'] = (int)$catId === 0 ? TRUE : FALSE;
+                    }
+                    else{
+                        $data['defaultCatProd'][$catId]['isActive'] = $showFirstDiv;
+                        $showFirstDiv = FALSE;
+                    }
+                }
+
                 // Load Location
                 $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
                 $cart = array();
@@ -964,20 +976,21 @@ class Home extends MY_Controller
                                                ->findOneBy(['slug' => $sellerslug]);
 
         $data['storeName'] = $member->getStoreName();
-        $data['contactNo'] = '0' . $member->getContactno();
+        $data['contactNo'] = $member->getContactno() === "" ? "" : '0' . $member->getContactno();
         $data['website'] = $member->getWebsite();
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
+
+        // Default region is Abra
+        $data['defaultRegion'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->find(EasyShop\Entities\EsLocationLookup::DEFAULT_REGION)->getLocation();
+
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
 
         if($addr === NULL){
-            // Default region is Abra
-            $defaultRegion = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->find(39);
-
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getCities($defaultRegion->getLocation());
+                                ->getCities($data['defaultRegion']);
 
             $data['streetAddr'] = '';
             $data['city'] = '';
@@ -987,7 +1000,7 @@ class Home extends MY_Controller
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
             $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
-            $data['city'] = $addr->getCity()->getLocation();
+            $data['city'] = $addr->getCity()->getLocation(). ", ";
             $data['region'] = $addr->getStateregion()->getLocation();
         }
 
@@ -1053,7 +1066,7 @@ class Home extends MY_Controller
             $data['contactNo'] = $this->input->post('contactNumber');
             $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
             $data['region'] = $this->input->post('regionSelect');
-            $data['city'] = $this->input->post('citySelect');
+            $data['city'] = $this->input->post('citySelect'). ", ";
             $data['website'] = $this->input->post('website');
 
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
