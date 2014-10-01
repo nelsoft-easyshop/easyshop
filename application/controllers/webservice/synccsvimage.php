@@ -82,22 +82,23 @@ class SyncCsvImage extends MY_Controller
         $errorSummary = array();
         foreach($checkImagesId["product"] as $ids)
         {
+            $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
+            foreach($imagesValues as $values) {
+                if($values){
+                    $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
+                }
 
-            $values = $this->EsProductImagesRepository->getDefaultImage($ids);            
-            
-            if($values){
-                $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
-            }
+                $path = "./assets/admin/$images";
 
-            $path = "./assets/admin/$images";
-
-            if(file_exists($path)) {
-                continue;
+                if(file_exists($path)) {
+                    continue;
+                }
+                else {
+                    $errorSummary[] = $images;
+                     
+                } 
             }
-            else {
-                $errorSummary[] = $images;
-                $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
-            }
+            $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
         }
         if(!empty($errorSummary)) {
             $jsonp = "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
