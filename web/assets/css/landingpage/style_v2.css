@@ -566,7 +566,9 @@ float: left;
   max-width: 41.5%;
   width: 100%;
 }
-
+.reqfield{
+    background-color: #efefef;
+}
 .reg2_password input,
 .reg2_confirmpassword input,
 .reg2_email input,
