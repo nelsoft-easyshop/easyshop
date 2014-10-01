@@ -19,13 +19,13 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
-                                    <?php $isSelected = true; foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                                    <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
                                             <li>
-                                                <span style="display: <?php echo $isSelected ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
                                         </a>
-                                    <?php $isSelected = false; endforeach;?>
+                                    <?php endforeach;?>
                                 </ul>
                             </div>
                         </div>
@@ -95,8 +95,8 @@
                     </select>
                     <div class="clear"></div>
                 </div>
-                <?php $divCounter = 0; foreach($defaultCatProd as $catId => $arrCat):?>
-                <div class="view row row-items grid category-products <?php echo $divCounter === 0 ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $divCounter>0 ? 'none' : ''?>" data-group="<?php echo $catId?>">
+                <?php foreach($defaultCatProd as $catId => $arrCat):?>
+                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" data-group="<?php echo $catId?>">
                     <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
                     <?php if($arrCat['non_categorized_count'] === 0): ?>
@@ -126,7 +126,7 @@
 
                 </div>
 
-                <?php $divCounter++; endforeach;?>
+                <?php endforeach;?>
 
             </div>
         </div>

@@ -342,6 +342,18 @@ class Home extends MY_Controller
                     , "prodLimit" => $this->vendorProdPerPage
                 );
 
+                //Determine active Div for first load
+                $showFirstDiv = TRUE;
+                foreach($data['defaultCatProd'] as $catId => $catDetails){
+                    if( isset($productView['isSearching']) ){
+                        $data['defaultCatProd'][$catId]['isActive'] = (int)$catId === 0 ? TRUE : FALSE;
+                    }
+                    else{
+                        $data['defaultCatProd'][$catId]['isActive'] = $showFirstDiv;
+                        $showFirstDiv = FALSE;
+                    }
+                }
+
                 // Load Location
                 $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
                 $cart = array();
