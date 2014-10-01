@@ -1,7 +1,22 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,700,300);
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Lt.ttf);
+font-weight: normal;
+}
+
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
+font-weight: bold;
+}
+
 /*** global style ***/
 html, body{
+    font-family: 'Helvetica', Arial, Calibri;
     background: #ebedf0;
 }
 
@@ -894,7 +909,7 @@ section {
 
 .row-products{
     min-height: 480px;
-    margin-top: -50px;
+    margin-top: -20px;
 }
 
 .border-1
@@ -912,6 +927,7 @@ section {
 
 .div-product-view-option{
     height: 30px;
+    margin-bottom: 10px;
 }
 
 .bg-product-section{
@@ -929,7 +945,7 @@ section {
     vertical-align: middle !important;
 }
 
-td.td-view.p-view.color-default{
+td.td-view.p-view2.color-default{
     padding-top: 0px !important;
     padding-right: 5px !important;
 }
@@ -989,6 +1005,14 @@ td.td-view.p-view.color-default{
     position:relative;
     z-index:2;
 }
+
+
+.active-category{
+    font-size: 17px;
+    color: #ff893b;
+    padding-right: 5px;
+}
+
 .list-category{
     margin-top: -1px !important;
     margin-bottom: 0px !important;
@@ -1082,6 +1106,11 @@ td.td-view.p-view.color-default{
 .btn-filter:hover{
     background: #272626;
 }
+
+.a-filter, .a-category{
+    cursor: pointer;
+}
+
 /** End of Left Column**/
 
 /** For Item **/
@@ -1107,10 +1136,6 @@ td.td-view.p-view.color-default{
 	padding-right: 5px !important;
 	padding-left: 5px !important;
 	margin-bottom: 11px !important;
-	transition: all 0.5s fade;
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
 }
 
 .grid > .product-paging > .thumb > .panel-item{
@@ -1231,18 +1256,14 @@ td.td-view.p-view.color-default{
     display: none;
 }
 
-.list > .panel-list-item{
+.list > .product-paging > .panel-list-item{
     display: inline-block;
     width:830px;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
     margin-bottom: 10px;
     margin-left: 7px;
 }
 
-.list > .panel-list-item:hover{
+.list > .product-paging > .panel-list-item:hover{
     -webkit-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     -moz-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);

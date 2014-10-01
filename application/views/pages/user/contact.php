@@ -9,7 +9,7 @@
                     <?PHP if ( !isset($user['username']) ) : ?>
                         <div class="jumbotron no-feedback-list">
                             <center>
-                                <strong>Please log in to send a message.</strong>
+                                <strong><span class="fa fa-sign-in"></span> Please log in to send a message.</strong>
                             </center>
                         </div>
                     <?PHP elseif ($message_recipient->getUsername() !== $user['username']) : ?>
@@ -19,13 +19,13 @@
                         <div class="div-message-form">
                             <?php echo form_open('home/sendMessage'); ?>
                             <div class="row">
-                                <div class="col-xs-6 col-message-1">
+                                <div class="col-xs-12 col-message-2">
                                     <input type="text" class="input-lg input-message" placeholder="NAME..." value="<?=$user['username']?>" disabled="disabled"/>
                                     <input type="hidden" name="recipient" value="<?=$message_recipient->getIdMember()?>" id="msg_recipient">
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <textarea class="input-lg input-message" name="msg" rows="7" placeholder="MESSAGE..." id="message"></textarea>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@
                     <?PHP else : ?>
                         <div class="jumbotron no-feedback-list">
                             <center>
-                                <strong>You are not allowed to send message to your self.</strong>
+                                <strong><span class="fa fa-ban">You are not allowed to send message to your self.</strong>
                             </center>
                         </div>
                     <?PHP endif; ?>
