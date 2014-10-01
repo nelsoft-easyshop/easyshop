@@ -76,13 +76,14 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div id="hidden-form">
-                                <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
+                                <?php echo form_open_multipart('/memberpage/upload_img', 'id="form_image"');?>
                                     <input type="file" data-type="avatar" style="visibility:hidden; height:0px; width:0px; position:absolute;" id="imgupload" accept="image/*" name="userfile"/> 
                                     <input type='hidden' name='x' value='0' id='image_x'>
                                     <input type='hidden' name='y' value='0' id='image_y'>
                                     <input type='hidden' name='w' value='0' id='image_w'>
                                     <input type='hidden' name='h' value='0' id='image_h'>
                                     <input type='hidden' name='vendor' value='1' id='vendor-hidden'>
+                                    <input type="hidden" name="url" value="<?=$vendorLink?>">
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
                                     <h1>Position and scale your photo</h1>

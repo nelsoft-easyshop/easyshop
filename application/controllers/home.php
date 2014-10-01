@@ -345,6 +345,7 @@ class Home extends MY_Controller
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
                     , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
                     , "prodLimit" => $this->vendorProdPerPage
+                    , "vendorLink" => ""
                 );
 
                 //Determine active Div for first load
@@ -538,6 +539,7 @@ class Home extends MY_Controller
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
+                    , "vendorLink" => "about"
                 ); 
                 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
@@ -728,6 +730,7 @@ class Home extends MY_Controller
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
+                    , "vendorLink" => "contact"
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
