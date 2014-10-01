@@ -115,11 +115,6 @@ class ValidationRules
                     'region' => array(
                                 new Assert\NotBlank(),
                     ),
-                    'website' => array(
-                                new Assert\NotBlank(),
-                                new Assert\Length(['min' => '5',
-                                                   'max' => '60']),
-                        ),
                 ),
         );
     }

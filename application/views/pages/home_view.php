@@ -32,7 +32,7 @@
            
                 <map name='<?php echo $idx?>_image_map'>
                     <!-- COORDS: left, top, right, bottom -->
-                    <area style='color:' shape="rect" coords="<?=$row['imagemap']['coordinate']?>" href="<?= $row['imagemap']['target']?>" alt="<?=$row['imagemap']['target']?>">
+                    <area style='color:' shape="rect" coords="<?=$row['imagemap']['coordinate']?>" href="<?= $row['imagemap']['target']?>" alt="<?=$row['imagemap']['target']?>" target="_blank">
                 </map>
                 
             <?PHP endforeach; ?>
@@ -83,7 +83,7 @@
 
         <div class="right_panel">
             <div>
-                <a href='<?=base_url()?>deals'><img src="<?= base_url() ?>assets/images/img_easy_treat.jpg" alt="Easy Treat: Best price offer for the day"></a>
+                <a href='/gadgetsgalore'><img src="/assets/images/gadgets-galore-thumbnail.jpg" alt="Gadgets Galore : Buy the latest gadgets at the lowest price"></a>
             </div>
             
             <div class="easy_treat_item">

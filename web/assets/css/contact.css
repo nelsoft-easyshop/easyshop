@@ -142,6 +142,10 @@ section {
     cursor: pointer;
 }
 
+.alert > .close{
+    margin-right: 0px;
+}
+
 .input-detail{
     width: 100%;
     border: solid #ececec 1px;
@@ -158,13 +162,12 @@ section {
 }
 
 .input-detail:focus{
-    border: solid #565656 1px;
+    border: solid #565656 1px !important;
     background: #ffffff;
 }
 
 .input-detail-select{
     height: 29px;
-    
 }
 
 .display-inline{
@@ -172,7 +175,7 @@ section {
 }
 
 .panel-contact-details{
-    min-height: 150px;
+    min-height: 100px;
     width: 100%;
     background: #ffffff;
     border-radius: 4px;
@@ -204,7 +207,7 @@ section {
 }
 .panel-contact-message, .panel-feedback-message{
     width: 100%;
-    min-height: 500px;
+    min-height: 347px;
     background: #ffffff;
     border-radius: 4px;
     padding: 25px 25px;
@@ -244,7 +247,8 @@ section {
 
 .p-about{
     line-height: 20px;
-    
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .textarea-about{
@@ -286,7 +290,7 @@ section {
 }
 
 .input-message:focus{
-    border: solid #565656 2px;
+    border: solid #565656 1px;
     background: #ffffff;
 }
 
@@ -450,6 +454,7 @@ section {
 }
 
 .a-tab {
+    font-size:14px;
     color: #575759;
     text-decoration: none;
     transition: all 0.5s ease;
@@ -488,7 +493,7 @@ section {
 .col-item-message{
     min-height: 90px;
     border-left: solid #e2e2e2 1px;
-    margin-left: -30px;
+    margin-left: -20px;
     font-style: italic;
 }
 
@@ -535,4 +540,13 @@ section {
 
 .pagination{
     margin: 10px !important;
+}
+
+.text-contact{
+    word-wrap: break-word;
+    width: 200px;
+}
+
+.alert > .close{
+    margin-right: 0px;
 }

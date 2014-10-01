@@ -129,8 +129,7 @@
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
 
-        if(!isNaN(price1) && !isNaN(price2)){
-            currentUrl = removeParam("price", currentUrl);
+        if(!isNaN(price1) && !isNaN(price2)){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
@@ -149,6 +148,47 @@
         }
     }); 
 
+    $('#btn_srch').click(function() {
+        var price1 = parseFloat($('#price1').val());
+        var price2 = parseFloat($('#price2').val()); 
+ 
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#price1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#price2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#price2,#price1");  
+        }
+        else{
+            validateWhiteTextBox("#price2,#price1"); 
+            $("#advsrch").submit();
+        }
+    });
+
+
+    $('#mbtn_srch').click(function() {
+        var price1 = parseFloat($('#mprice1').val());
+        var price2 = parseFloat($('#mprice2').val()); 
+ 
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#mprice1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#mprice2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#mprice2,#mprice1");  
+        }
+        else{
+            validateWhiteTextBox("#mprice2,#mprice1"); 
+            $("#madvsrch").submit();
+        }
+    });
+
     $('.rprice').click(function() {
         var price1 = parseFloat($('#rprice1').val());
         var price2 = parseFloat($('#rprice2').val());
@@ -157,7 +197,6 @@
         currentUrl = removeParam("endprice", currentUrl);
 
         if(!isNaN(price1) && !isNaN(price2)){
-            currentUrl = removeParam("price", currentUrl);
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
@@ -312,6 +351,8 @@
             $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
         }
     });
+
+
 
     $(function () {
         $.scrollUp({

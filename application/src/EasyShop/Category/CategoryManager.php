@@ -3,12 +3,20 @@
 namespace EasyShop\Category;
 
 /**
- * Promo Class
+ *  Promo class
  *
- * @author Ryan Vasquez
+ *  @author Ryan Vasquez
+ *  @author stephenjanz
  */
 class CategoryManager
 {
+    /**
+     *  Entity Manager Instance
+     *
+     *  @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
     /**
      * Codeigniter Config Loader
      *
@@ -17,17 +25,9 @@ class CategoryManager
     private $configLoader;
 
     /**
-     * Entity Manager instance
-     *
-     * @var Doctrine\ORM\EntityManager
+     *  Constructor. Retrieves Entity Manager instance
      */
-    private $em;
-
-
-    /**
-     * Constructor.
-     */
-    public function __construct($configLoader,$em)
+    public function __construct($configLoader, $em)
     {
         $this->configLoader = $configLoader;
         $this->em = $em;
@@ -53,6 +53,57 @@ class CategoryManager
         return $categoryList;
     }
 
+    /**
+     *  Create custom category for memberId @table es_member_cat
+     *
+     *  @param string $catName - category name
+     *
+     *  @return integer $lastId
+     */
+    public function createCustomCategory($catName, $memberId)
+    {
+        $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        $category = new EsMemberCat();
+        $category->setCatName($catName)
+                 ->setMember($memberObj);
+        $this->em->persist($category);
+        $this->em->flush();
+
+        return $category;
+    }
+
+    /**
+     *  Set category as featured @table es_member_cat. is_featured = 1
+     *  Pass an array of categoryIDs for batch updating.
+     *
+     *  @param array $catId - category ID
+     */
+    public function setCustomCategoryAsFeatured($catId, $memberId)
+    {
+        $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+
+        if( !is_array($catId) ){
+            $catId = array($catId);
+        }
+
+        foreach($catId as $categoryId){
+            $category = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                ->findOneBy(array(
+                                                'idMemcat' => $categoryId, 
+                                                'member' => $memberObj
+                                            ));
+            $category->setIsFeatured(1);
+            $this->em->persist($category);
+        }
+
+        $this->em->flush();
+    }
+
+    /**
+     * Set the image/icon of the category
+     * @param mixed $categoryList
+     * @return mixed
+     */
     public function setCategoryImage($categoryList)
     {
         foreach($categoryList as $key => $value){ 
@@ -64,4 +115,4 @@ class CategoryManager
         
         return $categoryList;
     }
-}
+} 

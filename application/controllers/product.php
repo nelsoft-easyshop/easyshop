@@ -33,7 +33,7 @@ class product extends MY_Controller
         // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter = $this->input->get() ? $this->input->get() : array();
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
         $response['products'] = $searchProductService->getProductBySearch($getParameter);
 
@@ -62,7 +62,7 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter = $this->input->get() ? $this->input->get() : array();
             $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
@@ -398,6 +398,7 @@ class product extends MY_Controller
                 }
                 $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
             }
+
             
             $data = array_merge($data,array( 
                 'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
@@ -416,8 +417,27 @@ class product extends MY_Controller
                 'shiploc' => $this->product_model->getLocation(),
                 'banner_view' => $banner_view,
                 'payment_method' => $payment_method_array,
-                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
                 ));
+            
+            $categoryManager = $this->serviceContainer['category_manager'];
+            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                        ->findBy(['parent' => 1]);
+            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+            $parentCategories = $categoryManager->setCategoryImage($protectedCategory);
+
+            
+            // category navigation of desktop version
+            $data['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
+                                                                    ['parentCategory' =>   $parentCategories,
+                                                                     'environment' => 'desktop']
+                                                   , TRUE );
+
+            // category navigation of mobile version
+            $data['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
+                                                                    ['parentCategory' =>   $parentCategories,
+                                                                     'environment' => 'mobile']
+                                                  , TRUE );
+
             $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
             $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');

@@ -931,30 +931,23 @@ class Payment extends MY_Controller{
  
    }
 
-    #JUST FUNCTIONS
 
-
-
-   function removeItemFromCart()
-   {
-        $carts = $this->session->all_userdata();
-        if(isset($carts['choosen_items'])){
-            foreach ($carts['choosen_items'] as $key => $value) {
-
-                $carts['cart_contents'][$key]['qty'] = 0 ;
-                $this->cart->update($carts['cart_contents'][$key]);
-                unset($carts['cart_contents'][$key]);
-                $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
-                $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
+    /**
+     * Remove the chosen items for checkout from the cart
+     *
+     */
+    public function removeItemFromCart()
+    {
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $cartCheckout = $this->session->userdata('choosen_items');
+        $memberId = $this->session->userdata('member_id');
+        if($cartCheckout){
+            foreach($cartCheckout as $rowId => $cartItem){
+                $cartManager->removeItem($memberId, $rowId);
             }
-
-            if(sizeof($carts['cart_contents']) == 2){
-                unset($carts['cart_contents']['total_items']);
-                unset($carts['cart_contents']['cart_total']);
-            }   
-
         }
         $this->session->unset_userdata('choosen_items');
+
     }
 
     /**
