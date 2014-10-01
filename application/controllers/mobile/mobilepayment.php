@@ -52,13 +52,14 @@ class mobilePayment extends MY_Controller
         $this->session->set_userdata('member_id', $memberId); 
     }
 
+
     public function doPaymentReview()
     { 
         $paymentController = $this->loadController('payment');
         $remove = $this->payment_model->releaseAllLock($this->member->getIdMember());
         $qtySuccess = $paymentController->resetPriceAndQty();
-         $itemArray = $this->session->userdata('choosen_items');
+        $itemArray = $this->session->userdata('choosen_items');
 
-         print_r( $itemArray );exit();
+        print_r( $itemArray );exit();
     }
 }
