@@ -1,5 +1,5 @@
 <?PHP
-
+use Doctrine\ORM\Query\ResultSetMapping;
 class ScratchCard extends MY_Controller
 {
 
@@ -64,12 +64,28 @@ class ScratchCard extends MY_Controller
         $data['metadescription'] = 'Scratch-to-win-promo';
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
         $viewData['product'] = $this->product_model->validateScratchCardCode($this->input->get('code'));
+        $viewData['code'] = $this->input->get('code');
         if (!$viewData['product']) {
             redirect('/Scratch-And-Win', 'refresh');
         }
         else if (intval($viewData['product']['c_id_code']) !== 0) {
             $viewData['product'] = 'purchase-limit-error';
         }
+        $slugs = array(
+            'lg-optimus-g-pro-lite-black',
+            'lg-nexus-5',
+            'apple-iphone-5c-16gb',
+            'lenovo-s820',
+            'lenovo-a316i-black',
+            'lg-optimus-l5-black'
+        );
+        $product = array();
+        foreach($slugs as $slug){
+            $dbProduct = $this->product_model->getProductBySlug($slug, false);
+            $product[] = $dbProduct;
+        }
+        $viewData['gadgets_galore'] = $product;
+
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
@@ -92,4 +108,24 @@ class ScratchCard extends MY_Controller
         echo json_encode($result);
     }
 
+    /**
+     * ajax - update fullname
+     * @param fullname
+     * @return boolean
+     */
+    public function updateFullname()
+    {
+        $memberId = $this->session->all_userdata()['member_id'];
+        $em = $this->serviceContainer['entity_manager'];
+        $member = $em->find('\EasyShop\Entities\EsMember', ['idMember'=>$memberId]);
+        $member->setFullname($this->input->post('fullname'));
+        $em->persist($member);
+        $em->flush();
+        $result = FALSE;
+        if($member->getFullname() === $this->input->post('fullname')) {
+            $result = true;
+        }
+
+        echo json_encode($result);
+    }
 }

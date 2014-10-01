@@ -15,11 +15,11 @@
                     <img src="/<?=$product['product_image_path']?>">
                 </div>
                 <div class="claim-details">
-                    <p>To claim your price, complete the registration form and visit<br>
-                        Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
-                        Malate, Manila<br>
-                        Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
-                        You may claim your prize until March 1, 2015.<br>
+                    <p>To claim your prize,
+                        visit Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
+                        Malate, Manila
+                        Don't forget to bring the winning scratch card AND two (2) valid ID's
+                        You may claim your prize until March 1, 2015.
                         Contact us for more information: (02) 353-0062 or (02)353-8337.
                     </p>
                 </div>
@@ -46,23 +46,52 @@
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
         <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?=$product['product']?>"
-                data_price="<?=$product['price']?>" data_code="<?PHP echo $_GET['code'];?>">
+                data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user['fullname'] ? TRUE : FALSE ?>">
         </span>
         <div class="claim-bg">
             <div id="prod_image">
-                <img src="/<?=$product['path']?>">
+                <img src="/<?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
-                <p>To claim your price, complete the registration form and visit<br>
+                <p>To claim your prize,  <?=$user['fullname'] ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
                     Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
-                    Malate, Manila<br>
-                    Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
-                    You may claim your prize until March 1, 2015.<br>
+                    Malate, Manila
+                    Don't forget to print this page and bring the
+                    winning scratch card and two (2) valid ID's
+                    You may claim your prize until March 1, 2015.
                     Contact us for more information: (02) 353-0062 or (02)353-8337.
                 </p>
+                <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
+            </div>
+            <div id="div-promo-modal">
+                <h1>Update your Fullname :</h1>
+                <div class="div-promo-modal-container">
+                    <input type="text" id="promo-fullname">
+                </div>
+                <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+                <button class="btn btn-default-3" id="apply-fullname">Apply</button>
             </div>
         </div>
         <input type="text" id="paymentToken" value="<?php echo md5(uniqid(mt_rand(), true)).'3';?>" style="display: none">
+    </div>
+    <div class="promo-gallery">
+        <div class="promo-gallery-header-container">
+            <div class="promo-gallery-header"></div>
+        </div>
+        <div class="promo-gallery-row">
+            <?PHP foreach($gadgets_galore as $product) : ?>
+            <div class="promo-gallery-data">
+                <div class="img-container">
+                    <img class="promo-img" src="/<?=html_escape($product['product_image_path'])?>">
+                </div>
+                <p><?=html_escape($product['product_name'])?></p>
+                <span>Php <?= number_format($product['price'], 2, '.', ',')?></span>
+                <br>
+                <a href="/item/<?=html_escape($product['slug'])?>"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+            </div>
+            <?PHP endforeach; ?>
+
+        </div>
     </div>
     <?PHP endif; ?>
 <?PHP else: ?>
@@ -151,11 +180,6 @@
                     <li>Only residents of the Republic of the Philippines are eligible to participate in this promotion.</li>
                 </ol>
                 <br>
-<!--                <p>-->
-<!--                    Visit <a href="/">www.Easyshop.ph</a> for more details or you may <br>-->
-<!--                    call our customer service at (02)353-0062 or <br>-->
-<!--                    (02)353-8337.-->
-<!--                </p>-->
             </div>
             <div class="scratch-win-error error">
                 <h2>Sorry</h2>
@@ -178,10 +202,11 @@
                         <img src="/">
                     </div>
                     <div class="claim-details">
-                        <p>To claim your price, complete the registration form and visit<br>
+                        <p>To claim your prize, complete the <a href="/">registration</a> form and visit<br>
                             Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                             Malate, Manila<br>
-                            Don't forget to bring the winning scratch card AND two (2) valid ID's<br>
+                            Don't forget to print this page and bring the <br>
+                            winning scratch card and two (2) valid ID's<br>
                             You may claim your prize until March 1, 2015.<br>
                             Contact us for more information: (02) 353-0062 or (02)353-8337.
                         </p>
@@ -223,5 +248,6 @@
         <?PHP endif; ?>
     </div>
     <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
     <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>

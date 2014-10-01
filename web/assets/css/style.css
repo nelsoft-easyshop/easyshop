@@ -3868,6 +3868,7 @@ text-align: right;
 }
 
 .login_box input {
+    background-color: white;
     border: 1px solid #B3B3B3;
     color: #494949;
     height: 25px;

@@ -52,7 +52,42 @@
                 }
             });
         });
-        if($('#checker').length){
+
+        $(document).on('click', '#register', function(){
+            $('#div-promo-modal').modal({
+                escClose: false,
+                containerCss:{
+                    maxWidth: 300,
+                    minWidth: 290,
+                    maxHeight: 220
+                }
+            });
+        });
+        $(document).on('click', '#apply-fullname', function(){
+            var fullname = $('#promo-fullname').val().trim();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            if(fullname === ""){
+                alert('Invalid name');
+                return false;
+            }
+            $.ajax({
+                url : '/promo/ScratchCard/updateFullname',
+                dataType : 'json',
+                type: 'POST',
+                data: {fullname:fullname, csrfname:csrftoken},
+                success: function(result){
+                    if(result === true){
+                        $.modal.close();
+                        alert('Registration complete.');
+                        success();
+                        $('#complete').html('');
+                    }else{
+                        alert('Something went wrong, try again.');
+                    }
+                }
+            });
+        });
+        var success = function() {
             var i_id = $("#checker").attr("data_id");
             var i_name = $("#checker").attr("data_name");
             var i_qty = 1;
@@ -112,6 +147,10 @@
                     }
                 }
             });
+        }
+
+        if ($('#checker').attr('run_js') === '1') {
+           success();
         }
     })
 })(jQuery)
