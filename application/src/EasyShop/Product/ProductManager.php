@@ -372,7 +372,8 @@ class ProductManager
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;
-    } 
+    }
+
     
     /**
      * Returns the recommended products list for a certain product
@@ -410,7 +411,7 @@ class ProductManager
         }
         
         return $products;
-    } 
+    }
 
     /**
      *  Fetch products under parent category, based on child cat ids ($arrCatId)
@@ -508,5 +509,6 @@ class ProductManager
 
         return $result;
     }
+
 }
 

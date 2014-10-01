@@ -96,18 +96,13 @@ class ValidationRules
                 ),
             'vendor_contact' => array(
                     'shop_name' => array(
-                                new Assert\NotBlank(),
-                                new Assert\Length(['min' => '5',
-                                                   'max' => '60']),
+                                new CustomAssert\IsValidStoreNameOptional(),
                     ),
                     'contact_number' => array(
-                                new Assert\NotBlank(),
-                                new CustomAssert\IsValidMobile(),
+                                new CustomAssert\IsValidMobileOptional(),
                     ), 
                     'street_address' => array(
-                                new Assert\NotBlank(),
-                                new Assert\Length(['min' => '5',
-                                                   'max' => '250']),
+                                new CustomAssert\IsValidAddressOptional(),
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
