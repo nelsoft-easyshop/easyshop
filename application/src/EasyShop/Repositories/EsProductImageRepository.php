@@ -26,7 +26,8 @@ class EsProductImageRepository extends EntityRepository
                             ->where('pi.product = :productId')
                             ->andWhere('pi.isPrimary = 1')
                             ->setParameter('productId', $productId)
-                            ->getQuery();
+                            ->getQuery()
+                            ->setMaxResults(1);
 
         $result = $qb->getOneOrNullResult();
         return $result;
