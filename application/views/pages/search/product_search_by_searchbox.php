@@ -63,8 +63,8 @@
                                 <div class="adv_ctr">
                                     <strong style="font-size:14px"><?=$productCount ;?></strong> result<?=(number_format($productCount) > 1)?"s":"";?> found for <strong><?php echo html_escape($string);?></strong>
                                 </div>
-                                <div id="list" class="list <?=($_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
-                                <div id="grid" class="grid <?=($_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
+                                <div id="list" class="list <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+                                <div id="grid" class="grid <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
                                 <div class="clear"></div>
 
                                 <div id="product_content">
