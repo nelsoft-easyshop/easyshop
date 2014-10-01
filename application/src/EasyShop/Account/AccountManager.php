@@ -225,6 +225,5 @@ class AccountManager
 
         return $result['hash'];
     }
-    
-        
+
 }

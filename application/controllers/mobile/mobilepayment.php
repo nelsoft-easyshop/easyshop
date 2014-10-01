@@ -44,10 +44,9 @@ class mobilePayment extends MY_Controller
         return $CI->$object_name = new $class_name();
     }
 
-    public function setDataToSession($memberId)
+    private function setDataToSession($memberId)
     {
-        $cartData = unserialize($this->member->getUserdata());
-        print_r( $cartData );
+        $cartData = unserialize($this->member->getUserdata()); 
         unset($cartData['total_items'],$cartData['cart_total']); 
         $this->session->set_userdata('choosen_items', $cartData);
         $this->session->set_userdata('member_id', $memberId); 
@@ -58,6 +57,8 @@ class mobilePayment extends MY_Controller
         $paymentController = $this->loadController('payment');
         $remove = $this->payment_model->releaseAllLock($this->member->getIdMember());
         $qtySuccess = $paymentController->resetPriceAndQty();
-        
+         $itemArray = $this->session->userdata('choosen_items');
+
+         print_r( $itemArray );exit();
     }
 }

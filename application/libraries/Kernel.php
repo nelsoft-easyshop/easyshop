@@ -80,7 +80,7 @@ class Kernel
             
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
-        
+
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
@@ -98,8 +98,8 @@ class Kernel
         
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager'], 
-                                                  $container['config_loader']);
+            return new \EasyShop\User\UserManager($container['entity_manager']
+                                                ,$container['config_loader']);
         };
         
         //Account Manager
@@ -118,9 +118,11 @@ class Kernel
                                                         $formErrorHelper,
                                                         $stringHelper);        
         };
-        
-        
-        
+
+        $container['message_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            return new \EasyShop\Message\MessageManager($em);
+        };
 
         //Authentication Manager
         $container['account_manager'] = function ($c) use ($container) {

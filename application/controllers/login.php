@@ -97,9 +97,17 @@ class Login extends MY_Controller
             $row = $this->user_model->verify_member($dataval);                 
             #if user is valid: member i, usersession and cart_contents will be set in the session
             if ($row['o_success'] >= 1) {
+            
+                $em = $this->serviceContainer['entity_manager'];
+                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+                $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+            
+                $cartData = unserialize($user->getUserdata());
+                $cartData = $cartData ? $cartData : array();
+            
                 $this->session->set_userdata('member_id', $row['o_memberid']);
                 $this->session->set_userdata('usersession', $row['o_session']);
-                $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
+                $this->session->set_userdata('cart_contents', $cartData);
 
                 if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
                     $temp = array(
@@ -112,14 +120,9 @@ class Login extends MY_Controller
                     $this->user_model->create_cookie($cookieval);
                 }
                 
-                /*
+                /**
                  * Register authenticated session
                  */
-                
-                $em = $this->serviceContainer['entity_manager'];
-                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
-                $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
-
                 $user->setFailedLoginCount(0);
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)

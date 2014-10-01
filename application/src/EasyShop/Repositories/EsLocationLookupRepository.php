@@ -39,6 +39,24 @@ class EsLocationLookupRepository extends EntityRepository
         return $data;
     }
 
+    public function verifyLocationCombination($stateRegionId, $cityId)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT loc, p
+            FROM EasyShop\Entities\EsLocationLookup loc
+            JOIN loc.parent p
+            WHERE loc.idLocation = :city_id
+                AND loc.parent = :stateregion_id
+        ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('city_id', $cityId)
+                    ->setParameter('stateregion_id', $stateRegionId);
+
+        return $query->getResult();
+    }
+
     /**
      * Retrieves Parent Location of a specific location
      */
@@ -51,7 +69,41 @@ class EsLocationLookupRepository extends EntityRepository
 
         return $locationLookup->getParent();
     }
+ 
+    public function getLocationLookup()
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+ 
+        $qbResult = $qb->select('loc')
+                        ->from('EasyShop\Entities\EsLocationLookup','loc')
+                        ->where(
+                                    $qb->expr()->in('loc.type', [EsLocationLookup::TYPE_COUNTRY
+                                                                ,EsLocationLookup::TYPE_STATEREGION
+                                                                ,EsLocationLookup::TYPE_CITY])
+                                )
+                        ->orderBy('loc.location', 'ASC')
+                        ->getQuery();
 
+        $result = $qbResult->getResult();
+
+        foreach($result as $key => $value){
+            $locationType = intval($value->getType());
+            if($locationType === 0){ 
+                $data['countryName'] = $value->getLocation();
+                $data['countryId'] =  $value->getidLocation();
+            }
+            else if($locationType === 3){
+                $data['stateRegionLookup'][$value->getidLocation()] = $value->getLocation();
+            }
+            else if($locationType === 4){
+                $data['cityLookup'][$value->getParent()->getIdLocation()][$value->getidLocation()] = $value->getLocation();
+            }
+        }
+
+        return $data;
+    }
+ 
     /**
      * Retrieves locations with the given type
      */
@@ -105,6 +157,6 @@ class EsLocationLookupRepository extends EntityRepository
                         ->getQuery()
                         ->getResult();
         return $locations;
-    }
+    } 
 }
 

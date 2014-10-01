@@ -25,7 +25,7 @@
                         </p>
                         <div class="div-about-edit-area">
                             <?php echo form_open('home/doUpdateDescription') ?>
-                                <textarea class="input-lg input-message textarea-about" name='description' rows="12" placeholder='Say something about your shop...'"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
+                                <textarea class="input-lg input-message textarea-about" name='description' rows="12" id="description" placeholder="'Say something about your shop...'" data-value="<?php echo html_escape($member->getStoreDesc()); ?>"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
                                 <center>
                                     <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
                                 </center>
@@ -176,7 +176,6 @@
     
     <input type = 'hidden' id='memberid' value='<?php echo html_escape($member->getIdMember()); ?>'/> 
 </section>
-
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/userabout.js?ver=<?php echo ES_FILE_VERSION?>"></script>
