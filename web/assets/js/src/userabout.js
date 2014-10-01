@@ -53,7 +53,7 @@
         animation: 'fade', // Fade, slide, none
         animationInSpeed: 100, // Animation in speed (ms)
         animationOutSpeed: 100, // Animation out speed (ms)
-        scrollText: '<i class="fa fa-angle-up"></i>', // Text for element, can contain HTML
+        scrollText: '', // Text for element, can contain HTML
         scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
         scrollImg: false, // Set true to use image
         activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
