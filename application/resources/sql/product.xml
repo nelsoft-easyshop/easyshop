@@ -1017,7 +1017,7 @@ FROM
     LEFT JOIN es_product_image pi
         ON pi.product_id = p.id_product and pi.is_primary = 1
     WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.id_product DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT :item_count
 </select>
 
