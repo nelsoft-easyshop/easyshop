@@ -707,7 +707,7 @@ FROM
 </select>
 
 <select id="updateIsDelete">
-        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = NOW()  where member_id = :memberid AND id_product = :productid
+        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = :datenow  where member_id = :memberid AND id_product = :productid
 </select>
 
 <select id="checkifexistcategory">
