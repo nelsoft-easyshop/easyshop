@@ -100,9 +100,10 @@ class SyncCsvImage extends MY_Controller
                      
                 } 
             }
-            $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);
+
         }
         if(!empty($errorSummary)) {
+            $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);            
             $jsonp = "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
             return $this->output
                 ->set_content_type('application/json')
