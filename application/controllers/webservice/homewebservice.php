@@ -474,12 +474,13 @@ class HomeWebService extends MY_Controller
         $type = $this->input->get("type");
         $value =  $this->input->get("myfile");
 
+
         $index = (int)$index;
         $productindex = (int)$productindex;
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if(!$product){
+        if(!$product && strtolower($type) !== "image"){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -490,9 +491,8 @@ class HomeWebService extends MY_Controller
                 $filename = date('yhmdhs');
                 $file_ext = explode('.', $_FILES['myfile']['name']);
                 $file_ext = strtolower(end($file_ext));  
-                $path_directory = 'assets/product/';   
+                $path_directory = 'assets/images/';   
                 $value = $path_directory.$filename.'.'.$file_ext;    
-
 
                 $this->upload->initialize(array( 
                     "upload_path" => $path_directory,
@@ -562,11 +562,11 @@ class HomeWebService extends MY_Controller
         
         $index = (int)$index;
         $productindex = (int)$productindex;
-        $value = !empty($_FILES['myfile']['name']) ? $value :  $map->section[$index]->product_panel_main[$productindex]->value;
+        $valueForImage = !empty($_FILES['myfile']['name']) ? $value :  $map->section[$index]->product_panel_main[$productindex]->value;
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if(!$product){
+        if(!$product && strtolower($type) !== "image"){
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($slugerrorjson);
@@ -579,7 +579,7 @@ class HomeWebService extends MY_Controller
                     $file_ext = explode('.', $_FILES['myfile']['name']);
                     $file_ext = strtolower(end($file_ext));  
                     $path_directory = 'assets/images/';   
-                    $value = $path_directory.$filename.'.'.$file_ext;   
+                    $valueForImage = $path_directory.$filename.'.'.$file_ext;   
                     $value = !empty($_FILES['myfile']['name']) ? $valueForImage :  $map->section[$index]->product_panel[$productindex]->value;         
 
                     $this->upload->initialize(array( 

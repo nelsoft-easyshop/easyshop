@@ -359,7 +359,7 @@ class Home extends MY_Controller
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$data);
                 $this->load->view('pages/user/vendor_view', $data);
-                $this->load->view('templates/footer_new');
+                $this->load->view('templates/footer_vendor', ['sellerSlug' => $vendorSlug]);
             }
         }
         // Load invalid link error page
@@ -546,7 +546,7 @@ class Home extends MY_Controller
                                                'isEditable' =>  $isEditable,
                                                'userDetails' => $userDetails,
                                               ]);
-        $this->load->view('templates/footer_new');
+        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
     
     
@@ -722,7 +722,7 @@ class Home extends MY_Controller
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
         $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
-        $this->load->view('templates/footer_new');
+        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
 
     /**
