@@ -80,6 +80,7 @@
                         $.modal.close();
                         alert('Registration complete.');
                         success();
+                        $('#complete').html('');
                     }else{
                         alert('Something went wrong, try again.');
                     }
