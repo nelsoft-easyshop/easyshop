@@ -78,7 +78,7 @@ class SyncCsvImage extends MY_Controller
      */ 
     private function checkIfImagesExist($checkImagesId)
     {
-
+        $flag = 0;
         $errorSummary = array();
         foreach($checkImagesId["product"] as $ids)
         {
@@ -96,14 +96,15 @@ class SyncCsvImage extends MY_Controller
                 else {
                     if(!in_array($images,$errorSummary)){
                         $errorSummary[] = $images;
+                        $flag = 1;
                     }
-                     
                 } 
             }
-
+            if($flag == 1){
+                $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);                            
+            }
         }
         if(!empty($errorSummary)) {
-            $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);            
             $jsonp = "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
             return $this->output
                 ->set_content_type('application/json')
