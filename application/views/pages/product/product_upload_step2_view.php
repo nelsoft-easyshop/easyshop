@@ -485,7 +485,7 @@
                         <div class="add_category_submit">
                             <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
                             <div class="loader_div" style="display:none">
-                                <img src='/assets/images/loading/preloader-whiteBG.gif'>
+                                <img src='/assets/images/orange_loader.gif'>
                                 <div class="percentage"></div>
                             </div>                            
                         </div> 
