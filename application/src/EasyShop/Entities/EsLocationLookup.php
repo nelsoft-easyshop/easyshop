@@ -61,6 +61,11 @@ class EsLocationLookup
     const TYPE_CITY = 4;
 
     /**
+     *  @var integer
+     */
+    const DEFAULT_REGION = 39;
+
+    /**
      * Get idLocation
      *
      * @return integer 

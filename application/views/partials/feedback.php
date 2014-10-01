@@ -7,10 +7,14 @@
                 <div class="col-xs-2 no-padding">
                     <center>
                         <div class="div-user-image">
-                            <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                            <a href="/<?php echo $feedback['userslug']?>">
+                                <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                            <a/>
                         </div>
                         <p class="p-user-name">
-                            <?php echo html_escape($feedback['username']); ?>
+                            <a href="/<?php echo $feedback['userslug']?>">
+                                <?php echo html_escape($feedback['username']); ?>
+                            </a>
                         </p>
                         <p class="p-date-feedback">
                             <?php echo $feedback['dateadded']->format('jS F, Y'); ?>
