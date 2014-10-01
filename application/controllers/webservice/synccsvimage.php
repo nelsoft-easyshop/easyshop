@@ -94,7 +94,9 @@ class SyncCsvImage extends MY_Controller
                     continue;
                 }
                 else {
-                    $errorSummary[] = $images;
+                    if(!in_array($images,$errorSummary)){
+                        $errorSummary[] = $images;
+                    }
                      
                 } 
             }
