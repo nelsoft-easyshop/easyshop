@@ -12,7 +12,7 @@ class EsAdminImagesRepository extends EntityRepository
      * Inserts image name under es_admin_images 
      * @param string $filename
      */    
-    public function insertImages($filename)
+    public function insertImage($filename)
     {
 
         $checkfilename = str_replace(' ', '_', $filename);
