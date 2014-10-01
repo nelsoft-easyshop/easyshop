@@ -132,7 +132,7 @@
                                 </div>
                             </div>                            
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <select id="feedback-select" class="input-lg input-message" name="feeback-order">
                                         <option value="0">Select the transaction you want to review</option>
                                         <?php foreach($orderRelations as $order): ?>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-12 col-message-2">
                                     <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
                                 </div>
                             </div>

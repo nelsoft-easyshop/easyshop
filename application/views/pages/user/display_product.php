@@ -88,11 +88,9 @@
                             <p class="p-list-discount">
                                 <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                             </p>
-                            <center>
-                                <a class="btn btn-default-1" target="_blank" href="/item/<?=$productSlug; ?>" >
-                                    <span class="fa fa-shopping-cart"></span> BUY NOW
-                                </a>
-                            </center>
+                            <a class="btn btn-default-1" target="_blank" href="/item/<?=$productSlug; ?>" >
+                                <span class="fa fa-shopping-cart"></span> BUY NOW
+                            </a>
                         </td>
                     </tr>
                 </table>
