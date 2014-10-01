@@ -332,10 +332,7 @@ function proceedStep3(url)
         beforeSubmit : function(arr, $form, options){
 
             var combination = processCombination();
-            console.log(combination);
             var attributes = processAttributes(); 
-            console.log(attributes);
-
             var percentVal = '0%';
             $('.percentage').html(percentVal);
             $( ".button_div" ).hide();
@@ -1307,7 +1304,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt){
                     if (evt.lengthComputable) {
-                        var percentComplete = evt.loaded / evt.total;
+                        var percentComplete = evt.loaded / evt.total * 100.0;
                         console.log(percentComplete);
                     }
                 }, false);
@@ -1436,7 +1433,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/orange_loader.gif');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/loading/preloader-whiteBG.gif');
             },
             success :function(d) {   
                 canProceed = true;
