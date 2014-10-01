@@ -945,6 +945,7 @@ class product_model extends CI_Model
         $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
         $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
         $sth->bindParam(':is_delete', $is_delete,PDO::PARAM_INT);
+        $sth->bindParam(':datenow', date('Y-m-d H:i:s'));
 
         $sth->execute();
     }
