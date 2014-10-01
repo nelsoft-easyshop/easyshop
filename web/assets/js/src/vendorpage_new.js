@@ -90,7 +90,7 @@ function ReplaceNumberWithCommas(thisnumber){
         }
         else {
             tempval = Math.abs(v);
-            this.value = tempval.toFixed(2);
+            this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
         }
     });
 

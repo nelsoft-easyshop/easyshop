@@ -56,7 +56,7 @@
                                     </li>
                                     <li>
                                         <p class="p-filter-name">By Price</p>
-                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field" placeholder="0.00"/>
+                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field"/>
                                     </li>
                                     <li>
                                         <center>
