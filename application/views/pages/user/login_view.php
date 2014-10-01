@@ -5,6 +5,8 @@
 
 
 <div class="res_wrapper login_content">
+    <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
+    <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
 
     <div class="login-tli-con" id="failed-login">
         <div class="border-all border-rad-3">
@@ -25,7 +27,7 @@
             <div class="clear"></div>
         </div>
     </div>
-        
+
     <div class="border-all border-rad-3" id="login-form">
         <div class="col-md-12 border-bottom bg-cl-f7f7f7">
             <div class="pd-tb-8">
