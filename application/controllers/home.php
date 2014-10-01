@@ -814,7 +814,7 @@ class Home extends MY_Controller
         $data = array(
             'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage),
+            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage, " lastmodifieddate DESC , "),
             'followed_users' =>  $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
