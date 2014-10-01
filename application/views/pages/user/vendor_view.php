@@ -11,7 +11,7 @@
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
+                                <a id="toggle-cat" class="a-category" data-parent="#category">
                                     CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
@@ -20,7 +20,7 @@
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><?php echo $arrCat['name']?></li></a>
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories"><li><span class="fa fa-caret-right active-category"></span>  <?php echo $arrCat['name']?></li></a>
                                     <?php endforeach;?>
                                 </ul>
                             </div>
@@ -31,12 +31,12 @@
                     <div class="panel panel-default  border-0 no-padding" id="filter-header">
                         <div class="panel-heading border-0 panel-category-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
+                                <a id="toggle-filter" class="a-filter" data-parent="#filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
                         </div>
-                        <div id="filter-list" class="panel-collapse collapse in">
+                        <div id="filter-list1" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-filter">
                                     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -52,7 +52,7 @@
                                     </li>
                                     <li>
                                         <p class="p-filter-name">By Price</p>
-                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field"/>
+                                        from <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00"/> to <input id="filter-uprice" type="text" class="input-filter-price price-field" placeholder="0.00"/>
                                     </li>
                                     <li>
                                         <center>
@@ -71,7 +71,7 @@
                 <div class="div-product-view-option">
                     <table class="p-view color-default pull-left">
                         <tr>
-                            <td class="td-view p-view color-default">VIEW STYLE:</td>
+                            <td class="td-view p-view2 color-default">VIEW STYLE:</td>
                             <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-th-large fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-th-list fa-2x icon-view icon-list"></span></td>
                         </tr>
                     </table>
