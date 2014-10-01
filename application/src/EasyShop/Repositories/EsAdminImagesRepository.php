@@ -15,19 +15,20 @@ class EsAdminImagesRepository extends EntityRepository
     public function insertImages($filename)
     {
 
+        $checkfilename = str_replace(' ', '_', $filename);
 
         $qb = $this->_em->createQueryBuilder()
                             ->select('pi')
                             ->from('EasyShop\Entities\EsAdminImages','pi')
                             ->where('pi.imageName = :name')
-                            ->setParameter('name', $filename)
+                            ->setParameter('name', $checkfilename)
                             ->getQuery();
 
         $result = $qb->getResult();
 
         $adminImage = new EsAdminImages;
         if(!$result) {
-            $adminImage->setImageName($filename);
+            $adminImage->setImageName($checkfilename);
             $this->_em->persist($adminImage);
             $this->_em->flush();        
 
