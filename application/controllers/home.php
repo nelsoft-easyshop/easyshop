@@ -266,11 +266,13 @@ class Home extends MY_Controller
         $vendorSlug = $this->uri->segment(1);
         $session_data = $this->session->all_userdata();
 
-        $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                            ->getVendorDetails($vendorSlug);
+        $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
+                           ->findOneBy(['slug' => $vendorSlug]);
+
         // User found - valid slug
-        if( !empty($arrVendorDetails) ){
+        if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);
+            
             if($pageSection === 'about'){
                 $this->aboutUser($vendorSlug);
             }
@@ -278,6 +280,9 @@ class Home extends MY_Controller
                 $this->contactUser($vendorSlug);
             }
             else{
+                $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                                       ->getVendorDetails($vendorSlug);
+
                 $headerData = $this->fill_header();
                 $headerData = array_merge($headerData, array(
                     "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
