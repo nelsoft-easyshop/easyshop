@@ -142,6 +142,10 @@ section {
     cursor: pointer;
 }
 
+.alert > .close{
+    margin-right: 0px;
+}
+
 .input-detail{
     width: 100%;
     border: solid #ececec 1px;
@@ -158,13 +162,12 @@ section {
 }
 
 .input-detail:focus{
-    border: solid #565656 1px;
+    border: solid #565656 1px !important;
     background: #ffffff;
 }
 
 .input-detail-select{
     height: 29px;
-    
 }
 
 .display-inline{
@@ -204,7 +207,7 @@ section {
 }
 .panel-contact-message, .panel-feedback-message{
     width: 100%;
-    min-height: 500px;
+    min-height: 347px;
     background: #ffffff;
     border-radius: 4px;
     padding: 25px 25px;

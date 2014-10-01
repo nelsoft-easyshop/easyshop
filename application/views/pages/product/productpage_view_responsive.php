@@ -571,7 +571,7 @@
                                 <?php endforeach;?>
                                 <div class="clear"></div>
                                 <div class="review_last"> 
-                                    <span id="see_more_reviews" style="font-weight:bold;"><a href="">See more reviews.</a></span> 
+                                    <span id="see_more_reviews" style="font-weight:bold;"><a href="javascript:void(0)">See more reviews.</a></span> 
                                     <img src="/assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
                                     <br/><br/>
                                 </diV>

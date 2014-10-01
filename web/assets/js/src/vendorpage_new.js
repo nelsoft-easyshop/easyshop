@@ -73,6 +73,9 @@ function ReplaceNumberWithCommas(thisnumber){
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
 
+        $('.tab_categories').find('.selected-marker').hide();
+        $(this).find('.selected-marker').show();
+
         if(pagingDiv.length === 0){
             ItemListAjax($(divId), 1);
         }
@@ -87,7 +90,7 @@ function ReplaceNumberWithCommas(thisnumber){
         }
         else {
             tempval = Math.abs(v);
-            this.value = tempval.toFixed(2);
+            this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
         }
     });
 
@@ -202,11 +205,25 @@ function ItemListAjax(CatDiv,page)
     });
 }
 
-
 /********* DESIGNER ************/
 
 (function ($) {
-   
+     $.scrollUp({
+        scrollName: 'scrollUp', // Element ID
+        scrollDistance: 300, // Distance from top/bottom before showing element (px)
+        scrollFrom: 'top', // 'top' or 'bottom'
+        scrollSpeed: 300, // Speed back to top (ms)
+        easingType: 'linear', // Scroll to top easing (see http://easings.net/)
+        animation: 'fade', // Fade, slide, none
+        animationInSpeed: 100, // Animation in speed (ms)
+        animationOutSpeed: 100, // Animation out speed (ms)
+        scrollText: '', // Text for element, can contain HTML
+        scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
+        scrollImg: false, // Set true to use image
+        activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+        zIndex: 2147483647, // Z-Index for the overlay
+    });
+
     //create a stick nav
     var menuOffset = $('.vendor-sticky-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
     $(document).bind('ready scroll', function() {
@@ -227,8 +244,8 @@ function ItemListAjax(CatDiv,page)
                 $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
             }
     });
-
-    $(".row-items").ready(function(){
+    
+    $(document).ready(function(){
         $('[rel=tooltiplist]').tooltip({
             placement : 'top'
         });
@@ -257,7 +274,7 @@ function ItemListAjax(CatDiv,page)
     });
     
     
-    $(".div-product-view-option").on('click','.icon-grid',function() {
+    $(document).on('click','.icon-grid',function() {
         var div = $("div.view");
         
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("list") )
@@ -270,7 +287,7 @@ function ItemListAjax(CatDiv,page)
         }
     });
 
-    $(".div-product-view-option").on('click','.icon-list',function() {   
+    $(document).on('click','.icon-list',function() {   
         var div = $("div.view");
     
         if( div.hasClass("view") && div.hasClass("row") && div.hasClass("row-items") && div.hasClass("grid") )
@@ -283,19 +300,17 @@ function ItemListAjax(CatDiv,page)
         };
     });
     
-    $("#left-wing").ready(function(){
+
+    $(document).ready(function(){
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
         $( "#toggle-filter" ).click(function() {
           $( "#filter-list1" ).slideToggle( "slow" );
-        });
-    });
-        
-    $(".div-product-view-option").ready(function(){
+        });        
         $( ".icon-list" ).click(function() {
           $( ".panel-item" ).hide();
-          $( ".panel-list-item" ).fadeIn( "fast" );
+          $( ".panel-list-item" ).fadeIn( "slow" );
         });
         
         $( ".icon-grid" ).click(function() {
@@ -304,5 +319,5 @@ function ItemListAjax(CatDiv,page)
         });
     
     });
-    
+
 })(jQuery);

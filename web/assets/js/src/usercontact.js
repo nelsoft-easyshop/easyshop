@@ -2,7 +2,11 @@
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
 
-        if($( "#displayStoreName" ).val() == "" || $( "#displayContactNo" ).val() == "" || $( "#displayStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
+        if( $( "#displayStoreName" ).val() == ""        || ($( "#displayContactNo" ).val() == ""    || 
+            $( "#displayContactNo" ).val().length < 11) || $( "#displayStreetAddr" ).val() == ""    || 
+            parseInt($('#errorCount').val()) > 0        || $( "#displayCity" ).val() == ""          || 
+            $( "#displayRegion" ).val() == ""){
+            
             $( "#editIconOpen" ).click();
         }
         else{
@@ -35,18 +39,10 @@
         $("#editIconOpen").css("display","none");
         $(".text-contact").css("display","none");
 
-        if($( "#storeName" ).val() == ""){
-            $( "#storeNameRow" ).show();
-        }
-        if($( "#contactNo" ).val() == ""){
-            $( "#contactNoRow" ).show();
-        }
-        if($( "#streetAddr" ).val() == ""){
-            $( "#addressRow" ).show();
-        }
-        if($( "#website" ).val() == ""){
-            $( "#websiteRow" ).show();
-        }
+        $( "#storeNameRow" ).show();
+        $( "#contactNoRow" ).show();
+        $( "#addressRow" ).show();
+        $( "#websiteRow" ).show();
      });
     
      $( "#editIconClose" ).click(function() {
@@ -63,17 +59,30 @@
             $( "#storeName" ).val($("#displayStoreName").val());
         }
 
-        if($( "#displayContactNo" ).val() == ""){
+        if($( "#displayContactNo" ).val() == "" || $( "#displayContactNo" ).val().length < 11){
             $( "#contactNoRow" ).hide();
         }
         else{
             $( "#contactNo" ).val($("#displayContactNo").val());
         }
 
-        $( "#streetAddr" ).val($("#displayStreetAddr").val());
-        $( "#regionSelect" ).val($("#displayRegion").val());
-        $( "#regionSelect" ).change();
-        $( "#citySelect" ).val($("#displayCity").val());
+        if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == "" && $("#displayStreetAddr").val() == ""){
+            $( "#addressRow" ).hide();
+        }
+        
+        if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == ""){
+            $( "#regionSelect" ).val($("#defaultRegion").val());
+            $( "#regionSelect" ).change();
+            $( "#citySelect" ).val($("#displayCity").val());
+        }   
+        else{
+            $( "#regionSelect" ).val($("#displayRegion").val());
+            $( "#regionSelect" ).change();
+            $( "#citySelect" ).val($("#displayCity").val());
+        }
+        
+        var addr = $("#displayStreetAddr").val();
+        $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
 
         if($( "#displayWebsite" ).val() == ""){
             $( "#websiteRow" ).hide();

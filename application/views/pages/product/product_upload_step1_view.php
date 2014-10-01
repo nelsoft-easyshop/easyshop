@@ -87,8 +87,8 @@
                             <div class="category_list_container" id="container_level01">
                                 <?php foreach ($firstlevel as $row): ?>
                                     <div class="border-rad-3">
-                                        <a href="javascript:void(0)" data-parentid="<?=$row['parent_id']; ?>" data-catid="<?=$row['id_cat']; ?>" data-level="0" data-name="<?=addslashes ($row['name']); ?>"  class="category_link display-ib">
-                                           <?=$row['name']; ?>
+                                        <a href="javascript:void(0)" data-parentid="<?=$row['parent_id']; ?>" data-catid="<?=$row['id_cat']; ?>" data-level="0" data-name="<?=html_escape($row['name']); ?>"  class="category_link display-ib">
+                                           <?=html_escape($row['name']); ?>
                                         </a>
                                     </div>
                                 <?php endforeach; ?>

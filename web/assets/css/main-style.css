@@ -1,7 +1,22 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,700,300);
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Lt.ttf);
+font-weight: normal;
+}
+
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
+font-weight: bold;
+}
+
 /*** global style ***/
 html, body{
+    font-family: 'Helvetica', Arial, Calibri;
     background: #ebedf0;
 }
 
@@ -899,7 +914,7 @@ section {
 
 .row-products{
     min-height: 480px;
-    margin-top: -30px;
+    margin-top: -20px;
 }
 
 .border-1
@@ -917,6 +932,7 @@ section {
 
 .div-product-view-option{
     height: 30px;
+    margin-bottom: 10px;
 }
 
 .bg-product-section{
@@ -934,7 +950,7 @@ section {
     vertical-align: middle !important;
 }
 
-td.td-view.p-view.color-default{
+td.td-view.p-view2.color-default{
     padding-top: 0px !important;
     padding-right: 5px !important;
 }
@@ -1006,6 +1022,14 @@ td.td-view.p-view.color-default{
     position:relative;
     z-index:2;
 }
+
+
+.active-category{
+    font-size: 17px;
+    color: #ff893b;
+    padding-right: 5px;
+}
+
 .list-category{
     margin-top: -1px !important;
     margin-bottom: 0px !important;
@@ -1105,6 +1129,11 @@ td.td-view.p-view.color-default{
 .btn-filter:hover{
     background: #272626;
 }
+
+.a-filter, .a-category{
+    cursor: pointer;
+}
+
 /** End of Left Column**/
 
 /** For Item **/
@@ -1130,6 +1159,7 @@ td.td-view.p-view.color-default{
     padding-right: 5px !important;
     padding-left: 5px !important;
     margin-bottom: 11px !important;
+
 }
 
 .grid > .product-paging > .thumb > .panel-item{
@@ -1260,7 +1290,7 @@ td.td-view.p-view.color-default{
 
 .list > .product-paging > .panel-list-item{
     display: inline-block;
-    width:825px;
+    width:830px;
     margin-bottom: 10px;
     margin-left: 7px;
     transition: all 0.5s ease;
