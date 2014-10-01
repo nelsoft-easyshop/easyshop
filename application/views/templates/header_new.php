@@ -102,7 +102,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </a>
                         </div>
                         <div class="header-cart-item-con">
-                            <a href=""><span><?=$cart_items[$cnt]['name']?></span></a>
+                            <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
                             <span>x <?=$cart_items[$cnt]['qty']?></span>
                             <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
                         </div>
