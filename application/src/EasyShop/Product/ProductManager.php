@@ -473,8 +473,55 @@ class ProductManager
         return $result;
     }
 
+    /**
+     * Creates directories, checks if the passed image name exists in the admin folder
+     * @param int $imagesId
+     * @return JSONP
+     */ 
+    public function imageresize($imageDirectory, $newDirectory, $dimension)
+    {
+        $CI =& get_instance();
+        $CI->load->library('image_lib');               
 
+        $config['image_library'] = 'GD2';
+        $config['source_image'] = $imageDirectory;
+        $config['maintain_ratio'] = true;
+        $config['quality'] = '85%';
+        $config['new_image'] = $newDirectory;
+        $config['width'] = $dimension[0];
+        $config['height'] = $dimension[1]; 
 
+        $CI->image_lib->initialize($config); 
+        $CI->image_lib->resize();
+        $CI->image_lib->clear();        
+    } 
 
+    /**
+     * Generates slugs for csv products upload
+     * @param string $title
+     * @return STRING
+     */ 
+    public function generateSlugForCSVProducts($title)   
+    {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $title]);
+
+        $cnt = count($product);
+        if($cnt > 0) {
+            $slugGenerate = $title."-".$cnt++;
+        }
+        else {
+            $slugGenerate = $title;
+        }
+        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $slugGenerate]);
+
+        if(count($checkIfSlugExist) > 0 ){
+            foreach($checkIfSlugExist as $newSlugs){
+                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
+            }
+        }
+        return $slugGenerate;
+    }
 }
 
