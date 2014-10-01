@@ -9,7 +9,7 @@
                     <?PHP if ( !isset($user['username']) ) : ?>
                         <div class="jumbotron no-feedback-list">
                             <center>
-                                <strong>Please log in to send a message.</strong>
+                                <strong><span class="fa fa-sign-in"></span> Please log in to send a message.</strong>
                             </center>
                         </div>
                     <?PHP elseif ($message_recipient->getUsername() !== $user['username']) : ?>
@@ -39,7 +39,7 @@
                     <?PHP else : ?>
                         <div class="jumbotron no-feedback-list">
                             <center>
-                                <strong>You are not allowed to send message to your self.</strong>
+                                <strong><span class="fa fa-ban">You are not allowed to send message to your self.</strong>
                             </center>
                         </div>
                     <?PHP endif; ?>
