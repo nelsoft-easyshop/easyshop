@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </span>
                     <?php endif;?>
                     <img src="/assets/images/img-default-icon-user.jpg"> 
-                    <a href=""><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
+                    <a href="<?php echo html_escape($user['slug'])?>"><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
                     <div class="new-user-nav-dropdown">
                         <span class="user-nav-dropdown">Account Settings</span>
                     </div>
