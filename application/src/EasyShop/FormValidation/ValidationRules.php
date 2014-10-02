@@ -130,8 +130,17 @@ class ValidationRules
                                 new Assert\Length(['min' => '5',
                                                    'max' => '250']),
                     ),
-
-                ),
+            'personal_info' => array(
+                    'dateofbirth' => array(
+                                new Assert\Date(['message' => "Invalid Birthday format."])
+                    ),
+                    'email' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Email()
+                    ),
+                    'mobile' => array(
+                                new CustomAssert\IsValidMobile()
+                    ),
         );
     }
 

@@ -19,5 +19,9 @@
         "bshaffer/oauth2-server-php": "v1.3",
         "facebook/php-sdk-v4" : "4.0.*",
         "google/apiclient": "1.0.*@beta"
+    },
+    "autoload": {
+        "classmap": ["system/libraries"]
     }
+
 }

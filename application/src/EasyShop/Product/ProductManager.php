@@ -63,16 +63,25 @@ class ProductManager
      */
     private $configLoader;
 
+
+    /**
+     * Image Library Dipendency Injection
+     *
+     * @var CI_Image_lib
+     */
+    private $imageLibrary;    
+
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
+        $this->imageLibrary = $imageLibrary;
     }
 
     /**
@@ -510,5 +519,53 @@ class ProductManager
         return $result;
     }
 
+    /**
+     * Creates directories, checks if the passed image name exists in the admin folder
+     * @param int $imagesId
+     * @return JSONP
+     */ 
+    public function imageresize($imageDirectory, $newDirectory, $dimension)
+    {
+        
+        $config['image_library'] = 'GD2';
+        $config['source_image'] = $imageDirectory;
+        $config['maintain_ratio'] = true;
+        $config['quality'] = '85%';
+        $config['new_image'] = $newDirectory;
+        $config['width'] = $dimension[0];
+        $config['height'] = $dimension[1]; 
+
+        $this->imageLibrary->initialize($config); 
+        $this->imageLibrary->resize();
+        $this->imageLibrary->clear();        
+    } 
+
+    /**
+     * Generates slugs 
+     * @param string $title
+     * @return STRING
+     */ 
+    public function generateSlug($title)   
+    {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $title]);
+
+        $cnt = count($product);
+        if($cnt > 0) {
+            $slugGenerate = $title."-".$cnt++;
+        }
+        else {
+            $slugGenerate = $title;
+        }
+        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $slugGenerate]);
+
+        if(count($checkIfSlugExist) > 0 ){
+            foreach($checkIfSlugExist as $newSlugs){
+                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
+            }
+        }
+        return $slugGenerate;
+    }
 }
 

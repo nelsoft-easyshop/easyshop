@@ -6,8 +6,11 @@ if (!defined('BASEPATH'))
 class Product extends MY_Controller {
 
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
+
+        //Loading Helpers
         $this->load->helper('htmlpurifier');
 
         //Loading Models
@@ -18,6 +21,11 @@ class Product extends MY_Controller {
         header('Content-type: application/json');
     }
 
+    /**
+     * Retrieve product information based on given slug
+     * @param  string $slug
+     * @return JSON
+     */
     public function item($slug = '')
     {
         $productRow = $this->product_model->getProductBySlug($slug);  
@@ -127,11 +135,11 @@ class Product extends MY_Controller {
             }
             $paymentMethodArray = $this->config->item('Promo')[$productRow['promo_type']]['payment_method'];
         }
-		
-		$paymentMethodNoKey = array();
-		foreach ($paymentMethodArray as $keyPm => $valuePm) {
-			array_push($paymentMethodNoKey,$valuePm);
-		}
+        
+        $paymentMethodNoKey = array();
+        foreach ($paymentMethodArray as $keyPm => $valuePm) {
+            array_push($paymentMethodNoKey,$valuePm);
+        }
 
         $data = array ( 
             'attr' => $this->product_model->getPrdShippingAttr($id), 
@@ -162,7 +170,7 @@ class Product extends MY_Controller {
             $productQuantity[$key]['location'] = $jsonFdata[$key];
         }
 
-            foreach ($relatedItems as $key => $value) {
+        foreach ($relatedItems as $key => $value) {
             unset($relatedItems[$key]['is_sold_out']);
             unset($relatedItems[$key]['cat_id']);
             unset($relatedItems[$key]['clickcount']);
@@ -203,9 +211,15 @@ class Product extends MY_Controller {
             "relatedItems" => $relatedItems
             ); 
 
-        die(json_encode($data,JSON_PRETTY_PRINT));
+        print(json_encode($data,JSON_PRETTY_PRINT));
     }
 
+    /**
+     * Get review of the seller
+     * @param  integer $product_id
+     * @param  integer $sellerid
+     * @return mixed
+     */
     public function getReviews($product_id, $sellerid)
     {
         $recent = array();
