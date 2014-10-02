@@ -88,10 +88,6 @@ class UserManager
      */
     public function __call($name, $args)
     {
-        /*if($this->valid){
-            $this->valid = call_user_func_array(array($this,$name), $args);
-        }*/
-
         $this->valid = call_user_func_array(array($this,$name), $args);
 
         if(!$this->valid){
