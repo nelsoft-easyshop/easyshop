@@ -137,9 +137,9 @@ class SyncCsvImage extends MY_Controller
         foreach($imagesId["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
-            echo "<br/>";
+
             foreach($imagesValues as $values) {
-                echo $values->getProductImagePath();
+
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
                 $path = "./assets/admin/$images";
 
