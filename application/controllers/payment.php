@@ -75,6 +75,13 @@ class Payment extends MY_Controller{
         $cart_contentss=array('choosen_items'=> $item);
         $this->session->set_userdata($cart_contentss);
     }
+
+    public function mobileBridge($itemArray,$memberId)
+    {
+        $this->session->set_userdata('choosen_items', $itemArray);
+        $this->session->set_userdata('member_id', $memberId);
+    }
+
     
     function review()
     {
