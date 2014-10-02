@@ -49,7 +49,7 @@ class Register extends MY_Controller
             $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
             $data['username'] = $this->input->post('username');
             $data['password'] = $this->input->post('password');
-            $data['email'] = $this->input->post('email'));
+            $data['email'] = $this->input->post('email');
             $data['mobile'] = substr($this->input->post('mobile'),1);
 
             $registrationFlag = false;
