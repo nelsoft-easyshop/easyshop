@@ -582,39 +582,11 @@ class EsProductRepository extends EntityRepository
     public function deleteProductFromAdmin($id)
     {
         $this->em =  $this->_em;
-
-        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
-                                    ->deleteAttrDetailByProductId($id);
-
-        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrhead')
-                                    ->deleteAttrHeadById($id);                                    
-
-        $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                    ->deleteImageByProductId($id);     
-
-        $qb = $this->em->createQueryBuilder()
-                            ->select('pi')
-                            ->from('EasyShop\Entities\EsProductItem','pi')
-                            ->where('pi.product = :productId')
-                            ->setParameter('productId', $id)
-                            ->getQuery();
-
-        $result = $qb->getOneOrNullResult();
-
-        $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                                    ->deleteShippingDetailByProductItem($result);         
-
-        $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
-                                    ->deleteShippingHeadByProductId($id);  
-
-        $this->em->getRepository('EasyShop\Entities\EsProductItem')
-                                    ->deleteProductItemByProductID($id);            
-
+         
         $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
             WHERE e.idProduct = ?8");
         $query->setParameter(8, $id);
         $query->execute();       
-
 
     }
 
