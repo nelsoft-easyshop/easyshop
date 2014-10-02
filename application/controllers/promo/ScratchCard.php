@@ -115,14 +115,15 @@ class ScratchCard extends MY_Controller
      */
     public function updateFullname()
     {
-        $memberId = $this->session->all_userdata()['member_id'];
+        $fullname = trim($this->input->post('fullname'));
+        $memberId = $this->session->userdata('member_id');
         $em = $this->serviceContainer['entity_manager'];
         $member = $em->find('\EasyShop\Entities\EsMember', ['idMember'=>$memberId]);
-        $member->setFullname($this->input->post('fullname'));
+        $member->setFullname($fullname);
         $em->persist($member);
         $em->flush();
         $result = FALSE;
-        if($member->getFullname() === $this->input->post('fullname')) {
+        if($member->getFullname() === $fullname) {
             $result = true;
         }
 

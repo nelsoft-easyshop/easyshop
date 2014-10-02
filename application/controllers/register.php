@@ -33,11 +33,11 @@ class Register extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('pages/user/register', $data);
     }
-	
-  	
-	/*
-	 *	Registration Handler
-	 */
+
+
+    /**
+     *   Registration Handler
+     */
     public function signup()
     {
         $serverResponse = array(
@@ -46,7 +46,7 @@ class Register extends MY_Controller
         );
 
         if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
-            $data['fullname'] = trim($this->input->post('fullname')) === 'promo-registration' ? '' : $this->input->post('fullname');
+            $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
             $data['username'] = $this->input->post('username');
             $data['password'] = $this->input->post('password');
             $data['email'] = $this->input->post('email');
@@ -183,9 +183,10 @@ class Register extends MY_Controller
 		 return $callback_result;
 	}
 
-    public function success($action = ''){
+    public function success($action = '')
+    {
         $data['title'] = 'Easyshop.ph - Thank You';
-        $referrer = ($this->input->post('referrer'))?$this->input->post('referrer'):'';
+        $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
         if(!($referrer)){
             $data['title'] = 'Page not found';
             $data = array_merge($data,$this->fill_header());

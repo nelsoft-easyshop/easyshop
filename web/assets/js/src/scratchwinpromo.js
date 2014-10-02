@@ -7,28 +7,32 @@
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var img = '';
-        $(document).on('click', '#send_btn', function () {
-            if (code.val().trim() == "") {
-                alert('Invalid code');
+        
+
+        $('#code-form').submit(function(event){
+            event.preventDefault();
+            var codeValue = code.val().trim();
+            if (codeValue == "") {
+               $('#scratch-txt-div').addClass('has-error');
                 return false;
             }
             $("#prod_image img").attr('src', '');
             $(".claim-details h3").html('');
             $(".claim-details p").html('');
-            $('.scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol, .scratch-win-form > p').hide();
+            $('.scratch-win-error, #scratch-win-claim, .scratch-win-form .instructions, .scratch-win-form > p').hide();
             $.ajax({
                 url: '/promo/ScratchCard/validateScratchCardCode',
                 type: 'POST',
                 dataType: 'json',
                 data: {
                     csrfname: csrftoken,
-                    code: code.val().trim()
+                    code: codeValue
                 },
                 success: function (data) {
                     if (data.product) {
-                        $('#claim_item').attr('data-code', code.val().trim());
+                        $('#claim_item').attr('data-code', codeValue);
                         $(".claim-details h3").html(data.name);
-                        $(".claim-details p").html(data.brief);
+                        $(".claim-details .prod-description").html(data.brief);
                         $("#prod_image img").attr('src', data.product_image_path);
                         if(!data.can_purchase) {
                             $('.purchase-limit-error').slideDown().show();
@@ -53,11 +57,15 @@
             });
         });
 
+        $('#scratch_txt').change(function(){
+            $('#scratch-txt-div').removeClass('has-error');
+        });
+        
         $(document).on('click', '#register', function(){
             $('#div-promo-modal').modal({
                 escClose: false,
                 containerCss:{
-                    maxWidth: 300,
+                    maxWidth: 600,
                     minWidth: 290,
                     maxHeight: 220
                 }
@@ -78,7 +86,7 @@
                 success: function(result){
                     if(result === true){
                         $.modal.close();
-                        alert('Registration complete.');
+                        alert('Your registration has been completed. Thank you.');
                         success();
                         $('#complete').html('');
                     }else{

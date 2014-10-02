@@ -37,7 +37,7 @@
             <div class="claim-bg">
                 <div class="claim-details">
                     <p>
-                        Code is already used
+                        Code has already been used.
                     </p>
                 </div>
             </div>
@@ -64,10 +64,11 @@
                 <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
             </div>
             <div id="div-promo-modal">
-                <h1>Update your Fullname :</h1>
-                <div class="div-promo-modal-container">
-                    <input type="text" id="promo-fullname">
+                <div class="div-promo-modal-container form-group">
+                    <label for="fullname" class="label-fullname">Complete name:</label>
+                    <input name="fullname" type="text"  class="form-control" id="promo-fullname">
                 </div>
+                <br/>
                 <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
                 <button class="btn btn-default-3" id="apply-fullname">Apply</button>
             </div>
@@ -100,91 +101,98 @@
         <div id="scratch-win">
             <div class="scratch-win-form">
                 <span>Enter your code here: </span>
-                <input type="text" id="scratch_txt" >
-                <button id="send_btn" class="scratch-win-btn">ENTER</button>
+                <form id="code-form">
+                    <div class="form-group" id="scratch-txt-div">
+                        <input type="text"  class="form-control"  id="scratch_txt" >
+                        <button class="btn btn-primary">ENTER</button>
+                    <div>
+                </form>
                 <div class="bottom-border"></div>
-                <h3>How to join: </h3>
-                <ol>
-                    <li>Participants must obtain a scratch card distributed in the following areas: Manila, Makati, and Ortigas from September 1-December 31, 2014 for a chance to win HOT items from EasyShop.ph.</li>
-                    <li>Participants must scratch the card to reveal a special code.</li>
-                    <li>Participants should visit <a href="/Scratch-And-Win">https://easyshop.ph/Scratch-And-Win</a> to enter the code. They automatically get an item for FREE if they have the winning code.</li>
-                    <li>Participants need to click on “CLAIM ITEM” and fill out the registration form or login to their accounts.</li>
-                    <li>To be eligible to join the promo, participants must complete their registration by providing their complete name, email address, and contact number on their EasyShop.ph profile page. Participants with incomplete profile details will not be qualified to win any item.</li>
-                    <h3>Prizes: </h3>
-                        <table id="promo-prizes-tbl">
-                            <thead>
+                
+                <div class='instructions'>
+                    <h3>How to join: </h3>
+                    <ol>
+                        <li>Participants must obtain a scratch card distributed in the following areas: Manila, Makati, and Ortigas from September 1-December 31, 2014 for a chance to win HOT items from EasyShop.ph.</li>
+                        <li>Participants must scratch the card to reveal a special code.</li>
+                        <li>Participants should visit <a href="/Scratch-And-Win">https://easyshop.ph/Scratch-And-Win</a> to enter the code. They automatically get an item for FREE if they have the winning code.</li>
+                        <li>Participants need to click on “CLAIM ITEM” and fill out the registration form or login to their accounts.</li>
+                        <li>To be eligible to join the promo, participants must complete their registration by providing their complete name, email address, and contact number on their EasyShop.ph profile page. Participants with incomplete profile details will not be qualified to win any item.</li>
+                        <h3>Prizes: </h3>
+                            <table id="promo-prizes-tbl">
+                                <thead>
+                                    <tr>
+                                        <th>MINOR PRIZES</th>
+                                        <th>QUANTITY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>EasyShop T-shirts</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>EasyShop Umbrella</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>EasyShop Planner</td>
+                                        <td>100</td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th>MAJOR PRIZES</th>
+                                        <th>QUANTITY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Yoobao 10400mAh Magic Cube II Power Bank (Silver)</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Western Digital Portable HDD 1TB</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Xiaomi Mi3</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>iPad mini with Retina display 16GB Wi-Fi Only</td>
+                                        <td>1</td>
+                                    </tr>
+                                </tbody>
+                                <thead>
                                 <tr>
-                                    <th>MINOR PRIZES</th>
-                                    <th>QUANTITY</th>
+                                    <th class="tbl-red">TOTAL NUMBER OF WINNERS</th>
+                                    <th class="tbl-red">307</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>EasyShop T-shirts</td>
-                                    <td>100</td>
-                                </tr>
-                                <tr>
-                                    <td>EasyShop Umbrella</td>
-                                    <td>100</td>
-                                </tr>
-                                <tr>
-                                    <td>EasyShop Planner</td>
-                                    <td>100</td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                                <tr>
-                                    <th>MAJOR PRIZES</th>
-                                    <th>QUANTITY</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Yoobao 10400mAh Magic Cube II Power Bank (Silver)</td>
-                                    <td>3</td>
-                                </tr>
-                                <tr>
-                                    <td>Western Digital Portable HDD 1TB</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Xiaomi Mi3</td>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <td>iPad mini with Retina display 16GB Wi-Fi Only</td>
-                                    <td>1</td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                            <tr>
-                                <th class="tbl-red">TOTAL NUMBER OF WINNERS</th>
-                                <th class="tbl-red">307</th>
-                            </tr>
-                            </thead>
-                        </table>
-                    <li>To claim the prizes, participants must present their winning scratch card and bring 2 valid IDs at the EasyShop Main Office located at 8th flr. Marc 2000 Tower, 1973 Taft Ave., Malate, Manila.</li>
-                    <li>Redemption of prizes is until March 1, 2015.</li>
-                    <li>For more details, visit the EasyShop website at <a href="/">https://easyshop.ph</a> or call customer service at (02) 354-5973.</li>
-                </ol>
-                <br>
-                <h3>Terms and Conditions: </h3>
-                <ol>
-                    <li>The contest is open to all individuals aged 21 years and above.</li>
-                    <li>By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal information provided is true, correct, and complete.</li>
-                    <li>By participating in this promo, the participant voluntarily provides information that may be used for market research.</li>
-                    <li>A participant can win only once.</li>
-                    <li>Prizes given are not convertible to cash.</li>
-                    <li>The scratch card cannot be used in conjunction with other on-going promotions unless specifically stated in the scratch card mechanics.</li>
-                    <li>Employees of EasyShop Online Inc. and Click to Print High Street Corporation including their relatives up to second degree of consanguinity or affinity are disqualified from joining the promotion.</li>
-                    <li>Only residents of the Republic of the Philippines are eligible to participate in this promotion.</li>
-                </ol>
+                                </thead>
+                            </table>
+                        <li>To claim the prizes, participants must present their winning scratch card and bring 2 valid IDs at the EasyShop Main Office located at 8th flr. Marc 2000 Tower, 1973 Taft Ave., Malate, Manila.</li>
+                        <li>Redemption of prizes is until March 1, 2015.</li>
+                        <li>For more details, visit the EasyShop website at <a href="/">https://easyshop.ph</a> or call customer service at (02) 354-5973.</li>
+                    </ol>
+                    <br>
+                    <h3>Terms and Conditions: </h3>
+                    <ol>
+                        <li>The contest is open to all individuals aged 21 years and above.</li>
+                        <li>By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal information provided is true, correct, and complete.</li>
+                        <li>By participating in this promo, the participant voluntarily provides information that may be used for market research.</li>
+                        <li>A participant can win only once.</li>
+                        <li>Prizes given are not convertible to cash.</li>
+                        <li>The scratch card cannot be used in conjunction with other on-going promotions unless specifically stated in the scratch card mechanics.</li>
+                        <li>Employees of EasyShop Online Inc. and Click to Print High Street Corporation including their relatives up to second degree of consanguinity or affinity are disqualified from joining the promotion.</li>
+                        <li>Only residents of the Republic of the Philippines are eligible to participate in this promotion.</li>
+                    </ol>
+                </div>
                 <br>
             </div>
             <div class="scratch-win-error error">
                 <h2>Sorry</h2>
                 <p>
-                    Your code did not match the item's code. Try your luck again with another scratch card.
+                    Your code did not match any of the promo's valid codes. Try your luck with another scratch card.
                 </p>
                 <p>
                     You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
@@ -210,6 +218,8 @@
                             You may claim your prize until March 1, 2015.<br>
                             Contact us for more information: (02) 353-0062 or (02)353-8337.
                         </p>
+                        <h3></h3>
+                        <p class="prod-description"></p>
                     </div>
                 </div>
                 <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
@@ -238,7 +248,7 @@
                     </div>
                     <div class="claim-details">
                         <h3></h3>
-                        <p>
+                        <p class="prod-description">
                         </p>
                         <a id="scratch-win-claim-link" href="">CLAIM ITEM</a>
                     </div>
