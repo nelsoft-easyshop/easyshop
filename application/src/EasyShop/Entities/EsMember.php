@@ -229,6 +229,15 @@ class EsMember
     private $website = '';
 
 
+    /**
+     *  @var string
+     */
+    const DEFAULT_DATE = "0001-01-01";
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_GENDER = "0";
 
     /**
      * @var \Doctrine\Common\Collections\Collection

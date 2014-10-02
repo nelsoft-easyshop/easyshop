@@ -121,7 +121,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 }
                 else{
                     // Display error
-                    alert(data.error);
+                    var errString = "";
+                    $.each(data.error, function(k,v){
+                        errString = errString + v + "<br>";
+                    });
+                    alert(errString);
                 }
             } 
         });
