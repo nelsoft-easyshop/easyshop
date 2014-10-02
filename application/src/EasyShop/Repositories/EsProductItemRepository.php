@@ -18,4 +18,16 @@ class EsProductItemRepository extends EntityRepository
         $query->setParameter(7, $id);
         $query->execute(); 
     }
+
+    public function getProductItemByProductId($id)
+    {
+        $this->em = $this->_em;
+        $qb = $this->em->createQueryBuilder()
+                            ->select('pi')
+                            ->from('EasyShop\Entities\EsProductItem','pi')
+                            ->where('pi.product = :productId')
+                            ->setParameter('productId', $id)
+                            ->getQuery();
+        return $qb->getOneOrNullResult();
+    }
 }
