@@ -112,7 +112,7 @@
                                 <?php echo form_open('');?>
                                     <input type="text" class="store-name-field" data-origname="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>"
                                            name="store_name" value="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>"
-                                           placeholder="Enter a new store bane">
+                                           placeholder="Enter a new store name...">
                                     <input type="hidden" name="store_name_hidden" value="1">
                                     <input id="store_name_submit" type="button" value="Save">
                                     <input id="store_name_cancel" type="button" value="Cancel">
