@@ -75,6 +75,7 @@ class Memberpage extends MY_Controller
         
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
@@ -125,7 +126,7 @@ class Memberpage extends MY_Controller
         else{
             $serverResponse = array(
                 'result' => 'fail'
-                , 'error' => 'Failed to validate form'
+                , 'error' => $formErrorHelper->getFormErrors($form)
             );
         }
 

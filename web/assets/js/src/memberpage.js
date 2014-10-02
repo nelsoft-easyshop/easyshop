@@ -539,7 +539,9 @@ $(document).ready(function(){
                         });
                     }
                     else if(obj.result === 'fail'){ 
-                        alert('An error was encountered in submitting your form. Please try again later.');
+                        $.each(obj.error, function(k,v){
+                            alert(k + " : " + v);
+                        });
                     }
                     else if(obj.result === 'error'){
                         if('mobile' in obj['error']){
