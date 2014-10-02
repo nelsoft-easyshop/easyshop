@@ -11,7 +11,7 @@
              `opened`)
         VALUES (:to_id,
                 :from_id,
-                NOW(),
+                :date_time_sent,
                 :message,
                 '0');
     </select>
