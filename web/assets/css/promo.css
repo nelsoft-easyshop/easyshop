@@ -268,6 +268,22 @@
     margin: 0;
     width: 136px;
 }
+
+.header-galore33{
+    background-color: #0078d5;
+    margin-top: 75px;
+    padding: 7px;
+}
+.header-galore33 a{
+    color: #ffffff;
+    font-weight: bold;
+    padding: 2%;
+    text-decoration: none;
+}
+.header-galore33 a:hover{
+    color: #ffffff;
+    text-decoration: none;
+}
 .btn.btn-default-1 {
     border: 2px solid #565656;
     background-color: #fff;

@@ -74,10 +74,10 @@ class ScratchCard extends MY_Controller
         $slugs = array(
             'lg-optimus-g-pro-lite-black',
             'lg-nexus-5',
-            'apple-iphone-5c-16gb',
-            'lenovo-s820',
-            'lenovo-a316i-black',
-            'lg-optimus-l5-black'
+            'apple-iphone-5c-16gb-1',
+            'lenovo-s820-red',
+            'lenovo-a316i-android-42-4gb-black',
+            'lg-optimus-l5-ii-e450-black'
         );
         $product = array();
         foreach($slugs as $slug){
