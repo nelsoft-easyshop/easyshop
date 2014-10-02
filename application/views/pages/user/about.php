@@ -20,8 +20,8 @@
                     <div class="clear"></div>
                     <div class="div-about-content">
 
-                        <p class="p-about">
-                            <?php echo html_escape($member->getStoreDesc()); ?>
+                        <p>
+                            <pre class="p-about"><?php echo html_escape($member->getStoreDesc()); ?></pre>
                         </p>
                         <div class="div-about-edit-area">
                             <?php echo form_open('home/doUpdateDescription') ?>

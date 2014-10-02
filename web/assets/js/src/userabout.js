@@ -121,7 +121,7 @@
         var $description = $('#description');
         $description.val($description.data('value'));
         $(".div-about-edit-area").css("display","none");
-        $(".p-about").css("display","inline");
+        $(".p-about").css("display","block");
         $(".fa-cancel-about").css("display","none");
         $(".fa-edit-about").css("display","inline");
     });
