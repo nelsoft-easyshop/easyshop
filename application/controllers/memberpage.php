@@ -100,8 +100,8 @@ class Memberpage extends MY_Controller
             $formData = $form->getData();
             $validNickname = (string)$formData['nickname'];
             $validFullname = (string)$formData['fullname'];
-            $validGender = strlen($formData['gender']) === 0 ? '0' : $formData['gender'];
-            $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? "0001-01-01" : $formData['dateofbirth'];
+            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $validEmail = (string)$formData['email'];
 
