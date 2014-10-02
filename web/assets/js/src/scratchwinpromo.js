@@ -70,6 +70,7 @@
                     maxHeight: 220
                 }
             });
+            $('.promoimgloader').hide();
         });
         $(document).on('click', '#apply-fullname', function(){
             var fullname = $('#promo-fullname').val().trim();
@@ -78,6 +79,8 @@
                 alert('Invalid name');
                 return false;
             }
+            $('.promoimgloader').show();
+            $('#apply-fullname').hide();
             $.ajax({
                 url : '/promo/ScratchCard/updateFullname',
                 dataType : 'json',
@@ -85,8 +88,6 @@
                 data: {fullname:fullname, csrfname:csrftoken},
                 success: function(result){
                     if(result === true){
-                        $.modal.close();
-                        alert('Your registration has been completed. Thank you.');
                         success();
                         $('#complete').html('');
                     }else{
@@ -153,6 +154,10 @@
                     if(data == false){
                         alert("An error occured,Try refreshing the site.");
                     }
+                    $('.promoimgloader').hide();
+                    $('.apply-fullname').show();
+                    $.modal.close();
+                    alert('Your registration has been completed. Thank you.');
                 }
             });
         }
