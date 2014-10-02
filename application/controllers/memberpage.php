@@ -1410,42 +1410,6 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
 
-    /*
-    public function updateVendorDetails()
-    {
-        $serverResponse = array(
-            "result" => FALSE,
-            "error" => "",
-            "data" => array()
-        );
-
-        if( $this->input->post("vendor_details") ){
-            $memberId = $this->session->userdata("member_id");
-            $storeName = strval($this->input->post("store_name"));
-            $mobileNum = strval($this->input->post("mobile"));
-            $stateRegionId = $this->input->post("stateregion");
-            $cityId = $this->input->post("city");
-
-            $um = $this->serviceContainer['user_manager'];
-            $boolResult = $um->setUser($memberId)
-                            ->setStoreName($storeName)
-                            ->setMobile($mobileNum)
-                            ->setAddressTable($stateRegionId, $cityId, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
-                            ->save();
-
-            $serverResponse["result"] = $boolResult;
-            $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
-            $serverResponse["new_data"] = array(
-                    "store_name" => $storeName
-                    , "mobile" => $mobileNum
-                    , "state_region_id" => $stateRegionId
-                    , "city_id" => $cityId
-            );
-        }
-
-        echo json_encode($serverResponse);
-    }*/
-
     /**
      *  AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
      */
