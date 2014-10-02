@@ -44,17 +44,17 @@
                 <tr id="storeNameRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><?php echo html_escape($storeName); ?></p>
-                        <input type="hidden" id="displayStoreName" value="<?php echo html_escape($storeName)?>"/>
+                        <p id="validatedStoreName" class="text-contact"><?php echo html_escape($validatedStoreName); ?></p>
+                        <input type="hidden" id="postStoreName" value="<?php echo html_escape($storeName)?>"/>
                         <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($storeName); ?>">
                     </td>
                 </tr>
                 <tr id="contactNoRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><?php echo html_escape($contactNo); ?></p>
+                        <p id="validatedContactNo" class="text-contact"><?php echo html_escape($validatedContactNo); ?></p>
                         <input type="text" class="input-detail" maxlength="11" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
-                        <input type="hidden" id="displayContactNo" value="<?php echo html_escape($contactNo)?>"/>
+                        <input type="hidden" id="postContactNo" value="<?php echo html_escape($contactNo)?>"/>
                     </td>
                 </tr>
                 <!-- <tr>
@@ -69,14 +69,18 @@
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
-                        <p class="text-contact"><?php echo html_escape($streetAddr . $city . $region); ?></p>
-                        <input type="hidden" id="displayStreetAddr" value="<?php echo html_escape($streetAddr)?>"/>
-                        <input type="hidden" id="displayCity" value="<?php echo html_escape($city)?>"/>
-                        <input type="hidden" id="displayRegion" value="<?php echo html_escape($region)?>"/>
-                        <input type="hidden" id="defaultRegion" value="<?php echo html_escape($defaultRegion)?>"/>
+                        <p class="text-contact"><?php echo html_escape($validatedStreetAddr . $validatedCity . $validatedRegion); ?></p>
+                        <input type="hidden" id="validatedStreetAddr" value="<?php echo html_escape($validatedStreetAddr)?>"/>
+                        <input type="hidden" id="validatedCity" value="<?php echo html_escape($validatedCity)?>"/>
+                        <input type="hidden" id="validatedRegion" value="<?php echo html_escape($validatedRegion)?>"/>
+
+                        <input type="hidden" id="postStreetAddr" value="<?php echo html_escape($streetAddr)?>"/>
+                        <input type="hidden" id="postCity" value="<?php echo html_escape($city)?>"/>
+                        <input type="hidden" id="postRegion" value="<?php echo html_escape($region)?>"/>
 
                         <input type="text" class="input-detail" placeholder="Address Line..." name="streetAddress" id="streetAddr" value="<?php echo html_escape(substr($streetAddr, 0, -2)); ?>">
                         <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
+                            <option value='' selected>Select State/Region</option>
                             <?php foreach($regions as $key => $value): ?>
                                 <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $region? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
                             <?php endforeach; ?>
@@ -98,8 +102,8 @@
                 <tr id="websiteRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><a href="#"><?php echo html_escape($website); ?></a></p>
-                        <input type="hidden" id="displayWebsite" value="<?php echo html_escape($website)?>"/>
+                        <p id="validatedWebsite" class="text-contact"><a href="#"><?php echo html_escape($validatedWebsite); ?></a></p>
+                        <input type="hidden" id="postWebsite" value="<?php echo html_escape($website)?>"/>
                         <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($website); ?>">
                     </td>
                 </tr>
