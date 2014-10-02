@@ -17,7 +17,7 @@ class Version20140903145737 extends AbstractMigration
         $this->addSql("
             CREATE TABLE `es_problem_report` (
             `id_problem_report` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `problem_image_path` TEXT NULL,
+            `problem_image_path` VARCHAR(1024)  NULL DEFAULT '',
             `problem_title` VARCHAR(1024) NOT NULL DEFAULT '',
             `problem_description` VARCHAR(1024) NOT NULL DEFAULT '',
             PRIMARY KEY (`id_problem_report`));");
