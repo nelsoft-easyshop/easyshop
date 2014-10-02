@@ -539,9 +539,11 @@ $(document).ready(function(){
                         });
                     }
                     else if(obj.result === 'fail'){ 
+                        var errString = "";
                         $.each(obj.error, function(k,v){
-                            alert(k + " : " + v);
+                            errString = errString + v + "<br>";
                         });
+                        alert(errString);
                     }
                     else if(obj.result === 'error'){
                         if('mobile' in obj['error']){

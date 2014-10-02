@@ -9,6 +9,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsValidDate extends Constraint
 {
-    public $message = 'Invalid date format.';
+    public $message = 'Invalid date format for %string%.';
 }
 

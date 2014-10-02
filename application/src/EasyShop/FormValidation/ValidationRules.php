@@ -113,7 +113,7 @@ class ValidationRules
                 ),
             'personal_info' => array(
                     'dateofbirth' => array(
-                                new Assert\Date()
+                                new Assert\Date(['message' => "Invalid Birthday format."])
                     ),
                     'email' => array(
                                 new Assert\NotBlank(),
