@@ -55,16 +55,13 @@
         if($( "#displayStoreName" ).val() == ""){
             $( "#storeNameRow" ).hide();
         }
-        else{
-            $( "#storeName" ).val($("#displayStoreName").val());
-        }
+        $( "#storeName" ).val($("#displayStoreName").val());
+        
 
         if($( "#displayContactNo" ).val() == "" || $( "#displayContactNo" ).val().length < 11){
             $( "#contactNoRow" ).hide();
         }
-        else{
-            $( "#contactNo" ).val($("#displayContactNo").val());
-        }
+        $( "#contactNo" ).val($("#displayContactNo").val());
 
         if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == "" && $("#displayStreetAddr").val() == ""){
             $( "#addressRow" ).hide();
@@ -72,24 +69,21 @@
         
         if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == ""){
             $( "#regionSelect" ).val($("#defaultRegion").val());
-            $( "#regionSelect" ).change();
-            $( "#citySelect" ).val($("#displayCity").val());
         }   
         else{
             $( "#regionSelect" ).val($("#displayRegion").val());
-            $( "#regionSelect" ).change();
-            $( "#citySelect" ).val($("#displayCity").val());
         }
-        
+        $( "#regionSelect" ).change();
+        $( "#citySelect" ).val($("#displayCity").val());
+
         var addr = $("#displayStreetAddr").val();
         $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
 
         if($( "#displayWebsite" ).val() == ""){
             $( "#websiteRow" ).hide();
         }
-        else{
-            $( "#website" ).val($("#displayWebsite").val());
-        }
+        $( "#website" ).val($("#displayWebsite").val());
+        
      });
 })(jQuery);
 

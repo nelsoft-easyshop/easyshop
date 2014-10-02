@@ -96,11 +96,13 @@ function askDraft(location)
             buttons: {
                 "Save as draft": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    $(".ui-dialog-buttonset").hide();
                     saveAsDraftProceed();
                     window.location = location;
                 },
                 "Don't save as draft": function() {
                     $(".ui-dialog-title").text('Please wait...'); 
+                    $(".ui-dialog-buttonset").hide();
                     window.location = location;
                 },
                 "Cancel": function() { 
@@ -121,6 +123,7 @@ function askDraft(location)
             buttons: {
                 "Proceed": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    $(".ui-dialog-buttonset").hide();
                     saveAsDraftProceed();
                     window.location = location;
                 }
@@ -534,8 +537,12 @@ function processAttributes()
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+        var price = parseFloat($(this).val());
         if( !isNaN(prcnt) ){
             get_discPrice();
+        }
+        else{
+            $("#discounted_price_con").text(price.toFixed(2));
         }
     });
     

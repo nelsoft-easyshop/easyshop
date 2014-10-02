@@ -57,6 +57,24 @@ class Payment extends MY_Controller{
         exit();
     }
 
+    /**
+     * Get items in cart depending on the promo type
+     * and push data to choosen_items
+     *
+     * @param $promoType
+     */
+    public function setPromoItemsToPayment($promoType)
+    {
+        $cartContent = $this->cart->contents();
+        $item = array();
+        foreach ($cartContent as $key => $value) {
+            if($value['promo_type'] == $promoType){
+                $item[$key] = $cartContent[$key];
+            }
+        }
+        $cart_contentss=array('choosen_items'=> $item);
+        $this->session->set_userdata($cart_contentss);
+    }
     
     function review()
     {
@@ -536,6 +554,10 @@ class Payment extends MY_Controller{
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery()
     {
+        if($this->input->post('promo_type') !== FALSE )
+        {
+            $this->setPromoItemsToPayment($this->input->post('promo_type'));
+        }
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
@@ -1098,7 +1120,7 @@ class Payment extends MY_Controller{
 
     function processData($itemList,$address)
     {
-        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $city = ($address['c_stateregionID']) > 0 ? $address['c_stateregionID'] :  27;
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city); 
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
@@ -1120,7 +1142,7 @@ class Payment extends MY_Controller{
             $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
             $productItem =  $value['product_itemID'];
             $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = $details[0]['price'];
+            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $othersumfee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;

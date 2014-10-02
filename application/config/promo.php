@@ -101,18 +101,23 @@ $config = array(
                 ),
              ),
             'viewable_button_product_page' =>true,
-        
         ),
         '5' =>array(
             'implementation' => '',
             'calculation_id' => '5',
-            'purchase_limit' => PHP_INT_MAX,
+            'purchase_limit' => 1,
             'payment_method' => array(),
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
-            'option' => array(),
-            'viewable_button_product_page' =>false,
+            'option' => array(
+                0 => array(
+                    'start' => '00:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => PHP_INT_MAX
+                ),
+            ),
+            'viewable_buy_button' =>false,
         ),
         '6' =>array(
             'implementation' => '',
