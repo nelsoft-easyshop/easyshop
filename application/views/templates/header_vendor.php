@@ -189,7 +189,7 @@
                             <option value="1">On Seller's Page</option>
                             <option value="2">Main Page</option> 
                         </select>
-                        <input type="text" name="q_str" class="ui-form-control">
+                        <input type="text" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
                         <input type="submit"  value="" class="submitSearch span_bg">
                     </form>
                 </li>
