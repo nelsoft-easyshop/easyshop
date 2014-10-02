@@ -186,7 +186,7 @@ class Register extends MY_Controller
     public function success($action = '')
     {
         $data['title'] = 'Easyshop.ph - Thank You';
-        $referrer = ($this->input->post('referrer'))?$this->input->post('referrer'):'';
+        $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
         if(!($referrer)){
             $data['title'] = 'Page not found';
             $data = array_merge($data,$this->fill_header());
