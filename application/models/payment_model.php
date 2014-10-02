@@ -635,7 +635,6 @@ class payment_model extends CI_Model
 
         return $row;
     }
-
     // Check order product before saving comment
     function checkOrderProductBasic($temp)
     {
