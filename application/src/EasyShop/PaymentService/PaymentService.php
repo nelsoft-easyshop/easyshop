@@ -452,7 +452,7 @@ class PaymentService
      *
      * @return mixed
      */
-    public function computeFeeAndParseData($itemList, $address, $pointsAllocated = "0.00")
+    public function computeFeeAndParseData($itemList, $address)
     {
         $city = ($address > 0 ? $address :  0);
         $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
@@ -468,26 +468,8 @@ class PaymentService
         $totalAdditionalFee = 0;
         $toBeLocked = array();
         $promoItemCount = 0;
-        $totalPointsAllowable = "0.00";
-
-        foreach ($itemList as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->find(intval($value['id']));
-            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
-        }
-
-        // cap points with respect to total points of items (avoid going above allowed limit of point spent)
-        if(intval($pointsAllocated) === 0){
-            $totalPointsAllowable = "1.00";
-        }
-        else{
-            $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
-        }
         
         foreach ($itemList as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->find(intval($value['id']));
-            $pointDeductable = bcmul($pointsAllocated, bcdiv($prod->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
             $sellerId = $value['member_id'];
             $productId = $value['id'];
             $orderQuantity = $value['qty'];
@@ -503,7 +485,7 @@ class PaymentService
             
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $totalAdditionalFee += $otherFee;
-            $total =  round(floatval(bcsub($value['subtotal'], bcmul($pointDeductable, $value['qty'], 10), 10))) + $otherFee;
+            $total =  $value['subtotal'] + $otherFee;
             $optionCount = count($value['options']);
             $optionString = '';
             foreach ($value['options'] as $keyopt => $valopt) {
@@ -542,7 +524,7 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$paymentMethod)
+    function validateCartData($carts,$paymentMethod, $pointsAllocated = "0.00")
     {
         $condition = false;
 
@@ -552,6 +534,21 @@ class PaymentService
 
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
+        $totalPointsAllowable = "0.00";
+
+        foreach ($itemArray as $key => $value) {
+            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->find(intval($value['id']));
+            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
+        }
+
+        if(intval($totalPointsAllowable) === 0){
+            $totalPointsAllowable = "1.00";
+            $pointsAllocated = "0.00";
+        }
+        else{
+            $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
+        }
 
         foreach($itemArray as $key => $value){
 
@@ -560,6 +557,8 @@ class PaymentService
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->find($productId);
+
+            $pointDeductable = bcmul($pointsAllocated, bcdiv($productArray->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
 
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
@@ -575,6 +574,7 @@ class PaymentService
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
+            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
@@ -601,24 +601,13 @@ class PaymentService
         /* PUT PAYMENT GATEWAY PAY HERE*/
         $returnValue = $this->primaryGateway->pay($validatedCart, $memberId, $this);
 
-        if($this->pointGateway !== NULL){
-            $this->pointGateway->setParameter('memberId', $memberId);
-            $this->pointGateway->setParameter('itemArray', $return['item_array']);
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($v_order_id);
 
-            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                    ->find($this->pointGateway->getParameter('paymentType'));
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->getParameter('paymentType'));
 
-            $trueAmount = $this->pointGateway->pay();
 
-            $paymentRecord = new EsPaymentGateway();
-            $paymentRecord->setAmount($trueAmount);
-            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-            $paymentRecord->setOrder($order);
-            $paymentRecord->setPaymentMethod($paymentMethod);
-
-            $this->em->persist($paymentRecord);
-            $this->em->flush();
-        }
 
         $response = array_merge($response, $returnValue);
         return $response;

@@ -1311,18 +1311,21 @@ class Payment extends MY_Controller{
      */
     function pay()
     {
-        // if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
-        //     redirect(base_url().'home', 'refresh');
-        // }
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+
         $carts = $this->session->all_userdata();
+
+        $paymentService = $this->serviceContainer['payment_service'];
 
         /* JSON Decode*/
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
 
-        // Validate Cart Data
-        $paymentService = $this->serviceContainer['payment_service'];
+        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
-        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        // Validate Cart Data and subtract points
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
@@ -1339,29 +1342,31 @@ class Payment extends MY_Controller{
         }
 
         $carts = $this->session->all_userdata();
+        $paymentService = $this->serviceContainer['payment_service'];
 
         // get credit points if there are any
-        $points = $this->em->getRepository('Easyshop\Entities\EsPoint')
-                        ->find(intval($this->session->userdata('member_id')))
-                        ->getCreditPoint();
-
+        $points = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                        ->findOneBy(["member" => intval($this->session->userdata('member_id'))]);
+        
         // Create a fake decoded JSON for payment service
-        if(intval($points) > 0){
+        if($points && intval($points->getCreditPoint()) > 0 ){
             $paymentMethods = [
                 "PaypalGateway" => 
                     ["method" => "PayPal", "getArray" => $this->input->get()],
                 "PointGateway" =>
                     ["method" => "Point", "amount" => $points, "pointtype" => "purchase"]
             ];
+            $points->setCreditPoint(0);
+            $this->serviceContainer['entity_manager']->flush();
         }
         else{
             $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
         }
         
-        // Validate Cart Data
-        $paymentService = $this->serviceContainer['payment_service'];
+        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
-        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        // Validate Cart Data
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'));

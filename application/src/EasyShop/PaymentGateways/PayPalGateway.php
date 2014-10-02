@@ -4,6 +4,7 @@ namespace EasyShop\PaymentGateways;
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 
 class PayPalGateway extends AbstractGateway
 {
@@ -154,8 +155,8 @@ class PayPalGateway extends AbstractGateway
         $regionDesc = $shippingAddress->getStateregion()->getLocation();
 
         // Compute shipping fee
-        $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
-        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
+        $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
+        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
         
         // Persist point credit for postback method
         $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
@@ -172,6 +173,7 @@ class PayPalGateway extends AbstractGateway
         $grandTotal= $itemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
         $this->setParameter('amount', $grandTotal);
+
         if($thereIsPromote <= 0 && $grandTotal < '50'){
             die('{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}');
         }
@@ -211,6 +213,9 @@ class PayPalGateway extends AbstractGateway
 
         $padata .= ($paypalType == 2 ? '&LANDINGPAGE='.urlencode('Billing') : '&LANDINGPAGE='.urlencode('Login'));
 
+        // var_dump($padata);
+        //die();
+
         $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $padata);
         if("SUCCESS" === strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" === strtoupper($httpParsedResponseAr["ACK"]))
         {   
@@ -230,12 +235,27 @@ class PayPalGateway extends AbstractGateway
                 //$locked = $this->lockItem($toBeLocked,$orderId,'insert');
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
 
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($orderId);
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->getParameter('paymentType'));
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount($this->getParameter('amount'));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+
+                $this->em->persist($paymentRecord);
+                $this->em->flush();
+
                 if($pointGateway !== NULL){
                     $pointGateway->setParameter('memberId', $memberId);
                     $pointGateway->setParameter('itemArray', $return['item_array']);
 
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($this->pointGateway->getParameter('paymentType'));
+                            ->find($pointGateway->getParameter('paymentType'));
 
                     $trueAmount = $pointGateway->pay();
 
@@ -257,7 +277,6 @@ class PayPalGateway extends AbstractGateway
             }        
         }
         else{
-            
             die('{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}');
         }
     }
@@ -290,8 +309,7 @@ class PayPalGateway extends AbstractGateway
             $orderId = $return->getIdOrder();
 
             // Compute shipping fee
-            $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
-            $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
+            $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
 
             $itemList = $prepareData['newItemList'];
             $grandTotal = $prepareData['totalPrice'];
