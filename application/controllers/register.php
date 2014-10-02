@@ -46,10 +46,10 @@ class Register extends MY_Controller
         );
 
         if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
-            $data['fullname'] = $this->input->post('fullname') ? $this->input->post('fullname')  : '';
+            $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
             $data['username'] = $this->input->post('username');
             $data['password'] = $this->input->post('password');
-            $data['email'] = $this->input->post('email');
+            $data['email'] = $this->input->post('email'));
             $data['mobile'] = substr($this->input->post('mobile'),1);
 
             $registrationFlag = false;
