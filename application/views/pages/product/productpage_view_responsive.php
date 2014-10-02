@@ -844,6 +844,9 @@
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
     <input id='p_itemid' type='hidden' value='0'/>
 
+    <input id='seller-id' type='hidden' value='<?php echo $product['sellerid']; ?>'/>
+    <input id='seller-username' type='hidden' value='<?php echo $product['sellerusername']; ?>'/>
+    <input id='user-id' type='hidden' value='<?php echo empty($uid) ? 0 : $uid;?>' />
 
 </section>
 
