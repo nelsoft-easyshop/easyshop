@@ -17,5 +17,9 @@
         "symfony/config": "2.6.*@dev",
         "facebook/php-sdk-v4" : "4.0.*",
         "google/apiclient": "1.0.*@beta"
+    },
+    "autoload": {
+        "classmap": ["system/libraries"]
     }
+
 }
