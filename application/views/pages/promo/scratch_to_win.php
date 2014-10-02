@@ -4,7 +4,7 @@
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
 <div class="promo-wrapper margin-top-10" id="main_search_container">
-    <?PHP if ($product['can_purchase'] === FALSE) : ?>
+    <?PHP if (isset($product['can_purchase']) && $product['can_purchase'] === FALSE) : ?>
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
             <p>
