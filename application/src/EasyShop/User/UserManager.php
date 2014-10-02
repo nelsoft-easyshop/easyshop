@@ -155,7 +155,7 @@ class UserManager
      *  Checks if user is allowed to change email
      *  Checks if email has already been used by another user
      *
-     *  @return boolean
+     *  @return object
      */
     public function setEmail($email)
     {
@@ -192,7 +192,7 @@ class UserManager
     /**
      *  Set storename in es_member table
      *
-     *  @return boolean
+     *  @return object
      */
     public function setStoreName($storeName)
     {
@@ -223,7 +223,7 @@ class UserManager
      *
      *  @param array $array - array('EntityFunctionName' => 'value')
      *
-     *  @return boolean
+     *  @return object
      */
     public function setMemberMisc($array)
     {
@@ -238,7 +238,7 @@ class UserManager
     /**
      *  Set es_address table values
      *
-     *  @return boolean
+     *  @return object
      */
     public function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
     {
