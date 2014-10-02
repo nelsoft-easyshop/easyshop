@@ -141,7 +141,7 @@ class SyncCsvImage extends MY_Controller
                                     ->deleteImageByProductId($ids);   
 
         $productItem = $this->em->getRepository('EasyShop\Entities\EsProductItem')
-                                    ->getProductItemByProductId($ids); 
+                                ->findOneBy(['product' => $ids]);                                    
 
         $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->deleteShippingDetailByProductItem($productItem);         
