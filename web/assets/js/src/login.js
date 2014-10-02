@@ -5,7 +5,7 @@
         $("#failed-login").hide();
         $(".search_box").css('display','none');
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
-            $("p#lockoutDuration").html($("#timeoutLeft").val());
+            $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
             $("#failed-login").show();
             $("#login-form").hide();
         }
