@@ -9,18 +9,18 @@ class messages_model extends CI_Model
 	parent::__construct();
         $this->load->library("xmlmap");
     }
-    public function send_message($sender,$recipient,$msg){
-           
-	$query = $this->xmlmap->getFilenameID('sql/messages', 'send_message');
+    public function send_message($sender,$recipient,$msg)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/messages', 'send_message');
+    
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
+        $sth->bindParam(':from_id',$sender, PDO::PARAM_INT);
+        $sth->bindParam(':message',$msg);
+        $sth->bindParam(':date_time_sent', date('Y-m-d H:i:s'));
+        $sth->execute();
 
-	$sth = $this->db->conn_id->prepare($query);
-	$sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
-	$sth->bindParam(':from_id',$sender, PDO::PARAM_INT);
-	$sth->bindParam(':message',$msg);
-	$sth->bindParam(':date_time_sent', date('Y-m-d H:i:s'));
-	$sth->execute();
-	
-	return $sth->rowCount();
+        return $sth->rowCount();
     }
 	        
     public function get_message($user_id){
