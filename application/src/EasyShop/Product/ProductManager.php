@@ -497,11 +497,11 @@ class ProductManager
     } 
 
     /**
-     * Generates slugs for csv products upload
+     * Generates slugs 
      * @param string $title
      * @return STRING
      */ 
-    public function generateSlugForCSVProducts($title)   
+    public function generateSlug($title)   
     {
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                 ->findBy(['slug' => $title]);
