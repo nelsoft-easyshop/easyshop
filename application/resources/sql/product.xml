@@ -707,7 +707,7 @@ FROM
 </select>
 
 <select id="updateIsDelete">
-        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = NOW()  where member_id = :memberid AND id_product = :productid
+        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = :datenow  where member_id = :memberid AND id_product = :productid
 </select>
 
 <select id="checkifexistcategory">
@@ -1017,7 +1017,7 @@ FROM
     LEFT JOIN es_product_image pi
         ON pi.product_id = p.id_product and pi.is_primary = 1
     WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.id_product DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT :item_count
 </select>
 
@@ -1061,7 +1061,7 @@ FROM
                 AND b.`is_delete` = 0
                 AND b.`is_draft` = 0
                 AND b.id_product NOT IN ({product_ids})
-            ORDER BY createddate DESC) AS tbl 
+            ORDER BY b.lastmodifieddate DESC) AS tbl 
         UNION
         ALL 
         SELECT 
@@ -1134,7 +1134,7 @@ FROM
     INNER JOIN es_product_image pi
         ON pi.product_id = p.id_product AND pi.is_primary = 1
     WHERE p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.createddate DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT {limit}
 </select>
  

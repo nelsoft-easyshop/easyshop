@@ -203,7 +203,7 @@
         <span class="span_bg sch_btn item_sch_btn"></span>
         <label for="active_sort">Sort By</label>
         <select name="active_sort" class="post_active_sort item_sort_select">
-            <option value="1">Date of Entry</option>
+            <option value="1">Last Modified</option>
             <option value="2">Name</option>
             <option value="3">Price</option>
             <option value="4">Availability</option>

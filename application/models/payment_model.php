@@ -94,34 +94,35 @@ class payment_model extends CI_Model
         return $row[0]['cnt'];
 
     }
-
+    
     public function lockItem($itemId,$qty,$orderId,$action)
     {
-        $query = "
-        INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty) 
-        VALUES
-            (:order_id,:item_id, :quantity)
-        ";
-
+    
         if($action == 'delete'){
             $query = "
-            DELETE 
-            FROM
-                es_product_item_lock 
-            WHERE product_item_id = :item_id 
-                AND qty = :quantity
-                AND order_id = :order_id
+                DELETE 
+                FROM
+                    es_product_item_lock 
+                WHERE product_item_id = :item_id 
+                    AND qty = :quantity
+                    AND order_id = :order_id
             ";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
+            $sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
+            $sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
         }
-        ;
-        
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
-        $sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
-        $sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
-
+        else{
+            $query = "INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty) VALUES 
+                    (:order_id, :item_id, :quantity, :datenow)";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':item_id', $itemId, PDO::PARAM_INT);
+            $sth->bindParam(':quantity', $qty, PDO::PARAM_INT); 
+            $sth->bindParam(':order_id', $orderId, PDO::PARAM_INT); 
+            $sth->bindParam(':datenow', $orderId, date('Y-m-d H:i:s')); 
+        }
+ 
         if ($sth->execute()){
-        // success
             return 1;
         }
         else{
