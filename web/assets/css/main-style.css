@@ -579,7 +579,18 @@ section {
 }
 
 .vendor-nav li:first-child a {
-    display: table-cell;
+/*    display: table-cell;
+    vertical-align: middle;*/
+}
+
+.vendor-nav li:first-child a img {
+    vertical-align: middle;
+}
+
+.vendor-nav li:first-child a:before {
+    content: " ";
+    display: inline-block;
+    height: 100%;
     vertical-align: middle;
 }
 

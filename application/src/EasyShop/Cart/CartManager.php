@@ -59,7 +59,6 @@ class CartManager
         $this->cart = $cart;
         $this->em = $em;
     }
-    
 
     /**
      * Validates single cart content. Returns the validated cart data
@@ -77,7 +76,7 @@ class CartManager
         if(!$product){
             return false;
         }
-        
+
         $cartProductAttributes = array();
         $validatedCartOptions = array();
         $finalPrice = $product->getFinalPrice();
@@ -161,12 +160,10 @@ class CartManager
             'promo_type' => $product->getPromoType(),
             'start_promo' => $product->getStartPromo(),
         );
-        
+
         return array('itemData' => $itemData, 'product' => $product);
     }
-    
 
-    
     /**
      * Returns the validated contents of the cart
      *
@@ -181,14 +178,14 @@ class CartManager
             $this->cart->destroy();
             return array();
         }
-    
-        $cartContents = $this->cart->getContents();       
+
+        $cartContents = $this->cart->getContents();
         $cartIndexName = $this->cart->getIndexName();
-        
+
         foreach($cartContents as $cartItem){
         
             $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
-            
+
             $itemData = $validationResult['itemData'];
             $product = $validationResult['product'];
 
@@ -210,6 +207,7 @@ class CartManager
         }
 
         $this->cart->persist($memberId);
+
         return  $this->cart->getContents();
             
     }
@@ -257,7 +255,7 @@ class CartManager
         if(!$validationResult){
             return false;
         }
-        
+
         $itemData = $validationResult['itemData'];
         if(empty($cartContents) || !is_array($option)){
             $this->cart->addContent($itemData);
@@ -284,7 +282,7 @@ class CartManager
                 $this->cart->addContent($itemData);
             }
         }
-            
+
         return true;
     }
     
@@ -335,8 +333,8 @@ class CartManager
         }
         
         $this->cart->updateContent($cartRowId, $cartItem);
-        
-        return true;
+
+        return (intval($quantity) === 0) ? FALSE : TRUE;
     }
     
     /**
@@ -348,7 +346,5 @@ class CartManager
     {
         return $this->cart;
     }
-
-
 
 }

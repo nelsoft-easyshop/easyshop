@@ -961,6 +961,7 @@ class product_model extends CI_Model
         $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
         $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
         $sth->bindParam(':is_delete', $is_delete,PDO::PARAM_INT);
+        $sth->bindParam(':datenow', date('Y-m-d H:i:s'));
 
         $sth->execute();
     }
@@ -1547,15 +1548,15 @@ class product_model extends CI_Model
         }
         
 
-        $query = 'SELECT lck.id_item_lock, pi.id_product_item, lck.qty as lock_qty, lck.timestamp, NOW() as timenow,
-        pi.quantity FROM es_product_item_lock lck INNER JOIN es_product_item pi ON pi.product_id = :product_id AND lck.product_item_id = pi.id_product_item';
+        $query = 'SELECT lck.id_item_lock, pi.id_product_item, lck.qty as lock_qty, lck.timestamp, pi.quantity 
+        FROM es_product_item_lock lck INNER JOIN es_product_item pi ON pi.product_id = :product_id AND lck.product_item_id = pi.id_product_item';
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
         $sth->execute();
         $lockdata = $sth->fetchAll(PDO::FETCH_ASSOC);
         foreach($lockdata as $lock){
             //DELETE LOCK ITEMS THAT ARE 5 MINUTES IN LIFE TIME
-            if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
+            if(round((strtotime("now") - strtotime($lock['timestamp']))/60) > 10){
                 $this->deleteProductItemLock($lock['id_item_lock']);
             }else{
                 if(isset($data[$lock['id_product_item']]) && $check_lock){

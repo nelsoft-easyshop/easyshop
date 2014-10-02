@@ -53,6 +53,8 @@ class Login extends MY_Controller
             }
             else{
                 $response['form_error'] = 'Invalid username or password';
+                $response['loginFail'] = true;
+                $response['timeoutLeft'] = $row['timeoutLeft'];
             }  
         }
         $data['render_searchbar'] = false;

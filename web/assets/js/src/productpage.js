@@ -704,15 +704,14 @@
         $('.quantity').data('qty',total_qty);
         $('.quantity').html(total_qty);
 
-
-        $.each(firstAvailableCombination.product_attribute_ids, function(idx, value){
-            $('.product_option:visible .options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
-        });
-
+              
+        if(firstAvailableCombination){
+            $.each(firstAvailableCombination.product_attribute_ids, function(idx, value){
+                $('.product_option:visible .options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
+            });
+        }
         
         //Loads the default shipment locations
-            
-                
         $.each(shipment, function(index, value){
             
             if(value.location_id == 1 && value.location_type == 0){

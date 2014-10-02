@@ -491,7 +491,7 @@
                                 <table width="100%">
                                     <tr>
                                         <td style="vertical-align:top;">
-                                            <p> <img src="/>assets/images/img_success.png"> </p>
+                                            <p> <img src="/assets/images/img_success.png"> </p>
                                         </td>
                                         <td width="98%">
                                             <p><strong>Your review has been submitted. Reload the page to view your review. </strong></p>

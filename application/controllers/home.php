@@ -266,11 +266,13 @@ class Home extends MY_Controller
         $vendorSlug = $this->uri->segment(1);
         $session_data = $this->session->all_userdata();
 
-        $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                            ->getVendorDetails($vendorSlug);
+        $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
+                           ->findOneBy(['slug' => $vendorSlug]);
+
         // User found - valid slug
-        if( !empty($arrVendorDetails) ){
+        if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);
+            
             if($pageSection === 'about'){
                 $this->aboutUser($vendorSlug);
             }
@@ -278,6 +280,9 @@ class Home extends MY_Controller
                 $this->contactUser($vendorSlug);
             }
             else{
+                $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                                       ->getVendorDetails($vendorSlug);
+
                 $headerData = $this->fill_header();
                 $headerData = array_merge($headerData, array(
                     "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
@@ -340,6 +345,7 @@ class Home extends MY_Controller
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
                     , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
                     , "prodLimit" => $this->vendorProdPerPage
+                    , "vendorLink" => ""
                 );
 
                 //Determine active Div for first load
@@ -533,6 +539,7 @@ class Home extends MY_Controller
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
+                    , "vendorLink" => "about"
                 ); 
                 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
@@ -723,6 +730,7 @@ class Home extends MY_Controller
                     , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
+                    , "vendorLink" => "contact"
                 ); 
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
@@ -809,7 +817,7 @@ class Home extends MY_Controller
         $data = array(
             'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage),
+            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage, " lastmodifieddate DESC , "),
             'followed_users' =>  $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),

@@ -198,7 +198,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = 'memberpage/'+action;
+            document.getElementById('form_image').action = '/memberpage/'+action;
             $('#form_image').submit();
         }
         else{
@@ -251,7 +251,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    document.getElementById('form_image').action = 'memberpage/'+formAction;
+                    document.getElementById('form_image').action = '/memberpage/'+formAction;
                     $('#form_image').submit();
                     $.modal.close();
                 });

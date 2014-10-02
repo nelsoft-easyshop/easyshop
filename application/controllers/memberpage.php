@@ -300,6 +300,7 @@ class Memberpage extends MY_Controller
             'h' => $this->input->post('h')
         );
         $isVendor = $this->input->post('vendor') ? true : false;
+        $vendorLink = html_escape($this->input->post('url'));
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -323,7 +324,7 @@ class Memberpage extends MY_Controller
         }
         else{
             if($isVendor){
-                redirect($temp['userslug']);
+                redirect($temp['userslug'] . "/" . $vendorLink);
             }
             else{
                 redirect('me');
@@ -861,13 +862,15 @@ class Memberpage extends MY_Controller
         $result = $this->memberpage_model->banner_upload($uid, $data);
         $data = $this->memberpage_model->get_member_by_id($uid);
 
+        $vendorLink = html_escape($this->input->post('url'));
+
         if(isset($result['error'])){
             print "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
             print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$data['userslug']."'},3000);</script>";
         }
         else{
-            redirect($data['userslug']);
+            redirect($data['userslug'] . "/" . $vendorLink);
         }
     }
         
