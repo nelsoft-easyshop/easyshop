@@ -26,7 +26,8 @@ class EsAdminImagesRepository extends EntityRepository
 
         $result = $qb->getResult();
 
-        $adminImage = new EsAdminImages;
+        $adminImage = new EsAdminImages();
+        
         if(!$result) {
             $adminImage->setImageName($checkfilename);
             $this->_em->persist($adminImage);
