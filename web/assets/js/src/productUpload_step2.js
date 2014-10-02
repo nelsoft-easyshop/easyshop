@@ -534,8 +534,12 @@ function processAttributes()
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+        var price = parseFloat($(this).val());
         if( !isNaN(prcnt) ){
             get_discPrice();
+        }
+        else{
+            $("#discounted_price_con").text(price.toFixed(2));
         }
     });
     
@@ -723,7 +727,7 @@ var previous,editSelectedValue,editSelectedId;
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
-        var regex = new RegExp("^[a-zA-Z0-9\\-\\s]+$");
+        var regex = new RegExp("^[a-zA-Z0-9\\-\\s\\b]+$");
         var str = String.fromCharCode(!evt.charCode ? evt.which : evt.charCode);
         if (regex.test(str)) {
             return true;
