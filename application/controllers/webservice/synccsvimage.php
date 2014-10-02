@@ -114,7 +114,7 @@ class SyncCsvImage extends MY_Controller
                 } 
             }
             if($flag === 1){
-                $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);                            
+                $this->deleteCSVProducts($ids);
             }
         }
         if(!empty($errorSummary)) {
@@ -123,6 +123,36 @@ class SyncCsvImage extends MY_Controller
         else {
             return $checkImagesId;
         }
+    }
+
+    /**
+     * Deletes products upload from the csv files that have errors
+     * @param int $ids
+     */ 
+    private function deleteCSVProducts($ids)
+    {
+        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
+                                    ->deleteAttrDetailByProductId($ids);
+
+        $this->em->getRepository('EasyShop\Entities\EsOptionalAttrhead')
+                                    ->deleteAttrHeadById($ids);                                    
+
+        $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                    ->deleteImageByProductId($ids);   
+
+        $productItem = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                    ->getProductItemByProductId($ids); 
+
+        $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                    ->deleteShippingDetailByProductItem($productItem);         
+
+        $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
+                                    ->deleteShippingHeadByProductId($ids);  
+
+        $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                    ->deleteProductItemByProductID($ids);
+
+        $this->EsProductRepository->deleteProductFromAdmin($ids);                                                                                                                                                                     
     }
 
     /**
