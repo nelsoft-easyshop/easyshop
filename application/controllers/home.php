@@ -945,7 +945,7 @@ class Home extends MY_Controller
             ));
 
         $data = array(
-            'title' => 'Report a Problem git statu| Easyshop.ph',
+            'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         );
 
