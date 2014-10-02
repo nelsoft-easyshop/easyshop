@@ -52,39 +52,6 @@ class EsProductImageRepository extends EntityRepository
         $result = $qb->getResult();
         return $result;
     }
-    /**
-     * Rename images uploaded from the admin side throuh csv
-     *
-     * @param string $filename
-     * @param int $productid
-     * @return EasyShop\Entities\EsProductImage
-     *
-     */
-    public function renameImagesAndSlugsFromAdmin($newSlug, $filename, $productId, $productImageId)
-    {
-
-        $this->em =  $this->_em;
-        $qb = $this->em->createQueryBuilder();
-        $q = $qb->update('EasyShop\Entities\EsProduct','pi')
-                ->set('pi.slug', $qb->expr()->literal($newSlug))
-                ->where('pi.idProduct = :productId')
-                ->setParameter('productId', $productId)
-                ->getQuery();
-        $p = $q->execute();   
-
-
-        $qb = $this->em->createQueryBuilder();
-        $q = $qb->update('EasyShop\Entities\EsProductImage','pi')
-                ->set('pi.productImagePath', $qb->expr()->literal($filename))
-                ->where('pi.product = :productId')
-                ->andWhere('pi.idProductImage = :idImage')
-                ->setParameter('productId', $productId)
-                ->setParameter('idImage', $productImageId)
-                ->getQuery();
-        $p = $q->execute();        
-
-        return $p;
-    }
 
     /**
      * Method used for reverting rubbish data from admin product csv uploads
