@@ -9,7 +9,10 @@ use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
-
+use EasyShop\Entities\EsOptionalAttrdetail;
+use EasyShop\Entities\EsOptionalAttrhead;
+use EasyShop\Entities\EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class EsProductRepository extends EntityRepository
@@ -587,6 +590,22 @@ class EsProductRepository extends EntityRepository
 
         return $resultNeeded; 
     }  
+
+    /**
+     * Delete products that do not have images inside admin folder
+     * @param  integer $id
+     */    
+    public function deleteProductFromAdmin($id)
+    {
+        $this->em =  $this->_em;
+         
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
+            WHERE e.idProduct = ?8");
+        $query->setParameter(8, $id);
+        $query->execute();       
+
+    }
+
 }
 
 
