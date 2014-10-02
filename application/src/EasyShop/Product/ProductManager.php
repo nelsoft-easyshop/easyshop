@@ -63,16 +63,25 @@ class ProductManager
      */
     private $configLoader;
 
+
+    /**
+     * Image Library Dipendency Injection
+     *
+     * @var CI_Image_lib
+     */
+    private $imageLibrary;    
+
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
+        $this->imageLibrary = $imageLibrary;
     }
 
     /**
@@ -480,9 +489,7 @@ class ProductManager
      */ 
     public function imageresize($imageDirectory, $newDirectory, $dimension)
     {
-        $CI =& get_instance();
-        $CI->load->library('image_lib');               
-
+        
         $config['image_library'] = 'GD2';
         $config['source_image'] = $imageDirectory;
         $config['maintain_ratio'] = true;
@@ -491,9 +498,9 @@ class ProductManager
         $config['width'] = $dimension[0];
         $config['height'] = $dimension[1]; 
 
-        $CI->image_lib->initialize($config); 
-        $CI->image_lib->resize();
-        $CI->image_lib->clear();        
+        $this->imageLibrary->initialize($config); 
+        $this->imageLibrary->resize();
+        $this->imageLibrary->clear();        
     } 
 
     /**
