@@ -17,6 +17,7 @@ class messages_model extends CI_Model
 	$sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
 	$sth->bindParam(':from_id',$sender, PDO::PARAM_INT);
 	$sth->bindParam(':message',$msg);
+	$sth->bindParam(':date_time_sent', date('Y-m-d H:i:s'));
 	$sth->execute();
 	
 	return $sth->rowCount();
