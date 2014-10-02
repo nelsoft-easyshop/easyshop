@@ -192,7 +192,7 @@
             <div class="scratch-win-error error">
                 <h2>Sorry</h2>
                 <p>
-                    Your code did not match the any of the promo's valid codes. Try your luck with another scratch card.
+                    Your code did not match any of the promo's valid codes. Try your luck with another scratch card.
                 </p>
                 <p>
                     You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
