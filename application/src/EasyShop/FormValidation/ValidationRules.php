@@ -111,6 +111,25 @@ class ValidationRules
                                 new Assert\NotBlank(),
                     ),
                 ),
+            'user_shipping_address' => array(
+                    'consignee' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'city' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'region' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'mobile_number' => array(
+                                new Assert\NotBlank(),
+                                new CustomAssert\IsValidMobile(),
+                    ),
+                    'street_address' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '250']),
+                    ),
             'personal_info' => array(
                     'dateofbirth' => array(
                                 new Assert\Date(['message' => "Invalid Birthday format."])
@@ -122,7 +141,6 @@ class ValidationRules
                     'mobile' => array(
                                 new CustomAssert\IsValidMobile()
                     ),
-                ),
         );
     }
 

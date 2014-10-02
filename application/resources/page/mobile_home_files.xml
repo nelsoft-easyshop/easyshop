@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!-- show product list, go to site, show product details -->
+<map>
+assets/images/mainslide/1.jpg
+assets/images/mainslide/2.jpg
+assets/images/mainslide/3.jpg
+ 
+    <section>
+        <name>Promo </name>
+        <bgcolor>white</bgcolor>
+        <type>promo</type>
+        <data>
+            <name>0</name>
+            <image>assets/images/mainslide/1.jpg</image>
+            <actionType>show product details</actionType>
+            <target>mobile/home</target>
+        </data> 
+        <data>
+            <name>0</name>
+            <image>assets/images/mainslide/1.jpg</image>
+            <actionType>show product details</actionType>
+            <target>mobile/home</target>
+        </data>
+        <data>
+            <name>0</name>
+            <image>assets/images/mainslide/1.jpg</image>
+            <actionType>show product details</actionType>
+            <target>mobile/home</target>
+        </data>
+    </section>
+
+    <section>
+        <name>Section 1</name>
+        <bgcolor>white</bgcolor>
+        <type>theme 1</type>
+        <data>
+            <name>0</name>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/mi-3-16gb</target>
+        </data> 
+        <data>
+            <name>0</name>
+            <image>./assets/product/557_128_20140715/557_128_20140715722500.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/lg-optimus-g2-d802</target>
+        </data>
+        <data>
+            <name>0</name>
+            <image>./assets/product/556_128_20140715/556_128_20140715400490.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/samsung-wb50f-166mp-smart-camera-with-free-8gb-microsd-and-camera-case</target>
+        </data>
+    </section>
+
+    <section>
+        <name>Section 2</name>
+        <bgcolor>white</bgcolor>
+        <type>theme 2</type>
+        <data>
+            <name>0</name>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/mi-3-16gb</target>
+        </data> 
+        <data>
+            <name>0</name>
+            <image>./assets/product/557_128_20140715/557_128_20140715722500.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/lg-optimus-g2-d802</target>
+        </data>
+        <data>
+            <name>0</name>
+            <image>./assets/product/556_128_20140715/556_128_20140715400490.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/samsung-wb50f-166mp-smart-camera-with-free-8gb-microsd-and-camera-case</target>
+        </data>
+    </section>
+
+    <section>
+        <name>Section 3</name>
+        <bgcolor>white</bgcolor>
+        <type>theme 3</type>
+        <data>
+            <name>0</name>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/mi-3-16gb</target>
+        </data> 
+        <data>
+            <name>0</name>
+            <image>./assets/product/557_128_20140715/557_128_20140715722500.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/lg-optimus-g2-d802</target>
+        </data>
+        <data>
+            <name>0</name>
+            <image>./assets/product/556_128_20140715/556_128_20140715400490.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/samsung-wb50f-166mp-smart-camera-with-free-8gb-microsd-and-camera-case</target>
+        </data>
+        <data>
+            <name>0</name>
+            <image>./assets/product/557_128_20140715/557_128_20140715722500.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/lg-optimus-g2-d802</target>
+        </data>
+    </section>
+ 
+    <section>
+        <name>Categories</name>
+        <bgcolor>white</bgcolor>
+        <type>categories</type>
+        <data>
+            <name>Clothing  &amp; Accessories</name>
+            <image>images/img_icon_clothing.png</image>
+            <actionType>go to site</actionType>
+            <target>mobile/category/getCategoriesProduct?slug=clothing-accessories</target>
+        </data> 
+        <data>
+            <name>Business &amp; Industrial</name>
+            <image>images/img_icon_business.png</image>
+            <actionType>go to site</actionType>
+            <target>mobile/category/getCategoriesProduct?slug=business-industrial</target>
+        </data>  
+        <data>
+            <name>Furniture, Home &amp; Garden</name>
+            <image>images/img_icon_home.png</image>
+            <actionType>go to site</actionType>
+            <target>mobile/category/getCategoriesProduct?slug=furniture-home-garden</target>
+        </data> 
+        <data>
+            <name>Electronics &amp; Gadgets</name>
+            <image>images/img_icon_electronics.png</image>
+            <actionType>go to site</actionType>
+            <target>mobile/category/getCategoriesProduct?slug=electronics-gadgets</target>
+        </data> 
+    </section>
+</map>

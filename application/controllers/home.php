@@ -1089,6 +1089,7 @@ class Home extends MY_Controller
 
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
+
 }
 
 /* End of file home.php */

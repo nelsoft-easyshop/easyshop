@@ -482,14 +482,18 @@
     LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
     where m.slug=:userslug
 </select>
-
-<select id='getUserCount'>
-  SELECT COUNT(*)
-  from es_member
-
+ 
+<select id="authenticateWebKey">
+    SELECT count(*) as `cnt`  from es_webservice_user where 
+    `username` = 'mobiledev' and
+    `password` = reverse(PASSword(concat(md5('mobiledev'),sha1(:key))))
 </select>
-
-
+ 
+<select id='getUserCount'>
+    SELECT COUNT(*)
+    from es_member
+</select>
+ 
 </map>
 
 

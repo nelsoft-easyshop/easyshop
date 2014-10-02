@@ -136,9 +136,14 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
+            $rsm->addScalarResult('head_id', 'head_id');
+            $rsm->addScalarResult('detail_id', 'detail_id');
+            $rsm->addScalarResult('is_other', 'is_other');
+            $rsm->addScalarResult('price', 'price');
+            $rsm->addScalarResult('image_id', 'image_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -146,7 +151,12 @@ class EsProductRepository extends EntityRepository
                 SELECT 
                     a.product_id as product_id
                     , b.name AS name
-                    , a.attr_value 
+                    , a.attr_value
+                    , a.attr_id as head_id
+                    , a.id_product_attr as detail_id
+                    , '0' as is_other
+                    , a.attr_price as price
+                    , '0' as image_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -160,6 +170,11 @@ class EsProductRepository extends EntityRepository
                      a.product_id as product_id
                     , a.`field_name`
                     , b.value_name 
+                    , b.head_id
+                    , b.id_optional_attrdetail as detail_id
+                    , '1' as is_other
+                    , b.value_price as price
+                    , b. product_img_id as price
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 

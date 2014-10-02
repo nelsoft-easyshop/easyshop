@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
 
 class product_model extends CI_Model
 {
+
     function __construct()
     {
         parent::__construct();
@@ -15,6 +16,20 @@ class product_model extends CI_Model
     }
 
     # the queries directory -- application/resources/sql/product.xml
+
+    /**
+     * Get all category available in database
+     * @return array
+     */
+    public function selectAllCategory()
+    {
+        $query = 'SELECT id_cat,parent_id,slug,name,description FROM es_cat where id_cat not in (1)';
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
 
     /**
      *  Get category details by using category ID
@@ -2163,9 +2178,14 @@ class product_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Get category details based on given slug
+     * @param  string $slug
+     * @return mixed
+     */
     public function getCategoryBySlug($slug)
     {
-    $query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
+        $query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug', $slug, PDO::PARAM_STR);
         $result = $sth->execute();
@@ -2173,7 +2193,8 @@ class product_model extends CI_Model
         $return  = array();
         if( count($rows) != 1 ){
             $return['id_cat'] = 0; $return['name'] = ''; $return['description'] = '';
-        }else{
+        }
+        else{
             $return = $rows[0];
         }
 
