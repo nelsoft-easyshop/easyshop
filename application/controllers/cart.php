@@ -211,9 +211,9 @@ class Cart extends MY_Controller{
         $result['data'] = $data;
         $result['delete_to_cart'] = (
             $product['sellerid'] == $member_id ||
-            $useraccessdetails['is_email_verify'] != 1  ||
-            $product['is_draft'] == "1" ||
-            $product['is_delete'] == "1" ||
+            intval($useraccessdetails['is_email_verify']) !== 1  ||
+            intval($product['is_draft']) !== 0 ||
+            intval($product['is_delete']) !== 0 ||
             $product['can_purchase'] === false
         );
 
