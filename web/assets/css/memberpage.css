@@ -552,3 +552,33 @@ table.sales_summary tr.sales_info:hover td.amount{
     font-size:1em;
     padding: 0px 5px;
 }
+
+#store_name_submit{
+    position: relative;
+    display: inline-block;
+    padding: 7px 3px 7px 3px !important;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
+    background-image: linear-gradient(#fcfcfc, #eee);
+    background-repeat: repeat-x;
+    border: 1px solid #d5d5d5 !important;
+    border-radius: 3px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    line-height: 12px;
+}
+
+#store_name_cancel{
+    color: #4183c4;
+    text-decoration: none;
+}
+
+.store-name-field{
+    border-radius: 3px;
+}
+
+
