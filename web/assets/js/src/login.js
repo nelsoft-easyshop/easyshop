@@ -5,7 +5,7 @@
         $("#failed-login").hide();
         $(".search_box").css('display','none');
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
-            $("p#lockoutDuration").html($("#timeoutLeft").val());
+            $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
             $("#failed-login").show();
             $("#login-form").hide();
         }
@@ -73,6 +73,10 @@
 
                                 if( typeof vendorSubscriptionUri !== "undefined" ){
                                     window.location = config.base_url + vendorSubscriptionUri;
+                                }
+                                else if (first_uri_segment == 'promo') {
+                                    var code = url.split("/");
+                                    window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
                                 else{
                                     if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){

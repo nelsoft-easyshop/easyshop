@@ -23,7 +23,7 @@ class MY_Controller extends CI_Controller
 
         $url = uri_string();
         
-        if($url !== 'login'){
+        if($url !== 'login' && $url !== 'register'){
             $this->session->set_userdata('uri_string', $url);
         }
         
