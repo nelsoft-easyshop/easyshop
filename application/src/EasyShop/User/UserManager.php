@@ -47,6 +47,13 @@ class UserManager
      */
     private $valid;
 
+    /** 
+     *  Flag for calling EntityManager::flush() in function save()
+     *
+     *  @var boolean
+     */
+    private $hasError;
+
     /**
      *  Container for error encountered by method chain.
      *
@@ -89,21 +96,8 @@ class UserManager
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
-        $this->valid = true;
-        $this->formValidation = $formValidation;
-        $this->formFactory = $formFactory;
-        $this->formErrorHelper = $formErrorHelper;
-    }
-
-    /**
-     *  Magic function. Called when accessing private functions from outside class.
-     */
-    public function __call($name, $args)
-    {
-        if($this->valid){
-            $this->valid = call_user_func_array(array($this,$name), $args);
-        }
-        return $this;
+        $this->hasError = FALSE;
+        $this->err = array();
     }
 
     /**
@@ -115,39 +109,32 @@ class UserManager
     }
 
     /**
-     *  Print desired info in this function.
-     */
-    public function showDetails()
-    {
-        print("Member ID: ". $this->memberId . "<br>");
-    }
-
-    /**
      *  REQUIRED! Initializes user to work on
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setUser($memberId)
+    public function setUser($memberId)
     {
         $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
 
         if( $memberEntity !== null ){
             $this->memberId = $memberId;
             $this->memberEntity = $memberEntity;
-            return true;
         }
         else{
-            $this->err = "User does not exist.";
-            return false;
+            $this->err['user'] = "User does not exist.";
+            $this->hasError = TRUE;
         }
+
+        return $this;
     }
 
     /**
      *  Set personal mobile in es_member table
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setMobile($mobileNum)
+    public function setMobile($mobileNum)
     {
         $isValidMobile = $this->isValidMobile($mobileNum);
 
@@ -161,28 +148,71 @@ class UserManager
 
             // If mobile not used
             if( empty($thisMember) ){
+                
+                $boolContactnoVerify = (string)$this->memberEntity->getContactno() === $mobileNum ? (bool)$this->memberEntity->getIsContactnoVerify() : FALSE;
+                
                 $this->memberEntity->setContactno($mobileNum);
+                $this->memberEntity->setIsContactnoVerify($boolContactnoVerify);
                 $this->em->persist($this->memberEntity);
-                return true;
             }
             else{
-                $this->err = "Mobile number already used.";
+                $this->err['mobile'] = "Mobile number already used.";
+                $this->hasError = TRUE;
             }
         }
         else{
-            $this->err = "Invalid mobile number.";
-            
+            $this->err['mobile'] = "Mobile Number should be in the format of (09 or 08)XXXXXXXXX .";
+            $this->hasError = TRUE;
         }
 
-        return false;
+        return $this;
+    }
+
+    /**
+     *  Set personal email in es_member
+     *  Checks if user is allowed to change email
+     *  Checks if email has already been used by another user
+     *
+     *  @return object
+     */
+    public function setEmail($email)
+    {
+        $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->getUserExistingEmail($this->memberId, $email);
+
+        $authenticationId = $this->memberEntity->getOauthId();
+        $authenticationProvider = $this->memberEntity->getOauthProvider();
+        $oldEmail = $this->memberEntity->getEmail();
+
+        if( $email !== $oldEmail && ( $authenticationId !== "0" || strlen($authenticationProvider) > 0 ) ){
+            $this->err['email'] = "Change of email not permitted for this user";
+            $this->hasError = TRUE;
+
+            return $this;
+        }
+
+        if(empty($thisMember)){
+
+            $boolEmailVerify = (string)$this->memberEntity->getEmail() === (string)$email ? (bool)$this->memberEntity->getIsEmailVerify() : FALSE;
+
+            $this->memberEntity->setEmail($email);
+            $this->memberEntity->setIsEmailVerify($boolEmailVerify);
+            $this->em->persist($this->memberEntity);
+        }
+        else{
+            $this->err['email'] = "Email already used.";
+            $this->hasError = TRUE;
+        }
+
+        return $this;
     }
 
     /**
      *  Set storename in es_member table
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setStoreName($storeName)
+    public function setStoreName($storeName)
     {
         $storeName = trim($storeName);
         $objUsedStoreName = array();
@@ -196,20 +226,39 @@ class UserManager
         if( empty($objUsedStoreName) ){
             $this->memberEntity->setStoreName($storeName);
             $this->em->persist($this->memberEntity);
-            return true;
         }
         else{
-            $this->err = "Store name already used!";
-            return false;
+            $this->err['storename'] = "Store name already used!";
+            $this->hasError = TRUE;
         }
+
+        return $this;
+    }
+
+
+    /**
+     *  Set misc table values for es_member
+     *
+     *  @param array $array - array('EntityFunctionName' => 'value')
+     *
+     *  @return object
+     */
+    public function setMemberMisc($array)
+    {
+        foreach($array as $function=>$value){
+            $this->memberEntity->$function($value);
+        }
+        $this->em->persist($this->memberEntity);
+
+        return $this;
     }
 
     /**
      *  Set es_address table values
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
+    public function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
     {
         // Verify location validity
         $locationEntity = $this->em->getRepository("EasyShop\Entities\EsLocationLookup")
@@ -218,8 +267,10 @@ class UserManager
         
         $isValidMobile = $this->isValidMobile($mobileNum);
         if( !$isValidMobile && $mobileNum !== "" ){
-            $this->err = "Invalid mobile number.";
-            return false;            
+            $this->err['mobile'] = "Invalid mobile number.";
+            $this->hasError = TRUE;
+
+            return $this;
         }
 
         if( $isValidLocation ){
@@ -250,14 +301,13 @@ class UserManager
                     ->setCountry($countryEntity);
 
             $this->em->persist($address);
-
-            return true;
         }
         else{
-            $this->err = "Invalid location combination";
+            $this->err['address'] = "Invalid location combination";
+            $this->hasError = TRUE;
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -265,9 +315,14 @@ class UserManager
      */
     public function save()
     {
-        $this->em->flush();
-
-        return $this->valid;
+        if($this->hasError){
+            $this->em->clear();
+        }
+        else{
+            $this->em->flush();
+        }
+        
+        return !$this->hasError;
     }
 
     /****************** UTILITY FUNCTIONS *******************/

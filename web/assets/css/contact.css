@@ -244,11 +244,21 @@ section {
 .div-about-edit-area{
     display: none;
 }
-
+/*
 .p-about{
     line-height: 20px;
     width: 100%;
     word-wrap: break-word;
+}
+*/
+
+.p-about{
+    background-color: #ffffff;
+    border: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #575759;
+    padding: 0px;
 }
 
 .textarea-about{
