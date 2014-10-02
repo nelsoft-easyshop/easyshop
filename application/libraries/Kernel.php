@@ -99,10 +99,7 @@ class Kernel
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
             return new \EasyShop\User\UserManager($container['entity_manager']
-                                                ,$container['config_loader']
-                                                ,$container['form_factory']
-                                                ,$container['form_validation']
-                                                ,$container['form_error_helper']);
+                                                ,$container['config_loader']);
         };
         
         //Account Manager
