@@ -59,8 +59,13 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+       
         
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/home_primary');
+        $this->load->view('templates/footer_full');
+        /*
+         $this->load->view('templates/header', $data);
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
@@ -70,6 +75,7 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
+        */
 
     }
     
@@ -144,8 +150,7 @@ class Home extends MY_Controller
         $this->load->view('pages/web/policy');
         $this->load->view('templates/footer_full');
     }
-    
-    
+  
     /**
      * Renders terms and conditions page
      *
