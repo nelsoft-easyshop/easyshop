@@ -44,6 +44,8 @@
 
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
  
+    <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/header-css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/bootstrap.css" media='screen'>
     <link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
@@ -60,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
 <!-- End Google Tag Manager -->
         
-<header id="header">
+<div id="header">
             <div id="header-top">
                 <div class="container">
                     <div class="row">
@@ -98,59 +100,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 
                                 <div class="header-inner-right-wrapper clearfix">
                                     <div class="dropdown-cart-menu-container pull-right">
-                                    <div class="btn-group dropdown-cart">
-                                    <button type="button" class="btn-info dropdown-toggle" data-toggle="dropdown">
-                                        <span class="drop-item">0 item(s) </span>
-                                        <span class="drop-price">- P 0.00</span>
-                                        <span class="cart-menu-icon"></span>
-                                    </button>
-                                    
-                                        <div class="dropdown-menu dropdown-cart-menu pull-right clearfix" role="menu">
-                                            <p class="dropdown-cart-description">Recently added item(s).</p>
-                                            <ul class="dropdown-cart-product-list">
-                                                <li class="item clearfix">
-                                                <a href="#" title="Delete item" class="delete-item"><i class="fa fa-times"></i></a>
-                                                    <figure>
-                                                        <a href="#"><img src="images/products/thumbnails/dress1.jpg" alt="dress 1"></a>
-                                                    </figure>
-                                                    <div class="dropdown-cart-details">
-                                                        <p class="item-name">
-                                                        <a href="#">Cam Optia AF Webcam </a>
-                                                        </p>
-                                                        <p>
-                                                            1x
-                                                            <span class="item-price">P499</span>
-                                                        </p>
-                                                    </div><!-- End .dropdown-cart-details -->
-                                                </li>
-                                                <li class="item clearfix">
-                                                <a href="#" title="Delete item" class="delete-item"><i class="fa fa-times"></i></a>
-                                                    <figure>
-                                                        <a href="#"><img src="images/products/thumbnails/dress6.jpg" alt="dress 6"></a>
-                                                    </figure>
-                                                    <div class="dropdown-cart-details">
-                                                        <p class="item-name">
-                                                            <a href="#">Iphone Case Cover Original</a>
-                                                        </p>
-                                                        <p>
-                                                            1x
-                                                            <span class="item-price">P499<span class="sub-price">.99</span></span>
-                                                        </p>
-                                                    </div><!-- End .dropdown-cart-details -->
-                                                </li>
-                                            </ul>
+                                        <div class="pos-rel mrgn-rght-8">
+                                            <div class="header-cart-container">
+                                                <a href="" class="header-cart-wrapper">
+                                                    <span class="header-cart-items-con">
+                                                        <span class="header-cart-item">2 item(s)</span> in your cart
+                                                    </span>
+                                                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+                                                </a>
+                                                <div class="header-cart-item-list">
+                                                    <p>Recently add item(s)</p>
+                                                    <div class="mrgn-bttm-15">
+                                                        <div class="header-cart-item-img">
+                                                            <a href="">
+                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="header-cart-item-con">
+                                                            <a href=""><span>Doraemon - blue</span></a>
+                                                            <span>x 1</span>
+                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                    <div class="mrgn-bttm-15">
+                                                        <div class="header-cart-item-img">
+                                                            <a href="">
+                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="header-cart-item-con">
+                                                            <a href=""><span>Doraemon - blue</span></a>
+                                                            <span>x 1</span>
+                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                    <div class="header-cart-lower-content">
+                                                        <div class="header-cart-shipping-total">
+                                                            <p>Shipping: <span>&#8369; 50.00</span></p>
+                                                            <p>Total: <span>&#8369; 100,500.00</span></p>
+                                                        </div>
+                                                        <div class="header-cart-buttons">
+                                                            <a href="" class="header-cart-lnk-cart">go to cart</a>
+                                                            <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             
-                                            <ul class="dropdown-cart-total">
-                                                <li><span class="dropdown-cart-total-title">Shipping:</span>P7</li>
-                                                <li><span class="dropdown-cart-total-title">Total:</span>P1005<span class="sub-price">.99</span></li>
-                                            </ul><!-- .dropdown-cart-total -->
-                                            <div class="dropdown-cart-action">
-                                                <p><a href="#" class="btn btn-custom-2 btn-block">Cart</a></p>
-                                                <p><a href="#" class="btn btn-custom btn-block">Checkout</a></p>
-                                            </div><!-- End .dropdown-cart-action -->
-                                            
-                                        </div><!-- End .dropdown-cart -->
-                                        </div><!-- End .btn-group -->
+                                        </div>
                                     </div><!-- End .dropdown-cart-menu-container -->
 
                                 <div class="header-top-dropdowns">
@@ -173,132 +173,124 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div><!-- End .col-md-7 -->
                     </div><!-- End .row -->
                 </div><!-- End .container -->
-                
-                <div id="main-nav-container">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 clearfix">
-                                
-                                <nav id="main-nav">
-                                    <div id="responsive-nav">
-                                        <div id="responsive-nav-button">
-                                            Menu <span id="responsive-nav-button-icon"></span>
-                                        </div><!-- responsive-nav-button -->
-                                    </div>
-                                    <ul class="menu clearfix">
-                                        <li class="mega-menu-container drop-category">
-                                            <span class="category-icon"></span>
-                                            <a href="#">CATEGORIES</a>
-                                            <span class="drop-icon"></span>
-                                            <div class="mega-menu clearfix">
-                                                <h2>popular categories</h2>
-                                                    <div class="col-3">
-                                                        <a href=""><h3>Clothes &amp; Accessories</h3></a>
-                                                        <ul>
-                                                            <li><a href="">Women Clothing</a></li>
-                                                            <li><a href="">Men Clothing</a></li>
-                                                            <li><a href="">Babies Clothing</a></li>
-                                                            <li><a href="">Unisex Accessories</a></li>
-                                                        </ul>
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href=""><h3>Electronics &amp; Gadget</h3></a>
-                                                        <ul>
-                                                            <li><a href="">Cameras &amp; Imaging</a></li>
-                                                            <li><a href="">Computer &amp; Networking</a></li>
-                                                            <li><a href="">Tablets</a></li>
-                                                            <li><a href="">Mobile Phones</a></li>
-                                                        </ul>
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href=""><h3>Jewelry &amp; Watches</h3></a>
-                                                        <ul>
-                                                            <li><a href="">Watches</a></li>
-                                                            <li><a href="">Fasion Jewelry</a></li>
-                                                        </ul>
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-4-icon"></span>
-                                                            Electronic & Gadgets</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-5-icon"></span>
-                                                            Toys, Hobbies & Collectibles</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-6-icon"></span>
-                                                            Books, Music & Movies</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-7-icon"></span>
-                                                            Furniture, Home & Garden</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-8-icon"></span>
-                                                            Business & Industrial</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                                    <div class="col-3">
-                                                        <a href="#" class="mega-menu-title">
-                                                            <span class="category-9-icon"></span>
-                                                            Food & Beverages</a>
-                                                            <p>FLorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque sagittis.</p><!-- End .mega-menu-title -->
-                                                    </div><!-- End .col-5 -->
-                                            </div><!-- End .mega-menu -->
-                                        </li>
-                                        
-                                        <li>
-                                            <a href="#">NEW ARRIVALS</a>
-                                            <ul>
-                                                <li><a href="#">Male</a></li>
-                                                <li><a href="#">Female</a></li>
-                                                <li><a href="c#">Gadgets</a>
-                                                    <ul>
-                                                        <li><a href="#">Camera</a></li>
-                                                        <li><a href="#">Phone</a></li>
-                                                        <li><a href="#">Computer</a></li>
-                                                        <li><a href="#">Accessories</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="#">Children</a></li>
-                                                <li><a href="#">Toys</a></li>
-                                                <li><a href="#">Auto Supplies</a></li>
-                                                <li><a href="#">Food & Beverages</a></li>
-                                                <li><a href="#">Beers</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">TOP PRODUCTS</a>
-                                        </li>
-                                        <li><a href="#">TOP SELLERS</a></li>
-                                        <li><a href="#">EASY TREATS</a>
-                                            <ul>
-                                                <li><a href="#">Hot Deals</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">EASY DEALS</a></li>
-                                    </ul>
+                <div class="sticky-header-nav">
+                    <div id="main-nav-container">
+                        <div  class="sticky-nav-logo-con">
+                            <div class="sticky-nav-logo">
+                                <img src="<?=base_url()?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 clearfix">
                                     
-                                </nav>
-                                
-                            </div><!-- End .col-md-12 -->
-                    </div><!-- End .row -->
-                    <div class="clear"></div> 
-                </div><!-- End .container -->
+                                    <div id="main-nav">
+                                        <div id="responsive-nav">
+                                            <div id="responsive-nav-button">
+                                                Menu <span id="responsive-nav-button-icon"></span>
+                                            </div><!-- responsive-nav-button -->
+                                        </div>
+                                        <ul class="menu clearfix">
+                                            <li class="mega-menu-container drop-category">
+                                                <span class="category-icon"></span>
+                                                <a href="#" class="mega-menu-title">CATEGORIES</a>
+                                                <span class="drop-icon"></span>
+                                                <div class="mega-menu clearfix">
+                                                    <div class="col-md-80p border-right">                                                    
+                                                        <h2>popular categories</h2>
+                                                        <div class="mrgn-left-neg-14">
+                                                            <div class="col-md-3">
+                                                                <a href="" class="cat-sub-title">Clothes &amp; Accessories</a>
+                                                                <ul class="cat-sub-list">
+                                                                    <li><a href="">Women Clothing</a></li>
+                                                                    <li><a href="">Men Clothing</a></li>
+                                                                    <li><a href="">Babies Clothing</a></li>
+                                                                    <li><a href="">Unisex Accessories</a></li>
+                                                                </ul>
+                                                            </div><!-- End .col-5 -->
+                                                            <div class="col-md-3">
+                                                                <a href="" class="cat-sub-title">Electronics &amp; Gadget</a>
+                                                                <ul class="cat-sub-list">
+                                                                    <li><a href="">Cameras &amp; Imaging</a></li>
+                                                                    <li><a href="">Computer &amp; Networking</a></li>
+                                                                    <li><a href="">Tablets</a></li>
+                                                                    <li><a href="">Mobile Phones</a></li>
+                                                                </ul>
+                                                            </div><!-- End .col-5 -->
+                                                            <div class="col-md-3">
+                                                                <a href="" class="cat-sub-title">Jewelry &amp; Watches</a>
+                                                                <ul class="cat-sub-list">
+                                                                    <li><a href="">Watches</a></li>
+                                                                    <li><a href="">Fasion Jewelry</a></li>
+                                                                </ul>
+                                                            </div><!-- End .col-5 -->
+                                                            <div class="col-md-3">
+                                                                <a href="" class="cat-sub-title">Health &amp; Beauty</a>
+                                                                <ul class="cat-sub-list">
+                                                                    <li><a href="">Makeup</a></li>
+                                                                    <li><a href="">Fragrances</a></li>
+                                                                    <li><a href="">Skin Care</a></li>
+                                                                </ul>
+                                                            </div><!-- End .col-5 -->
+                                                        </div>                                                    
+                                                    </div>
+                                                    <div class="col-md-20p">
+                                                        <h2>other categories</h2>
+                                                        <ul class="other-cat-con">
+                                                            <li><a href="">Food &amp; Beverages</a></li>
+                                                            <li><a href="">Toys, Hobbies &amp; Collections</a></li>
+                                                            <li><a href="">Books, Music &amp; Movies</a></li>
+                                                            <li><a href="">Home, Furniture &amp; Garden</a></li>
+                                                            <li><a href="">Business &amp; Industrial</a></li>
+                                                        </ul>
+                                                    </div>    
+                                                </div><!-- End .mega-menu -->
+                                            </li>
+                                            
+                                            <li>
+                                                <a href="#">NEW ARRIVALS</a>
+                                                <ul class="nav-2nd-level">
+                                                    <li><a href="#">Male</a></li>
+                                                    <li><a href="#">Female</a></li>
+                                                    <li><a href="c#">Gadgets</a>
+                                                        <ul class="nav-3rd-level">
+                                                            <li><a href="#">Camera</a></li>
+                                                            <li><a href="#">Phone</a></li>
+                                                            <li><a href="#">Computer</a></li>
+                                                            <li><a href="#">Accessories</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="#">Children</a></li>
+                                                    <li><a href="#">Toys</a></li>
+                                                    <li><a href="#">Auto Supplies</a></li>
+                                                    <li><a href="#">Food &amp; Beverages</a></li>
+                                                    <li><a href="#">Beers</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="#">TOP PRODUCTS</a>
+                                            </li>
+                                            <li><a href="#">TOP SELLERS</a></li>
+                                            <li><a href="#">EASY TREATS</a>
+                                                <ul class="nav-2nd-level">
+                                                    <li><a href="#">Hot Deals</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="#">EASY DEALS</a></li>
+                                        </ul>
+                                        
+                                    </div>
+                                    
+                                </div><!-- End .col-md-12 -->
+                        </div><!-- End .row -->
+                        <div class="clear"></div> 
+                    </div><!-- End .container -->
+                </div>
                     <div class="clear"></div> 
                 </div><!-- End #nav -->
                 <div class="clear"></div> 
             </div><!-- End #inner-header -->
             <div class="clear"></div> 
-        </header><!-- End #header -->
+</div><!-- End #header -->
 
 <div class="clear"></div>        
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
