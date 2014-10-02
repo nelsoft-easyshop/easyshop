@@ -2178,17 +2178,23 @@ class product_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Get category details based on given slug
+     * @param  string $slug
+     * @return mixed
+     */
     public function getCategoryBySlug($slug)
     {
-		$query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
-    	$result = $sth->execute();
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':slug', $slug, PDO::PARAM_STR);
+        $result = $sth->execute();
+        $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         $return  = array();
         if( count($rows) != 1 ){
             $return['id_cat'] = 0; $return['name'] = ''; $return['description'] = '';
-        }else{
+        }
+        else{
             $return = $rows[0];
         }
 
