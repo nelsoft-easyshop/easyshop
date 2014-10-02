@@ -35,14 +35,21 @@ class SyncCsvImage extends MY_Controller
     }
 
     /**
-     * Passess the posted data to syncImages method
+     * Evaluates the posted data 
+     * @return JSON
      */ 
     public function index()
     {
-
-
         if($this->input->get("product")){
-            $this->checkIfImagesExist($this->input->get());               
+            $result = $this->checkIfImagesExist($this->input->get());               
+            if(!is_array($result)){
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($result);    
+            }
+            else {
+                return $this->syncImages($result);
+            }
         }
         else {
             $this->doUpload($this->input->get());  
@@ -106,18 +113,15 @@ class SyncCsvImage extends MY_Controller
                     }
                 } 
             }
-            if($flag == 1){
+            if($flag === 1){
                 $result =  $this->EsProductRepository->deleteProductFromAdmin($ids);                            
             }
         }
         if(!empty($errorSummary)) {
-            $jsonp = "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output($jsonp);        
+            return  "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
         }
         else {
-            $this->syncImages($checkImagesId);
+            return $checkImagesId;
         }
     }
 
@@ -158,7 +162,7 @@ class SyncCsvImage extends MY_Controller
                 $attrImage = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
                                             ->findBy(['productImgId' => $productImageId]); 
                 if(!file_exists($tempDirectory)){
-                    $newSlug = $this->productManager->generateSlugForCSVProducts($productObject->getSlug());
+                    $newSlug = $this->productManager->generateSlug($productObject->getSlug());
                     mkdir($tempDirectory.'categoryview/', 0777, true);
                     mkdir($tempDirectory.'small/', 0777, true);
                     mkdir($tempDirectory.'thumbnail/', 0777, true);
