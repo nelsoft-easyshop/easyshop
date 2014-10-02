@@ -537,8 +537,12 @@ function processAttributes()
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+        var price = parseFloat($(this).val());
         if( !isNaN(prcnt) ){
             get_discPrice();
+        }
+        else{
+            $("#discounted_price_con").text(price.toFixed(2));
         }
     });
     
