@@ -71,13 +71,14 @@
                 <br/>
                 <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
                 <button class="btn btn-default-3" id="apply-fullname">Apply</button>
+                <img class="promoimgloader" src="/./assets/images/loading/preloader-whiteBG-small.gif">
             </div>
         </div>
         <input type="text" id="paymentToken" value="<?php echo md5(uniqid(mt_rand(), true)).'3';?>" style="display: none">
     </div>
     <div class="promo-gallery">
-        <div class="promo-gallery-header-container">
-            <div class="promo-gallery-header"></div>
+        <div class="header-galore33">
+            <a href="/gadgetsgalore">YOU MAY ALSO LIKE GADGETS GALORE</a>
         </div>
         <div class="promo-gallery-row">
             <?PHP foreach($gadgets_galore as $product) : ?>

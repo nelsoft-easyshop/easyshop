@@ -563,8 +563,9 @@ float: left;
 }
 
 .reg2_username input {
-  max-width: 41.5%;
-  width: 100%;
+    max-width: 41.5%;
+    width: 100%;
+    background-color: #ffffff;
 }
 
 .reg2_fullname input,
@@ -572,8 +573,9 @@ float: left;
 .reg2_confirmpassword input,
 .reg2_email input,
 .mobile input {
-  max-width: 85%;
-  width: 100%;
+    max-width: 85%;
+    width: 100%;
+    background-color: #ffffff;
 }
 
 .reg2_btn_submit input.btn_send {
