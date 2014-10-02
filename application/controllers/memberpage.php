@@ -98,12 +98,12 @@ class Memberpage extends MY_Controller
 
         if($form->isValid()){
             $formData = $form->getData();
-            $validNickname = $formData['nickname'];
-            $validFullname = $formData['fullname'];
+            $validNickname = (string)$formData['nickname'];
+            $validFullname = (string)$formData['fullname'];
             $validGender = strlen($formData['gender']) === 0 ? '0' : $formData['gender'];
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? "0001-01-01" : $formData['dateofbirth'];
-            $validMobile = $formData['mobile'];
-            $validEmail = $formData['email'];
+            $validMobile = (string)$formData['mobile'];
+            $validEmail = (string)$formData['email'];
 
             $um->setUser($memberId)
                ->setMobile($validMobile)

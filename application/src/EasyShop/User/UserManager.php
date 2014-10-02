@@ -273,7 +273,7 @@ class UserManager
         
         $isValidMobile = $this->isValidMobile($mobileNum);
         if( !$isValidMobile && $mobileNum !== "" ){
-            $this->err = "Invalid mobile number.";
+            $this->err['mobile'] = "Invalid mobile number.";
             return false;            
         }
 
