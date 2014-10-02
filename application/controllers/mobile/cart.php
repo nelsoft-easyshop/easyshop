@@ -91,7 +91,7 @@ class cart extends MY_Controller
         
 
         $mobileCartContents = json_decode($this->input->post('cartData'));
-		$mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
+        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
         foreach($mobileCartContents as $mobileCartContent){
                               
             $options = array();
