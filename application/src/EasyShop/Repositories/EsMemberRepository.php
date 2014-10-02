@@ -59,7 +59,7 @@ class EsMemberRepository extends EntityRepository
     }
 
     /**
-     *  
+     *  Fetch member entity using $mobileNum
      */
     public function getUserExistingMobile($memberId, $mobileNum)
     {
@@ -73,6 +73,25 @@ class EsMemberRepository extends EntityRepository
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('contact_no', $mobileNum);
+
+        return $query->getResult();
+    }
+
+    /**
+     *  Fetch member entity using $email
+     */
+    public function getUserExistingEmail($memberId, $email)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT m
+            FROM EasyShop\Entities\EsMember m
+            WHERE m.idMember != :member_id
+                AND m.email = :email
+        ";
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('email', $email);
 
         return $query->getResult();
     }

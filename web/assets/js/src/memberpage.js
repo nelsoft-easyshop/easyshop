@@ -495,7 +495,15 @@ $(document).ready(function(){
                     thisbtn.val('Save');
                     $(form).find('input').attr('disabled', false);
                     
-                    if(data == 1){
+                    try{
+                        var obj = jQuery.parseJSON(data);   
+                    }
+                    catch(e){
+                        alert('An error was encountered while processing your data. Please try again later.');
+                        return false;
+                    }
+
+                    if(obj.result === 'success'){
                         progress_update($('#personal_profile_main'));
                         
                         $('#mobile, #email').each(function(){
@@ -530,22 +538,16 @@ $(document).ready(function(){
                             }
                         });
                     }
-                    else if(data == 0){ 
-                        alert('An error was encountered in submitting your form. Please try again later.');
-                        //window.location.reload(true);
+                    else if(obj.result === 'fail'){ 
+                        var errString = "";
+                        $.each(obj.error, function(k,v){
+                            errString = errString + v + "<br>";
+                        });
+                        alert(errString);
                     }
-                    else{
-                        try{
-                            var obj = jQuery.parseJSON(data);	
-                        }
-                        catch(e){
-                            alert('An error was encountered while processing your data. Please try again later.');
-                            //window.location.reload(true);
-                            return false;
-                        }
-                        
-                        if(obj['mobile'] == 1){
-                            $('#cont_mobilediv span:first').html('Mobile No. already used.');
+                    else if(obj.result === 'error'){
+                        if('mobile' in obj['error']){
+                            $('#cont_mobilediv span:first').html(obj.error.mobile);
                             $('#cont_mobilediv').show();
                         }
                         else{
@@ -557,8 +559,8 @@ $(document).ready(function(){
                                 mobileField.attr('disabled', false);
                             }
                         }
-                        if(obj['email'] == 1){
-                            $('#cont_emaildiv span:first').html('Email already used.');
+                        if('email' in obj['error']){
+                            $('#cont_emaildiv span:first').html(obj.error.email);
                             $('#cont_emaildiv').show();
                         }
                         else{

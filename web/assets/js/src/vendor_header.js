@@ -121,7 +121,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 }
                 else{
                     // Display error
-                    alert(data.error);
+                    var errString = "";
+                    $.each(data.error, function(k,v){
+                        errString = errString + v + "<br>";
+                    });
+                    alert(errString);
                 }
             } 
         });
@@ -198,7 +202,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/memberpage/'+action;
+            document.getElementById('form_image').action = '/memberpage/'+formAction;
             $('#form_image').submit();
         }
         else{
