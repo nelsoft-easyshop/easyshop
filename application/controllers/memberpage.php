@@ -68,6 +68,74 @@ class Memberpage extends MY_Controller
      */
     public function edit_personal()
     {
+        $em = $this->serviceContainer['entity_manager'];
+        $um = $this->serviceContainer['user_manager'];
+        $memberId = $this->session->userdata('member_id');
+        $memberEntity = $em->find('EasyShop\Entities\EsMember', $memberId);
+        
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('nickname', 'text')
+                    ->add('fullname', 'text')
+                    ->add('gender', 'text')
+                    ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
+                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('email', 'text', array('constraints' => $rules['email']))
+                    ->getForm();
+
+        $form->submit([
+            'nickname' => $this->input->post('nickname')
+            , 'fullname' => $this->input->post('fullname')
+            , 'gender' => $this->input->post('gender')
+            , 'dateofbirth' => $this->input->post('dateofbirth')
+            , 'mobile' => $this->input->post('mobile')
+            , 'email' => $this->input->post('email')
+        ]);
+
+        if($form->isValid()){
+            $formData = $form->getData();
+            $validNickname = $formData['nickname'];
+            $validFullname = $formData['fullname'];
+            $validGender = strlen($formData['gender']) === 0 ? '0' : $formData['gender'];
+            $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? "0001-01-01" : $formData['dateofbirth'];
+            $validMobile = $formData['mobile'];
+            $validEmail = $formData['email'];
+
+            $um->setUser($memberId)
+               ->setMobile($validMobile)
+               ->setEmail($validEmail)
+               ->setMemberMisc([
+                    'setNickname' => $validNickname
+                    , 'setFullname' => $validFullname
+                    , 'setGender' => $validGender
+                    , 'setBirthday' => new DateTime($validDateOfBirth)
+                    , 'setLastmodifieddate' => new DateTime('now')
+                ]);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult ? 'success' : 'error'
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => 'fail'
+                , 'error' => 'Failed to validate form'
+            );
+        }
+
+        echo json_encode($serverResponse);
+    }
+
+
+    /*
+    public function edit_personal()
+    {
         if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
         {
             $uid = $this->session->userdata('member_id');
@@ -114,7 +182,7 @@ class Memberpage extends MY_Controller
         else{
             echo 0;
         }
-    }
+    }*/
 
     /**
      *  Used to edit address under Personal Information Tab

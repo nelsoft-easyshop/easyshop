@@ -111,6 +111,18 @@ class ValidationRules
                                 new Assert\NotBlank(),
                     ),
                 ),
+            'personal_info' => array(
+                    'dateofbirth' => array(
+                                new Assert\Date()
+                    ),
+                    'email' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Email()
+                    ),
+                    'mobile' => array(
+                                new CustomAssert\IsValidMobile()
+                    ),
+                ),
         );
     }
 

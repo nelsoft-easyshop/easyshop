@@ -47,6 +47,13 @@ class UserManager
      */
     private $valid;
 
+    /** 
+     *  Flag for calling EntityManager::flush() in function save()
+     *
+     *  @var boolean
+     */
+    private $hasError;
+
     /**
      *  Container for error encountered by method chain.
      *
@@ -71,7 +78,9 @@ class UserManager
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
-        $this->valid = true;
+        $this->valid = TRUE;
+        $this->hasError = FALSE;
+        $this->err = array();
     }
 
     /**
@@ -79,9 +88,16 @@ class UserManager
      */
     public function __call($name, $args)
     {
-        if($this->valid){
+        /*if($this->valid){
             $this->valid = call_user_func_array(array($this,$name), $args);
+        }*/
+
+        $this->valid = call_user_func_array(array($this,$name), $args);
+
+        if(!$this->valid){
+            $this->hasError = TRUE;
         }
+
         return $this;
     }
 
@@ -116,7 +132,7 @@ class UserManager
             return true;
         }
         else{
-            $this->err = "User does not exist.";
+            $this->err['user'] = "User does not exist.";
             return false;
         }
     }
@@ -145,12 +161,34 @@ class UserManager
                 return true;
             }
             else{
-                $this->err = "Mobile number already used.";
+                $this->err['mobile'] = "Mobile number already used.";
             }
         }
         else{
-            $this->err = "Invalid mobile number.";
-            
+            $this->err['mobile'] = "Invalid mobile number.";
+        }
+
+        return false;
+    }
+
+    /**
+     *  Set personal email in es_member
+     *
+     *  @return boolean
+     */
+    private function setEmail($email)
+    {
+        $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->getUserExistingEmail($this->memberId, $email);
+
+        if(empty($thisMember)){
+            $this->memberEntity->setEmail($email);
+            $this->em->persist($this->memberEntity);
+
+            return true;
+        }
+        else{
+            $this->err['email'] = "Email already used.";
         }
 
         return false;
@@ -178,9 +216,27 @@ class UserManager
             return true;
         }
         else{
-            $this->err = "Store name already used!";
+            $this->err['storename'] = "Store name already used!";
             return false;
         }
+    }
+
+
+    /**
+     *  Set misc table values for es_member
+     *
+     *  @param array $array - array('EntityFunctionName' => 'value')
+     *
+     *  @return boolean
+     */
+    private function setMemberMisc($array)
+    {
+        foreach($array as $function=>$value){
+            $this->memberEntity->$function($value);
+        }
+        $this->em->persist($this->memberEntity);
+
+        return true;
     }
 
     /**
@@ -233,7 +289,7 @@ class UserManager
             return true;
         }
         else{
-            $this->err = "Invalid location combination";
+            $this->err['address'] = "Invalid location combination";
         }
 
         return false;
@@ -244,9 +300,14 @@ class UserManager
      */
     public function save()
     {
-        $this->em->flush();
-
-        return $this->valid;
+        if($this->hasError){
+            $this->em->clear();
+        }
+        else{
+            $this->em->flush();
+        }
+        
+        return !$this->hasError;
     }
 
     /****************** UTILITY FUNCTIONS *******************/
