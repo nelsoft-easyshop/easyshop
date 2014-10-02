@@ -1340,9 +1340,24 @@ class Payment extends MY_Controller{
 
         $carts = $this->session->all_userdata();
 
-        // Create a fake decoded JSON for payment service
-        $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
+        // get credit points if there are any
+        $points = $this->em->getRepository('Easyshop\Entities\EsPoint')
+                        ->find(intval($this->session->userdata('member_id')))
+                        ->getCreditPoint();
 
+        // Create a fake decoded JSON for payment service
+        if(intval($points) > 0){
+            $paymentMethods = [
+                "PaypalGateway" => 
+                    ["method" => "PayPal", "getArray" => $this->input->get()],
+                "PointGateway" =>
+                    ["method" => "Point", "amount" => $points, "pointtype" => "purchase"]
+            ];
+        }
+        else{
+            $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
+        }
+        
         // Validate Cart Data
         $paymentService = $this->serviceContainer['payment_service'];
 

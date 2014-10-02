@@ -619,9 +619,6 @@ class PaymentService
             $this->em->persist($paymentRecord);
             $this->em->flush();
         }
-        else{
-            $returnValue['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
-        }
 
         $response = array_merge($response, $returnValue);
         return $response;

@@ -157,6 +157,13 @@ class PayPalGateway extends AbstractGateway
         $pointSpent = $pointGateway ? $this->pointGateway->getParameter('amount') : "0";
         $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
         
+        // Persist point credit for postback method
+        $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
+                            ->findOneBy(["member" => intval($memberId)]);
+
+        $userPoints->setCreditPoint(intval($pointSpent));
+        $this->em->flush();
+
         $shipping_amt = round(floatval($prepareData['othersumfee']),2);
         $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
         $productstring = $prepareData['productstring'];
@@ -222,6 +229,27 @@ class PayPalGateway extends AbstractGateway
                 $orderId = $return['v_order_id'];
                 //$locked = $this->lockItem($toBeLocked,$orderId,'insert');
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
+
+                if($pointGateway !== NULL){
+                    $pointGateway->setParameter('memberId', $memberId);
+                    $pointGateway->setParameter('itemArray', $return['item_array']);
+
+                    $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->pointGateway->getParameter('paymentType'));
+
+                    $trueAmount = $pointGateway->pay();
+
+                    $paymentRecord = new EsPaymentGateway();
+                    $paymentRecord->setAmount($trueAmount);
+                    $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                    $paymentRecord->setOrder($order);
+                    $paymentRecord->setPaymentMethod($paymentMethod);
+
+                    $this->em->persist($paymentRecord);
+                    $this->em->flush();
+                }
+
+
                 die('{"e":"1","d":"'.$paypalurl.'"}');
             }
             else{

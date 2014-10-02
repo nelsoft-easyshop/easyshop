@@ -104,13 +104,30 @@ $(document).ready(function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
-        var paymentMethod = JSON.stringify(
-                    {
-                        PaypalGateway:{
-                            method:"PayPal", 
-                            type:$(this).data('type')
-                        }
-                    });
+        var pointAllocated = $('#pointsAllocated').val();
+        if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
+            var paymentMethod = JSON.stringify(
+            {
+                PaypalGateway:{
+                    method:"PayPal", 
+                    type:$(this).data('type')
+                },
+                PointGateway:{
+                    method:"Point",
+                    amount:pointAllocated,
+                    pointtype: "purchase"
+                }
+            });
+        }
+        else{
+            var paymentMethod = JSON.stringify(
+            {
+                PaypalGateway:{
+                    method:"PayPal", 
+                    type:$(this).data('type')
+                }
+            });
+        }
         if(type == 1){
             if(!$('#chk_paypal1').is(':checked')){
                 $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",

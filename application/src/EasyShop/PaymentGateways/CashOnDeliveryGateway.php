@@ -117,6 +117,9 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $this->em->flush();
             }
         }
+        else{
+            $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+        }
         return $response;
     }
 
