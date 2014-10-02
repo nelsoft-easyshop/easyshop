@@ -132,13 +132,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div><span class="user-nav-dropdown">Account Settings</span></div>
                             <ul class="nav-dropdown">
                                 <li>
-                                    <a href="/me">Dashboard</a>
+                                    <a class="prevent" href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="/me?me=pending">On-going Transactions</a>
+                                    <a class="prevent" href="/me?me=pending">On-going Transactions</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="/me?me=settings">Settings</a>
+                                    <a class="prevent" href="/me?me=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/login/logout">Logout</a>
