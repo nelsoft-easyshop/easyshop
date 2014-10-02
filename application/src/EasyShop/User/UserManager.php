@@ -143,7 +143,7 @@ class UserManager
             }
         }
         else{
-            $this->err['mobile'] = "Invalid mobile number.";
+            $this->err['mobile'] = "Mobile Number should be in the format of (09 or 08)XXXXXXXXX .";
             $this->hasError = TRUE;
         }
 
