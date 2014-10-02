@@ -62,9 +62,8 @@ class Memberpage extends MY_Controller
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
-     *  Returns 1 on success, 0 otherwise
      *
-     *  @return integer
+     *  @return JSON
      */
     public function edit_personal()
     {
@@ -116,6 +115,7 @@ class Memberpage extends MY_Controller
                     , 'setBirthday' => new DateTime($validDateOfBirth)
                     , 'setLastmodifieddate' => new DateTime('now')
                 ]);
+
             $boolResult = $um->save();
 
             $serverResponse = array(
@@ -132,58 +132,6 @@ class Memberpage extends MY_Controller
 
         echo json_encode($serverResponse);
     }
-
-
-    /*
-    public function edit_personal()
-    {
-        if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
-        {
-            $uid = $this->session->userdata('member_id');
-            $checkdata = array(
-                'member_id' => $uid,
-                'contactno' => $this->input->post('mobile'),
-                'email' => $this->input->post('email')
-            );
-
-            $check = $this->register_model->check_contactinfo($checkdata);
-            if($check['mobile'] !== 0 || $check['email'] !== 0){
-                echo json_encode($check);
-                return;
-            }
-
-            $uid = $this->session->userdata('member_id');
-            $postdata = array(
-                'fullname' => $this->input->post('fullname'),
-                'nickname' => $this->input->post('nickname'),
-                'gender' => $this->input->post('gender'),
-                'birthday' => $this->input->post('dateofbirth'),
-                'contactno' => ltrim($this->input->post('mobile'), '0'),
-                'email' => $this->input->post('email')
-            );
-
-            if($postdata['email'] === $this->input->post('email_orig')){
-                $postdata['is_email_verify'] = $this->input->post('is_email_verify');
-            }
-            else{
-                $postdata['is_email_verify'] = 0;
-            }
-            
-            if($postdata['contactno'] === $this->input->post('mobile_orig')){
-                $postdata['is_contactno_verify'] = $this->input->post('is_contactno_verify');
-            }
-            else{
-                $postdata['is_contactno_verify'] = 0;
-            }
-            
-            $result = $this->memberpage_model->edit_member_by_id($uid, $postdata);
-
-            echo 1;
-        }
-        else{
-            echo 0;
-        }
-    }*/
 
     /**
      *  Used to edit address under Personal Information Tab

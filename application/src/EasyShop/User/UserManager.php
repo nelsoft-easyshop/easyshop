@@ -156,7 +156,11 @@ class UserManager
 
             // If mobile not used
             if( empty($thisMember) ){
+                
+                $boolContactnoVerify = (string)$this->memberEntity->getContactno() === $mobileNum ? (bool)$this->memberEntity->getIsContactnoVerify() : FALSE;
+                
                 $this->memberEntity->setContactno($mobileNum);
+                $this->memberEntity->setIsContactnoVerify($boolContactnoVerify);
                 $this->em->persist($this->memberEntity);
                 return true;
             }
@@ -173,6 +177,8 @@ class UserManager
 
     /**
      *  Set personal email in es_member
+     *  Checks if user is allowed to change email
+     *  Checks if email has already been used by another user
      *
      *  @return boolean
      */
@@ -181,8 +187,22 @@ class UserManager
         $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                         ->getUserExistingEmail($this->memberId, $email);
 
+        $authenticationId = $this->memberEntity->getOauthId();
+        $authenticationProvider = $this->memberEntity->getOauthProvider();
+        $oldEmail = $this->memberEntity->getEmail();
+
+        if( $email !== $oldEmail && ( $authenticationId !== "0" || strlen($authenticationProvider) > 0 ) ){
+            $this->err['email'] = "Change of email not permitted for this user";
+
+            return false;
+        }
+
         if(empty($thisMember)){
+
+            $boolEmailVerify = (string)$this->memberEntity->getEmail() === (string)$email ? (bool)$this->memberEntity->getIsEmailVerify() : FALSE;
+
             $this->memberEntity->setEmail($email);
+            $this->memberEntity->setIsEmailVerify($boolEmailVerify);
             $this->em->persist($this->memberEntity);
 
             return true;
