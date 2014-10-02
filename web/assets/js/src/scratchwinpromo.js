@@ -32,7 +32,7 @@
                     if (data.product) {
                         $('#claim_item').attr('data-code', codeValue);
                         $(".claim-details h3").html(data.name);
-                        $(".claim-details p").html(data.brief);
+                        $(".claim-details .prod-description").html(data.brief);
                         $("#prod_image img").attr('src', data.product_image_path);
                         if(!data.can_purchase) {
                             $('.purchase-limit-error').slideDown().show();

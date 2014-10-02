@@ -218,6 +218,8 @@
                             You may claim your prize until March 1, 2015.<br>
                             Contact us for more information: (02) 353-0062 or (02)353-8337.
                         </p>
+                        <h3></h3>
+                        <p class="prod-description"></p>
                     </div>
                 </div>
                 <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
