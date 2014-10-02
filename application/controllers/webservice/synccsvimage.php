@@ -132,8 +132,6 @@ class SyncCsvImage extends MY_Controller
         $this->config->load('image_dimensions', TRUE);
         $imageDimensions = $this->config->config['image_dimensions'];
         
-        $this->load->model('product_model');
-
         foreach($imagesId["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
@@ -158,7 +156,7 @@ class SyncCsvImage extends MY_Controller
                 $tempDirectory = "./assets/product/".$filename."/"; 
 
                 $attrImage = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
-                    ->findBy(['productImgId' => $productImageId]); 
+                                            ->findBy(['productImgId' => $productImageId]); 
                 if(!file_exists($tempDirectory)){
                     $newSlug = $this->productManager->generateSlugForCSVProducts($productObject->getSlug());
                     mkdir($tempDirectory.'categoryview/', 0777, true);
@@ -182,7 +180,7 @@ class SyncCsvImage extends MY_Controller
                     $this->productManager->imageresize($imageDirectory, $tempDirectory,$imageDimensions["usersize"]);
                     $productObject->setSlug($newSlug);
                     $productImageObject = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                        ->findBy(array('product' => $productId, 'idProductImage' => $productImageId));
+                                                    ->findBy(array('product' => $productId, 'idProductImage' => $productImageId));
                     foreach ($productImageObject as $image ) {
                         $image->setProductImagePath($imageDirectory);
                     }
