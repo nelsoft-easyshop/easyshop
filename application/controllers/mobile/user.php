@@ -56,15 +56,16 @@ class user extends MY_Controller
     { 
         $userShippingAddress = $this->em->getRepository("EasyShop\Entities\EsAddress")
                         ->findOneBy(["idMember"=>$this->member->getIdMember(),"type"=> EsAddress::TYPE_DELIVERY]);
-     
-        $address['delivery_address']['consignee_name'] = $userShippingAddress->getConsignee();
-        $address['delivery_address']['mobile'] = $userShippingAddress->getMobile();
-        $address['delivery_address']['telephone'] = $userShippingAddress->getTelephone();
-        $address['delivery_address']['address'] = $userShippingAddress->getAddress();
-        $address['delivery_address']['state_region'] = $userShippingAddress->getStateregion()->getIdLocation();
-        $address['delivery_address']['city'] = $userShippingAddress->getCity()->getIdLocation();
-        $address['delivery_address']['country'] = $userShippingAddress->getCountry()->getIdLocation();
-
+        $address = [];
+        if($userShippingAddress){
+            $address['delivery_address']['consignee_name'] = $userShippingAddress->getConsignee();
+            $address['delivery_address']['mobile'] = $userShippingAddress->getMobile();
+            $address['delivery_address']['telephone'] = $userShippingAddress->getTelephone();
+            $address['delivery_address']['address'] = $userShippingAddress->getAddress();
+            $address['delivery_address']['state_region'] = $userShippingAddress->getStateregion()->getIdLocation();
+            $address['delivery_address']['city'] = $userShippingAddress->getCity()->getIdLocation();
+            $address['delivery_address']['country'] = $userShippingAddress->getCountry()->getIdLocation();
+        }
         echo json_encode($address,JSON_PRETTY_PRINT);
     }
 
