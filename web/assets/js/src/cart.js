@@ -78,7 +78,7 @@ function changeQuantity(inputField)
             $(inputField).attr("max-quantity", data.maxqty);
         }
     });
-    $(".checkAll").trigger('click').trigger('click');
+    checkTotal();
 }
 
 
@@ -133,7 +133,6 @@ function del(data)
             success: function (data) {
                 
                 if(data.isSuccess){
-                    $(".checkAll").trigger('click').trigger('click');
                     $(".row_" + prod_id).remove();
                     $("#total").text(data.totalPrice);
                     $(".cart_no").text(data.numberOfItems);
@@ -142,15 +141,20 @@ function del(data)
                         $('.cart').css('width','28');
                         $('.big_cart').addClass('cart_zero');
                     }
+                    checkTotal();
                 }
                 else{
                     alert('Sorry, we are having a problem right now.');
-                    
                 }
-    
-
             }
         });
     }
 }
-
+function checkTotal()
+{
+    $(".checkAll").trigger('click').trigger('click');
+    var checked = $('.checkAll:checked').length;
+    if (parseInt(checked) === 0) {
+        $('#total').html('0.00');
+    }
+}
