@@ -242,7 +242,7 @@
         </div>
     </div>
 </section> 
-
+<input type="hidden" id="vendor-username" name="name" value="<?php echo $arrVendorDetails['username']?>">
 <!-- Load Js Files -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
