@@ -3,7 +3,8 @@
 use EasyShop\Entities\EsProduct; 
 
 /**
- * Mobile Webservice Cass
+ * Mobile Webservice Class
+ *
  * @author Inon baguio
  */
 class MobileWebService extends MY_Controller 
