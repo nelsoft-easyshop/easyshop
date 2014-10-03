@@ -474,7 +474,7 @@ class Home extends MY_Controller
                                                                             'id' => 'as-buyer',
                                                                             'ratingHeaders' => $ratingHeaders,
                                                                             ), TRUE);                                                          
-                                                                
+                                          
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
@@ -528,7 +528,7 @@ class Home extends MY_Controller
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
         $getUserProduct = $this->getUserDefaultCategoryProducts($member->getIdMember());
-
+     
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -541,7 +541,7 @@ class Home extends MY_Controller
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "about"
                 ); 
-                
+
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $cart = array();
         $cartSize = 0;
@@ -576,7 +576,11 @@ class Home extends MY_Controller
     public function doUpdateDescription()
     {
         $em = $this->serviceContainer['entity_manager'];
+        $rules = $this->serviceContainer['form_validation']->getRules('personal_info')['storeDescription'];
+        $maxLength = $rules[0]->max;
+        
         $description = $this->input->post('description');
+        $description = trim($description, 0, $maxLength);
         $userId = intval($this->input->post('userId'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($userId);

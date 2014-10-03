@@ -142,11 +142,9 @@ class ValidationRules
                     'mobile' => array(
                                 new CustomAssert\IsValidMobile()
                     ),
-            ),
-            'vendor_header_details' =>array(
-                    'mobile' => array(
-                                new CustomAssert\IsValidMobile()
-                    )
+                    'storeDescription' => array(
+                                new Assert\Length(['max' => '1024'])
+                    ),
             ),
         );
     }

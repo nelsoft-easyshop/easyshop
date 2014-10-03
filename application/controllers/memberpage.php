@@ -1357,7 +1357,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
-        $rules = $formValidation->getRules('vendor_header_details');
+        $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                     ->setMethod('POST')
                     ->add('store_name', 'text')
