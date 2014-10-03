@@ -606,6 +606,32 @@ class EsProductRepository extends EntityRepository
 
     }
 
+    /**
+     * Get the seller of a product. Used for strange cases where the member cannot
+     * be retrieved from the product object
+     *
+     * @param integer $productId
+     * @return EasyShop\Entities\EsMember
+     */
+    public function getSeller($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('member_id', 'member_id');
+        $query = $this->em->createNativeQuery("
+            SELECT `member_id` from es_product WHERE id_product = :productId
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();  
+        
+        $seller = $em->getRepository('EasyShop\Entities\EsMember')
+                     ->find($result[0]['member_id']);
+        return $seller;
+
+    }
+    
+    
 }
 
 

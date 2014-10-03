@@ -1350,33 +1350,60 @@ class Memberpage extends MY_Controller
      */
     public function updateVendorDetails()
     {
-        $serverResponse = array(
-            "result" => FALSE,
-            "error" => "",
-            "data" => array()
-        );
+        $memberId = $this->session->userdata('member_id');
+        $um = $this->serviceContainer['user_manager'];
 
-        if( $this->input->post("vendor_details") ){
-            $memberId = $this->session->userdata("member_id");
-            $storeName = strval($this->input->post("store_name"));
-            $mobileNum = strval($this->input->post("mobile"));
-            $stateRegionId = $this->input->post("stateregion");
-            $cityId = $this->input->post("city");
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
-            $um = $this->serviceContainer['user_manager'];
-            $boolResult = $um->setUser($memberId)
-                            ->setStoreName($storeName)
-                            ->setMobile($mobileNum)
-                            ->setAddressTable($stateRegionId, $cityId, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
-                            ->save();
+        $rules = $formValidation->getRules('vendor_header_details');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('store_name', 'text')
+                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('city', 'text')
+                    ->add('stateregion', 'text')
+                    ->getForm();
 
-            $serverResponse["result"] = $boolResult;
-            $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
-            $serverResponse["new_data"] = array(
-                    "store_name" => $storeName
-                    , "mobile" => $mobileNum
-                    , "state_region_id" => $stateRegionId
-                    , "city_id" => $cityId
+        $form->submit([
+            'store_name' => $this->input->post('store_name')
+            , 'mobile' => $this->input->post('mobile')
+            , 'city' => $this->input->post('city')
+            , 'stateregion' => $this->input->post('stateregion')
+        ]);
+
+        if( $form->isValid() ){
+            $formData = $form->getData();
+            $validStoreName = (string)$formData['store_name'];
+            $validMobile = (string)$formData['mobile'];
+            $validCity = $formData['city'];
+            $validStateRegion = $formData['stateregion'];
+
+            $um->setUser($memberId)
+                ->setStoreName($validStoreName)
+                ->setMobile($validMobile)
+                ->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
+                ->setMemberMisc([
+                    'setLastmodifieddate' => new DateTime('now')
+                ]);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+                , 'new_data' => $boolResult ? array(
+                                        "store_name" => $validStoreName
+                                        , "mobile" => $validMobile
+                                        , "state_region_id" => $validStateRegion
+                                        , "city_id" => $validCity
+                                    ) : array()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => FALSE
+                , 'error' => $formErrorHelper->getFormErrors($form)
             );
         }
 

@@ -968,7 +968,6 @@ class Home extends MY_Controller
         $rules = $formValidation->getRules('vendor_contact');
         $data['isValid'] = false;
         $data['targetPage'] = $targetPage;
-        // $data['targetPage'] = 'about';
         $data['errors'] = [];
 
         $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
@@ -985,7 +984,7 @@ class Home extends MY_Controller
                                                ->findOneBy(['slug' => $sellerslug]);
 
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
-        $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? "" : '0' . $member->getContactno();
+        $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
 
@@ -1063,6 +1062,13 @@ class Home extends MY_Controller
                 }
                 else{
                     if($formData['city'] !== null || $formData['region'] !== null){
+                        $city = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->findOneBy(['location' => $formData['city']]);
+
+                        $region = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->findOneBy(['location' => $formData['region']]);
+
+
                         $addr->setAddress($formData['street_address']);
                         $addr->setCity($city);
                         $addr->setStateregion($region);
@@ -1084,7 +1090,7 @@ class Home extends MY_Controller
                 $data['isValid'] = true;
 
                 $data['validatedStoreName'] = $member->getStoreName();
-                $data['validatedContactNo'] = $member->getContactno() === "" ? "" : '0' . $member->getContactno();
+                $data['validatedContactNo'] = $member->getContactno() === false ? "" : '0' . $member->getContactno();
                 $data['validatedWebsite'] = $member->getWebsite();
             }
             else{
@@ -1099,6 +1105,16 @@ class Home extends MY_Controller
             $data['region'] = $this->input->post('regionSelect');
             $data['city'] = $this->input->post('citySelect') == '' ? '' : $this->input->post('citySelect') . ", ";
             $data['website'] = $this->input->post('website');
+
+            if(array_key_exists('shop_name', $data['errors'])){
+                $data['storeName'] = '';
+            }
+            if(array_key_exists('contact_number', $data['errors'])){
+                $data['contactNo'] = '';
+            }
+            if(array_key_exists('website', $data['errors'])){
+                $data['website'] = '';
+            }
 
             if($data['region'] !== ''){
                 $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')

@@ -142,7 +142,12 @@ class ValidationRules
                     'mobile' => array(
                                 new CustomAssert\IsValidMobile()
                     ),
-            )
+            ),
+            'vendor_header_details' =>array(
+                    'mobile' => array(
+                                new CustomAssert\IsValidMobile()
+                    )
+            ),
         );
     }
 
