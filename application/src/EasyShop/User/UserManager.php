@@ -39,13 +39,12 @@ class UserManager
      */
     private $memberEntity;
 
-    /**
-     *  Check if method chain returns true.
-     *  Checked by magic function __call(), for all private functions
+    /** 
+     *  Flag for calling EntityManager::flush() in function save()
      *
      *  @var boolean
      */
-    private $valid;
+    private $hasError;
 
     /**
      *  Container for error encountered by method chain.
@@ -60,6 +59,24 @@ class UserManager
      * @var Object
      */
     private $configLoader;
+
+    /**
+     * Form Validation
+     * @var [type]
+     */
+    private $formValidation;
+
+    /**
+     * Form Factory service
+     * @var [type]
+     */
+    private $formFactory;
+
+    /**
+     * Form error helper
+     * @var [type]
+     */
+    private $formErrorHelper;
     
     /**
      *  Constructor. Retrieves Entity Manager instance
@@ -67,22 +84,12 @@ class UserManager
      * @param Doctrine\Orm\EntityManager $em
      * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
      */
-    public function __construct($em,$configLoader)
+    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
-        $this->valid = true;
-    }
-
-    /**
-     *  Magic function. Called when accessing private functions from outside class.
-     */
-    public function __call($name, $args)
-    {
-        if($this->valid){
-            $this->valid = call_user_func_array(array($this,$name), $args);
-        }
-        return $this;
+        $this->hasError = FALSE;
+        $this->err = array();
     }
 
     /**
@@ -94,74 +101,103 @@ class UserManager
     }
 
     /**
-     *  Print desired info in this function.
-     */
-    public function showDetails()
-    {
-        print("Member ID: ". $this->memberId . "<br>");
-    }
-
-    /**
      *  REQUIRED! Initializes user to work on
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setUser($memberId)
+    public function setUser($memberId)
     {
         $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
 
         if( $memberEntity !== null ){
             $this->memberId = $memberId;
             $this->memberEntity = $memberEntity;
-            return true;
         }
         else{
-            $this->err = "User does not exist.";
-            return false;
+            $this->err['user'] = "User does not exist.";
+            $this->hasError = TRUE;
         }
+
+        return $this;
     }
 
     /**
      *  Set personal mobile in es_member table
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setMobile($mobileNum)
+    public function setMobile($mobileNum)
     {
-        $isValidMobile = $this->isValidMobile($mobileNum);
-
+        $mobileNum = ltrim($mobileNum, "0");
         $thisMember = array();
 
-        if( $isValidMobile || $mobileNum === "" ){
-            if( $mobileNum !== "" ){
-                $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->getUserExistingMobile($this->memberId, $mobileNum);
-            }
+        if( $mobileNum !== "" ){
+            $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->getUserExistingMobile($this->memberId, $mobileNum);
+        }
 
-            // If mobile not used
-            if( empty($thisMember) ){
-                $this->memberEntity->setContactno($mobileNum);
-                $this->em->persist($this->memberEntity);
-                return true;
-            }
-            else{
-                $this->err = "Mobile number already used.";
-            }
+        // If mobile not used
+        if( empty($thisMember) ){
+            
+            $boolContactnoVerify = (string)$this->memberEntity->getContactno() === $mobileNum ? (bool)$this->memberEntity->getIsContactnoVerify() : FALSE;
+            
+            $this->memberEntity->setContactno($mobileNum);
+            $this->memberEntity->setIsContactnoVerify($boolContactnoVerify);
+            $this->em->persist($this->memberEntity);
         }
         else{
-            $this->err = "Invalid mobile number.";
-            
+            $this->err['mobile'] = "Mobile number already used.";
+            $this->hasError = TRUE;
         }
 
-        return false;
+        return $this;
+    }
+
+    /**
+     *  Set personal email in es_member
+     *  Checks if user is allowed to change email
+     *  Checks if email has already been used by another user
+     *
+     *  @return object
+     */
+    public function setEmail($email)
+    {
+        $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->getUserExistingEmail($this->memberId, $email);
+
+        $authenticationId = $this->memberEntity->getOauthId();
+        $authenticationProvider = $this->memberEntity->getOauthProvider();
+        $oldEmail = $this->memberEntity->getEmail();
+
+        if( $email !== $oldEmail && ( $authenticationId !== "0" || strlen($authenticationProvider) > 0 ) ){
+            $this->err['email'] = "Change of email not permitted for this user";
+            $this->hasError = TRUE;
+
+            return $this;
+        }
+
+        if(empty($thisMember)){
+
+            $boolEmailVerify = (string)$this->memberEntity->getEmail() === (string)$email ? (bool)$this->memberEntity->getIsEmailVerify() : FALSE;
+
+            $this->memberEntity->setEmail($email);
+            $this->memberEntity->setIsEmailVerify($boolEmailVerify);
+            $this->em->persist($this->memberEntity);
+        }
+        else{
+            $this->err['email'] = "Email already used.";
+            $this->hasError = TRUE;
+        }
+
+        return $this;
     }
 
     /**
      *  Set storename in es_member table
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setStoreName($storeName)
+    public function setStoreName($storeName)
     {
         $storeName = trim($storeName);
         $objUsedStoreName = array();
@@ -175,32 +211,47 @@ class UserManager
         if( empty($objUsedStoreName) ){
             $this->memberEntity->setStoreName($storeName);
             $this->em->persist($this->memberEntity);
-            return true;
         }
         else{
-            $this->err = "Store name already used!";
-            return false;
+            $this->err['storename'] = "Store name already used!";
+            $this->hasError = TRUE;
         }
+
+        return $this;
+    }
+
+
+    /**
+     *  Set misc table values for es_member
+     *
+     *  @param array $array - array('EntityFunctionName' => 'value')
+     *
+     *  @return object
+     */
+    public function setMemberMisc($array)
+    {
+        foreach($array as $function=>$value){
+            $this->memberEntity->$function($value);
+        }
+        $this->em->persist($this->memberEntity);
+
+        return $this;
     }
 
     /**
      *  Set es_address table values
      *
-     *  @return boolean
+     *  @return object
      */
-    private function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
+    public function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
     {
+        $mobileNum = ltrim($mobileNum, "0");
+
         // Verify location validity
         $locationEntity = $this->em->getRepository("EasyShop\Entities\EsLocationLookup")
                                     ->verifyLocationCombination($stateRegionId, $cityId);
         $isValidLocation = !empty($locationEntity);
         
-        $isValidMobile = $this->isValidMobile($mobileNum);
-        if( !$isValidMobile && $mobileNum !== "" ){
-            $this->err = "Invalid mobile number.";
-            return false;            
-        }
-
         if( $isValidLocation ){
             $arrAddressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
                                     ->getAddressDetails($this->memberId, $type);
@@ -229,14 +280,13 @@ class UserManager
                     ->setCountry($countryEntity);
 
             $this->em->persist($address);
-
-            return true;
         }
         else{
-            $this->err = "Invalid location combination";
+            $this->err['address'] = "Invalid location combination";
+            $this->hasError = TRUE;
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -244,32 +294,17 @@ class UserManager
      */
     public function save()
     {
-        $this->em->flush();
-
-        return $this->valid;
-    }
-
-    /****************** UTILITY FUNCTIONS *******************/
-
-    /**
-     *  Used to check if mobile format is valid. 
-     *  Prepares mobile for database input if format is valid
-     *
-     *  @return boolean
-     */
-    private function isValidMobile(&$mobileNum)
-    {
-        $isValidMobile = preg_match('/^(08|09)[0-9]{9}$/', $mobileNum);
-
-        if($isValidMobile){
-            $mobileNum = ltrim($mobileNum,"0");
-            return true;
+        if($this->hasError){
+            $this->em->clear();
         }
         else{
-            return false;
+            $this->em->flush();
         }
+        
+        return !$this->hasError;
     }
-    
+
+
     /**
      * Returns the formatted feedback
      *
@@ -498,6 +533,106 @@ class UserManager
         }
 
         return true;
+    }
+
+    /**
+     * Update or insert address of the user
+     * @param string   $streetAddress   [description]
+     * @param integer  $region          [description]
+     * @param integer  $city            [description]
+     * @param integer  $memberId        [description]
+     * @param integer  $type            [description]
+     * @param string   $consignee       [description]
+     * @param string   $mobileNumber    [description]
+     * @param string   $telephoneNumber [description]
+     * @param interger $country
+     */
+    public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "",$country = 1)
+    { 
+        $formValidation = $this->formValidation; 
+        $formFactory = $this->formFactory;
+        $rules = $formValidation->getRules('user_shipping_address'); 
+        $data['isSuccessful'] = false;
+
+        if(intval($type)===EsAddress::TYPE_DELIVERY){
+
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                ->setMethod('POST')
+                                ->add('consignee', 'text', array('constraints' => $rules['consignee']))
+                                ->add('mobile_number', 'text', array('constraints' => $rules['mobile_number']))
+                                ->add('telephone_number', 'text')
+                                ->add('street_address', 'text', array('constraints' => $rules['street_address']))
+                                ->add('region', 'text', array('constraints' => $rules['region'])) 
+                                ->add('city', 'text', array('constraints' => $rules['city']))
+                                ->getForm();
+
+            $form->submit([ 
+                'consignee' => $consignee,
+                'mobile_number' => $mobileNumber,
+                'telephone_number' => $streetAddress,
+                'street_address' => $streetAddress,
+                'region' => $region,
+                'city' => $city,
+            ]);
+
+            $data['errors'] = [];
+            if($form->isValid()){
+
+                $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                            ->findOneBy([
+                                                'idMember' => $memberId, 
+                                                'type' => EsAddress::TYPE_DELIVERY
+                                            ]);
+
+                $memberIdObject = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                            ->find($memberId);
+
+                $stateRegionObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($region);
+
+                $cityObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($city);
+
+                $countryObject = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->find($country);
+
+                // Update existing shipping address of the user 
+                if( $addressEntity !== null ){
+                    $esAddress = $addressEntity; 
+                }
+                // Insert shipping address to database
+                else{
+                    $esAddress = new EsAddress();
+                }
+                    $esAddress->setAddress($streetAddress);
+                    $esAddress->setCountry($countryObject);
+                    $esAddress->setStateregion($stateRegionObject);
+                    $esAddress->setCity($cityObject);
+                    $esAddress->setIdMember($memberIdObject);
+                    $esAddress->setType(EsAddress::TYPE_DELIVERY);
+                    $esAddress->setConsignee($consignee);
+                    $esAddress->setMobile(substr($mobileNumber,1));
+                    $esAddress->setTelephone($telephoneNumber);
+                    $this->em->persist($esAddress);
+                    $this->em->flush();
+
+                $data['isSuccessful'] = true;
+            }
+            else{
+                 $data['errors'] = $this->formErrorHelper->getFormErrors($form);
+            }
+        }
+
+        $mobileErrors = [];
+        $errCounter = 0;
+        foreach ($data['errors'] as $key => $value) {
+            $mobileErrors[$errCounter]['type'] = $key;
+            $mobileErrors[$errCounter]['message'] = $value;
+            $errCounter++;
+        }
+        $data['mobile_errors'] = $mobileErrors;
+        
+        return $data;
     }
 
 }

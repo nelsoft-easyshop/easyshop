@@ -1184,11 +1184,15 @@ FROM
     WHERE `product_id_item` = :itemId
 </select>
 
-    <select id="validateBuyAtZeroCode">
-        SELECT es_product.*, es_product_image.product_image_path as `path` from es_promo
+    <select id="validateScratchCardCode">
+        SELECT es_product.*,es_promo.member_id AS `c_member_id`, es_product_image.product_image_path as `path` from es_promo
         left join es_product on es_product.id_product = es_promo.product_id
         left join es_product_image on es_product_image.product_id = es_product.id_product
-        where code = :code;
+        where code = :code AND es_promo.promo_type = 5;
+    </select>
+
+    <select id="tieUpMemberToCode">
+        UPDATE `easyshop`.`es_promo` SET `member_id`=:member_id WHERE `code`=:code;
     </select>
 
     <select id="buyAtZeroAuthenticate">

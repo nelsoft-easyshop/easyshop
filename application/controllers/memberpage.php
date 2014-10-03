@@ -62,58 +62,75 @@ class Memberpage extends MY_Controller
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
-     *  Returns 1 on success, 0 otherwise
      *
-     *  @return integer
+     *  @return JSON
      */
     public function edit_personal()
     {
-        if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
-        {
-            $uid = $this->session->userdata('member_id');
-            $checkdata = array(
-                'member_id' => $uid,
-                'contactno' => $this->input->post('mobile'),
-                'email' => $this->input->post('email')
+        $em = $this->serviceContainer['entity_manager'];
+        $um = $this->serviceContainer['user_manager'];
+        $memberId = $this->session->userdata('member_id');
+        $memberEntity = $em->find('EasyShop\Entities\EsMember', $memberId);
+        
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('nickname', 'text')
+                    ->add('fullname', 'text')
+                    ->add('gender', 'text')
+                    ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
+                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('email', 'text', array('constraints' => $rules['email']))
+                    ->getForm();
+
+        $form->submit([
+            'nickname' => $this->input->post('nickname')
+            , 'fullname' => $this->input->post('fullname')
+            , 'gender' => $this->input->post('gender')
+            , 'dateofbirth' => $this->input->post('dateofbirth')
+            , 'mobile' => $this->input->post('mobile')
+            , 'email' => $this->input->post('email')
+        ]);
+
+        if($form->isValid()){
+            $formData = $form->getData();
+            $validNickname = (string)$formData['nickname'];
+            $validFullname = (string)$formData['fullname'];
+            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
+            $validMobile = (string)$formData['mobile'];
+            $validEmail = (string)$formData['email'];
+
+            $um->setUser($memberId)
+               ->setMobile($validMobile)
+               ->setEmail($validEmail)
+               ->setMemberMisc([
+                    'setNickname' => $validNickname
+                    , 'setFullname' => $validFullname
+                    , 'setGender' => $validGender
+                    , 'setBirthday' => new DateTime($validDateOfBirth)
+                    , 'setLastmodifieddate' => new DateTime('now')
+                ]);
+
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult ? 'success' : 'error'
+                , 'error' => $boolResult ? '' : $um->errorInfo()
             );
-
-            $check = $this->register_model->check_contactinfo($checkdata);
-            if($check['mobile'] !== 0 || $check['email'] !== 0){
-                echo json_encode($check);
-                return;
-            }
-
-            $uid = $this->session->userdata('member_id');
-            $postdata = array(
-                'fullname' => $this->input->post('fullname'),
-                'nickname' => $this->input->post('nickname'),
-                'gender' => $this->input->post('gender'),
-                'birthday' => $this->input->post('dateofbirth'),
-                'contactno' => ltrim($this->input->post('mobile'), '0'),
-                'email' => $this->input->post('email')
-            );
-
-            if($postdata['email'] === $this->input->post('email_orig')){
-                $postdata['is_email_verify'] = $this->input->post('is_email_verify');
-            }
-            else{
-                $postdata['is_email_verify'] = 0;
-            }
-            
-            if($postdata['contactno'] === $this->input->post('mobile_orig')){
-                $postdata['is_contactno_verify'] = $this->input->post('is_contactno_verify');
-            }
-            else{
-                $postdata['is_contactno_verify'] = 0;
-            }
-            
-            $result = $this->memberpage_model->edit_member_by_id($uid, $postdata);
-
-            echo 1;
         }
         else{
-            echo 0;
+            $serverResponse = array(
+                'result' => 'fail'
+                , 'error' => $formErrorHelper->getFormErrors($form)
+            );
         }
+
+        echo json_encode($serverResponse);
     }
 
     /**
@@ -1333,33 +1350,60 @@ class Memberpage extends MY_Controller
      */
     public function updateVendorDetails()
     {
-        $serverResponse = array(
-            "result" => FALSE,
-            "error" => "",
-            "data" => array()
-        );
+        $memberId = $this->session->userdata('member_id');
+        $um = $this->serviceContainer['user_manager'];
 
-        if( $this->input->post("vendor_details") ){
-            $memberId = $this->session->userdata("member_id");
-            $storeName = strval($this->input->post("store_name"));
-            $mobileNum = strval($this->input->post("mobile"));
-            $stateRegionId = $this->input->post("stateregion");
-            $cityId = $this->input->post("city");
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
-            $um = $this->serviceContainer['user_manager'];
-            $boolResult = $um->setUser($memberId)
-                            ->setStoreName($storeName)
-                            ->setMobile($mobileNum)
-                            ->setAddressTable($stateRegionId, $cityId, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
-                            ->save();
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('store_name', 'text')
+                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('city', 'text')
+                    ->add('stateregion', 'text')
+                    ->getForm();
 
-            $serverResponse["result"] = $boolResult;
-            $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
-            $serverResponse["new_data"] = array(
-                    "store_name" => $storeName
-                    , "mobile" => $mobileNum
-                    , "state_region_id" => $stateRegionId
-                    , "city_id" => $cityId
+        $form->submit([
+            'store_name' => $this->input->post('store_name')
+            , 'mobile' => $this->input->post('mobile')
+            , 'city' => $this->input->post('city')
+            , 'stateregion' => $this->input->post('stateregion')
+        ]);
+
+        if( $form->isValid() ){
+            $formData = $form->getData();
+            $validStoreName = (string)$formData['store_name'];
+            $validMobile = (string)$formData['mobile'];
+            $validCity = $formData['city'];
+            $validStateRegion = $formData['stateregion'];
+
+            $um->setUser($memberId)
+                ->setStoreName($validStoreName)
+                ->setMobile($validMobile)
+                ->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
+                ->setMemberMisc([
+                    'setLastmodifieddate' => new DateTime('now')
+                ]);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+                , 'new_data' => $boolResult ? array(
+                                        "store_name" => $validStoreName
+                                        , "mobile" => $validMobile
+                                        , "state_region_id" => $validStateRegion
+                                        , "city_id" => $validCity
+                                    ) : array()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => FALSE
+                , 'error' => $formErrorHelper->getFormErrors($form)
             );
         }
 

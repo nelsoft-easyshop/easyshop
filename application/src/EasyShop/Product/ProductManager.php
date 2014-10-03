@@ -63,16 +63,25 @@ class ProductManager
      */
     private $configLoader;
 
+
+    /**
+     * Image Library Dipendency Injection
+     *
+     * @var CI_Image_lib
+     */
+    private $imageLibrary;    
+
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
+        $this->imageLibrary = $imageLibrary;
     }
 
     /**
@@ -92,7 +101,7 @@ class ProductManager
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
         $this->promoManager->hydratePromoData($product);
-        
+
         return $product;
     }
 
@@ -178,8 +187,6 @@ class ProductManager
         return $productItemLocks;
     }
 
-    
-    
     /**
      * Apply discounted price to product
      * This has been refactored with hydrate promo data
@@ -191,7 +198,7 @@ class ProductManager
         foreach ($products as $key => $value) {  
             $resultObject = $this->getProductDetails($value->getIdProduct());
         } 
-        
+
         return $products;
     }
 
@@ -376,6 +383,45 @@ class ProductManager
         return true;
     }
 
+    
+    /**
+     * Returns the recommended products list for a certain product
+     *
+     * @param integer $productId
+     * @param integer $limit
+     * @return \EasyShop\Entities\EsProduct
+     */
+    public function getRecommendedProducts($productId, $limit = null)
+    {    
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+
+        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->createQueryBuilder("p")
+                                ->select("p")
+                                ->where('p.cat = :category')
+                                ->andWhere("p.idProduct != :productId")
+                                ->andWhere("p.isDraft = :isDraft")
+                                ->andWhere("p.isDelete = :isDelete")
+                                ->setParameter('productId',$product->getIdProduct())
+                                ->setParameter('category',$product->getCat())
+                                ->setParameter('isDraft',0)
+                                ->setParameter('isDelete',0)
+                                ->orderBy('p.clickcount', 'DESC')
+                                ->getQuery();
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $products = $queryBuilder->getResult();
+        
+        foreach($products as $key => $product){
+            $products[$key] = $this->getProductDetails($product->getIdProduct());
+        }
+        
+        return $products;
+    }
+
     /**
      *  Fetch products under parent category, based on child cat ids ($arrCatId)
      *
@@ -473,8 +519,53 @@ class ProductManager
         return $result;
     }
 
+    /**
+     * Creates directories, checks if the passed image name exists in the admin folder
+     * @param int $imagesId
+     * @return JSONP
+     */ 
+    public function imageresize($imageDirectory, $newDirectory, $dimension)
+    {
+        
+        $config['image_library'] = 'GD2';
+        $config['source_image'] = $imageDirectory;
+        $config['maintain_ratio'] = true;
+        $config['quality'] = '85%';
+        $config['new_image'] = $newDirectory;
+        $config['width'] = $dimension[0];
+        $config['height'] = $dimension[1]; 
 
+        $this->imageLibrary->initialize($config); 
+        $this->imageLibrary->resize();
+        $this->imageLibrary->clear();        
+    } 
 
+    /**
+     * Generates slugs 
+     * @param string $title
+     * @return STRING
+     */ 
+    public function generateSlug($title)   
+    {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $title]);
 
+        $cnt = count($product);
+        if($cnt > 0) {
+            $slugGenerate = $title."-".$cnt++;
+        }
+        else {
+            $slugGenerate = $title;
+        }
+        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findBy(['slug' => $slugGenerate]);
+
+        if(count($checkIfSlugExist) > 0 ){
+            foreach($checkIfSlugExist as $newSlugs){
+                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
+            }
+        }
+        return $slugGenerate;
+    }
 }
 

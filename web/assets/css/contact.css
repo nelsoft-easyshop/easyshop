@@ -244,11 +244,21 @@ section {
 .div-about-edit-area{
     display: none;
 }
-
+/*
 .p-about{
     line-height: 20px;
     width: 100%;
     word-wrap: break-word;
+}
+*/
+
+.p-about{
+    background-color: #ffffff;
+    border: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #575759;
+    padding: 0px;
 }
 
 .textarea-about{
@@ -363,7 +373,7 @@ section {
 
 .tdr-1{
     text-align: left;
-     width: 140px;
+     width: 150px;
 }
 
 .td-2, .td-3{
@@ -372,12 +382,12 @@ section {
 
 .tdr-2{
     text-align: left;
-     width: 140px;
+     width: 150px;
 }
 .tdr-3{
     text-align:right;
     padding-left:0px; 
-    width: 140px;
+    width: 150px;
 }
 
 .td-rate-seller{

@@ -860,6 +860,11 @@ div.sell_steps4 ul li:nth-child(4) a {
 .sell_steps ul li a {
     color: #494949;
 }
+
+.sell_steps ul li a:hover {
+    text-decoration: none;
+}
+
 .sell_steps.sell_steps1,.sell_steps.sell_steps2,
 .sell_steps.sell_steps3,.sell_steps.sell_steps4 {
     text-align: center;

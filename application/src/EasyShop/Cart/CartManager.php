@@ -89,7 +89,7 @@ class CartManager
             $attrPrice = isset($explodedOption[1]) ? $explodedOption[1] : null;
             $attrName = $key;
             $productAttribute = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->getProductAttributeDetailByName($product->getIdProduct(), $attrName, $attrValue,$attrPrice);
+                            ->getProductAttributeDetailByName($productId, $attrName, $attrValue,$attrPrice);
 
             if(empty($productAttribute)){
                 return false;
@@ -139,10 +139,18 @@ class CartManager
         $cartItemQuantity = ($quantity > $itemAvailability) ? $itemAvailability : $quantity;
         $cartIndexName = $this->cart->getIndexName();
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                        ->getDefaultImage($product->getIdProduct());
+                        ->getDefaultImage($productId);
+        /**
+         * Fix for strange error when the member cannot be obtained from the product object
+         */
+        $seller = $product->getMember();
+        if(!$seller){
+            $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getSeller($productId);
+        }       
         
         $itemData = array(
-            'id' => $product->getIdProduct(),
+            'id' => $productId,
             'qty' => $cartItemQuantity,
             'price' => $finalPrice,
             'original_price' => $product->getOriginalPrice(),
@@ -150,7 +158,7 @@ class CartManager
             'options' => $validatedCartOptions,
             'imagePath' => $productImage->getDirectory(),
             'imageFile' =>  $productImage->getFilename(),
-            'member_id' => $product->getMember()->getIdMember(),
+            'member_id' => $seller->getIdMember(),
             'brief' => $product->getBrief(),
             'product_itemID' => $productItemId, 
             'maxqty' => $itemAvailability,
@@ -268,7 +276,8 @@ class CartManager
                 $optionNew =  serialize($itemData['options']);
                 if($optionCart === $optionNew && $cartRow['id'] === $itemData['id']){
                     $quantityToInsert = $quantityToInsert + $cartRow['qty'];
-                    $quantityToInsert =  $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
+                    $quantityToInsert = $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
+                    $quantityToInsert = $quantityToInsert < 0 ? 0 : $quantityToInsert;
                     $itemData['qty'] = $quantityToInsert;
                     $isUpdate = true;
                     break;     

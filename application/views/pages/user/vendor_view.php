@@ -6,7 +6,7 @@
 <div class="container-non-responsive bg-product-section">
     <div class="row row-products">
         <div class="col-xs-3 no-padding col-left-wing">
-            <div class="left-wing" id="left-wing">
+            <div class="left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -31,9 +31,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-group panel-category border-0">
-                    <div class="panel panel-danger border-0 no-padding">
-                        <div class="panel-heading border-0 panel-category-heading" id="filter-header">
+                <div class="panel-group panel-category border-0" id="filter">
+                    <div class="panel panel-default  border-0 no-padding" id="filter-header">
+                        <div class="panel-heading border-0 panel-category-heading">
                             <h4 class="panel-title">
                                 <a id="toggle-filter" class="a-filter" data-parent="#filter">
                                     FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
@@ -138,7 +138,8 @@
 
  
 <script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
-<script src='/assets/js/src/jquery-1.8.2.js' type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+

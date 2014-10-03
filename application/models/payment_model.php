@@ -119,7 +119,7 @@ class payment_model extends CI_Model
             $sth->bindParam(':item_id', $itemId, PDO::PARAM_INT);
             $sth->bindParam(':quantity', $qty, PDO::PARAM_INT); 
             $sth->bindParam(':order_id', $orderId, PDO::PARAM_INT); 
-            $sth->bindParam(':datenow', $orderId, date('Y-m-d H:i:s')); 
+            $sth->bindParam(':datenow', date('Y-m-d H:i:s')); 
         }
  
         if ($sth->execute()){
@@ -635,7 +635,6 @@ class payment_model extends CI_Model
 
         return $row;
     }
-
     // Check order product before saving comment
     function checkOrderProductBasic($temp)
     {

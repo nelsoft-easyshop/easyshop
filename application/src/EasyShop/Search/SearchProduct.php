@@ -312,15 +312,14 @@ class SearchProduct
         foreach ($collection as $key => $value) {
             $productId = $value->getIdProduct();
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                            ->getDefaultImage($productId);
-
+                                      ->getDefaultImage($productId);
             $value->directory = "assets/product/unavailable/";
             $value->imageFileName = "unavailable_product_img.jpg";
 
             if($productImage != NULL){
                 $value->directory = $productImage->getDirectory();
                 $value->imageFileName = $productImage->getFilename();
-            }
+            } 
         }
          
         return $collection;
@@ -345,7 +344,6 @@ class SearchProduct
                 $productId = $valueProduct->getIdProduct();
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                 ->getDefaultImage($productId);
-
                 $valueProduct->directory = "assets/product/unavailable/";
                 $valueProduct->imageFileName = "unavailable_product_img.jpg";
 
@@ -353,6 +351,7 @@ class SearchProduct
                     $valueProduct->directory = $productImage->getDirectory();
                     $valueProduct->imageFileName = $productImage->getFilename();
                 }
+
             }
             $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
             $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 

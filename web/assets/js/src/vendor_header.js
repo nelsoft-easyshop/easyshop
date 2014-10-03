@@ -78,7 +78,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     // Search button click
     $(document).on('click','.submitSearch',function() {
         var searchType = $(this).closest(".search-form").find('.search-type').val();
-        var action =  (searchType == 1) ? "" : "/search/search.html";
+        var action =  (searchType == 1) ? "/" + $('#vendor_name').val() : "/search/search.html";
         $(this).closest(".search-form").attr("action",action);
         $(this).closest(".search-form").submit();
     });
@@ -121,7 +121,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 }
                 else{
                     // Display error
-                    alert(data.error);
+                    var errString = "";
+                    $.each(data.error, function(k,v){
+                        errString = errString + v + "<br>";
+                    });
+                    alert(errString);
                 }
             } 
         });
@@ -198,7 +202,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/memberpage/'+action;
+            document.getElementById('form_image').action = '/memberpage/'+formAction;
             $('#form_image').submit();
         }
         else{
@@ -368,3 +372,22 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     });
 
 })(jQuery);
+
+function proceedPayment(obj)
+{
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    $.ajax({
+        async: true,
+        url: "/payment/cart_items",
+        type: "POST",
+        dataType: "json",
+        data: {csrfname: csrftoken},
+        success: function (data) {
+            if (data == true) {
+                window.location.replace("/payment/review");
+            } else {
+                alert(data, 'Remove these items from your cart to proceed with your checkout.');
+            }
+        }
+    });
+}

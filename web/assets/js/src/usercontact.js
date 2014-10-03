@@ -2,15 +2,13 @@
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
 
-        if( $( "#displayStoreName" ).val() == ""        || ($( "#displayContactNo" ).val() == ""    || 
-            $( "#displayContactNo" ).val().length < 11) || $( "#displayStreetAddr" ).val() == ""    || 
-            parseInt($('#errorCount').val()) > 0        || $( "#displayCity" ).val() == ""          || 
-            $( "#displayRegion" ).val() == ""){
+        if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
+            $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
             
             $( "#editIconOpen" ).click();
         }
         else{
-            if($( "#website" ).val() == ""){
+            if($( "p#validatedStoreName" ).html() == ""){
                 $( "#websiteRow" ).hide();
             }
         }
@@ -23,12 +21,21 @@
         });
 
     $( "#regionSelect" ).change(function() {
-        var data = window.cities[$( "#regionSelect" ).val()];
-        var list = '';
+        var regionValue = $( "#regionSelect" ).val();
+
+        var list = "<option value='' selected>Select City</option>";
         $("#citySelect").empty();
-        for (var i=0; i < data.length; i++) {
-            list += "<option value='" + data[i] + "'>" + data[i] + "</option>";
+
+        if(regionValue != ''){
+            var list = "<option value=''>Select City</option>";
+            var data = window.cities[regionValue];
+            var city = $("#postCity" ).val();
+
+            for (var i=0; i < data.length; i++) {
+                list += "<option value='" + data[i] + "' " + (data[i] == city.substring(0, city.length - 2)? "selected>" : ">") + data[i] + "</option>";
+            }
         }
+
         $("#citySelect").html(list);
     });   
 
@@ -39,6 +46,7 @@
         $("#editIconOpen").css("display","none");
         $(".text-contact").css("display","none");
 
+        $( "#regionSelect" ).change();
         $( "#storeNameRow" ).show();
         $( "#contactNoRow" ).show();
         $( "#addressRow" ).show();
@@ -52,44 +60,29 @@
         $("#editIconOpen").css("display","inline");
         $(".text-contact").css("display","inline");
 
-        if($( "#displayStoreName" ).val() == ""){
+        // hide all fields that are empty
+        if($( "p#validatedStoreName" ).html() == ""){
             $( "#storeNameRow" ).hide();
         }
-        else{
-            $( "#storeName" ).val($("#displayStoreName").val());
-        }
-
-        if($( "#displayContactNo" ).val() == "" || $( "#displayContactNo" ).val().length < 11){
+        if($( "p#validatedContactNo" ).html() == ""){
             $( "#contactNoRow" ).hide();
         }
-        else{
-            $( "#contactNo" ).val($("#displayContactNo").val());
-        }
-
-        if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == "" && $("#displayStreetAddr").val() == ""){
-            $( "#addressRow" ).hide();
-        }
-        
-        if($("#displayCity" ).val() == "" && $( "#displayRegion" ).val() == ""){
-            $( "#regionSelect" ).val($("#defaultRegion").val());
-            $( "#regionSelect" ).change();
-            $( "#citySelect" ).val($("#displayCity").val());
-        }   
-        else{
-            $( "#regionSelect" ).val($("#displayRegion").val());
-            $( "#regionSelect" ).change();
-            $( "#citySelect" ).val($("#displayCity").val());
-        }
-        
-        var addr = $("#displayStreetAddr").val();
-        $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
-
-        if($( "#displayWebsite" ).val() == ""){
+        if($( "p#validatedWebsite" ).html() == ""){
             $( "#websiteRow" ).hide();
         }
-        else{
-            $( "#website" ).val($("#displayWebsite").val());
+        if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
+            $( "#addressRow" ).hide();
         }
+
+        // revert all changes back to original using post hidden input
+        $( "#storeName" ).val($("#postStoreName").val());
+        $( "#contactNo" ).val($("#postContactNo").val());
+        $( "#website" ).val($("#postWebsite").val());
+        $( "#regionSelect" ).change();
+
+        var addr = $("#postStreetAddr").val();
+        $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
+        
      });
 })(jQuery);
 

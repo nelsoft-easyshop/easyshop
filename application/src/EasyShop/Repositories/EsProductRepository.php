@@ -9,7 +9,10 @@ use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
-
+use EasyShop\Entities\EsOptionalAttrdetail;
+use EasyShop\Entities\EsOptionalAttrhead;
+use EasyShop\Entities\EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class EsProductRepository extends EntityRepository
@@ -133,9 +136,14 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
+            $rsm->addScalarResult('head_id', 'head_id');
+            $rsm->addScalarResult('detail_id', 'detail_id');
+            $rsm->addScalarResult('is_other', 'is_other');
+            $rsm->addScalarResult('price', 'price');
+            $rsm->addScalarResult('image_id', 'image_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -143,7 +151,12 @@ class EsProductRepository extends EntityRepository
                 SELECT 
                     a.product_id as product_id
                     , b.name AS name
-                    , a.attr_value 
+                    , a.attr_value
+                    , a.attr_id as head_id
+                    , a.id_product_attr as detail_id
+                    , '0' as is_other
+                    , a.attr_price as price
+                    , '0' as image_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -157,6 +170,11 @@ class EsProductRepository extends EntityRepository
                      a.product_id as product_id
                     , a.`field_name`
                     , b.value_name 
+                    , b.head_id
+                    , b.id_optional_attrdetail as detail_id
+                    , '1' as is_other
+                    , b.value_price as price
+                    , b. product_img_id as price
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
@@ -572,6 +590,48 @@ class EsProductRepository extends EntityRepository
 
         return $resultNeeded; 
     }  
+
+    /**
+     * Delete products that do not have images inside admin folder
+     * @param  integer $id
+     */    
+    public function deleteProductFromAdmin($id)
+    {
+        $this->em =  $this->_em;
+         
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
+            WHERE e.idProduct = ?8");
+        $query->setParameter(8, $id);
+        $query->execute();       
+
+    }
+
+    /**
+     * Get the seller of a product. Used for strange cases where the member cannot
+     * be retrieved from the product object
+     *
+     * @param integer $productId
+     * @return EasyShop\Entities\EsMember
+     */
+    public function getSeller($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('member_id', 'member_id');
+        $query = $this->em->createNativeQuery("
+            SELECT `member_id` from es_product WHERE id_product = :productId
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();  
+        
+        $seller = $em->getRepository('EasyShop\Entities\EsMember')
+                     ->find($result[0]['member_id']);
+        return $seller;
+
+    }
+    
+    
 }
 
 
