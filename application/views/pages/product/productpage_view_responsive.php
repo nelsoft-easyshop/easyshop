@@ -111,7 +111,7 @@
                                     <tr>
                                         <td class="v-align-top" width="10%">
                                             <a href="/<?php echo $product['sellerusername'];?>"> 
-                                                <img class="seller-img seller-img-m" src="/<?php echo  $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+                                                <img class="seller-img seller-img-m" src="<?=$avatarImage?>"><br />
                                             </a>
                                         </td>
                                         <td class="v-align-top td-seller-info">
@@ -179,7 +179,7 @@
                                     <td  width="40%" style="vertical-align:top; padding-right: 3px;">
                                         <span class="seller-name"> 
                                             <a href="/<?php echo $product['sellerslug'];?>"> 
-                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
+                                                <img class=" seller-img" src="<?=$avatarImage?>"/><br />
                                                 <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                                             </a>
                                             <br/>

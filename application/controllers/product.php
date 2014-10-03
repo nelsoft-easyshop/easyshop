@@ -380,6 +380,8 @@ class product extends MY_Controller
         $uid = $this->session->userdata('member_id');
         $product_row = $this->product_model->getProductBySlug($slug);  	
         $data = $this->fill_header();
+
+        $um = $this->serviceContainer['user_manager'];
         
         if($product_row['o_success'] >= 1){
             $id = $product_row['id_product'];
@@ -417,6 +419,7 @@ class product extends MY_Controller
                 'shiploc' => $this->product_model->getLocation(),
                 'banner_view' => $banner_view,
                 'payment_method' => $payment_method_array,
+                'avatarImage' => $um->getUserImage($product_row['sellerid'], "small")
                 ));
             
             $categoryManager = $this->serviceContainer['category_manager'];

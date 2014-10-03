@@ -2140,7 +2140,7 @@ function imageprev(input) {
                         $.modal.close();
                     });
                     jcrop_api = $.Jcrop($('#user_image_prev'),{
-                        aspectRatio: width/height,
+                        aspectRatio: 1,
                         boxWidth: 500,
                         boxHeight: 500,
                         minSize: [width*0.1,height*0.1],
