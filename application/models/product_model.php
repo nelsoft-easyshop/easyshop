@@ -2561,7 +2561,6 @@ class product_model extends CI_Model
      */
     public function is_free_shipping($product_id)
     {
-        $product_id = 42;
         $query = "SELECT SUM(price) as shipping_total FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
