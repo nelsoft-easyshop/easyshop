@@ -257,9 +257,11 @@ class Memberpage extends MY_Controller
     {
         $uid = $this->session->userdata('member_id');
         $user_product_count = $this->memberpage_model->getUserItemCount($uid);
+        $um = $this->serviceContainer['user_manager'];
+
         $data = array(
             'title' => 'Easyshop.ph - Member Profile',
-            'image_profile' => $this->memberpage_model->get_image($uid),
+            'image_profile' => $um->getUserImage($uid),
             'active_products' => $this->memberpage_model->getUserItems($uid,0),
             'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
             'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),

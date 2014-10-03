@@ -1187,7 +1187,7 @@ class productUpload extends MY_Controller
             $productID = $this->input->post('prod_h_id');
             
             $product = $this->product_model->getProductById($productID, true);
-            
+
             if(empty($product) || (intval($product['sellerid']) !== intval($memberId))){
                 redirect('sell/step1', 'refresh');
             }
@@ -1364,6 +1364,7 @@ class productUpload extends MY_Controller
         if( $this->input->post('prod_h_id') ){
             $productID = $this->input->post('prod_h_id');
             $memberID = $this->session->userdata('member_id');
+            $um = $this->serviceContainer['user_manager'];
             
             $product_row = $this->product_model->getProductById($productID, true);
             if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberID))){
@@ -1391,7 +1392,8 @@ class productUpload extends MY_Controller
                 'availability' => $availability,
                 'shipping_summary' => $this->product_model->getShippingSummary($productID),
                 'attr' => $this->product_model->getPrdShippingAttr($productID),
-                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID)
+                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID),
+                'avatarImage' => $um->getUserImage($memberID, "small")
             );
             $data = array_merge($data, $this->fill_view());
             

@@ -74,7 +74,7 @@
                         <div class="clear"></div>
                         <div id="avatar_cont">
                             <span>
-                                <?php echo $image_profile?>
+                                <img src="<?=$image_profile?>" id="user_image">
                             </span>
                         </div>
                         <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
