@@ -376,8 +376,13 @@ section {
      width: 150px;
 }
 
-.td-2, .td-3{
-    padding-left: 50px;
+.td-1{
+    width: 81px;
+}
+
+ .td-2, .td-3{
+    padding-left: 35px;
+    width: 150px;
 }
 
 .tdr-2{
