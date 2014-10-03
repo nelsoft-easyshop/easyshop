@@ -632,28 +632,36 @@ function processAttributes()
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
-
-        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
-            $(this).val('');
-            return false;
-        } 
         var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
         var sum = ((basePrice - discountPrice) / basePrice) * 100;
         sum = sum.toFixed(4);
         validateWhiteTextBox("#discountedP");
+        
+        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
+            $(this).val('');
+            $("#slider_val").val("0%");
+            $rangeSlider.ionRangeSlider("update", {
+                from: 0
+            });
+            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+            return false;
+        } 
 
         if(discountPrice > basePrice){
             alert("Discounted price cannot be greater than base price.");
             $this.val("0.00");
             validateRedTextBox("#discountedP");
             return false;
-        }
-
+        } 
+ 
         if(discountPrice <= 0){
             alert("Discounted price cannot be equal or less than 0.");
-            $this.val("0.00");
-            $( "span#discounted_price_con" ).text( "0.00" );
-            validateRedTextBox("#discountedP");
+            $this.val('');
+            $("#slider_val").val("0%");
+            $rangeSlider.ionRangeSlider("update", {
+                from: 0
+            }); 
+            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
             return false;
         }
 
