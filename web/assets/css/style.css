@@ -1720,7 +1720,7 @@ nav ul > li:hover > div {
 .cd_slide_discount > span {
     display: inline-block;
     font-size: 16px;
-    padding-top: 10px;
+    padding-top: 7px;
 }
 
 .cd_slide_base_price {
@@ -3158,7 +3158,7 @@ div.pass-hint {
     padding:0px 2px;
     vertical-align: middle;
     width: 217px;
-    line-height: 32px;
+/*    line-height: 32px;*/
     height: 32px;
 }
 

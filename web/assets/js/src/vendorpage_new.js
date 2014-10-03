@@ -194,13 +194,17 @@ function ItemListAjax(CatDiv,page)
             }
 
             if(productPage.length > 0){
-                CatDiv.find('.product-paging:last').after(obj.htmlData);    
+                CatDiv.find('.product-paging:last').after(obj.htmlData);
             }
             else{
                 CatDiv.find('.loading_div').after(obj.htmlData);
             }
 
             $(paginationContainer).children('center').html(obj.paginationData);
+
+            CatDiv.find('[rel=tooltiplist]').tooltip({
+                placement : 'top'
+            });
         }
     });
 }

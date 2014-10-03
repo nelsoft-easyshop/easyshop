@@ -10,7 +10,6 @@
 <script>
     
 </script>
-
 <section style="color-gray">
     <div class="container font-roboto" style="max-width:980px;">
         <div class="row">
@@ -89,18 +88,18 @@
                         <div class="panel-heading panel-seller-header">
                             <a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
                                 Seller: <?php echo html_escape($product['sellerusername']);?>
-                                <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                                <i class="sell glyphicon glyphicon-chevron-down pull-right"></i>
                             </a>
                             <script>
                                     $("#seller-accordion").on('click','.a-accordion-header',function() {
                                         
-                                        var attr = $("i.glyphicon").attr("class");
+                                        var attr = $("i.sell").attr("class");
 
-                                        if(attr == "glyphicon glyphicon-chevron-down pull-right")
+                                        if(attr == "sell glyphicon glyphicon-chevron-down pull-right")
                                         {
-                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+                                            $('i.sell').removeClass("sell glyphicon glyphicon-chevron-down pull-right").addClass("sell glyphicon glyphicon-chevron-up pull-right");
                                         }else{
-                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+                                            $('i.sell').removeClass("sell glyphicon glyphicon-chevron-up pull-right").addClass("sell glyphicon glyphicon-chevron-down pull-right");
                                         
                                         }
                                     });
@@ -112,7 +111,7 @@
                                     <tr>
                                         <td class="v-align-top" width="10%">
                                             <a href="/<?php echo $product['sellerusername'];?>"> 
-                                                <img class="seller-img seller-img-m" src="/<?php echo  $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+                                                <img class="seller-img seller-img-m" src="<?=$avatarImage?>"><br />
                                             </a>
                                         </td>
                                         <td class="v-align-top td-seller-info">
@@ -180,7 +179,7 @@
                                     <td  width="40%" style="vertical-align:top; padding-right: 3px;">
                                         <span class="seller-name"> 
                                             <a href="/<?php echo $product['sellerslug'];?>"> 
-                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
+                                                <img class=" seller-img" src="<?=$avatarImage?>"/><br />
                                                 <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                                             </a>
                                             <br/>
@@ -583,13 +582,14 @@
                 <div class="row">
                 <div class="col-md-12">
                 <div class="panel-group display-when-mobile-833" id="accordion">
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border"  id="details-accordion">
                         <div class="panel-heading  no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#productDescription" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#productDescription" class="accordion-details-toggle">
                                     Product Details
-                            
+                                    <i class="indicator glyphicon glyphicon-chevron-up pull-right"></i>
                                 </a>
+                               
                             </h4>
                         </div>
                         
@@ -625,11 +625,12 @@
                         </div>
                     </div>
                     
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border" id="specs-accordion">
                         <div class="panel-heading no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#specs" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#specs" class="accordion-specs-toggle">
                                     Specifications
+                                    <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i>
                                 </a>
                             </h4>
                         </div>
@@ -681,12 +682,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border" id="review-accordion">
                         <div class="panel-heading no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#review" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#review" class="accordion-review-toggle">
                                     Reviews
+                                <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i>
                                 </a>
+                                <script>
+                                function toggleChevron(e) {
+                                    $(e.target)
+                                        .prev('.panel-heading')
+                                        .find("i.indicator")
+                                        .toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                                }
+                                $('#accordion').on('hidden.bs.collapse', toggleChevron);
+                                $('#accordion').on('shown.bs.collapse', toggleChevron);
+                                </script>
                             </h4>
                         </div>
                         <div id="review" class="panel-collapse collapse">

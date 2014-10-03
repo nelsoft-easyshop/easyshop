@@ -414,22 +414,25 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');  
+        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');
 
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
                 $imgFile = '/banner.png';
+                $isHide = (boolean)$member->getIsHideBanner();
                 break;
             case "small":
                 $imgFile = '/60x60.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
             default:
                 $imgFile = '/150x150.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile)){
+        if(!file_exists($imageURL.$imgFile) || $isHide){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
         else{
@@ -445,18 +448,26 @@ class UserManager
      * @param integer $memberId
      * @return boolean
      */
-    public function removeUserImage($memberId)
+    public function removeUserImage($memberId, $selector = NULL)
     {
         // Get member object
         $EsMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy(['idMember' => $memberId]);
 
         if($EsMember !== null){
-            // Update user image
-            $EsMember->setImgurl(""); 
+            switch($selector){
+                case "banner":
+                    $EsMember->setIsHideBanner(TRUE);
+                    $userImage = $this->getUserImage($memberId, "banner");
+                    break;
+                default:
+                    $EsMember->setIsHideAvatar(TRUE);
+                    $userImage = $this->getUserImage($memberId);
+                    break;
+            }
             $this->em->flush();
 
-            return $this->getUserImage($memberId);
+            return $userImage;
         }
         else{
             return false;

@@ -1,0 +1,27 @@
+<?php
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\Version;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+class Version20141003172518 extends AbstractMigration
+{
+    public function up(Schema $schema)
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `es_member` ADD COLUMN `is_hide_avatar` TINYINT(1) NOT NULL DEFAULT '0' ");
+        $this->addSql("ALTER TABLE `es_member` ADD COLUMN `is_hide_banner` TINYINT(1) NOT NULL DEFAULT '0' ");
+    }
+
+    public function down(Schema $schema)
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `es_member` DROP COLUMN `is_hide_avatar` ");
+        $this->addSql("ALTER TABLE `es_member` DROP COLUMN `is_hide_banner` ");
+    }
+}
