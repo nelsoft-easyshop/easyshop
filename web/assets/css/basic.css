@@ -15,11 +15,12 @@
 
 /* Overlay */
 #simplemodal-overlay {
-	background-color:#bcbcbc;
+	background-color:rgba(0,0,0,0.60);
 }
 
 /* Container */
 #simplemodal-container {
+	border-radius: 4px;
 	/*height:290px !important;*/
 	height: auto !important;
 	width:600px; 
