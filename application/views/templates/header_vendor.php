@@ -48,7 +48,7 @@
                             Message
                         </a>
 
-                         <?php echo form_open('');?>
+                        <?php echo form_open('');?>
                             <input type="hidden" id="subscribe_status" value="<?php echo $subscriptionStatus?>">
                             <input type="hidden" id="vendor_name" name="name" value="<?php echo $arrVendorDetails['username']?>">
                             <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
@@ -243,6 +243,7 @@
     </div>
 </section> 
 
+<input type="hidden" id="vendor-username" name="name" value="<?php echo $arrVendorDetails['username']?>">
 <!-- Load Js Files -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>

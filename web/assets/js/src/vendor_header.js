@@ -78,7 +78,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     // Search button click
     $(document).on('click','.submitSearch',function() {
         var searchType = $(this).closest(".search-form").find('.search-type').val();
-        var action =  (searchType == 1) ? "/" + $('#vendor_name').val() : "/search/search.html";
+        var action =  (searchType == 1) ? "/" + $('#vendor-username').val() : "/search/search.html";
         $(this).closest(".search-form").attr("action",action);
         $(this).closest(".search-form").submit();
     });

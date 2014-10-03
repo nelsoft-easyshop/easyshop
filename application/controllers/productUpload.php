@@ -238,7 +238,14 @@ class productUpload extends MY_Controller
 
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
         $response['memid'] = $member_id = $this->session->userdata('member_id');
-        $dir    = './assets/product/'; 
+        $dir    = './assets/product/';
+
+        if(!glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)){
+            $date = date("Ymd");
+            $tempDirectory = './assets/product/'. $product_id.'_'.$member_id.'_'.$date.'/';
+            mkdir($tempDirectory, 0777, true);
+        }
+
         $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
         $product = $this->product_model->getProductEdit($product_id, $member_id);
         $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
@@ -372,8 +379,8 @@ class productUpload extends MY_Controller
         
         $data = array('title'=>'Edit Product');
         $data = array_merge($data,$this->fill_view());
-        $data['$render_searchbar'] = false; 
-
+        $data['$render_searchbar'] = false;
+        
         $this->load->view('templates/header', $data);   
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
