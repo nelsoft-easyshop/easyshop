@@ -1,4 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/jquery.bxslider2.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/new-homepage.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/owl.carousel.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 
 <section id="content">       
     <div id="slider-edge">
@@ -28,31 +31,23 @@
 
     <div class="lg-margin"></div><!-- Space -->
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="row home-banners">
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="#"><img src="<?php echo base_url() ?>assets/images/big-banner-1.png" alt="Home Big Banner 1" class="img-responsive"></a>
-                    </div><!-- End .col-md-6 -->
-                    
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="#"><img src="<?php echo base_url() ?>assets/images/big-banner-2.png" alt="Home Big Banner 2" class="img-responsive"></a>
-                    </div><!-- End .col-md-6 -->
-
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="#"><img src="<?php echo base_url() ?>assets/images/big-banner-3.png" alt="Home Big Banner 1" class="img-responsive"></a>
-                    </div><!-- End .col-md-6 -->
-
-                </div><!-- End .home-banners -->
-
-                <div class="lg-margin"></div><!-- Space -->
-            </div>
-        </div>
+        <?php
+            include("featured.php");
+        ?>
+        <?php
+            include("promo-ads.php");
+        ?>
+        <?php
+            include("featured-category.php");
+        ?>
     </div>
+    
+    
 </section>
 
 <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
+
 <script>
     (function ($)  {
         // BxSlider.js Slider Plugin
