@@ -126,11 +126,6 @@ class ValidationRules
                                 new Assert\Length(['max' => '1024'])
                     ),
                 ),
-            'vendor_header_details' =>array(
-                    'mobile' => array(
-                                new CustomAssert\IsValidMobile()
-                    )
-                ),
         );
     }
 
