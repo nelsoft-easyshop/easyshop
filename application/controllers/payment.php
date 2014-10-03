@@ -1354,7 +1354,7 @@ class Payment extends MY_Controller{
                 "PaypalGateway" => 
                     ["method" => "PayPal", "getArray" => $this->input->get()],
                 "PointGateway" =>
-                    ["method" => "Point", "amount" => $points, "pointtype" => "purchase"]
+                    ["method" => "Point", "amount" => $points->getCreditPoint(), "pointtype" => "purchase"]
             ];
             $points->setCreditPoint(0);
             $this->serviceContainer['entity_manager']->flush();
@@ -1373,6 +1373,9 @@ class Payment extends MY_Controller{
     
         extract($response);
         $this->generateFlash($txnid,$message,$status);
+
+        // die();
+
         redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 }

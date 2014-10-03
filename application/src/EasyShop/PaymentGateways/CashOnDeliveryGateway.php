@@ -56,7 +56,7 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                    ->getShippingAddress(intval($memberId));
+                        ->getShippingAddress(intval($memberId));
 
         // Compute shipping fee
         $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
@@ -92,17 +92,27 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['status'] = 's';
 
                 foreach ($itemList as $key => $value) {  
-                    $itemComplete = $this->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                    $this->productManager->updateSoldoutStatus($value['id']);
+                    $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                    $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                 }
 
                 /* remove item from cart function */ 
                 /* send notification function */ 
+
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($v_order_id);
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                            ->find($this->getParameter('paymentType'));
+
+
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($this->getParameter('amount'));
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                 $paymentRecord->setOrder($order);
                 $paymentRecord->setPaymentMethod($paymentMethod);
+                
+                $this->em->persist($paymentRecord);
 
                 if($pointGateway !== NULL){
                     $pointGateway->setParameter('memberId', $memberId);
@@ -113,13 +123,13 @@ class CashOnDeliveryGateway extends AbstractGateway
 
                     $trueAmount = $pointGateway->pay();
 
-                    $paymentRecord = new EsPaymentGateway();
-                    $paymentRecord->setAmount($trueAmount);
-                    $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                    $paymentRecord->setOrder($order);
-                    $paymentRecord->setPaymentMethod($paymentMethod);
+                    $pointRecord = new EsPaymentGateway();
+                    $pointRecord->setAmount($trueAmount);
+                    $pointRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                    $pointRecord->setOrder($order);
+                    $pointRecord->setPaymentMethod($paymentMethod);
 
-                    $this->em->persist($paymentRecord);   
+                    $this->em->persist($pointRecord);   
                 }
                 $this->em->flush();
             }

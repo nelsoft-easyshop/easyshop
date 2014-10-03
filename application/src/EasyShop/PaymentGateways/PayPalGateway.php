@@ -340,10 +340,10 @@ class PayPalGateway extends AbstractGateway
                         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
 
                             # START SAVING TO DATABASE HERE 
-                            // foreach ($itemList as $key => $value) {     
-                            //     $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                            //     $this->product_model->update_soldout_status($value['id']);
-                            // }
+                            foreach ($itemList as $key => $value) {     
+                                $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                                $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                            }
 
                             $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
                             //$complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,0,$flag);

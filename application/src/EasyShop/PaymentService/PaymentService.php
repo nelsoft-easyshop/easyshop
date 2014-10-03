@@ -166,7 +166,7 @@ class PaymentService
      *
      * @var EasyShop\Product\ProductManager
      */
-    private $productManager;
+    public $productManager;
 
     /**
      * Post Array
@@ -601,16 +601,7 @@ class PaymentService
         /* PUT PAYMENT GATEWAY PAY HERE*/
         $returnValue = $this->primaryGateway->pay($validatedCart, $memberId, $this);
 
-        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                            ->find($v_order_id);
-
-                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($this->getParameter('paymentType'));
-
-
-
-        $response = array_merge($response, $returnValue);
-        return $response;
+        return $returnValue;
     }
 
     public function postBack($paymentMethods, $validatedCart, $memberId)
@@ -622,7 +613,6 @@ class PaymentService
         $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this);
 
         return $returnValue;
-
     }
 
     public function getPointGateway()
