@@ -23,7 +23,7 @@
 		</div>
 		<div class="post_item_content_right">
 			<div class="product_title_container">
-				<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $draft_product['slug'];?>"><?php echo html_escape($draft_product['name']);?></a></p>
+				<p class="post_item_product_title fm1"><span><?php echo html_escape($draft_product['name']);?></span></p>
 				<div class="post_item_button">
 					<?php echo form_open('sell/edit/step2'); ?>
 					<input type="hidden" name="p_id" value ="<?php echo $draft_product['id_product'];?>" /> 
