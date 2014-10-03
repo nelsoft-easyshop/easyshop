@@ -2574,16 +2574,24 @@ class product_model extends CI_Model
     }
 
 
-    function is_free_shipping($product_id){
+    /**
+     * Determines if an item is free shipping
+     *
+     * @param integer $productId
+     * @return boolean
+     */
+    public function is_free_shipping($product_id)
+    {
         $query = "SELECT SUM(price) as shipping_total FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
         $sth->closeCursor();
         $sth->execute();
-        $total_shipping_fee = $sth->fetch(PDO::FETCH_ASSOC)['shipping_total'];
-        if($total_shipping_fee > 0){
+        $totalShippingFee = $sth->fetch(PDO::FETCH_ASSOC)['shipping_total'];
+        if($totalShippingFee > 0 || !$totalShippingFee){
             return false;
-        }else{
+        }
+        else{
             return true;
         }
     }
