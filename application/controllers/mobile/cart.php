@@ -145,24 +145,6 @@ class cart extends MY_Controller
                     'sellerEmail ' => $member->getEmail()
                     );
                     
-                $relatedItems = $this->productManager->getRecommendedProducts($productId,5);
-                $formattedRelatedItem = array();
-                foreach($relatedItems as $relatedItem){
-                    
-                    $defaultImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                         ->getDefaultImage($relatedItem->getIdProduct());
-                    
-                    array_push($formattedRelatedItem, array('product' => $relatedItem->getName(),
-                                                    'slug' => $relatedItem->getSlug(),
-                                                    'product_image_path' => $defaultImage->getProductImagePath(),
-                                                    'price' => $relatedItem->getFinalPrice(),
-                                                    'end_promo' => $relatedItem->getEndPromo(),
-                                                    'original_price' => $relatedItem->getOriginalPrice(),
-                                                    'sold_price' => $relatedItem->getSoldPrice(),
-                                                    'percentage' => $relatedItem->getDiscountPercentage(),
-                                                    ));
-                }
-                
                 $images = array();
                 foreach($product->getImages() as $image){
                     $images[$image->getIdProductImage()] = $image->getProductImagePath();
@@ -211,8 +193,7 @@ class cart extends MY_Controller
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],
                     'sellerDetails' => $sellerDetails,
-                    'images' => $images,
-                    'relatedItems' => $formattedRelatedItem,
+                    'images' => $images, 
                     'mapAttributes' => $mappedAttributes
                 ];
                 
