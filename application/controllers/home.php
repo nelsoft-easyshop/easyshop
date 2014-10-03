@@ -40,8 +40,6 @@ class Home extends MY_Controller
         $this->load->model('user_model');
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
-        $this->user_ID = $this->session->userdata('member_id');
-        $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
     /**
@@ -749,23 +747,6 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
 
-    /**
-     * Send Message
-     * @param recipient int
-     * @param msg string
-     * @return mixed
-     */
-    public function sendMessage()
-    {
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-            ->find($this->input->post('recipient'));
-        $this->messageManager->send(
-            $this->user_ID,
-            $this->input->post('recipient'),
-            $this->input->post('msg')
-        );
-        Redirect('/'.$member->getSlug().'/contact' ,'refresh');
-    }
 
     /**
      *  NOT YET USED !!!

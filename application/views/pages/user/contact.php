@@ -17,10 +17,10 @@
                             Leave A Message
                         </p>
                         <div class="div-message-form">
-                            <?php echo form_open('home/sendMessage'); ?>
+                            <?php echo form_open('messages/doSendMessage'); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="<?=$user['username']?>" disabled="disabled"/>
+                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?=html_escape($message_recipient->getUsername())?>" disabled="disabled"/>
                                     <input type="hidden" name="recipient" value="<?=$message_recipient->getIdMember()?>" id="msg_recipient">
                                 </div>
                             </div>
