@@ -42,6 +42,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':product_count',$productCount,PDO::PARAM_INT);
         $sth->bindParam(':data_response',$apiResponse,PDO::PARAM_STR);
         $sth->bindParam(':tid',$tid,PDO::PARAM_STR);
+        $sth->bindParam(':dateadded', date('Y-m-d H:i:s')); 
 
         $sth->execute();
         
