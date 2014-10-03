@@ -102,7 +102,7 @@
                 <tr id="websiteRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
-                        <p id="validatedWebsite" class="text-contact"><a href="#"><?php echo html_escape($validatedWebsite); ?></a></p>
+                        <p class="text-contact"><a href="#" id="validatedWebsite"><?php echo html_escape($validatedWebsite); ?></a></p>
                         <input type="hidden" id="postWebsite" value="<?php echo html_escape($website)?>"/>
                         <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($website); ?>">
                     </td>
