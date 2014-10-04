@@ -18,7 +18,8 @@
         /* Begin listening for events */
         var host = window.location.hostname;
         var domainNamePos = host.indexOf('easyshop');
-        var url = 'ws://ws.' + (0 === domainNamePos ? host : host.substr(domainNamePos));
+        var protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        var url = protocol + '://ws.' + (0 === domainNamePos ? host : host.substr(domainNamePos));
         
         easyshop.websocket.client.listen(url, $('#user-session').val(), function (topic, data) {
             easyshop.eventDispatcher.dispatch(data);
