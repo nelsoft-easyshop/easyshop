@@ -43,8 +43,34 @@ class MobileWebService extends MY_Controller
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getMobileXMLfile().".xml"; 
-        $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");        
+        $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
+        if($this->input->get()) {
+            $this->authentication($this->input->get(), $this->input->get('hash'));
+        }      
+
+    }
+
+    /**
+     *  Removes mainSlides
+     *  @return JSON
+     */
+    public function removeContent() 
+    {
+        $map = simplexml_load_file($this->file);        
+        $index =  $this->input->get("index");
+        $nodeName =  $this->input->get("nodename");        
+        $productindex =  $this->input->get("productindex");        
+        $file = $this->file;
+        $jsonFile = $this->json;        
+        if($nodeName == "mainSlide") {
+            if(count($map->mainSlide) > 1){
+                $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);                  
+            }
+        }
     }
 
     /**
@@ -68,14 +94,40 @@ class MobileWebService extends MY_Controller
         $type = $this->input->get("type");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
-        $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
+
+        $filename = date('yhmdhs');
+        $file_ext = explode('.', $_FILES['myfile']['name']);
+        $file_ext = strtolower(end($file_ext));  
+        $path_directory = 'assets/images/mainslide';
+
+        $this->upload->initialize(array( 
+            "upload_path" => $path_directory,
+            "overwrite" => FALSE, 
+            "encrypt_name" => FALSE,
+            "file_name" => $filename,
+            "remove_spaces" => TRUE,
+            "allowed_types" => "jpg|jpeg|png|gif", 
+            "xss_clean" => FALSE
+        )); 
         
-        $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/mainSlide[last()]');
-        if($addXml === TRUE) {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output($this->json); 
+        if ( ! $this->upload->do_upload("myfile")) {
+            $error = array('error' => $this->upload->display_errors());
+                     return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($error);
+        } 
+        else {
+            $value = "assets/images/mainslide/".$filename.'.'.$file_ext;
+            $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);            
+            $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/mainSlide[last()]');
+            if($addXml === TRUE) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json); 
+            }   
         }
+
+
     }
 
     /**
@@ -84,47 +136,85 @@ class MobileWebService extends MY_Controller
      */
     public function setMainSlide()
     {
+        $filename = date('yhmdhs');        
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");
         $type = $this->input->get("type");
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
-        $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
 
         $map = simplexml_load_file($this->file);
+        $value = !empty($_FILES['myfile']['name']) ? $value : $map->mainSlide[$index]->value;
 
-        if($order === ""){
-            $order = (int)$order;
-            $map->mainSlide[$index]->value = $value;
-            $map->mainSlide[$index]->type = $type;
-            $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
-            $map->mainSlide[$index]->imagemap->target = $target;  
+        if(!empty($_FILES['myfile']['name'])){
+            $file_ext = explode('.', $_FILES['myfile']['name']);
+            $file_ext = strtolower(end($file_ext));  
+            $path_directory = 'assets/images/mainslide';
+            $value = $path_directory."/".$filename.".".$file_ext;
+            $this->upload->initialize(array( 
+                "upload_path" => $path_directory,
+                "overwrite" => FALSE, 
+                "encrypt_name" => FALSE,
+                "file_name" => $filename,
+                "remove_spaces" => TRUE,
+                "allowed_types" => "jpg|jpeg|png|gif", 
+                "xss_clean" => FALSE
+            ));
+
+            $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
+            if ( ! $this->upload->do_upload("myfile")) {
+                $error = array('error' => $this->upload->display_errors());
+                         return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($error);
+            }  
+            else {
+                $map->mainSlide[$index]->value = $value;
+                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
+                $map->mainSlide[$index]->imagemap->target = $target;
+                
+                if($map->asXML($this->file)) {
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+                } 
+            }            
         }
         else {
-            $order = (int) $order;  
-            $tempValue = (string) $map->mainSlide[$order]->value;
-            $tempOrder = (string) $map->mainSlide[$order]->type;
-            $tempTarget = (string) $map->mainSlide[$order]->imagemap->target;
-            $tempCoordinate = (string) $map->mainSlide[$order]->imagemap->coordinate;
+            if($order === ""){
+                $order = (int)$order;
+                $map->mainSlide[$index]->value = $value;
+                $map->mainSlide[$index]->type = $type;
+                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
+                $map->mainSlide[$index]->imagemap->target = $target;  
+            }
+            else {
+                $order = (int) $order;  
+                $tempValue = (string) $map->mainSlide[$order]->value;
+                $tempOrder = (string) $map->mainSlide[$order]->type;
+                $tempTarget = (string) $map->mainSlide[$order]->imagemap->target;
+                $tempCoordinate = (string) $map->mainSlide[$order]->imagemap->coordinate;
 
-            $map->mainSlide[$order]->value = $map->mainSlide[$index]->value;
-            $map->mainSlide[$order]->type = $map->mainSlide[$index]->type;
-            $map->mainSlide[$order]->imagemap->target = $map->mainSlide[$index]->imagemap->target;
-            $map->mainSlide[$order]->imagemap->coordinate = $map->mainSlide[$index]->imagemap->coordinate;
+                $map->mainSlide[$order]->value = $map->mainSlide[$index]->value;
+                $map->mainSlide[$order]->type = $map->mainSlide[$index]->type;
+                $map->mainSlide[$order]->imagemap->target = $map->mainSlide[$index]->imagemap->target;
+                $map->mainSlide[$order]->imagemap->coordinate = $map->mainSlide[$index]->imagemap->coordinate;
 
-            $map->mainSlide[$index]->value = $tempValue;
-            $map->mainSlide[$index]->type = $tempOrder;
-            $map->mainSlide[$index]->imagemap->target = $tempTarget;
-            $map->mainSlide[$index]->imagemap->coordinate = $tempCoordinate;
+                $map->mainSlide[$index]->value = $tempValue;
+                $map->mainSlide[$index]->type = $tempOrder;
+                $map->mainSlide[$index]->imagemap->target = $tempTarget;
+                $map->mainSlide[$index]->imagemap->coordinate = $tempCoordinate;
 
+            }
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+
+            }             
         }
-        if($map->asXML($this->file)) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-
-        }     
+    
     }  
 
     /**
@@ -170,36 +260,12 @@ class MobileWebService extends MY_Controller
         $index = $index == 0 ? 1 : $index;   
         $boxIndex = $boxIndex == 0 ? 1 : $boxIndex;
 
-        $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent['.$boxIndex.']');    
+        $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');    
 
-        if($originalBoxIndex == 0 && $addXml == TRUE) {
-            $swap = $this->swapBoxContents($map, $this->file, $originalSectionIndex, $originalBoxIndex, $boxIndex, $value, $type, $target, $actionType);
-            if($swap === TRUE) {
+        if($addXml === TRUE) {
                 return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-            }
-        }
-    }
-
-    /**
-     *  Swaps boxContents nodes
-     *  @return bool
-     */
-    public function swapBoxContents($map, $file, $originalSectionIndex, $originalBoxIndex, $boxIndex, $value, $type, $target, $actionType)
-    {
-        $map = simplexml_load_file($file);
-        $map->section[$originalSectionIndex]->boxContent[$boxIndex]->value = (string)$map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->value;
-        $map->section[$originalSectionIndex]->boxContent[$boxIndex]->type = (string)$map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->type;
-        $map->section[$originalSectionIndex]->boxContent[$boxIndex]->target = (string)$map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->target;
-        $map->section[$originalSectionIndex]->boxContent[$boxIndex]->actionType = (string)$map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->actionType;
-
-        $map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->value = $value;
-        $map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->type = $type;
-        $map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->target = $target;
-        $map->section[$originalSectionIndex]->boxContent[$originalBoxIndex]->actionType = $actionType;  
-        if($map->asXML($file)) {
-            return true;
+                    ->set_output($this->json);            
         }
     }
 
@@ -209,6 +275,7 @@ class MobileWebService extends MY_Controller
      */
     public function setBoxContent()
     {
+
         $index = (int)$this->input->get("sectionIndex");
         $boxIndex = (int)$this->input->get("boxIndex");
         $order = $this->input->get("order");
