@@ -11,6 +11,10 @@ section {
   to { opacity: 1; }
 }
 
+#feedback-order-error-icon{
+    display:none;
+}
+
 .row-contact{
     min-height: 560px;
 }
