@@ -14,7 +14,7 @@ class Version20141003192743 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP PROCEDURE `es_sp_Payment_order`");
+        $this->addSql("DROP PROCEDURE IF EXISTS `es_sp_Payment_order`");
         $this->addSql("
 
             CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
@@ -250,7 +250,7 @@ class Version20141003192743 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP PROCEDURE `es_sp_Payment_order`");
+        $this->addSql("DROP PROCEDURE IF EXISTS `es_sp_Payment_order`");
         $this->addSql("
 
             CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
