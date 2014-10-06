@@ -29,7 +29,8 @@
             :string,
             :product_count,
             :data_response,
-            :tid
+            :tid,
+            :dateadded
         )
     </select>
 

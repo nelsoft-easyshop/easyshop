@@ -287,20 +287,19 @@ class Home extends MY_Controller
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
-                $userProduct = $em->getRepository("EasyShop\Entities\EsProduct")->findBy(['member' => $arrVendorDetails['id_member'],
-                                                                          'isDelete' => 0,'isDraft' => 0]);
-
-                if (count($userProduct) <= 0) { 
-                    redirect($vendorSlug.'/about'); 
+                $userProduct = $em->getRepository("EasyShop\Entities\EsProduct")->findBy(['member' => $arrVendorDetails['id_member'],'isDelete' => 0,'isDraft' => 0]);
+                
+                if (count($userProduct) <= 0) {
+                    redirect($vendorSlug.'/about');
                 }
 
                 $productView['defaultCatProd'] = [];
-                if (count($userProduct) > 0) { 
+                if (count($userProduct) > 0) {
                     $getUserProduct = $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member']);
                     $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
                 }
 
-                // If searching in page
+                // If searching in  page
                 if($this->input->get() && count($userProduct) > 0){
 
                     $productView['isSearching'] = TRUE;
@@ -530,13 +529,11 @@ class Home extends MY_Controller
                                            ->getRepository('EasyShop\Entities\EsLocationLookup');
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
-                                 ->getVendorDetails($sellerslug); 
+                                 ->getVendorDetails($sellerslug);
 
         $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
-                                  ->findBy(['member' => $arrVendorDetails['id_member'],
-                                            'isDelete' => 0,'isDraft' => 0]);
-
-     
+                                                  ->findBy(['member' => $arrVendorDetails['id_member'],
+                                                              'isDelete' => 0,'isDraft' => 0]);
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -544,7 +541,7 @@ class Home extends MY_Controller
                     , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
                     , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
                     , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
-                    , "noItem" => (count($userProduct)  > 0) ? TRUE : FALSE
+                    , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "about"
