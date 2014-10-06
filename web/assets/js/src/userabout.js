@@ -38,6 +38,7 @@
             $feedbackSelect = $('#feedback-select');
             if($feedbackSelect.val() == 0){
                 $feedbackSelect.addClass("input-error");
+                $('#feedback-order-error-icon').show();
                 event.preventDefault();
             }
  
