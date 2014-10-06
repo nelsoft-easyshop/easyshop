@@ -255,11 +255,7 @@ class MobileWebService extends MY_Controller
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
         $map = simplexml_load_file($this->file);
 
-        $originalBoxIndex = $boxIndex;
-        $originalSectionIndex = $index;
-
-        $index = $index == 0 ? 1 : $index;   
-        $boxIndex = $boxIndex == 0 ? 1 : $boxIndex;
+        $index = $index == 0 ? 1 : $index + 1;   
 
         $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');    
 
@@ -288,7 +284,7 @@ class MobileWebService extends MY_Controller
 
         $map = simplexml_load_file($this->file);
 
-        if($order === ""){
+        if($order === "" || $order == NULL){
             $order = (int) $order;
             $map->section[$index]->boxContent[$boxIndex]->value = $value;
             $map->section[$index]->boxContent[$boxIndex]->type = $type ;
