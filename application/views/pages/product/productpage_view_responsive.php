@@ -87,7 +87,7 @@
                     <div class="panel panel-default no-border">
                         <div class="panel-heading panel-seller-header">
                             <a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
-                                Seller: <?php echo html_escape($product['sellerusername']);?>
+                                Seller: <?php echo html_escape($product['storename']);?>
                                 <i class="sell glyphicon glyphicon-chevron-down pull-right"></i>
                             </a>
                             <script>
@@ -110,13 +110,13 @@
                                 <table width="100%" class="font-12">
                                     <tr>
                                         <td class="v-align-top" width="10%">
-                                            <a href="/<?php echo $product['sellerusername'];?>"> 
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
                                                 <img class="seller-img seller-img-m" src="<?=$avatarImage?>"><br />
                                             </a>
                                         </td>
                                         <td class="v-align-top td-seller-info">
-                                            <a href="/<?php echo $product['sellerusername'];?>"> 
-                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
+                                                <span class="name"><?php echo html_escape($product['storename']);?></span> 
                                             </a>
                                             <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
                                                 <span>
@@ -180,7 +180,7 @@
                                         <span class="seller-name"> 
                                             <a href="/<?php echo $product['sellerslug'];?>"> 
                                                 <img class=" seller-img" src="<?=$avatarImage?>"/><br />
-                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+                                                <span class="name"><?php echo html_escape( $product['storename']);?></span> 
                                             </a>
                                             <br/>
                                             <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">

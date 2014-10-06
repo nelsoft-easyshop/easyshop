@@ -216,18 +216,22 @@ class product_model extends CI_Model
         $sth->bindParam(':slug',$slug);
         $sth->execute();
         $product = $sth->fetch(PDO::FETCH_ASSOC);
-
         if(intval($product['o_success']) !== 0){
-        if(strlen(trim($product['userpic']))===0)
-            $product['userpic'] = 'assets/user/default';
-        if(intval($product['brand_id'],10) === 1)
-            $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
-        applyPriceDiscount($product);
-        if(isset($product['product_image_path'])){
-            $temp = array($product);
-            explodeImagePath($temp);
-            $product = $temp[0];
-        }
+        
+            if( !$product['storename'] || strlen(trim($product['storename'])) === 0){
+                $product['storename'] = $product['sellerusername'];
+            }
+            
+            if(strlen(trim($product['userpic']))===0)
+                $product['userpic'] = 'assets/user/default';
+            if(intval($product['brand_id'],10) === 1)
+                $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
+            applyPriceDiscount($product);
+            if(isset($product['product_image_path'])){
+                $temp = array($product);
+                explodeImagePath($temp);
+                $product = $temp[0];
+            }
         }
         return $product;
     }
