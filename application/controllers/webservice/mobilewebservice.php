@@ -182,14 +182,15 @@ class MobileWebService extends MY_Controller
             }            
         }
         else {
-            if($order === ""){
-                $order = (int)$order;
+
+            if(!isset($order) || $order == NULL){
                 $map->mainSlide[$index]->value = $value;
                 $map->mainSlide[$index]->type = $type;
                 $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;  
             }
             else {
+
                 $order = (int) $order;  
                 $tempValue = (string) $map->mainSlide[$order]->value;
                 $tempOrder = (string) $map->mainSlide[$order]->type;
