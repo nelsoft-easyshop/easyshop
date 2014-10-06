@@ -20,11 +20,10 @@
 </div>
 <script type="text/javascript">
    
-    var shipment = JSON.parse($('#p_shipment').val());        
+    var shipment = JSON.parse($('#p_shipment').val());
     var iid = '<?php echo $item_id;?>';
-   
-    $.each(shipment, function(index, value){
-
+    (function($) { 
+        $.each(shipment, function(index, value){
             if(iid == value.product_item_id){
                 var option =  $('#locationID_' + value.location_id);
                 option.data('price',value.price);
@@ -36,13 +35,14 @@
                     $(this).prop('disabled', false);
                     $(this).data('price',value.price);
                 }); 
-            }            
-    });
+            }
+        });
 
-    if($('#shipment_locations :selected').is(':disabled')){
-        $('#shipment_locations :nth-child(1)').prop('selected', true);
-        $('.shipping_fee').html("Select location to view shipping fee");
-    }
+        if($('#shipment_locations :selected').is(':disabled')){
+            $('#shipment_locations :nth-child(1)').prop('selected', true);
+            $('.shipping_fee').html("Select location to view shipping fee");
+        }
 
+    })(jQuery);
 
 </script>

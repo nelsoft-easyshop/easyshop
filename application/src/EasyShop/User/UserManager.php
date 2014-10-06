@@ -39,14 +39,6 @@ class UserManager
      */
     private $memberEntity;
 
-    /**
-     *  Check if method chain returns true.
-     *  Checked by magic function __call(), for all private functions
-     *
-     *  @var boolean
-     */
-    private $valid;
-
     /** 
      *  Flag for calling EntityManager::flush() in function save()
      *
@@ -136,32 +128,25 @@ class UserManager
      */
     public function setMobile($mobileNum)
     {
-        $isValidMobile = $this->isValidMobile($mobileNum);
-
+        $mobileNum = ltrim($mobileNum, "0");
         $thisMember = array();
 
-        if( $isValidMobile || $mobileNum === "" ){
-            if( $mobileNum !== "" ){
-                $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->getUserExistingMobile($this->memberId, $mobileNum);
-            }
+        if( $mobileNum !== "" ){
+            $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->getUserExistingMobile($this->memberId, $mobileNum);
+        }
 
-            // If mobile not used
-            if( empty($thisMember) ){
-                
-                $boolContactnoVerify = (string)$this->memberEntity->getContactno() === $mobileNum ? (bool)$this->memberEntity->getIsContactnoVerify() : FALSE;
-                
-                $this->memberEntity->setContactno($mobileNum);
-                $this->memberEntity->setIsContactnoVerify($boolContactnoVerify);
-                $this->em->persist($this->memberEntity);
-            }
-            else{
-                $this->err['mobile'] = "Mobile number already used.";
-                $this->hasError = TRUE;
-            }
+        // If mobile not used
+        if( empty($thisMember) ){
+            
+            $boolContactnoVerify = (string)$this->memberEntity->getContactno() === $mobileNum ? (bool)$this->memberEntity->getIsContactnoVerify() : FALSE;
+            
+            $this->memberEntity->setContactno($mobileNum);
+            $this->memberEntity->setIsContactnoVerify($boolContactnoVerify);
+            $this->em->persist($this->memberEntity);
         }
         else{
-            $this->err['mobile'] = "Mobile Number should be in the format of (09 or 08)XXXXXXXXX .";
+            $this->err['mobile'] = "Mobile number already used.";
             $this->hasError = TRUE;
         }
 
@@ -260,19 +245,13 @@ class UserManager
      */
     public function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
     {
+        $mobileNum = ltrim($mobileNum, "0");
+
         // Verify location validity
         $locationEntity = $this->em->getRepository("EasyShop\Entities\EsLocationLookup")
                                     ->verifyLocationCombination($stateRegionId, $cityId);
         $isValidLocation = !empty($locationEntity);
         
-        $isValidMobile = $this->isValidMobile($mobileNum);
-        if( !$isValidMobile && $mobileNum !== "" ){
-            $this->err['mobile'] = "Invalid mobile number.";
-            $this->hasError = TRUE;
-
-            return $this;
-        }
-
         if( $isValidLocation ){
             $arrAddressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
                                     ->getAddressDetails($this->memberId, $type);
@@ -325,27 +304,7 @@ class UserManager
         return !$this->hasError;
     }
 
-    /****************** UTILITY FUNCTIONS *******************/
 
-    /**
-     *  Used to check if mobile format is valid. 
-     *  Prepares mobile for database input if format is valid
-     *
-     *  @return boolean
-     */
-    private function isValidMobile(&$mobileNum)
-    {
-        $isValidMobile = preg_match('/^(08|09)[0-9]{9}$/', $mobileNum);
-
-        if($isValidMobile){
-            $mobileNum = ltrim($mobileNum,"0");
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    
     /**
      * Returns the formatted feedback
      *
@@ -455,22 +414,25 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');  
+        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');
 
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
                 $imgFile = '/banner.png';
+                $isHide = (boolean)$member->getIsHideBanner();
                 break;
             case "small":
                 $imgFile = '/60x60.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
             default:
                 $imgFile = '/150x150.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile)){
+        if(!file_exists($imageURL.$imgFile) || $isHide){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
         else{
@@ -486,18 +448,26 @@ class UserManager
      * @param integer $memberId
      * @return boolean
      */
-    public function removeUserImage($memberId)
+    public function removeUserImage($memberId, $selector = NULL)
     {
         // Get member object
         $EsMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy(['idMember' => $memberId]);
 
         if($EsMember !== null){
-            // Update user image
-            $EsMember->setImgurl(""); 
+            switch($selector){
+                case "banner":
+                    $EsMember->setIsHideBanner(TRUE);
+                    $userImage = $this->getUserImage($memberId, "banner");
+                    break;
+                default:
+                    $EsMember->setIsHideAvatar(TRUE);
+                    $userImage = $this->getUserImage($memberId);
+                    break;
+            }
             $this->em->flush();
 
-            return $this->getUserImage($memberId);
+            return $userImage;
         }
         else{
             return false;

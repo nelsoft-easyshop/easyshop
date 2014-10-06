@@ -113,7 +113,7 @@ class payment_model extends CI_Model
             $sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
         }
         else{
-            $query = "INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty) VALUES 
+            $query = "INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty, timestamp) VALUES 
                     (:order_id, :item_id, :quantity, :datenow)";
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':item_id', $itemId, PDO::PARAM_INT);

@@ -40,8 +40,6 @@ class Home extends MY_Controller
         $this->load->model('user_model');
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
-        $this->user_ID = $this->session->userdata('member_id');
-        $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
     /**
@@ -289,15 +287,21 @@ class Home extends MY_Controller
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
 
-                $getUserProduct = $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member']);
-                $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
+                $userProduct = $em->getRepository("EasyShop\Entities\EsProduct")->findBy(['member' => $arrVendorDetails['id_member'],
+                                                                          'isDelete' => 0,'isDraft' => 0]);
 
-                if ($getUserProduct['totalProductCount'] <= 0) { 
+                if (count($userProduct) <= 0) { 
                     redirect($vendorSlug.'/about'); 
                 }
 
+                $productView['defaultCatProd'] = [];
+                if (count($userProduct) > 0) { 
+                    $getUserProduct = $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member']);
+                    $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
+                }
+
                 // If searching in page
-                if($this->input->get()){
+                if($this->input->get() && count($userProduct) > 0){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
@@ -341,7 +345,7 @@ class Home extends MY_Controller
                     , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
                     , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
                     , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
-                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
                     , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
                     , "prodLimit" => $this->vendorProdPerPage
@@ -474,7 +478,7 @@ class Home extends MY_Controller
                                                                             'id' => 'as-buyer',
                                                                             'ratingHeaders' => $ratingHeaders,
                                                                             ), TRUE);                                                          
-                                                                
+                                          
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
@@ -526,9 +530,13 @@ class Home extends MY_Controller
                                            ->getRepository('EasyShop\Entities\EsLocationLookup');
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
-                                 ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getUserDefaultCategoryProducts($member->getIdMember());
+                                 ->getVendorDetails($sellerslug); 
 
+        $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
+                                  ->findBy(['member' => $arrVendorDetails['id_member'],
+                                            'isDelete' => 0,'isDraft' => 0]);
+
+     
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -536,12 +544,12 @@ class Home extends MY_Controller
                     , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember())
                     , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($member->getIdMember(),"banner")
                     , "isEditable" => ($this->session->userdata('member_id') && $member->getIdMember() == $this->session->userdata('member_id')) ? TRUE : FALSE
-                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "noItem" => (count($userProduct)  > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "about"
                 ); 
-                
+
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $cart = array();
         $cartSize = 0;
@@ -576,7 +584,11 @@ class Home extends MY_Controller
     public function doUpdateDescription()
     {
         $em = $this->serviceContainer['entity_manager'];
+        $rules = $this->serviceContainer['form_validation']->getRules('personal_info')['storeDescription'];
+        $maxLength = $rules[0]->max;
+        
         $description = $this->input->post('description');
+        $description = trim($description, 0, $maxLength);
         $userId = intval($this->input->post('userId'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($userId);
@@ -718,8 +730,10 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-        $getUserProduct = $this->getUserDefaultCategoryProducts($member->getIdMember());
 
+        $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
+                                  ->findBy(['member' => $arrVendorDetails['id_member'],
+                                            'isDelete' => 0,'isDraft' => 0]);
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -727,7 +741,7 @@ class Home extends MY_Controller
                     , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($memberId)
                     , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($memberId,"banner")
                     , "isEditable" => ($viewerId && $memberId == $viewerId) ? TRUE : FALSE
-                    , "noItem" => ($getUserProduct['totalProductCount'] > 0) ? TRUE : FALSE
+                    , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "contact"
@@ -745,23 +759,6 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
 
-    /**
-     * Send Message
-     * @param recipient int
-     * @param msg string
-     * @return mixed
-     */
-    public function sendMessage()
-    {
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-            ->find($this->input->post('recipient'));
-        $this->messageManager->send(
-            $this->user_ID,
-            $this->input->post('recipient'),
-            $this->input->post('msg')
-        );
-        Redirect('/'.$member->getSlug().'/contact' ,'refresh');
-    }
 
     /**
      *  NOT YET USED !!!
@@ -968,7 +965,6 @@ class Home extends MY_Controller
         $rules = $formValidation->getRules('vendor_contact');
         $data['isValid'] = false;
         $data['targetPage'] = $targetPage;
-        // $data['targetPage'] = 'about';
         $data['errors'] = [];
 
         $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
@@ -985,7 +981,7 @@ class Home extends MY_Controller
                                                ->findOneBy(['slug' => $sellerslug]);
 
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
-        $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? "" : '0' . $member->getContactno();
+        $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
 
@@ -1063,6 +1059,13 @@ class Home extends MY_Controller
                 }
                 else{
                     if($formData['city'] !== null || $formData['region'] !== null){
+                        $city = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->findOneBy(['location' => $formData['city']]);
+
+                        $region = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->findOneBy(['location' => $formData['region']]);
+
+
                         $addr->setAddress($formData['street_address']);
                         $addr->setCity($city);
                         $addr->setStateregion($region);
@@ -1084,7 +1087,7 @@ class Home extends MY_Controller
                 $data['isValid'] = true;
 
                 $data['validatedStoreName'] = $member->getStoreName();
-                $data['validatedContactNo'] = $member->getContactno() === "" ? "" : '0' . $member->getContactno();
+                $data['validatedContactNo'] = $member->getContactno() === false ? "" : '0' . $member->getContactno();
                 $data['validatedWebsite'] = $member->getWebsite();
             }
             else{
@@ -1099,6 +1102,16 @@ class Home extends MY_Controller
             $data['region'] = $this->input->post('regionSelect');
             $data['city'] = $this->input->post('citySelect') == '' ? '' : $this->input->post('citySelect') . ", ";
             $data['website'] = $this->input->post('website');
+
+            if(array_key_exists('shop_name', $data['errors'])){
+                $data['storeName'] = '';
+            }
+            if(array_key_exists('contact_number', $data['errors'])){
+                $data['contactNo'] = '';
+            }
+            if(array_key_exists('website', $data['errors'])){
+                $data['website'] = '';
+            }
 
             if($data['region'] !== ''){
                 $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')

@@ -208,7 +208,7 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" class="a-accordion-header" href="#collapseOne">
-                                        Advanced Search <i class="glyphicon <?=(isset($products))?'glyphicon-chevron-down':'glyphicon-chevron-up';?> pull-right"></i>
+                                        Advanced Search <i class="adv glyphicon <?=(isset($products))?'glyphicon-chevron-down':'glyphicon-chevron-up';?> pull-right"></i>
                                     </a>
                                 </h4>
                             </div>
@@ -276,7 +276,9 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="2" class="td-search-button">
-                                            <input type="button" value="SEARCH" id="mbtn_srch" class="btn btn-lg btn-block" />      
+                                            <br/>
+                                            <input type="button" value="SEARCH" id="mbtn_srch" class="btn btn-lg btn-block" />  
+                                            <br/>
                                             <center><a data-toggle="modal" data-target="#refine" class="a-refine">Refine Search</a></center>
                                         </td>
                                     </tr>
@@ -350,13 +352,17 @@
                                     </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <div class="responsive-product panel panel-default no-border panel-items">
-                                    <h3>No result found.</h3>
+                                    <div class="panel panel-default no-border">
+                                        <center>
+                                            <h4><span class="glyphicon glyphicon glyphicon-warning-sign"></span> No result found.</h4>
+                                        </center>
                                     </div>
                                 <?php endif;?>
                             <?php else: ?>
-                                <div class="responsive-product panel panel-default no-border panel-items">
-                                <h3>Begin searching by applying search filters.</h3>
+                                <div class="panel panel-default no-border">
+                                    <center>
+                                        <h4><span class="glyphicon glyphicon-search"></span> Begin searching by applying search filters.</h4>
+                                    </center>
                                 </div>
                             <?php endif;?>
                         </div>

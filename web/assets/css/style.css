@@ -568,9 +568,10 @@ input[type="button"] {
 }
 
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable{
-    z-index: 100102;
+    border-radius: 4px;
     background-color: #fff;
     padding:8px;
+    z-index: 100102;
 }
 
 .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
@@ -599,11 +600,32 @@ input[type="button"] {
     width: 36px;
 }
 
+.ui-dialog-titlebar-close {
+    background-color: #fff;
+    border: none;
+    position: absolute;
+    right: 0;
+}
+
+.ui-dialog-buttonset {
+    text-align: center;
+}
+
+.ui-dialog-buttonset .btn.btn-default-3 {
+    min-width: 100px;
+}
+
+.ui-dialog-buttonset .btn.btn-default-3:focus {
+    color: #fff;
+    outline: none;
+}
+
 .ui-dialog-titlebar-close:before {
-    border: 1px solid #6D6D6D;
+/*    border: 1px solid #6D6D6D;
     border-radius: 2px;
-    color: #6D6D6D;
-    content: "X";
+    color: #6D6D6D;*/
+    background: url(../images/img-close.png) no-repeat center center;
+    content: " ";
     display: inline-block;
     height: 20px;
     line-height: 20px;
@@ -1698,7 +1720,7 @@ nav ul > li:hover > div {
 .cd_slide_discount > span {
     display: inline-block;
     font-size: 16px;
-    padding-top: 10px;
+    padding-top: 7px;
 }
 
 .cd_slide_base_price {
@@ -3136,7 +3158,7 @@ div.pass-hint {
     padding:0px 2px;
     vertical-align: middle;
     width: 217px;
-    line-height: 32px;
+/*    line-height: 32px;*/
     height: 32px;
 }
 

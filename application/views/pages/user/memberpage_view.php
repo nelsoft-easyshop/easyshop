@@ -74,7 +74,7 @@
                         <div class="clear"></div>
                         <div id="avatar_cont">
                             <span>
-                                <?php echo $image_profile?>
+                                <img src="<?=$image_profile?>" id="user_image">
                             </span>
                         </div>
                         <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
@@ -539,7 +539,7 @@
         <div class="post_items_content content-paging">
             <div class="post_item_content_left">
                 <div class="post_item_img_table">
-                                                                              
+
                 <span class="post_item_img_con">
                     <img src="<?php echo base_url().$draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
                 </span>
@@ -559,7 +559,7 @@
     </div>
     <div class="post_item_content_right">
         <div class="product_title_container">
-            <p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $draft_product['slug'];?>"><?php echo html_escape($draft_product['name']);?></a></p>
+            <p class="post_item_product_title fm1"><span><?php echo html_escape($draft_product['name']);?></span></p>
             
             <div class="post_item_button">
                 <?php echo form_open('sell/edit/step2'); ?>
