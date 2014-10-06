@@ -3,34 +3,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class cart extends MY_Controller 
+class mobilePayment extends MY_Controller 
 {
-    
     /**
-     * The cartManager
+     * The oauth2 server
      *
-     * @var EasyShop\Cart\CartManager
-     */
-    private $cartManager;
-    
-    /**
-     * Product manager
-     *
-     * @var EasyShop\Product\ProductManager
-     */
-    private $productManager;
-    
-    /**
-     * The cart object
-     * 
-     * @var EasyShop\Cart\CartInterface
-     */
-    private $cartImplementation;
-
-    /**
-     * Oauth2 server
-     *
-     * @var Oauth\Server
      */
     private $oauthServer;
 
@@ -47,25 +24,14 @@ class cart extends MY_Controller
      * @var EasyShop\Entities\EsMember
      */
     private $member;
-    
+
     /**
-     * Cart Data
-     *
-     * @var mixed
-     */
-    private $cartData;
-    
-    /**
-     * Mobile Cart constructor
-     *
+     * Mobile payment constructor
      */
     function __construct() 
     {
         parent::__construct();
-        $this->cartManager = $this->serviceContainer['cart_manager'];
-        $this->productManager = $this->serviceContainer['product_manager'];
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
-        $this->cartImplementation = $this->cartManager->getCartObject();
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
 
@@ -79,48 +45,44 @@ class cart extends MY_Controller
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
     }
 
-
     /**
-     * Persists the cart object in the database
-     * 
+     * Load controller to access the controller function 
+     * @param  string $fileName
+     * @return object
+     */
+    private function loadController($fileName)
+    {
+        $CI = & get_instance();
+        $file_path = APPPATH.'controllers/'.$fileName.'.php';
+        $object_name = $fileName;
+        $class_name = ucfirst($fileName);
+        if(file_exists($file_path)){
+            require $file_path;
+        }
+        else{
+            show_error("Unable to load the requested controller class: ".$class_name);
+        } 
+
+        return $CI->$object_name = new $class_name();
+    }
+ 
+    /**
+     * Review cart data and validate 
      * @return JSON
      */
-    public function persist()
-    {
-        $response = array();
-        
+    public function doPaymentReview()
+    { 
 
-        $mobileCartContents = json_decode($this->input->post('cartData'));
-        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
-        foreach($mobileCartContents as $mobileCartContent){
-                              
-            $options = array();
-            foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1){
-                    $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
-                }
-               
-            }
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->findOneBy(['slug' => $mobileCartContent->slug]);
-            if($product){
-                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
-            }
-        }
-        $this->cartImplementation->persist($this->member->getIdMember());
-        $this->getCartData();
-    }
-
-    /**
-     * Returns the cart data
-     *
-     */
-    public function getCartData()
-    {
         $cartData = unserialize($this->member->getUserdata());
-        $cartData = $cartData ? $cartData : array();
-        
-        
+        unset($cartData['total_items'],$cartData['cart_total']);
+
+        $this->paymentController = $this->loadController('payment');
+        $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember());
+        $cartData = $dataCollection['cartData']; 
+        $canContinue = $dataCollection['canContinue'];
+        $errorMessage = $dataCollection['errMsg'];
+        $paymentType = $dataCollection['paymentType'];
+
         $formattedCartContents = array();
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -194,17 +156,23 @@ class cart extends MY_Controller
                     'finalPrice' => $cartItem['price'],
                     'sellerDetails' => $sellerDetails,
                     'images' => $images, 
-                    'mapAttributes' => $mappedAttributes
+                    'mapAttributes' => $mappedAttributes,
+                    'cashOnDelivery' =>  (isset($cartItem['cash_delivery'])) ? $cartItem['cash_delivery'] : 0 ,
+                    'locationAvalailability' => $cartItem['availability'],
                 ];
                 
                 $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
             }
         }
-       
-        print(json_encode($formattedCartContents));
+
+        $outputData = array(
+            'cartData' => $formattedCartContents,
+            'canContinue' => $canContinue,
+            'errorMessage' => $errorMessage,
+            'paymentType' => $paymentType,
+        );
+
+        print(json_encode($outputData));
     }
 
 }
-
-/* End of file cart.php */
-/* Location: ./application/controllers/mobile/cart.php */
