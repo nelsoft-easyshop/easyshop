@@ -585,7 +585,7 @@ class Home extends MY_Controller
         $maxLength = $rules[0]->max;
         
         $description = $this->input->post('description');
-        $description = trim($description, 0, $maxLength);
+        $description = substr($description, 0, $maxLength);
         $userId = intval($this->input->post('userId'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($userId);

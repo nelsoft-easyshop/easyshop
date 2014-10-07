@@ -758,7 +758,6 @@
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var isLoggedIn = ($(".es-data[name='is-logged-in']").val() == 'true');
             var msg = 'Kindly login to qualify for this promo.';
-
             $.ajax({
                 url : '/promo/BuyAtZero/buyAtZeroRegistration',
                 type : 'post',
@@ -790,7 +789,6 @@
                 }
             });
         })
-        
         
         $(document).on('click', '#send.enabled', function(){
             

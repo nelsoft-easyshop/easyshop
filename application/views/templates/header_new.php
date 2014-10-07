@@ -16,9 +16,9 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-    <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     
     <!--[if lt IE 9]>
     <script>
@@ -178,7 +178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-        <script type="text/javascript" src="/assets/js/src/bootstrap.js" ></script>
+<script type="text/javascript" src="/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
 
 <script type='text/javascript'>
 

@@ -4,6 +4,7 @@
 !/web/assets/product/unavailable
 !/web/assets/product/product_description
 !/web/assets/product/default
+!/web/assets/user/default
 /web/assets/product/product_description/*
 
 /application/src/EasyShop/Doctrine/Proxies/*
