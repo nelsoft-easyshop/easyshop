@@ -328,7 +328,7 @@ input[type="button"] {
 }
 
 .span_bg {
-    background-image: url('../images/global_sprite.png');
+    background-image: url('../images/global_sprite.png?ver=6.0');
     background-repeat: no-repeat;
     display: inline-block;
     vertical-align: middle;
