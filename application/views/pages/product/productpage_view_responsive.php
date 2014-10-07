@@ -287,12 +287,12 @@
                                                 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
                                                 <span class="font-10" width="100%">Item is listed as an ad only. *</span>
                                             <?php elseif($product['promo_type'] == 6 && $product['start_promo'] == 1): ?>
-                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>_registration' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>_registration' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
                                                 <span class="font-10" width="100%">Click buy to qualify for the promo*</span>
                                             <?php elseif(!$is_buy_button_viewable && intval($product['start_promo']) === 1) : ?>
                                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                                             <?php else: ?>
-                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
                                                 <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
                                             <?php endif; ?>
 
