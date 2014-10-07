@@ -117,7 +117,7 @@ $config = array(
                     'purchase_limit' => PHP_INT_MAX
                 ),
             ),
-            'viewable_buy_button' =>false,
+            'viewable_button_product_page' =>false,
         ),
         '6' =>array(
             'implementation' => '',

@@ -41,15 +41,48 @@ a{
 sub, sup{
     line-height: 20px !important; 
 }
-.cd_timer_container{;
-    margin-top: 15px !important; 
+
+.cd_timer_container{
+    margin-top: 0px !important; 
 }
+
 .dsc_tmr{
     bottom: 74px;
     left: 211px;
     position: relative;
     width: 287px;
 }
+.panel-countdown{
+    margin-bottom: 7px !important;
+}
+
+.panel-countdown > .panel-heading{
+    border: 1px solid #c52020 !important;
+}
+
+.panel-countdown > .panel-body{
+    padding: 2px !important;
+}
+
+.panel-countdown > .panel-heading{
+    background-color: #e42626 !important;
+    border: 1px solid #c52020 !important;
+    color: #ffffff !important;
+}
+
+.panel-countdown > .panel-body{
+    border: 1px solid #c52020 !important;
+}
+
+.panel-countdown > .panel-heading > center > strong{
+    font-size: 12px;
+}
+
+.panel-countdown > .panel-heading > center > strong > a{
+    color: #ffffff !important;
+    border-bottom: 1px dotted #fff;
+}
+
 .genericWithCountdown_dsc_tmr{
     bottom: 47px;
     left: 242px;
@@ -59,9 +92,10 @@ sub, sup{
 .genericWithCountdown_dsc_prp_txt3 {
     display: block;
     font-size: 22px;
-    left: 30px;
     position: relative;
     top: 11px;
+    margin-top: 7px;
+    text-align: right;
 }
 .genericWithCountdown_prod_alert_box{
     background-color: #e42626;
@@ -101,8 +135,8 @@ sub, sup{
 .cd_timer_container {
     background: url("../../assets/images/img_bg_countdown_timer2.png") no-repeat scroll center top rgba(0, 0, 0, 0);
     color: #FFFFFF;
-    height: 76px;
-    margin: 175px auto 0;
+    height: 63px;
+    /*margin: 175px auto 0;*/
     width: 302px;
 }
 
@@ -498,6 +532,11 @@ line-height: 30px !important;
 }
 
 @media only screen and (max-width: 1024px) {
+.genericWithCountdown_dsc_prp_txt3 {
+    text-align: center;
+
+}
+
 
 .display-when-mobile-833{
     display: inline;
