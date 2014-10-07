@@ -2404,9 +2404,6 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
-                default :
-                    $PromoPrice = $baseprice;
-                    break;
                 case 6 :
                     $PromoPrice = $baseprice;
                     if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){

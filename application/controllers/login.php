@@ -53,7 +53,7 @@ class Login extends MY_Controller
             }
             else{
                 $response['form_error'] = 'Invalid username or password';
-                if($row['timeoutLeft'] >= 1){
+                if(array_key_exists('timeoutLeft', $row) && $row['timeoutLeft'] >= 1){
                     $response['loginFail'] = true;
                     $response['timeoutLeft'] = $row['timeoutLeft'];
                 }

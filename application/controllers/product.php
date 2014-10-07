@@ -400,7 +400,7 @@ class product extends MY_Controller
                     $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
                 }
                 $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
-                $isBuyButtonViewable = $this->config->item('Promo')[$product_row['promo_type']]['viewable_buy_button'];
+                $isBuyButtonViewable = $this->config->item('Promo')[$product_row['promo_type']]['viewable_button_product_page'];
             }
 
             
