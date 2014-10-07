@@ -40,8 +40,11 @@
         <?php
             include("featured-category.php");
         ?>
+        
     </div>
-    
+    <?php
+            include("featured-brands.php");
+        ?>
     
 </section>
 
