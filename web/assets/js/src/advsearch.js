@@ -321,8 +321,7 @@
                     isEmptySearch = true;
                     $.ajax({
                         url: loadUrl+'&typeview='+typeView+'&page='+offset,
-                        type: 'get',
-                        async: false,
+                        type: 'get', 
                         dataType: 'json',
                         onLoading:$(".loading_products").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
                         success: function(response) {
