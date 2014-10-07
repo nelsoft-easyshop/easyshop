@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsAddress
  *
  * @ORM\Table(name="es_address", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE PAIR", columns={"id_member", "type"})}, indexes={@ORM\Index(name="idx_id_member", columns={"id_member"}), @ORM\Index(name="fk_es_location_lookup_es_address_idx", columns={"stateregion", "country", "city"}), @ORM\Index(name="fk_es_location_city_es_address_idx", columns={"city"}), @ORM\Index(name="fk_es_location_es_countyr_es_address_idx", columns={"country"}), @ORM\Index(name="IDX_14E09C7F7C999E6", columns={"stateregion"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsAddressRepository")
  */
 class EsAddress
 {
@@ -110,6 +110,15 @@ class EsAddress
      */
     private $idMember;
 
+    /**
+     * @var integer
+     */
+    const TYPE_DEFAULT = 0;
+
+    /**
+     * @var integer
+     */
+    const TYPE_DELIVERY = 1;
 
 
     /**

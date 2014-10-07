@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPaymentGateway
  *
  * @ORM\Table(name="es_payment_gateway", indexes={@ORM\Index(name="fk_es_point_gateway_order_id_idx", columns={"order_id"}), @ORM\Index(name="fk_es_point_gateway_payment_method_idx", columns={"payment_method_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPaymentGatewayRepository")
  */
 class EsPaymentGateway
 {
@@ -99,7 +99,6 @@ class EsPaymentGateway
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-
         return $this;
     }
 
@@ -122,7 +121,6 @@ class EsPaymentGateway
     public function setOrder(\EasyShop\Entities\EsOrder $order = null)
     {
         $this->order = $order;
-
         return $this;
     }
 

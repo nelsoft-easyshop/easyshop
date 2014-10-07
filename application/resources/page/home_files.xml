@@ -50,6 +50,14 @@
         <type>annotation</type>
     </typeNode>
 
+    <typeNode>
+        <value>image</value>
+    </typeNode>
+    <typeNode>
+        <value>product</value>
+    </typeNode>
+    
+
 
     <productSlide_title>
         <value>Hot and New</value>

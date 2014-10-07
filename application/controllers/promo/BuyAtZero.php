@@ -30,12 +30,14 @@ class BuyAtZero extends MY_Controller
                 $this->session->userdata('member_id')
             );
         }
-        
+
         echo json_encode($data);
     }
 
 }
 
+
 /* End of file BuyAtZero.php */
 /* Location: ./application/controllers/promo/BuyAtZero.php */
+
 

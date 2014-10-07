@@ -1,0 +1,134 @@
+.bg-gray{
+	background-color: #ebe9e9;
+    padding: 8px 5px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.font-12{
+	font-size: 12px;
+}
+
+.h2-title{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.no-border{
+	border-radius: 0px !important;
+}
+
+.btn-gray{
+	padding-left: -10px;
+	background-color: #393939;
+    border:1px solid #393939;
+    border-radius: 2px;
+    color: #FFFFFF;
+}
+
+.btn-gray:hover{
+	color: #fff;
+    background-color: #626262;
+    border:1px solid #626262;
+}
+
+.tr-header-summary{
+	background-color: #ebe9e9;
+	background: #ebe9e9;
+    font-family: 'Roboto',sans-serif;
+    margin-bottom: 3px;
+	font-weight:200;
+}
+
+.display-when-mobile-368{
+	display: none;
+
+}
+
+.div-mess{
+		font-size: 12px;
+}
+
+
+
+@media only screen and (max-width: 410px) {
+	.tbl-ship-to{
+		font-size: 12px;
+	}
+	
+}
+
+@media only screen and (max-width: 295px) {
+	.bg-gray {
+		font-size:13px;
+	}
+	.tbl-ship-to{
+		font-size: 10px;
+	}
+	
+	.btn-gray{
+		font-size:13px;
+	}
+	
+	.font-12{
+		font-size: 9px;
+	}
+	
+	.modal-dialog{
+		font-size: 10px !important;
+	}
+	
+	.form-control{
+		font-size: 10px !important;
+	}
+	
+	.modal-title{
+		font-size: 13px !important;
+	}
+}
+.display-when-mobile-542{
+	display: none;
+
+}
+@media only screen and (max-width: 542px) {
+	.payment_options_tabs{
+	
+		font-size: 9px;
+	}
+	
+	.payment_inner_content {
+	margin-top: -12px;
+	}
+	
+	.display-when-mobile-542{
+	display: inline;
+	}
+	
+	.display-when-desktop-payment{
+	display: none;
+	}
+	
+	
+}
+
+@media only screen and (max-width: 368px) {
+	.hide-when-mobile-368{
+		display:none;
+	
+	}
+	.display-when-mobile-368{
+		display: inline
+	
+	}
+	
+	.div-mess{
+		font-size: 12px;
+	
+	}
+	
+	.table-list{
+		font-size: 10px;
+	
+	}
+
+}

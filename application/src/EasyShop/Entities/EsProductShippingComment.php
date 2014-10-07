@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductShippingComment
  *
  * @ORM\Table(name="es_product_shipping_comment", uniqueConstraints={@ORM\UniqueConstraint(name="Unique Pair", columns={"order_product_id", "member_id"})}, indexes={@ORM\Index(name="sdfs_idx", columns={"member_id"}), @ORM\Index(name="IDX_46E797E6F65E9B0F", columns={"order_product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductShippingCommentRepository")
  */
 class EsProductShippingComment
 {

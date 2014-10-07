@@ -8,7 +8,11 @@
 <select id="user_login">
     CALL `es_sp_Login_user`(:username ,:password, :ip)
 </select>
-    
+
+<select id="socialMediaLogin">
+    CALL `es_sp_SocialMediaLogin_user`(:username, :oauthId, :oauthProvider, :ip)
+</select>
+
 <select id="changepass">
     CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
 </select>
@@ -194,13 +198,16 @@
 </select>
 
 <select id="update_imgurl">
-    UPDATE `es_member` set `imgurl`=:path WHERE `id_member` = :id_member
+    UPDATE `es_member` set `imgurl`=:path, `is_hide_avatar` = :is_hide_avatar WHERE `id_member` = :id_member
+</select>
+
+<select id="update_imgurl_banner">
+    UPDATE `es_member` set `imgurl`=:path, `is_hide_banner` = :is_hide_banner WHERE `id_member` = :id_member
 </select>
 
 <select id="get_image">
     SELECT `imgurl`, `id_member`, `username` FROM `es_member` WHERE `id_member` = :id
 </select>
-    
     
 <select id="store_cookie_keeplogin">
     CALL `es_sp_CreateCookie_Keeplogin` (:id_member, :ip, :useragent, :usersession)
@@ -479,4 +486,14 @@
     where m.slug=:userslug
 </select>
 
+<select id='getUserCount'>
+  SELECT COUNT(*)
+  from es_member
+
+</select>
+
+
 </map>
+
+
+

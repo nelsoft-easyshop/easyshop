@@ -3,11 +3,13 @@
 namespace EasyShop\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EsProduct
  *
  * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"}), @ORM\Index(name="fulltext_search_keyword", columns={"search_keyword"})})
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductRepository")
  */
 class EsProduct
 {
@@ -61,6 +63,13 @@ class EsProduct
      * @ORM\Column(name="keywords", type="string", length=1024, nullable=false)
      */
     private $keywords = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
 
     /**
      * @var string
@@ -210,13 +219,6 @@ class EsProduct
     private $isSoldOut = '0';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="is_meetup", type="boolean", nullable=false)
@@ -263,8 +265,73 @@ class EsProduct
      */
     private $style;
 
+    /**
+     * @var boolean
+     *
+     */
+    private $startPromo = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     */
+    private $endPromo = '0';
+    
+    
+    /**
+     * @var string
+     *
+     */
+    private $originalPrice = '0.0000';
+    
+    
+    /**
+     * @var string
+     *
+     */
+    private $finalPrice = '0.0000';
+     
+    /**
+     * @var string
+     *
+     */
+    private $discountPercentage = '0.0000';
 
+    
+    /**
+     *
+     * @var bool
+     *
+     */
+    private $isFreeShipping = false;
+    
+    /**
+     * @var string
+     *
+     */
+    private $soldPrice = '0.0000';
 
+    
+    /**
+     * @var \EasyShop\Entities\EsProductImage
+     * @ORM\OneToMany(targetEntity="EasyShop\Entities\EsProductImage", mappedBy="product")
+     **/
+
+    private $images;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="max_allowable_point", type="decimal", precision=15, scale=4, nullable=true)
+     */
+    private $maxAllowablePoint = '0.0000';
+
+    public function __construct() 
+    {
+        $this->images = new ArrayCollection();
+    }
+    
     /**
      * Get idProduct
      *
@@ -411,6 +478,29 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
     }
 
     /**
@@ -897,29 +987,6 @@ class EsProduct
     }
 
     /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
-    }
-
-    /**
      * Set isMeetup
      *
      * @param boolean $isMeetup
@@ -1032,5 +1099,180 @@ class EsProduct
     public function getStyle()
     {
         return $this->style;
+    }
+    
+    /**
+     * Set isStartPromo
+     *
+     * @param bool $isStart
+     */
+    public function setStartPromo($isStart)
+    {
+        $this->startPromo = $isStart;
+    }
+    
+    /**
+     * Get isStartPromo
+     *
+     * @return bool
+     */
+    public function getStartPromo()
+    {
+        return $this->startPromo;
+    }
+    
+    /**
+     * Set isEndPromo
+     *
+     * @param bool $isStart
+     */
+    public function setEndPromo($isEnd)
+    {
+        $this->endPromo = $isEnd;
+    }
+    
+    /**
+     * Get isEndPromo
+     *
+     * @return bool
+     */
+    public function getEndPromo()
+    {
+        return $this->endPromo;
+    }
+    
+    /**
+     *  Set $originalPrice
+     *
+     *  @param string $originalPrice
+     */
+    public function setOriginalPrice($originalPrice)
+    {
+        $this->originalPrice = $originalPrice;
+    }
+    
+    /**
+     *  Get $originalPrice
+     *
+     *  @return string
+     */
+    public function getOriginalPrice()
+    {
+        return $this->originalPrice;
+    }
+    
+    /**
+     *  Set the final price
+     *
+     *  @param string $finalPrice
+     */
+    public function setFinalPrice($finalPrice)
+    {
+        $this->finalPrice = $finalPrice;
+    }
+    
+    /**
+     *  Get finalPrice
+     *
+     *  @return string
+     */
+    public function getFinalPrice()
+    {
+        return $this->finalPrice;
+    }
+    
+    
+    /**
+     *  Set $discountPercentage
+     *
+     *  @param string $discountPercentage
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
+    }
+    
+    /**
+     *  Get $discountPercentage
+     *
+     *  @return string
+     */
+    public function getDiscountPercentage()
+    {
+        return $this->discountPercentage;
+    }
+    
+    
+    /**
+     *  Set $isFreeShipping
+     *
+     *  @param bool $isFreeShipping
+     */
+    public function setIsFreeShipping($isFreeShipping)
+    {
+        $this->isFreeShipping = $isFreeShipping;
+    }
+    
+    /**
+     *  Get $isFreeShipping
+     *
+     *  @return bool
+     */
+    public function getIsFreeShipping()
+    {
+        return $this->isFreeShipping;
+    }
+    
+    /**
+     *  Set $soldPrice
+     *
+     *  @param string $soldPrice
+     */
+    public function setSoldPrice($soldPrice)
+    {
+        $this->soldPrice = $soldPrice;
+    }
+    
+    /**
+     *  Get $soldPrice
+     *
+     *  @return string
+     */
+    public function getSoldPrice()
+    {
+        return $this->soldPrice;
+    }
+    
+    /** 
+     * Returns the images of a product
+     *
+     * @return EasyShop\Entities\EsProductImage
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    
+    /**
+     * Set maxAllowablePoint
+     *
+     * @param string $maxAllowablePoint
+     * @return EsProduct
+     */
+    public function setMaxAllowablePoint($maxAllowablePoint)
+    {
+        $this->maxAllowablePoint = $maxAllowablePoint;
+
+        return $this;
+    }
+
+    /**
+     * Get maxAllowablePoint
+     *
+     * @return string 
+     */
+    public function getMaxAllowablePoint()
+    {
+        return $this->maxAllowablePoint;
     }
 }

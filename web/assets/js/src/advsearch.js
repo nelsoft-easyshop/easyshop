@@ -1,175 +1,375 @@
-$(document).ready(function() {
 
-	$(":checkbox[name^='_subcat']").change(function(){
-		var val = $(this).val();
-		$(":checkbox[name^='_subcat']").not(this).prop("checked", false);			
-		$('#_cat option[value=' + val + ']').attr("selected", "selected");
-		$("#advsrch").submit();
-	});
 
-	$(".adv_leftpanel, #_sop, #_con, #_loc").change(function(){			
-		$("#advsrch").submit();
-	});
+(function($) {
 
-	// Product View Toggle
-	
-	var curCookie = $.cookie("grd");
-		
-	if(curCookie == "list" || curCookie == null){
-		$("#list").attr("class", "list list-active");
-		$("#grid").attr("class", "grid");
-		$(".product").attr("class", "product-list");
-	}else{
-		$("#grid").attr("class", "grid grid-active");
-		$("#list").attr("class", "list");
-		$(".product-list").attr("class", "product");
-	}
-	
-	$('#list').click(function() {
-		$.removeCookie("grd");
-		$.cookie("grd", "list", {path: "/", secure: false});
-		var cookieValue = $.cookie("grd");
+    var validateRedTextBox = function(idclass)
+    {
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "box-shadow": "0px 0px 2px 2px #FF0000"});
+        $(idclass).focus();
+    } 
 
-		$('.product').animate({opacity: 0}, function() {
-			$('#grid').removeClass('grid-active');
-			$('#list').addClass('list-active');
-			$('.product').attr('class', 'product-list');
-			$('.product-list').stop().animate({opacity: 1}, "fast");
-		});
-		
-	});
+    var validateWhiteTextBox = function(idclass)
+    {
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+    }
 
-	$('#grid').click(function() {
-		$.removeCookie("grd");
-		$.cookie("grd", "grid", {path: "/", secure: false});
-		var cookieValue = $.cookie("grd");
+    var removeParam = function(key, sourceURL)
+    {
+        var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
+            }
+            rtn = rtn + "?" + params_arr.join("&");
+            return rtn;
+        }
+        return sourceURL;
+    }
 
-		$('.product-list').animate({opacity: 0}, function() {
-			$('#list').removeClass('list-active');
-			$('#grid').addClass('grid-active');
-			$('.product-list').attr('class', 'product');
-			$('.product').stop().animate({opacity: 1}, "fast");
-		});			
-	});
-	
-	// Product View Toggle end			
-	
-	$("#_price1,#_price2").change(function(){
-		$(this).removeClass("err");
-		var val = parseFloat($(this).val());
-		if (isNaN(val)){
-			$(this).val('');
-		}else{
-			$(this).val(val.toFixed(2)); 
-		}			
-	});
-	
-	$("#btn_srch").click(function() {
-		
-			if($("#_cat").val() == 1){
-				$(":checkbox").not(this).prop("checked", false);	
-			}
-			
-			// Price - Start //////////////////////////////////////	
-			var price1 = parseInt($("#_price1").val());
-			var price2 = parseInt($("#_price2").val());
-			var msg = "Invalid price range";
-			var fprice1;
-			var fprice2;
-			
-			if (isNaN(price1)){
-				fprice1 = "";
-			}else{
-				fprice1 = price1.toFixed(2); 
-			}					
-			
-			if (isNaN(price2)){
-				fprice2 = "";
-			}else{
-				fprice2 = price2.toFixed(2); 
-			}			
-												
-			if(price1 > price2){
-				alert(msg);
-				$("#_price2").addClass("err").focus();
-				return false;
-			}else if(isNaN(price1) == true && price2 > 0){
-				alert(msg);
-				$("#_price1").addClass("err").focus();
-				return false;			
-			}else if(isNaN(price2) == true && price1 > 0){
-				alert(msg);
-				$("#_price2").addClass("err").focus();
-				return false;			
-			}
-			// Price - End //////////////////////////////////////					
-	});
+    var getCookie = function(name)
+    {
+        var regexp = new RegExp("(?:^" + name + "|;\s*"+ name + ")=(.*?)(?:;|$)", "g");
+        var result = regexp.exec(document.cookie);
 
-	// START OF INFINITE SCROLLING FUNCTION
+        return (result === null) ? null : result[1];
+    }
 
-    var base_url = config.base_url;
-    var offset = 1;
-    var request_ajax = true;
-    var ajax_is_on = false;
-    var objHeight = $(window).height() - 50;
-    var last_scroll_top = 0;
+    var createCookie = function(name, value, expires, path, domain)
+    {
+        var cookie = name + "=" + escape(value) + ";";
+
+        if (expires) { 
+            if(expires instanceof Date) { 
+                if (isNaN(expires.getTime()))
+                    expires = new Date();
+            }
+            else
+                expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
+            cookie += "expires=" + expires.toGMTString() + ";";
+        }
+        if (path){
+            cookie += "path=" + path + ";";
+        }
+        if (domain){
+            cookie += "domain=" + domain + ";";
+        }
+        document.cookie = cookie;
+    }
+
+    var checkIfUrlParamExist = function(field,url)
+    {
+        if(url.indexOf('?' + field + '=') != -1)
+            return true;
+        else if(url.indexOf('&' + field + '=') != -1)
+            return true;
+        return false
+    }
+
+    var getParameterByName = function(name)
+    {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    $('.nav_title').mouseover(function(e) {
+        $("nav").show();
+    });
+
+    $('.nav_title').mouseout(function(e) {
+        $("nav").hide();
+    });
+
+    $("nav").mouseenter(function() {
+        $(this).show();
+    }).mouseleave(function() {
+        $(this).hide();
+    });
+
+    $( ".priceField" ).keypress(function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+        && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+        validateWhiteTextBox(this);
+
+        return true;
+    });
+
+    $(document).on('change',".priceField",function () {
+        var priceval = this.value.replace(new RegExp(",", "g"), '');
+        var v = parseFloat(priceval);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '';
+        }
+        else {
+            tempval = Math.abs(v);
+            this.value = tempval.toFixed(2);
+        }
+    });
+
+    $('.price').click(function() { 
+        var price1 = parseFloat($('#price1').val());
+        var price2 = parseFloat($('#price2').val()); 
+
+        currentUrl = removeParam("startprice", currentUrl);
+        currentUrl = removeParam("endprice", currentUrl);
+
+        if(!isNaN(price1) && !isNaN(price2)){ 
+            currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
+        }
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#price1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#price2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#price2,#price1");  
+        }
+        else{
+            validateWhiteTextBox("#price2,#price1"); 
+            document.location.href=currentUrl;
+        }
+    }); 
+
+    $('#btn_srch').click(function() {
+        var price1 = parseFloat($('#price1').val());
+        var price2 = parseFloat($('#price2').val()); 
+ 
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#price1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#price2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#price2,#price1");  
+        }
+        else{
+            validateWhiteTextBox("#price2,#price1"); 
+            $("#advsrch").submit();
+        }
+    });
+
+
+    $('#mbtn_srch').click(function() {
+        var price1 = parseFloat($('#mprice1').val());
+        var price2 = parseFloat($('#mprice2').val()); 
+ 
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#mprice1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#mprice2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#mprice2,#mprice1");  
+        }
+        else{
+            validateWhiteTextBox("#mprice2,#mprice1"); 
+            $("#madvsrch").submit();
+        }
+    });
+
+    $('.rprice').click(function() {
+        var price1 = parseFloat($('#rprice1').val());
+        var price2 = parseFloat($('#rprice2').val());
+
+        currentUrl = removeParam("startprice", currentUrl);
+        currentUrl = removeParam("endprice", currentUrl);
+
+        if(!isNaN(price1) && !isNaN(price2)){
+            currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
+        }
+
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#price1");
+        }
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#price2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#price2,#price1");  
+        }
+        else{
+            validateWhiteTextBox("#price2,#price1"); 
+            document.location.href=currentUrl;
+        }
+    }); 
+
+    $(".cbx").click(function(){
+        var $this = $(this);
+        var head = $this.data('head').toLowerCase();
+        var value = $this.data('value');  
+        var check = checkIfUrlParamExist(head,currentUrl); 
+        if(check){
+            currentUrl = removeParam(head, currentUrl);
+            var paramValue = getParameterByName(head);
+            if (paramValue.toLowerCase().indexOf(value) >= 0){ 
+                var newValue = paramValue.replace(value,'').replace(/^,|,$/g,'');
+                if(newValue == ""){
+                    currentUrl = currentUrl;
+                }
+                else{
+                    currentUrl = currentUrl +'&'+head+'='+ newValue;
+                }
+                if(head == "category"){
+                    currentUrl = currentUrl +'&'+head+'='+ value;
+                }
+            }
+            else{
+                if(head == "category"){
+                    currentUrl = currentUrl +'&'+head+'='+ value;
+                }
+                else{
+                    currentUrl = currentUrl +'&'+head+'='+ paramValue+','+value; 
+                }
+                
+            }
+        }
+        else{
+            currentUrl = currentUrl +'&'+head+'='+ value;
+        }
+
+        document.location.href=currentUrl;
+    });
+
+    $('#list').click(function(){
+        typeView = 'product-list';
+        createCookie("view ", "product-list", 30); 
+        $('.product').animate({opacity:0},function(){
+            $('.grid').removeClass('grid-active');
+            $('.list').addClass('list-active');
+            $('.product').attr('class', 'product-list');
+            $('.product-list').stop().animate({opacity:1},"fast");
+        });
+    });
+
+    $('#grid').click(function(){
+        typeView = 'product';
+        createCookie("view ", "product", 30);  
+        $('.product-list').animate({opacity:0},function(){
+            $('.list').removeClass('list-active');
+            $('.grid').addClass('grid-active');
+            $('.product-list').attr('class', 'product');
+            $('.product').stop().animate({opacity:1},"fast");
+        });
+    });
+
+    if ($('.left_attribute').length === $('.left_attribute:contains("a")').length) {
+        $('.left_attribute').children('h3:gt(2)').nextAll().hide();
+        $('.left_attribute').children('h3:gt(2)').hide();
+        $('.left_attribute').children('.more_attr').show();
+    }
+    else {
+        $('.more_attr').hide();
+    }
+
+    $(".more_attr").click(function() {
+        $(this).parent().children().show();
+        $(this).hide();
+        $(this).siblings('.less_attr').show;
+    });
+
+    $(".less_attr").click(function() {
+        $('.left_attribute').children('h3:gt(2)').nextAll().hide();
+        $('.left_attribute').children('h3:gt(2)').hide();
+        $(this).siblings('.more_attr').show();
+        $(this).hide();
+    });
+
+
+     // START OF INFINITE SCROLLING FUNCTION 
+    
+    var currentUrl = $('#hidden-currentUrl').val();
+    var typeView = $('#hidden-typeView').val(); 
+    var emptySearch = $('#hidden-emptySearch').val();
+    var loadUrl = $('#hidden-loadUrl').val();
+
+    var offset = 1; 
+    var canRequestAjax = true;
+    var isEmptySearch = emptySearch != "" ? false : true;
+    var objHeight=$(window).height()-50;
+    var lastScroll = 0;
+ 
+    var type = 1;
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content'); 
-    
+    var csrfname = $("meta[name='csrf-name']").attr('content');
     $(window).scroll(function(event) {
-    
         var st = $(this).scrollTop();
-        
-        if(st > last_scroll_top){
-            if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {					
-                if (request_ajax === true && ajax_is_on === false) {
-                    ajax_is_on = true;
-                    
-                    var cat = $("#_cat").val();
-                    var condition = JSON.parse($('.condition').val());
-                    
+        if(st > lastScroll){
+            if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
+                if (canRequestAjax === true && isEmptySearch === false) {
+                    isEmptySearch = true;
                     $.ajax({
-                        url: base_url + 'advsrch/more',
-                        data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
-                        type: 'post',
-                        dataType: 'JSON',
-                        onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
-                        success: function(d){
-                            if(d == "0"){
-                                ajax_is_on = true;
-                            }else{
-                                $($.parseHTML(d.trim())).appendTo($('#product_content'));
-                                ajax_is_on = false;
-                                offset += 1;
+                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
+                        type: 'get',
+                        async: false,
+                        dataType: 'json',
+                        onLoading:$(".loading_products").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
+                        success: function(response) {
+                            if(response.count > 0){
+                                $('#product_content').append(response.view);
+                                $('#move-product').detach().appendTo('#paste-product');
+                                offset++;
+                                isEmptySearch = false;
                             }
-                            jQuery(".loading_products").fadeOut(); 
-                            //$(".loading_products").hide();
-                        } // end of function(d)
-                    }); // end of .ajax
-                } // end of request ajax
-            } // end of $(window).scrollTop
-        } // end of st > last_scroll_top
-        
-        last_scroll_top = st;
-    });  // end of window .scroll
 
-	// END OF INFINITE SCROLLING FUNCTION
+                           $(".loading_products").fadeOut();
+                        }
+                    });
+                }
+            }
+        }
+        lastScroll = st;
+    });
+    // END OF INFINITE SCROLLING FUNCTION
 
-}); // end of document ready
+    $("#accordion").on('click','.a-accordion-header',function() {
+        var attr = $("i.adv").attr("class");
+        if(attr == "adv glyphicon glyphicon-chevron-down pull-right"){
+            $('.adv ').removeClass("adv glyphicon glyphicon-chevron-down pull-right").addClass("adv glyphicon glyphicon-chevron-up pull-right");
+        }else if(attr == "adv glyphicon glyphicon-chevron-up pull-right"){
+            $('.adv ').removeClass("adv glyphicon glyphicon-chevron-up pull-right").addClass("adv glyphicon glyphicon-chevron-down pull-right");
+        }
+    });
 
 
-$(function(){
-	$("h3[id^=fld_]").click(function(){
-		var getchild = "#c" + $(this).attr('id');
-		var geticon = "#i" + $(this).attr('id');
-		if($(getchild).is(":visible")){
-			$(getchild).hide();
-			$(geticon).removeClass("span_bg advsrch_toggle");
-			$(geticon).addClass("span_bg advsrch");
-		}else{
-			$(getchild).show();
-			$(geticon).removeClass("span_bg advsrch");
-			$(geticon).addClass("span_bg advsrch_toggle");
-		}
-	});
-});
+
+    $(function () {
+        $.scrollUp({
+                    scrollName: 'scrollUp', // Element ID
+                    scrollDistance: 300, // Distance from top/bottom before showing element (px)
+                    scrollFrom: 'top', // 'top' or 'bottom'
+                    scrollSpeed: 300, // Speed back to top (ms)
+                    easingType: 'linear', // Scroll to top easing (see http://easings.net/)
+                    animation: 'fade', // Fade, slide, none
+                    animationInSpeed: 200, // Animation in speed (ms)
+                    animationOutSpeed: 200, // Animation out speed (ms)
+                    scrollText: 'Scroll to top', // Text for element, can contain HTML
+                    scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
+                    scrollImg: false, // Set true to use image
+                    activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+                    zIndex: 2147483647 // Z-Index for the overlay
+                });
+    });
+
+})( jQuery );

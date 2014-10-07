@@ -104,9 +104,9 @@ class ScratchCard extends MY_Controller
             $this->session->userdata('member_id'),
             $this->input->post('code')
         );
-
         echo json_encode($result);
     }
+
 
     /**
      * ajax - update fullname

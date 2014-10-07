@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPaymentBankdeposit
  *
  * @ORM\Table(name="es_payment_bankdeposit", indexes={@ORM\Index(name="fk_es_payment_bankdeposit_es_order_idx", columns={"order_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPaymentBankdepositRepository")
  */
 class EsPaymentBankdeposit
 {

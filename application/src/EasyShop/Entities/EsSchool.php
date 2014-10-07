@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsSchool
  *
  * @ORM\Table(name="es_school", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE PAIR", columns={"id_member", "count"})}, indexes={@ORM\Index(name="fk_es_school_es_member_idx", columns={"id_member"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsSchoolRepository")
  */
 class EsSchool
 {

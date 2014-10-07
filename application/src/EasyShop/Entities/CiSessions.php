@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CiSessions
  *
  * @ORM\Table(name="ci_sessions", indexes={@ORM\Index(name="last_activity_idx", columns={"last_activity"}), @ORM\Index(name="old_session_id", columns={"old_session_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\CiSessionsRepository")
  */
 class CiSessions
 {

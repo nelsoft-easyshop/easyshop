@@ -96,11 +96,13 @@ function askDraft(location)
             buttons: {
                 "Save as draft": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    $(".ui-dialog-buttonset").hide();
                     saveAsDraftProceed();
                     window.location = location;
                 },
                 "Don't save as draft": function() {
                     $(".ui-dialog-title").text('Please wait...'); 
+                    $(".ui-dialog-buttonset").hide();
                     window.location = location;
                 },
                 "Cancel": function() { 
@@ -121,6 +123,7 @@ function askDraft(location)
             buttons: {
                 "Proceed": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    $(".ui-dialog-buttonset").hide();
                     saveAsDraftProceed();
                     window.location = location;
                 }
@@ -272,9 +275,9 @@ function checkOptionValue(selector,id,value,evt)
     var activeSelection = selector.search_results.find('li.active-result').length;
     var highlightSelection = selector.search_results.find('li.highlighted').length;
     var valueData =  $('.value-data'); 
-    value = value.replace(/[^a-z0-9\s\-]/gi, '');
+    value = $.trim(value.replace(/[^a-z0-9\s\-]/gi, ''));
 
-    if(value === ""){
+    if(value.length <= 0){
         return false;
         $('body').click();
     }
@@ -332,10 +335,7 @@ function proceedStep3(url)
         beforeSubmit : function(arr, $form, options){
 
             var combination = processCombination();
-            console.log(combination);
             var attributes = processAttributes(); 
-            console.log(attributes);
-
             var percentVal = '0%';
             $('.percentage').html(percentVal);
             $( ".button_div" ).hide();
@@ -537,8 +537,12 @@ function processAttributes()
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+        var price = parseFloat($(this).val());
         if( !isNaN(prcnt) ){
             get_discPrice();
+        }
+        else{
+            $("#discounted_price_con").text(price.toFixed(2));
         }
     });
     
@@ -557,7 +561,7 @@ function processAttributes()
         tinyMCE.init({ 
             mode : "specific_textareas",
             editor_selector : "mceEditor", 
-            menubar: "table format view insert edit",
+            menubar: "table format view insert",
             statusbar: false, 
             height: 300,
             plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
@@ -591,7 +595,7 @@ function processAttributes()
     var $rangeSlider = $("#range_1");
     $rangeSlider.ionRangeSlider({
         min: 0,
-        max: 100,
+        max: 99,
         type: 'single',
         step: 1,
         postfix: "%",
@@ -628,28 +632,36 @@ function processAttributes()
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
-
-        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
-            $(this).val('');
-            return false;
-        } 
         var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
         var sum = ((basePrice - discountPrice) / basePrice) * 100;
         sum = sum.toFixed(4);
         validateWhiteTextBox("#discountedP");
+        
+        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
+            $(this).val('');
+            $("#slider_val").val("0%");
+            $rangeSlider.ionRangeSlider("update", {
+                from: 0
+            });
+            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+            return false;
+        } 
 
         if(discountPrice > basePrice){
             alert("Discounted price cannot be greater than base price.");
             $this.val("0.00");
             validateRedTextBox("#discountedP");
             return false;
-        }
-
+        } 
+ 
         if(discountPrice <= 0){
             alert("Discounted price cannot be equal or less than 0.");
-            $this.val("0.00");
-            $( "span#discounted_price_con" ).text( "0.00" );
-            validateRedTextBox("#discountedP");
+            $this.val('');
+            $("#slider_val").val("0%");
+            $rangeSlider.ionRangeSlider("update", {
+                from: 0
+            }); 
+            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
             return false;
         }
 
@@ -721,16 +733,25 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
+ 
     }
 
-    $(document).on("change",".chzn-search > input[type=text]", function (){
-        $(this).val($(this).val().replace(/[^a-z0-9\s\-]/gi, '')); 
+
+    $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
+        var regex = new RegExp("^[a-zA-Z0-9\\-\\s\\b]+$");
+        var str = String.fromCharCode(!evt.charCode ? evt.which : evt.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        evt.preventDefault();
+
+        return false;
     });
 
     $(document).on("change","#head-data",function (){
         var selector = $(this); 
         var valueData =  $('.value-data'); 
-        var selectedValue = selector.chosen().val();  
+        var selectedValue = selector.chosen().val();
         var cleanString = jqSelector(selectedValue.toLowerCase().replace(/ /g,''));
         var length = $(".select-control-panel-option > .div2 > span > [id="+cleanString+"]").length; 
         var buttonValue = $('.add-property').val(); 
@@ -947,7 +968,9 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selValue = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').text();
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).val(selValue).prop("disabled",true);
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option:contains('"+selValue+"')").prop('selected', true); 
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option:contains('"+selValue+"')").attr('selected','selected');
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -1291,10 +1314,16 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('#form_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimage',
             type: "POST", 
-            dataType: "json",         
-            uploadProgress : function(event, position, total, percentComplete) {
-                canProceed = false;
-                console.log(percentComplete);
+            dataType: "json",             
+            xhr: function(){
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt){
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total * 100.0;
+                        console.log(percentComplete);
+                    }
+                }, false);
+                return xhr;
             },
             success :function(d) {   
                 filescntret = d.fcnt;
@@ -1376,12 +1405,10 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     $(document).on('change',".attr-image-input",function (e){
  
         var val = $(this).val();
-        var size = this.files[0].size;
 
         extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-
         switch(extension){
-            case 'gif': case 'jpg': case 'png': case 'jpeg':             
+            case 'gif': case 'jpg': case 'png': case 'jpeg':
             break;
             default:
                 alert('Invalid file type. Please choose another image.');
@@ -1389,9 +1416,12 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             break;
         }
 
-        if(size > 5*1024*1024){
-            alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
-            return false;
+        if(badIE == false){
+            var size = this.files[0].size;
+            if(size > 5*1024*1024){
+                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+                return false;
+            }
         }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
@@ -1401,12 +1431,24 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
+                
+                $('<input type="hidden">').attr({
+                    id: 'pictureName',
+                    name: 'pictureName',
+                    value: picName
+                }).appendTo('form');
                 arr.push({name:'pictureName', value:picName});
+
+                $('<input type="hidden">').attr({
+                    id: 'pictureCount',
+                    name: 'pictureCount',
+                    value: pictureCountOther
+                }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/orange_loader.gif');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/loading/preloader-whiteBG.gif');
             },
             success :function(d) {   
                 canProceed = true;
@@ -1420,11 +1462,16 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     alert(d.msg);
                     $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 }
+                $('#other_files > #pictureCount').remove();
+                $('#other_files > #pictureName').remove();
+                
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 canProceed = true;
+                $('#other_files > #pictureCount').remove();
+                $('#other_files > #pictureName').remove();
             }
         }).submit();
     });

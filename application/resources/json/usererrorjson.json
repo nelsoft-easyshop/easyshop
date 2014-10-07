@@ -1,0 +1,11 @@
+jsonCallback(
+    {
+        "sites":
+        [
+            {
+                "usererror": "User does not exist",   
+            },
+        ]
+    }
+);
+

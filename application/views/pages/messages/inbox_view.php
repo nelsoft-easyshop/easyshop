@@ -1,6 +1,5 @@
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.dataTables.min.js"></script>
 
-
 <div class="container wrapper inbox-view-content">
     <div id="head_container">       
         <div>
@@ -26,7 +25,6 @@
             <?PHP foreach($result['messages'] as $key => $row) { ?>
                 <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "reciever" ? "NS" : "")?>">
                     <td>
-                    
                         <div class="img-wrapper-div">
                             <span class="img-wrapper-span">
                             <?php if(reset($row)['status'] == "sender"): ?>
@@ -58,13 +56,13 @@
         </table>
     </div>
     <div id="msg_inbox_container" class = "msg_container">
-		<div id="msg_field">
-			<!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
-		</div>
-		<div id="msg_textarea">
-			<textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
-			<button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
-		</div>
+        <div id="msg_field">
+            <!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
+        </div>
+        <div id="msg_textarea">
+            <textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
+            <button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
+        </div>
     </div>
 </div>
 <div id="modal-background">
@@ -75,14 +73,14 @@
         <button id="modal-close">X</button>
     </div>
     <div id="modal-inside-container" class="mrgn-top-10">
-		<div>
-			<label>To : </label>
-			<input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
-		</div>
-		<div>
-			<label>Message : </label><br>
-			<textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Your message here.."></textarea>		
-		</div>	   
+        <div>
+            <label>To : </label>
+            <input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
+        </div>
+        <div>
+            <label>Message : </label><br>
+            <textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Your message here.."></textarea>		
+        </div>
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
@@ -99,21 +97,22 @@
             "sScrollY": "375px"
         });
         $("#table_id_info").hide();
-
+        
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
-		$("#modal-background, #modal-close").click(function() {
-			$("#modal-container, #modal-background").toggleClass("active");
-			$("#modal-container").hide();
-			$("#msg-message").val("");
-			$("#msg_name").val("");
-		});
+        $("#modal-background, #modal-close").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").hide();
+            $("#msg-message").val("");
+            $("#msg_name").val("");
+        });
 
-		$("#modal-launcher").click(function() {
-			$("#modal-container, #modal-background").toggleClass("active");
-			$("#modal-container").show();
-		});
+        $("#modal-launcher").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").show();
+        });
 
-		$("#msg_textarea").on("click","#send_btn",function(){
+        $("#msg_textarea").on("click","#send_btn",function(){
+
             var D = eval('(' + $(this).attr('data') + ')');
             var recipient = D.name;
             var img = D.img;

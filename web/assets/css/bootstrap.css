@@ -911,11 +911,11 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #428bca;
+  /*color: #428bca;*/
   text-decoration: none;
 }
 a:hover {
-  color: #2a6496;
+  /*color: #2a6496;*/
   text-decoration: underline;
 }
 /*a:hover,
@@ -6350,7 +6350,7 @@ a.tooltips span {
 .step4_prod_preview .buy_box {
     padding: 1px;
 }
-
+/*
 .prod_con_gal {
     border:1px solid #cecece;
     display: inline-block;
@@ -6369,7 +6369,7 @@ a.tooltips span {
     vertical-align: middle;
     text-align: center;
 }
-
+*/
 .step4_prod_preview .id-class {
     height: 50px;
     line-height: 50px;
@@ -6394,7 +6394,7 @@ a.tooltips span {
 }
 
 #feed-catlist nav ul > li > p {
-  height: 53px;
+  height: 54px;
   width: 100%;
 }
 

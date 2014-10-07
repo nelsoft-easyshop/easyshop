@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductImage
  *
  * @ORM\Table(name="es_product_image", indexes={@ORM\Index(name="fk_es_product_es_product1", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductImageRepository")
  */
 class EsProductImage
 {
@@ -45,14 +45,22 @@ class EsProductImage
     /**
      * @var \EasyShop\Entities\EsProduct
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsProduct")
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsProduct", inversedBy="images")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id", referencedColumnName="id_product")
      * })
      */
     private $product;
 
-
+    /**
+     * @var string
+     */
+    private $directory = '';
+    
+    /**
+     * @var string
+     */
+    private $filename = '';
 
     /**
      * Get idProductImage
@@ -155,4 +163,53 @@ class EsProductImage
     {
         return $this->product;
     }
+
+    /**
+     * Returns the path of the image
+     *
+     * @return string
+     */
+    public function getDirectory()
+    {
+        $this->explodeImagePath();
+        return $this->directory;
+    }
+    
+    /**
+     * Returns the filename of the image
+     *
+     * @return string
+     */
+    public function getFilename()
+    {
+        $this->explodeImagePath();
+        return $this->filename;
+    }
+    
+    /**
+     * Separates the image directory and file name
+     *
+     */
+    private function explodeImagePath()
+    {
+        if($this->directory === '' && $this->filename === ''){
+            if(trim($this->productImagePath) === ''){
+                $this->directory = 'assets/product/default/';
+                $this->filename = 'default_product_img.jpg';
+            }
+            else{
+                if(file_exists($this->productImagePath)){
+                    $reversedPath = strrev($this->productImagePath);
+                    $this->directory = substr($this->productImagePath,0,strlen($reversedPath)-strpos($reversedPath,'/'));
+                    $this->filename  = substr($this->productImagePath,strlen($reversedPath)-strpos($reversedPath,'/'),strlen($reversedPath));
+                }
+                else{
+                    $this->directory = 'assets/product/unavailable/';
+                    $this->filename = 'unavailable_product_img.jpg';
+                }
+            }                
+        }
+    }
+    
+    
 }

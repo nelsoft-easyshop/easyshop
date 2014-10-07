@@ -42,6 +42,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':product_count',$productCount,PDO::PARAM_INT);
         $sth->bindParam(':data_response',$apiResponse,PDO::PARAM_STR);
         $sth->bindParam(':tid',$tid,PDO::PARAM_STR);
+        $sth->bindParam(':dateadded', date('Y-m-d H:i:s'),PDO::PARAM_STR); 
 
         $sth->execute();
         
@@ -94,34 +95,35 @@ class payment_model extends CI_Model
         return $row[0]['cnt'];
 
     }
-
+    
     public function lockItem($itemId,$qty,$orderId,$action)
     {
-        $query = "
-        INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty) 
-        VALUES
-            (:order_id,:item_id, :quantity)
-        ";
-
+    
         if($action == 'delete'){
             $query = "
-            DELETE 
-            FROM
-                es_product_item_lock 
-            WHERE product_item_id = :item_id 
-                AND qty = :quantity
-                AND order_id = :order_id
+                DELETE 
+                FROM
+                    es_product_item_lock 
+                WHERE product_item_id = :item_id 
+                    AND qty = :quantity
+                    AND order_id = :order_id
             ";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
+            $sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
+            $sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
         }
-        ;
-        
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
-        $sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
-        $sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
-
+        else{
+            $query = "INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty, timestamp) VALUES 
+                    (:order_id, :item_id, :quantity, :datenow)";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':item_id', $itemId, PDO::PARAM_INT);
+            $sth->bindParam(':quantity', $qty, PDO::PARAM_INT); 
+            $sth->bindParam(':order_id', $orderId, PDO::PARAM_INT); 
+            $sth->bindParam(':datenow', date('Y-m-d H:i:s')); 
+        }
+ 
         if ($sth->execute()){
-        // success
             return 1;
         }
         else{
@@ -272,21 +274,26 @@ class payment_model extends CI_Model
         $this->load->library('parser');
         $this->email->set_newline("\r\n");
         $this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
-        $this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
-        
+        $workingDirectory = getcwd();
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/header-img.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/appbar.home.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/appbar.message.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/facebook.png", "inline");
+        $this->email->attach($workingDirectory. "/assets/images/landingpage/templates/twitter.png", "inline");
+
         switch($string){
             case 'buyer':
                 $this->email->subject($this->lang->line('notification_subject_buyer'));
                 #user appended at template
                 $data['store_link'] = base_url();
                 $data['msg_link'] = base_url() . "messages/#";
-                $msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
+                $msg = $this->parser->parse('emails/email_purchase_notification_buyer',$data,true);
                 break;
             case 'seller':
                 $this->email->subject($this->lang->line('notification_subject_seller'));
                 $data['store_link'] = base_url() . $data['buyer_slug'];
                 $data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
-                $msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
+                $msg = $this->parser->parse('emails/email_purchase_notification_seller',$data,true);
                 break;
             case 'return_payment':
                 $this->email->subject($this->lang->line('notification_returntobuyer'));
@@ -302,7 +309,6 @@ class payment_model extends CI_Model
         $result = $this->email->send();
 
         $errmsg = $this->email->print_debugger();
-        
         return $result;
     }
 
@@ -318,6 +324,9 @@ class payment_model extends CI_Model
         */
     function sendNotificationMobile($mobile, $msg)
     {
+        return true;
+        
+        
         $fields = array();
         $fields["api"] = "dgsMQ8q77hewW766aqxK";
         

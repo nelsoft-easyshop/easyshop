@@ -270,7 +270,7 @@ class memberpage_model extends CI_Model
         else{
             $config['image_library'] = 'gd2';
             $config['source_image'] = $path.'/usersize.png';
-            $config['maintain_ratio'] = true;
+            $config['maintain_ratio'] = false;
             
             $imageData = $this->upload->data();
             
@@ -310,12 +310,14 @@ class memberpage_model extends CI_Model
             $this->image_lib->initialize($config);  
             $this->image_lib->resize();
 
+            $isHide = 0;
             $query = $this->xmlmap->getFilenameID('sql/users', 'update_imgurl');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':path', $path);
             $sth->bindParam(':id_member', $uid);
+            $sth->bindParam(':is_hide_avatar', $isHide);
             $sth->execute();
-            $user_image = img($path.'/150x150.png?'.time());			
+            $user_image = img($path.'/150x150.png?'.time());
             return array('user_image' => $user_image);
         }
     }
@@ -345,7 +347,7 @@ class memberpage_model extends CI_Model
         $config['max_size']	= '5000';
         $config['max_width']  = '5000';
         $config['max_height']  = '5000';
-        $this->upload->initialize($config);  
+        $this->upload->initialize($config);
         
         if ( ! $this->upload->do_upload()){
             return array('error' => $this->upload->display_errors());
@@ -371,10 +373,18 @@ class memberpage_model extends CI_Model
             
             //Resize to standard banner size
             $config['new_image'] = $path.'/banner.png';
-            $config['width'] = 980;
-            $config['height'] = 270;
+            $config['width'] = 1475;
+            $config['height'] = 366;
             $this->image_lib->initialize($config);  
             $this->image_lib->resize();	
+
+            $isHide = 0;
+            $query = $this->xmlmap->getFilenameID('sql/users', 'update_imgurl_banner');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':path', $path);
+            $sth->bindParam(':id_member', $uid);
+            $sth->bindParam(':is_hide_banner', $isHide);
+            $sth->execute();
         }
     }
     

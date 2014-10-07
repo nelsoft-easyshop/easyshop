@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsVerifcode
  *
  * @ORM\Table(name="es_verifcode", uniqueConstraints={@ORM\UniqueConstraint(name="member_id_UNIQUE", columns={"member_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsVerifcodeRepository")
  */
 class EsVerifcode
 {

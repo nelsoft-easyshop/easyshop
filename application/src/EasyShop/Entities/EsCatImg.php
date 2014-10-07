@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsCatImg
  *
  * @ORM\Table(name="es_cat_img")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsCatImgRepository")
  */
 class EsCatImg
 {

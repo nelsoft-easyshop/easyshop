@@ -135,7 +135,7 @@
     	console.log(ids);
     	console.log(typeof(ids));
         var obj = JSON.parse(ids);
-        var other_cat_name = escapeHtml(customCategory.replace(/'/g, "\\'")); 
+        var other_cat_name = escapeHtml(customCategory); 
         if(obj.length > 0){
  
             var parent_ids = new Array();
@@ -200,7 +200,7 @@
 
     $(document).on('change focusout','.customCategory',function () {
     	var selector = $(this);
-    	var value = escapeHtml(selector.val().replace(/'/g, "\\'"));
+    	var value = escapeHtml(selector.val());
         var catId = selector.data('catid');
         var level = selector.data('level');
 

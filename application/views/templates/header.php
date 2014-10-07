@@ -132,13 +132,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div><span class="user-nav-dropdown">Account Settings</span></div>
                             <ul class="nav-dropdown">
                                 <li>
-                                    <a href="/me">Dashboard</a>
+                                    <a class="prevent" href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="/me?me=pending">On-going Transactions</a>
+                                    <a class="prevent" href="/me?me=pending">On-going Transactions</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="/me?me=settings">Settings</a>
+                                    <a class="prevent" href="/me?me=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/login/logout">Logout</a>
@@ -187,7 +187,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="res_wrapper wrapper search_wrapper">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
-            <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="<?=base_url()?>" class="prevent"><span class="span_bg"></span></a> </div>
         <?php endif; ?>
         
         <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
@@ -196,22 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
                 
-                <select name="q_cat" id="q_cat">
+                <select name="category" id="category">
                     <option value="1">All Categories</option>
                     <?php
-                        foreach ($category_search as $keyrow) {
-                        $selected = "";
-                        if(isset($_GET['q_cat'])){
-                            if($_GET['q_cat'] == $keyrow['id_cat'])
-                            {
-                                $selected = "selected";
-                            }
-                        }
+                        foreach ($category_search as $keyrow):
+                        $selected = ($this->input->get('category') && $this->input->get('category') == $keyrow['id_cat'])?"selected":"";
                     ?>
-                    <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>"><?php echo $keyrow['name']; ?></option>
-                    <?php
-                        }
-                    ?>
+                        <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>">
+                            <?php echo $keyrow['name']; ?>
+                        </option>
+                    <?php endforeach;?>
                 </select>
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
                 </div>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsAttr
  *
  * @ORM\Table(name="es_attr", indexes={@ORM\Index(name="fk_es_attr_es_attr_lookuplist1_idx", columns={"attr_lookuplist_id"}), @ORM\Index(name="fk_es_attr_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_attr_es_datatype1_idx", columns={"datatype_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsAttrRepository")
  */
 class EsAttr
 {

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsAdminMember
  *
  * @ORM\Table(name="es_admin_member")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsAdminMemberRepository")
  */
 class EsAdminMember
 {
@@ -164,7 +164,7 @@ class EsAdminMember
     {
         return $this->fullname;
     }
-
+    
     /**
      * Set createdAt
      *

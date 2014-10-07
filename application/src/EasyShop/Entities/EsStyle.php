@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsStyle
  *
  * @ORM\Table(name="es_style")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsStyleRepository")
  */
 class EsStyle
 {

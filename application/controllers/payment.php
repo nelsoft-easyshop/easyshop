@@ -169,7 +169,14 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);
+
+            $maxPoint = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                            ->getMaxPoint(intval($member_id));
+
+            $data['maxPoint'] = $maxPoint;          
+            
+            $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
            redirect('/cart/', 'refresh'); 
@@ -940,35 +947,29 @@ class Payment extends MY_Controller{
         $data = array_merge($data,$this->fill_header());
 
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
+        // $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('pages/payment/payment_response_responsive' ,$response);  
         $this->load->view('templates/footer_full'); 
  
    }
 
-    #JUST FUNCTIONS
 
-
-
-   function removeItemFromCart()
-   {
-        $carts = $this->session->all_userdata();
-        if(isset($carts['choosen_items'])){
-            foreach ($carts['choosen_items'] as $key => $value) {
-
-                $carts['cart_contents'][$key]['qty'] = 0 ;
-                $this->cart->update($carts['cart_contents'][$key]);
-                unset($carts['cart_contents'][$key]);
-                $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
-                $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
+    /**
+     * Remove the chosen items for checkout from the cart
+     *
+     */
+    public function removeItemFromCart()
+    {
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $cartCheckout = $this->session->userdata('choosen_items');
+        $memberId = $this->session->userdata('member_id');
+        if($cartCheckout){
+            foreach($cartCheckout as $rowId => $cartItem){
+                $cartManager->removeItem($memberId, $rowId);
             }
-
-            if(sizeof($carts['cart_contents']) == 2){
-                unset($carts['cart_contents']['total_items']);
-                unset($carts['cart_contents']['cart_total']);
-            }   
-
         }
         $this->session->unset_userdata('choosen_items');
+
     }
 
     /**
@@ -1085,9 +1086,9 @@ class Payment extends MY_Controller{
         }//close foreach seller loop
     }
 
-	/*
-	 *	Function to generate google analytics data
-	 */
+    /*
+     *  Function to generate google analytics data
+     */
     function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 
@@ -1307,8 +1308,53 @@ class Payment extends MY_Controller{
 
     }
 
-}
+    /**
+     *  Universal Pay Method
+     *
+     *  This function should only serve as a bridge that calls PaymentService
+     *  and passes all the necessary variables (payment methods + cost of each,
+     *  session related data etc.)
+     * 
+     *  $paymentMethods should be constructed as follows:
+     *  
+     *  {
+     *      "CODGateway" : {
+     *              "method" : "CashOnDelivery", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      },
+     *      "PointGateway" : {
+     *              "method" : "Point", 
+     *              "amount" : 999, 
+     *              "isLock" : false
+     *      }
+     *  }
+     *   
+     */
+    function pay()
+    {
+        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+        
+        $carts = $this->session->all_userdata();
 
+        /* JSON Decode*/
+        $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
+
+        // Validate Cart Data
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+
+        $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+
+        extract($response);
+        $this->generateFlash($txnid,$message,$status);
+        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+    }
+}
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */

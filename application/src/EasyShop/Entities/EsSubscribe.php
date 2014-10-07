@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsSubscribe
  *
  * @ORM\Table(name="es_subscribe", uniqueConstraints={@ORM\UniqueConstraint(name="email_UNIQUE", columns={"email"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsSubscribeRepository")
  */
 class EsSubscribe
 {

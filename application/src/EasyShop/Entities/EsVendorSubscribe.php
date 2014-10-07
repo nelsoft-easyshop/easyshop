@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsVendorSubscribe
  *
  * @ORM\Table(name="es_vendor_subscribe")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsVendorSubscribeRepository")
  */
 class EsVendorSubscribe
 {

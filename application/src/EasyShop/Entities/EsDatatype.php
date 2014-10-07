@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsDatatype
  *
  * @ORM\Table(name="es_datatype")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsDatatypeRepository")
  */
 class EsDatatype
 {

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOptionalAttrhead
  *
  * @ORM\Table(name="es_optional_attrhead", indexes={@ORM\Index(name="fk_es_optional_attrhead_es_product_idx", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOptionalAttrheadRepository")
  */
 class EsOptionalAttrhead
 {

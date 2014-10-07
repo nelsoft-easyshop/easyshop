@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPaymentMethod
  *
  * @ORM\Table(name="es_payment_method")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPaymentMethodRepository")
  */
 class EsPaymentMethod
 {
@@ -28,7 +28,35 @@ class EsPaymentMethod
      */
     private $name;
 
+    /**
+     * @var int
+     */
+    const PAYMENT_PAYPAL = 1;
 
+    /**
+     * @var int
+     */
+    const PAYMENT_DRAGONPAY = 2;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_CASHONDELIVERY = 3;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_PESOPAYCC = 4;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_DIRECTBANKDEPOSIT = 5;
+
+    /**
+     * @var int
+     */
+    const PAYMENT_POINTS = 6;
 
     /**
      * Get idPaymentMethod

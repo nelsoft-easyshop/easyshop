@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsCat
  *
  * @ORM\Table(name="es_cat", indexes={@ORM\Index(name="fk_es_cat_es_cat1_idx", columns={"parent_id"}), @ORM\Index(name="ft_es_cat", columns={"name"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsCatRepository")
  */
 class EsCat
 {
@@ -94,7 +94,20 @@ class EsCat
      */
     private $parent;
 
+    /**
+     * @var string
+     */
+    private $image = '';
 
+    /**
+     *  @var integer
+     */
+    const CUSTOM_TYPE = 2;
+
+    /**
+     *  @var integer
+     */
+    const CUSTOM_TYPE_OTHERS = 0;
 
     /**
      * Get idCat
@@ -335,4 +348,25 @@ class EsCat
     {
         return $this->parent;
     }
+
+    /**
+     *  Set $image
+     *
+     *  @param string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+    
+    /**
+     *  Get $image
+     *
+     *  @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+    
 }

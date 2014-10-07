@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOptionalAttrdetail
  *
  * @ORM\Table(name="es_optional_attrdetail", indexes={@ORM\Index(name="fk_es_optional_attrdetail_idx", columns={"head_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOptionalAttrdetailRepository")
  */
 class EsOptionalAttrdetail
 {

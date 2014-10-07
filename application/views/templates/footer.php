@@ -10,6 +10,7 @@
                     </p>
                     <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
                     </div>
+
                 </div>
                 <script src="/assets/js/src/ws.js"></script>
                 <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">

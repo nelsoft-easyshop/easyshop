@@ -31,8 +31,8 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
+        require_once APPPATH . 'src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
@@ -67,7 +67,7 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-        
+
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {
             $wsConfig = require APPPATH . '/config/param/websocket.php';
@@ -80,7 +80,7 @@ class Kernel
             
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
-        
+
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
@@ -95,10 +95,33 @@ class Kernel
         $container['xml_resource'] = function ($c) use ($container) {
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
- 
+        
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager']);
+            return new \EasyShop\User\UserManager($container['entity_manager']
+                                                ,$container['config_loader']);
+        };
+        
+        //Account Manager
+        $container['account_manager'] = function ($c) use ($container) {
+            $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            $stringHelper = $container['string_utility'];
+            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
+                                                        $userManager, 
+                                                        $formFactory, 
+                                                        $formValidation, 
+                                                        $formErrorHelper,
+                                                        $stringHelper);        
+        };
+
+        $container['message_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            return new \EasyShop\Message\MessageManager($em);
         };
 
         // Paths
@@ -150,8 +173,8 @@ class Kernel
         };
 
         //Validation Rules Service
-        $container['form_validation'] = function ($c) {
-            return new \EasyShop\FormValidation\ValidationRules();
+        $container['form_validation'] = function ($c) use($container) {
+            return new \EasyShop\FormValidation\ValidationRules($container['entity_manager']);
         };
 
         //Request Service
@@ -164,8 +187,136 @@ class Kernel
             return new \EasyShop\BugReporter\BugReporter($container['entity_manager']);
         };
         
+        // Point Tracker
+        $container['point_tracker'] = function ($c) use($container) {
+            return new \EasyShop\PointTracker\PointTracker($container['entity_manager']);
+        };
+
+        // Http foundation
+        $container['request'] = function ($c) use($container) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+        
+        //Cart Manager
+        $container['cart_manager'] = function ($c) use ($container) {
+            $productManager = $container['product_manager'];
+            $promoManager = $container['promo_manager'];
+            $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
+            return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
+        };
+
+        // Search product
+        $container['search_product'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
+            $collectionHelper = $container['collection_helper'];
+            $productManager = $container['product_manager'];
+            $categoryManager = $container['category_manager'];
+
+            return new \EasyShop\Search\SearchProduct(
+                                                        $em
+                                                        ,$collectionHelper
+                                                        ,$productManager
+                                                        ,$categoryManager
+                                                    );
+        };
+
+        //Promo Manager
+        $container['promo_manager'] = function ($c) use ($container){
+            return new \EasyShop\Promo\PromoManager($container['config_loader']);
+        };
+
+        // Product Manager
+        $container['product_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            $promoManager = $container['promo_manager'];
+            $configLoader = $container['config_loader'];
+            $collectionHelper = $container['collection_helper'];
+            $imageLibrary = new \CI_Image_lib();
+            return new \EasyShop\Product\ProductManager($em, 
+                                                        $promoManager, 
+                                                        $collectionHelper, 
+                                                        $configLoader,
+                                                        $imageLibrary);
+        };
+
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+         };
+        $socialMediaConfig = require APPPATH . 'config/oauth.php';
+        $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
+            $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
+                $socialMediaConfig['facebook']['redirect_url'],
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret']
+            );
+            $googleClient = new Google_Client();
+            $googleClient->setAccessType('online');
+            $googleClient->setApplicationName('Easyshop');
+            $googleClient->setClientId($socialMediaConfig['google']['key']['appId']);
+            $googleClient->setClientSecret($socialMediaConfig['google']['key']['secret']);
+            $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
+            $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
+            $em = $container['entity_manager'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\SocialMedia\SocialMediaManager(
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret'],
+                $fbRedirectLoginHelper,
+                $googleClient,
+                $em,
+                $stringUtility
+            );
+        };
+        // Category Manager
+        $container['category_manager'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
+            $configLoader = $container['config_loader'];
+
+            return new \EasyShop\Category\CategoryManager($configLoader,$em);
+        };
+        
+        $container['config_loader'] = function ($c) {
+            $configImplementation = new \EasyShop\ConfigLoader\CodeigniterConfig();
+            return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
+        };
+         
+
+        // Payment Service
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['request'],
+                            $container['point_tracker'],
+                            $container['promo_manager'],
+                            $container['product_manager']
+                            );
+        };
+
+
+        //Login Throttler Service
+        $container['login_throttler'] = function ($c) use($container) {
+            return new \EasyShop\LoginThrottler\LoginThrottler(
+                $container['entity_manager'],
+                $container['http_request']
+                );
+        };
+        
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+        };
+        
+        // Form Helper
+        $container['form_error_helper'] = function ($c) {
+            return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
     }
+
 }

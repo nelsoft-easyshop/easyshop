@@ -345,7 +345,7 @@
                         <div class="reg2_btn_submit">
                             <!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
                             <input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
-                            <div style='display:inline-block; position:absolute;'>
+                            <div style='display:inline-block; position:absolute; width:50px; overflow:hidden;'>
                             <img style='display:none;margin-top:5px;margin-left:5px;' src="<?=base_url()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
                             </div>
                         </div>
@@ -390,7 +390,7 @@
 
                         </div>
                     </li>
-                        <li>
+                    <li>
 
                     </li>
                 </ul>

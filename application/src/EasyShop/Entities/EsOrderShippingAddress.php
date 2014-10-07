@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOrderShippingAddress
  *
  * @ORM\Table(name="es_order_shipping_address", indexes={@ORM\Index(name="fk_es_address_region_idx", columns={"stateregion"}), @ORM\Index(name="fk_es_address_city_idx", columns={"city"}), @ORM\Index(name="fk_es_address_country_idx", columns={"country"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOrderShippingAddressRepository")
  */
 class EsOrderShippingAddress
 {

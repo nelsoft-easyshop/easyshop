@@ -72,23 +72,20 @@ class CSRF_Protection
         // Is this a post request?
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
+            $this->CI->config->load('csrf', TRUE);
+            $csrfConfig = $this->CI->config->item('csrf');
 
+            $firstUrlSegment = reset($this->CI->uri->segment_array());
 
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
             }
-            elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
-                return true;
-            } 
-            elseif($_SERVER['REQUEST_URI'] === '/payment/ipn2'){
+            else if(in_array($_SERVER['REQUEST_URI'], $csrfConfig['bypassURI'])){
                 return true;
             }
-            elseif($_SERVER['REQUEST_URI'] === '/payment/pesoPayDataFeed'){
+            else if(in_array($firstUrlSegment,  $csrfConfig['bypassFirstSegment'])){
                 return true;
-            }
-            elseif(strpos($_SERVER['REQUEST_URI'], 'webservice')){
-                return true;
-            }
+            }       
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);
