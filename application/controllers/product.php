@@ -421,7 +421,7 @@ class product extends MY_Controller
                 'shiploc' => $this->product_model->getLocation(),
                 'banner_view' => $banner_view,
                 'payment_method' => $payment_method_array,
-                'avatarImage' => $um->getUserImage($product_row['sellerid'], "small")
+                'avatarImage' => $um->getUserImage($product_row['sellerid'], "small"),
                 'is_buy_button_viewable' => $isBuyButtonViewable,
                 ));
             
