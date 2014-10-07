@@ -250,6 +250,6 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script src='/assets/js/src/vendor_header.js' type="text/javascript"></script>
+<script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
 
  
