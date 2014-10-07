@@ -102,7 +102,8 @@ class Kernel
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
                                                 ,$container['form_factory']
-                                                ,$container['form_error_helper']);
+                                                ,$container['form_error_helper']
+                                                ,$container['string_utility']);
         };
         
         //Account Manager
@@ -287,14 +288,14 @@ class Kernel
             $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
             $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
             $em = $container['entity_manager'];
-            $stringUtility = $container['string_utility'];
+            $userManager = $container['user_manager'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $socialMediaConfig['facebook']['key']['appId'],
                 $socialMediaConfig['facebook']['key']['secret'],
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
-                $stringUtility
+                $userManager
             );
         };
         // Category Manager

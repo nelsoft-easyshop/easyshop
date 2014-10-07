@@ -79,17 +79,26 @@ class UserManager
     private $formErrorHelper;
     
     /**
+     * String utility object
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+    
+    /**
      *  Constructor. Retrieves Entity Manager instance
      *
      * @param Doctrine\Orm\EntityManager $em
-     * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
+     * @param EasyShop\ConfigLoader\ConfigLoader $ConfigLoader
+     * @param EasyShop\Utility\StringUtility $stringUtility
      */
-    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper)
+    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper, $stringUtility)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->hasError = FALSE;
         $this->err = array();
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -544,6 +553,31 @@ class UserManager
         }
 
         return true;
+    }
+    
+    /**
+     * Generate user slug
+     *
+     * @param $memberId
+     * @return EasyShop\Entities\EsMember
+     */
+    public function generateUserSlug($memberId)
+    {
+        $member = $this->em->getRepository("EasyShop\Entities\EsMember")
+                           ->findOneBy(array("idMember"=>$memberId));
+ 
+        $slug = $this->stringUtility->cleanString($member->getUsername());
+        
+        $membersWithSlug = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                    ->findOneBy(array("slug"=>$slug));
+        if($membersWithSlug){
+            $slug = $slug.$member->getIdMember();
+        }
+        
+        $member->setSlug($slug);
+        $this->em->flush();
+
+        return $member;   
     }
 
     /**
