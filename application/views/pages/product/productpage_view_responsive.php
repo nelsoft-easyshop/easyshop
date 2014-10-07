@@ -52,9 +52,10 @@
                 <?php include("product_image_gallery.php") ?>
             </div>
             
-            <?php echo $banner_view; ?>
+            
             
             <div class="col-md-7" style="position: relative; z-index: 1;">
+                <?php echo $banner_view; ?>
                 <div class="display-when-mobile-833">
                 <div class="panel panel-default">
                     <div class="panel-body">
