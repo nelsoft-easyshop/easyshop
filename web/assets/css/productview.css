@@ -83,6 +83,18 @@ sub, sup{
     border-bottom: 1px dotted #fff;
 }
 
+.alert-promo{
+    background-color: #e42626 !important;
+    border: 1px solid #c52020 !important;
+    color: #ffffff !important;
+    margin-bottom: 7px !important;
+}
+
+.alert-promo > center > strong > a{
+    color: #ffffff !important;
+    border-bottom: dotted #ffffff 1px;
+}
+
 .genericWithCountdown_dsc_tmr{
     bottom: 47px;
     left: 242px;
@@ -128,6 +140,12 @@ sub, sup{
     font-size: 10px;
 }
 
+.col-fixed-sale > center > .cd_timer_container{
+    margin-left: -25px !important;
+    margin-top: -25px !important;
+    height: 53px !important;
+}
+
 .cd_timer_container div > span:first-child {
     font-size: 19px !important;
     margin-bottom: -4px;
@@ -156,12 +174,10 @@ sub, sup{
 .discount_perc{
     display: inline;
     background-color: #dd0000;
-    bottom: 155px;
     color: #FFFFFF;
     float: right;
     font-size: 25px;
     height: 74px;
-    left: 10px;
     position: relative;
     width: 70px;
 }
@@ -171,10 +187,26 @@ sub, sup{
     padding: 7px 7px 7px 3px;
     text-align: center;
 }
+
+.col-fixed-sale > .dsc_prp_txt3{
+    font-size: 18px;
+    text-align: right;
+    margin-top: 5px;
+    width: 100%;
+}
+
 .dsc_prp_txt3{
     display: block;
     font-size: 22px;
  
+}
+
+.td-discount{
+    background-color: #dd0000;
+    color: #FFFFFF;
+    font-size: 25px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .btn-meet-up{
@@ -531,12 +563,40 @@ line-height: 30px !important;
     min-width: 400px !important;
 }
 
-@media only screen and (max-width: 1024px) {
-.genericWithCountdown_dsc_prp_txt3 {
-    text-align: center;
-
+.panel-no-border{
+    border: none !important;
 }
 
+@media only screen and (max-width: 1024px) {
+
+.panel-countdown > .panel-discount{
+     padding: 7px !important;
+}
+
+.col-fixed-sale > center > .cd_timer_container{
+    margin-left: 0px !important;
+    height: 53px !important;
+    margin: 0px !important;
+    margin-top: -10px !important;
+}
+
+
+.col-fixed-sale > .dsc_header_txt{
+    text-align: center;
+    width: 100%;
+    margin-bottom: -5px;
+}
+
+.col-fixed-sale > .dsc_prp_txt3{
+    text-align: center;
+}
+.genericWithCountdown_dsc_prp_txt3 {
+    text-align: center;
+}
+
+td > .cd_timer_container{
+    margin-top: 0px !important;
+}
 
 .display-when-mobile-833{
     display: inline;
