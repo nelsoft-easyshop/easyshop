@@ -758,7 +758,6 @@
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var isLoggedIn = ($(".es-data[name='is-logged-in']").val() == 'true');
             var msg = 'Kindly login to qualify for this promo.';
-
             $.ajax({
                 url : '/promo/BuyAtZero/buyAtZeroRegistration',
                 type : 'post',
@@ -778,7 +777,7 @@
                     else if(data){
                         msg = "Congratulations! You now have the chance to win this  " + 
                             escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
-                            "announced on September 15, 2014. Stay tuned for more EasyShop.ph " +
+                            "announced on October 16, 2014. Stay tuned for more EasyShop.ph " +
                             "promotions. ";
                     }
                     else{
@@ -790,7 +789,6 @@
                 }
             });
         })
-        
         
         $(document).on('click', '#send.enabled', function(){
             
