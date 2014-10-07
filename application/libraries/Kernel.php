@@ -99,7 +99,8 @@ class Kernel
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
             return new \EasyShop\User\UserManager($container['entity_manager']
-                                                ,$container['config_loader']);
+                                                ,$container['config_loader']
+                                                ,$container['string_utility']);
         };
         
         //Account Manager
@@ -262,14 +263,14 @@ class Kernel
             $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
             $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
             $em = $container['entity_manager'];
-            $stringUtility = $container['string_utility'];
+            $userManager = $container['user_manager'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $socialMediaConfig['facebook']['key']['appId'],
                 $socialMediaConfig['facebook']['key']['secret'],
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
-                $stringUtility
+                $userManager
             );
         };
         // Category Manager
