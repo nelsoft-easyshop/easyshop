@@ -4,6 +4,8 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
+use EasyShop\Entities\EsProductItemLock;
+use EasyShop\Entities\EsOrder;
 
 class EsProductItemLockRepository extends EntityRepository
 {
@@ -25,7 +27,19 @@ class EsProductItemLockRepository extends EntityRepository
                         ->setParameter('product_id', $productId)
                         ->getQuery(); 
         return $result = $query->getResult();
-
-             
     }
+
+    public function getLockCount($orderId)
+    {
+        $query = $this->_em->createQueryBuilder()
+                        ->select('count(lck.idItemLock) AS cnt')
+                        ->from('EasyShop\Entities\EsProductItemLock','lck')
+                        ->where('lck.order = :orderId')
+                        ->setParameter('orderId', $orderId) 
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return intval($query);
+    }
+       
 }
+
