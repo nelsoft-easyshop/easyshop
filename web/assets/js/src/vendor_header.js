@@ -110,7 +110,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     $('#display-banner-view').show();
                     $('#edit-banner-view').hide();
                     $(".storeName").html(storName);
-                    $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
+                    if( stateRegion === "0" && city === "0" ){
+                        $("#placeStock > strong").html("Location not set");
+                    }
+                    else{
+                        $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
+                    }
+                    
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
 
                     // Update custom attr origval for "Cancel" functionality
