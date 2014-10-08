@@ -51,11 +51,16 @@ function proceedPayment(obj){
 
 function changeQuantity(inputField)
 {
-
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var desiredQuantity = parseInt($(inputField).val(),10);
     var maxQuantity = parseInt($(inputField).attr("max-quantity"),10);
     var cartRowId = $(inputField).attr("id");
+    if (isNaN(desiredQuantity)) {
+        $(inputField).val($(inputField).attr('value'))
+        alert("Invalid input");
+        return false;
+    }
+
     if (desiredQuantity > maxQuantity) {
         desiredQuantity = maxQuantity;
     }
@@ -122,33 +127,42 @@ function del(data)
 {
     var prod_id = $(data).attr('val');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var isConfirmed = confirm("Are you sure you would like to remove this item from the shopping cart?");
-    
-    if (isConfirmed) {
-        $.ajax({
-            url: "/cart/doRemoveItem",
-            type: "POST",
-            dataType: "JSON",
-            data: {id: prod_id, csrfname: csrftoken},
-            success: function (data) {
-                
-                if(data.isSuccess){
-                    $(".row_" + prod_id).remove();
-                    $("#total").text(data.totalPrice);
-                    $(".cart_no").text(data.numberOfItems);
-                    if(parseInt(data.numberOfItems) === 0){
-                        $('.cart_no').hide();
-                        $('.cart').css('width','28');
-                        $('.big_cart').addClass('cart_zero');
+    $('#div_cart_modal').modal({
+        escClose: false,
+        containerCss:{
+            maxWidth: 500,
+            minWidth: 305,
+            maxHeight: 200
+        },
+        onShow: function(){
+            $('#div_cart_modal button').on('click', function(){
+                $.ajax({
+                    url: "/cart/doRemoveItem",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {id: prod_id, csrfname: csrftoken},
+                    success: function (data) {
+
+                        if(data.isSuccess){
+                            $(".row_" + prod_id).remove();
+                            $("#total").text(data.totalPrice);
+                            $(".cart_no").text(data.numberOfItems);
+                            if(parseInt(data.numberOfItems) === 0){
+                                $('.cart_no').hide();
+                                $('.cart').css('width','28');
+                                $('.big_cart').addClass('cart_zero');
+                            }
+                            checkTotal();
+                        }
+                        else{
+                            alert('Sorry, we are having a problem right now.');
+                        }
                     }
-                    checkTotal();
-                }
-                else{
-                    alert('Sorry, we are having a problem right now.');
-                }
-            }
-        });
-    }
+                });
+                $.modal.close();
+            });
+        }
+    })
 }
 function checkTotal()
 {

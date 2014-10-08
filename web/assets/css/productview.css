@@ -54,14 +54,15 @@ sub, sup{
 }
 .panel-countdown{
     margin-bottom: 7px !important;
+    box-shadow: none !important;
 }
 
 .panel-countdown > .panel-heading{
-    border: 1px solid #c52020 !important;
+    border: 1px solid #dd0000 !important;
 }
 
 .panel-countdown > .panel-body{
-    padding: 2px !important;
+    padding: 0px !important;
 }
 
 .panel-countdown > .panel-heading{
@@ -71,7 +72,7 @@ sub, sup{
 }
 
 .panel-countdown > .panel-body{
-    border: 1px solid #c52020 !important;
+    border: 1px solid #dd0000 !important;
 }
 
 .panel-countdown > .panel-heading > center > strong{
@@ -132,9 +133,18 @@ sub, sup{
     font-weight: 600 !important;
     font-size: 22px;
 }
+
+.col-countdown-sale > .dsc_header_txt{
+    font-size: 18px !important;
+}
+.dsc_time_left{
+    margin-top: -16px;
+    margin-bottom: 0px;
+}
 .dsc_prp_txt{
     display: block;
     font-size: 23px;
+    margin-top: -17px;
 }
 .dsc_prp_txt2{
     font-size: 10px;
@@ -143,6 +153,12 @@ sub, sup{
 .col-fixed-sale > center > .cd_timer_container{
     margin-left: -25px !important;
     margin-top: -25px !important;
+    height: 53px !important;
+}
+
+.col-countdown-sale > center > .cd_timer_container{
+    margin-left: -28px !important;
+    margin-top: -17px !important;
     height: 53px !important;
 }
 
@@ -580,6 +596,13 @@ line-height: 30px !important;
     margin-top: -10px !important;
 }
 
+.col-countdown-sale > center > .cd_timer_container{
+  margin-right: 0px !important;
+    margin-top: -10px !important;
+    height: 53px !important;
+    text-align: center ;
+    margin-left: 10px !important;
+}
 
 .col-fixed-sale > .dsc_header_txt{
     text-align: center;
@@ -587,8 +610,19 @@ line-height: 30px !important;
     margin-bottom: -5px;
 }
 
+.col-countdown-sale > .dsc_header_txt{
+    text-align: center;
+    width: 100%;
+    margin-bottom: -5px;
+}
+
 .col-fixed-sale > .dsc_prp_txt3{
     text-align: center;
+}
+
+.col-countdown-sale > center > .dsc_prp_txt{
+    text-align: center;
+    margin-top: 0px;
 }
 .genericWithCountdown_dsc_prp_txt3 {
     text-align: center;

@@ -1313,3 +1313,41 @@ input.cc_check {
 	}
 
 }
+#div_cart_modal{
+    display: none;
+}
+#div_cart_modal h1 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-left: 15px;
+}
+.div_cart_modal_container {
+    border-bottom: 1px solid #cecece;
+    height: 55px;
+    margin-bottom: 15px;
+    margin-left: 3%;
+}
+#div_cart_modal span {
+    background-color: #fff;
+    color: #565656;
+    display: inline-block;
+    margin-right: 14px;
+    padding: 6px 12px;
+    width: 136px;
+    margin-left: 3%;
+    border: 2px solid #565656;
+}
+#div_cart_modal button {
+    background-color: #00a388;
+    border-bottom: 2px solid #007c67;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    height: auto;
+    line-height: 23px;
+    margin: 0;
+    width: 136px;
+    margin-left: 20%;
+}
