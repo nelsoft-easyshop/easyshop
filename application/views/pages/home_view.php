@@ -1,4 +1,4 @@
-<link href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <link rel="canonical" href="<?php echo base_url();?>"/>
 
 <div class="clear"></div>
@@ -96,8 +96,8 @@
             </div>
             
             <div>
-                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179" WMODE="transparent">
-                    <param name="movie" value="<?= base_url() ?>assets/images/Set-A-Box.swf" />
+                <object type="application/x-shockwave-flash" data="/assets/images/Set-A-Box.swf" width="198" height="179" WMODE="transparent">
+                    <param name="movie" value="/assets/images/Set-A-Box.swf" />
                     <param name="quality" value="high"/>
              </object>
           
@@ -108,88 +108,19 @@
 
 <div class="clear before-feed"></div>
 
-    <?php
-    if(!$this->session->userdata('member_id')):
-        foreach($sections as $section): ?>
-            <section>
-                <?php echo $section;?>
-            </section>
-    <?php 
-        endforeach;
-    endif; ?>
+    <?php foreach($sections as $section): ?>
+        <section>
+        <?php echo $section;?>
+        </section>
+    <?php endforeach; ?>
                 
 <div class="clear"></div>
 
 
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="/>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-$("body").bind("unloadingChild", function(){
-    console.log("child unloaded");
-});
-
-
-
-$( document ).ready(function( $ ) {
-    
-    var ids;
-
-    function loadFeed(postids)
-    {
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var itmcount;
-        $.ajax({ 
-            type: "POST",
-            url: config.base_url+'product/getFeed', 
-            data: "ids=" + postids + "&"+csrfname+"=" + csrftoken,
-            dataType : "json",
-            success: function(data){
-                request_ajax = true; 
-                console.log('loading feed complete.');
-                // $( data.html ).insertAfter( $('.before-feed') );
-                itmcount = data.count;
-                if(itmcount <= 0){
-                    ajax_is_on = true;
-                }else{
-                    ajax_is_on = false;  
-                    $('.home_feed_items').append(data.html);
-                    ids = data.product_ids;
-                }
-            }
-        });   
-    }
-
-    console.log('ready');
-    <?php if($this->session->userdata('member_id')): ?>
-        console.log('loading feed.');
-        $('<section><div class="wrapper category_section"><div class=" home_cat_product_title red_cat"><a>FEED</a></div><div class="home_feed_items"></div></div></section><br/>').insertAfter( $('.before-feed') );
-        loadFeed(0);
-
-        // START OF INFINITE SCROLLING FUNCTION  
-        var ajax_is_on = false; 
-        var last_scroll_top = 0;
-        var itmcnt;
-     
-        $(window).scroll(function(event) {
-            var st = $(this).scrollTop();
-            if(st > last_scroll_top){
-                if ($(window).scrollTop() + 500 > $(document).height() - $(window).height()) {
-                    if (request_ajax === true && ajax_is_on === false) {
-                        request_ajax = false; 
-                        itmcnt = loadFeed(ids);  
-                    }
-                }
-            }
-            last_scroll_top = st;
-        });
-        // END OF INFINITE SCROLLING FUNCTION
-    <?php endif; ?>
-});
-
-</script>
