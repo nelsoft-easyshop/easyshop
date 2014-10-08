@@ -201,10 +201,10 @@ class CartManager
             $serialValidatedOptions = serialize($itemData['options']);
             $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
 
-            if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] ||
+            if( !$canBuyerDoPurchase || intval($cartItem['id']) !==  intval($itemData['id']) ||
                 $serialRawOptions !== $serialValidatedOptions ||
-                $itemData['member_id'] === $memberId || $product->getIsDraft() ||
-                $product->getIsDelete() || $itemData['qty'] === 0)
+                intval($itemData['member_id']) === intval($memberId) || $product->getIsDraft() ||
+                $product->getIsDelete() || intval($itemData['qty']) === 0)
             {
                 $this->cart->removeContent($cartItem[$cartIndexName]);
             }
@@ -299,7 +299,7 @@ class CartManager
      * data into the database
      *
      * @param integer $memberId
-     * @param inetger $cartRowId
+     * @param integer $cartRowId
      */
     public function removeItem($memberId, $cartRowId)
     {
@@ -353,5 +353,29 @@ class CartManager
     {
         return $this->cart;
     }
+    
+    /**
+     * Synchs the cartData in the session with the cart data in the database
+     * Used usually after successful login.
+     *
+     * @param integer $memberId
+     */
+    public function synchCart($memberId)
+    {
+        $userCartData = unserialize($this->em->find('EasyShop\Entities\EsMember', ['idMember' => $memberId])
+                                            ->getUserData());    
+
+        if($userCartData){
+            foreach($userCartData as $rowId => $cartItem){
+                if(!isset($cartItem[$this->cart->getIndexName()])){
+                    continue;
+                }
+                $this->addItem($cartItem['id'], $cartItem['qty'], $cartItem['options']);
+            }
+        }
+        return $this->cart->getContents(); 
+
+    }
+
 
 }

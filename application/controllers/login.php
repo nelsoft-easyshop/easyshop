@@ -85,12 +85,14 @@ class Login extends MY_Controller
     }
   
     
-    /*   
-     *   Function for creating sessions and making database changes upon login
+    /**  
+     * Function for creating sessions and making database changes upon login
+     *  
+     * @param string $uname
+     * @param string $pass
      */
-
-    private function login($uname, $pass){
-
+    private function login($uname, $pass)
+    {
         // if user still has timeout left, do not process this login attempt
         if($this->throttleService->getTimeoutLeft($uname) >= 1){
             $row['o_success'] = 0;
@@ -103,11 +105,14 @@ class Login extends MY_Controller
             if ($row['o_success'] >= 1) {
             
                 $em = $this->serviceContainer['entity_manager'];
+                $cartManager = $this->serviceContainer['cart_manager'];
                 $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
                 $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
             
-                $cartData = unserialize($user->getUserdata());
-                $cartData = $cartData ? $cartData : array();
+
+                $cartData = $cartManager->synchCart($user->getIdMember());
+                
+                
             
                 $this->session->set_userdata('member_id', $row['o_memberid']);
                 $this->session->set_userdata('usersession', $row['o_session']);
