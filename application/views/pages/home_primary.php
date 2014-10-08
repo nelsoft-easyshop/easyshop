@@ -77,15 +77,16 @@
     (function ($)  {
         // BxSlider.js Slider Plugin
         $('.bxslider').bxSlider({
-            minSlides: 4,
-            maxSlides: 1,
+            maxSlides: 4,
+            moveSlides: 1,
             speed: 1000,
             auto: true,
             pause: 6000,
             prevText : '',
             nextText : '',
             slideWidth: 270,
-            slideMargin: 20
+            slideMargin: 20,
+            infiniteLoop: true
         });
 
         $('#content .bx-wrapper').removeAttr("style");
