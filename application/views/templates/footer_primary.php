@@ -1,29 +1,33 @@
         <section class="footer-primary">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h1>Help Center</h1>
-                        <ul>
-                            <li><a href="">Registration</a></li>
-                            <li><a href="">How to Shop</a></li>
-                            <li><a href="">How to Sell</a></li>
-                            <li><a href="">Payment Methods</a></li>
-                            <li><a href="">FAQ</a></li>
-                            <li><a href="">Live Chat</a></li>
-                            <li><a href="">Report a Problem</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3">
-                        <h1>Information</h1>
-                        <ul>
-                            <li><a href="">View Cart</a></li>
-                            <li><a href="">My Wishlist</a></li>
-                            <li><a href="">About Us</a></li>
-                            <li><a href="">Contact Us</a></li>
-                            <li><a href="">Shipping Policy</a></li>
-                            <li><a href="">Privacy Policy</a></li>
-                            <li><a href="">Terms of Use</a></li>
-                        </ul>
+                <div class="row-fluid">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <h1>Help Center</h1>
+                                <ul>
+                                    <li><a href="">Registration</a></li>
+                                    <li><a href="">How to Shop</a></li>
+                                    <li><a href="">How to Sell</a></li>
+                                    <li><a href="">Payment Methods</a></li>
+                                    <li><a href="">FAQ</a></li>
+                                    <li><a href="">Live Chat</a></li>
+                                    <li><a href="">Report a Problem</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <h1>Information</h1>
+                                <ul>
+                                    <li><a href="">View Cart</a></li>
+                                    <li><a href="">My Wishlist</a></li>
+                                    <li><a href="">About Us</a></li>
+                                    <li><a href="">Contact Us</a></li>
+                                    <li><a href="">Shipping Policy</a></li>
+                                    <li><a href="">Privacy Policy</a></li>
+                                    <li><a href="">Terms of Use</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h1>Newsletter</h1>
