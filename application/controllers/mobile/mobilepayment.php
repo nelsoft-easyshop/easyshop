@@ -26,6 +26,11 @@ class mobilePayment extends MY_Controller
     private $member;
 
     /**
+     * Cash on delivery payment type number
+     */
+    const CASH_ON_DELIVERY = 3;
+
+    /**
      * Mobile payment constructor
      */
     function __construct() 
@@ -177,7 +182,30 @@ class mobilePayment extends MY_Controller
             'paymentType' => $paymentType,
         );
 
-        print(json_encode($outputData));
+        print(json_encode($outputData,JSON_PRETTY_PRINT));
+    }
+
+    public function doMobilePayCod()
+    {   
+        $paymentType = self::CASH_ON_DELIVERY;
+        $cartData = unserialize($this->member->getUserdata()); 
+        if(!empty($cartData)){
+            unset($cartData['total_items'],$cartData['cart_total']);
+            $this->paymentController = $this->loadController('payment');
+            $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
+            $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
+            $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
+            $returnArray = array_merge(['isSuccess' => $isSuccess],$dataProcess);
+        }
+        else{
+            $returnArray = array(
+                    'isSuccess' => false,
+                    'status' => 'f',
+                    'message' => 'You have no item in your cart',
+                );
+        }
+
+        echo json_encode($returnArray,JSON_PRETTY_PRINT);
     }
 
 }

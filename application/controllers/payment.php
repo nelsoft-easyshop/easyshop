@@ -77,6 +77,62 @@ class Payment extends MY_Controller{
     }
 
     /**
+     * persist pay transaction
+     * @param  mixed $itemArray   [description]
+     * @param  integer $memberId    [description]
+     * @param  integer $paymentType [description]
+     * @return JSON
+     */
+    public function mobilePayBridge($itemArray,$memberId,$paymentType)
+    {
+        // set session
+        $this->session->set_userdata('member_id', $memberId); 
+        $this->session->set_userdata('choosen_items', $itemArray);
+
+        // convert payment type into int
+        $paymentType = intval($paymentType);
+        $errorMessage = [];
+        $success = false; 
+
+        // update cart data details
+        $qtysuccess = $this->resetPriceAndQty();
+
+        $address = $this->memberpage_model->get_member_by_id($memberId); 
+
+        $prepareData = $this->processData($itemArray,$address);
+        $grandTotal = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+
+        // generate reference number
+        $txnid = $this->generateReferenceNumber($paymentType,$memberId);
+        if($qtySuccess != count($itemArray)){
+            if($paymentType === 3){
+                $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$txnid);
+                if($return['o_success'] <= 0){
+                    $message = $return['o_message']; 
+                }
+                else{
+                    $v_order_id = $return['v_order_id'];
+                    $invoice = $return['invoice_no'];
+
+                    foreach ($itemList as $key => $value) {               
+                        $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                        $this->product_model->update_soldout_status($value['id']);
+                    }
+
+                    $this->removeItemFromCart();  
+                    $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
+                }
+            }
+        }
+        else{
+            array_push($errorMessage, 'The availability of one of your items is below your desired quantity. 
+                                        Someone may have purchased the item before you completed your payment.');
+        }
+    }
+
+    /**
      * Review cart data from mobile
      * @param  mixed $itemArray
      * @param  integer $memberId
@@ -106,16 +162,21 @@ class Payment extends MY_Controller{
         // get all possible error message
         $errorMessage = [];
         $canContinue = true;
-        if(!$successCount){
+        if($successCount != count($itemArray)){
             $canContinue = false;
             array_push($errorMessage, 'One or more of your item(s) is unavailable in your location.');
         }
 
-        if(!$qtySuccess){
+        if($qtySuccess != count($itemArray)){
             $canContinue = false;
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
                                     Check the availability of your item and try again.');
+        }
+
+        if($codCount != count($itemArray)){
+            $canContinue = false;
+            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.');
         }
 
         if(!$purchaseLimit){
@@ -126,11 +187,6 @@ class Payment extends MY_Controller{
         if(!$soloRestriction){
             $canContinue = false;
             array_push($errorMessage, 'One of your items can only be purchased individually.');
-        }
-
-        if($codCount != count($itemArray)){
-            $canContinue = false;
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.');
         }
 
         return array(
@@ -665,68 +721,79 @@ class Payment extends MY_Controller{
     }
 
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
-    function payCashOnDelivery()
+
+    public function cashOnDeliveryProcessing($memberId,$txnid,$itemList,$paymentType)
     {
-        if($this->input->post('promo_type') !== FALSE )
-        {
+        $address = $this->memberpage_model->get_member_by_id($memberId); 
+        $prepareData = $this->processData($itemList,$address);
+        $grandTotal = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+        $return = $this->payment_model->payment($paymentType,$grandTotal,$memberId,$productstring,count($itemList),json_encode($itemList),$txnid);
+
+        if($return['o_success'] <= 0){
+            $message = $return['o_message'];
+            $status = 'f';
+        }
+        else{
+            $v_order_id = $return['v_order_id'];
+            $invoice = $return['invoice_no'];
+            $status = 's';
+            $message = ($paymentType == $this->PayMentDirectBankDeposit) 
+                            ? 'Your payment has been completed through Direct Bank Deposit.' 
+                            : 'Your payment has been completed through Cash on Delivery.';
+
+            foreach ($itemList as $key => $value) {
+                $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                $this->product_model->update_soldout_status($value['id']);
+            }
+            $this->removeItemFromCart();  
+            $this->sendNotification(array('member_id'=>$memberId, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
+        }
+
+        return array(
+                'status' => $status,
+                'message' => $message,
+            );
+    }
+
+    public function payCashOnDelivery()
+    {
+        if($this->input->post('promo_type') !== FALSE ){
             $this->setPromoItemsToPayment($this->input->post('promo_type'));
         }
-        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
+
+        if(!$this->session->userdata('member_id') 
+            || !$this->input->post('paymentToken') 
+            || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
 
         $lastDigit = substr($this->input->post('paymentToken'), -1);
         $qtysuccess = $this->resetPriceAndQty();
         $status = 'f';
-        if($lastDigit == 1){
-            $paymentType = $this->PayMentCashOnDelivery;
-            $textType = 'cashondelivery';
-            $message = 'Your payment has been completed through Cash on Delivery.';
-
-        }elseif($lastDigit == 2) {
+        if($lastDigit == 2) {
             $paymentType = $this->PayMentDirectBankDeposit;
             $textType = 'directbankdeposit';
-            $message = 'Your payment has been completed through Direct Bank Deposit.';
-
-        }else{
-            $paymentType = $this->PayMentCashOnDelivery;  
+        }
+        else{
+            $paymentType = $this->PayMentCashOnDelivery; 
             $textType = 'cashondelivery';
-            $message = 'Your payment has been completed through Cash on Delivery.';
         }
 
         $member_id =  $this->session->userdata('member_id');
         $itemList =  $this->session->userdata('choosen_items');
-        $productCount = count($itemList);   
-
-        $address = $this->memberpage_model->get_member_by_id($member_id); 
-
-        $prepareData = $this->processData($itemList,$address);
-        $grandTotal = $prepareData['totalPrice'];
-        $productstring = $prepareData['productstring'];
-        $itemList = $prepareData['newItemList']; 
+        $productCount = count($itemList);
         $txnid = $this->generateReferenceNumber($paymentType,$member_id);
 
         if($qtysuccess == $productCount){
-            $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$txnid);
-
-            if($return['o_success'] <= 0){
-                $message = $return['o_message']; 
-            }else{
-                $v_order_id = $return['v_order_id'];
-                $invoice = $return['invoice_no'];
-                $status = 's';
-
-                foreach ($itemList as $key => $value) {               
-                    $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                    $this->product_model->update_soldout_status($value['id']);
-                }
-
-                $this->removeItemFromCart();  
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
-            }   
-        }else{
+            $codData = $this->cashOnDeliveryProcessing($member_id,$txnid,$itemList,$paymentType);
+            $status = $codData['status'];
+            $message = $codData['message'];
+        }
+        else{
             $message = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.'; 
-        } 
+        }
 
         $this->generateFlash($txnid,$message,$status);
         redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
