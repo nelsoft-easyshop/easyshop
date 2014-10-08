@@ -501,7 +501,8 @@ class UserManager
         $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                 ->findOneBy(array("username"=>$sellername));
 
-        if(empty($memberEntity) || empty($vendorEntity) ){
+        if(empty($memberEntity) || empty($vendorEntity) || 
+            ( (int)$memberEntity->getIdMember()===(int)$vendorEntity->getIdMember() ) ){
             return false;
         }
 
