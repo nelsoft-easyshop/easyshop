@@ -51,11 +51,16 @@ function proceedPayment(obj){
 
 function changeQuantity(inputField)
 {
-
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var desiredQuantity = parseInt($(inputField).val(),10);
     var maxQuantity = parseInt($(inputField).attr("max-quantity"),10);
     var cartRowId = $(inputField).attr("id");
+    if (isNaN(desiredQuantity)) {
+        $(inputField).val($(inputField).attr('value'))
+        alert("Invalid input");
+        return false;
+    }
+
     if (desiredQuantity > maxQuantity) {
         desiredQuantity = maxQuantity;
     }
