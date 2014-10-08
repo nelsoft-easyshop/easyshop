@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/header-css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/bootstrap.css" media='screen'>
-    <link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='<?=base_url()?>assets/css/new-homepage.css' rel="stylesheet" media='screen'/>
 </head>
 <body>
 
@@ -76,8 +76,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div><!-- End .header-top-left -->
                             <div class="header-top-right">
                                 <div class="header-text-container pull-right">
-                                    <p class="header-text"><span class="top-icon top-icon-account"></p>
-                                    <p class="header-link"><a href="#">login</a>&nbsp;or&nbsp;<a href="#">create an account</a></p>
+                                    <div class="header-link">
+                                        <span class="login-icon user-acct-icon"></span>
+                                        <a href="#">login</a>&nbsp;or&nbsp;
+                                        <a href="#">create an account</a>
+                                    </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->
                         </div><!-- End .col-md-12 -->
@@ -175,12 +178,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div><!-- End .container -->
                 <div class="sticky-header-nav">
                     <div id="main-nav-container">
-                        <div  class="sticky-nav-logo-con">
-                            <div class="sticky-nav-logo">
-                                <img src="<?=base_url()?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
-                            </div>
-                        </div>
                         <div class="container">
+                            <div  class="sticky-nav-logo-con">
+                                <div class="sticky-nav-logo">
+                                    <a href="">
+                                        <img src="<?=base_url()?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                                    </a>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12 clearfix">
                                     
@@ -247,7 +252,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </div><!-- End .mega-menu -->
                                             </li>
                                             
-                                            <li>
+                                            <li class="mobile-menu-nav-hide">
                                                 <a href="#">NEW ARRIVALS</a>
                                                 <ul class="nav-2nd-level">
                                                     <li><a href="#">Male</a></li>
@@ -267,17 +272,76 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <li><a href="#">Beers</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="#">TOP PRODUCTS</a>
+                                            <li class="mobile-menu-nav-hide"><a href="#">TOP PRODUCTS</a>
                                             </li>
-                                            <li><a href="#">TOP SELLERS</a></li>
-                                            <li><a href="#">EASY TREATS</a>
+                                            <li class="mobile-menu-nav-hide"><a href="#">TOP SELLERS</a></li>
+                                            <li class="mobile-menu-nav-hide"><a href="#">EASY TREATS</a>
                                                 <ul class="nav-2nd-level">
                                                     <li><a href="#">Hot Deals</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="#">EASY DEALS</a></li>
+                                            <li class="mobile-menu-nav-hide"><a href="#">EASY DEALS</a></li>
                                         </ul>
                                         
+                                        <div class="sticky-search-cart-wrapper">
+                                            <div class="sticky-search-wrapper">
+                                                <input type="text" class="ui-form-control">
+                                                <button id="quick-search" class="" type="submit"></button>
+                                            </div>
+                                            <div class="header-cart-container">
+                                                <span class="header-cart-items-con sticky-cart">
+                                                    <span class="header-cart-item">2 item(s)</span> in your cart
+                                                </span>
+                                                <span class="header-cart-icon-con span_bg cart-icon"></span>
+                                                <div class="sticky-header-cart-item-list">
+                                                    <p>Recently add item(s)</p>
+                                                    <div class="mrgn-bttm-15">
+                                                        <div class="header-cart-item-img">
+                                                            <a href="">
+                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="header-cart-item-con">
+                                                            <a href=""><span>Doraemon - blue</span></a>
+                                                            <span>x 1</span>
+                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                    <div class="mrgn-bttm-15">
+                                                        <div class="header-cart-item-img">
+                                                            <a href="">
+                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="header-cart-item-con">
+                                                            <a href=""><span>Doraemon - blue</span></a>
+                                                            <span>x 1</span>
+                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                    <div class="header-cart-lower-content">
+                                                        <div class="header-cart-shipping-total">
+                                                            <p>Shipping: <span>&#8369; 50.00</span></p>
+                                                            <p>Total: <span>&#8369; 100,500.00</span></p>
+                                                        </div>
+                                                        <div class="header-cart-buttons">
+                                                            <a href="" class="header-cart-lnk-cart">go to cart</a>
+                                                            <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="header-text-container pull-right">                                               
+                                                <div class="header-link">
+                                                    <span class="login-icon user-acct-icon"></span>
+                                                    <a href="#">login</a>&nbsp;or&nbsp;
+                                                    <a href="#">create an account</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                 </div><!-- End .col-md-12 -->
