@@ -86,7 +86,7 @@
                     </table>
                 <?php endif; ?>
                 <!--<a href="javascript:void(0);"  class="link_address btn btn-default btn-gray" style="text-decoration: none;">Change Shipping Address</a> -->
-                <a class="btn btn-default btn-gray" style="text-decoration: none;" data-toggle="modal" data-target="#change_ship">Change Shipping Address</a> 
+                <a class="btn btn-default btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Address</a> 
             </div>
         </div>
         <div class="col-md-6">

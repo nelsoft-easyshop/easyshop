@@ -75,16 +75,16 @@
                     <table width="100%" class="table-tab">
                         <tr>
                             <td class="td-title-1">
-                                <p class="tab-title-1"><a id="ab" class="a-tab tab-active-link" href="#as-buyer" role="tab" data-toggle="tab">Feedback as a Buyer</a></p>
+                                <p class="tab-title-1"><a id="ab" class="a-tab tab-active-link" href="#as-buyer" role="tab" data-toggle="tab">Feedback from Seller</a></p>
                             </td>
                             <td class="td-title-2">
-                                <p class="tab-title-2"><a id="as" class="a-tab" href="#as-seller" role="tab" data-toggle="tab">Feedback as a Seller</a></p>
+                                <p class="tab-title-2"><a id="as" class="a-tab" href="#as-seller" role="tab" data-toggle="tab">Feedback from Buyer</a></p>
                             </td>
                             <td class="td-title-3">
-                                <p class="tab-title-3"><a id="fob" class="a-tab" href="#for-other-buyer" role="tab" data-toggle="tab">Feedback for other - Buyer</a></p>
+                                <p class="tab-title-3"><a id="fob" class="a-tab" href="#for-other-buyer" role="tab" data-toggle="tab">Feedback for Seller</a></p>
                             </td>
                             <td class="td-title-4">
-                                <p class="tab-title-4"><a id="fos" class="a-tab" href="#for-other-seller" role="tab" data-toggle="tab">Feedback for other - Seller</a></p>
+                                <p class="tab-title-4"><a id="fos" class="a-tab" href="#for-other-seller" role="tab" data-toggle="tab">Feedback for Buyer</a></p>
                             </td>
                         </tr>
                     </table>

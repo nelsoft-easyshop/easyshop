@@ -244,5 +244,5 @@
 </div>
 <div class="clear"></div>
 
-<script src="<?= base_url() ?>assets/js/src/vendor/numeral.min.js"></script>
-<script src="<?= base_url() ?>assets/js/src/cart.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/numeral.min.js"></script>
+<script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>

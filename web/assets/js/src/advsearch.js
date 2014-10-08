@@ -321,8 +321,7 @@
                     isEmptySearch = true;
                     $.ajax({
                         url: loadUrl+'&typeview='+typeView+'&page='+offset,
-                        type: 'get',
-                        async: false,
+                        type: 'get', 
                         dataType: 'json',
                         onLoading:$(".loading_products").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
                         success: function(response) {
@@ -344,11 +343,11 @@
     // END OF INFINITE SCROLLING FUNCTION
 
     $("#accordion").on('click','.a-accordion-header',function() {
-        var attr = $("i.glyphicon").attr("class");
-        if(attr == "glyphicon glyphicon-chevron-down pull-right"){
-            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
-        }else if(attr == "glyphicon glyphicon-chevron-up pull-right"){
-            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+        var attr = $("i.adv").attr("class");
+        if(attr == "adv glyphicon glyphicon-chevron-down pull-right"){
+            $('.adv ').removeClass("adv glyphicon glyphicon-chevron-down pull-right").addClass("adv glyphicon glyphicon-chevron-up pull-right");
+        }else if(attr == "adv glyphicon glyphicon-chevron-up pull-right"){
+            $('.adv ').removeClass("adv glyphicon glyphicon-chevron-up pull-right").addClass("adv glyphicon glyphicon-chevron-down pull-right");
         }
     });
 

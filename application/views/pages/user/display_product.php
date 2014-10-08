@@ -11,7 +11,8 @@
             $isFreeShipping = $objProduct->getIsFreeShipping();
             $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
             $briefDesc = html_escape($objProduct->getBrief());
-            $immediateCat = $objProduct->getCat()->getName();
+            $catObj = $objProduct->getCat();
+            $immediateCat = $catObj->getIdCat() === 1 ? html_escape($objProduct->getCatOtherName()) : html_escape($catObj->getName());
         ?>
             <div class="col-lg-3 col-md-4 col-xs-6 thumb">
                 <div class="panel-item">

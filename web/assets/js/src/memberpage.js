@@ -214,12 +214,7 @@ var memconf = {
                             }
                             
                             if(obj.result === 'success'){
-                                datafield.siblings('div.disp_vendor_url').show();
-                                urlDisplay.children('.edit_userslug').remove();
-                                urlDisplay.find('span.disp_userslug').text(htmlDecode(slugVal));
-                                urlDisplay.find('a').attr('href',config.base_url+htmlDecode(slugVal));
-                                datafield.remove();
-                                $(form).remove();
+                                location.reload(true);
                             }else{
                                 inputSlug.attr('disabled',false);
                                 saveBtn.attr('disabled',false);
@@ -2145,7 +2140,7 @@ function imageprev(input) {
                         $.modal.close();
                     });
                     jcrop_api = $.Jcrop($('#user_image_prev'),{
-                        aspectRatio: width/height,
+                        aspectRatio: 1,
                         boxWidth: 500,
                         boxHeight: 500,
                         minSize: [width*0.1,height*0.1],

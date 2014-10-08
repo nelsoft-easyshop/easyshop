@@ -51,5 +51,21 @@ class Resource
     
     }
 
+    /**
+     * Returns the home xml file used by the application
+     *
+     * @return string
+     */
+    public function getMobileXMLfile()
+    {
+        $xmlfile = 'page/mobile_home_files';
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_home');
+        }
+        
+        return $xmlfile;
+    
+    }    
+
 }
 

@@ -75,22 +75,91 @@ class Payment extends MY_Controller{
         $cart_contentss=array('choosen_items'=> $item);
         $this->session->set_userdata($cart_contentss);
     }
-    
-    function review()
+
+    /**
+     * Review cart data from mobile
+     * @param  mixed $itemArray
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function mobileReviewBridge($itemArray,$memberId)
     {
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+        // set session
+        $this->session->set_userdata('member_id', $memberId); 
+        $this->session->set_userdata('choosen_items', $itemArray);
+
+        // update cart data details
+        $qtySuccess = $this->resetPriceAndQty(); 
+
+        // check the availability of the product
+        $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
+        $itemArray = $productAvailability['item_array'];
+        $successCount = $productAvailability['success_count'];
+        $codCount = $productAvailability['cod_count']; 
+
+        // check the purchase limit and payment type available
+        $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
+        $paymentType = $purchaseLimitPaymentType['payment_type'];
+        $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
+        $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+
+        // get all possible error message
+        $errorMessage = [];
+        $canContinue = true;
+        if(!$successCount){
+            $canContinue = false;
+            array_push($errorMessage, 'One or more of your item(s) is unavailable in your location.');
         }
 
-        $member_id =  $this->session->userdata('member_id');
-        $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtySuccess = $this->resetPriceAndQty();
-        $configPromo = $this->config->item('Promo'); 
-        $itemArray = $this->session->userdata('choosen_items'); 
+        if(!$qtySuccess){
+            $canContinue = false;
+            array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
+                                    Someone may have purchased the item before you can complete your payment.
+                                    Check the availability of your item and try again.');
+        }
 
-        $address = $this->memberpage_model->get_member_by_id($member_id);
+        if(!$purchaseLimit){
+            $canContinue = false;
+            array_push($errorMessage, 'You have exceeded your purchase limit for a promo of an item in your cart.');
+        }
 
-        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        if(!$soloRestriction){
+            $canContinue = false;
+            array_push($errorMessage, 'One of your items can only be purchased individually.');
+        }
+
+        if($codCount != count($itemArray)){
+            $canContinue = false;
+            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.');
+        }
+
+        return array(
+            'cartData' => $itemArray,
+            'errMsg' => $errorMessage,
+            'canContinue' => $canContinue,
+            'paymentType' => $paymentType,
+        );
+    }
+
+    /**
+     * Check a Product Availability in location and if available in COD process
+     * @param  mixed $itemArray
+     * @param  integer $city
+     * @param  integer $region
+     * @param  integer $majorIsland
+     * @return mixed
+     */
+    private function checkProductAvailability($itemArray,$memberId)
+    {
+        $successCount = 0;
+        $codCount = 0;
+        $shippingDetails = false;
+
+        $address = $this->memberpage_model->get_member_by_id($memberId);
+
+        $city = ($address['c_stateregionID'] > 0) ? $address['c_stateregionID'] : 0;
+        $region = 0;
+        $majorIsland = 0;
         if($city > 0){  
             $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
             $region = $cityDetails['parent_id'];
@@ -98,12 +167,7 @@ class Payment extends MY_Controller{
             $majorIsland = $cityDetails['parent_id'];
         }
 
-        $itemCount = count($itemArray);
-        $successCount = $codCount = 0;
-        $data['shippingDetails'] = false; 
-
         foreach ($itemArray as $key => $value) {
-
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $availability = "Not Available";
@@ -122,7 +186,7 @@ class Payment extends MY_Controller{
                     $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
                 }
 
-                $data['shippingDetails'] = true; 
+                $shippingDetails = true; 
             }
 
             $seller = $value['member_id'];
@@ -131,33 +195,83 @@ class Payment extends MY_Controller{
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
-        $paymentType = $configPromo[0]['payment_method'];        
-        $promoteSuccess['purchase_limit'] = true;
-        $promoteSuccess['solo_restriction'] = true; 
+        return $returnData = array(
+            'item_array' => $itemArray,
+            'success_count' => $successCount,
+            'cod_count' =>$codCount,
+            'shipping_details' => $shippingDetails,
+        );
+    }
 
+    /**
+     * Check purchase limit and payment type available for the product in cart
+     * @param  mixed $itemArray
+     * @param  integer $memberId
+     * @return mixed
+     */
+    private function checkPurchaseLimitAndPaymentType($itemArray,$memberId)
+    {
+        $configPromo = $this->config->item('Promo');
+        $purchaseLimit = true;
+        $soloRestriction = true;
+        $paymentType = $configPromo[0]['payment_method'];
+   
         /*  
          *   Changed code to be able to adopt for any promo type
          */
-        if($this->cart_model->isCartCheckoutPromoAllow($itemArray)){    
+        if($this->cart_model->isCartCheckoutPromoAllow($itemArray)){
             foreach ($itemArray as $key => $value) {
                 $qty = $value['qty'];
                 $paymentType = array_intersect ( $paymentType , $configPromo[$value['promo_type']]['payment_method']);
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
-                $can_purchase = $this->product_model->is_purchase_allowed($member_id ,$value['promo_type'], intval($value['start_promo']) === 1);
+                $can_purchase = $this->product_model->is_purchase_allowed($memberId ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
-                    $promoteSuccess['purchase_limit'] = false;
+                    $purchaseLimit = false;
                     break;
                 }
             }
-        }else{
-            $promoteSuccess['solo_restriction'] = false;
+        }
+        else{
+            $soloRestriction = false;
         }
 
-        $data['paymentType'] = $paymentType;        
+        return $returnData = array(
+            'payment_type' => $paymentType,
+            'purchase_limit' => $purchaseLimit,
+            'solo_restriction' => $soloRestriction,
+        );
+    }
+    
+    function review()
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+
+        $member_id =  $this->session->userdata('member_id');
+        $remove = $this->payment_model->releaseAllLock($member_id);
+        $qtySuccess = $this->resetPriceAndQty(); 
+        $itemArray = $this->session->userdata('choosen_items'); 
+        $itemCount = count($itemArray); 
+        $address = $this->memberpage_model->get_member_by_id($member_id);
+
+        // check the availability of the product
+        $productAvailability = $this->checkProductAvailability($itemArray,$member_id);
+        $itemArray = $productAvailability['item_array'];
+        $successCount = $productAvailability['success_count'];
+        $codCount = $productAvailability['cod_count'];
+        $data['shippingDetails'] = $productAvailability['shipping_details'];
+
+        // check the purchase limit and payment type available
+        $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$member_id);
+        $paymentType = $purchaseLimitPaymentType['payment_type'];
+        $promoteSuccess['purchase_limit'] = $purchaseLimitPaymentType['purchase_limit'];
+        $promoteSuccess['solo_restriction'] = $purchaseLimitPaymentType['solo_restriction']; 
+
+        $data['paymentType'] = $paymentType;
         $data['promoteSuccess'] = $promoteSuccess;
 
-        if(!count($itemArray) <= 0){ 
-
+        if(!count($itemArray) <= 0){
             $data['cat_item'] = $itemArray;
             $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
             $data['success'] = ($successCount == $itemCount ? true : false);
@@ -168,17 +282,16 @@ class Payment extends MY_Controller{
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$address);
 
-            $this->load->view('templates/header', $header);
-            // $this->load->view('pages/payment/payment_review' ,$data);
-
-            $maxPoint = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+            // Get all available points
+            $data['maxPoint'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
                             ->getMaxPoint(intval($member_id));
-
-            $data['maxPoint'] = $maxPoint;          
             
+            // Load view
+            $this->load->view('templates/header', $header); 
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
-        }else{
+        }
+        else{
            redirect('/cart/', 'refresh'); 
        }
     }
@@ -1231,7 +1344,7 @@ class Payment extends MY_Controller{
     function lockItem($ids = array(),$orderId,$action = 'insert')
     {
         foreach ($ids as $key => $value) {
-            $lock = $this->payment_model->lockItem($key,$value,$orderId,$action);   
+            $lock = $this->payment_model->lockItem($key,$value,$orderId,$action);
         }
     }
 

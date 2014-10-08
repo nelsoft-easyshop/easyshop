@@ -137,9 +137,9 @@
 </section>
 
  
-<script src='/assets/js/src/vendorpage_new.js' type="text/javascript"></script>
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
+<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
 <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
 

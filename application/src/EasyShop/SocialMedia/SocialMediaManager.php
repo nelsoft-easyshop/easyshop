@@ -11,21 +11,29 @@ class SocialMediaManager
 
     const FACEBOOK = 1;
     const GOOGLE = 2;
+    
     /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
+    
+    /**
+     * UserManager
+     *
+     * @var EasyShop\User\UserManager;
+     */
+    private $userManager;
 
-    public function __construct($appId, $secret, $fbRedirectLoginHelper, $googleClient, $em, $stringUtility)
+    public function __construct($appId, $secret, $fbRedirectLoginHelper, $googleClient, $em, $userManager)
     {
         $this->appId = $appId;
         $this->secret = $secret;
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
         $this->em = $em;
-        $this->stringUtility = $stringUtility;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -137,13 +145,14 @@ class SocialMediaManager
         $member->setLastLoginDatetime(new DateTime('now'));
         $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
         $member->setLastFailedLoginDatetime(new DateTime('now'));
-        $member->setSlug($this->stringUtility->cleanString($username));
         $member->setOauthId($oAuthId);
         $member->setOauthProvider($oAuthProvider);
-
+        $member->setSlug('');
         $this->em->persist($member);
         $this->em->flush();
 
+        $this->userManager->generateUserSlug($member->getIdMember());
+        
         return $member;
     }
 
