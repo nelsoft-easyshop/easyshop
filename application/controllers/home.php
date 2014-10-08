@@ -63,7 +63,7 @@ class Home extends MY_Controller
         
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/home_primary');
-        $this->load->view('templates/footer_full');
+        $this->load->view('templates/footer_primary');
         /*
          $this->load->view('templates/header', $data);
         if( $data['logged_in'] ){
