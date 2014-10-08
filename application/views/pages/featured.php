@@ -1,4 +1,4 @@
-<div class="row mo" style="padding-left: 30px; padding-right: 30px; margin-bottom: 20px;">
+<div class="row-fluid mo" style="padding-left: 30px; padding-right: 30px; margin-bottom: 20px;">
     <div class="row" style="background: url('/assets/images/clothes-closet.jpg') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
             <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
