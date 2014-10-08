@@ -31,6 +31,11 @@ class mobilePayment extends MY_Controller
     const CASH_ON_DELIVERY = 3;
 
     /**
+     * Paypal payment type number
+     */
+    const PAYPAL_PAYMENT_TYPE = 1;
+
+    /**
      * Mobile payment constructor
      */
     function __construct() 
@@ -87,7 +92,7 @@ class mobilePayment extends MY_Controller
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
-            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember());
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
             $errorMessage = $dataCollection['errMsg'];
@@ -208,4 +213,59 @@ class mobilePayment extends MY_Controller
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
     }
 
+    public function doPaypalRequestToken()
+    {
+        $paymentType = self::PAYPAL_PAYMENT_TYPE;
+        $returnUrl = "";
+        $cancelUrl = "";
+        $isSuccess = false;
+        $cartData = unserialize($this->member->getUserdata()); 
+        if(!empty($cartData)){
+            unset($cartData['total_items'],$cartData['cart_total']);
+            $this->paymentController = $this->loadController('payment');
+            $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
+            $urlReturn = ""; 
+
+
+            if($requestData['e'] == 1){
+                $isSuccess = true;
+                $urlReturn = $requestData['d'];
+                $message = "";
+                $returnUrl = $requestData['returnUrl'];
+                $cancelUrl = $requestData['cancelUrl'];
+            }
+            else{
+                $message = $requestData['d'];
+            }
+
+            $returnArray = array(
+                    'isSuccess' => $isSuccess, 
+                    'message' => '',
+                    'url' => $urlReturn,
+                    'returnUrl' => $returnUrl,
+                    'cancelUrl' => $cancelUrl,
+                );
+        }
+        else{
+            $returnArray = array(
+                    'isSuccess' => $isSuccess, 
+                    'message' => 'You have no item in your cart',
+                    'url' => '',
+                    'returnUrl' => $returnUrl,
+                    'cancelUrl' => $cancelUrl,
+                );
+        }
+
+        echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
+
+    public function paypalReturn()
+    {
+        echo json_encode(array('isSuccess' => 1));
+    }
+
+    public function paypalCancel()
+    {
+        echo json_encode(array('isSuccess' => 1));
+    }
 }

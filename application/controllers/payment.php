@@ -77,62 +77,6 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * persist pay transaction
-     * @param  mixed $itemArray   [description]
-     * @param  integer $memberId    [description]
-     * @param  integer $paymentType [description]
-     * @return JSON
-     */
-    public function mobilePayBridge($itemArray,$memberId,$paymentType)
-    {
-        // set session
-        $this->session->set_userdata('member_id', $memberId); 
-        $this->session->set_userdata('choosen_items', $itemArray);
-
-        // convert payment type into int
-        $paymentType = intval($paymentType);
-        $errorMessage = [];
-        $success = false; 
-
-        // update cart data details
-        $qtysuccess = $this->resetPriceAndQty();
-
-        $address = $this->memberpage_model->get_member_by_id($memberId); 
-
-        $prepareData = $this->processData($itemArray,$address);
-        $grandTotal = $prepareData['totalPrice'];
-        $productstring = $prepareData['productstring'];
-        $itemList = $prepareData['newItemList'];
-
-        // generate reference number
-        $txnid = $this->generateReferenceNumber($paymentType,$memberId);
-        if($qtySuccess != count($itemArray)){
-            if($paymentType === 3){
-                $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$txnid);
-                if($return['o_success'] <= 0){
-                    $message = $return['o_message']; 
-                }
-                else{
-                    $v_order_id = $return['v_order_id'];
-                    $invoice = $return['invoice_no'];
-
-                    foreach ($itemList as $key => $value) {               
-                        $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                        $this->product_model->update_soldout_status($value['id']);
-                    }
-
-                    $this->removeItemFromCart();  
-                    $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
-                }
-            }
-        }
-        else{
-            array_push($errorMessage, 'The availability of one of your items is below your desired quantity. 
-                                        Someone may have purchased the item before you completed your payment.');
-        }
-    }
-
-    /**
      * Review cart data from mobile
      * @param  mixed $itemArray
      * @param  integer $memberId
@@ -195,6 +139,45 @@ class Payment extends MY_Controller{
             'canContinue' => $canContinue,
             'paymentType' => $paymentType,
         );
+    }
+
+    /**
+     * persist pay transaction
+     * @param  mixed $itemArray   [description]
+     * @param  integer $memberId    [description]
+     * @param  integer $paymentType [description]
+     * @return JSON
+     */
+    public function mobilePayBridge($itemArray,$memberId,$paymentType)
+    {
+        // set session
+        $this->session->set_userdata('member_id', $memberId); 
+        $this->session->set_userdata('choosen_items', $itemArray);
+
+        // update cart data details
+        $qtySuccess = $this->resetPriceAndQty();
+
+        if(intval($paymentType) === $this->PayMentPayPal){
+
+            $remove = $this->payment_model->releaseAllLock($memberId);
+            $qtysuccess = $this->resetPriceAndQty(); 
+
+            if($qtysuccess != count($itemArray)){
+                return array(
+                    'e' => '0',
+                    'd' => 'One of the items in your cart is unavailable.'
+                );
+            } 
+
+            $paypalReturnURL    = base_url().'mobile/mobilepayment/paypalReturn'; 
+            $paypalCancelURL    = base_url().'mobile/mobilepayment/paypalCancel'; 
+            $requestData = $this->createPaypalToken($itemArray,$memberId,$paypalReturnURL,$paypalCancelURL);
+
+            $urlArray = array('returnUrl' => $paypalReturnURL,'cancelUrl' => $paypalCancelURL);
+            $mergeArray = array_merge($requestData,$urlArray);
+
+            return $mergeArray;
+        }
     }
 
     /**
@@ -363,7 +346,6 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         };
 
-        $paypalMode         = $this->paypal->getMode(); 
         $paypalReturnURL    = base_url().'pay/paypal'; 
         $paypalCancelURL    = base_url().'payment/review'; 
 
@@ -388,8 +370,21 @@ class Payment extends MY_Controller{
             exit();
         } 
 
-        $address = $this->memberpage_model->get_member_by_id($member_id); 
-        
+        $paypalProcess = $this->createPaypalToken($itemList,$member_id,$paypalReturnURL,$paypalCancelURL,$paypalType);
+
+        echo json_encode($paypalProcess);
+    }
+
+    private function createPaypalToken($itemList,$memberId,$paypalReturnURL,$paypalCancelURL,$paypalType = 1)
+    {
+        $paypalMode = $this->paypal->getMode(); 
+        $productCount = count($itemList);
+
+        $cnt = 0; 
+        $dataitem = '';  
+        $paymentType = $this->PayMentPayPal; #paypal 
+
+        $address = $this->memberpage_model->get_member_by_id($memberId);
         $name = $address['consignee'];
         $street = $address['c_address']; 
         $cityDescription = $address['c_city'];
@@ -407,9 +402,12 @@ class Payment extends MY_Controller{
         $thereIsPromote = $prepareData['thereIsPromote'];
 
         if($thereIsPromote <= 0 && $grandTotal < '50'){
-            die('{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}');
+            return array(
+                'e' => '0',
+                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
+            );
         }
-        
+
         foreach ($itemList as $key => $value) {
             $value['price'] = round(floatval($value['price']),2);
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
@@ -447,21 +445,32 @@ class Payment extends MY_Controller{
 
         $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata); 
         
-        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
-        {   
+        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) 
+            || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){   
             $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
-            $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
+            $return = $this->payment_model->payment($paymentType,$grandTotal,$memberId,$productstring,$productCount,json_encode($itemList),$transactionID);
             
             if($return['o_success'] > 0){
                 $orderId = $return['v_order_id'];
                 $locked = $this->lockItem($toBeLocked,$orderId,'insert');
                 $paypalurl ='https://www'.$paypalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
-                die('{"e":"1","d":"'.$paypalurl.'"}');
-            }else{
-                die('{"e":"0","d":"'.$return['o_message'].'"}');
+                return array(
+                    'e' => '1',
+                    'd' => $paypalurl
+                );
+            }
+            else{
+                return array(
+                    'e' => '0',
+                    'd' => $return['o_message']
+                );
             }        
-        }else{
-            die('{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}');
+        }
+        else{
+            return array(
+                    'e' => '0',
+                    'd' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
+                );
         }
     }
 
@@ -722,6 +731,14 @@ class Payment extends MY_Controller{
 
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
 
+    /**
+     * Process data for the cash on delivery mode of payment
+     * @param  integer $memberId
+     * @param  string  $txnid
+     * @param  mixed   $itemList
+     * @param  integer $paymentType
+     * @return mixed
+     */
     public function cashOnDeliveryProcessing($memberId,$txnid,$itemList,$paymentType)
     {
         $address = $this->memberpage_model->get_member_by_id($memberId); 
