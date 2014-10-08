@@ -64,10 +64,10 @@ class EsVendorSubscribe extends \EasyShop\Entities\EsVendorSubscribe implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'memberId', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendorId');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'memberId', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendorId');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
     }
 
     /**
@@ -191,45 +191,45 @@ class EsVendorSubscribe extends \EasyShop\Entities\EsVendorSubscribe implements 
     /**
      * {@inheritDoc}
      */
-    public function setMemberId($memberId)
+    public function setMember(\EasyShop\Entities\EsMember $member = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMemberId', array($memberId));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMember', array($member));
 
-        return parent::setMemberId($memberId);
+        return parent::setMember($member);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMemberId()
+    public function getMember()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMemberId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMember', array());
 
-        return parent::getMemberId();
+        return parent::getMember();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setVendorId($vendorId)
+    public function setVendor(\EasyShop\Entities\EsMember $vendor = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVendorId', array($vendorId));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVendor', array($vendor));
 
-        return parent::setVendorId($vendorId);
+        return parent::setVendor($vendor);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getVendorId()
+    public function getVendor()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVendorId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVendor', array());
 
-        return parent::getVendorId();
+        return parent::getVendor();
     }
 
 }

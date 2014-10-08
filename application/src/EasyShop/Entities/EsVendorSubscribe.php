@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsVendorSubscribe
  *
- * @ORM\Table(name="es_vendor_subscribe")
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsVendorSubscribeRepository")
+ * @ORM\Table(name="es_vendor_subscribe", indexes={@ORM\Index(name="fk_es_vendor_subscribe_memberId_idx", columns={"member_id"}), @ORM\Index(name="fk_es_vendor_subscribe_vendorId_idx", columns={"vendor_id"})})
+ * @ORM\Entity
  */
 class EsVendorSubscribe
 {
@@ -22,18 +22,24 @@ class EsVendorSubscribe
     private $idVendorSubscribe;
 
     /**
-     * @var integer
+     * @var \EasyShop\Entities\EsMember
      *
-     * @ORM\Column(name="member_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
+     * })
      */
-    private $memberId;
+    private $member;
 
     /**
-     * @var integer
+     * @var \EasyShop\Entities\EsMember
      *
-     * @ORM\Column(name="vendor_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="vendor_id", referencedColumnName="id_member")
+     * })
      */
-    private $vendorId;
+    private $vendor;
 
 
 
@@ -48,48 +54,48 @@ class EsVendorSubscribe
     }
 
     /**
-     * Set memberId
+     * Set member
      *
-     * @param integer $memberId
+     * @param \EasyShop\Entities\EsMember $member
      * @return EsVendorSubscribe
      */
-    public function setMemberId($memberId)
+    public function setMember(\EasyShop\Entities\EsMember $member = null)
     {
-        $this->memberId = $memberId;
+        $this->member = $member;
 
         return $this;
     }
 
     /**
-     * Get memberId
+     * Get member
      *
-     * @return integer 
+     * @return \EasyShop\Entities\EsMember 
      */
-    public function getMemberId()
+    public function getMember()
     {
-        return $this->memberId;
+        return $this->member;
     }
 
     /**
-     * Set vendorId
+     * Set vendor
      *
-     * @param integer $vendorId
+     * @param \EasyShop\Entities\EsMember $vendor
      * @return EsVendorSubscribe
      */
-    public function setVendorId($vendorId)
+    public function setVendor(\EasyShop\Entities\EsMember $vendor = null)
     {
-        $this->vendorId = $vendorId;
+        $this->vendor = $vendor;
 
         return $this;
     }
 
     /**
-     * Get vendorId
+     * Get vendor
      *
-     * @return integer 
+     * @return \EasyShop\Entities\EsMember 
      */
-    public function getVendorId()
+    public function getVendor()
     {
-        return $this->vendorId;
+        return $this->vendor;
     }
 }
