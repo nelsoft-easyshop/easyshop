@@ -166,7 +166,14 @@ class PaymentService
      *
      * @var EasyShop\Product\ProductManager
      */
-    private $productManager;
+    public $productManager;
+
+    /**
+     * Post Array
+     *
+     * @var mixed
+     */
+    private $postArray;
 
     /**
      * Constructor
@@ -445,7 +452,7 @@ class PaymentService
      *
      * @return mixed
      */
-    public function computeFeeAndParseData($itemList, $address, $pointsAllocated = "0.00")
+    public function computeFeeAndParseData($itemList, $address)
     {
         $city = ($address > 0 ? $address :  0);
         $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
@@ -461,21 +468,8 @@ class PaymentService
         $totalAdditionalFee = 0;
         $toBeLocked = array();
         $promoItemCount = 0;
-        $totalPointsAllowable = "0.00";
-
+        
         foreach ($itemList as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->find(intval($value['id']));
-            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
-        }
-
-        // cap points with respect to total points of items (avoid going above allowed limit of point spent)
-        $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
-
-        foreach ($itemList as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->find(intval($value['id']));
-            $pointDeductable = bcmul($pointsAllocated, bcdiv($prod->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
             $sellerId = $value['member_id'];
             $productId = $value['id'];
             $orderQuantity = $value['qty'];
@@ -491,7 +485,7 @@ class PaymentService
             
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $totalAdditionalFee += $otherFee;
-            $total =  round(floatval(bcsub($value['subtotal'], bcmul($pointDeductable, $value['qty'], 10), 10))) + $otherFee;
+            $total =  $value['subtotal'] + $otherFee;
             $optionCount = count($value['options']);
             $optionString = '';
             foreach ($value['options'] as $keyopt => $valopt) {
@@ -530,7 +524,7 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$paymentMethod)
+    function validateCartData($carts,$paymentMethod, $pointsAllocated = "0.00")
     {
         $condition = false;
 
@@ -540,6 +534,21 @@ class PaymentService
 
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
+        $totalPointsAllowable = "0.00";
+
+        foreach ($itemArray as $key => $value) {
+            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->find(intval($value['id']));
+            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
+        }
+
+        if(intval($totalPointsAllowable) === 0){
+            $totalPointsAllowable = "1.00";
+            $pointsAllocated = "0.00";
+        }
+        else{
+            $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
+        }
 
         foreach($itemArray as $key => $value){
 
@@ -548,6 +557,8 @@ class PaymentService
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->find($productId);
+
+            $pointDeductable = bcmul($pointsAllocated, bcdiv($productArray->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
 
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
@@ -563,6 +574,7 @@ class PaymentService
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
+            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
@@ -586,99 +598,27 @@ class PaymentService
         // Initialize gateways
         $this->initializeGateways($paymentMethods);
 
-        // Set status response
-        $response['status'] = 'f';
-        $productCount = count($validatedCart['itemArray']);
+        /* PUT PAYMENT GATEWAY PAY HERE*/
+        $returnValue = $this->primaryGateway->pay($validatedCart, $memberId, $this);
 
-        // get address Id
-        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                    ->getShippingAddress(intval($memberId));
-
-        // Compute shipping fee
-        $pointSpent = $this->pointGateway ? $this->pointGateway->getParameter('amount') : "0";
-        $prepareData = $this->computeFeeAndParseData($validatedCart['itemArray'], intval($address), $pointSpent);
-
-        $grandTotal = $prepareData['totalPrice'];
-
-        $this->primaryGateway->setParameter('amount', $grandTotal);
-
-        $productString = $prepareData['productstring'];
-        $itemList = $prepareData['newItemList']; 
-
-        $txnid = $this->primaryGateway->generateReferenceNumber($memberId);        
-        $response['txnid'] = $txnid;
-        if($validatedCart['itemCount'] === $productCount){
-            
-            $returnValue = $this->primaryGateway->pay();
-
-            $return = $this->persistPayment(
-                $grandTotal, 
-                $memberId, 
-                $productString, 
-                $productCount, 
-                json_encode($itemList),
-                $txnid,
-                $this->primaryGateway
-                );
-
-            if($return['o_success'] <= 0){
-                 $returnValue['message'] = $return['o_message'];
-            }
-            else{
-                $v_order_id = $return['v_order_id'];
-                $invoice = $return['invoice_no'];
-                $response['status'] = 's';
-
-                foreach ($itemList as $key => $value) {  
-                    $itemComplete = $this->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                    $this->productManager->updateSoldoutStatus($value['id']);
-                }
-
-                /* remove item from cart function */ 
-                /* send notification function */ 
-                
-                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                            ->find($v_order_id);
-
-                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($this->primaryGateway->getParameter('paymentType'));
-
-                $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($this->primaryGateway->getParameter('amount'));
-                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                $paymentRecord->setOrder($order);
-                $paymentRecord->setPaymentMethod($paymentMethod);
-
-                $this->em->persist($paymentRecord);
-                $this->em->flush();
-
-                if($this->pointGateway !== NULL){
-
-                    $this->pointGateway->setParameter('memberId', $memberId);
-                    $this->pointGateway->setParameter('itemArray', $return['item_array']);
-
-                    $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($this->pointGateway->getParameter('paymentType'));
-
-                    $trueAmount = $this->pointGateway->pay();
-
-                    $paymentRecord = new EsPaymentGateway();
-                    $paymentRecord->setAmount($trueAmount);
-                    $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                    $paymentRecord->setOrder($order);
-                    $paymentRecord->setPaymentMethod($paymentMethod);
-
-                    $this->em->persist($paymentRecord);
-                    $this->em->flush();
-                }
-            }
-        }
-        else{
-            $returnValue['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
-        }
-
-        $response = array_merge($response, $returnValue);
-        return $response;
+        return $returnValue;
     }
+
+    public function postBack($paymentMethods, $validatedCart, $memberId)
+    {
+        // Initialize gateways
+        $this->initializeGateways($paymentMethods);
+
+        // Execute payment gateway postback method
+        $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this);
+
+        return $returnValue;
+    }
+
+    public function getPointGateway()
+    {
+        return $this->pointGateway;
+    }
+
 }
 
