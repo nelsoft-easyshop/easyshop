@@ -244,8 +244,8 @@
     <div class="div_cart_modal_container">
         Are you sure you would like to remove this item from the shopping cart?
     </div>
+    <button class="btn btn-default-3">Yes</button>
     <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
-    <button class="btn btn-default-3">Ok</button>
 </div>
 
 <div id="navigator">
