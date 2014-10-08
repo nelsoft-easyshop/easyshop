@@ -49,34 +49,39 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-            
-        $xmlResourceService = $this->serviceContainer['xml_resource'];
-        $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
 
-        $layout_arr = array();
-        if(!$this->session->userdata('member_id')){
-            foreach($home_content['section'] as $section){
-                array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
-            }
-        }
 
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
-            'data' => $home_content,
-            'sections' => $layout_arr,
+
             'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
-
+        
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         
-        if( $data['logged_in'] ){
+        if( $data['logged_in'] && $view !== 'basic'){
             $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
             $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
+        
+            $xmlResourceService = $this->serviceContainer['xml_resource'];
+            $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
+
+            $layout_arr = array();
+            if(!$this->session->userdata('member_id') || $view === 'basic'){
+                foreach($home_content['section'] as $section){
+                    array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
+                }
+            }
+        
+            $data['data'] = $home_content;
+            $data['sections'] = $layout_arr;
+
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
