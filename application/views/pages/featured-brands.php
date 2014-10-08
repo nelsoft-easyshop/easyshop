@@ -10,7 +10,7 @@
                     </header>
                 
                     <div class="carousel-controls div-slider-control slider-brand">
-                        <span class="pull-right">
+                        <span class="pull-right brand-nav">
                             <a id="popular-brand-prev"><i class="fa fa-angle-left fa-brand-prev"></i></a>
                             <a id="popular-brand-next"><i class="fa fa-angle-right fa-brand-next"></i></a>
                         </span>
