@@ -16,7 +16,7 @@ $(document).ready(function() {
         itemsDesktopSmall: [979,2],
         itemsTablet: [768,2],
         itemsMobile : [479,1],
-        navigation: true,
+        navigation: false,
         beforeInit : function(elem){
             random(elem);
         }
