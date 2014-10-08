@@ -25,6 +25,9 @@ class SocialMediaController extends MY_Controller
         echo $facebookData->getProperty('email');
         if ($facebookData->getProperty('email')) {
             $validateFacebookData = $this->socialMediaManager->authenticateAccount($facebookData->getId(), 'Facebook');
+            print "<pre>";
+            print_r($validateFacebookData);
+            print "</pre>";
             if (!$validateFacebookData) {
                 echo '1';
                 $response = $this->socialMediaManager->registerAccount(
