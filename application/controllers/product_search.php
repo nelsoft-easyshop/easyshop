@@ -186,7 +186,7 @@ class product_search extends MY_Controller {
                     'environment' => 'mobile'), TRUE );
 
         $data = array(
-                'title' => (($response['string']==='')?"Search":$response['string']).'| Easyshop.ph'
+                'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
                 );
 
         $data = array_merge($data, $this->fill_header());
