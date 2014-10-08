@@ -51,7 +51,7 @@
 }
 
 .slider-item {
-	width:50%;
+/*	width:50%;*/
 	float:left;
 	margin:0;
 	position:relative;
@@ -324,19 +324,19 @@
 	}
 	
 	.bx-wrapper .bx-controls-direction a {
-		width:50px;
+		width:36px;
 		height:36px;
 		margin-top: -18px;
 	}
 
 	.bx-wrapper .bx-prev {
-		background-position: 0 -101px;
+		background-position: -10px -102px
 		
 	}
 
 	.bx-wrapper .bx-next {
 		right: 0;
-		background-position: -48px -101px;
+		background-position: -55px -102px
 	}
 
 	.bx-wrapper .bx-pager,

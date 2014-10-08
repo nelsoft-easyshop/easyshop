@@ -1,81 +1,11 @@
 /* =============================================
 ---------------------  Header -----------------
 ==============================================*/
-#header .dropdown-language .dropdown-menu > li > a {
-  padding:8px 12px;
-}
 
 #header .btn {
   padding: 7px 12px;
   border-radius:0;
 }
-
-#header .dropdown-menu {
-  min-width: 100%;
-  padding:0;
-  margin:0;
-  background-color: #e2e2e2;
-  border: none;
-  border-radius: 0;
-  -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
-          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
-}
-
-#header .dropdown-menu .divider {
-  background-color: #fff;
-}
-
-#header .dropdown-menu > li > a {
-  display:block;
-  width:100%;
-  padding:0;
-  font-size:13px;
-  line-height: 20px;
-  padding:6px 13px;
-  color: #444645;
-  border-top:1px solid #fff;
-}
-
-#header .dropdown-menu > li > a:hover,
-#header .dropdown-menu > li > a:focus {
-  color: #fff;
-  text-decoration: none;
-  background-color: #ff530d;
-}
-
-#header .header-top-dropdowns  .btn-custom {
-	background-color:#ff893b;
-	color:#7f7d74;
-}
-
-#header .header-top-dropdowns  .btn-group:hover .btn-custom ,
-#header .header-top-dropdowns  .btn-custom:hover, 
-#header .header-top-dropdowns  .btn-custom:focus, 
-#header .header-top-dropdowns  .btn-custom:active, 
-#header .header-top-dropdowns  .btn-custom.active,
-#header .header-top-dropdowns  .open .dropdown-toggle.btn-custom,
-#header .header-top-dropdowns .dropdown-menu > li > a:hover  {
-	background-color:#ff6138;
-	color:#fff;
-}
-
-/* active hover for bootstrap dropdown */
-/* on click still stay active */
-.btn-group:hover  .dropdown-menu {
-	display:block;
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 #main-nav-container #main-nav #responsive-nav ul li:first-child {
 	border-top:none;
@@ -257,23 +187,25 @@
 }
 
 
-#quick-access {
-	float:right;
-	position:relative;
-	margin-top:7.5px;
-}
 /* Search Navigation */
 
-#nav-searchbar {
-    border-radius: 4px;
-    box-sizing: border-box;
-    display: block;
-    margin: 0;
-    overflow: hidden;
-    position: relative;
-    white-space: nowrap;
-    width: auto;
+.nav-searchfield-width input[type="text"] {
+	max-width: 360px;
+	width: 100%;
 }
+
+.nav-submit-button input[type="submit"],
+.sticky-search-wrapper input[type="submit"] {
+    background-color: #ff893b;
+    background-position: -946px -250px;
+    border: none;
+    height: 33px;
+    width: 45px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
 #nav-searchbar .nav-submit-button {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -293,161 +225,12 @@
     width: auto;
     z-index: 1;
 }
-#nav-searchbar .nav-submit-button button {
-	padding: auto 20px;
-}
-#nav-searchbar #nav-search-in {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-position: 0 -532px;
-    border-color: #bdbdbd #cdcdcd #cdcdcd;
-    border-image: none;
-    border-radius: 4px 0 0 4px;
-    border-right: 1px solid #cdcdcd;
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
-    display: inline-block;
-    float: left;
-    height: 35px;
-    overflow: hidden;
-    position: relative;
-    width: 130px;
-}
-#nav-search-in #nav-search-in-content {
-    display: inline-block;
-}
-#nav-searchbar #nav-search-in-content {
-    color: #777;
-    font-family: "Conv_HelveticaLTStd-Light",arial,"sans-serif";
-    font-size: 12px;
-    height: 35px;
-    line-height: 33px;
-    margin: 0 21px 0 9px;
-    text-indent: 1px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: absolute;
-}
-#nav-search-in.nav-facade-active .nav-down-arrow {
-    display: block;
-}
-.nav-facade-active #searchDropdownBox {
-    opacity: 0;
-    visibility: visible;
-}
-#nav-searchbar #nav-search-in .nav-down-arrow {
-    border-color: #a0a0a0 transparent transparent;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-style: solid;
-    border-width: 4px 4px 0;
-    font-size: 0;
-    height: 0;
-    line-height: 0;
-    position: absolute;
-    right: 8px;
-    top: 14px;
-    width: 0;
-}
-#nav-searchbar .nav-facade-active #searchDropdownBox {
-    cursor: pointer;
-    height: 29px;
-    left: 0;
-    top: 0;
-    width: auto;
-}
-#nav-searchbar .nav-facade-active #searchDropdownBox {
-    cursor: pointer;
-}
-
-#twotabsearchtextbox {
-	width: 89%;
-}
-
-#nav-searchbar #nav-iss-attach {
-    height: 100%;
-    padding: 0;
-    position: relative;
-    white-space: normal;
-}
-
-.quick-search-form  {
-	position:relative;
-}
-
-#header .dropdown-cart-menu-container .btn,
-.quick-search-form .btn {
-  padding: 7.5px 10px;
-  border-radius:0;
-  border:none;
-}
-
-#header .dropdown-cart-menu-container:hover .btn.dropdown-toggle,
-#header .dropdown-cart-menu-container .open  .btn.dropdown-toggle {
-	background: #ff6138;
-	color:#fff;
-}
-
-#quick-search {
-	width:45px;
-	height:35px;
-	background-image: url(../images/sprites/sprite.png);
-	background-position: 4px -116px;
-	border:none;
-}
-
-#quick-search:focus,
-#quick-search:active {
-	border:none;
-	outline:none;
-}
-
-.quick-search-form .form-control {
-	height: 35px;
-	padding: 8px 15px;
-	color: #fff;
-	font-size:13px;
-	line-height:20px;
-	background-color: #595959;
-	border: 1px solid transparent;
-	border-radius: 0 !important;
-	-webkit-box-shadow:none;
-		  box-shadow:none;
-}
-
-.quick-search-form .form-control:focus {
-	border-color:#555555;
-	outline: 0;
-	-webkit-box-shadow:none;
-		  box-shadow:none;
-}
-
-.quick-search-form .form-control:-moz-placeholder {
-	color: #fff;
-}
-
-.quick-search-form .form-control::-moz-placeholder {
-	color: #fff;
-}
-
-.quick-search-form .form-control:-ms-input-placeholder {
-	color: #fff;
-}
-
-.quick-search-form .form-control::-webkit-input-placeholder {
-	color: #fff;
-}
 
 .dropdown-cart-menu-container {
 	padding-bottom:8px;
 	position: relative;
 	margin-left:20px;
 }
-
-
 
 /** slider **/
 .home-banners div:nth-child(1) {
@@ -459,7 +242,7 @@
 }
 
 .home-banners div:nth-child(3) {
-padding: 0 15px 0 5px;
+	padding: 0 15px 0 5px;
 }
 
 /* =============================================
@@ -1386,7 +1169,6 @@ padding: 0 15px 0 5px;
 	}
 	
 }
-
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
