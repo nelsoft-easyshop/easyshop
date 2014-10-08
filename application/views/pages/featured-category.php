@@ -1,4 +1,4 @@
-<div class="row row-category">        
+<div class="row-fluid row-category">        
     <div class="col-md-12">
        <div class="purchased-items-container carousel-wrapper">
             <header class="content-title">
