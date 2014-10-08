@@ -5,31 +5,30 @@
 
 <section id="content">       
     <div id="slider-edge">
-        <div class="left-side-shadow"></div><!-- End .left-side-shadow -->
-        <div class="right-side-shadow"></div><!-- End .left-side-shadow -->
+        <div class="left-side-shadow"></div>
+        <div class="right-side-shadow"></div>
         <div id="bxslider" class="container">
             <ul class="bxslider">
                 <li>
                     <div class="slider-item">
                         <img src="<?php echo base_url() ?>assets/images/homeslider/slide1_1.jpg" alt="Slider item 1">
-                    </div><!-- End .slider-item -->
+                    </div>
                     <div class="slider-item">
                         <img src="<?php echo base_url() ?>assets/images/homeslider/slide2_1.jpg" alt="Slider item 2">                        
-                    </div><!-- End .slider-item -->
+                    </div>
                 </li>
                 <li>
                     <div class="slider-item">
                         <img src="<?php echo base_url() ?>assets/images/homeslider/slide3_1.jpg" alt="Slider item 3">
-                    </div><!-- End .slider-item -->
+                    </div>
                     <div class="slider-item">
                         <img src="<?php echo base_url() ?>assets/images/homeslider/slide4_1.jpg" alt="Slider item 4">                        
-                    </div><!-- End .slider-item -->
+                    </div>
                 </li>
             </ul>
-        </div><!-- End #bxslider -->
-    </div><!-- #slider-edge -->
-
-    <div class="lg-margin"></div><!-- Space -->
+        </div>
+    </div>
+    <div class="lg-margin"></div>
     <div class="container">
         <?php
             include("featured.php");
@@ -43,9 +42,8 @@
         
     </div>
     <?php
-            include("featured-brands.php");
-        ?>
-    
+        include("featured-brands.php");
+    ?>
 </section>
 
 <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
