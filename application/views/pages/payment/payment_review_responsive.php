@@ -86,7 +86,7 @@
                     </table>
                 <?php endif; ?>
                 <!--<a href="javascript:void(0);"  class="link_address btn btn-default btn-gray" style="text-decoration: none;">Change Shipping Address</a> -->
-                <a class="btn btn-default btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Address</a> 
+                <a class="btn btn-default btn-gray" style="text-decoration: none;" data-toggle="modal" data-target="#change_ship">Change Shipping Address</a> 
             </div>
         </div>
         <div class="col-md-6">
@@ -159,7 +159,9 @@
 						<td colspan="2" align="right">
 							<b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
 						</td>
-					<!-- </tr>
+					</tr>
+                    
+                    <tr id ="pointInput">
                         <td colspan="2">
                             Point Allocation:
                         </td>
@@ -167,21 +169,14 @@
                             <input type="number" id="pointsAllocated" name="pointsAllocated" value="20" min="0" value="0" max="<?php echo $maxPoint; ?>">
                             <br/> <br/> Max points allowable: <?php echo $maxPoint; ?>
                         </td>
-                    </tr>  -->
+                    </tr> 
+                    
+
 				</table>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
-			<div class="display-when-desktop-payment">
-			 <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-12">
             <div class="display-when-desktop-payment">
              <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>

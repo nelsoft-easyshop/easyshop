@@ -1442,6 +1442,10 @@ class Payment extends MY_Controller{
      *              "isLock" : false
      *      }
      *  }
+     *
+     *
+     *  The redirect part on this function will only execute iff the payment gateway
+     *  has no postback requirements
      *   
      */
     function pay()
@@ -1470,6 +1474,10 @@ class Payment extends MY_Controller{
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 
+    /**
+     * Postback function for PayPal
+     * 
+     */
     public function postBackPayPal()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
@@ -1508,8 +1516,6 @@ class Payment extends MY_Controller{
     
         extract($response);
         $this->generateFlash($txnid,$message,$status);
-
-        // die();
 
         redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }

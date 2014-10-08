@@ -27,18 +27,19 @@ class EsProductItemLockRepository extends EntityRepository
                         ->setParameter('product_id', $productId)
                         ->getQuery(); 
         return $result = $query->getResult();
-
-             
     }
 
-    // public function releaseAllLock($memberId)
-    // {
-        
-    // }
+    public function getLockCount($orderId)
+    {
+        $query = $this->_em->createQueryBuilder()
+                        ->select('count(lck.idItemLock) AS cnt')
+                        ->from('EasyShop\Entities\EsProductItemLock','lck')
+                        ->where('lck.order = :orderId')
+                        ->setParameter('orderId', $orderId) 
+                        ->getQuery()
+                        ->getSingleScalarResult();
+        return intval($query);
+    }
+       
 }
 
-// $query = " DELETE FROM `es_product_item_lock` WHERE id_item_lock IN (
-//                 SELECT * FROM (
-//                     SELECT b.`id_item_lock` FROM es_order a, `es_product_item_lock` b WHERE a.buyer_id = :member_id AND a.`order_status` = 99 AND a.`id_order` = b.`order_id`) 
-//                 AS tbl)
-//         ";

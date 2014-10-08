@@ -7,10 +7,16 @@ use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 
+
 /**
  * Cash On Delivery Gateway Class
  *
  * @author LA roberto <la.roberto@easyshop.ph>
+ *
+ *
+ * Params needed
+ *      method:"CashOnDelivery"
+ *      lastDigit:$('input[name=paymentToken]').val().slice(-1)
  */
 class CashOnDeliveryGateway extends AbstractGateway
 {
@@ -161,10 +167,4 @@ class CashOnDeliveryGateway extends AbstractGateway
     }
 
 }
-
-/*
-    Params needed
-        method:"CashOnDelivery", 
-        lastDigit:$('input[name=paymentToken]').val().slice(-1)
-*/
 

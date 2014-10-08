@@ -29,3 +29,4 @@ class EsOrderHistoryRepository extends EntityRepository
         return $orderHistory;
     }
 }
+
