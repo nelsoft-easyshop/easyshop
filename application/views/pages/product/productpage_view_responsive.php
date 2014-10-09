@@ -446,7 +446,7 @@
                             <?php elseif($uid == $product['sellerid']): ?>
                             <p class=""><!-- Unable to review own product --></p>
                             <?php else: ?>
-                            <p class="" style="color:#f18200;"><strong>Sign-in & purchase item to write a review</strong></p>
+                            <p class="" style="color:#f18200;"><strong>Sign-in &amp; purchase item to write a review</strong></p>
                             <?php endif; ?>
                         </div>
                         <div id="write_review_content">
@@ -457,7 +457,7 @@
                                     <table width="100%" style="margin-left:-10px;" class="font-roboto table-write-review">
                                         <tr>
                                             <td style="padding: 15px 0px 5px 0px;" width="10%" ]>
-                                                <label>Subject:*</label>
+                                                <label>Subject <span style="color:red;">*</span></label>
                                             </td>
                                             <td style="padding: 15px 0px 5px 0px;" width="70%">
                                                 <input type="text" class="form-control no-border" style="width: 100% !important; height: 40px; !important;" name="subject" maxlength="150">
@@ -472,12 +472,10 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 5px 0px 5px 0px;" colspan="2">
-                                                <label>Comment *</label>
+                                            <td style="padding: 5px 0px 5px 0px;">
+                                                <label>Comment <span style="color:red;">*</span></label>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 0px 0px 0px 27px;" colspan="2">
+                                            <td style="padding: 10px 0 0 0;">
                                                 <textarea class="form-control no-border" style="width: 100% !important;" name="comment"></textarea>
                                             </td>
                                         </tr>
