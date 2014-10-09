@@ -1269,6 +1269,11 @@ div.sell_steps4 ul li:nth-child(4) a {
     border: 1px solid #f18200;   
 }
 
+.loading-text {
+    display: block;
+    text-align: center;
+}
+
 #list div.active_img .makeprimary {
     color: #f18200;
 }

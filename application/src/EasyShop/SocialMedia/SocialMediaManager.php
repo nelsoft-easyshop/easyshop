@@ -10,6 +10,7 @@ class SocialMediaManager
 {
 
     const FACEBOOK = 1;
+    
     const GOOGLE = 2;
     
     /**
@@ -25,15 +26,45 @@ class SocialMediaManager
      * @var EasyShop\User\UserManager;
      */
     private $userManager;
+    
+    /**
+     * Facebook Redirect login helper
+     *
+     * @var Facebook\FacebookRedirectLoginHelper
+     */
+    private $fbRedirectLoginHelper;
+    
+    /**
+     * Google Client
+     *
+     * @var Google_Client
+     */
+    private $googleClient;
 
-    public function __construct($appId, $secret, $fbRedirectLoginHelper, $googleClient, $em, $userManager)
+    /**
+     * Oauth Configuration
+     *
+     * @var mixed
+     */
+    private $oauthConfig;
+
+    
+    /**
+     * Class constructor. Loads dependencies.
+     *
+     * @param Facebook\FacebookRedirectLoginHelper $fbRedirectLoginHelper
+     * @param Google_Client $googleClient
+     * @param Doctrine\ORM\EntityManager $em
+     * @param EasyShop\User\UserManager $userManager
+     * @param EasyShop\Core\ConfigLoader $configLoader
+     */
+    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader)
     {
-        $this->appId = $appId;
-        $this->secret = $secret;
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
         $this->em = $em;
         $this->userManager = $userManager;
+        $this->oauthConfig = $configLoader->getItem('oauth');
     }
 
     /**
@@ -75,7 +106,9 @@ class SocialMediaManager
     {
         switch ($account) {
             case self::FACEBOOK :
-                FacebookSession::setDefaultApplication($this->appId, $this->secret);
+                session_start();
+                $facebookConfig = $this->oauthConfig['facebook']['key'];
+                FacebookSession::setDefaultApplication($facebookConfig['appId'], $facebookConfig['secret']);
                 $session = $this->fbRedirectLoginHelper->getSessionFromRedirect();
                 $userProfile = (new \Facebook\FacebookRequest(
                             $session, 'GET', '/me'
@@ -166,4 +199,26 @@ class SocialMediaManager
         $date =  new DateTime('now');
         return sha1($memberId + $date->format('Y-m-d H:i:s'));
     }
+    
+        
+    /**
+     * Returns the facebook type constant
+     *
+     * @return integer
+     */
+    public function getFacebookTypeConstant()
+    {
+        return self::FACEBOOK;
+    }
+    
+    /**
+     * Returns the google type constant
+     *
+     * @return integer
+     */
+    public function getGoogleTypeConstant()
+    {
+        return self::GOOGLE;
+    }
+
 }
