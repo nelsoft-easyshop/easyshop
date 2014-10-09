@@ -309,7 +309,7 @@ class PayPalGateway extends AbstractGateway
      * Postback function for paypal
      * 
      */
-    public function postBackMethod($validatedCart, $memberId, $paymentService)
+    public function postBackMethod($validatedCart, $memberId, $paymentService, $params=[])
     {
         // Point Gateway
         $pointGateway = $paymentService->getPointGateway();

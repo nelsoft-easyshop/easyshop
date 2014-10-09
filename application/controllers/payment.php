@@ -1598,14 +1598,55 @@ class Payment extends MY_Controller{
         $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
-        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
     
         extract($response);
         $this->generateFlash($txnid,$message,$status);
 
         redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
+
+    public function returnDragonPay()
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+        $paymentService = $this->serviceContainer['payment_service'];
+        $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
+
+        $params['txnId'] = $this->input->get('txnid');
+        $params['refNo'] = $this->input->get('refno');
+        $params['status'] =  $this->input->get('status');
+        $params['message'] = $this->input->get('message');
+        $params['digest'] = $this->input->get('digest');
+
+        $response = $paymentService->returnMethod($paymentMethods, $params);
+        
+        extract($response);
+        $this->generateFlash($txnId,$message,$status);
+        redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+    }
+
+    public function postBackDragonPay()
+    {
+        header("Content-Type:text/plain");
+        $paymentService = $this->serviceContainer['payment_service'];
+        $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
+
+        $params['txnId'] = $this->input->post('txnid');
+        $params['refNo'] = $this->input->post('refno');
+        $params['status'] =  $this->input->post('status');
+        $params['message'] = $this->input->post('message');
+        $params['digest'] = $this->input->post('digest');
+
+        $response = $paymentService->postBack($paymentMethods, null, null, $params);
+
+        echo 'result=OK'; 
+    }
+
 }
+
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */
+

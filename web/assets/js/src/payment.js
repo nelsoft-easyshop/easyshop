@@ -141,11 +141,43 @@ $(document).ready(function(){
 // -- DRAGON PAY PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.btnDp',function () {
-        var action = config.base_url + "payment/payDragonPay"; 
+        var action = '';
+        var postData = ''; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
         
+        if(PAY_BY_GATEWAY){
+            var pointAllocated = $('#pointsAllocated').val();
+            if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
+                var paymentMethod = JSON.stringify(
+                {
+                    DragonPayGateway:{
+                        method:"DragonPay", 
+                    },
+                    PointGateway:{
+                        method:"Point",
+                        amount:pointAllocated,
+                        pointtype: "purchase"
+                    }
+                });
+            }
+            else{
+                var paymentMethod = JSON.stringify(
+                {
+                    DragonPayGateway:{
+                        method:"DragonPay", 
+                    }
+                });
+            }
+            postData = csrfname+"="+csrftoken+"&paymentMethods="+paymentMethod;
+            action = config.base_url + "pay/pay";
+        }
+        else{
+            postData = csrfname+"="+csrftoken;
+            action = config.base_url + "payment/payDragonPay";
+        }
+
         if($('#chk_dp').is(':checked')){
             $(this).val('Please wait...'); 
             $(this).attr('disabled','disabled');
@@ -153,7 +185,7 @@ $(document).ready(function(){
                 type: "POST",
                 url:  action, 
                 dataType: "json",
-                data: csrfname+"="+csrftoken, 
+                data: postData, 
                 success: function(d) {
                     if(d.e == 1){ 
                         window.location.replace(d.u);
