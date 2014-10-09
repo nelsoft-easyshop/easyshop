@@ -1226,7 +1226,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
                         <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
                         <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
-                        <span class="loading-text">Loading text</span>\
+                        <span class="loading-text">0 %</span>\
                         <a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a>\
                         <div class="loadingfiles"></div>\
                         </div>');
@@ -1322,6 +1322,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total * 100.0;
                         console.log(percentComplete);
+                        $('.loading-text').html(percentComplete + ' %');
                     }
                 }, false);
                 return xhr;
