@@ -28,7 +28,7 @@ class PointGateway extends AbstractGateway
      * Pay method for Point Gateway Class
      * 
      */
-    public function pay()
+    public function pay($param1 = null, $param2 = null, $param3 = null)
     {
         $memberId = $this->parameters['memberId'];
         $itemArray = $this->parameters['itemArray'];

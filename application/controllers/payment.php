@@ -1526,23 +1526,29 @@ class Payment extends MY_Controller{
      *              "isLock" : false
      *      }
      *  }
+     *
+     *
+     *  The redirect part on this function will only execute iff the payment gateway
+     *  has no postback requirements
      *   
      */
     function pay()
     {
-        if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
-        
+
         $carts = $this->session->all_userdata();
+
+        $paymentService = $this->serviceContainer['payment_service'];
 
         /* JSON Decode*/
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
 
-        // Validate Cart Data
-        $paymentService = $this->serviceContainer['payment_service'];
+        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
-        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method']);
+        // Validate Cart Data and subtract points
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
@@ -1550,6 +1556,52 @@ class Payment extends MY_Controller{
         extract($response);
         $this->generateFlash($txnid,$message,$status);
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+    }
+
+    /**
+     * Postback function for PayPal
+     * 
+     */
+    public function postBackPayPal()
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+
+        $carts = $this->session->all_userdata();
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        // get credit points if there are any
+        $points = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
+                        ->findOneBy(["member" => intval($this->session->userdata('member_id'))]);
+        
+        // Create a fake decoded JSON for payment service
+        if($points && intval($points->getCreditPoint()) > 0 ){
+            $paymentMethods = [
+                "PaypalGateway" => 
+                    ["method" => "PayPal", "getArray" => $this->input->get()],
+                "PointGateway" =>
+                    ["method" => "Point", "amount" => $points->getCreditPoint(), "pointtype" => "purchase"]
+            ];
+            $points->setCreditPoint(0);
+            $this->serviceContainer['entity_manager']->flush();
+        }
+        else{
+            $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
+        }
+        
+        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
+
+        // Validate Cart Data
+        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+
+        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+    
+        extract($response);
+        $this->generateFlash($txnid,$message,$status);
+
+        redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 }
 
