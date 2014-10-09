@@ -1571,7 +1571,7 @@ class Payment extends MY_Controller{
         }
 
         $carts = $this->session->all_userdata();
-		$paymentService = $this->serviceContainer['payment_service'];
+        $paymentService = $this->serviceContainer['payment_service'];
 
         // get credit points if there are any
         $points = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
@@ -1611,7 +1611,7 @@ class Payment extends MY_Controller{
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
-		$paymentService = $this->serviceContainer['payment_service'];
+        $paymentService = $this->serviceContainer['payment_service'];
         $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
 
         $params['txnId'] = $this->input->get('txnid');
@@ -1619,7 +1619,7 @@ class Payment extends MY_Controller{
         $params['status'] =  $this->input->get('status');
         $params['message'] = $this->input->get('message');
         $params['digest'] = $this->input->get('digest');
-		
+
         $response = $paymentService->returnMethod($paymentMethods, $params);
         
         extract($response);
@@ -1630,7 +1630,7 @@ class Payment extends MY_Controller{
     public function postBackDragonPay()
     {
         header("Content-Type:text/plain");
-		$paymentService = $this->serviceContainer['payment_service'];
+        $paymentService = $this->serviceContainer['payment_service'];
         $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
 
         $params['txnId'] = $this->input->post('txnid');
@@ -1638,7 +1638,7 @@ class Payment extends MY_Controller{
         $params['status'] =  $this->input->post('status');
         $params['message'] = $this->input->post('message');
         $params['digest'] = $this->input->post('digest');
-		
+
         $response = $paymentService->postBack($paymentMethods, null, null, $params);
 
         echo 'result=OK'; 
@@ -1649,3 +1649,4 @@ class Payment extends MY_Controller{
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */
+

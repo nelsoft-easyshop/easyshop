@@ -2,7 +2,7 @@
 
 $config = array(
             'bypassURI' => array(
-							'/pay/postBackDragonPay',
+                            '/pay/postBackDragonPay',
                             '/payment/dragonPayPostBack',
                             '/payment/ipn2',
                             '/payment/pesoPayDataFeed',
