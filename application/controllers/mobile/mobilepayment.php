@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+
 class mobilePayment extends MY_Controller 
 {
     /**
@@ -24,16 +26,6 @@ class mobilePayment extends MY_Controller
      * @var EasyShop\Entities\EsMember
      */
     private $member;
-
-    /**
-     * Cash on delivery payment type number
-     */
-    const CASH_ON_DELIVERY = 3;
-
-    /**
-     * Paypal payment type number
-     */
-    const PAYPAL_PAYMENT_TYPE = 1;
 
     /**
      * Mobile payment constructor
@@ -192,7 +184,7 @@ class mobilePayment extends MY_Controller
 
     public function doMobilePayCod()
     {   
-        $paymentType = self::CASH_ON_DELIVERY;
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
@@ -215,7 +207,7 @@ class mobilePayment extends MY_Controller
 
     public function doPaypalRequestToken()
     {
-        $paymentType = self::PAYPAL_PAYMENT_TYPE;
+        $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
         $returnUrl = "";
         $cancelUrl = "";
         $isSuccess = false;

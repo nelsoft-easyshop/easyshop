@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+
 class Payment extends MY_Controller{
 
     function __construct() {
@@ -382,7 +384,7 @@ class Payment extends MY_Controller{
 
         $cnt = 0; 
         $dataitem = '';  
-        $paymentType = $this->PayMentPayPal; #paypal 
+        $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
 
         $address = $this->memberpage_model->get_member_by_id($memberId);
         $name = $address['consignee'];
@@ -790,11 +792,11 @@ class Payment extends MY_Controller{
         $qtysuccess = $this->resetPriceAndQty();
         $status = 'f';
         if($lastDigit == 2) {
-            $paymentType = $this->PayMentDirectBankDeposit;
+            $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
             $textType = 'directbankdeposit';
         }
         else{
-            $paymentType = $this->PayMentCashOnDelivery; 
+            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
             $textType = 'cashondelivery';
         }
 
