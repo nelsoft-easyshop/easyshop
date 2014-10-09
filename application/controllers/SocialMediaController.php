@@ -121,7 +121,7 @@ class SocialMediaController extends MY_Controller
         $loginCount = $userData->getLoginCount();
         $userData->setLoginCount(intval($loginCount) + 1);
         $userData->setUsersession($session);
-        $userData->setLastLoginDatetime(date('Y-m-d H:i:s'));
+        $userData->setLastLoginDatetime(new DateTime('now'));
         $userData->setLastLoginIp($this->serviceContainer['http_request']->getClientIp());
         $userData->setFailedLoginCount(0);
 
