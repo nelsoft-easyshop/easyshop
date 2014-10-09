@@ -208,7 +208,7 @@ class SocialMediaManager
      */
     public function getFacebookTypeConstant()
     {
-        return SELF::FACEBOOK;
+        return self::FACEBOOK;
     }
     
     /**
@@ -218,7 +218,7 @@ class SocialMediaManager
      */
     public function getGoogleTypeConstant()
     {
-        return SELF::GOOGLE;
+        return self::GOOGLE;
     }
 
 }
