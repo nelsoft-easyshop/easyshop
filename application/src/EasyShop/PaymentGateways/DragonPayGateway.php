@@ -171,14 +171,14 @@ class DragonPayGateway extends AbstractGateway
         $this->setParameter('paymentType', $paymentType);
 
         $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                ->findOneBy(['transactionId' => $token, 'paymentMethod' => $paymentType]);
+                        ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
 
         $invoice = $return->getInvoiceNo();
         $orderId = $return->getIdOrder();
-        $memberId = $return->getBuyer();
+        $memberId = $return->getBuyer()->getIdMember();
         $itemList = json_decode($return->getDataResponse(), true);
         $postBackCount = $return->getPostbackcount();
-
+		
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
                     ->getShippingAddress(intval($memberId));
@@ -242,7 +242,7 @@ class DragonPayGateway extends AbstractGateway
             $response['status'] = 'f';
             $response['message'] = 'Transaction Not Completed. '.urldecode($message);
         }
-        
+      
         return $response;
     }
 
