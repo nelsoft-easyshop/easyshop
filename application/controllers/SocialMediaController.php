@@ -22,9 +22,14 @@ class SocialMediaController extends MY_Controller
             redirect('/login', 'refresh');
         }
         $facebookData = $this->socialMediaManager->getAccount(1);
+        echo $facebookData->getProperty('email');
         if ($facebookData->getProperty('email')) {
             $validateFacebookData = $this->socialMediaManager->authenticateAccount($facebookData->getId(), 'Facebook');
+            print "<pre>";
+            print_r($validateFacebookData);
+            print "</pre>";
             if (!$validateFacebookData) {
+                echo '1';
                 $response = $this->socialMediaManager->registerAccount(
                     $facebookData->getFirstName(),
                     $facebookData->getName(),
@@ -36,10 +41,15 @@ class SocialMediaController extends MY_Controller
                 );
             }
             else {
+                echo '2';
                 $response = $validateFacebookData;
             }
-            $this->login($response);
-            redirect('/', 'refresh');
+            print "<pre>";
+            print_r($response->getIdMember());
+            print "</pre>";
+
+//            $this->login($response);
+//            redirect('/', 'refresh');
         }
         else {
             redirect('/login', 'refresh');
