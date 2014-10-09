@@ -289,13 +289,13 @@ class Kernel
             $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
+            $configLoader = $container['config_loader'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
-                $socialMediaConfig['facebook']['key']['appId'],
-                $socialMediaConfig['facebook']['key']['secret'],
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
-                $userManager
+                $userManager,
+                $configLoader
             );
         };
         // Category Manager
