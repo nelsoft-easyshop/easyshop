@@ -122,7 +122,14 @@ function htmlDecode(value) {
                     $('#display-banner-view').show();
                     $('#edit-banner-view').hide();
                     $(".storeName").html(htmlDecode(storName));
-                    $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
+
+                    if( stateRegion === "0" && city === "0" ){
+                        $("#placeStock > strong").html("Location not set");
+                    }
+                    else{
+                        $("#placeStock > strong").html(htmlDecode(citySelected)+', '+htmlDecode(stateRegionSelected));
+                    }
+                    
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
 
                     // Update custom attr origval for "Cancel" functionality
