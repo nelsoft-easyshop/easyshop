@@ -6,8 +6,16 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
-use application\libraries\NuSOAP\lib\nusoap as nusoap;
 
+/**
+ * Dragon Pay Gateway Class
+ *
+ * @author LA roberto <la.roberto@easyshop.ph>
+ *
+ *
+ * Params needed
+ *      method:"DragonPay"
+ */
 class DragonPayGateway extends AbstractGateway
 {
 
@@ -34,6 +42,10 @@ class DragonPayGateway extends AbstractGateway
             '202' => 'Invalid Merchant Password'
         );
 
+    /**
+     * Constructor
+     * 
+     */
     public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
@@ -49,12 +61,25 @@ class DragonPayGateway extends AbstractGateway
         $this->client = get_instance()->kernel->serviceContainer['nusoap_client'];
     }
 
+    /**
+     * Retrive Processors
+     * 
+     */
     public function getProcessors()
     { 
         $result = $this->client->call('GetProcessors');
         return $result['GetProcessorsResult']['ProcessorInfo'];
     }
 
+    /**
+     * Retrieve Transaction Token
+     * 
+     * @param float $amount
+     * @param string $description
+     * @param string $email
+     * @param string $txnId
+     * @return mixed
+     */
     public function getTxnToken($amount,$description,$email,$txnId)
     {
         $errorCodes = $this->errorCodes;
@@ -81,6 +106,12 @@ class DragonPayGateway extends AbstractGateway
         }
     }
 
+    /**
+     * Retrieve Status
+     * 
+     * @param mixed $txnId
+     * @return mixed
+     */
     public function getStatus($txnId)
     { 
         $param = array(
@@ -92,6 +123,12 @@ class DragonPayGateway extends AbstractGateway
         return $result['GetTxnStatusResult'];
     }
 
+    /**
+     * Voids Transaction
+     * 
+     * @param mixed $txnId
+     * @return mixed
+     */
     public function voidTransaction($txnId)    
     {
         $param = array(
@@ -103,6 +140,13 @@ class DragonPayGateway extends AbstractGateway
         return $result['CancelTransactionResult'];
     }
 
+    /**
+     * Pay method for Dragon Pay Gateway Class
+     * 
+     * @param mixed $validatedCart
+     * @param mixed $memberId Cart
+     * @param mixed $paymentService
+     */
     public function pay($validatedCart, $memberId, $paymentService)
     {
         header('Content-type: application/json');
@@ -162,7 +206,14 @@ class DragonPayGateway extends AbstractGateway
         }
     }
 
-    //$txnId, $refNo, $status, $message, $digest, $paymentService
+    /**
+     * Postback callback method
+     *
+     * Dragonpay's PostBack URL is routed to here
+     * 
+     * @param mixed $paymentService
+     * @param mixed $params
+     */
     public function postBackMethod($paymentService, $params)
     {
         extract($params);
@@ -220,6 +271,13 @@ class DragonPayGateway extends AbstractGateway
 
     }
 
+    /**
+     * Return callback method
+     *
+     * Dragonpay's Return URL is routed to here
+     * 
+     * @param mixed $params
+     */
     public function returnMethod($params)
     {
         // paymentType
@@ -246,21 +304,46 @@ class DragonPayGateway extends AbstractGateway
         return $response;
     }
 
+
+    /**
+     * External Charge for Dragonpay
+     *
+     * 
+     * @return int
+     */
     public function getExternalCharge()
     {
         return 20.00;
     }
 
+    /**
+     * Generate Reference Number for Dragonpay
+     *
+     * 
+     * @return string
+     */
     public function generateReferenceNumber($memberId)
     {
         return 'DPY-'.date('ymdhs').'-'.$memberId;
     }
 
+    /**
+     * Returns Order Status for Dragonpay
+     *
+     * 
+     * @return int
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_DRAFT;
     }
 
+    /**
+     * Returns Order Product Status for Dragonpay
+     *
+     * 
+     * @return int
+     */
     public function getOrderProductStatus()
     {
         return EsOrderStatus::STATUS_PAID;
