@@ -1322,7 +1322,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total * 100.0;
                         console.log(percentComplete);
-                        $('.loading-text').html(percentComplete + ' %');
+                        $('.loading-text').html(parseFloat(percentComplete).toFixed(2); + ' %');
                     }
                 }, false);
                 return xhr;
