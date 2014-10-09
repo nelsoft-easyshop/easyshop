@@ -18,10 +18,23 @@
         "symfony/config": "2.6.*@dev",
         "bshaffer/oauth2-server-php": "v1.3",
         "facebook/php-sdk-v4" : "4.0.*",
-        "google/apiclient": "1.0.*@beta"
+        "google/apiclient": "1.0.*@beta",
+        "noiselabs/nusoap-bundle": "dev-master"
     },
-    "autoload": {
-        "classmap": ["system/libraries"]
-    }
-
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "nusphere/nusoap",
+                "version": "0.9.5",
+                "dist": {
+                    "url": "http://downloads.sourceforge.net/project/nusoap/nusoap/0.9.5/nusoap-0.9.5.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "classmap": ["lib/"]
+                }
+            }
+        }
+    ]
 }

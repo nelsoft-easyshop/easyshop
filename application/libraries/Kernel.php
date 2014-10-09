@@ -352,6 +352,20 @@ class Kernel
             return $server;
         };
 
+        // NUSoap Client
+        $container['nusoap_client'] = function ($c) {
+            $url = '';
+            if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
+            // LIVE
+                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            else{
+            // SANDBOX
+                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            return new \nusoap_client($url,true);
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
