@@ -280,6 +280,21 @@ class UserManager
         return $this;
     }
 
+    public function deleteAddressTable($type)
+    {
+        $addressEntity = $this->em->getRepository("EasyShop\Entities\EsAddress")
+                                ->findOneBy(array(
+                                            "idMember"=>$this->memberEntity
+                                            , "type" => (string)$type
+                                            ));
+
+        if( !empty($addressEntity) ){
+            $this->em->remove($addressEntity);
+        }
+
+        return $this;
+    }
+
     /**
      *  Flush all persisted entities set above.
      */

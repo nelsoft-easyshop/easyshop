@@ -1385,10 +1385,17 @@ class Memberpage extends MY_Controller
             $um->setUser($memberId)
                 ->setStoreName($validStoreName)
                 ->setMobile($validMobile)
-                ->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT)
                 ->setMemberMisc([
                     'setLastmodifieddate' => new DateTime('now')
                 ]);
+
+            if( $validCity === "0" && $validStateRegion === "0" ){
+                $um->deleteAddressTable(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
+            }
+            else{
+                $um->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT);
+            }
+
             $boolResult = $um->save();
 
             $serverResponse = array(
