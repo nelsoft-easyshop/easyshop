@@ -112,7 +112,7 @@ class SocialMediaController extends MY_Controller
         $session = $this->socialMediaManager->createSession($userData->getIdMember());
         $em = $this->serviceContainer['entity_manager'];
         $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
-        $cartData = $cartManager->synchCart($user->getIdMember());;
+        $cartData = $this->container['cart_manager']->synchCart($user->getIdMember());;
 
         $this->session->set_userdata('member_id', $userData->getIdMember());
         $this->session->set_userdata('usersession', $session);

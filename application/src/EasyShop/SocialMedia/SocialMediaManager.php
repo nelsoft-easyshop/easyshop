@@ -48,6 +48,12 @@ class SocialMediaManager
      */
     private $oauthConfig;
 
+    /**
+     * String utility
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
     
     /**
      * Class constructor. Loads dependencies.
@@ -57,14 +63,16 @@ class SocialMediaManager
      * @param Doctrine\ORM\EntityManager $em
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
+     * @param EasyShop\Utility\StringUtility
      */
-    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader)
+    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
         $this->em = $em;
         $this->userManager = $userManager;
         $this->oauthConfig = $configLoader->getItem('oauth');
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -167,6 +175,13 @@ class SocialMediaManager
      */
     public function registerAccount($username, $fullname, $gender, $email, $emailVerify, $oAuthId, $oAuthProvider)
     {
+        $username = $this->stringUtility->cleanString(strtolower($username));
+        $existingMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy(['username' => $username]);
+        if($existingMember){
+            $username = $this->stringUtility->cleanString(strtolower($fullname));
+        }
+
         $member = new EsMember();
         $member->setUsername($username);
         $member->setFullname($fullname);
