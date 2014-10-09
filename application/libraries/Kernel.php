@@ -290,12 +290,14 @@ class Kernel
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
             $configLoader = $container['config_loader'];
+            $stringUtility = $container['string_utility'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
                 $userManager,
-                $configLoader
+                $configLoader,
+                $stringUtility
             );
         };
         // Category Manager
