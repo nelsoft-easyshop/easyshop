@@ -341,8 +341,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-text-container pull-right">                                               
                                                 <div class="header-link">
                                                     <span class="login-icon user-acct-icon"></span>
-                                                    <a href="#">login</a>&nbsp;or&nbsp;
-                                                    <a href="#">create an account</a>
+                                                    <a href="/login">login</a>&nbsp;or&nbsp;
+                                                    <a href="/register">create an account</a>
                                                 </div>
                                             </div>
                                         </div>
