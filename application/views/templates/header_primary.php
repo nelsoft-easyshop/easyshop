@@ -91,7 +91,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div id="inner-header">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-4 col-sm-4 col-xs-12 logo-container">
+                        <div class="col-md-3 col-sm-3 col-xs-12 logo-container">
                             <h1 class="logo clearfix">
                                 <span>EasyShop.ph</span>
                                 <a href="#" title="EasyShop.ph Website">
@@ -99,7 +99,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 </a>
                             </h1>
                         </div><!-- End .col-md-5 -->
-                        <div class="col-md-8 col-sm-8 col-xs-12 header-inner-right">
+                        <div class="col-md-9 col-sm-9 col-xs-12 header-inner-right">
                                 
                                 <div class="header-inner-right-wrapper clearfix">
                                     <div class="dropdown-cart-menu-container pull-right">
@@ -160,13 +160,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <form class="nav-searchbar-inner" ,="" accept-charset="utf-8" role="search" name="site-search" method="get" action="/s/ref=nb_sb_noss" id="nav-searchbar">
 
                                     <div class="nav-submit-button nav-sprite">
-                                        <button id="quick-search" class="btn btn-custom" type="submit"></button>
+                                        <input type="submit" value="" class="span_bg">
                                     </div>
-
                                 <div class="nav-searchfield-width">
-                                  <div id="nav-iss-attach">
-                                    <input class="ui-form-control" type="text" autocomplete="off" name="field-keywords" value="" title="Search For" id="twotabsearchtextbox">
-                                  </div>
+                                  <div class="search-container">
+                                        <select class="ui-form-control">
+                                            <option>On Seller's Page</option>
+                                            <option>Main Page</option>
+                                            <option>Other Page</option>
+                                        </select>
+                                        <input type="text" class="ui-form-control">
+                                    </div>
                                 </div>
                                 </form><!-- End .Search Navigation -->
 
@@ -286,7 +290,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <div class="sticky-search-cart-wrapper">
                                             <div class="sticky-search-wrapper">
                                                 <input type="text" class="ui-form-control">
-                                                <button id="quick-search" class="" type="submit"></button>
+                                                <input type="submit" value="" class="span_bg">
                                             </div>
                                             <div class="header-cart-container">
                                                 <span class="header-cart-items-con sticky-cart">

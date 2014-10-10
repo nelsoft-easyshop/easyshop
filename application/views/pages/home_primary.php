@@ -11,19 +11,43 @@
             <ul class="bxslider">
                 <li>
                     <div class="slider-item">
-                        <img src="<?php echo base_url() ?>assets/images/homeslider/slide1_1.jpg" alt="Slider item 1">
-                    </div>
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_1.jpg" alt="Slider item 1">
+                    </div><!-- End .slider-item -->
+                 </li>
+                <li>
                     <div class="slider-item">
-                        <img src="<?php echo base_url() ?>assets/images/homeslider/slide2_1.jpg" alt="Slider item 2">                        
-                    </div>
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_1.jpg" alt="Slider item 2">                        
+                    </div><!-- End .slider-item -->
                 </li>
                 <li>
                     <div class="slider-item">
-                        <img src="<?php echo base_url() ?>assets/images/homeslider/slide3_1.jpg" alt="Slider item 3">
-                    </div>
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_1.jpg" alt="Slider item 3">
+                    </div><!-- End .slider-item -->
+                 </li>
+                <li>
                     <div class="slider-item">
-                        <img src="<?php echo base_url() ?>assets/images/homeslider/slide4_1.jpg" alt="Slider item 4">                        
-                    </div>
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_1.jpg" alt="Slider item 4">                        
+                    </div><!-- End .slider-item -->
+                </li>
+                <li>
+                    <div class="slider-item">
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_6.jpg" alt="Slider item 4">                        
+                    </div><!-- End .slider-item -->
+                </li>
+                <li>
+                    <div class="slider-item">
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_6.jpg" alt="Slider item 4">                        
+                    </div><!-- End .slider-item -->
+                </li>
+                <li>
+                    <div class="slider-item">
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_6.jpg" alt="Slider item 4">                        
+                    </div><!-- End .slider-item -->
+                </li>
+                <li>
+                    <div class="slider-item">
+                        <img src="<?php echo base_url() ?>assets/images/homeslider/hs_6.jpg" alt="Slider item 4">                        
+                    </div><!-- End .slider-item -->
                 </li>
             </ul>
         </div>
@@ -53,14 +77,19 @@
     (function ($)  {
         // BxSlider.js Slider Plugin
         $('.bxslider').bxSlider({
-            minSlides: 1,
-            maxSlides: 1,
+            maxSlides: 4,
+            moveSlides: 1,
             speed: 1000,
             auto: true,
             pause: 6000,
             prevText : '',
-            nextText : ''
+            nextText : '',
+            slideWidth: 270,
+            slideMargin: 20,
+            infiniteLoop: true
         });
+
+        $('#content .bx-wrapper').removeAttr("style");
          
         $(window).on('load resize', function() {
             var windowWidth = $(window).width(),
