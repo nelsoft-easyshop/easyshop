@@ -17,7 +17,7 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                Transaction Number: 
+                                                Transaction Number
                                             </th>
                                             <th>
                                                 Product Name
