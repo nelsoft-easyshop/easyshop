@@ -44,7 +44,7 @@ class MobileWebService extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getMobileXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
-
+        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
         }      
@@ -258,12 +258,23 @@ class MobileWebService extends MY_Controller
         $index = $index == 0 ? 1 : $index + 1;   
 
         $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');    
-
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+                   if($addXml === TRUE) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);            
+            } 
         }
+
+
     }
 
     /**
@@ -283,6 +294,15 @@ class MobileWebService extends MY_Controller
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType);
 
         $map = simplexml_load_file($this->file);
+
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
+        }
 
         if($order === "" || $order == NULL){
             $order = (int) $order;
