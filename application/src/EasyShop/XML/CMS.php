@@ -20,7 +20,17 @@ class CMS
 
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
-
+        if($nodeName == "sliderSection") {
+            $string = '
+            <image>
+                <path>'.$value.'</path>
+                <target>'.$type.'</target>
+            </image>
+            '; 
+        }
+        if($nodeName == "categorySubSlug") {
+           $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
+        }  
         if($nodeName == "boxContent") {
             $string ='
 
@@ -200,7 +210,62 @@ $string = '<typeNode>
         }
 
     }
+    /**
+     *  Method used to add xml contents for parent nodes under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $xml_string
+     *  @param boolean $move
+     *
+     *  @return boolean
+     */
+    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true) 
+    {        
+        $sxe = new \SimpleXMLElement(file_get_contents($file));
+        $insert = new \SimpleXMLElement($xml_string);
+        $target = current($sxe->xpath($target_node));
 
+        $this->simplexml_insert_formatted($insert, $target,$tabs,$newLines,$move);
+        if($sxe->asXml($file)) {
+            return true;
+
+        }
+    }
+
+    /**
+     *  Method used to add xml contents for parent nodes under home_files.xml
+     *
+     *  @param SimpleXmlElement $insert
+     *  @param SimpleXmlElement $target
+     *  @param boolean $move
+     *
+     *  @return boolean $result
+     */
+    public function simplexml_insert_formatted(\SimpleXMLElement $insert, \SimpleXMLElement $target,$tabs,$newLines,$move = true) 
+    {
+        $target_dom = dom_import_simplexml($target);
+
+        $document = $target_dom->ownerDocument;
+        $insert_dom = $document->importNode(dom_import_simplexml($insert), true);
+        $document->formatOutput = true;
+        $parentNode = $target_dom->parentNode;
+        if($move){
+            if ($target_dom->nextSibling) {
+                $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
+                $parentNode->insertBefore($document->createTextNode($newLines), $result);
+                $parentNode->insertBefore($document->createTextNode($tabs), $result);
+
+            } 
+            else {
+                $result =  $target_dom->parentNode->appendChild($insert_dom);
+            }
+        } 
+        else {
+            $parentNode->insertBefore($insert_dom,$result);   
+
+        }
+        return $result;
+    }    
     /**
      *  Method used to add xml contents for parent nodes under home_files.xml
      *
@@ -276,12 +341,12 @@ $string = '<typeNode>
         $insert_dom = $document->importNode(dom_import_simplexml($insert), true);
         $document->formatOutput = true;
         $parentNode = $target_dom->parentNode;
-
+        $tabs = "\t\t\t\t";
         if($move){
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
+                $parentNode->insertBefore($document->createTextNode($tabs), $result);
 
             } 
             else {

@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<map>
+    
+    <categoryNavigation>
+        
+        <category>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <sub>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <sub>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <sub>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <sub>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+                <categorySubSlug>clothing-and-accessories</categorySubSlug>
+            </sub>
+        </category>
+        
+        <otherCategories>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <categorySlug>clothing-and-accessories</categorySlug>
+            <categorySlug>clothing-and-accessories</categorySlug>
+        </otherCategories>
+        
+        
+    </categoryNavigation>
+    
+    
+    
+    <sliderSection>
+        <slide>
+            <template>A</template>
+            <image>
+                <path>foo.png</path>
+                <target>/</target>
+            </image>
+             <image>
+                <path>foo.png</path>
+                <target>/</target>
+            </image>
+             <image>
+                <path>foo.png</path>
+                <target>/</target>
+            </image>
+             <image>
+                <path>foo.png</path>
+                <target>/</target>
+            </image>
+        </slide>
+       
+        <slide>
+            <template>B</template>
+            <image>
+                <path>foo.png</path>
+                <target>/</target>
+            </image>
+        </slide>
+       
+    </sliderSection>
+    
+    
+    
+    <sellerSection>
+        
+        <sellerSlug>patriots21</sellerSlug>
+        <sellerBanner>foo.jpg</sellerBanner>
+        <sellerLogo>foologo.jpg</sellerLogo>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+    </sellerSection>
+    
+    <adSection>
+        <ad>
+            <img>foo.png</img>
+            <target>/</target>
+        </ad>
+        
+        <ad>
+            <img>foo.png</img>
+            <target>/</target>
+        </ad>
+        
+        <ad>
+            <img>foo.png</img>
+            <target>/</target>
+        </ad>
+    </adSection>
+    
+    <categorySection>
+        <categorySlug>clothing-and-accessories</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+    
+      
+    <categorySection>
+        <categorySlug>clothing-and-accessories</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ubuntu-valid-gd</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+    <brandSection>
+        <brandId>1</brandId>
+        <brandId>2</brandId>
+        <brandId>3</brandId>
+        <brandId>4</brandId>
+    </brandSection>
+    
+</map>
