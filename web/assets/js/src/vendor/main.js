@@ -15,7 +15,7 @@ $(document).ready(function() {
         itemsDesktop : [1199,3],
         itemsDesktopSmall: [979,2],
         itemsTablet: [768,2],
-        itemsMobile : [479,1],
+        itemsMobile : [479,2],
         navigation: false,
         beforeInit : function(elem){
             random(elem);
@@ -39,7 +39,7 @@ $(document).ready(function() {
         itemsDesktop : [1199,3],
         itemsDesktopSmall: [979,2],
         itemsTablet: [768,2],
-        itemsMobile : [479,1],
+        itemsMobile : [479,2],
         slideSpeed: 400,
         autoPlay: 8000,
         stopOnHover: true,
@@ -56,7 +56,7 @@ $(document).ready(function() {
         itemsDesktop : [1199,3],
         itemsDesktopSmall: [979,2],
         itemsTablet: [768,2],
-        itemsMobile : [479,1],
+        itemsMobile : [479,2],
         slideSpeed: 400,
         autoPlay: 8000,
         stopOnHover: true,
@@ -73,7 +73,7 @@ $(document).ready(function() {
         itemsDesktop : [1199,3],
         itemsDesktopSmall: [979,2],
         itemsTablet: [768,2],
-        itemsMobile : [479,1],
+        itemsMobile : [479,2],
         slideSpeed: 400,
         autoPlay: 8000,
         stopOnHover: true,
@@ -262,27 +262,27 @@ $(document).ready(function() {
     // }
 
     // $(window).on('scroll resize', stickyMenu);
-
-    var menuOffset = $('.sticky-header-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
-    $(document).bind('ready scroll', function() {
-        var docScroll = $(document).scrollTop();
-        if (docScroll >= 180) 
-            {
-                if (!$('.sticky-header-nav').hasClass('sticky-nav-fixed')) {
-                    $('.sticky-header-nav').addClass('sticky-nav-fixed').css({
-                        top: '-155px'
-                    }).stop().animate({
-                        top: 0
-                    }, 100);
+//start
+    // var menuOffset = $('.sticky-header-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
+    // $(document).bind('ready scroll', function() {
+        // var docScroll = $(document).scrollTop();
+        // if (docScroll >= 180) 
+            // {
+                // if (!$('.sticky-header-nav').hasClass('sticky-nav-fixed')) {
+                    // $('.sticky-header-nav').addClass('sticky-nav-fixed').css({
+                        // top: '-155px'
+                    // }).stop().animate({
+                        // top: 0
+                    // }, 100);
                     
-                }
+                // }
 
-            } 
-        else 
-            {
-                $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
-            }
+            // } 
+        // else 
+            // {
+                // $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
+            // }
 
-    });
+    // });
     
 }(jQuery));
