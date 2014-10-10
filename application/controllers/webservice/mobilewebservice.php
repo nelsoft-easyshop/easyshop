@@ -257,7 +257,6 @@ class MobileWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;   
 
-        $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');    
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -267,7 +266,8 @@ class MobileWebService extends MY_Controller
                 ->set_output( $this->slugerrorjson);
         }
         else {
-                   if($addXml === TRUE) {
+            $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');                
+            if($addXml === TRUE) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);            
@@ -303,36 +303,37 @@ class MobileWebService extends MY_Controller
                         ->set_content_type('application/json')
                         ->set_output( $this->slugerrorjson);
         }
-
-        if($order === "" || $order == NULL){
-            $order = (int) $order;
-            $map->section[$index]->boxContent[$boxIndex]->value = $value;
-            $map->section[$index]->boxContent[$boxIndex]->type = $type ;
-            $map->section[$index]->boxContent[$boxIndex]->target = $target;
-            $map->section[$index]->boxContent[$boxIndex]->actionType = $actionType; 
-        }
         else {
-            $order = (int) $order;         
-            $tempValue = (string)$map->section[$index]->boxContent[$order]->value;
-            $tempOrder = (string)$map->section[$index]->boxContent[$order]->type;
-            $tempTarget = (string)$map->section[$index]->boxContent[$order]->target;
-            $tempActionType = (string)$map->section[$index]->boxContent[$order]->actionType;
+            if($order === "" || $order == NULL){
+                $order = (int) $order;
+                $map->section[$index]->boxContent[$boxIndex]->value = $value;
+                $map->section[$index]->boxContent[$boxIndex]->type = $type ;
+                $map->section[$index]->boxContent[$boxIndex]->target = $target;
+                $map->section[$index]->boxContent[$boxIndex]->actionType = $actionType; 
+            }
+            else {
+                $order = (int) $order;         
+                $tempValue = (string)$map->section[$index]->boxContent[$order]->value;
+                $tempOrder = (string)$map->section[$index]->boxContent[$order]->type;
+                $tempTarget = (string)$map->section[$index]->boxContent[$order]->target;
+                $tempActionType = (string)$map->section[$index]->boxContent[$order]->actionType;
 
-            $map->section[$index]->boxContent[$order]->value = $map->section[$index]->boxContent[$boxIndex]->value;
-            $map->section[$index]->boxContent[$order]->type = $map->section[$index]->boxContent[$boxIndex]->type;
-            $map->section[$index]->boxContent[$order]->target = $map->section[$index]->boxContent[$boxIndex]->target;
-            $map->section[$index]->boxContent[$order]->actionType = $map->section[$index]->boxContent[$boxIndex]->actionType;
+                $map->section[$index]->boxContent[$order]->value = $map->section[$index]->boxContent[$boxIndex]->value;
+                $map->section[$index]->boxContent[$order]->type = $map->section[$index]->boxContent[$boxIndex]->type;
+                $map->section[$index]->boxContent[$order]->target = $map->section[$index]->boxContent[$boxIndex]->target;
+                $map->section[$index]->boxContent[$order]->actionType = $map->section[$index]->boxContent[$boxIndex]->actionType;
 
-            $map->section[$index]->boxContent[$boxIndex]->value = $tempValue;
-            $map->section[$index]->boxContent[$boxIndex]->type = $tempOrder;
-            $map->section[$index]->boxContent[$boxIndex]->target = $tempTarget;
-            $map->section[$index]->boxContent[$boxIndex]->actionType = $tempActionType;
+                $map->section[$index]->boxContent[$boxIndex]->value = $tempValue;
+                $map->section[$index]->boxContent[$boxIndex]->type = $tempOrder;
+                $map->section[$index]->boxContent[$boxIndex]->target = $tempTarget;
+                $map->section[$index]->boxContent[$boxIndex]->actionType = $tempActionType;
 
-        }
-        if($map->asXML($this->file)) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+            }
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }            
         }          
     }
 }
