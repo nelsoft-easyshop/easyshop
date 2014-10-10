@@ -62,7 +62,7 @@ class EsOrderRepository extends EntityRepository
                                     pm.name as paymentMethod")
                         ->from('EasyShop\Entities\EsOrder','o')
                         ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with',  
-                                                                $qb->expr()->andX(
+                                    $qb->expr()->andX(
                                         $qb->expr()->eq('o.idOrder', 'op.order')
                                         ,$qb->expr()->eq('op.seller', ':sellerId')
                                     )
