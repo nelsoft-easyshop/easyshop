@@ -26,6 +26,9 @@
                                                 Date of Transaction
                                             </th>
                                             <th>
+                                                Sellers Name
+                                            </th>                                            
+                                            <th>
                                                 Order Quantity
                                             </th>
                                             <th>
@@ -52,7 +55,10 @@
                                             </td>
                                             <td>
                                                 <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
-                                            </td>                                        
+                                            </td>    
+                                            <td>
+                                                <?php echo $value["fullname"]; ?>
+                                            </td>                                                                                 
                                             <td>
                                                 <?php echo $value["orderQuantity"]; ?>
                                             </td>     
