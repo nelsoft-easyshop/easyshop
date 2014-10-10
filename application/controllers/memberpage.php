@@ -58,7 +58,8 @@ class Memberpage extends MY_Controller
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
     }
-    
+
+
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
@@ -247,6 +248,47 @@ class Memberpage extends MY_Controller
             }
         }
     }
+
+    /**
+     * Returns bought on-going transactions of the user
+     *  @return VIEW
+     */
+    public function printBuyTransactions()
+    {
+        $attribs = "";
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        foreach($boughTransactions["transactions"] as $key => $value) {
+            $attr = $EsOrderRepository->getOrderProductAttributes($value["idOrder"]);
+            if(count($attr) > 0) {
+                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+            }
+        }        
+        $this->load->view("pages/user/printboughttransactions", $boughTransactions);
+    }
+
+    /**
+     * Returns sold on-going transactions of the user
+     *  @return VIEW
+     */
+    public function printSellTransactions()
+    {
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');        
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+
+            foreach($soldTransaction["transactions"] as $key => $value) {
+                $attr = $EsOrderRepository->getOrderProductAttributes($value["idOrder"]);
+                if(count($attr) > 0) {
+                    array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                }
+            }
+           
+        $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
+    
+    }
+    
 
     /**
      *  Fetch all data needed when displaying the Member page
