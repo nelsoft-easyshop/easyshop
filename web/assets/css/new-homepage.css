@@ -792,6 +792,7 @@ header {
 
 #content .content-title {
     margin-bottom:20px;
+    width: 100% !important;
 }
 
 .title-desc {
@@ -1844,10 +1845,17 @@ html, body{
     font-family: 'Helvetica', Arial, Calibri !important;
     background: #ebedf0;
 }
+
 .item-featured{
 font-family: 'Helvetica', Arial, Calibri !important;
     padding: 10px;
     border: solid red 1px !important;
+}
+
+.mo{
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
 }
 
 .item > .item-image-container {
@@ -2081,16 +2089,16 @@ width: 100% !important;
 }
 
 .span-store-logo{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
     vertical-align: middle;
 }
 
 .store-logo-container{
     display: table-cell;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     vertical-align: middle !important;
 }
@@ -2141,7 +2149,7 @@ width: 100% !important;
 }
 
 .carousel-controls {
-    padding-left: 7px !important;
+    padding-left: 0px !important;
 }
 
 .title-bg > h3{
@@ -2249,6 +2257,20 @@ width: 100% !important;
     margin-right: 14px;
 }
 
+.span-store-logo > img, .span-store-big-logo > img {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.row-featured-category{
+    margin-top: 30px;
+}
+
+.item-image-container{
+    width: 100%;
+    height: 228px;
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
@@ -2326,6 +2348,111 @@ width: 100% !important;
     }
     
     .owl-wrapper{
-        overflow: hidden !important;
+        overflow-x: hidden !important;
     }
+}
+
+@media only screen and (max-width: 979px) {
+    .content-title > .title-bg > h3{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    #cat-items {
+        margin-top: 45px;
+    }
+    
+    .mo{
+        padding-left: 0px;
+        padding-right: 0px;
+        margin: 20px 0px;
+    }
+    
+    .col-featured-items{
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    .item-image-container{
+        width: 100%;
+        height: 100px !important;
+        border: solid #fff 1px;
+        margin-bottom: 5px !important;
+    }
+
+    .item-name{
+        font-size: 12px;
+    }
+    
+    .old-price, .item-price{
+        font-size: 12px;
+    }
+    
+    .new-circle, .discount-circle{
+        font-size:10px;
+        width: 30px;
+        height: 30px;
+        padding: 0px !important; 
+        padding-top: 7px !important;
+    }
+    
+    .td-logo-store{
+        
+        padding-left: 4px;
+    }
+    
+    a.btn-default-1{
+        padding: 5px 2px !important;
+        font-size: 10px; 
+    }
+    
+    #cat-items .item, #featured-seller .item{
+        padding: 10px 10px !important;
+    }
+    
+    .span-see-all{
+        font-size:13px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    
+    .row-promo-ads{
+        margin-top: 10px;
+    }
+    
+    .mo {
+        margin: 10px 0px;
+    }
+    
+    .brand-container{
+        width: 100%;
+        height: 70px;
+        max-height: 70px;
+        border: solid #e2e2e2 1px;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+    
+    #brand-items {
+        margin-top: 50px;
+    }
+    
+    .brand-img{
+        max-height: 70px;k
+        border: solid red 1px;
+    }
+    
+    .promo-3{
+        display: none;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .item-price{
+        display: block;
+        margin-top: 4px;
+    }
+    
 }

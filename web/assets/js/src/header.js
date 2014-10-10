@@ -1,6 +1,5 @@
 (function ($) {
     
-        $
     $(document).ready(function() {
     
     //Sort random function
@@ -18,11 +17,12 @@
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
             itemsTablet: [768,2],
-            itemsMobile : [479,1],
+            itemsMobile : [479,2],
             navigation: false,
             beforeInit : function(elem){
                 random(elem);
             }
+
     
         });
     
@@ -42,7 +42,7 @@
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
             itemsTablet: [768,2],
-            itemsMobile : [479,1],
+            itemsMobile : [479,2],
             slideSpeed: 400,
             autoPlay: 8000,
             stopOnHover: true,
@@ -59,7 +59,7 @@
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
             itemsTablet: [768,2],
-            itemsMobile : [479,1],
+            itemsMobile : [479,2],
             slideSpeed: 400,
             autoPlay: 8000,
             stopOnHover: true,
@@ -76,7 +76,7 @@
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
             itemsTablet: [768,2],
-            itemsMobile : [479,1],
+            itemsMobile : [479,2],
             slideSpeed: 400,
             autoPlay: 8000,
             stopOnHover: true,
@@ -175,20 +175,12 @@
         container = $('#responsive-nav');
             
     container.append(menu);
-    
-    
-    
     container.find('li, .col-2, .col-3, .col-4, .col-5').each(function () {
-
         var $this = $(this);
-        
-        
         if ($this.hasClass('mega-menu-container')) {
             $this.removeClass('mega-menu-container');
         }
 
-        
-        
         $this.has('ul, .megamenu').prepend('<span class="menu-button"></span>');
         
     });
@@ -250,46 +242,45 @@
 /* =========================================
 ---- Sticky Menu
 =========================================== */
-    
-    // function stickyMenu() {
-    //     var windowTop = $(window).scrollTop(),
- //            windowWidth = checkWindowWidth(),
- //            header = $('#header'),
- //            navContainer = $('#main-nav-container'),
- //            navDist = navContainer.offset().top,
- //            headerHeight = header.height();
-               
- //        if (windowTop >= navDist && windowTop > headerHeight&& windowWidth > 768) {
- //            navContainer.addClass('fixed');
- //        } else {
- //            navContainer.removeClass('fixed');
- //        }
-    // }
 
-    // $(window).on('scroll resize', stickyMenu);
+/*
+    function stickyMenu() {
+        var windowTop = $(window).scrollTop(),
+            windowWidth = checkWindowWidth(),
+            header = $('#header'),
+            navContainer = $('#main-nav-container'),
+            navDist = navContainer.offset().top,
+            headerHeight = header.height();
+                
+        if (windowTop >= navDist && windowTop > headerHeight&& windowWidth > 768) {
+            navContainer.addClass('fixed');
+        }
+        else {
+            navContainer.removeClass('fixed');
+        }
+    }
 
-    var menuOffset = $('.sticky-header-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
-    $(document).bind('ready scroll', function() {
-        var docScroll = $(document).scrollTop();
-        if (docScroll >= 180) 
-            {
+    $(window).on('scroll resize', stickyMenu);
+
+        var menuOffset = $('.sticky-header-nav')[0].offsetTop; // replace #menu with the id or class of the target navigation
+        $(document).bind('ready scroll', function() {
+            var docScroll = $(document).scrollTop();
+            if (docScroll >= 180) {
                 if (!$('.sticky-header-nav').hasClass('sticky-nav-fixed')) {
                     $('.sticky-header-nav').addClass('sticky-nav-fixed').css({
                         top: '-155px'
                     }).stop().animate({
                         top: 0
                     }, 100);
-                    
                 }
 
             } 
-        else 
-            {
-                $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
-            }
-
+        else {
+            $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
+        }
     });
-    
+        
+*/
 
 
 }(jQuery));
