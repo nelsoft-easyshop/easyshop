@@ -72,3 +72,4 @@
 
 <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/newhome.js" type="text/javascript"></script>
