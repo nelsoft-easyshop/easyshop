@@ -202,6 +202,41 @@ class DragonPayGateway extends AbstractGateway
         else{ 
             $orderId = $return['v_order_id'];
             //$locked = $this->lockItem($toBeLocked,$orderId,'insert');  
+
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                            ->find($orderId);
+
+            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                        ->find($this->getParameter('paymentType'));
+
+            $paymentRecord = new EsPaymentGateway();
+            $paymentRecord->setAmount($this->getParameter('amount'));
+            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+            $paymentRecord->setOrder($order);
+            $paymentRecord->setPaymentMethod($paymentMethod);
+
+            $this->em->persist($paymentRecord);
+            $this->em->flush(); 
+
+            if($pointGateway !== NULL){
+                $pointGateway->setParameter('memberId', $memberId);
+                $pointGateway->setParameter('itemArray', $return['item_array']);
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                        ->find($pointGateway->getParameter('paymentType'));
+
+                $trueAmount = $pointGateway->pay();
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount($trueAmount);
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+
+                $this->em->persist($paymentRecord);
+                $this->em->flush();
+            }
+
             exit($dpReturn);
         }
     }
