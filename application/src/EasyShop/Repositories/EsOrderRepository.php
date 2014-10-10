@@ -22,7 +22,6 @@ class EsOrderRepository extends EntityRepository
         $queryBuilder = $qb->select("orderAttr.attrName as attrName,                                                         
                                      orderAttr.attrValue as attrValue,                                                         
                                      orderAttr.attrPrice as attrPrice ")
-
                             ->from('EasyShop\Entities\EsOrderProductAttr','orderAttr')
                             ->leftJoin('EasyShop\Entities\EsOrderProduct', 'o', 'with', "o.idOrderProduct = orderAttr.orderProduct")    
                             ->where("o.idOrderProduct = :orderid")
