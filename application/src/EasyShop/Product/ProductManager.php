@@ -83,6 +83,7 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
+        $product->setIsNew($this->isProductNew($product));
         $this->promoManager->hydratePromoData($product);
         
         return $product;
@@ -269,6 +270,23 @@ class ProductManager
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;
+    }
+    
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        $lastModifiedDate = $product->getLastModifiedDate()
+                                    ->getTimestamp();
+        $dateNow = new DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::newnessLimit;
     }
 }
 
