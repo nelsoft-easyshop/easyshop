@@ -43,7 +43,7 @@
                             <span class="glyphicon glyphicon-plus-sign"></span>Follow
                         </span>                       
 
-                        <a class="btn btn-default-1" href="/<?=$arrVendorDetails['username']; ?>/contact">
+                        <a class="btn btn-default-1" href="/<?=$arrVendorDetails['userslug']; ?>/contact">
                             <span class="icon-message-btn"></span>
                             Message
                         </a>
