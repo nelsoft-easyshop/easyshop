@@ -270,5 +270,22 @@ class ProductManager
         $this->em->flush();
         return true;
     }
+    
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        $lastModifiedDate = $product->getLastModifiedDate()
+                                    ->getTimestamp();
+        $dateNow = new DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::newnessLimit;
+    }
 }
 
