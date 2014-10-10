@@ -33,6 +33,7 @@ class mobilePayment extends MY_Controller
     function __construct() 
     {
         parent::__construct();
+        $this->load->model('product_model'); 
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
@@ -88,39 +89,18 @@ class mobilePayment extends MY_Controller
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
             $errorMessage = $dataCollection['errMsg'];
-            $paymentType = $dataCollection['paymentType'];
-
+            $paymentType = $dataCollection['paymentType']; 
+            $formattedCartContents = array();
             foreach($cartData as $rowId => $cartItem){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['idProduct' => $cartItem['id']]);
-                
-                if($product){
-                    $member = $product->getMember();
-                    $productId = $product->getIdProduct();
-                           
-                    $ratings = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                    ->getAverageRatings($member->getIdMember());
-                    $sellerRating = array();
-                    $sellerRating['rateCount'] = $ratings['count'] ;
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[0]] = $ratings['rating1'];
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[1]] = $ratings['rating2'];
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[2]] = $ratings['rating3'];  
-                    
-                    $sellerDetails = array(
-                        'sellerName' => $member->getUsername(),
-                        'sellerRating' => $sellerRating,
-                        'sellerContactNumber' => $member->getContactno(),
-                        'sellerEmail ' => $member->getEmail()
-                        );
-                        
-                    $images = array();
-                    foreach($product->getImages() as $image){
-                        $images[$image->getIdProductImage()] = $image->getProductImagePath();
-                    }
+                                        ->findOneBy(['idProduct' => $cartItem['id']]);
 
-                    
+                if($product){
+                    $productId = $product->getIdProduct();
+                    $member = $product->getMember();
                     $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                ->getAttributesByProductIds($productId);
+                            ->getAttributesByProductIds($productId);
+
                     $mappedAttributes = array();
                     foreach($attributes as $attribute){
                         $isSelected = false;
@@ -147,27 +127,131 @@ class mobilePayment extends MY_Controller
                             'isSelected' => $isSelected,
                         ));
                     }
-                    
-                    $formattedCartItem = [
+
+                    $formattedCartContents[$rowId] = [
                         'rowid' => $cartItem['rowid'],
                         'productId' =>  $cartItem['id'],
                         'productItemId' => $cartItem['product_itemID'],
                         'maximumAvailability' => $cartItem['maxqty'],
                         'slug' => $cartItem['slug'],
                         'name' => $cartItem['name'],
-                        'quantity' => $cartItem['qty'],
-                        'description' => $product->getDescription(),
-                        'brand' => $product->getBrand()->getName(),
+                        'quantity' => $cartItem['qty'], 
                         'originalPrice' => $cartItem['original_price'],
-                        'finalPrice' => $cartItem['price'],
-                        'sellerDetails' => $sellerDetails,
-                        'images' => $images, 
-                        'mapAttributes' => $mappedAttributes,
-                        'cashOnDelivery' =>  (isset($cartItem['cash_delivery'])) ? $cartItem['cash_delivery'] : 0 ,
-                        'locationAvalailability' => $cartItem['availability'],
+                        'finalPrice' => $cartItem['price'],  
+                        'mapAttributes' => $mappedAttributes
                     ];
+
+                    // format product details
+                    $productDetails = array(
+                                    'name' => $cartItem['name'],
+                                    'description' => $product->getDescription(),
+                                    'brand' => $product->getBrand()->getName(),
+                                    'condition' => $product->getCondition(),
+                                    'discount' => $product->getDiscount(),
+                                    'basePrice' => $cartItem['price'],
+                                ); 
+                    $formattedCartContents[$rowId]['productDetails'] = $productDetails;
+
+                    // format imgages
+                    $productImages = array();
+                    foreach($product->getImages() as $image){
+                        $mergeData = [
+                                    'product_image_path' =>  $image->getProductImagePath(),
+                                    'id' => $image->getIdProductImage(),
+                                ];
+                        $productImages[] = $mergeData;
+                    }
+                    $formattedCartContents[$rowId]['productImages'] = $productImages;
+
+                    // format seller details
+                    $ratings = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                    ->getAverageRatings($member->getIdMember());
+                    $sellerRating = array();
+                    $sellerRating['rateCount'] = $ratings['count'] ;
+                    $sellerRating['rateDescription'][$this->lang->line('rating')[0]] = $ratings['rating1'];
+                    $sellerRating['rateDescription'][$this->lang->line('rating')[1]] = $ratings['rating2'];
+                    $sellerRating['rateDescription'][$this->lang->line('rating')[2]] = $ratings['rating3'];  
                     
-                    $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
+                    $sellerDetails = array(
+                        'sellerName' => $member->getUsername(),
+                        'sellerRating' => $sellerRating,
+                        'sellerContactNumber' => $member->getContactno(),
+                        'sellerEmail ' => $member->getEmail()
+                        );
+                    $formattedCartContents[$rowId]['sellerDetails'] = $sellerDetails;
+
+                    // format product combination attributes
+                    $complete = array();
+                    $specification = array();
+                    $productCombinationAttributes = array();
+
+                    $productAttributes = $this->product_model->getProductAttributes($productId, 'NAME');
+                    $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
+                    foreach ($productAttributes as $key => $productOption) {
+                        $newArrayOption = array(); 
+
+                        for ($i=0; $i < count($productOption) ; $i++) { 
+                            $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
+                            $newKey = $type.'_'.$productAttributes[$key][$i]['value_id']; 
+                            $newArrayOption[$newKey] = $productOption[$i];
+                            $newArrayOption[$newKey]['name'] = $key; 
+                            $newArrayOption[$newKey]['id'] = $newKey; 
+                        }
+
+                        foreach ($newArrayOption as $key => $value) {
+                            unset($newArrayOption[$key]['type']);
+                            unset($newArrayOption[$key]['datatype']);
+                            unset($newArrayOption[$key]['datatype']);
+                            unset($newArrayOption[$key]['img_path']);
+                            unset($newArrayOption[$key]['img_file']);
+                            unset($newArrayOption[$key]['value_id']);
+                        }
+
+                        if(count($productOption)>1){
+                            $productCombinationAttributes[$key] = $newArrayOption; 
+                        }
+                        elseif((count($productOption) === 1)&&(($productOption[0]['datatype'] === '5'))||($productOption[0]['type'] === 'option')){
+                            $productCombinationAttributes[$key] = $newArrayOption; 
+                            $specification = $newArrayOption;
+                        }
+                        else{
+                            $specification = $newArrayOption; 
+                        }
+                    }
+
+                    // product specification
+                    $productSpecification = [];
+                    foreach ($specification as $key => $value) {
+                        $productSpecification[] = $value;
+                    }
+                    $formattedCartContents[$rowId]['productSpecification'] = $productSpecification;
+                    
+                    foreach ($productCombinationAttributes as $key => $value) {
+                        foreach ($productCombinationAttributes[$key] as $key2 => $value2) {
+                            $complete[] = $value2; 
+                        }
+                    }
+                    $formattedCartContents[$rowId]['productCombinationAttributes'] = $complete;
+
+                    // format product combination details
+                    $productQuantity = $this->product_model->getProductQuantity($productId, false, false, $product->getStartPromo());
+                    $productQuantityNew = [];
+                    foreach ($productQuantity as $key => $valuex) {
+                        unset($productQuantity[$key]['attr_lookuplist_item_id']);
+                        unset($productQuantity[$key]['attr_name']);
+                        $newCombinationKey = array();
+
+                        for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
+                            $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
+                            array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
+                        }
+
+                        unset($productQuantity[$key]['product_attribute_ids']);
+                        $productQuantity[$key]['combinationId'] = $newCombinationKey;
+                        $productQuantity[$key]['id'] = $key;
+                        $productQuantityNew[] = $productQuantity[$key];
+                    }
+                    $formattedCartContents[$rowId]['productCombinationDetails'] = $productQuantityNew;
                 }
             }
         }

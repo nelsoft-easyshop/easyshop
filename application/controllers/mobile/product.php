@@ -136,21 +136,7 @@ class Product extends MY_Controller {
             'sellerContactNumber' => $seller['contactno'],
             'sellerEmail ' => $seller['email']
             );
-
-        $paymentMethodArray = $this->config->item('Promo')[0]['payment_method'];
-        if(intval($productRow['is_promote']) === 1){
-            $bannerfile = $this->config->item('Promo')[$productRow['promo_type']]['banner'];
-            if(strlen(trim($bannerfile)) > 0){
-                $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $productRow, TRUE); 
-            }
-            $paymentMethodArray = $this->config->item('Promo')[$productRow['promo_type']]['payment_method'];
-        }
-        
-        $paymentMethodNoKey = array();
-        foreach ($paymentMethodArray as $keyPm => $valuePm) {
-            array_push($paymentMethodNoKey,$valuePm);
-        }
-
+ 
         foreach ($relatedItems as $key => $value) {
             unset($relatedItems[$key]['is_sold_out']);
             unset($relatedItems[$key]['cat_id']);
@@ -185,8 +171,7 @@ class Product extends MY_Controller {
             "productImages" => $newProductImageArray,
             "sellerDetails" => $sellerDetails,
             "productCombinationAttributes" => $complete,
-            "productSpecification" => $productSpecificationNew,
-            "paymentMethod" => $paymentMethodNoKey,
+            "productSpecification" => $productSpecificationNew, 
             "productCombinatiobDetails" => $productQuantityNew,
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
