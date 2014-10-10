@@ -4,6 +4,7 @@
 <link type="text/css"  href='/assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
+<link type="text/css"  rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css" media="screen"/>
 
 
 <div id = "member_page_body">
@@ -11,7 +12,8 @@
     <section>
         <div class="wrapper profile_content">
             <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
-            <div class="profile_top_nav">
+            <div class="profile_top_nav">               
+            
                 <div>
                     <ul>
                         <li><a href="<?=base_url()?>home">Home</a></li>
@@ -60,7 +62,6 @@
             
             <span class="quickheader_close" style="cursor:pointer;border:medium 1px;">X</span>
         </div>
-        
         
         
         
@@ -1716,7 +1717,7 @@
     </div>
     
     <div id="bought" class="transactions-buy dashboard_table" data-key="buy" data-controller="2">
-        <h2>Bought Items</h2>
+        <h2>Bought Items | <span id="printTransactions" data-url="printbuytransactions" class="fa fa-print" style="cursor:pointer;size:1px;"></span></h2>
         <?php if($transaction['count']['buy']===0):?>
             <br/>
             <div><span class='nocontent'>You have not bought any items yet.</span></div>
@@ -1731,8 +1732,10 @@
     </div>
     
     <div class="post_item_srch_container">
+
             <input type="text" class="box sch_box tx_sch_box" placeholder="Transaction No." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
             <span class="span_bg sch_btn tx_sch_btn"></span>
+
             <label for="active_sort">Payment Filter</label>
             <select name="active_sort" class="post_active_sort tx_sort_select">
                 <option value="0">Show All</option>
@@ -1743,6 +1746,7 @@
             </select>
             <span class="span_bg arrow_sort tx_arrow_sort"></span>
         </div>
+
         
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
         <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
@@ -1765,12 +1769,15 @@
                         <span><strong>Date:</strong></span>
                         <span class="transac_title_date"><?php echo $transact['dateadded']?></span>
                     </div>
+        
+
                     <!-- If payment method is dragon pay / direct bank deposit-->
+
                     <div class="transac_title_col3">
                         <?php if( ($transact['payment_method'] == 2 || $transact['payment_method'] == 4) && $transact['transac_stat'] == 99):?>
                             <?php $attr = array('class'=>'');
                                 echo form_open('',$attr);
-                            ?>
+                            ?>             
                                 <input type="button" class="dragonpay_update_btn css_dp_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
                                 <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
                                 <input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
@@ -1972,7 +1979,8 @@
                  <div class="feedback_wrapper">
                     <?php foreach($transact['users'] as $uk=>$user):?>
                     <div class="feedback_container">
-                        <?php if( $user['has_feedb'] == 0 ): ?>
+                        <?php if( $user['has_feedb'] == 0 ): ?>          
+
                             <p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
                             <div class="transac-feedback-container">
                                 <h2>Feedback</h2>
@@ -2018,7 +2026,7 @@
 </div>
 
     <div id="sold" class="transactions-sell dashboard_table" data-key="sell" data-controller="2">
-        <h2>Sold Items</h2>
+        <h2>Sold Items  | <span id="printTransactions" data-url="printselltransactions" class="fa fa-print" style="cursor:pointer;size:1px;"></span></h2>
         <?php if($transaction['count']['sell']===0):?>
         <br/>
         <div><span class='nocontent'>You have not sold any items yet.</span></div>
