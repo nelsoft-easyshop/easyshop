@@ -1,16 +1,33 @@
 (function ($) {
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
-        if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
-            $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
-            
-            $( "#editIconOpen" ).click();
-        }
-        else{
+        if($( "#isEditable" ).val() == false){
+            // hide all fields that are empty
+            if($( "p#validatedStoreName" ).html() == ""){
+                $( "#storeNameRow" ).hide();
+            }
+            if($( "p#validatedContactNo" ).html() == ""){
+                $( "#contactNoRow" ).hide();
+            }
             if($( "a#validatedWebsite" ).html() == ""){
                 $( "#websiteRow" ).hide();
             }
+            if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
+                $( "#addressRow" ).hide();
+            }
         }
+        else{
+            if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
+            $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
+            
+                $( "#editIconOpen" ).click();
+            }
+            else{
+                if($( "a#validatedWebsite" ).html() == ""){
+                    $( "#websiteRow" ).hide();
+                }
+            }
+        }        
      });
 
     $(" #contactNo ").numeric(
@@ -66,7 +83,6 @@
         if($( "p#validatedContactNo" ).html() == ""){
             $( "#contactNoRow" ).hide();
         }
-
         if($( "a#validatedWebsite" ).html() == ""){
             $( "#websiteRow" ).hide();
         }
@@ -82,8 +98,6 @@
 
         var addr = $("#postStreetAddr").val();
         $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
-        
      });
 })(jQuery);
-
 
