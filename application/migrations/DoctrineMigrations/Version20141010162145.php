@@ -29,7 +29,7 @@ class Version20141010162145 extends AbstractMigration
 
         // Add index
         $this->addSql("ALTER TABLE `es_product` 
-            ADD DROP FULLTEXT INDEX `ft_es_product_search_keyword_idx` (`search_keyword` ASC);
+            ADD FULLTEXT INDEX `ft_es_product_search_keyword_idx` (`search_keyword` ASC);
         ");
 
         // ES_CAT
