@@ -102,8 +102,9 @@ $config = array(
              ),
             'viewable_button_product_page' =>true,
         ),
+        /* Scratch and win promo */
         '5' =>array(
-            'implementation' => '',
+            'implementation' => 'EasyShop\Promo\ListingPromo',
             'calculation_id' => '5',
             'purchase_limit' => 1,
             'payment_method' => array(),
@@ -119,8 +120,9 @@ $config = array(
             ),
             'viewable_button_product_page' =>false,
         ),
+        /* Buy at zero promo */
         '6' =>array(
-            'implementation' => '',
+            'implementation' => 'EasyShop\Promo\BuyAtZeroPromo',
             'calculation_id' => '6',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
