@@ -28,15 +28,24 @@ class CMS
     private $productManager;
     
     /**
+     * User Manager
+     *
+     * @var EasyShop\Product\UserManager
+     */
+    private $userManager;
+    
+    
+    /**
      * Loads dependencies
      *
      * @param EasyShop\XML\Resource
      */
-    public function __construct($xmlResourceGetter, $em, $productManager)
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
     {
         $this->xmlResourceGetter = $xmlResourceGetter;
         $this->em = $em;
         $this->productManager = $productManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -349,7 +358,8 @@ $string = '<typeNode>
             foreach($categorySection['productPanel'] as $idx=>$product){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
-                $sectionData['products'][$idx] =  $this->productManager->getProductDetails($product->getIdProduct());
+                $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
+                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
                                 
             }
             array_push($homePageData['categorySection'], $sectionData);
