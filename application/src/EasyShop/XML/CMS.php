@@ -6,6 +6,40 @@ class CMS
 {
 
     /**
+     * The xml resource getter
+     *
+     * @var EasyShop\XML\Resource
+     */
+    private $xmlResourceGetter;
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+    
+    
+    /**
+     * Product Manager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+    
+    /**
+     * Loads dependencies
+     *
+     * @param EasyShop\XML\Resource
+     */
+    public function __construct($xmlResourceGetter, $em, $productManager)
+    {
+        $this->xmlResourceGetter = $xmlResourceGetter;
+        $this->em = $em;
+        $this->productManager = $productManager;
+    }
+
+    /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
      *
      *  @param string $nodeName
@@ -16,8 +50,6 @@ class CMS
      *
      *  @return string
      */
-    public $string;
-
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
         if($nodeName=="feedFeaturedProduct")
@@ -289,6 +321,39 @@ $string = '<typeNode>
         }
         return $result;
     }
+    
+    
+    /**
+     * Returns the home page data
+     *
+     * 
+     */
+    public function getHomeData()
+    {
+        $homeXmlFile = $this->xmlResourceGetter->getHomeXMLfile();
+        $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
+        
+        $homePageData = array();
+        $homePageData['categorySection'] = array(); 
+
+        foreach($xmlContent['categorySection'] as $categorySection){
+            $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);
+            $sectionData['subHeaders'] = $categorySection['sub'];
+            
+            foreach($categorySection['productPanel'] as $idx=>$product){
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->findOneBy(['slug' => $product['slug']]);
+                $sectionData['products'][$idx] =  $this->productManager->getProductDetails($product->getIdProduct());
+                                
+            }
+            array_push($homePageData['categorySection'], $sectionData);
+        }
+
+        return $homePageData;
+    }
+    
+    
 }
 
 
