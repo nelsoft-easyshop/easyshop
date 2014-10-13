@@ -6,7 +6,6 @@
             <div class="col-md-12">
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
-
                         <p>
                             <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
                             <span class="pull-right">
@@ -42,7 +41,7 @@
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
                                 <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
-                                  
+                                        <span class="new-circle">NEW</span>
                                     <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
                                         <span class="discount-circle">-<?php echo $product->getDiscountPercentage() ?>%</span>
                                     <?php endif; ?>
