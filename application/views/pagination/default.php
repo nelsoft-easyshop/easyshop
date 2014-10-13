@@ -14,9 +14,6 @@
      */
     $lastPage = isset($lastPage) ? $lastPage : 1;
 
-
-    $lastPage = 297;
-    
     /**
      * number of pages before pagination logic kicks in
      *
