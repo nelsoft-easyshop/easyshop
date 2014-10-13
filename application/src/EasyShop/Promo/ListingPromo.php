@@ -16,7 +16,11 @@ class ListingPromo extends AbstractPromo
         if(!isset($this->product)){
             return null;
         }
-
+        
+        $this->dateToday = $this->dateToday->getTimestamp();
+        $this->startDateTime = $this->startDateTime->getTimestamp();
+        $this->endDateTime = $this->endDateTime->getTimestamp();
+        
         $this->promoPrice = $this->product->getPrice();
         if(!($this->dateToday < $this->startDateTime) ||
             ($this->endDateTime < $this->startDateTime) ||
