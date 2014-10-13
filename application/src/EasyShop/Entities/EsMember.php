@@ -190,6 +190,17 @@ class EsMember
     private $storeName;
 
     /**
+     * @var string
+     * @ORM\Column(name="oauth_id", type="string", length=255, nullable=false)
+     */
+    private $oauthId;
+
+    /**
+     * @var string
+     * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
+     */
+    private $oauthProvider;
+    /**
      * @var integer
      *
      * @ORM\Column(name="failed_login_count", type="integer", nullable=true)
@@ -202,6 +213,44 @@ class EsMember
      * @ORM\Column(name="last_failed_login_datetime", type="datetime", nullable=true)
      */
     private $lastFailedLoginDatetime = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="support_email", type="string", length=255, nullable=true)
+     */
+    private $supportEmail = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     */
+    private $website = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_hide_avatar", type="boolean", nullable=false)
+     */
+    private $isHideAvatar = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_hide_banner", type="boolean", nullable=false)
+     */
+    private $isHideBanner = '0';
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_DATE = "0001-01-01";
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_GENDER = "0";
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -790,6 +839,17 @@ class EsMember
     }
 
     /**
+     * Set OauthId
+     *
+     * @param string $oauthId
+     * @return EsMember
+     */
+    public function setOauthId($oauthId)
+    {
+        $this->oauthId = $oauthId;
+    }
+
+    /**
      * Set failedLoginCount
      *
      * @param integer $failedLoginCount
@@ -798,8 +858,28 @@ class EsMember
     public function setFailedLoginCount($failedLoginCount)
     {
         $this->failedLoginCount = $failedLoginCount;
-
         return $this;
+    }
+
+    /**
+     * Get OauthId
+     *
+     * @return string
+     */
+    public function getOauthId()
+    {
+        return $this->oauthId;
+    }
+
+    /**
+     * Set OauthProvider
+     *
+     * @param string $oauthProvider
+     * @return string
+     */
+    public function setOauthProvider($oauthProvider)
+    {
+        $this->oauthProvider = $oauthProvider;
     }
 
     /**
@@ -821,8 +901,17 @@ class EsMember
     public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
     {
         $this->lastFailedLoginDatetime = $lastFailedLoginDatetime;
-
         return $this;
+    }
+
+    /**
+     * Get getOauthProvider
+     *
+     * @return string
+     */
+    public function getOauthProvider()
+    {
+        return $this->oauthProvider;
     }
 
     /**
@@ -834,7 +923,6 @@ class EsMember
     {
         return $this->lastFailedLoginDatetime;
     }
-
 
     /**
      * Add session
@@ -868,4 +956,97 @@ class EsMember
     {
         return $this->session;
     }
+
+    /**
+     * Set Support Email
+     *
+     * @param string $supportEmail
+     * @return EsMember
+     */
+    public function setSupportEmail($supportEmail)
+    {
+        $this->supportEmail = $supportEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get Support Email
+     *
+     * @return string 
+     */
+    public function getSupportEmail()
+    {
+        return $this->supportEmail;
+    }
+
+    /**
+     * Set Website
+     *
+     * @param string $website
+     * @return EsMember
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * Get Website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set isHideAvatar
+     *
+     * @param boolean $isHideAvatar
+     * @return EsMember
+     */
+    public function setIsHideAvatar($isHideAvatar)
+    {
+        $this->isHideAvatar = $isHideAvatar;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideAvatar
+     *
+     * @return boolean 
+     */
+    public function getIsHideAvatar()
+    {
+        return $this->isHideAvatar;
+    }
+
+    /**
+     * Set isHideBanner
+     *
+     * @param boolean $isHideBanner
+     * @return EsMember
+     */
+    public function setIsHideBanner($isHideBanner)
+    {
+        $this->isHideBanner = $isHideBanner;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideBanner
+     *
+     * @return boolean 
+     */
+    public function getIsHideBanner()
+    {
+        return $this->isHideBanner;
+    }
+
 }

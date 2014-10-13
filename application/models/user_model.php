@@ -7,18 +7,49 @@ class user_model extends CI_Model {
         parent::__construct();
         $this->load->library("xmlmap");
     }
-        
-    public function getRealIpAddr() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) //check ip from share internet 
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //to check ip if pass from proxy 
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        else
-        $ip = $_SERVER['REMOTE_ADDR'];
+    
+    /**
+     * Get real ip address of user
+     * @return string $ip
+     */
+    public function getRealIpAddr()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])){
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else{
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
         return $ip;
     }
 
-    public function verify_member($data = array()) {
+    /**
+     * [authenticateWebKey description]
+     * @param  string $key [description]
+     * @return [type]      [description]
+     */
+    public function authenticateWebKey($key = "")
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users', 'authenticateWebKey');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':key', $key,PDO::PARAM_STR);  
+        $sth->execute(); 
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
+    /**
+     * Verify user credentials inputs for login
+     * @param  array  $data
+     * @return array $row
+     */
+    public function verify_member($data = array())
+    {
         $username = $data['login_username'];
         $password = $data['login_password'];
         $ip = $this->getRealIpAddr();
@@ -27,14 +58,30 @@ class user_model extends CI_Model {
         $sth->bindParam(':username', $username);
         $sth->bindParam(':password', $password);
         $sth->bindParam(':ip', $ip);
-            $sth->execute();
+        $sth->execute();
         $row = $sth->fetch();
 
         return $row;
-
     }
 
-    public function logout(){
+
+    public function VerifySocialMediaAccount($username, $oauthId, $oauthProvider)
+    {
+        $ip = $this->getRealIpAddr();
+        $query = $this->xmlmap->getFilenameID('sql/users', 'socialMediaLogin');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':username', $username);
+        $sth->bindParam(':oauthId', $oauthId);
+        $sth->bindParam(':oauthProvider', $oauthProvider);
+        $sth->bindParam(':ip', $ip);
+        $sth->execute();
+        $row = $sth->fetch();
+
+        return $row;
+    }
+
+    public function logout()
+    {
         $sid = $this->session->userdata('member_id');
         $sname = $this->session->userdata('usersession');
         $query = $this->xmlmap->getFilenameID('sql/users','user_logout');
@@ -43,6 +90,7 @@ class user_model extends CI_Model {
         $sth->bindParam(':id_member',$sid);
         $sth->execute();
         $row = $sth->fetch();
+
         return $row;
     }
 
@@ -66,6 +114,7 @@ class user_model extends CI_Model {
         $sth->bindParam(':usersession', $temp['session']);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
+
         return $row;
     }
     
@@ -101,6 +150,7 @@ class user_model extends CI_Model {
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
         $row = (!empty($row))?$row:false;
+
         return $row;
     
     }
@@ -113,13 +163,11 @@ class user_model extends CI_Model {
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
         $row = (!empty($row))?$row:false;
+
         return $row;
     
     }
-    
-    
 
-    
     public function getUserAccessDetails($uid)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getUserAccessDetails');

@@ -238,9 +238,15 @@ class productUpload extends MY_Controller
 
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
         $response['memid'] = $member_id = $this->session->userdata('member_id');
-        $dir    = './assets/product/'; 
-        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/';
-        $other_category_name = $this->input->post("othernamecategory");
+        $dir    = './assets/product/';
+
+        if(!glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)){
+            $date = date("Ymd");
+            $tempDirectory = './assets/product/'. $product_id.'_'.$member_id.'_'.$date.'/';
+            mkdir($tempDirectory, 0777, true);
+        }
+
+        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
         $product = $this->product_model->getProductEdit($product_id, $member_id);
         $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
 
@@ -257,7 +263,7 @@ class productUpload extends MY_Controller
         }
 
         // Loading Categories breadcrumbs
-        $otherCategory  = $response['otherCategory'] = $this->input->post('othernamecategory');
+        $otherCategory  = $response['otherCategory'] = html_escape($this->input->post('othernamecategory'));
         $breadcrumbs = '';
         $parents = $this->product_model->getParentId($cat_id); 
 
@@ -628,8 +634,9 @@ class productUpload extends MY_Controller
                 $explodearraynameoffiles = explode('||', $value);
                 $nameOfFile = $explodearraynameoffiles[0];
                 $arrayNameOnly[$key] = strtolower($nameOfFile); 
-
-                $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+                if($primaryId == $key){
+                    $primaryName = strtolower($nameOfFile); 
+                }
 
                 if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                     unset($arraynameoffiles[$key]);
@@ -875,7 +882,9 @@ class productUpload extends MY_Controller
         foreach($arraynameoffiles as $key => $value ) {
             $nameOfFile = explode('||', $value)[0];
             $arrayNameOnly[$key] = strtolower($nameOfFile); 
-            $primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+            if($primaryId == $key){
+                $primaryName = strtolower($nameOfFile); 
+            }
 
             if(in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
                 unset($arraynameoffiles[$key],$arrayNameOnly[$key]); 
@@ -1185,7 +1194,7 @@ class productUpload extends MY_Controller
             $productID = $this->input->post('prod_h_id');
             
             $product = $this->product_model->getProductById($productID, true);
-            
+
             if(empty($product) || (intval($product['sellerid']) !== intval($memberId))){
                 redirect('sell/step1', 'refresh');
             }
@@ -1299,6 +1308,11 @@ class productUpload extends MY_Controller
                             }
                         }
                     }
+
+                    // Reorder array values for proper checking of equality
+                    sort($clientProductItemID);
+                    sort($dbProductItemID);
+                    
                     #If ProductItemID matches for client and server, also verifies that all attributes have been checked
                     #or provided with a shipping location
                     if( $clientProductItemID == $dbProductItemID ){
@@ -1314,9 +1328,9 @@ class productUpload extends MY_Controller
                                         if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
                                             # -- ALGO START FOR INSERTION TO DATABASE --
                                             # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                foreach( $shipAttr[$groupkey] as $attrCombinationID){
+                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
+                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
+                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
                                                     $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
                                                 }
                                             }
@@ -1357,6 +1371,7 @@ class productUpload extends MY_Controller
         if( $this->input->post('prod_h_id') ){
             $productID = $this->input->post('prod_h_id');
             $memberID = $this->session->userdata('member_id');
+            $um = $this->serviceContainer['user_manager'];
             
             $product_row = $this->product_model->getProductById($productID, true);
             if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberID))){
@@ -1384,7 +1399,8 @@ class productUpload extends MY_Controller
                 'availability' => $availability,
                 'shipping_summary' => $this->product_model->getShippingSummary($productID),
                 'attr' => $this->product_model->getPrdShippingAttr($productID),
-                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID)
+                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID),
+                'avatarImage' => $um->getUserImage($memberID, "small")
             );
             $data = array_merge($data, $this->fill_view());
             

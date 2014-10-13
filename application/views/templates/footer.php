@@ -12,7 +12,7 @@
                     </div>
 
                 </div>
-                <script src="/assets/js/src/ws.js"></script>
+                <script src="/assets/js/src/ws.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
                 <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
         </footer>
         <div class="notification_container">

@@ -1,3 +1,11 @@
+(function ($) {
+
+    shippingPreference = jQuery.parseJSON($('#shippingPreference').val());
+    checkData = jQuery.parseJSON($('#checkData').val());
+
+})(jQuery);
+
+
 $(function(){
     $('#step2_link').on('click', function(){
         $('#edit_step2').submit();
@@ -415,6 +423,7 @@ $(function(){
         clonefield.find('select.shipping_preference').val(0);
         clonefield.find('.delete_ship_pref').hide();
         clonefield.find('input.shipattr').prop('checked', true);
+        clonefield.find('input.shipattr').parent('label').addClass('active');
         
         clonefield.find('select.shiploc').chosen({width:"480px"});
         
@@ -559,7 +568,7 @@ $(function(){
         var thisCheckbox = $(this);
         var attrkey = parseInt(thisCheckbox.val());
         
-        var divAttr = thisCheckbox.closest('div.shipping_attr');		
+        var divAttr = thisCheckbox.closest('div.shipping_attr');
         var divInput = divAttr.siblings('div.shipping_input');
         var selectedLoc = divInput.find('option:selected');
         

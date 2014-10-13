@@ -540,20 +540,21 @@ class Register_model extends CI_Model
 		}
 	}
 	
-	function signupMember_landingpage($data) 
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users', 'signup_member');
+    function signupMember_landingpage($data)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users', 'signup_member');
         $sth = $this->db->conn_id->prepare($query);
-		$blank = '';
         $sth->bindParam(':username', $data['username']);
-		$sth->bindParam(':password', $data['password']);
-		$sth->bindParam(':email', $data['email']);
-		$sth->bindParam(':contactno', $data['mobile']);
+        $sth->bindParam(':password', $data['password']);
+        $sth->bindParam(':email', $data['email']);
+        $sth->bindParam(':contactno', $data['mobile']);
+        $sth->bindParam(':fullname', $data['fullname']);
+        $sth->bindParam(':datenow', date('Y-m-d H:i:s'));
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-	}
+    }
 	
 }
 

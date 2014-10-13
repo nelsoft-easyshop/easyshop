@@ -45,7 +45,25 @@ class EsLocationLookup
      */
     private $parent;
 
+    /**
+     *  @var integer
+     */
+    const TYPE_COUNTRY = 0;
 
+    /**
+     *  @var integer
+     */
+    const TYPE_STATEREGION = 3;
+
+    /**
+     *  @var integer
+     */
+    const TYPE_CITY = 4;
+
+    /**
+     *  @var integer
+     */
+    const DEFAULT_REGION = 39;
 
     /**
      * Get idLocation

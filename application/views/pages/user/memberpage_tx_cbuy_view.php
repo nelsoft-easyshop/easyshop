@@ -38,7 +38,7 @@
 								</div>
 								<div class="transac_bought_con">
 									<span class="transac_bought_con_col1">Bought from: </span>
-									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
+									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>"><?php echo $product['seller'];?></a></span>
 									<span class="transac_bought_con_col3">
 										Status:
 										<?php if($product['status'] == 1):?>

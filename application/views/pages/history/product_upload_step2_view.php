@@ -606,7 +606,7 @@ foreach($opt_attr as $prod_attr): ?>
       <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
       <input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
     </form>
-    <div class="loader_div" style="display:none"><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'></div>              
+    <div class="loader_div" style="display:none"><img src='/assets/images/orange_loader.gif'></div>              
     <div class="percentage">
 
     </div>
@@ -631,7 +631,7 @@ foreach($opt_attr as $prod_attr): ?>
     </div>
     <div class="p_content">
       <p class="h_strong">You may add your own item specifications to your listing. This is helpful if you have item details that are not present in our provided list.</p>
-      <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/1.png"></div>
+      <div><img src="/assets/images/tutorial/prd_upload_step2/optionals/1.png"></div>
       <p class="">You can enter as many fields as you need by clicking on <strong>+Add more value</strong></p>
     </div>
   </div>

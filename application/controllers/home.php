@@ -30,6 +30,8 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
+        $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
     /**
@@ -59,24 +61,20 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
-       
-        
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/home/home_primary');
         $this->load->view('templates/footer_primary');
-        /*
-         $this->load->view('templates/header', $data);
-        if( $data['logged_in'] ){
-            $data = array_merge($data, $this->getFeed());            
-            $this->load->view("templates/home_layout/layoutF",$data);
-            $this->load->view('templates/footer', array('minborder' => true));
-        }
-        else{
-            $this->load->view('pages/home_view', $data);
-            $this->load->view('templates/footer_full');
-        }
-        */
-
     }
     
     

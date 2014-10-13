@@ -8,10 +8,11 @@ use EasyShop\Entities\EsProductShippingHead;
 class EsProductShippingHeadRepository extends EntityRepository
 {
     /**
-     * Returns the total shipping fee of a product
+     * Returns the total shipping fee of a product. Returns NULL if there are
+     * no shipping details available.
      *
      * @param integer $productId
-     * @return integer
+     * @return string
      */
     public function getShippingTotalPrice($productId)
     { 
@@ -24,8 +25,19 @@ class EsProductShippingHeadRepository extends EntityRepository
                             ->getQuery();
 
         $result = $qb->getOneOrNullResult();
-
-        return intval($result['shipping_total']);
+        return $result['shipping_total'];
+    }
+    
+    /**
+     * Method used for reverting rubbish data from admin product csv uploads
+     * @param int $id
+     */
+    public function deleteShippingHeadByProductId($id)
+    {
+        $query = $this->_em->createQuery("DELETE FROM EasyShop\Entities\EsProductShippingHead e 
+            WHERE e.product = ?6");
+        $query->setParameter(6, $id);
+        $query->execute();       
     }
 
 }

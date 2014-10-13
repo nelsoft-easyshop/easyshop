@@ -10027,7 +10027,7 @@ $.widget( "ui.dialog", {
 				{ click: props, text: name } :
 				props;
 			// Default to a non-submitting button
-			props = $.extend( { type: "button" }, props );
+			props = $.extend( { type: "button", class: "btn btn-default-3" }, props );
 			// Change the context for the click callback to be the main element
 			click = props.click;
 			props.click = function() {

@@ -18,7 +18,10 @@ class Login extends MY_Controller
         $this->load->model('user_model');
         $this->load->model('cart_model');
         $this->load->library('encrypt');
-        $this->throttleService = $this->serviceContainer['login_throttler'];	
+        session_start();
+        $this->load->config('oauth', TRUE);
+        $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
+        $this->throttleService = $this->serviceContainer['login_throttler'];
     }
     
     /**
@@ -27,12 +30,16 @@ class Login extends MY_Controller
      */
     function index() 
     {
+        $facebookScope = $this->config->item('facebook', 'oauth');
+        $googleScope = $this->config->item('google', 'oauth');
         $data = array(
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
         );
         $data = array_merge($data, $this->fill_header());
-        $response['url'] = $this->session->userdata('uri_string'); 
+        $response['url'] = $this->session->userdata('uri_string');
+        $response['facebook_login_url'] = $this->socialMediaManager->getLoginUrl(1, $facebookScope['permission_to_access']);
+        $response['google_login_url'] = $this->socialMediaManager->getLoginUrl(2, $googleScope['permission_to_access']);
         if($this->input->post('login_form')){
             $row = array();
             if($this->form_validation->run('login_form')){
@@ -46,9 +53,14 @@ class Login extends MY_Controller
             }
             else{
                 $response['form_error'] = 'Invalid username or password';
+                if(array_key_exists('timeoutLeft', $row) && $row['timeoutLeft'] >= 1){
+                    $response['loginFail'] = true;
+                    $response['timeoutLeft'] = $row['timeoutLeft'];
+                }
             }  
         }
         $data['render_searchbar'] = false;
+
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/login_view',$response);
         $this->load->view('templates/footer');
@@ -73,12 +85,14 @@ class Login extends MY_Controller
     }
   
     
-    /*   
-     *   Function for creating sessions and making database changes upon login
+    /**  
+     * Function for creating sessions and making database changes upon login
+     *  
+     * @param string $uname
+     * @param string $pass
      */
-
-    private function login($uname, $pass){
-
+    private function login($uname, $pass)
+    {
         // if user still has timeout left, do not process this login attempt
         if($this->throttleService->getTimeoutLeft($uname) >= 1){
             $row['o_success'] = 0;
@@ -89,9 +103,20 @@ class Login extends MY_Controller
             $row = $this->user_model->verify_member($dataval);                 
             #if user is valid: member i, usersession and cart_contents will be set in the session
             if ($row['o_success'] >= 1) {
+            
+                $em = $this->serviceContainer['entity_manager'];
+                $cartManager = $this->serviceContainer['cart_manager'];
+                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+                $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+            
+
+                $cartData = $cartManager->synchCart($user->getIdMember());
+                
+                
+            
                 $this->session->set_userdata('member_id', $row['o_memberid']);
                 $this->session->set_userdata('usersession', $row['o_session']);
-                $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
+                $this->session->set_userdata('cart_contents', $cartData);
 
                 if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
                     $temp = array(
@@ -104,14 +129,9 @@ class Login extends MY_Controller
                     $this->user_model->create_cookie($cookieval);
                 }
                 
-                /*
+                /**
                  * Register authenticated session
                  */
-                
-                $em = $this->serviceContainer['entity_manager'];
-                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
-                $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
-
                 $user->setFailedLoginCount(0);
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)

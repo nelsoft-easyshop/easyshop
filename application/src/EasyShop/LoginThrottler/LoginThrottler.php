@@ -24,9 +24,11 @@ class LoginThrottler
             0, // 1st failed attempt
             0, // 2nd failed attempt
             0, // 3rd failed attempt
-            30, // 4th failed attempt
-            45, // 5th failed attempt
-            60 // 6th+ failed attempt
+            0, // 4th failed attempt
+            0, // 5th failed attempt
+            30, // 6th failed attempt
+            45, // 7th failed attempt
+            60 // 8th+ failed attempt
         ];
 
     /**

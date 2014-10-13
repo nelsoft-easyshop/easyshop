@@ -5,8 +5,10 @@
 
 
 <div class="res_wrapper login_content">
+    <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
+    <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
 
-    <div class="login-tli-con" id="failed-login">
+    <div class="login-tli-con" id="failed-login" style="display: none">
         <div class="border-all border-rad-3">
             <div class="col-md-12 border-bottom bg-cl-f7f7f7">
                 <div class="pd-tb-8">
@@ -20,12 +22,12 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
     </div>
-        
+    
     <div class="border-all border-rad-3" id="login-form">
         <div class="col-md-12 border-bottom bg-cl-f7f7f7">
             <div class="pd-tb-8">
@@ -64,7 +66,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-7 col-md-7">
                                     <input type="text" id="login_username" name="login_username" class="ui-form-control">
-                                    <span id="username_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
+                                    <span id="username_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"></span>
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-10">
@@ -73,7 +75,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-7 col-md-7">
                                 <input type="password" id="login_password" name="login_password" class="ui-form-control"> 
-                                    <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"> </span>
+                                    <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"> </span>
                                     <span id="login_error" class="red" style="font-weight:bold;display:block"><?php echo (isset($form_error)?$form_error:'');?>  </span>
                                 </div>
                             </div>
@@ -111,8 +113,10 @@
                             <div class="col-sm-10 col-sm-pull-1 col-md-10 col-md-pull-1 col-sm-offset-1 col-md-offset-1">
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
-                                        <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
-                                        <span class="text-center">Log In with Facebook</span>
+                                        <a href="<?=$facebook_login_url?>">
+                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
+                                            <span class="text-center">Log In with Facebook</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -121,8 +125,10 @@
                             <div class="col-sm-10 col-sm-pull-1 col-md-10 col-md-pull-1 col-sm-offset-1 col-md-offset-1">
                                 <div class="log-in-btn log-in-google">
                                     <div>
-                                        <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
-                                        <span class="text-center">Log In with Google</span>
+                                        <a href="<?=$google_login_url?>">
+                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
+                                            <span class="text-center">Log In with Google</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

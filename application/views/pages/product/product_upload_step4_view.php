@@ -225,7 +225,7 @@
                                 <h4 class="id-class" id="<?php echo $product['id_product'];?>"> 
                                     <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
                                     <span class="seller-name"> 
-                                        <img src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
+                                        <img src="<?=$avatarImage?>"><br />
                                         <span><?php echo html_escape($product['sellerusername']);?></span> 
                                         <p>No ratings received.</p>
                                     </span>
