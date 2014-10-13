@@ -15,6 +15,8 @@
     $lastPage = isset($lastPage) ? $lastPage : 1;
 
 
+    $lastPage = 297;
+    
     /**
      * number of pages before pagination logic kicks in
      *
@@ -23,11 +25,11 @@
     $maxPages = isset($maxPages) ? $maxPages : 10;
 
     /**
-     * Pages to the left of the currentPage to maintain
+     * Minimum number of pages to the left of the currentPage to maintain
      *
      * @var integer
      */
-    $pagesBefore = isset($pagesBefore) ? $pagesBefore : 5;
+    $pagesBefore = isset($pagesBefore) ? $pagesBefore : 4;
     
     /**
      * Add hyperlink or not
@@ -46,12 +48,13 @@
     $start = $lastPage > $maxPages ? $currentPage-$pagesBefore : 1; 
     $start = $start < 1 ? 1 : $start;
     
-    $range = ($currentPage - $start);
+    //$range = ($currentPage - $start);
+    $range = $lastPage - $currentPage;
     $range = $range > $maxPages ? $maxPages : $range;
 
     $end = $lastPage > $maxPages ? $currentPage+$range : $lastPage; 
     $end = $end > $lastPage ? $lastPage : $end ;
-    
+
 ?>
 
 
