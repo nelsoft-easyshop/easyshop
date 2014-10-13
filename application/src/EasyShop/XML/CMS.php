@@ -6,6 +6,49 @@ class CMS
 {
 
     /**
+     * The xml resource getter
+     *
+     * @var EasyShop\XML\Resource
+     */
+    private $xmlResourceGetter;
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+    
+    
+    /**
+     * Product Manager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+    
+    /**
+     * User Manager
+     *
+     * @var EasyShop\Product\UserManager
+     */
+    private $userManager;
+    
+    
+    /**
+     * Loads dependencies
+     *
+     * @param EasyShop\XML\Resource
+     */
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
+    {
+        $this->xmlResourceGetter = $xmlResourceGetter;
+        $this->em = $em;
+        $this->productManager = $productManager;
+        $this->userManager = $userManager;
+    }
+
+    /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
      *
      *  @param string $nodeName
@@ -16,8 +59,6 @@ class CMS
      *
      *  @return string
      */
-    public $string;
-
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
 
@@ -294,6 +335,40 @@ $string = '<typeNode>
         }
         return $result;
     }
+    
+    
+    /**
+     * Returns the home page data
+     *
+     * 
+     */
+    public function getHomeData()
+    {
+        $homeXmlFile = $this->xmlResourceGetter->getHomeXMLfile();
+        $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
+        
+        $homePageData = array();
+        $homePageData['categorySection'] = array(); 
+
+        foreach($xmlContent['categorySection'] as $categorySection){
+            $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);
+            $sectionData['subHeaders'] = $categorySection['sub'];
+            
+            foreach($categorySection['productPanel'] as $idx=>$product){
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->findOneBy(['slug' => $product['slug']]);
+                $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
+                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+                                
+            }
+            array_push($homePageData['categorySection'], $sectionData);
+        }
+
+        return $homePageData;
+    }
+    
+    
 }
 
 

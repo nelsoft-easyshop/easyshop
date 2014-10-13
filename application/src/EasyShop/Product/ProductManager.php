@@ -27,6 +27,13 @@ use EasyShop\Entities\EsCat;
 class ProductManager
 {
 
+
+    /**
+     * Newness Limit in days 
+     *
+     */
+    const NEWNESS_LIMIT = 14;
+
     /**
      * Entity Manager instance
      *
@@ -100,6 +107,10 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
+        $product->setIsNew($this->isProductNew($product));
+        $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                           ->getDefaultImage($product->getIdProduct()));
+        
         $this->promoManager->hydratePromoData($product);
 
         return $product;
@@ -382,8 +393,24 @@ class ProductManager
         $this->em->flush();
         return true;
     }
-
     
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        $lastModifiedDate = $product->getLastModifiedDate()
+                                    ->getTimestamp();
+        $dateNow = new \DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::NEWNESS_LIMIT;
+    }
+
     /**
      * Returns the recommended products list for a certain product
      *
@@ -450,9 +477,14 @@ class ProductManager
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
-            $product->directory = $objImage->getDirectory();
-            $product->imageFileName = $objImage->getFilename();
-
+            if(!$objImage){
+                $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            }
+            else{
+                $product->directory = $objImage->getDirectory();
+                $product->imageFileName = $objImage->getFilename();
+            }
             $categoryProducts[] = $product;
         }
 

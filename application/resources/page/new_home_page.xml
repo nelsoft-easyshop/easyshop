@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<map>
+    
+    <categorySection>
+        <type>category</type>
+        <categorySlug>clothing-and-accessories</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <product_panel>
+            <slug>ubuntu-valid-gd</slug>
+        </product_panel>
+        
+         <product_panel>
+            <slug>ubuntu-valid-gd</slug>
+        </product_panel>
+        
+         <product_panel>
+            <slug>ubuntu-valid-gd</slug>
+        </product_panel>
+        
+         <product_panel>
+            <slug>ubuntu-valid-gd</slug>
+        </product_panel>
+        
+        <product_panel>
+            <slug>ubuntu-valid-gd</slug>
+        </product_panel>
+        
+    </categorySection>
+    
+</map>
