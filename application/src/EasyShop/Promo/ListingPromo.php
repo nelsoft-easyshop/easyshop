@@ -25,7 +25,7 @@ class ListingPromo extends AbstractPromo
         if(!($this->dateToday < $this->startDateTime) ||
             ($this->endDateTime < $this->startDateTime) ||
             ($this->dateToday > $this->endDateTime))
-        ){
+        {
             $this->isStartPromo = true;
         }
           
