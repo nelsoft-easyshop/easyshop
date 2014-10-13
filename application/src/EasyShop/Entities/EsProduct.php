@@ -67,6 +67,13 @@ class EsProduct
     /**
      * @var string
      *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="price", type="decimal", precision=15, scale=4, nullable=false)
      */
     private $price = '0.0000';
@@ -198,9 +205,9 @@ class EsProduct
     private $enddate = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="promo_type", type="boolean", nullable=false)
+     * @ORM\Column(name="promo_type", type="integer", nullable=false)
      */
     private $promoType = '0';
 
@@ -210,13 +217,6 @@ class EsProduct
      * @ORM\Column(name="is_sold_out", type="boolean", nullable=false)
      */
     private $isSoldOut = '0';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
 
     /**
      * @var boolean
@@ -311,6 +311,14 @@ class EsProduct
      *
      */
     private $soldPrice = '0.0000';
+    
+    
+    /**
+     * @var EasyShop\Entities\EsProductImage
+     * 
+     *
+     */
+    private $defaultImage;
 
     
     /**
@@ -478,6 +486,29 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
     }
 
     /**
@@ -920,7 +951,7 @@ class EsProduct
     /**
      * Set promoType
      *
-     * @param boolean $promoType
+     * @param integer $promoType
      * @return EsProduct
      */
     public function setPromoType($promoType)
@@ -933,7 +964,7 @@ class EsProduct
     /**
      * Get promoType
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getPromoType()
     {
@@ -961,29 +992,6 @@ class EsProduct
     public function getIsSoldOut()
     {
         return $this->isSoldOut;
-    }
-
-    /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
     }
 
     /**
@@ -1243,16 +1251,7 @@ class EsProduct
         return $this->soldPrice;
     }
     
-    /** 
-     * Returns the images of a product
-     *
-     * @return EasyShop\Entities\EsProductImage
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-    
+
     /**
      * Set maxAllowablePoint
      *
@@ -1275,4 +1274,36 @@ class EsProduct
     {
         return $this->maxAllowablePoint;
     }
+    
+    
+    /**
+     * Set the default image
+     *
+     * @param EasyShop\Entities\EsProductImage $defaultImage
+     */
+    public function setDefaultImage($defaultImage)
+    {
+        $this->defaultImage = $defaultImage;
+    }
+    
+    /**
+     * Returns the default image
+     *
+     * @return EasyShop\Entities\EsProductImage
+     */
+    public function getDefaultImage()
+    {
+        return $this->defaultImage;
+    }
+    
+    /** 
+     * Returns the images of a product
+     *
+     * @return EasyShop\Entities\EsProductImage[]
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+        
 }

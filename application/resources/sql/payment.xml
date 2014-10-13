@@ -1,166 +1,168 @@
 <?xml version='1.0' ?>
 <map>
-	
 
-<select id="get_address">
-	SELECT
-	   `streetno`
-	  , `streetname`
-	  , `barangay`
-	  , `citytown`
-	  , `country`
-	  , `postalcode`
-	  , `type`
-	  , `telephone`
-	  , `mobile`
-	  , `consignee`
-	FROM `es_address`
-	WHERE TYPE = 1
-	AND id_member = :id_member
-	limit 1
-</select>
+    <select id="get_address">
+        SELECT
+        `streetno`
+        , `streetname`
+        , `barangay`
+        , `citytown`
+        , `country`
+        , `postalcode`
+        , `type`
+        , `telephone`
+        , `mobile`
+        , `consignee`
+        FROM `es_address`
+        WHERE TYPE = 1
+        AND id_member = :id_member
+        limit 1
+    </select>
 
-<select id="payment_transaction">
-	CALL es_sp_Payment_order(
-		:payment_type,
-		:invoice_no,
-		:total_amt,
-		:ip,
-		:member_id,
-		:string,
-		:product_count,
-		:data_response,
-		:tid
-	)
-</select>
+    <select id="payment_transaction">
+        CALL es_sp_Payment_order(
+            :payment_type,
+            :invoice_no,
+            :total_amt,
+            :ip,
+            :member_id,
+            :string,
+            :product_count,
+            :data_response,
+            :tid,
+            :dateadded
+        )
+    </select>
 
-<select id="updatePaymentIfComplete">
-	UPDATE 
-	  es_order 
-	SET
-	  `order_status` = :order_status
-	  , `data_response` = :data 
-	  , `transaction_id` = :tid
-	  , `payment_method_id` = :payment_id
-	  , `postbackcount` = postbackcount + 1
-	  , `is_flag` = :flag  
-	WHERE `id_order` = :id_order 
-</select>
-
-
-<select id="getPurchaseTransactionDetails">
-	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as finalprice, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net,
-		opa.attr_name, opa.attr_value, buyer.email as buyer_email, o.invoice_no,
-		IF(badd.mobile='','N/A',CONCAT('0',badd.mobile)) as buyer_contactno, IF(seller.contactno='','N/A',CONCAT('0',seller.contactno)) as seller_contactno,
-		l0.location as stateregion, l1.location as city, badd.address,COALESCE(badd.telephone, 'N/A') as buyer_telephone,
-		o.payment_method_id
-	FROM es_order o
-	INNER JOIN es_order_product op 
-		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id AND o.invoice_no = :invoice_no
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
-	LEFT JOIN es_order_product_attr opa
-		ON op.id_order_product = opa.order_product_id
-	LEFT JOIN es_member seller
-		ON op.seller_id = seller.id_member
-	LEFT JOIN es_member buyer
-		ON o.buyer_id = buyer.id_member
-	LEFT JOIN es_order_shipping_address badd
-		ON o.shipping_address_id = badd.id_order_shipping_address
-	LEFT JOIN es_location_lookup l0
-		ON badd.stateregion = l0.id_location
-	LEFT JOIN es_location_lookup l1
-		ON badd.city = l1.id_location
-</select>
+    <select id="updatePaymentIfComplete">
+        UPDATE 
+        es_order 
+        SET
+        `order_status` = :order_status
+        , `data_response` = :data 
+        , `transaction_id` = :tid
+        , `payment_method_id` = :payment_id
+        , `postbackcount` = postbackcount + 1
+        , `is_flag` = :flag  
+        WHERE `id_order` = :id_order 
+    </select>
 
 
-<select id="getOrderProductTransactionDetails">
-	SELECT	o.id_order, o.invoice_no, op.id_order_product 
-		,p.name as product_name, FORMAT(op.price,2) as price, op.order_quantity, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as total, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net
-		,opa.attr_name, opa.attr_value
-		,seller.username as seller, seller.email as seller_email, seller.contactno as seller_contactno, buyer.username as buyer, buyer.email as buyer_email, buyer.contactno as buyer_contactno,
-		o.payment_method_id
-	FROM es_order o
-	INNER JOIN es_order_product op 
-		ON op.order_id = o.id_order AND op.order_id = :order_id AND op.id_order_product = :order_product_id AND o.invoice_no = :invoice_num
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
-	LEFT JOIN es_order_product_attr opa
-		ON op.id_order_product = opa.order_product_id
-	LEFT JOIN es_member seller
-		ON op.seller_id = seller.id_member
-	LEFT JOIN es_member buyer
-		ON o.buyer_id = buyer.id_member
-	WHERE op.seller_id = :member_id OR o.buyer_id = :member_id
-</select>
+    <select id="getPurchaseTransactionDetails">
+        SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as finalprice, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net,
+            opa.attr_name, opa.attr_value, buyer.email as buyer_email, o.invoice_no,
+            IF(badd.mobile='','N/A',CONCAT('0',badd.mobile)) as buyer_contactno, IF(seller.contactno='','N/A',CONCAT('0',seller.contactno)) as seller_contactno,
+            l0.location as stateregion, l1.location as city, badd.address,COALESCE(badd.telephone, 'N/A') as buyer_telephone,
+            o.payment_method_id,
+            buyer.slug as buyer_slug, seller.slug as seller_slug
+        FROM es_order o
+        INNER JOIN es_order_product op 
+            ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id AND o.invoice_no = :invoice_no
+        INNER JOIN es_product p
+            ON op.product_id = p.id_product
+        LEFT JOIN es_order_product_attr opa
+            ON op.id_order_product = opa.order_product_id
+        LEFT JOIN es_member seller
+            ON op.seller_id = seller.id_member
+        LEFT JOIN es_member buyer
+            ON o.buyer_id = buyer.id_member
+        LEFT JOIN es_order_shipping_address badd
+            ON o.shipping_address_id = badd.id_order_shipping_address
+        LEFT JOIN es_location_lookup l0
+            ON badd.stateregion = l0.id_location
+        LEFT JOIN es_location_lookup l1
+            ON badd.city = l1.id_location
+    </select>
 
-<select id="updateTransactionStatus">
-	CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id, :invoice_num, :member_id )
-</select>
 
-<!-- Used to verify transaction for adding feedbacks-->
-<select id="checkTransaction">
-	SELECT eo.id_order
-	FROM es_order eo
-	INNER JOIN es_order_product ep
-		ON eo.id_order = ep.order_id AND eo.id_order = :order_id AND eo.buyer_id = :buyer AND ep.seller_id = :seller
-</select>
+    <select id="getOrderProductTransactionDetails">
+        SELECT	o.id_order, o.invoice_no, op.id_order_product 
+            ,p.name as product_name, FORMAT(op.price,2) as price, op.order_quantity, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as total, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net
+            ,opa.attr_name, opa.attr_value
+            ,seller.username as seller, seller.email as seller_email, seller.contactno as seller_contactno, buyer.username as buyer, buyer.email as buyer_email, buyer.contactno as buyer_contactno,
+            o.payment_method_id,
+            buyer.slug as buyer_slug, seller.slug as seller_slug
+        FROM es_order o
+        INNER JOIN es_order_product op 
+            ON op.order_id = o.id_order AND op.order_id = :order_id AND op.id_order_product = :order_product_id AND o.invoice_no = :invoice_num
+        INNER JOIN es_product p
+            ON op.product_id = p.id_product
+        LEFT JOIN es_order_product_attr opa
+            ON op.id_order_product = opa.order_product_id
+        LEFT JOIN es_member seller
+            ON op.seller_id = seller.id_member
+        LEFT JOIN es_member buyer
+            ON o.buyer_id = buyer.id_member
+        WHERE op.seller_id = :member_id OR o.buyer_id = :member_id
+    </select>
 
-<!-- Used to check for dragonpay transaction-->
-<select id="checkTransactionBasic">
-	SELECT id_order, data_response,transaction_id
-	FROM es_order
-	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
-</select>
+    <select id="updateTransactionStatus">
+        CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id, :invoice_num, :member_id )
+    </select>
 
-<!-- Check order product - used to check before adding comments and bankdeposit details-->
-<select id="checkOrderProductBasic">
-	SELECT id_order_product
-	FROM es_order_product
-	WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
-	LIMIT 1
-</select>
+    <!-- Used to verify transaction for adding feedbacks-->
+    <select id="checkTransaction">
+        SELECT eo.id_order
+        FROM es_order eo
+        INNER JOIN es_order_product ep
+            ON eo.id_order = ep.order_id AND eo.id_order = :order_id AND eo.buyer_id = :buyer AND ep.seller_id = :seller
+    </select>
 
-<select id="addShippingComment">
-	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `delivery_date`, `expected_date`, `datemodified`)
-	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :delivery_date, :expected_date, NOW())
-	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, delivery_date = :delivery_date, expected_date = :expected_date, datemodified = NOW()
-</select>
+    <!-- Used to check for dragonpay transaction-->
+    <select id="checkTransactionBasic">
+        SELECT id_order, data_response,transaction_id
+        FROM es_order
+        WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
+    </select>
 
-<select id="addBankDepositDetails">
-	INSERT INTO es_payment_bankdeposit (`order_id`, `bank`,`ref_num`, `amount`, `date_deposit`, `comment`, `datemodified`, `is_invalid`)
-	VALUES(:order_id, :bank, :ref_num, :amount, :date_deposit, :comment, NOW(), 0)
-	ON DUPLICATE KEY UPDATE bank = :bank, ref_num = :ref_num, amount = :amount, date_deposit = :date_deposit, comment = :comment, datemodified = NOW(), is_invalid = 0
-</select>
+    <!-- Check order product - used to check before adding comments and bankdeposit details-->
+    <select id="checkOrderProductBasic">
+        SELECT id_order_product
+        FROM es_order_product
+        WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
+        LIMIT 1
+    </select>
 
-<!-- Used to update es_order - Dragonpay transaction -->
-<select id="updateTransactionStatusBasic">
-	UPDATE es_order
-	SET order_status = :order_status, datemodified = NOW()
-	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
-</select>
+    <select id="addShippingComment">
+        INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `delivery_date`, `expected_date`, `datemodified`)
+        VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :delivery_date, :expected_date, NOW())
+        ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, delivery_date = :delivery_date, expected_date = :expected_date, datemodified = NOW()
+    </select>
 
-<!-- Used by Dragonpay upon updating es_order table (status field) -->
-<select id="addOrderHistory">
-	INSERT INTO es_order_history (`order_id`, `order_status`, `comment`, `date_added`)
-	VALUES (:order_id, :order_status, :comment, NOW());
-</select>
+    <select id="addBankDepositDetails">
+        INSERT INTO es_payment_bankdeposit (`order_id`, `bank`,`ref_num`, `amount`, `date_deposit`, `comment`, `datemodified`, `is_invalid`)
+        VALUES(:order_id, :bank, :ref_num, :amount, :date_deposit, :comment, NOW(), 0)
+        ON DUPLICATE KEY UPDATE bank = :bank, ref_num = :ref_num, amount = :amount, date_deposit = :date_deposit, comment = :comment, datemodified = NOW(), is_invalid = 0
+    </select>
 
-<select id="addOrderProductHistory">
-	INSERT INTO es_order_product_history (`order_product_id`, `comment`, `date_added`, `order_product_status`)
-	VALUES (:order_product_id, :comment, NOW(), :order_product_status)
-</select>
+    <!-- Used to update es_order - Dragonpay transaction -->
+    <select id="updateTransactionStatusBasic">
+        UPDATE es_order
+        SET order_status = :order_status, datemodified = NOW()
+        WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
+    </select>
 
-<select id="responseDragonpay">
-	CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)
-</select>
+    <!-- Used by Dragonpay upon updating es_order table (status field) -->
+    <select id="addOrderHistory">
+        INSERT INTO es_order_history (`order_id`, `order_status`, `comment`, `date_added`)
+        VALUES (:order_id, :order_status, :comment, NOW());
+    </select>
 
-<!-- Used by product reject and unreject buttons in memberpage transactions-->
-<select id="responseReject">
-	UPDATE `es_order_product`
-	SET is_reject = :stat
-	WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
-</select>
+    <select id="addOrderProductHistory">
+        INSERT INTO es_order_product_history (`order_product_id`, `comment`, `date_added`, `order_product_status`)
+        VALUES (:order_product_id, :comment, NOW(), :order_product_status)
+    </select>
+
+    <select id="responseDragonpay">
+        CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)
+    </select>
+
+    <!-- Used by product reject and unreject buttons in memberpage transactions-->
+    <select id="responseReject">
+        UPDATE `es_order_product`
+        SET is_reject = :stat
+        WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
+    </select>
 
 
 

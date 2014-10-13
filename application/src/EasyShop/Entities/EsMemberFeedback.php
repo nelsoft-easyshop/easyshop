@@ -39,6 +39,16 @@ class EsMemberFeedback
 
     /**
      * @var integer
+     */
+    const REVIEWER_AS_BUYER = 0;
+  
+    /**
+     * @var integer
+     */
+    const REVIEWER_AS_SELLER = 1;
+    
+    /**
+     * @var integer
      *
      * @ORM\Column(name="id_feedback", type="integer", nullable=false)
      * @ORM\Id

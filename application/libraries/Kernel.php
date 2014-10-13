@@ -80,7 +80,7 @@ class Kernel
             
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
-        
+
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
@@ -90,7 +90,8 @@ class Kernel
         $container['xml_cms'] = function ($c) use ($container) {
             return new \EasyShop\XML\CMS($container['xml_resource'],
                                          $container['entity_manager'],
-                                         $container['product_manager']);
+                                         $container['product_manager'],
+                                         $container['user_manager']);
         };
         
         //XML Resource Service
@@ -100,8 +101,12 @@ class Kernel
         
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager'], 
-                                                  $container['config_loader']);
+            return new \EasyShop\User\UserManager($container['entity_manager']
+                                                ,$container['config_loader']
+                                                ,$container['form_validation']
+                                                ,$container['form_factory']
+                                                ,$container['form_error_helper']
+                                                ,$container['string_utility']);
         };
         
         //Account Manager
@@ -120,9 +125,29 @@ class Kernel
                                                         $formErrorHelper,
                                                         $stringHelper);        
         };
-        
-        
-        
+
+        $container['message_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            return new \EasyShop\Message\MessageManager($em);
+        };
+
+        //Authentication Manager
+        $container['account_manager'] = function ($c) use ($container) {
+            $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            $stringHelper = $container['string_utility'];
+            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
+                                                        $userManager, 
+                                                        $formFactory, 
+                                                        $formValidation, 
+                                                        $formErrorHelper,
+                                                        $stringHelper);        
+        };
+
 
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';
@@ -132,10 +157,14 @@ class Kernel
         $vendorTwigBridgeDir = $vendorDir . '/symfony/twig-bridge/Symfony/Bridge/Twig';
 
         // CSRF Setup
-        $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
-        $session = new \Symfony\Component\HttpFoundation\Session\Session();
-        $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
-
+        $container['csrf_provider'] = function ($c){
+            $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
+            $session = new \Symfony\Component\HttpFoundation\Session\Session();
+            $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
+            return $csrfProvider;
+        };
+        
+        
         // Twig setup
         $translator = new \Symfony\Component\Translation\Translator('en');
         $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
@@ -143,7 +172,7 @@ class Kernel
         $translator->addResource('xlf', $vendorValidatorDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
 
         //Twig Service
-        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $csrfProvider) {
+        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $container) {
             // Create twig
             $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
                 $viewsDir,
@@ -153,7 +182,7 @@ class Kernel
             $formEngine = new Symfony\Bridge\Twig\Form\TwigRendererEngine(array('form_div_layout.html.twig'));
             $formEngine->setEnvironment($twig);
             $twig->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($translator));
-            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $csrfProvider)));
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $container['csrf_provider'])));
             return $twig;
         };
 
@@ -161,10 +190,10 @@ class Kernel
         $validator = \Symfony\Component\Validator\Validation::createValidator();
 
         //Form Factory Service
-        $container['form_factory'] = function ($c) use ($csrfProvider, $validator) {
+        $container['form_factory'] = function ($c) use ($container, $validator) {
             // Create factory
             $formFactory = \Symfony\Component\Form\Forms::createFormFactoryBuilder()
-                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($csrfProvider))
+                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($container['csrf_provider']))
                 ->addExtension(new \Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension())
                 ->addExtension(new \Symfony\Component\Form\Extension\Validator\ValidatorExtension($validator))
                 ->getFormFactory();
@@ -173,8 +202,8 @@ class Kernel
         };
 
         //Validation Rules Service
-        $container['form_validation'] = function ($c) {
-            return new \EasyShop\FormValidation\ValidationRules();
+        $container['form_validation'] = function ($c) use ($container){
+            return new \EasyShop\FormValidation\ValidationRules($container['entity_manager']);
         };
 
         //Request Service
@@ -231,10 +260,12 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
+            $imageLibrary = new \CI_Image_lib();
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
-                                                        $configLoader);
+                                                        $configLoader,
+                                                        $imageLibrary);
         };
 
 
@@ -242,7 +273,36 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
- 
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+         };
+        $socialMediaConfig = require APPPATH . 'config/oauth.php';
+        $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
+            $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
+                $socialMediaConfig['facebook']['redirect_url'],
+                $socialMediaConfig['facebook']['key']['appId'],
+                $socialMediaConfig['facebook']['key']['secret']
+            );
+            $googleClient = new Google_Client();
+            $googleClient->setAccessType('online');
+            $googleClient->setApplicationName('Easyshop');
+            $googleClient->setClientId($socialMediaConfig['google']['key']['appId']);
+            $googleClient->setClientSecret($socialMediaConfig['google']['key']['secret']);
+            $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
+            $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $configLoader = $container['config_loader'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\SocialMedia\SocialMediaManager(
+                $fbRedirectLoginHelper,
+                $googleClient,
+                $em,
+                $userManager,
+                $configLoader,
+                $stringUtility
+            );
+        };
         // Category Manager
         $container['category_manager'] = function ($c) use($container) {
             $em = $container['entity_manager'];
@@ -286,10 +346,29 @@ class Kernel
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
         };
 
+        $container['oauth2_server'] = function ($c) use ($dbConfig, $container) {
+            $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
+            $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
+            
+            $userCredentialStorage = new EasyShop\OAuth\Storage\UserCredentials($container['account_manager']);
+            $server = new OAuth2\Server($storage);
+            $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
+            $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
+            return $server;
+        };
 
-        // String Utility
-        $container['string_utility'] = function($c) {
-            return new EasyShop\Utility\StringUtility();
+        // NUSoap Client
+        $container['nusoap_client'] = function ($c) {
+            $url = '';
+            if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
+            // LIVE
+                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            else{
+            // SANDBOX
+                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            return new \nusoap_client($url,true);
         };
 
         /* Register services END */

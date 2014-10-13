@@ -114,7 +114,7 @@ class AccountManager
                         ->setMethod('POST')
                         ->add('username', 'text', array('constraints' => $rules['username']))
                         ->add('password', 'text', array('constraints' => $rules['password']))
-                        ->getForm();;
+                        ->getForm();
         
         $form->submit([ 'username' => $username,
                         'password' => $password
@@ -191,6 +191,7 @@ class AccountManager
             $member->setDatecreated(new DateTime('now'));
             $member->setLastmodifieddate(new DateTime('now'));
             $member->setLastLoginDatetime(new DateTime('now'));
+            $member->setLastFailedLoginDateTime(new DateTime('now'));
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             
@@ -224,6 +225,5 @@ class AccountManager
 
         return $result['hash'];
     }
-    
-        
+
 }

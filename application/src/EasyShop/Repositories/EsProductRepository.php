@@ -9,6 +9,11 @@ use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
+use EasyShop\Entities\EsOptionalAttrdetail;
+use EasyShop\Entities\EsOptionalAttrhead;
+use EasyShop\Entities\EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class EsProductRepository extends EntityRepository
 {
@@ -50,31 +55,24 @@ class EsProductRepository extends EntityRepository
                 , `weight`
             FROM (
                     SELECT 
-                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3) +
+                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 10) +
                         (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
-                        MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) +
-                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
-                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5) +
-                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) +
-                        ((REPLACE (`search_keyword`, ' ', '') LIKE :param3 )  * 0.005)
+                        (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 10) +
+                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1.5) +
+                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 15) +
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) 
                          AS weight,
                         id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
                         ,`is_sold_out`
                     FROM es_product
-                    WHERE is_delete = 0 AND is_draft = 0 
-                    AND (
-                        MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
-                        OR 
-                        REPLACE (`search_keyword`, ' ', '') LIKE :param3
-                    )
+                    WHERE is_delete = 0 AND is_draft = 0
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
-        $query->setParameter('param1', $stringCollection[1]); 
-        $query->setParameter('param2', $stringCollection[2]); 
-        $query->setParameter('param3', "%".$stringCollection[3]."%"); 
+        $query->setParameter('param1', $stringCollection[1]);
+        $query->setParameter('param2', $stringCollection[2]);
         $results = $query->execute();  
 
         return $results;
@@ -85,25 +83,30 @@ class EsProductRepository extends EntityRepository
      * @param  array   $productIds
      * @param  integer $offset
      * @param  integer $perPage
+     * @param  boolean $applyLimit
      * @return mixed
      */
-    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
+    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
     {   
         if(!empty($productIds)){
             $this->em =  $this->_em;
 
                 $sql = "
                     SELECT 
-                        p,m
+                        p,m,c
                     FROM 
                         EasyShop\Entities\EsProduct p
                         JOIN p.member m
+                        JOIN p.cat c
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)
-                                    ->setParameter('ids', $productIds)
-                                    ->setFirstResult($offset*$perPage)
-                                    ->setMaxResults($perPage);
+                                    ->setParameter('ids', $productIds);
+                if($applyLimit){
+                    $query->setFirstResult($offset*$perPage)
+                        ->setMaxResults($perPage);
+                }
+                
                 $results = $query->getResult();
                 return $results;
             }
@@ -126,9 +129,14 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
+            $rsm->addScalarResult('head_id', 'head_id');
+            $rsm->addScalarResult('detail_id', 'detail_id');
+            $rsm->addScalarResult('is_other', 'is_other');
+            $rsm->addScalarResult('price', 'price');
+            $rsm->addScalarResult('image_id', 'image_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -136,7 +144,12 @@ class EsProductRepository extends EntityRepository
                 SELECT 
                     a.product_id as product_id
                     , b.name AS name
-                    , a.attr_value 
+                    , a.attr_value
+                    , a.attr_id as head_id
+                    , a.id_product_attr as detail_id
+                    , '0' as is_other
+                    , a.attr_price as price
+                    , '0' as image_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -150,6 +163,11 @@ class EsProductRepository extends EntityRepository
                      a.product_id as product_id
                     , a.`field_name`
                     , b.value_name 
+                    , b.head_id
+                    , b.id_optional_attrdetail as detail_id
+                    , '1' as is_other
+                    , b.value_price as price
+                    , b. product_img_id as price
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
@@ -356,7 +374,30 @@ class EsProductRepository extends EntityRepository
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getOneOrNullResult();
 
-        return $result['count']; 
+        return $result['count'];
+    }    
+
+    /**
+     *  Get parent categories(default) of products uploaded by a specific user
+     *
+     *  @return array
+     */
+    public function getUserProductParentCategories($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_cat','parent_cat');
+        $rsm->addScalarResult('cat_id','cat_id');
+        $rsm->addScalarResult('prd_count','prd_count');
+        $rsm->addScalarResult('p_cat_name','p_cat_name');
+        $rsm->addScalarResult('p_cat_slug','p_cat_slug');
+        $rsm->addScalarResult('p_cat_img','p_cat_img');
+
+        $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId);
+
+        return $query->getResult();
     }
 
     /**
@@ -369,7 +410,7 @@ class EsProductRepository extends EntityRepository
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('p.idProduct')
+        $qbResult = $qb->select('DISTINCT p.idProduct')
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsMember','m',
                                                     'WITH','p.member = m.idMember')
@@ -387,8 +428,12 @@ class EsProductRepository extends EntityRepository
         }
  
         if(isset($filterArray['seller']) && $filterArray['seller']){
+            $sellerString = $filterArray['seller'];
+            if (strpos($filterArray['seller'],'seller:') !== false) {
+                $sellerString = str_replace("seller:","",$filterArray['seller']);
+            }
             $qbResult = $qbResult->andWhere('m.username LIKE :username')
-                                ->setParameter('username', '%'.$filterArray['seller'].'%');
+                                ->setParameter('username', $sellerString);
         }
 
         if(isset($filterArray['category']) 
@@ -418,13 +463,87 @@ class EsProductRepository extends EntityRepository
                                     );
         }
 
+        if(isset($filterArray['sortby'])){
+
+            $order = "DESC";
+            if(isset($filterArray['sorttype']) 
+                && strtoupper($filterArray['sorttype']) == "ASC"){
+                $order = "ASC";
+            }
+
+            switch(strtoupper($filterArray['sortby'])){
+                case "NEW":
+                    $qbResult = $qbResult->orderBy('p.createddate', $order);
+                    break;
+                case "HOT":
+                    $qbResult = $qbResult->orderBy('p.isHot', $order)
+                                        ->addOrderBy(' p.clickcount',$order);
+                    break;
+                default:
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
+            }
+        }
+
         $qbResult = $qbResult->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
+        
         return $resultNeeded; 
     }
 
+    /**
+     *  Get user products that have no assigned custom category
+     *  Returns Product IDs ONLY!
+     *
+     *  @param integer $memberId
+     *  @param array $catId
+     *
+     *  @return array
+     */
+    public function getNotCustomCategorizedProducts($memberId, $catId)
+    {
+        $em = $this->_em;
+        $result = array();
+
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $dql = "
+            SELECT p.idProduct
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0 ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        $rawResult = $query->getResult();
+
+        foreach( $rawResult as $row ){
+            $result[] = $row['idProduct'];
+        }
+
+        return $result;
+    }
+    
     /**
      * Get popular items by seller or category based on click count
      * @param  $offset   [description]
@@ -433,6 +552,7 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
+
     public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
     {
         $this->em =  $this->_em;
@@ -463,6 +583,48 @@ class EsProductRepository extends EntityRepository
 
         return $resultNeeded; 
     }  
+
+    /**
+     * Delete products that do not have images inside admin folder
+     * @param  integer $id
+     */    
+    public function deleteProductFromAdmin($id)
+    {
+        $this->em =  $this->_em;
+         
+        $query = $this->em->createQuery("DELETE FROM EasyShop\Entities\EsProduct e 
+            WHERE e.idProduct = ?8");
+        $query->setParameter(8, $id);
+        $query->execute();       
+
+    }
+
+    /**
+     * Get the seller of a product. Used for strange cases where the member cannot
+     * be retrieved from the product object
+     *
+     * @param integer $productId
+     * @return EasyShop\Entities\EsMember
+     */
+    public function getSeller($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('member_id', 'member_id');
+        $query = $this->em->createNativeQuery("
+            SELECT `member_id` from es_product WHERE id_product = :productId
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();  
+        
+        $seller = $em->getRepository('EasyShop\Entities\EsMember')
+                     ->find($result[0]['member_id']);
+        return $seller;
+
+    }
+    
+    
 }
 
 

@@ -1277,7 +1277,7 @@ li.brand_result:hover{
 
 
 .loadingfiles{
-   background: url("../images/orange_loader.gif") no-repeat scroll 0 0 #FCFEFC;
+   background: url("../images/loading/preloader-whiteBG-small.gif") no-repeat scroll 0 0 #FCFEFC;
    height: 36%;
    left: 32px;
    opacity: 1;

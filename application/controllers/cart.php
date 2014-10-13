@@ -28,7 +28,6 @@ class Cart extends MY_Controller
         $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
-    
     /**
      * Renders the cart page
      *
@@ -40,13 +39,13 @@ class Cart extends MY_Controller
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-
             $data['title'] = 'Cart | Easyshop.ph';
             $data['cart_items'] = $cartContents;
-            $data['total'] = $this->cartImplementation->getTotalPrice();
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+            $data['total'] = $cartSize ? $this->cartImplementation->getTotalPrice() : 0;
 
             $this->load->view('templates/header', $data);
-            $this->load->view('templates/checkout_progressbar', $data);
+            #$this->load->view('templates/checkout_progressbar');
             $this->load->view('pages/cart/cart-responsive', $data);
             $this->load->view('templates/footer_full');
         } 
@@ -54,8 +53,7 @@ class Cart extends MY_Controller
             redirect('/login', 'refresh');
         }
     }
-    
-    
+
     /**
      * Action for adding an item into the cart
      *
@@ -65,12 +63,12 @@ class Cart extends MY_Controller
     {
         $productId = $this->input->post('productId');
         $options = $this->input->post('options');
-        $quantity = $this->input->post('quantity');        
+        $quantity = $this->input->post('quantity');
         $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
         $isLoggedIn = $this->session->userdata('usersession') ? true : false;
+
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
-    
 
     /**
      * Remove an item from the cart
@@ -100,18 +98,19 @@ class Cart extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $isSuccessful = $this->cartManager->changeItemQuantity($cartId, $quantity);
 
-        $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
-        $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
-        
-        $result = array(
+        if ($isSuccessful) {
+            $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
+            $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
+
+            $result = array(
                 'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
                 'cartTotal' => $this->cartImplementation->getTotalPrice(),
-                'isSuccessful' => $isSuccessful,
                 'qty' =>  $cartItem['qty'],
                 'maxqty' => $cartItem['maxqty']);
-                
-        print json_encode($result);
+        }
+        $result['isSuccessful'] = $isSuccessful;
 
+        print json_encode($result);
     }
 
     /**

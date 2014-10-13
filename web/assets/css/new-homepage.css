@@ -1970,7 +1970,7 @@ width: 100% !important;
 }
 
 .btn.btn-default-1 {
-    border: 2px solid #565656;
+    border: 3px solid #565656;
     background-color: #fff;
     color: #565656;
     padding: 8px 15px;
@@ -1995,7 +1995,12 @@ width: 100% !important;
 .fa-prev-slide{
     position: absolute;
     left: 0;
-    margin-left: 20px;
+    margin-left: 15px;
+    padding-left: 10px;
+    width: 42px;
+    height: 42px;
+    border: solid #fff 2px;
+    border-radius: 50%;
     top: 48%;
     z-index: 999;
     color: #ffffff;
@@ -2008,7 +2013,12 @@ width: 100% !important;
 .fa-next-slide{
     position: absolute;
     right: 0;
-    margin-right: -40px;
+    margin-right: -44px;
+    padding-left: 13px;
+    width: 42px;
+    height: 42px;
+    border: solid #fff 2px;
+    border-radius: 50%;
     top:48%;
     z-index: 999;
     color: #ffffff;
@@ -2019,7 +2029,9 @@ width: 100% !important;
 }
 
 .fa-next-slide:hover, .fa-prev-slide:hover{
-    color: #ff893b;
+    color: #ffffff;
+    background: #ff893b;
+    border-color: #ff893b;
     cursor: pointer;
 }
 
@@ -2178,16 +2190,16 @@ width: 100% !important;
 }
 
 .span-store-logo{
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     display: table-cell;
     vertical-align: middle;
 }
 
 .store-logo-container{
     display: table-cell;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height:50px;
     text-align: center;
     vertical-align: middle !important;
 }
@@ -2441,9 +2453,7 @@ width: 100% !important;
         float: left !important;
     }
     
-    .prev, .next{
-        display: none;
-    }
+    
     
     .owl-wrapper{
         overflow-x: hidden !important;
@@ -2492,6 +2502,15 @@ width: 100% !important;
     
     .promo-3{
         display: none;
+    }
+    
+    .fa-next-slide, .fa-prev-slide{
+        background: #ff893b;
+        border-color: #ff893b;
+        color: #ffffff;
+        opacity: 0.7;
+        top: 40%;
+        
     }
 }
 

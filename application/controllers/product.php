@@ -33,7 +33,7 @@ class product extends MY_Controller
         // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter = $this->input->get() ? $this->input->get() : array();
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
         $response['products'] = $searchProductService->getProductBySearch($getParameter);
 
@@ -62,7 +62,7 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter = $this->input->get() ? $this->input->get() : array();
             $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
@@ -328,7 +328,7 @@ class product extends MY_Controller
             $categories[$index]['subcategories'] = $this->product_model->getDownLevelNode($category['id_cat']);
             foreach($categories[$index]['subcategories'] as $inner_index=>$subcategory){
 
-                $down_cat = $this->product_model->selectChild($subcategory['id_cat']);		
+                $down_cat = $this->product_model->selectChild($subcategory['id_cat']);      
                 if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
                     $down_cat = array();
                 array_push($down_cat, $subcategory['id_cat']);
@@ -343,7 +343,7 @@ class product extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/all_categories_view', $data); 
-        $this->load->view('templates/footer_full'); 	
+        $this->load->view('templates/footer_full');     
     }
 
     /**
@@ -378,8 +378,10 @@ class product extends MY_Controller
         $this->load->model("user_model");
         $this->load->config('promo', TRUE);
         $uid = $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProductBySlug($slug);  	
+        $product_row = $this->product_model->getProductBySlug($slug);   
         $data = $this->fill_header();
+
+        $um = $this->serviceContainer['user_manager'];
         
         if($product_row['o_success'] >= 1){
             $id = $product_row['id_product'];
@@ -388,16 +390,19 @@ class product extends MY_Controller
             $this->session->set_userdata('product_id', $id);
             $product_catid = $product_row['cat_id'];
             
-            $banner_view = '';  
+            $banner_view = '';
             $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
-            
+            $isBuyButtonViewable = true;
+
             if(intval($product_row['is_promote']) === 1 && (!$product_row['end_promo']) ){
                 $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
                 if(strlen(trim($bannerfile)) > 0){
                     $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
                 }
                 $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
+                $isBuyButtonViewable = $this->config->item('Promo')[$product_row['promo_type']]['viewable_button_product_page'];
             }
+
             
             $data = array_merge($data,array( 
                 'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
@@ -416,14 +421,35 @@ class product extends MY_Controller
                 'shiploc' => $this->product_model->getLocation(),
                 'banner_view' => $banner_view,
                 'payment_method' => $payment_method_array,
-                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+                'avatarImage' => $um->getUserImage($product_row['sellerid'], "small"),
+                'is_buy_button_viewable' => $isBuyButtonViewable,
                 ));
+            
+            $categoryManager = $this->serviceContainer['category_manager'];
+            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                        ->findBy(['parent' => 1]);
+            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+            $parentCategories = $categoryManager->setCategoryImage($protectedCategory);
+
+            
+            // category navigation of desktop version
+            $data['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
+                                                                    ['parentCategory' =>   $parentCategories,
+                                                                     'environment' => 'desktop']
+                                                   , TRUE );
+
+            // category navigation of mobile version
+            $data['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
+                                                                    ['parentCategory' =>   $parentCategories,
+                                                                     'environment' => 'mobile']
+                                                  , TRUE );
+
             $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
             $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/productpage_view', $data);
+            $this->load->view('pages/product/productpage_view_responsive', $data);
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';

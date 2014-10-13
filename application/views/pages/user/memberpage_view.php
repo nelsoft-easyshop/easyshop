@@ -74,7 +74,7 @@
                         <div class="clear"></div>
                         <div id="avatar_cont">
                             <span>
-                                <?php echo $image_profile?>
+                                <img src="<?=$image_profile?>" id="user_image">
                             </span>
                         </div>
                         <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
@@ -203,7 +203,7 @@
         <span class="span_bg sch_btn item_sch_btn"></span>
         <label for="active_sort">Sort By</label>
         <select name="active_sort" class="post_active_sort item_sort_select">
-            <option value="1">Date of Entry</option>
+            <option value="1">Last Modified</option>
             <option value="2">Name</option>
             <option value="3">Price</option>
             <option value="4">Availability</option>
@@ -539,7 +539,7 @@
         <div class="post_items_content content-paging">
             <div class="post_item_content_left">
                 <div class="post_item_img_table">
-                                                                              
+
                 <span class="post_item_img_con">
                     <img src="<?php echo base_url().$draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
                 </span>
@@ -559,7 +559,7 @@
     </div>
     <div class="post_item_content_right">
         <div class="product_title_container">
-            <p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $draft_product['slug'];?>"><?php echo html_escape($draft_product['name']);?></a></p>
+            <p class="post_item_product_title fm1"><span><?php echo html_escape($draft_product['name']);?></span></p>
             
             <div class="post_item_button">
                 <?php echo form_open('sell/edit/step2'); ?>
@@ -680,7 +680,7 @@
             <div>
                 <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
                 <?php foreach($tempafb as $key=>$afb):?>
-                <p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+                <p>From: <a href="<?php echo base_url();?><?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
                 <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
                 <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                     <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -738,7 +738,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>From: <a href="<?php echo base_url();?><?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -792,7 +792,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>For: <a href="<?php echo base_url();?><?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -846,7 +846,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>For: <a href="<?php echo base_url();?><?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -1851,7 +1851,7 @@
                                 <div class="transac_bought_con tx_cont">
                                     <span class="transac_bought_con_col1">Bought from: </span>
                                     <span class="transac_bought_con_col2">
-                                        <a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
+                                        <a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>">
                                             <?php echo html_escape($product['seller']);?>
                                         </a>
                                     </span>
@@ -2066,7 +2066,7 @@
                             <span class="transac_title_date"><?php echo $transact['dateadded']?></span>
                         </div>
                         <div class="transac_title_col3">
-                            <strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo html_escape($transact['buyer']);?></a> <br />
+                            <strong>Sold to: </strong> <a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer']);?></a> <br />
                             <span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
                             <div style="display:none;" class="transac_address_cont">
                                 <?php foreach($transact['users'] as $uk=>$user):?>
@@ -2389,7 +2389,7 @@
                                 </div>
                                 <div class="transac_bought_con">
                                     <span class="transac_bought_con_col1">Bought from: </span>
-                                    <span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo html_escape($product['seller']);?></a></span>
+                                    <span class="transac_bought_con_col2"><a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>"><?php echo html_escape($product['seller']);?></a></span>
                                     <span class="transac_bought_con_col3">
                                         Status:
                                         <?php if($product['status'] == 1):?>
@@ -2518,7 +2518,7 @@
                         </div>
                         <div class="transac_title_col3">
                             <strong>Sold to: </strong>
-                            <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+                            <a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo $transact['buyer']?></a> <br />
                             <span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
                             <div style="display:none;" class="transac_address_cont">
                                 <?php foreach($transact['users'] as $uk=>$user):?>

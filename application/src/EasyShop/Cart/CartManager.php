@@ -59,7 +59,6 @@ class CartManager
         $this->cart = $cart;
         $this->em = $em;
     }
-    
 
     /**
      * Validates single cart content. Returns the validated cart data
@@ -77,7 +76,7 @@ class CartManager
         if(!$product){
             return false;
         }
-        
+
         $cartProductAttributes = array();
         $validatedCartOptions = array();
         $finalPrice = $product->getFinalPrice();
@@ -90,7 +89,7 @@ class CartManager
             $attrPrice = isset($explodedOption[1]) ? $explodedOption[1] : null;
             $attrName = $key;
             $productAttribute = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->getProductAttributeDetailByName($product->getIdProduct(), $attrName, $attrValue,$attrPrice);
+                            ->getProductAttributeDetailByName($productId, $attrName, $attrValue,$attrPrice);
 
             if(empty($productAttribute)){
                 return false;
@@ -140,10 +139,18 @@ class CartManager
         $cartItemQuantity = ($quantity > $itemAvailability) ? $itemAvailability : $quantity;
         $cartIndexName = $this->cart->getIndexName();
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                        ->getDefaultImage($product->getIdProduct());
+                        ->getDefaultImage($productId);
+        /**
+         * Fix for strange error when the member cannot be obtained from the product object
+         */
+        $seller = $product->getMember();
+        if(!$seller){
+            $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getSeller($productId);
+        }       
         
         $itemData = array(
-            'id' => $product->getIdProduct(),
+            'id' => $productId,
             'qty' => $cartItemQuantity,
             'price' => $finalPrice,
             'original_price' => $product->getOriginalPrice(),
@@ -151,7 +158,7 @@ class CartManager
             'options' => $validatedCartOptions,
             'imagePath' => $productImage->getDirectory(),
             'imageFile' =>  $productImage->getFilename(),
-            'member_id' => $product->getMember()->getIdMember(),
+            'member_id' => $seller->getIdMember(),
             'brief' => $product->getBrief(),
             'product_itemID' => $productItemId, 
             'maxqty' => $itemAvailability,
@@ -161,12 +168,10 @@ class CartManager
             'promo_type' => $product->getPromoType(),
             'start_promo' => $product->getStartPromo(),
         );
-        
+
         return array('itemData' => $itemData, 'product' => $product);
     }
-    
 
-    
     /**
      * Returns the validated contents of the cart
      *
@@ -179,16 +184,16 @@ class CartManager
 
         if(!$member || !$member->getIsEmailVerify()){
             $this->cart->destroy();
-            return false;
+            return array();
         }
-    
-        $cartContents = $this->cart->getContents();       
+
+        $cartContents = $this->cart->getContents();
         $cartIndexName = $this->cart->getIndexName();
-        
+
         foreach($cartContents as $cartItem){
         
             $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
-            
+
             $itemData = $validationResult['itemData'];
             $product = $validationResult['product'];
 
@@ -196,10 +201,10 @@ class CartManager
             $serialValidatedOptions = serialize($itemData['options']);
             $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
 
-            if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] || 
+            if( !$canBuyerDoPurchase || intval($cartItem['id']) !==  intval($itemData['id']) ||
                 $serialRawOptions !== $serialValidatedOptions ||
-                $itemData['member_id'] === $memberId || $product->getIsDraft() ||
-                $product->getIsDelete() || $itemData['qty'] === 0)
+                intval($itemData['member_id']) === intval($memberId) || $product->getIsDraft() ||
+                $product->getIsDelete() || intval($itemData['qty']) === 0)
             {
                 $this->cart->removeContent($cartItem[$cartIndexName]);
             }
@@ -208,8 +213,9 @@ class CartManager
             }
 
         }
-                    
+
         $this->cart->persist($memberId);
+
         return  $this->cart->getContents();
             
     }
@@ -227,7 +233,7 @@ class CartManager
         $promoBoughtCount = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                 ->getPromoPurchaseCountForMember($memberId, $product->getPromoType());
         $promoConfig = $this->promoManager->getPromoConfig($product->getPromoType());
-        
+
         if(($promoBoughtCount >= $promoConfig['purchase_limit']) || 
            ($product->getIsPromote() && !$promoConfig['is_buyable_outside_promo'] && !$product->getStartPromo())
         ){
@@ -257,7 +263,7 @@ class CartManager
         if(!$validationResult){
             return false;
         }
-        
+
         $itemData = $validationResult['itemData'];
         if(empty($cartContents) || !is_array($option)){
             $this->cart->addContent($itemData);
@@ -270,7 +276,8 @@ class CartManager
                 $optionNew =  serialize($itemData['options']);
                 if($optionCart === $optionNew && $cartRow['id'] === $itemData['id']){
                     $quantityToInsert = $quantityToInsert + $cartRow['qty'];
-                    $quantityToInsert =  $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
+                    $quantityToInsert = $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
+                    $quantityToInsert = $quantityToInsert < 0 ? 0 : $quantityToInsert;
                     $itemData['qty'] = $quantityToInsert;
                     $isUpdate = true;
                     break;     
@@ -283,7 +290,7 @@ class CartManager
                 $this->cart->addContent($itemData);
             }
         }
-            
+
         return true;
     }
     
@@ -293,7 +300,7 @@ class CartManager
      * data into the database
      *
      * @param integer $memberId
-     * @param inetger $cartRowId
+     * @param integer $cartRowId
      */
     public function removeItem($memberId, $cartRowId)
     {
@@ -334,8 +341,8 @@ class CartManager
         }
         
         $this->cart->updateContent($cartRowId, $cartItem);
-        
-        return true;
+
+        return (intval($quantity) === 0) ? FALSE : TRUE;
     }
     
     /**
@@ -347,7 +354,29 @@ class CartManager
     {
         return $this->cart;
     }
+    
+    /**
+     * Synchs the cartData in the session with the cart data in the database
+     * Used usually after successful login.
+     *
+     * @param integer $memberId
+     */
+    public function synchCart($memberId)
+    {
+        $userCartData = unserialize($this->em->find('EasyShop\Entities\EsMember', ['idMember' => $memberId])
+                                            ->getUserData());    
 
+        if($userCartData){
+            foreach($userCartData as $rowId => $cartItem){
+                if(!isset($cartItem[$this->cart->getIndexName()])){
+                    continue;
+                }
+                $this->addItem($cartItem['id'], $cartItem['qty'], $cartItem['options']);
+            }
+        }
+        return $this->cart->getContents(); 
+
+    }
 
 
 }

@@ -89,7 +89,8 @@
     <select id="getProductBySlugNoIncrement">
         SELECT p.id_product as id_product, p.slug as slug, p.is_meetup, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
         p.is_promote, p.startdate, p.enddate, p.cat_id as cat_id, p.price as price,  p.brief as brief, p.sku as sku, i.`product_image_path`,
-        p.is_sold_out, p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername,  m.slug as sellerslug, m.imgurl as userpic, '1' as o_success, '' as o_message
+        p.is_sold_out, p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.store_name as storename,  m.slug as sellerslug,
+        m.imgurl as userpic, '1' as o_success, '' as o_message
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
@@ -707,7 +708,7 @@ FROM
 </select>
 
 <select id="updateIsDelete">
-        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = NOW()  where member_id = :memberid AND id_product = :productid
+        UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = :datenow  where member_id = :memberid AND id_product = :productid
 </select>
 
 <select id="checkifexistcategory">
@@ -1017,7 +1018,7 @@ FROM
     LEFT JOIN es_product_image pi
         ON pi.product_id = p.id_product and pi.is_primary = 1
     WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.id_product DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT :item_count
 </select>
 
@@ -1061,7 +1062,7 @@ FROM
                 AND b.`is_delete` = 0
                 AND b.`is_draft` = 0
                 AND b.id_product NOT IN ({product_ids})
-            ORDER BY createddate DESC) AS tbl 
+            ORDER BY b.lastmodifieddate DESC) AS tbl 
         UNION
         ALL 
         SELECT 
@@ -1134,7 +1135,7 @@ FROM
     INNER JOIN es_product_image pi
         ON pi.product_id = p.id_product AND pi.is_primary = 1
     WHERE p.is_draft = 0 AND p.is_delete = 0
-    ORDER BY p.createddate DESC
+    ORDER BY p.lastmodifieddate DESC
     LIMIT {limit}
 </select>
  
@@ -1184,11 +1185,15 @@ FROM
     WHERE `product_id_item` = :itemId
 </select>
 
-    <select id="validateBuyAtZeroCode">
-        SELECT es_product.*, es_product_image.product_image_path as `path` from es_promo
+    <select id="validateScratchCardCode">
+        SELECT es_product.*,es_promo.member_id AS `c_member_id`, es_product_image.product_image_path as `path` from es_promo
         left join es_product on es_product.id_product = es_promo.product_id
         left join es_product_image on es_product_image.product_id = es_product.id_product
-        where code = :code;
+        where code = :code AND es_promo.promo_type = 5;
+    </select>
+
+    <select id="tieUpMemberToCode">
+        UPDATE `easyshop`.`es_promo` SET `member_id`=:member_id WHERE `code`=:code;
     </select>
 
     <select id="buyAtZeroAuthenticate">

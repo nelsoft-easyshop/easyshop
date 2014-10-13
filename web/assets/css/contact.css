@@ -11,6 +11,10 @@ section {
   to { opacity: 1; }
 }
 
+#feedback-order-error-icon{
+    display:none;
+}
+
 .row-contact{
     min-height: 560px;
 }
@@ -27,23 +31,25 @@ section {
     text-transform:uppercase;
     font-weight: bold;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .table-contact-details{
     margin-top: 25px;
-    border-bottom: solid #e2e2e2 1px;
+    border-bottom: solid #e2e2e2 0px;
 }
 
 .td-contact-icon{
-    vertical-align: top;
+    vertical-align: middle;
     padding-right: 15px;
     padding-bottom: 25px;
     text-align: center;
 }
 
 .td-contact-detail{
-    vertical-align: top;
+    vertical-align: middle;
     padding-left: 10px;
+    padding-bottom: 25px;
 }
 
 .fa-edit-icon{
@@ -86,12 +92,62 @@ section {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     display: none;
-    
 }
 
 .fa-cancel-edit:hover{
     background: #fe893a !important;
     cursor: pointer;
+}
+
+.fa-edit-about{
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -15px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+
+.fa-edit-about:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.fa-cancel-about{
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -15px;
+    margin-top: 10px;
+    background: #4370cc;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 0px 4px 0px 4px;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    display: none;
+}
+
+.fa-cancel-about:hover{
+    background: #fe893a !important;
+    cursor: pointer;
+}
+
+.alert > .close{
+    margin-right: 0px;
 }
 
 .input-detail{
@@ -106,10 +162,11 @@ section {
     resize:none;
     margin-bottom: 10px;
     display: none;
+    margin-top:10px;
 }
 
 .input-detail:focus{
-    border: solid #565656 1px;
+    border: solid #565656 1px !important;
     background: #ffffff;
 }
 
@@ -122,7 +179,7 @@ section {
 }
 
 .panel-contact-details{
-    min-height: 500px;
+    min-height: 100px;
     width: 100%;
     background: #ffffff;
     border-radius: 4px;
@@ -154,11 +211,12 @@ section {
 }
 .panel-contact-message, .panel-feedback-message{
     width: 100%;
-    min-height: 500px;
+    min-height: 347px;
     background: #ffffff;
     border-radius: 4px;
     padding: 25px 25px;
     margin-top: 10px;
+    margin-bottom: 20px;
     margin-left: 30px;
 }
 
@@ -168,7 +226,49 @@ section {
     border-radius: 4px;
     padding: 25px 25px;
     margin-top: 10px;
+    margin-bottom: 20px;
     margin-left: 30px;
+}
+
+.panel-about-seller{
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    padding-bottom:30px;
+}
+
+.div-about-content{
+    margin-top: 20px;
+}
+
+.div-about-edit-area{
+    display: none;
+}
+/*
+.p-about{
+    line-height: 20px;
+    width: 100%;
+    word-wrap: break-word;
+}
+*/
+
+.p-about{
+    background-color: #ffffff;
+    border: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #575759;
+    padding: 0px;
+}
+
+.textarea-about{
+    display: block;
+    font-size: 14px;
+    margin-bottom:5px;
 }
 
 .div-message-form{
@@ -181,10 +281,12 @@ section {
 
 .col-message-1{
     padding-right: 5px !important;
+    padding-left: 5px !important;
 }
 
 .col-message-2{
-    padding-left: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 .input-message{
@@ -197,11 +299,29 @@ section {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     resize:none;
+    margin-bottom: 15px;
+    outline: none;
 }
 
 .input-message:focus{
     border: solid #565656 1px;
     background: #ffffff;
+}
+
+.error-color{
+    color: #a94442 !important;
+}
+
+.input-error{
+    border: solid #a94421 2px !important;
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(169,67,33,1);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(169,67,33,1);
+    box-shadow: 0px 0px 14px 0px rgba(169,67,33,1);
+}    
+.input-error:focus{
+    -webkit-box-shadow: 0px 0px 14px -2px rgba(240,17,17,1);
+    -moz-box-shadow: 0px 0px 14px -2px rgba(240,17,17,1);
+    box-shadow: 0px 0px 14px -2px rgba(240,17,17,1);
 }
 
 .btn-send{
@@ -244,9 +364,56 @@ section {
 .table-rate{
     margin-bottom:7px;
 }
+.table-rate-seller{
+    margin-top: 15px;
+}
+
+.table-rate-seller-leave{
+    margin-top: 0px;
+}
+.td-rate-average {
+    padding-right: 5px;
+}
+
+.tdr-1{
+    text-align: left;
+     width: 150px;
+}
+
+.td-1{
+    width: 81px;
+}
+
+ .td-2, .td-3{
+    padding-left: 35px;
+    width: 150px;
+}
+
+.tdr-2{
+    text-align: left;
+     width: 150px;
+}
+.tdr-3{
+    text-align:right;
+    padding-left:0px; 
+    width: 150px;
+}
+
+.td-rate-seller{
+    vertical-align: middle !important;
+}
+.v-align-middle{
+    vertical-align: middle !important;
+}
+
+.span-rate-c{
+    margin: 0px;
+    margin-top: -3px;
+    font-size: 13px;
+}
 
 .span-rate{
-    padding-left: 15px;
+    padding-left: 10px;
 }
 
 .fa-star{
@@ -300,12 +467,13 @@ section {
 }
 
 .div-feedback-list{
-    border-top: solid #fe893a 2px;
+    border-top: solid #fe893a 3px;
     padding-top: 30px;
     margin-top: 20px;
 }
 
 .a-tab {
+    font-size:14px;
     color: #575759;
     text-decoration: none;
     transition: all 0.5s ease;
@@ -336,14 +504,15 @@ section {
 }
 
 .star-feed{
-    font-size: 17px;
-    padding-right: 7px;
+    font-size: 24px;
+    padding-right: 0px;
 }
+
 
 .col-item-message{
     min-height: 90px;
     border-left: solid #e2e2e2 1px;
-    margin-left: -30px;
+    margin-left: -20px;
     font-style: italic;
 }
 
@@ -382,4 +551,21 @@ section {
     display: table;
     vertical-align:middle;
     width: 100% !important;
+}
+
+.jumbotron{
+    margin-bottom: 0px !important;
+}
+
+.pagination{
+    margin: 10px !important;
+}
+
+.text-contact{
+    word-wrap: break-word;
+    width: 200px;
+}
+
+.alert > .close{
+    margin-right: 0px;
 }
