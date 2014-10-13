@@ -19,6 +19,13 @@ use Easyshop\Entities\EsProductItem;
 class ProductManager
 {
 
+
+    /**
+     * Newness Limit in days 
+     *
+     */
+    const NEWNESS_LIMIT = 14;
+
     /**
      * Entity Manager instance
      *
@@ -282,11 +289,11 @@ class ProductManager
     {
         $lastModifiedDate = $product->getLastModifiedDate()
                                     ->getTimestamp();
-        $dateNow = new DateTime('now');
+        $dateNow = new \DateTime('now');
         $dateNow = $dateNow->getTimestamp();
         $datediff = $dateNow - $lastModifiedDate;
         $daysDifferential = floor($datediff/(60*60*24));
-        return $daysDifferential <= self::newnessLimit;
+        return $daysDifferential <= self::NEWNESS_LIMIT;
     }
 }
 
