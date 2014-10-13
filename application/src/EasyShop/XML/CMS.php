@@ -365,6 +365,22 @@ $string = '<typeNode>
             array_push($homePageData['categorySection'], $sectionData);
         }
 
+        foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
+            $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $category['categorySlug']]);
+
+            foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
+            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $subCategory]);
+            }
+        }
+
+        foreach ($xmlContent['categoryNavigation']['otherCategories']['categorySlug'] as $key => $category) {
+        $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                ->findOneBy(['slug' => $category]);
+        }
+        $homePageData['categoryNavigation'] = $featuredCategory;
+
         return $homePageData;
     }
     
