@@ -413,9 +413,14 @@ class ProductManager
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
-            $product->directory = $objImage->getDirectory();
-            $product->imageFileName = $objImage->getFilename();
-
+            if(!$objImage){
+                $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            }
+            else{
+                $product->directory = $objImage->getDirectory();
+                $product->imageFileName = $objImage->getFilename();
+            }
             $categoryProducts[] = $product;
         }
 
