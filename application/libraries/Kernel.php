@@ -102,7 +102,8 @@ class Kernel
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
                                                 ,$container['form_factory']
-                                                ,$container['form_error_helper']);
+                                                ,$container['form_error_helper']
+                                                ,$container['string_utility']);
         };
         
         //Account Manager
@@ -287,13 +288,15 @@ class Kernel
             $googleClient->setRedirectUri($socialMediaConfig['google']['redirect_url']);
             $googleClient->setDeveloperKey($socialMediaConfig['google']['key']['apiKey']);
             $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $configLoader = $container['config_loader'];
             $stringUtility = $container['string_utility'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
-                $socialMediaConfig['facebook']['key']['appId'],
-                $socialMediaConfig['facebook']['key']['secret'],
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
+                $userManager,
+                $configLoader,
                 $stringUtility
             );
         };
@@ -349,6 +352,20 @@ class Kernel
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
+        };
+
+        // NUSoap Client
+        $container['nusoap_client'] = function ($c) {
+            $url = '';
+            if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
+            // LIVE
+                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            else{
+            // SANDBOX
+                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            return new \nusoap_client($url,true);
         };
 
         /* Register services END */

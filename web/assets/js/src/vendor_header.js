@@ -1,6 +1,18 @@
 // global jsonCity
 var jsonCity = jQuery.parseJSON($('#json_city').val());
 
+/*******************    HTML Decoder    ********************************/
+function htmlDecode(value) {
+    
+    //value = value.replace(/script>/g, '');
+    
+    if (value) {
+        return $('<div />').html(value).text();
+    } else {
+        return '';
+    }
+}
+
 (function ($) {
 
     // Numeric characters only. Disable negative
@@ -78,7 +90,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     // Search button click
     $(document).on('click','.submitSearch',function() {
         var searchType = $(this).closest(".search-form").find('.search-type').val();
-        var action =  (searchType == 1) ? "/" + $('#vendor_name').val() : "/search/search.html";
+        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
         $(this).closest(".search-form").attr("action",action);
         $(this).closest(".search-form").submit();
     });
@@ -109,12 +121,19 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     // change all related display
                     $('#display-banner-view').show();
                     $('#edit-banner-view').hide();
-                    $(".storeName").html(storName);
-                    $("#placeStock > strong").html(citySelected+', '+stateRegionSelected);
+                    $(".storeName").html(htmlDecode(storName));
+
+                    if( stateRegion === "0" && city === "0" ){
+                        $("#placeStock > strong").html("Location not set");
+                    }
+                    else{
+                        $("#placeStock > strong").html(htmlDecode(citySelected)+', '+htmlDecode(stateRegionSelected));
+                    }
+                    
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
 
                     // Update custom attr origval for "Cancel" functionality
-                    $("#storeNameTxt").attr('data-origval', data.new_data.store_name);
+                    $("#storeNameTxt").attr('data-origval', htmlDecode(data.new_data.store_name));
                     $("#mobileNumberTxt").attr('data-origval', data.new_data.mobile);
                     $(".stateregionselect").attr('data-origval', data.new_data.state_region_id);
                     $(".cityselect").attr('data-origval',data.new_data.city_id);

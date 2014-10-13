@@ -239,10 +239,19 @@
     </div>
 </div>
 
+<div id="div_cart_modal">
+    <h1>Cart - Remove item</h1>
+    <div class="div_cart_modal_container">
+        Are you sure you would like to remove this item from the shopping cart?
+    </div>
+    <button class="btn btn-default-3">Yes</button>
+    <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+</div>
 
 <div id="navigator">
 </div>
 <div class="clear"></div>
 
-<script src="<?= base_url() ?>assets/js/src/vendor/numeral.min.js"></script>
-<script src="<?= base_url() ?>assets/js/src/cart.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/numeral.min.js"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>

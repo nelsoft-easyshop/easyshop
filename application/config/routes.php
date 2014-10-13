@@ -122,13 +122,21 @@ else {
 
     #PAYMENT CASH ON DELIVERY
     $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #UNIVERSAL PAYMENT
-    $route['(?i)pay/pay'] = 'payment/pay';  
+    $route['(?i)pay/pay'] = 'payment/pay';
+
+    #RETURN PAYMENT DRAGON PAY (GATEWAY)
+    $route['(?i)pay/returnDragonPay'] = 'payment/returnDragonPay';  # la roberto
+    $route['(?i)pay/postBackDragonPay'] = 'payment/postBackDragonPay';  # la roberto
+    
     #PAYMENT DIRECT BANK DEPOSIT
     $route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #PAYMENT PAYPAL
     $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
     $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
+    $route['(?i)pay/postBackPayPal'] = 'payment/postBackPayPal';  # la roberto
 
     $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 
@@ -152,6 +160,7 @@ else {
     $route['homewebservice'] = 'webservice/homewebservice';
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
+    $route['mobilewebservice'] = 'webservice/mobilewebservice';
 }
 
 /* End of file routes.php */

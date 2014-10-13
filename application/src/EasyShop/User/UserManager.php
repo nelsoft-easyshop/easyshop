@@ -79,17 +79,29 @@ class UserManager
     private $formErrorHelper;
     
     /**
+     * String utility object
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+    
+    /**
      *  Constructor. Retrieves Entity Manager instance
      *
      * @param Doctrine\Orm\EntityManager $em
-     * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
+     * @param EasyShop\ConfigLoader\ConfigLoader $ConfigLoader
+     * @param EasyShop\Utility\StringUtility $stringUtility
      */
-    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper)
+    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper, $stringUtility)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->hasError = FALSE;
         $this->err = array();
+        $this->formFactory = $formFactory;
+        $this->formValidation = $formValidation;
+        $this->formErrorHelper = $formErrorHelper;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -289,6 +301,21 @@ class UserManager
         return $this;
     }
 
+    public function deleteAddressTable($type)
+    {
+        $addressEntity = $this->em->getRepository("EasyShop\Entities\EsAddress")
+                                ->findOneBy(array(
+                                            "idMember"=>$this->memberEntity
+                                            , "type" => (string)$type
+                                            ));
+
+        if( !empty($addressEntity) ){
+            $this->em->remove($addressEntity);
+        }
+
+        return $this;
+    }
+
     /**
      *  Flush all persisted entities set above.
      */
@@ -414,22 +441,25 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');  
+        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');
 
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
                 $imgFile = '/banner.png';
+                $isHide = (boolean)$member->getIsHideBanner();
                 break;
             case "small":
                 $imgFile = '/60x60.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
             default:
                 $imgFile = '/150x150.png';
+                $isHide = (boolean)$member->getIsHideAvatar();
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile)){
+        if(!file_exists($imageURL.$imgFile) || $isHide){
             $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
         }
         else{
@@ -445,18 +475,26 @@ class UserManager
      * @param integer $memberId
      * @return boolean
      */
-    public function removeUserImage($memberId)
+    public function removeUserImage($memberId, $selector = NULL)
     {
         // Get member object
         $EsMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy(['idMember' => $memberId]);
 
         if($EsMember !== null){
-            // Update user image
-            $EsMember->setImgurl(""); 
+            switch($selector){
+                case "banner":
+                    $EsMember->setIsHideBanner(TRUE);
+                    $userImage = $this->getUserImage($memberId, "banner");
+                    break;
+                default:
+                    $EsMember->setIsHideAvatar(TRUE);
+                    $userImage = $this->getUserImage($memberId);
+                    break;
+            }
             $this->em->flush();
 
-            return $this->getUserImage($memberId);
+            return $userImage;
         }
         else{
             return false;
@@ -472,13 +510,13 @@ class UserManager
     {
         $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                 ->findOneBy(array("username"=>$sellername));
-
-        if(empty($vendorEntity)){
-            return false;
-        }
+        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $memberId);
 
         $subscriptionEntity = $this->em->getRepository("EasyShop\Entities\EsVendorSubscribe")
-                                        ->findOneBy(array("memberId" => $memberId, "vendorId" => $vendorEntity->getIdMember()));
+                                        ->findOneBy(array(
+                                                        "member" => $memberEntity
+                                                        , "vendor" => $vendorEntity
+                                                    ));
 
         if(!empty($subscriptionEntity)){
             return "followed";
@@ -499,13 +537,14 @@ class UserManager
         $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                 ->findOneBy(array("username"=>$sellername));
 
-        if(empty($memberEntity) || empty($vendorEntity) ){
+        if(empty($memberEntity) || empty($vendorEntity) || 
+            ( (int)$memberEntity->getIdMember()===(int)$vendorEntity->getIdMember() ) ){
             return false;
         }
 
         $subscriptionEntity = new EsVendorSubscribe();
-        $subscriptionEntity->setMemberId($memberId)
-                            ->setVendorId($vendorEntity->getIdMember());
+        $subscriptionEntity->setMember($memberEntity)
+                            ->setVendor($vendorEntity);
         $this->em->persist($subscriptionEntity);
         $this->em->flush();
 
@@ -521,11 +560,12 @@ class UserManager
     {
         $vendorEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                 ->findOneBy(array("username"=>$sellername));
+        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $memberId);
 
         $subscriptionEntity = $this->em->getRepository("EasyShop\Entities\EsVendorSubscribe")
                                         ->findOneBy(array(
-                                                    "memberId"=>$memberId
-                                                    ,"vendorId"=>$vendorEntity->getIdMember()
+                                                    "member"=>$memberEntity
+                                                    ,"vendor"=>$vendorEntity
                                                 ));
         if(!empty($subscriptionEntity)){
             $this->em->remove($subscriptionEntity);
@@ -533,6 +573,31 @@ class UserManager
         }
 
         return true;
+    }
+    
+    /**
+     * Generate user slug
+     *
+     * @param $memberId
+     * @return EasyShop\Entities\EsMember
+     */
+    public function generateUserSlug($memberId)
+    {
+        $member = $this->em->getRepository("EasyShop\Entities\EsMember")
+                           ->findOneBy(array("idMember"=>$memberId));
+ 
+        $slug = $this->stringUtility->cleanString($member->getUsername());
+        
+        $membersWithSlug = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                    ->findOneBy(array("slug"=>$slug));
+        if($membersWithSlug){
+            $slug = $slug.$member->getIdMember();
+        }
+        
+        $member->setSlug($slug);
+        $this->em->flush();
+
+        return $member;   
     }
 
     /**

@@ -1,4 +1,4 @@
-<link type="text/css" href='<?=base_url()?>assets/css/contact.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
     <div class="container-non-responsive bg-product-section">
@@ -17,10 +17,10 @@
                             Leave A Message
                         </p>
                         <div class="div-message-form">
-                            <?php echo form_open('home/sendMessage'); ?>
+                            <?php echo form_open('messages/doSendMessage'); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="<?=$user['username']?>" disabled="disabled"/>
+                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?=html_escape($message_recipient->getUsername())?>" disabled="disabled"/>
                                     <input type="hidden" name="recipient" value="<?=$message_recipient->getIdMember()?>" id="msg_recipient">
                                 </div>
                             </div>
@@ -49,4 +49,4 @@
     </div>
     </div>
 </section>
-<script src="/assets/js/src/vendorpage_contact.js"></script>
+<script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>

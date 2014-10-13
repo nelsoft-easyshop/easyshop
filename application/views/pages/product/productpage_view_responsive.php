@@ -10,7 +10,6 @@
 <script>
     
 </script>
-
 <section style="color-gray">
     <div class="container font-roboto" style="max-width:980px;">
         <div class="row">
@@ -53,7 +52,10 @@
                 <?php include("product_image_gallery.php") ?>
             </div>
             
+            
+            
             <div class="col-md-7" style="position: relative; z-index: 1;">
+                <?php echo $banner_view; ?>
                 <div class="display-when-mobile-833">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -88,19 +90,19 @@
                     <div class="panel panel-default no-border">
                         <div class="panel-heading panel-seller-header">
                             <a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
-                                Seller: <?php echo html_escape($product['sellerusername']);?>
-                                <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                                Seller: <?php echo html_escape($product['storename']);?>
+                                <i class="sell glyphicon glyphicon-chevron-down pull-right"></i>
                             </a>
                             <script>
                                     $("#seller-accordion").on('click','.a-accordion-header',function() {
                                         
-                                        var attr = $("i.glyphicon").attr("class");
+                                        var attr = $("i.sell").attr("class");
 
-                                        if(attr == "glyphicon glyphicon-chevron-down pull-right")
+                                        if(attr == "sell glyphicon glyphicon-chevron-down pull-right")
                                         {
-                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+                                            $('i.sell').removeClass("sell glyphicon glyphicon-chevron-down pull-right").addClass("sell glyphicon glyphicon-chevron-up pull-right");
                                         }else{
-                                            $('i.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+                                            $('i.sell').removeClass("sell glyphicon glyphicon-chevron-up pull-right").addClass("sell glyphicon glyphicon-chevron-down pull-right");
                                         
                                         }
                                     });
@@ -111,13 +113,13 @@
                                 <table width="100%" class="font-12">
                                     <tr>
                                         <td class="v-align-top" width="10%">
-                                            <a href="/<?php echo $product['sellerusername'];?>"> 
-                                                <img class="seller-img seller-img-m" src="/<?php echo  $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
+                                                <img class="seller-img seller-img-m" src="<?=$avatarImage?>"><br />
                                             </a>
                                         </td>
                                         <td class="v-align-top td-seller-info">
-                                            <a href="/<?php echo $product['sellerusername'];?>"> 
-                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+                                            <a href="/<?php echo $product['sellerslug'];?>"> 
+                                                <span class="name"><?php echo html_escape($product['storename']);?></span> 
                                             </a>
                                             <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
                                                 <span>
@@ -180,8 +182,8 @@
                                     <td  width="40%" style="vertical-align:top; padding-right: 3px;">
                                         <span class="seller-name"> 
                                             <a href="/<?php echo $product['sellerslug'];?>"> 
-                                                <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"/><br />
-                                                <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+                                                <img class=" seller-img" src="<?=$avatarImage?>"/><br />
+                                                <span class="name"><?php echo html_escape( $product['storename']);?></span> 
                                             </a>
                                             <br/>
                                             <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
@@ -282,14 +284,18 @@
                                             <p class="buy_btn_sub"> This is your own listing </p>
                                         <?php else: ?>
                                             <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
-                                                    <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
+                                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
                                                 <span class="font-10" width="100%">Item is listed as an ad only. *</span>
+                                            <?php elseif($product['promo_type'] == 6 && $product['start_promo'] == 1): ?>
+                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>_registration' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
+                                                <span class="font-10" width="100%">Click buy to qualify for the promo*</span>
+                                            <?php elseif(!$is_buy_button_viewable && intval($product['start_promo']) === 1) : ?>
+                                                <p class="buy_btn_sub"> This product is for promo use only. </p>
                                             <?php else: ?>
-                                                    <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
                                                 <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
                                             <?php endif; ?>
-                                        
-                                            
+
                                         <?php endif;?>
                                     </center>
                                 </div>
@@ -440,7 +446,7 @@
                             <?php elseif($uid == $product['sellerid']): ?>
                             <p class=""><!-- Unable to review own product --></p>
                             <?php else: ?>
-                            <p class="" style="color:#f18200;"><strong>Sign-in & purchase item to write a review</strong></p>
+                            <p class="" style="color:#f18200;"><strong>Sign-in &amp; purchase item to write a review</strong></p>
                             <?php endif; ?>
                         </div>
                         <div id="write_review_content">
@@ -451,7 +457,7 @@
                                     <table width="100%" style="margin-left:-10px;" class="font-roboto table-write-review">
                                         <tr>
                                             <td style="padding: 15px 0px 5px 0px;" width="10%" ]>
-                                                <label>Subject:*</label>
+                                                <label>Subject <span style="color:red;">*</span></label>
                                             </td>
                                             <td style="padding: 15px 0px 5px 0px;" width="70%">
                                                 <input type="text" class="form-control no-border" style="width: 100% !important; height: 40px; !important;" name="subject" maxlength="150">
@@ -466,12 +472,10 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 5px 0px 5px 0px;" colspan="2">
-                                                <label>Comment *</label>
+                                            <td style="padding: 5px 0px 5px 0px;">
+                                                <label>Comment <span style="color:red;">*</span></label>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 0px 0px 0px 27px;" colspan="2">
+                                            <td style="padding: 10px 0 0 0;">
                                                 <textarea class="form-control no-border" style="width: 100% !important;" name="comment"></textarea>
                                             </td>
                                         </tr>
@@ -583,13 +587,14 @@
                 <div class="row">
                 <div class="col-md-12">
                 <div class="panel-group display-when-mobile-833" id="accordion">
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border"  id="details-accordion">
                         <div class="panel-heading  no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#productDescription" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#productDescription" class="accordion-details-toggle">
                                     Product Details
-                            
+                                    <i class="indicator glyphicon glyphicon-chevron-up pull-right"></i>
                                 </a>
+                               
                             </h4>
                         </div>
                         
@@ -625,11 +630,12 @@
                         </div>
                     </div>
                     
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border" id="specs-accordion">
                         <div class="panel-heading no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#specs" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#specs" class="accordion-specs-toggle">
                                     Specifications
+                                    <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i>
                                 </a>
                             </h4>
                         </div>
@@ -681,12 +687,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default no-border">
+                    <div class="panel panel-default no-border" id="review-accordion">
                         <div class="panel-heading no-border">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#review" class="accordion-toggle">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#review" class="accordion-review-toggle">
                                     Reviews
+                                <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i>
                                 </a>
+                                <script>
+                                function toggleChevron(e) {
+                                    $(e.target)
+                                        .prev('.panel-heading')
+                                        .find("i.indicator")
+                                        .toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+                                }
+                                $('#accordion').on('hidden.bs.collapse', toggleChevron);
+                                $('#accordion').on('shown.bs.collapse', toggleChevron);
+                                </script>
                             </h4>
                         </div>
                         <div id="review" class="panel-collapse collapse">

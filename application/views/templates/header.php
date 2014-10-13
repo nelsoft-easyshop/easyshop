@@ -137,6 +137,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <li>
                                     <a class="prevent" href="/me?me=pending">On-going Transactions</a>
                                 </li>
+                                <li>
+                                    <a class="prevent" href="/?view=basic">Easyshop.ph</a>
+                                </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/me?me=settings">Settings</a>
                                 </li>
@@ -187,7 +190,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="res_wrapper wrapper search_wrapper">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
-            <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="<?=base_url()?>" class="prevent"><span class="span_bg"></span></a> </div>
         <?php endif; ?>
         
         <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>

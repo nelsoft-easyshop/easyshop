@@ -79,10 +79,10 @@ class SearchProduct
 
         if(trim($clearString) != ""){
             $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '"+'.implode('*" "+', $explodedString) .'*"';
-            $stringCollection[1] = '"'.implode('" "', $explodedString).'"';
-            $stringCollection[2] = '"'.trim($clearString).'"';
-            $stringCollection[3] = str_replace(' ', '', trim($clearString));
+            $stringCollection[0] = '+"'.implode('" +"', $explodedString) .'"';
+            $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+            $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
+            $stringCollection[2] = '"'.trim($clearString).'"'; 
 
             if(trim($queryString) === ""){
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')

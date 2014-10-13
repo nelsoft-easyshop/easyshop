@@ -228,6 +228,19 @@ class EsMember
      */
     private $website = '';
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_hide_avatar", type="boolean", nullable=false)
+     */
+    private $isHideAvatar = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_hide_banner", type="boolean", nullable=false)
+     */
+    private $isHideBanner = '0';
 
     /**
      *  @var string
@@ -988,6 +1001,52 @@ class EsMember
     public function getWebsite()
     {
         return $this->website;
+    }
+
+    /**
+     * Set isHideAvatar
+     *
+     * @param boolean $isHideAvatar
+     * @return EsMember
+     */
+    public function setIsHideAvatar($isHideAvatar)
+    {
+        $this->isHideAvatar = $isHideAvatar;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideAvatar
+     *
+     * @return boolean 
+     */
+    public function getIsHideAvatar()
+    {
+        return $this->isHideAvatar;
+    }
+
+    /**
+     * Set isHideBanner
+     *
+     * @param boolean $isHideBanner
+     * @return EsMember
+     */
+    public function setIsHideBanner($isHideBanner)
+    {
+        $this->isHideBanner = $isHideBanner;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideBanner
+     *
+     * @return boolean 
+     */
+    public function getIsHideBanner()
+    {
+        return $this->isHideBanner;
     }
 
 }

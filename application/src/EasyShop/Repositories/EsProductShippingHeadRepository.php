@@ -8,10 +8,11 @@ use EasyShop\Entities\EsProductShippingHead;
 class EsProductShippingHeadRepository extends EntityRepository
 {
     /**
-     * Returns the total shipping fee of a product
+     * Returns the total shipping fee of a product. Returns NULL if there are
+     * no shipping details available.
      *
      * @param integer $productId
-     * @return integer
+     * @return string
      */
     public function getShippingTotalPrice($productId)
     { 
@@ -24,8 +25,7 @@ class EsProductShippingHeadRepository extends EntityRepository
                             ->getQuery();
 
         $result = $qb->getOneOrNullResult();
-
-        return intval($result['shipping_total']);
+        return $result['shipping_total'];
     }
     
     /**

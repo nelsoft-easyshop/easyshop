@@ -5,17 +5,13 @@
             <h5>Stay in Touch</h5>
             <a href="https://www.facebook.com/EasyShopPhilippines"> <span class="span_bg facebook"></span></a>
             <a href="https://twitter.com/EasyShopPH"><span class="span_bg twitter"></span></a>
-            <!--
-        		  <span class="span_bg youtube"></span>
-                  <span class="span_bg pinterest"></span>
-        		  -->
          
             <div class="signup">
-          			<h5>Signup for Newsletter</h5>
-                      <?php echo form_open('subscribe');?>
-          			<input type="text" class="subscribe_email" name="subscribe_email">
-          			<input type="submit" value="Submit" class="subscribe_btn" name="subscribe_btn">
-                      <?php echo form_close();?>
+                    <h5>Signup for Newsletter</h5>
+                    <?php echo form_open('subscribe');?>
+                        <input type="text" class="subscribe_email" name="subscribe_email">
+                        <input type="submit" value="Submit" class="subscribe_btn" name="subscribe_btn">
+                    <?php echo form_close();?>
             </div>
           
         </div>
@@ -73,7 +69,7 @@
       </div>
     </div>
     
-    <script src="/assets/js/src/ws.js"></script>
+    <script src="/assets/js/src/ws.js?ver=<?php echo ES_FILE_VERSION?>"></script>
     <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
     </footer>
 	</body>

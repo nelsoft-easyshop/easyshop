@@ -231,18 +231,22 @@ class product_model extends CI_Model
         $sth->bindParam(':slug',$slug);
         $sth->execute();
         $product = $sth->fetch(PDO::FETCH_ASSOC);
-
         if(intval($product['o_success']) !== 0){
-        if(strlen(trim($product['userpic']))===0)
-            $product['userpic'] = 'assets/user/default';
-        if(intval($product['brand_id'],10) === 1)
-            $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
-        applyPriceDiscount($product);
-        if(isset($product['product_image_path'])){
-            $temp = array($product);
-            explodeImagePath($temp);
-            $product = $temp[0];
-        }
+        
+            if( !$product['storename'] || strlen(trim($product['storename'])) === 0){
+                $product['storename'] = $product['sellerusername'];
+            }
+            
+            if(strlen(trim($product['userpic']))===0)
+                $product['userpic'] = 'assets/user/default';
+            if(intval($product['brand_id'],10) === 1)
+                $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
+            applyPriceDiscount($product);
+            if(isset($product['product_image_path'])){
+                $temp = array($product);
+                explodeImagePath($temp);
+                $product = $temp[0];
+            }
         }
         return $product;
     }
@@ -2400,9 +2404,6 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
-                default :
-                    $PromoPrice = $baseprice;
-                    break;
                 case 6 :
                     $PromoPrice = $baseprice;
                     if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
@@ -2574,16 +2575,24 @@ class product_model extends CI_Model
     }
 
 
-    function is_free_shipping($product_id){
+    /**
+     * Determines if an item is free shipping
+     *
+     * @param integer $productId
+     * @return boolean
+     */
+    public function is_free_shipping($product_id)
+    {
         $query = "SELECT SUM(price) as shipping_total FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
         $sth->closeCursor();
         $sth->execute();
-        $total_shipping_fee = $sth->fetch(PDO::FETCH_ASSOC)['shipping_total'];
-        if($total_shipping_fee > 0){
+        $totalShippingFee = $sth->fetch(PDO::FETCH_ASSOC)['shipping_total'];
+        if($totalShippingFee > 0 || !$totalShippingFee){
             return false;
-        }else{
+        }
+        else{
             return true;
         }
     }

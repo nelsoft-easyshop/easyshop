@@ -1,14 +1,13 @@
 (function ($) {
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
-
         if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
             $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
             
             $( "#editIconOpen" ).click();
         }
         else{
-            if($( "p#validatedStoreName" ).html() == ""){
+            if($( "a#validatedWebsite" ).html() == ""){
                 $( "#websiteRow" ).hide();
             }
         }
@@ -67,7 +66,8 @@
         if($( "p#validatedContactNo" ).html() == ""){
             $( "#contactNoRow" ).hide();
         }
-        if($( "p#validatedWebsite" ).html() == ""){
+
+        if($( "a#validatedWebsite" ).html() == ""){
             $( "#websiteRow" ).hide();
         }
         if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){

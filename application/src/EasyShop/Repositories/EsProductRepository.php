@@ -57,29 +57,22 @@ class EsProductRepository extends EntityRepository
                     SELECT 
                         (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 10) +
                         (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
-                        (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 5) +
-                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
+                        (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 10) +
+                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1.5) +
                         (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 15) +
-                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) +
-                        ((REPLACE (`search_keyword`, ' ', '') LIKE :param3 )  * 0.005)
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) 
                          AS weight,
                         id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
                         ,`is_sold_out`
                     FROM es_product
-                    WHERE is_delete = 0 AND is_draft = 0 
-                    AND (
-                        MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
-                        OR 
-                        REPLACE (`search_keyword`, ' ', '') LIKE :param3
-                    )
+                    WHERE is_delete = 0 AND is_draft = 0
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
-        $query->setParameter('param1', $stringCollection[1]); 
-        $query->setParameter('param2', $stringCollection[2]); 
-        $query->setParameter('param3', "%".$stringCollection[3]."%"); 
+        $query->setParameter('param1', $stringCollection[1]);
+        $query->setParameter('param2', $stringCollection[2]);
         $results = $query->execute();  
 
         return $results;

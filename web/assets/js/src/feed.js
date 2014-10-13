@@ -119,6 +119,10 @@
             parentDiv.before(obj.view);
             thisbtn.attr('disabled',false);
             thisbtn.val("Load More");
+
+            var y = $(window).scrollTop();  
+            $(window).scrollTop(y+1);
+            
         });
         
         pageField.val(pageNum+1);
