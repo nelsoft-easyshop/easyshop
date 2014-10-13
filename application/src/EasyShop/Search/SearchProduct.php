@@ -73,7 +73,7 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = str_replace('"', '', $queryString);
+        $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
         $stringCollection = array();
         $ids = array(); 
 
