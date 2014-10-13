@@ -1,6 +1,6 @@
 <div class="row-featured-category">
    
-
+    <?php $sectionCount  = 1; ?>
     <?php foreach($homeContent['categorySection'] as $categorySection): ?>
         <div class="row row-category" id="category-1">        
             <div class="col-md-12">
@@ -11,8 +11,8 @@
                             <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
                             <span class="pull-right">
                                 <span>
-                                    <a id="purchased-items-slider-prev-cat-1"><i class="icon-control-left fa-category-item-prev"></i></a>
-                                    <a id="purchased-items-slider-next-cat-1"><i class="icon-control-right fa-category-item-next"></i></a>
+                                    <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="icon-control-left fa-category-item-prev"></i></a>
+                                    <a id="purchased-items-slider-next-cat-<?php echo $sectionCount ?>"><i class="icon-control-right fa-category-item-next"></i></a>
                                 </span>
                             </span>
                             <span class="pull-right">
@@ -34,7 +34,7 @@
                     </div>
                     
                     
-                    <div id="cat-items" class="purchased-items-slider-cat-1 owl-carousel"> 
+                    <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel"> 
                     
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
@@ -94,6 +94,7 @@
                 </div><!-- End .purchased-items-container -->
             </div><!-- End .col-md-12 -->
         </div><!-- End .row -->
+        <?php $sectionCount++; ?>
     <?php endforeach; ?>
     
 
