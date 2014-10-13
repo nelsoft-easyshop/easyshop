@@ -2203,7 +2203,7 @@ class product_model extends CI_Model
         if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
             $home_view_data['section'] = make_array($home_view_data['section']);            
         }
-    if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
+        if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
             $home_view_data['mainSlide'] = make_array($home_view_data['mainSlide']);
         }
 

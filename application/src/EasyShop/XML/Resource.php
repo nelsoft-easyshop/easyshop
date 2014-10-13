@@ -48,8 +48,46 @@ class Resource
         }
         
         return $xmlfile;
-    
     }
+    
+    
+    /**
+     * Returns a specific content of an xml
+     *
+     * @param string $file
+     * @param string $id
+     * @param string $node
+     */
+    public function getXMlContent($file, $id = NULL, $node = NULL) 
+    {
+        $query = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");   
+        $xpath = '/map/';
+        $xpathNode = NULL;
+        $xpathId = NULL;
+        
+        if($id){
+            $xpathId = '[@id="' . $id . '"]';
+            $xpathNode = 'select';
+        }
+        
+        if($node){
+            $xpathNode = $node;
+        }
+
+        if($xpathNode === NULL && $xpathId === NULL){
+            $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
+            $result = json_decode(json_encode($xml), 1);
+            return $result;
+        }
+        else{
+            $xpath = $xpath.$xpathNode .$xpathId;
+            $result = $query->xpath(' /map/'.$node.'[@id="' . $id . '"] ');
+             return reset($result);
+        }
+
+    }
+
+    
 
 }
 

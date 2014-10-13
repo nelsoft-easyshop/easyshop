@@ -39,33 +39,21 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-            
-        $xmlResourceService = $this->serviceContainer['xml_resource'];
-        $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
-
-        $layout_arr = array();
-        if(!$this->session->userdata('member_id')){
-            foreach($home_content['section'] as $section){
-                array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
-            }
-        }
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
 
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
-            'data' => $home_content,
-            'sections' => $layout_arr,
-            'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+            'homeContent' => $homeContent,
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
-
+            
         $data = array_merge($data, $this->fill_header());
-       
-        
+
         $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/home/home_primary');
+        $this->load->view('pages/home/home_primary', $data);
         $this->load->view('templates/footer_primary');
         /*
-         $this->load->view('templates/header', $data);
+        $this->load->view('templates/header', $data);
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
@@ -265,11 +253,10 @@ class Home extends MY_Controller
                 $this->contactUser($sellerslug);
             }
             else{
-                $data['title'] = 'Vendor Profile | Easyshop.ph';
+                $storeName = $vendordetails['store_name'] && strlen($vendordetails['store_name']) > 0 ?  $vendordetails['store_name'] :  $vendordetails['username'];
+                $data['title'] = html_escape($storeName).' | Easyshop.ph';
                 $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
                 $data = array_merge($data, $this->fill_header());
-                $data['render_logo'] = false;
-                $data['render_searchbar'] = false;
                 $this->load->view('templates/header_new', $data);
                 $this->load->view('templates/header_vendor');
                 $sellerid = $vendordetails['id_member'];
