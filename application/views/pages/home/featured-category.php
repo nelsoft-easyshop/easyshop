@@ -2,7 +2,7 @@
    
     <?php $sectionCount  = 1; ?>
     <?php foreach($homeContent['categorySection'] as $categorySection): ?>
-        <div class="row row-category" id="category-1">        
+        <div class="row row-category" id="category-<?php echo $sectionCount; ?>">        
             <div class="col-md-12">
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
@@ -19,7 +19,7 @@
                             </span>
                         </p>
                     </div>
-                    <div class="tag-categories">
+                    <div class="tag-categories" id="tag-<?php echo $sectionCount; ?>">
                         <?php $count = 0; ?>
                         <?php foreach($categorySection['subHeaders'] as $subheader): ?>
                             <a href="<?php echo $subheader['target']; ?>">
