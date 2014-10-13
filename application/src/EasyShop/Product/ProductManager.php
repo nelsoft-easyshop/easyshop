@@ -108,6 +108,9 @@ class ProductManager
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
         $product->setIsNew($this->isProductNew($product));
+        $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                           ->getDefaultImage($product->getIdProduct()));
+        
         $this->promoManager->hydratePromoData($product);
 
         return $product;
