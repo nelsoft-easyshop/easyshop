@@ -366,11 +366,13 @@ $string = '<typeNode>
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
                 $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
-                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
-                                
+                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
             }
             array_push($homePageData['categorySection'], $sectionData);
         }
+        
+        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
+
 
         return $homePageData;
     }
