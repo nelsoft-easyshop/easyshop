@@ -259,7 +259,9 @@
                                     <br><a id="discnt_btn" class="blue">Add discount price</a>
                                     <div class="discounted_price_container">
                                         <strong>Discounted Price:</strong> &#8369;
-                                        <span id="discounted_price_con">0.00</span>
+                                        <span id="discounted_price_con">
+                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'0.00';?>
+                                        </span>
                                     </div>
 
                                     <div id="dsc_frm">
@@ -485,7 +487,7 @@
                         <div class="add_category_submit">
                             <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
                             <div class="loader_div" style="display:none">
-                                <img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'>
+                                <img src='/assets/images/orange_loader.gif'>
                                 <div class="percentage"></div>
                             </div>                            
                         </div> 

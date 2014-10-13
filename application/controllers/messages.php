@@ -13,7 +13,20 @@ if (!defined('BASEPATH'))
 class messages extends MY_Controller
 {
 
-    public $user_ID = null;
+    /**
+     * The message manager
+     *
+     * @var EasyShop\Message\MessageManager
+     */
+    private $messageManager;
+    
+    /**
+     * Member ID of currently logged in used
+     * 
+     * @var integer
+     */
+    private $userId;
+
 
     public function __construct()
     {
@@ -22,13 +35,15 @@ class messages extends MY_Controller
         $this->load->library('session');
         $this->load->model('messages_model');
         $this->load->model('user_model');
-        $this->user_ID = $this->session->userdata('member_id');
+        
+        $this->userId = $this->session->userdata('member_id');
+        $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
     public function index()
     {
         if ($this->session->userdata('usersession')) {
-            $result = $this->messages_model->get_all_messages($this->user_ID);
+            $result = $this->messages_model->get_all_messages($this->userId);
             $title = (!isset($result['unread_msgs']) || $result['unread_msgs'] == 0
                     ? 'Message | Easyshop.ph'
                     : 'Message (' . $result['unread_msgs'] . ') | Easyshop.ph' );
@@ -71,7 +86,7 @@ class messages extends MY_Controller
             $msg = trim($this->input->post("msg"));
             $result = $this->messages_model->send_message($sessionData['member_id'],$qResult['id_member'],$msg);
             if($result === 1){
-                $result = $this->messages_model->get_all_messages($this->user_ID);
+                $result = $this->messages_model->get_all_messages($this->userId);
                 
                 // TODO: query count only
                 $recipientMessages = $this->messages_model->get_all_messages($qResult['id_member'], "Get_UnreadMsgs");
@@ -98,9 +113,9 @@ class messages extends MY_Controller
     {
         $id = $this->input->post("id_msg");
 
-        $result = $this->messages_model->delete_msg($id, $this->user_ID);
+        $result = $this->messages_model->delete_msg($id, $this->userId);
         if ($result > 0) {
-            $result = $this->messages_model->get_all_messages($this->user_ID);
+            $result = $this->messages_model->get_all_messages($this->userId);
         }
         else {
             $result = "";
@@ -117,7 +132,7 @@ class messages extends MY_Controller
     public function retrieve_msgs()
     {
         $todo = $this->input->post("todo");
-        $result = $this->messages_model->get_all_messages($this->user_ID, $todo);
+        $result = $this->messages_model->get_all_messages($this->userId, $todo);
 
         echo json_encode($result);
     }
@@ -129,11 +144,26 @@ class messages extends MY_Controller
      */
     public function is_seened()
     {
-        $id = $this->user_ID;
+        $id = $this->userId;
         $from_ids = $this->input->post('checked');
         $result = $this->messages_model->is_seened($id, $from_ids);
 
         echo json_encode($result);
+    }
+    
+    /**
+     * New action for sending a message
+     *
+     * @param recipient int
+     * @param msg string
+     */
+    public function doSendMessage()
+    {
+        $recipient = intval($this->input->post('recipient'));
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find($recipient);
+        $this->messageManager->send( $this->userId, $recipient, $this->input->post('msg'));
+        Redirect('/'.$member->getSlug().'/contact' ,'refresh');
     }
 
 }

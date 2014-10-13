@@ -19,7 +19,7 @@
 
 .right_product{
   display: inline-block;
-  width: 784px;
+  width: 760px;
 }
 
 .right_product select {
@@ -38,7 +38,7 @@
 }
 
 .bread_crumbs {
-  margin-left: 195px;
+  margin-left: 225px;
 }
 
 .filters {
@@ -700,7 +700,7 @@ Advanced Search Filters
     width: 264px;
 }
 
-#btn_srch {
+#btn_srch, #mbtn_srch {
   background-color: #F48000;
   border: none;
   color: #ffffff;
@@ -717,7 +717,7 @@ Advanced Search Filters
    transition:    all 0.3s ease-in-out;
 }
 
-#btn_srch:hover {
+#btn_srch:hover, #mbtn_srch:hover {
   background-color: #ff4400;
 }
 

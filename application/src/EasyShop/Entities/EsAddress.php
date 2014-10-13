@@ -110,6 +110,15 @@ class EsAddress
      */
     private $idMember;
 
+    /**
+     * @var integer
+     */
+    const TYPE_DEFAULT = 0;
+
+    /**
+     * @var integer
+     */
+    const TYPE_DELIVERY = 1;
 
 
     /**

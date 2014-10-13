@@ -22,8 +22,9 @@
                 <td width="7%">
                     <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
                        data-image="<?= base_url() ?><?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
-                        <img class="img-responsive thumbnail no-border thumbnail-item"
-                             src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>">
+                        <span class="cart-item-image-con">
+                            <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                        </span>
                     </a>
                 </td>
                 <td style="align:left;">
@@ -116,8 +117,9 @@
                                         <td width="50%">
                                             <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
                                                data-image="/<?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>">
-                                                <img class="img-responsive thumbnail no-border thumbnail-item"
-                                                     src="/<?php echo $row['imagePath'];  ?>categoryview/<?php echo $row['imageFile']; ?>">
+                                                <span class="cart-item-image-con">
+                                                    <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                                                </span>
                                             </a>
                                         </td>
                                         <td style="vertical-align: top; text-align:right;" align="right" width="50%">
@@ -237,10 +239,19 @@
     </div>
 </div>
 
+<div id="div_cart_modal">
+    <h1>Cart - Remove item</h1>
+    <div class="div_cart_modal_container">
+        Are you sure you would like to remove this item from the shopping cart?
+    </div>
+    <button class="btn btn-default-3">Yes</button>
+    <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+</div>
 
 <div id="navigator">
 </div>
 <div class="clear"></div>
 
-<script src="<?= base_url() ?>assets/js/src/vendor/numeral.min.js"></script>
-<script src="<?= base_url() ?>assets/js/src/cart.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/numeral.min.js"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>

@@ -51,7 +51,7 @@
             <div class="inputRow">
                 <span class="adv_is">   
                     <label>Keyword: </label>
-                    <input style="" type="text" name="q_str" id="keywordTxt" value="<?=(isset($string))?html_escape($string):'';?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
+                    <input type="text" name="q_str" id="keywordTxt" value="<?=html_escape($this->input->get('q_str'))?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
                 </span>
                 <span class="adv_is">
                     <select name="category" id="selectCat" title="Select item category">
@@ -61,7 +61,7 @@
                         <?php endforeach; ?>
                     </select>
                 </span>
-                <input value="SEARCH" type="submit" id="btn_srch" />
+                <input value="SEARCH" type="button" id="btn_srch" />
             </div>
             <div class="inputRow">
                 <span class="adv_us">
@@ -96,20 +96,20 @@
                 </span>
                 <span class="adv_us">
                     <label>Price:</label>
-                    <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                    <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                     to
-                    <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                    <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                 </span>
             </div>
-        </div>
-
-        <?php if(isset($cntr)): ?>
-            <div class="adv_ctr"><strong style="font-size:14px"><?php echo ($cntr>0)?number_format($cntr):'No';?></strong> result<?php echo  ($cntr>1 || $cntr === 0)?'s':'';?> found</div>
-        <?php endif ?>
+        </div> 
         
+        <?php if(isset($products)): ?>
+        <div class="adv_ctr"><strong style="font-size:14px"><?=$productCount;?></strong> result<?=(number_format($productCount) > 1)?"s":"";?>  found</div>
+        <?php endif; ?>
+
         <!-- Buttons start -->
-        <div id="list" class="list list-active" title="List"></div>
-        <div id="grid" class="grid" title="Grid"></div>
+        <div id="list" class="list <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"list-active":"";?>"></div>
+        <div id="grid" class="grid <?=(isset($_COOKIE['view']) && $_COOKIE['view'] == "product-list")?"":"grid-active";?> "></div>
         <!-- Buttons end -->
         <div class="clear"></div> 
         <div id="product_content">
@@ -195,7 +195,7 @@
 
 <!-- MOBILE VERSION SECTION -->
 <?php
-    $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
+    $attr = array('id'=>'madvsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
 ?>
     <div class="display-when-mobile-1024">
@@ -208,7 +208,7 @@
                             <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" class="a-accordion-header" href="#collapseOne">
-                                        Advanced Search <i class="glyphicon <?=(isset($products))?'glyphicon-chevron-down':'glyphicon-chevron-up';?> pull-right"></i>
+                                        Advanced Search <i class="adv glyphicon <?=(isset($products))?'glyphicon-chevron-down':'glyphicon-chevron-up';?> pull-right"></i>
                                     </a>
                                 </h4>
                             </div>
@@ -224,7 +224,7 @@
                                     <tr>
                                         <td class="td-search-label">Category: </td>
                                         <td class="td-search-input">
-                                            <select name="q_cat" id="selectCat" class="form-control input-sm no-border" title="Select item category">
+                                            <select name="category" id="selectCat" class="form-control input-sm no-border" title="Select item category">
                                                 <option value="1">- All -</option>
                                                 <?php foreach ($parentCategory as $key => $value): ?>
                                                     <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('q_cat')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
@@ -269,14 +269,16 @@
                                     <tr>
                                         <td class="td-search-label">Price: </td>
                                         <td class="td-search-input">
-                                            <input type="text" name="startprice" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                                            <input type="text" name="startprice" class="priceField" id="mprice1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                                             to
-                                            <input type="text" name="endprice" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                                            <input type="text" name="endprice" class="priceField" id="mprice2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                                         </td>
                                     </tr> 
                                     <tr>
                                         <td colspan="2" class="td-search-button">
-                                            <input type="submit" value="SEARCH" id="btn_srch" class="btn btn-lg btn-block" />      
+                                            <br/>
+                                            <input type="button" value="SEARCH" id="mbtn_srch" class="btn btn-lg btn-block" />  
+                                            <br/>
                                             <center><a data-toggle="modal" data-target="#refine" class="a-refine">Refine Search</a></center>
                                         </td>
                                     </tr>
@@ -350,13 +352,17 @@
                                     </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <div class="responsive-product panel panel-default no-border panel-items">
-                                    <h3>No result found.</h3>
+                                    <div class="panel panel-default no-border">
+                                        <center>
+                                            <h4><span class="glyphicon glyphicon glyphicon-warning-sign"></span> No result found.</h4>
+                                        </center>
                                     </div>
                                 <?php endif;?>
                             <?php else: ?>
-                                <div class="responsive-product panel panel-default no-border panel-items">
-                                <h3>Begin searching by applying search filters.</h3>
+                                <div class="panel panel-default no-border">
+                                    <center>
+                                        <h4><span class="glyphicon glyphicon-search"></span> Begin searching by applying search filters.</h4>
+                                    </center>
                                 </div>
                             <?php endif;?>
                         </div>

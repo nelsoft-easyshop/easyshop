@@ -176,6 +176,11 @@ jQuery(document).ready(function(){
                 maxlength:25,
 				alphanumeric_underscore: true
 				},
+             fullname: {
+                 required: true,
+                 minlength: 5,
+                 maxlength:25
+             },
 			password: {
 				required: true,
                 minlength: 6,

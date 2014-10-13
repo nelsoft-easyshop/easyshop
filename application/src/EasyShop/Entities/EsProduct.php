@@ -67,6 +67,13 @@ class EsProduct
     /**
      * @var string
      *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="price", type="decimal", precision=15, scale=4, nullable=false)
      */
     private $price = '0.0000';
@@ -210,13 +217,6 @@ class EsProduct
      * @ORM\Column(name="is_sold_out", type="boolean", nullable=false)
      */
     private $isSoldOut = '0';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
 
     /**
      * @var boolean
@@ -478,6 +478,29 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
     }
 
     /**
@@ -961,29 +984,6 @@ class EsProduct
     public function getIsSoldOut()
     {
         return $this->isSoldOut;
-    }
-
-    /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
     }
 
     /**

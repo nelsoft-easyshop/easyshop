@@ -52,24 +52,33 @@ class CMS
      */
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
-        if($nodeName=="feedFeaturedProduct")
-        {
+
+        if($nodeName == "boxContent") {
+            $string ='
+
+
+            <boxContent>
+            <value>'.$value.'</value>
+            <type>'.$type.'</type>
+            <target>'.$coordinate.'</target>
+            <actionType>'.$target.'</actionType>
+        </boxContent>';
+        }        
+        if($nodeName=="feedFeaturedProduct") {
             $string = '
                     <product>
             <slug>'.$value.'</slug>
         </product>
             '; 
         }
-        if($nodeName=="feedPopularItems")
-        {
+        if($nodeName=="feedPopularItems") {
             $string = '
                     <product>
             <slug>'.$value.'</slug>
         </product>
             ';
         }
-        if($nodeName=="feedPromoItems")
-        {
+        if($nodeName=="feedPromoItems") {
             $string = '
                     <product>
             <slug>'.$value.'</slug>
@@ -84,8 +93,7 @@ class CMS
         }
         if($nodeName == "mainSlide") {
 
- $string = '    
-    <mainSlide> 
+ $string = '<mainSlide> 
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
@@ -137,7 +145,6 @@ $string = '<typeNode>
             return $string;
     }
 
-    
     /**
      *  Method used to remove xml contents for product_panel_main nodes under home_files.xml, user for re-ordering
      *
@@ -236,9 +243,7 @@ $string = '<typeNode>
      *  @return boolean
      */
     public function addXml($file,$xml_string,$target_node,$move = true) 
-    {
-        
-        
+    {        
         $sxe = new \SimpleXMLElement(file_get_contents($file));
         $insert = new \SimpleXMLElement($xml_string);
         $target = current($sxe->xpath($target_node));
