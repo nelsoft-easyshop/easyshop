@@ -782,6 +782,36 @@ header {
     margin-bottom: 10px;
 }
 
+.slider-template-1 {
+    display: table-cell;
+    height: 470px;
+    vertical-align: middle;
+    text-align: center;
+    width: 1140px;
+}
+
+.slider-template-1 img {
+    max-height: 470px;
+    max-width: 1140px;
+    height: auto;
+    width: auto;
+}
+
+.slider-template-2 {
+    display: table-cell;
+    height: 470px;
+    text-align: center;
+    vertical-align: middle;
+    width: 565px;
+}
+
+.slider-template-2 img {
+    max-height: 470px;
+    max-width: 565px;
+    height: auto;
+    width: auto;
+}
+
 
 /* =============================================
 ---------------------  Content ---------------
@@ -2706,6 +2736,42 @@ width: 100% !important;
     }
 }
 
+@media only screen and (max-width: 1200px) {
+    /** main slider **/
+    .main-slider-container {
+        height: 388px;
+    }
+    
+    .slider-template-1 {
+        display: table-cell;
+        height: 388px;
+        vertical-align: middle;
+        width: 940px;
+    }
+
+    .slider-template-1 img {
+        max-height: 388px;
+        max-width: 940px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-2 {
+    display: table-cell;
+    height: 388px;
+    text-align: center;
+    vertical-align: middle;
+    width: 465px;
+    }
+
+    .slider-template-1 img {
+        max-height: 388px;
+        max-width: 465px;
+        height: auto;
+        width: auto;
+    }
+}
+
 @media only screen and (max-width: 991px) {
     .sticky-nav-fixed .mobile-menu-nav-hide {
         display: block;
@@ -2843,6 +2909,20 @@ width: 100% !important;
 	.footer-bottom-content .col-md-6 {
 		text-align: center;
 	}
+
+    .footer-hide {
+        display: none;
+    }
+
+    .res-copyright {
+        background-color: #fff;
+        color: #565656;
+        display: block;
+        font-size: 0.85em;
+        padding:19px 0;
+        text-align: center;
+        width: 100%;
+    }
 
 }
 

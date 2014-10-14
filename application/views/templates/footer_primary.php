@@ -67,10 +67,15 @@
                         <img src="assets/images/img-dragonpay.png" alt="Dragon Pay">
                         <img src="assets/images/img-cod.png" alt="COD">
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-6 text-right footer-hide">
                         <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
                     </div>
                 </div>
+            </div>
+        </section>
+        <section class="res-copyright">
+            <div>
+                <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
             </div>
         </section>
     </body>

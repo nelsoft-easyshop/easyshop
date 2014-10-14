@@ -1649,6 +1649,10 @@ td.td-view.p-view2.color-default{
     line-height: 52px;
 }
 
+.res-copyright {
+    display: none;
+}
+
 /*** vendor footer ***/
 
 .vendor-footer-con {
