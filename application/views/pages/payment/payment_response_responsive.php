@@ -29,7 +29,7 @@
                         </tr>
                         <tr>
                             <td width="50%" style="padding: 5px;">
-                                <b>Payment Reference Number:</b>
+                                <b>Payment Invoice Number:</b>
                             </td>
                             <td width="50%" style="padding: 5px;">
                                 <?php echo $invoice_no; ?>
@@ -64,7 +64,7 @@
                         </tr>
                         <tr>
                             <td width="50%" style="padding: 5px;">
-                                <b>Payment Reference Number:</b>
+                                <b>Payment Invoice Number:</b>
                             </td>
                         </tr>
                         <tr>

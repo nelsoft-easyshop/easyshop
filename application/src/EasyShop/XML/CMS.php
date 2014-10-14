@@ -349,7 +349,14 @@ $string = '<typeNode>
         
         $homePageData = array();
         $homePageData['categorySection'] = array(); 
+        
 
+        if(isset($xmlContent['categorySection']['categorySlug'])){
+            $temporary = $xmlContent['categorySection'];
+            $xmlContent['categorySection'] = array();
+            array_push($xmlContent['categorySection'], $temporary);
+        }
+        
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);
@@ -359,11 +366,29 @@ $string = '<typeNode>
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
                 $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
-                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
-                                
+                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
             }
             array_push($homePageData['categorySection'], $sectionData);
         }
+        
+        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
+
+
+        foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
+            $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $category['categorySlug']]);
+
+            foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
+            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $subCategory]);
+            }
+        }
+
+        foreach ($xmlContent['categoryNavigation']['otherCategories']['categorySlug'] as $key => $category) {
+        $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                ->findOneBy(['slug' => $category]);
+        }
+        $homePageData['categoryNavigation'] = $featuredCategory;
 
         //Get vendor page details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')

@@ -105,52 +105,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="dropdown-cart-menu-container pull-right">
                                         <div class="pos-rel mrgn-rght-8">
                                             <div class="header-cart-container">
-                                                <a href="" class="header-cart-wrapper">
+                                                <a href="/cart" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con">
-                                                        <span class="header-cart-item">2 item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                                                 </a>
-                                                <div class="header-cart-item-list">
+                                                <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                                <?PHP else : ?>
+                                                    <div class="header-cart-item-list">
                                                     <p>Recently add item(s)</p>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
+                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
+                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                            <div class="mrgn-bttm-15">
+                                                                <div class="header-cart-item-img">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
+                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="header-cart-item-con">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
+                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                </div>
+                                                                <div class="clear"></div>
+                                                            </div>
+                                                        <?PHP endif; ?>
+                                                    <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Shipping: <span>&#8369; 50.00</span></p>
-                                                            <p>Total: <span>&#8369; 100,500.00</span></p>
+                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
-                                                            <a href="" class="header-cart-lnk-cart">go to cart</a>
-                                                            <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
                                                         </div>
                                                         <div class="clear"></div>
                                                     </div>
                                                 </div>
+                                                <?PHP endif; ?>
                                             </div>
                                             
                                         </div>
@@ -208,49 +202,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <div class="col-md-80p border-right">                                                    
                                                         <h2>popular categories</h2>
                                                         <div class="mrgn-left-neg-14">
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Clothes &amp; Accessories</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Women Clothing</a></li>
-                                                                    <li><a href="">Men Clothing</a></li>
-                                                                    <li><a href="">Babies Clothing</a></li>
-                                                                    <li><a href="">Unisex Accessories</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Electronics &amp; Gadget</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Cameras &amp; Imaging</a></li>
-                                                                    <li><a href="">Computer &amp; Networking</a></li>
-                                                                    <li><a href="">Tablets</a></li>
-                                                                    <li><a href="">Mobile Phones</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Jewelry &amp; Watches</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Watches</a></li>
-                                                                    <li><a href="">Fasion Jewelry</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Health &amp; Beauty</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Makeup</a></li>
-                                                                    <li><a href="">Fragrances</a></li>
-                                                                    <li><a href="">Skin Care</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                        </div>                                                    
+                                                            <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
+                                                                <div class="col-md-3">
+                                                                    <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
+                                                                    <ul class="cat-sub-list">
+                                                                        <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
+                                                                            <li><a href="/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
+                                                                        <?PHP endforeach; ?>
+                                                                    </ul>
+                                                                </div><!-- End .col-5 -->
+                                                            <?PHP endforeach; ?>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-20p">
                                                         <h2>other categories</h2>
                                                         <ul class="other-cat-con">
-                                                            <li><a href="">Food &amp; Beverages</a></li>
-                                                            <li><a href="">Toys, Hobbies &amp; Collections</a></li>
-                                                            <li><a href="">Books, Music &amp; Movies</a></li>
-                                                            <li><a href="">Home, Furniture &amp; Garden</a></li>
-                                                            <li><a href="">Business &amp; Industrial</a></li>
+                                                            <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
+                                                            <li><a href="/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
+                                                            <?PHP endforeach; ?>
                                                         </ul>
                                                     </div>    
                                                 </div><!-- End .mega-menu -->

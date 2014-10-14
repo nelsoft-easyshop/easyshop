@@ -58,6 +58,16 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
 
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/home/home_primary', $data);
