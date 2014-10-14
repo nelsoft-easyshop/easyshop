@@ -368,6 +368,14 @@ class Kernel
             return new \nusoap_client($url,true);
         };
 
+        // API formatter 
+        $container['api_formatter'] = function ($c) use($container) {
+            $em = $container['entity_manager']; 
+            $collectionHelper = $container['collection_helper'];
+            $productManager = $container['product_manager'];
+            return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager);
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
