@@ -17,21 +17,17 @@
                     </div>
                 </div>
                 <div id="brand-items" class="popular-brands owl-carousel"> 
-                    <?php
-                        for($i=1; $i<=14; $i++){
-                    ?>
+                    <?php foreach($homeContent['brandSection']['brandId'] as $brand) : ?>
                     <div class="item">
                         <div class="brand-container">
                             <div class="span-brand">
                                 <a href="#">
-                                    <img class="brand-img" src="/assets/images/products/brands/brand-<?php echo $i;?>.png" />
+                                    <img class="brand-img" src="/assets/images/products/brands/brand-<?=$brand?>.png" />
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <?php
-                        }
-                    ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

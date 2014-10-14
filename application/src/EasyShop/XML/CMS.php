@@ -373,7 +373,7 @@ $string = '<typeNode>
         
         $homePageData['adSection'] = $xmlContent['adSection']['ad'];
 
-
+        //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
@@ -389,6 +389,9 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+
+        //Get Popular Brands
+        $homePageData['brandSection'] = $xmlContent['brandSection'];
 
         return $homePageData;
     }
