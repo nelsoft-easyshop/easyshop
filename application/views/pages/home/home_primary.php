@@ -30,56 +30,70 @@
                  <li>
                     <div class="slider-item slider-template-3">
                         <div class="img-holder img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder">
+                            <div class="temp3-img-1">
+                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
+                            </div>
+                        </div>                        
+                        <div class="img-holder temp3-img-2">
                             <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
                         </div>
-                        <div class="clear"></div>
+                        <div class="clear"></div>                        
                     </div>
                  </li>
+
                  <li>
                     <div class="slider-item slider-template-3">
                         <div class="img-holder img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder">
+                            <div class="temp3-img-1">
+                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
+                            </div>
+                        </div>    
+                        <div class="img-holder temp3-img-2">
                             <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
                         </div>
-                        <div class="clear"></div>
-                    </div>
+                        <div class="clear"></div>                        
+                    </div>                    
+                 </li>
+
+                 <li>
+                    <div class="slider-item slider-template-4">
+                        <div class="img-holder img-holder-mrgn-right-10">
+                            <div class="temp4-img-1">
+                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
+                            </div>
+                        </div>
+                        <div class="img-holder">                            
+                            <div class="display-ib img-holder-mrgn-btn-10">
+                                <div class="temp4-img-2 ">
+                                    <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
+                                </div>
+                            </div>
+                            <div class="temp4-img-2">
+                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
+                            </div>
+                        </div>
+                        <div class="clear"></div>                       
+                    </div>                   
                  </li>
                  <li>
                     <div class="slider-item slider-template-4">
                         <div class="img-holder img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder">
-                            <div class="img-holder-mrgn-btn-10">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
-                            </div>
-                            <div>
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
+                            <div class="temp4-img-1">
+                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
                             </div>
                         </div>
-                        <div class="clear"></div>
-                    </div>
-                 </li>
-                 <li>
-                    <div class="slider-item slider-template-4">
-                        <div class="img-holder img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder">
-                            <div class="img-holder-mrgn-btn-10">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
+                        <div class="img-holder">                            
+                            <div class="display-ib img-holder-mrgn-btn-10">
+                                <div class="temp4-img-2 ">
+                                    <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
+                                </div>
                             </div>
-                            <div>
+                            <div class="temp4-img-2">
                                 <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
                             </div>
                         </div>
-                        <div class="clear"></div>
-                    </div>
+                        <div class="clear"></div>                       
+                    </div>                     
                  </li>
             </ul>
         </div>

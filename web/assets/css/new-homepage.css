@@ -229,6 +229,19 @@ header {
     color:#4370cc;
 }
 
+.header-seller-name {
+    display: inline-block;
+    width: 125px;
+}
+
+.new-user-nav-dropdown .user-nav-dropdown:after {
+    border-color:#565656 transparent transparent transparent;
+}
+
+.new-user-nav-dropdown:hover + .nav-dropdown {
+    display: block;
+}
+
 .top-icon {
     display: block;
     height:22px;
@@ -769,6 +782,10 @@ header {
     width: auto !important;
 }
 
+.bxslider li img {
+    margin: auto;
+}
+
 .slider-template-3 .img-holder,
 .slider-template-4 .img-holder {
     float: left;
@@ -808,6 +825,36 @@ header {
 .slider-template-2 img {
     max-height: 470px;
     max-width: 565px;
+    height: auto;
+    width: auto;
+}
+
+.slider-template-3 .temp3-img-1 {
+    display: table-cell;
+    height: 470px;
+    text-align: center;
+    vertical-align: middle;
+    width: 333px;
+}
+
+.slider-template-3 .temp3-img-1 img {
+    max-height: 470px;
+    max-width: 333px;
+    height: auto;
+    width: auto;
+}
+
+.slider-template-3 .temp3-img-2 {
+    display: table-cell;
+    height: 470px;
+    text-align: center;
+    vertical-align: middle;
+    width: 222px;
+}
+
+.slider-template-3 .temp3-img-2 img {
+    max-height: 470px;
+    max-width: 222px;
     height: auto;
     width: auto;
 }
@@ -2736,7 +2783,7 @@ width: 100% !important;
     }
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1199px) {
     /** main slider **/
     .main-slider-container {
         height: 388px;
@@ -2757,16 +2804,327 @@ width: 100% !important;
     }
 
     .slider-template-2 {
-    display: table-cell;
-    height: 388px;
-    text-align: center;
-    vertical-align: middle;
-    width: 465px;
+        display: table-cell;
+        height: 388px;
+        text-align: center;
+        vertical-align: middle;
+        width: 465px;
+    }
+
+    .slider-template-2 img {
+        max-height: 388px;
+        max-width: 465px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-1,
+    .slider-template-4 .temp4-img-1 {
+        display: table-cell;
+        height: 388px;
+        text-align: center;
+        vertical-align: middle;
+        width: 273px;
+    }
+
+    .slider-template-3 .temp3-img-1 img,
+    .slider-template-4 .temp4-img-1 img {
+        max-height: 388px;
+        max-width: 273px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-2 {
+        display: table-cell;
+        height: 388px;
+        text-align: center;
+        vertical-align: middle;
+        width: 182px;
+    }
+
+    .slider-template-3 .temp3-img-2 img {
+        max-height: 388px;
+        max-width: 182px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-4 .temp4-img-2 {
+        display: table-cell;
+        height: 189px;
+        text-align: center;
+        vertical-align: middle;
+        width: 182px;
+    }
+
+    .slider-template-4 .temp4-img-2 img {
+        max-height: 189px;
+        max-width: 182px;
+        height: auto;
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    /** main slider **/
+    .main-slider-container {
+        height: 302px;
+    }
+    
+    .slider-template-1 {
+        display: table-cell;
+        height: 302px;
+        vertical-align: middle;
+        width: 720px;
     }
 
     .slider-template-1 img {
-        max-height: 388px;
-        max-width: 465px;
+        max-height: 301px;
+        max-width: 720px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-2 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 355px;
+    }
+
+    .slider-template-2 img {
+        max-height: 301px;
+        max-width: 355px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-1,
+    .slider-template-4 .temp4-img-1 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 207px;
+    }
+
+    .slider-template-3 .temp3-img-1 img,
+    .slider-template-4 .temp4-img-1 img {
+        max-height: 301px;
+        max-width: 207px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-2 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-3 .temp3-img-2 img {
+        max-height: 301px;
+        max-width: 138px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-4 .temp4-img-2 {
+        display: table-cell;
+        height: 145.5px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-4 .temp4-img-2 img {
+        max-height: 145.5px;
+        max-width: 138px;
+        height: auto;
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /** main slider **/
+    .bxslider li {
+        margin-left: 10px;
+    }
+    .main-slider-container {
+        height: 302px;
+    }
+    
+    .slider-template-1 {
+        display: table-cell;
+        height: 302px;
+        vertical-align: middle;
+        width: 100%;
+    }
+
+    .slider-template-1 img {
+        max-height: 301px;
+        max-width: 720px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-2 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 355px;
+    }
+
+    .slider-template-2 img {
+        max-height: 301px;
+        max-width: 355px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-1,
+    .slider-template-4 .temp4-img-1 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 207px;
+    }
+
+    .slider-template-3 .temp3-img-1 img,
+    .slider-template-4 .temp4-img-1 img {
+        max-height: 301px;
+        max-width: 207px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-2 {
+        display: table-cell;
+        height: 301px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-3 .temp3-img-2 img {
+        max-height: 301px;
+        max-width: 138px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-4 .temp4-img-2 {
+        display: table-cell;
+        height: 145.5px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-4 .temp4-img-2 img {
+        max-height: 145.5px;
+        max-width: 138px;
+        height: auto;
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 567px) {
+    /** main slider **/
+    .bxslider li {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .main-slider-container {
+        height: 407px;
+    }
+    
+    .slider-template-1 {
+        display: table-cell;
+        height: 407px;
+        vertical-align: middle;
+        width: 567px;
+        position: relative;
+    }
+
+    .slider-template-1 img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .slider-template-2 {
+        display: table-cell;
+        height: 407px;
+        text-align: center;
+        vertical-align: middle;
+        width: 567px;
+    }
+
+    .slider-template-2 img {
+        max-height: 407px;
+        max-width: 565px;
+/*        height: auto;
+        width: auto;*/
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .slider-template-3 .temp3-img-1,
+    .slider-template-4 .temp4-img-1 {
+        display: table-cell;
+        height: 407px;
+        text-align: center;
+        vertical-align: middle;
+        width: 207px;
+    }
+
+    .slider-template-3 .temp3-img-1 img,
+    .slider-template-4 .temp4-img-1 img {
+        max-height: 407px;
+        max-width: 207px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-3 .temp3-img-2 {
+        display: table-cell;
+        height: 407px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-3 .temp3-img-2 img {
+        max-height: 407px;
+        max-width: 138px;
+        height: auto;
+        width: auto;
+    }
+
+    .slider-template-4 .temp4-img-2 {
+        display: table-cell;
+        height: 145.5px;
+        text-align: center;
+        vertical-align: middle;
+        width: 138px;
+    }
+
+    .slider-template-4 .temp4-img-2 img {
+        max-height: 145.5px;
+        max-width: 138px;
         height: auto;
         width: auto;
     }
