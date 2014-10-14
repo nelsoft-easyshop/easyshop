@@ -2,12 +2,11 @@
 
 namespace EasyShop\Promo;
 
-class ListingPromo extends AbstractPromo
+class FixedDiscountPromo extends AbstractPromo
 {
 
-
     /**
-     * Applies the guessThePricePromo calulcation
+     * Applies the fixed discount calculation
      *
      * @return EasyShop\Entities\Product
      */
@@ -21,20 +20,23 @@ class ListingPromo extends AbstractPromo
         $this->startDateTime = $this->startDateTime->getTimestamp();
         $this->endDateTime = $this->endDateTime->getTimestamp();
         
-        $this->promoPrice = $this->product->getPrice();
-        if(!($this->dateToday < $this->startDateTime) ||
-            ($this->endDateTime < $this->startDateTime) ||
-            ($this->dateToday > $this->endDateTime))
+        if(($this->dateToday < $this->startDateTime) || 
+          ($this->endDateTime < $this->startDateTime) ||
+          ($this->dateToday > $this->endDateTime))
         {
+            $this->promoPrice = $this->product->getPrice();
+        }
+        else{
+            $this->promoPrice = $this->product->getPrice() - ($this->product->getPrice()*$this->product->getDiscount()/100.0) ;
             $this->isStartPromo = true;
         }
-          
+
         $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
         $this->persist();        
         
         return $this->product;
     }
 
-
+    
 }
 
