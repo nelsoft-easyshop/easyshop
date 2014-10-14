@@ -29,7 +29,6 @@ class FixedDiscountPromo extends AbstractPromo
 
         $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
         $this->persist();        
-        
         return $this->product;
     }
 

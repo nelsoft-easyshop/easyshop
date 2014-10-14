@@ -38,7 +38,7 @@ $config = array(
         ),
         /* Fix discount sale */ 
         '2' => array(
-            'implementation' => 'EasyShop\Promo\FixDiscountPromo',
+            'implementation' => 'EasyShop\Promo\FixedDiscountPromo',
             'calculation_id' => '2',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' =>  array(
