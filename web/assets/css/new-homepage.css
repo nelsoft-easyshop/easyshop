@@ -2520,7 +2520,17 @@ width: 100% !important;
         color: #ffffff;
         opacity: 0.7;
         top: 40%;
-        
+        font-size: 25px;
+        height: 30px;
+        width: 30px;
+    }
+    
+    .fa-prev-slide{
+        padding-left: 6px;
+    }
+    
+    .fa-next-slide{
+        padding-left: 12px;
     }
     
    #tag-1 a, #tag-2 a, #tag-3 a{
