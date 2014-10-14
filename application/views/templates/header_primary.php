@@ -208,49 +208,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <div class="col-md-80p border-right">                                                    
                                                         <h2>popular categories</h2>
                                                         <div class="mrgn-left-neg-14">
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Clothes &amp; Accessories</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Women Clothing</a></li>
-                                                                    <li><a href="">Men Clothing</a></li>
-                                                                    <li><a href="">Babies Clothing</a></li>
-                                                                    <li><a href="">Unisex Accessories</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Electronics &amp; Gadget</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Cameras &amp; Imaging</a></li>
-                                                                    <li><a href="">Computer &amp; Networking</a></li>
-                                                                    <li><a href="">Tablets</a></li>
-                                                                    <li><a href="">Mobile Phones</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Jewelry &amp; Watches</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Watches</a></li>
-                                                                    <li><a href="">Fasion Jewelry</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                            <div class="col-md-3">
-                                                                <a href="" class="cat-sub-title">Health &amp; Beauty</a>
-                                                                <ul class="cat-sub-list">
-                                                                    <li><a href="">Makeup</a></li>
-                                                                    <li><a href="">Fragrances</a></li>
-                                                                    <li><a href="">Skin Care</a></li>
-                                                                </ul>
-                                                            </div><!-- End .col-5 -->
-                                                        </div>                                                    
+                                                            <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
+                                                                <div class="col-md-3">
+                                                                    <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
+                                                                    <ul class="cat-sub-list">
+                                                                        <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
+                                                                            <li><a href="/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
+                                                                        <?PHP endforeach; ?>
+                                                                    </ul>
+                                                                </div><!-- End .col-5 -->
+                                                            <?PHP endforeach; ?>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-20p">
                                                         <h2>other categories</h2>
                                                         <ul class="other-cat-con">
-                                                            <li><a href="">Food &amp; Beverages</a></li>
-                                                            <li><a href="">Toys, Hobbies &amp; Collections</a></li>
-                                                            <li><a href="">Books, Music &amp; Movies</a></li>
-                                                            <li><a href="">Home, Furniture &amp; Garden</a></li>
-                                                            <li><a href="">Business &amp; Industrial</a></li>
+                                                            <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
+                                                            <li><a href="/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
+                                                            <?PHP endforeach; ?>
                                                         </ul>
                                                     </div>    
                                                 </div><!-- End .mega-menu -->
