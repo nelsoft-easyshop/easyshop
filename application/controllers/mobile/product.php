@@ -28,13 +28,6 @@ class Product extends MY_Controller {
      */
     public function item($slug = '')
     {
-
-        $ss= array(
-            'a' => 'a'
-        );
-
-        $ss = array_merge($ss, array('s'=>'s'));
-        print_r($ss);
         $productRow = $this->product_model->getProductBySlug($slug);  
         $id = $productRow['id_product'];
         $productCategoryId = $productRow['cat_id'];
