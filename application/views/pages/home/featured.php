@@ -29,7 +29,7 @@
                             <table width="100%">
                             <tr>
                                 <td>
-                                    <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/boom">
+                                    <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$product['product']->getSlug()?>">
                                         <span class="icon-cart"></span> ADD TO CART
                                     </a>
                                 </td>
