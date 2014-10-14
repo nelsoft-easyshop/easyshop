@@ -119,7 +119,7 @@
 
 
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="/>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="/assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
