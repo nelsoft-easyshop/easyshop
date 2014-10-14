@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace EasyShop\XML;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 
 class CMS
 {
-
     /**
      * The xml resource getter
      *
@@ -402,8 +402,8 @@ $string = '<typeNode>
             $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                 ->getDefaultImage($productData->getIdProduct());
-            $featuredVendor['product'][$key]['image']['directory'] = "assets/product/unavailable/";
-            $featuredVendor['product'][$key]['image']['imageFileName'] = "unavailable_product_img.jpg";
+            $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
             if ($productImage != NULL) {
                 $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
