@@ -166,7 +166,7 @@
                             Point Allocation:
                         </td>
                         <td colspan="2" align="right">
-                            <input type="number" id="pointsAllocated" name="pointsAllocated" value="20" min="0" value="0" max="<?php echo $maxPoint; ?>">
+                            <input type="number" id="pointsAllocated" name="pointsAllocated" value="0" min="0" value="0" max="<?php echo $maxPoint; ?>">
                             <br/> <br/> Max points allowable: <?php echo $maxPoint; ?>
                         </td>
                     </tr> 
