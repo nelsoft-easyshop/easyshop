@@ -249,8 +249,25 @@ class Register extends MY_Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            
+            $formData = $form->getData();
+            if(!$em->getRepository('Easyshop\Entities\EsSubscribe')->findBy(['email' => $formData['email']])){
+                $subscriber = new EasyShop\Entities\EsSubscribe();
+                $subscriber->setEmail($formData['email']);
+                $subscriber->setDatecreated(date_create(date("Y-m-d H:i:s")));
+                $em->persist($subscriber);
+                $em->flush();
+                $data['content'] = 'You have successfully Subscribed!';
+            }
+            else{
+                $data['content'] = 'You are already subscribed to Easyshop.ph.';
+            }
+
+            $data['title'] = 'Successful Subscription | Easyshop.ph';
+            $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
+            $this->load->view('pages/user/register_subscribe_success', $data);
+            exit();
         }
+        redirect('home','refresh');
     }
     
     /**
