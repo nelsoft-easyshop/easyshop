@@ -28,15 +28,24 @@ class CMS
     private $productManager;
     
     /**
+     * User Manager
+     *
+     * @var EasyShop\Product\UserManager
+     */
+    private $userManager;
+    
+    
+    /**
      * Loads dependencies
      *
      * @param EasyShop\XML\Resource
      */
-    public function __construct($xmlResourceGetter, $em, $productManager)
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
     {
         $this->xmlResourceGetter = $xmlResourceGetter;
         $this->em = $em;
         $this->productManager = $productManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -340,7 +349,14 @@ $string = '<typeNode>
         
         $homePageData = array();
         $homePageData['categorySection'] = array(); 
+        
 
+        if(isset($xmlContent['categorySection']['categorySlug'])){
+            $temporary = $xmlContent['categorySection'];
+            $xmlContent['categorySection'] = array();
+            array_push($xmlContent['categorySection'], $temporary);
+        }
+        
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);
@@ -349,11 +365,30 @@ $string = '<typeNode>
             foreach($categorySection['productPanel'] as $idx=>$product){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
-                $sectionData['products'][$idx] =  $this->productManager->getProductDetails($product->getIdProduct());
-                                
+                $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
+                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
             }
             array_push($homePageData['categorySection'], $sectionData);
         }
+        
+        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
+
+
+        foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
+            $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $category['categorySlug']]);
+
+            foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
+            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                ->findOneBy(['slug' => $subCategory]);
+            }
+        }
+
+        foreach ($xmlContent['categoryNavigation']['otherCategories']['categorySlug'] as $key => $category) {
+        $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                ->findOneBy(['slug' => $category]);
+        }
+        $homePageData['categoryNavigation'] = $featuredCategory;
 
         return $homePageData;
     }

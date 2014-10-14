@@ -7,9 +7,8 @@
                 
                 <div class="item">
                     <div class="item-image-container" style="background: url(/assets/images/products/item1.jpg) center no-repeat; background-size: cover">
-                        <figure>
                         
-                        </figure>
+                        <span class="new-circle">NEW</span>
                         <span class="discount-circle">-25%</span>
                     </div><!-- End .item-image -->
                                                     
@@ -45,9 +44,8 @@
                 
                 <div class="item">
                     <div class="item-image-container" style="background: url(/assets/images/products/big-dress1.jpg) center no-repeat; background-size: cover">
-                        <figure>
-                            
-                        </figure>
+                        
+                        <span class="new-circle">NEW</span>
                         <span class="discount-circle">-25%</span>
                     </div><!-- End .item-image -->
                                                     
@@ -83,9 +81,7 @@
                 
                 <div class="item">
                     <div class="item-image-container" style="background: url(/assets/images/products/item2.jpg) center no-repeat; background-size: cover">
-                        <figure>
-                        
-                        </figure>
+                        <span class="new-circle">NEW</span>
                         <span class="discount-circle">-25%</span>
                     </div><!-- End .item-image -->
                                                     
@@ -121,9 +117,7 @@
                 
                 <div class="item">
                     <div class="item-image-container" style="background: url(/assets/images/products/phone3.jpg) center no-repeat; background-size: cover">
-                        <figure>
-                            
-                        </figure>
+                        <span class="new-circle">NEW</span>
                         <span class="discount-circle">-25%</span>
                     </div><!-- End .item-image -->
                                                     
@@ -159,9 +153,7 @@
                 
                 <div class="item">
                     <div class="item-image-container" style="background: url(/assets/images/products/item3.jpg) center no-repeat; background-size: cover">
-                        <figure>
-                            
-                        </figure>
+                        <span class="new-circle">NEW</span>
                         <span class="discount-circle">-25%</span>
                     </div><!-- End .item-image -->
                                                     

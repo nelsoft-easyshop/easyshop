@@ -205,9 +205,9 @@ class EsProduct
     private $enddate = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="promo_type", type="boolean", nullable=false)
+     * @ORM\Column(name="promo_type", type="integer", nullable=false)
      */
     private $promoType = '0';
 
@@ -311,6 +311,14 @@ class EsProduct
      *
      */
     private $soldPrice = '0.0000';
+    
+    
+    /**
+     * @var EasyShop\Entities\EsProductImage
+     * 
+     *
+     */
+    private $defaultImage;
 
     
     /**
@@ -943,7 +951,7 @@ class EsProduct
     /**
      * Set promoType
      *
-     * @param boolean $promoType
+     * @param integer $promoType
      * @return EsProduct
      */
     public function setPromoType($promoType)
@@ -956,7 +964,7 @@ class EsProduct
     /**
      * Get promoType
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getPromoType()
     {
@@ -1243,16 +1251,7 @@ class EsProduct
         return $this->soldPrice;
     }
     
-    /** 
-     * Returns the images of a product
-     *
-     * @return EasyShop\Entities\EsProductImage
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-    
+
     /**
      * Set maxAllowablePoint
      *
@@ -1275,4 +1274,36 @@ class EsProduct
     {
         return $this->maxAllowablePoint;
     }
+    
+    
+    /**
+     * Set the default image
+     *
+     * @param EasyShop\Entities\EsProductImage $defaultImage
+     */
+    public function setDefaultImage($defaultImage)
+    {
+        $this->defaultImage = $defaultImage;
+    }
+    
+    /**
+     * Returns the default image
+     *
+     * @return EasyShop\Entities\EsProductImage
+     */
+    public function getDefaultImage()
+    {
+        return $this->defaultImage;
+    }
+    
+    /** 
+     * Returns the images of a product
+     *
+     * @return EasyShop\Entities\EsProductImage[]
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+        
 }

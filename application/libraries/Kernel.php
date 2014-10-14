@@ -90,7 +90,8 @@ class Kernel
         $container['xml_cms'] = function ($c) use ($container) {
             return new \EasyShop\XML\CMS($container['xml_resource'],
                                          $container['entity_manager'],
-                                         $container['product_manager']);
+                                         $container['product_manager'],
+                                         $container['user_manager']);
         };
         
         //XML Resource Service

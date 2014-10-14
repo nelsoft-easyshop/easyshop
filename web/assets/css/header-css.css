@@ -188,9 +188,14 @@
 
 
 /* Search Navigation */
+.nav-searchfield-width select {
+	max-width: 128px;
+	width: 100%
+}
+
 .nav-searchfield-width input[type="text"] {
 	max-width: 360px;
-	width: 34%;
+	width: 100%;
 }
 
 .nav-submit-button input[type="submit"],
