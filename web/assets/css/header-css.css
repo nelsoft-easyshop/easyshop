@@ -167,8 +167,8 @@
 	background-position:center center;
 	vertical-align:top;
 	border-radius:3px;
-	margin-left:15px;
-	margin-top:1.5px;
+/*	margin-left:15px;
+	margin-top:1.5px;*/
 	transition:background-color 0.4s;
 	-webkit-transition:background-color 0.4s;
 	-moz-transition:background-color 0.4s;
@@ -188,6 +188,10 @@
 
 
 /* Search Navigation */
+.nav-searchfield-width select {
+	max-width: 128px;
+	width: 100%
+}
 
 .nav-searchfield-width input[type="text"] {
 	max-width: 360px;
@@ -835,18 +839,7 @@
 		border:none;
 	}
 
-	#main-nav-container #main-nav #responsive-nav {
-		display:block;
-		padding:5px 0;
-	}
-
-	#responsive-nav-button {
-		color:#fff;
-	}
 	
-	#main-nav-container #main-nav > ul{
-		display:none;	
-	}
 	
 	.col-2 {
 		padding-left:15px;

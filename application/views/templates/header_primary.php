@@ -45,10 +45,11 @@
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
  
     <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
+    
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/header-css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/bootstrap.css" media='screen'>
     <link type="text/css" href='<?=base_url()?>assets/css/new-homepage.css' rel="stylesheet" media='screen'/>
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
 </head>
 <body>
 
@@ -106,7 +107,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <div class="pos-rel mrgn-rght-8">
                                             <div class="header-cart-container">
                                                 <a href="/cart" class="header-cart-wrapper">
-                                                    <span class="header-cart-items-con">
+                                                    <span class="header-cart-items-con ui-form-control">
                                                         <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon"></span>
@@ -190,7 +191,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div id="main-nav">
                                         <div id="responsive-nav">
                                             <div id="responsive-nav-button">
-                                                Menu <span id="responsive-nav-button-icon"></span>
+                                                <span id="responsive-nav-button-icon"></span>
                                             </div><!-- responsive-nav-button -->
                                         </div>
                                         <ul class="menu clearfix">
@@ -262,10 +263,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <input type="submit" value="" class="span_bg">
                                             </div>
                                             <div class="header-cart-container">
-                                                <span class="header-cart-items-con sticky-cart">
-                                                    <span class="header-cart-item">2 item(s)</span> in your cart
-                                                </span>
-                                                <span class="header-cart-icon-con span_bg cart-icon"></span>
+                                                <a href="" class="header-cart-wrapper">
+                                                    <span class="header-cart-items-con sticky-cart">
+                                                        <span class="header-cart-item">2 item(s)</span> in your cart
+                                                    </span>
+                                                    <span class="header-cart-icon-con span_bg cart-icon">
+                                                        <span class="cart-item-notif">1</span>
+                                                    </span>
+                                                </a>                                                
                                                 <div class="sticky-header-cart-item-list">
                                                     <p>Recently add item(s)</p>
                                                     <div class="mrgn-bttm-15">
