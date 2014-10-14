@@ -16,9 +16,13 @@ class FixedDiscountPromo extends AbstractPromo
             return null;
         }
         
+        $this->dateToday = $this->dateToday->getTimestamp();
+        $this->startDateTime = $this->startDateTime->getTimestamp();
+        $this->endDateTime = $this->endDateTime->getTimestamp();
+        
         if(($this->dateToday < $this->startDateTime) || 
           ($this->endDateTime < $this->startDateTime) ||
-          ($this->dateToday < $this->endDateTime))
+          ($this->dateToday > $this->endDateTime))
         {
             $this->promoPrice = $this->product->getPrice();
         }
@@ -29,6 +33,7 @@ class FixedDiscountPromo extends AbstractPromo
 
         $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
         $this->persist();        
+        
         return $this->product;
     }
 
