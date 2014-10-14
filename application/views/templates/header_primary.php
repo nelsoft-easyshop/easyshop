@@ -114,7 +114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </a>
                                                 <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
                                                 <?PHP else : ?>
-                                                    <div class="header-cart-item-list">
+                                                <div class="header-cart-item-list">
                                                     <p>Recently add item(s)</p>
                                                     <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
                                                         <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
@@ -265,52 +265,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart">
-                                                        <span class="header-cart-item">2 item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon">
-                                                        <span class="cart-item-notif">1</span>
+                                                        <span class="cart-item-notif"><?=$cart_size?></span>
                                                     </span>
-                                                </a>                                                
+                                                </a>
+                                            <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                            <?PHP else : ?>
                                                 <div class="sticky-header-cart-item-list">
                                                     <p>Recently add item(s)</p>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
+                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
+                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                            <div class="mrgn-bttm-15">
+                                                                <div class="header-cart-item-img">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
+                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="header-cart-item-con">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
+                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                </div>
+                                                                <div class="clear"></div>
+                                                            </div>
+                                                        <?PHP endif; ?>
+                                                    <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Shipping: <span>&#8369; 50.00</span></p>
-                                                            <p>Total: <span>&#8369; 100,500.00</span></p>
+                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
-                                                            <a href="" class="header-cart-lnk-cart">go to cart</a>
-                                                            <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
                                                         </div>
                                                         <div class="clear"></div>
                                                     </div>
                                                 </div>
+                                            <?PHP endif; ?>
                                             </div>
                                             <div class="header-text-container pull-right">                                               
                                                 <div class="header-link">
