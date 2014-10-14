@@ -365,6 +365,28 @@ $string = '<typeNode>
             array_push($homePageData['categorySection'], $sectionData);
         }
 
+        //Get vendor page details
+        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
+        $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
+
+        foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+            $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findOneBy(['slug' => $product['slug']]);
+            $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                ->getDefaultImage($productData->getIdProduct());
+            $featuredVendor['product'][$key]['image']['directory'] = "assets/product/unavailable/";
+            $featuredVendor['product'][$key]['image']['imageFileName'] = "unavailable_product_img.jpg";
+
+            if ($productImage != NULL) {
+                $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
+                $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
+            }
+        }
+        $homePageData['seller'] = $featuredVendor;
+
         return $homePageData;
     }
     
