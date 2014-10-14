@@ -233,6 +233,26 @@ class Register extends MY_Controller
 
     }
     
+    
+    public function newSubscribe()
+    {
+        $em = $this->serviceContainer['entity_manager'];
+        $rules = $this->serviceContainer['form_validation']->getRules('subscribe')['email'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $request = $this->serviceContainer['http_request'];
+
+        $form = $formFactory->createBuilder()
+                            ->setMethod('POST')
+                            ->add('email', 'text', array('required' => false, 'label' => false, 'constraints' => $rules))
+                            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            
+        }
+    }
+    
     /**
      * Renders change password view
      *
