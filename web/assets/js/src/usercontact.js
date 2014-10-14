@@ -12,9 +12,6 @@
             if($( "a#validatedWebsite" ).html() == ""){
                 $( "#websiteRow" ).hide();
             }
-            if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
-                $( "#addressRow" ).hide();
-            }
         }
         else{
             if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
@@ -67,6 +64,10 @@
         $( "#contactNoRow" ).show();
         $( "#addressRow" ).show();
         $( "#websiteRow" ).show();
+
+        if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
+            $( "#streetAddr" ).val('');
+        }
      });
     
      $( "#editIconClose" ).click(function() {
@@ -85,9 +86,6 @@
         }
         if($( "a#validatedWebsite" ).html() == ""){
             $( "#websiteRow" ).hide();
-        }
-        if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
-            $( "#addressRow" ).hide();
         }
 
         // revert all changes back to original using post hidden input
