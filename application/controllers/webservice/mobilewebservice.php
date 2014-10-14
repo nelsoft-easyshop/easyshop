@@ -44,7 +44,7 @@ class MobileWebService extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getMobileXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
-
+        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
         }      
@@ -257,13 +257,24 @@ class MobileWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;   
 
-        $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');    
-
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');                
+            if($addXml === TRUE) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);            
+            } 
         }
+
+
     }
 
     /**
@@ -284,35 +295,45 @@ class MobileWebService extends MY_Controller
 
         $map = simplexml_load_file($this->file);
 
-        if($order === "" || $order == NULL){
-            $order = (int) $order;
-            $map->section[$index]->boxContent[$boxIndex]->value = $value;
-            $map->section[$index]->boxContent[$boxIndex]->type = $type ;
-            $map->section[$index]->boxContent[$boxIndex]->target = $target;
-            $map->section[$index]->boxContent[$boxIndex]->actionType = $actionType; 
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
-            $order = (int) $order;         
-            $tempValue = (string)$map->section[$index]->boxContent[$order]->value;
-            $tempOrder = (string)$map->section[$index]->boxContent[$order]->type;
-            $tempTarget = (string)$map->section[$index]->boxContent[$order]->target;
-            $tempActionType = (string)$map->section[$index]->boxContent[$order]->actionType;
+            if($order === "" || $order == NULL){
+                $order = (int) $order;
+                $map->section[$index]->boxContent[$boxIndex]->value = $value;
+                $map->section[$index]->boxContent[$boxIndex]->type = $type ;
+                $map->section[$index]->boxContent[$boxIndex]->target = $target;
+                $map->section[$index]->boxContent[$boxIndex]->actionType = $actionType; 
+            }
+            else {
+                $order = (int) $order;         
+                $tempValue = (string)$map->section[$index]->boxContent[$order]->value;
+                $tempOrder = (string)$map->section[$index]->boxContent[$order]->type;
+                $tempTarget = (string)$map->section[$index]->boxContent[$order]->target;
+                $tempActionType = (string)$map->section[$index]->boxContent[$order]->actionType;
 
-            $map->section[$index]->boxContent[$order]->value = $map->section[$index]->boxContent[$boxIndex]->value;
-            $map->section[$index]->boxContent[$order]->type = $map->section[$index]->boxContent[$boxIndex]->type;
-            $map->section[$index]->boxContent[$order]->target = $map->section[$index]->boxContent[$boxIndex]->target;
-            $map->section[$index]->boxContent[$order]->actionType = $map->section[$index]->boxContent[$boxIndex]->actionType;
+                $map->section[$index]->boxContent[$order]->value = $map->section[$index]->boxContent[$boxIndex]->value;
+                $map->section[$index]->boxContent[$order]->type = $map->section[$index]->boxContent[$boxIndex]->type;
+                $map->section[$index]->boxContent[$order]->target = $map->section[$index]->boxContent[$boxIndex]->target;
+                $map->section[$index]->boxContent[$order]->actionType = $map->section[$index]->boxContent[$boxIndex]->actionType;
 
-            $map->section[$index]->boxContent[$boxIndex]->value = $tempValue;
-            $map->section[$index]->boxContent[$boxIndex]->type = $tempOrder;
-            $map->section[$index]->boxContent[$boxIndex]->target = $tempTarget;
-            $map->section[$index]->boxContent[$boxIndex]->actionType = $tempActionType;
+                $map->section[$index]->boxContent[$boxIndex]->value = $tempValue;
+                $map->section[$index]->boxContent[$boxIndex]->type = $tempOrder;
+                $map->section[$index]->boxContent[$boxIndex]->target = $tempTarget;
+                $map->section[$index]->boxContent[$boxIndex]->actionType = $tempActionType;
 
-        }
-        if($map->asXML($this->file)) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+            }
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }            
         }          
     }
 }

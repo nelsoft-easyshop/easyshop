@@ -1543,7 +1543,8 @@ class Payment extends MY_Controller{
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
         }
 
-        $this->session->set_userdata('choosen_items', $itemArray); 
+        $this->session->set_userdata('choosen_items', $itemArray);
+
         return $qtysuccess;
     }
 
@@ -1620,14 +1621,20 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
 
-        $carts = $this->session->all_userdata();
-
-        $paymentService = $this->serviceContainer['payment_service'];
-
         /* JSON Decode*/
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
 
         $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
+
+        if(reset($paymentMethods)['method'] === 'CashOnDelivery'){
+            if($this->input->post('promo_type') !== FALSE ){
+                $this->setPromoItemsToPayment($this->input->post('promo_type'));
+            }
+        }
+
+        $carts = $this->session->all_userdata();
+
+        $paymentService = $this->serviceContainer['payment_service'];
 
         // Validate Cart Data and subtract points
         $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
