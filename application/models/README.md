@@ -1,4 +1,8 @@
-The use of Codeigniter has been deprecated and will no longer be supported as decided by the development team. 
+CODIGNITER MODELS 
+
++++++++++++++++++++++++++++++++++++++++
+
+The use of Codeigniter models has been deprecated and will no longer be supported as decided by the development team. 
 Instead business entities are to be accessed using the Doctrine ORM which can be found in src/EasyShop/Entities.
 Business logic at the same time is to be placed in appropriate classes/services which are also located in 
 src/EasyShop. In addition to this, re-usable getter methods are to be placed in repositories following the repository
