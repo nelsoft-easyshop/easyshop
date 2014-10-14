@@ -111,7 +111,6 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                             ->find($this->getParameter('paymentType'));
 
-
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($this->getParameter('amount'));
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));

@@ -834,9 +834,9 @@ textarea {
     color: #868487;
     font-size: 0.75em;
     height: 33px;
-    line-height: 26px;
+    line-height: 33px;
     margin-right: -5px;
-    padding: 0px 12px;
+    padding: 0px 12px !important;
     vertical-align: middle;
     width: 148px;
 }
@@ -1647,6 +1647,10 @@ td.td-view.p-view2.color-default{
 
 .footer-bottom-content p {
     line-height: 52px;
+}
+
+.res-copyright {
+    display: none;
 }
 
 /*** vendor footer ***/
