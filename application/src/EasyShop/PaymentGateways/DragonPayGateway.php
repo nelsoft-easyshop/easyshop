@@ -259,11 +259,11 @@ class DragonPayGateway extends AbstractGateway
         $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
                         ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
 
-        $invoice = $return->getInvoiceNo();
-        $orderId = $return->getIdOrder();
-        $memberId = $return->getBuyer()->getIdMember();
-        $itemList = json_decode($return->getDataResponse(), true);
-        $postBackCount = $return->getPostbackcount();
+        $response['invoice'] = $invoice = $return->getInvoiceNo();
+        $response['order_id'] = $orderId = $return->getIdOrder();
+        $response['member_id'] = $memberId = $return->getBuyer()->getIdMember();
+        $response['itemList'] = $itemList = json_decode($return->getDataResponse(), true);
+        $response['postBackCount'] = $postBackCount = $return->getPostbackcount();
 		
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
@@ -286,10 +286,10 @@ class DragonPayGateway extends AbstractGateway
             $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
                             ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus,0);
 
-            if(!$postBackCount){
+            //if(!$postBackCount){
                 //$remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
                 //$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
-            }
+            //}
 
         }
         elseif(strtolower($status) == "f"){
@@ -303,7 +303,7 @@ class DragonPayGateway extends AbstractGateway
             $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                     ->addOrderHistory($orderHistory);
         }
-
+        return $response;
     }
 
     /**
@@ -329,7 +329,6 @@ class DragonPayGateway extends AbstractGateway
             $orderId = $return->getIdOrder();
             $response['status'] = 's';
             $response['message'] = 'Your payment has been completed through Dragon Pay. '.urldecode($message);  
-            //$this->removeItemFromCart(); 
         }
         else{
             $response['status'] = 'f';

@@ -93,8 +93,8 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['message'] = $return['o_message'];
             }
             else{
-                $v_order_id = $return['v_order_id'];
-                $invoice = $return['invoice_no'];
+                $response['order_id'] = $v_order_id = $return['v_order_id'];
+                $response['invoice'] = $invoice = $return['invoice_no'];
                 $response['status'] = 's';
 
                 foreach ($itemList as $key => $value) {  

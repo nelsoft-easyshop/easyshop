@@ -334,8 +334,8 @@ class PayPalGateway extends AbstractGateway
             $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                 ->findOneBy(['transactionId' => $token, 'paymentMethod' => $paymentType]);
 
-            $invoice = $return->getInvoiceNo();
-            $orderId = $return->getIdOrder();
+            $response['invoice'] = $invoice = $return->getInvoiceNo();
+            $response['order_id'] = $orderId = $return->getIdOrder();
 
             // Compute shipping fee
             $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));

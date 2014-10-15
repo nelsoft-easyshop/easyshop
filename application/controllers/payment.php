@@ -1647,8 +1647,11 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
-
         extract($response);
+
+        $this->removeItemFromCart();
+        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$order_id, 'invoice_no'=>$invoice));
+
         $this->generateFlash($txnid,$message,$status);
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
@@ -1692,8 +1695,10 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
-    
         extract($response);
+        
+        $this->removeItemFromCart();
+        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$order_id, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
 
         redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
@@ -1714,8 +1719,12 @@ class Payment extends MY_Controller{
         $params['digest'] = $this->input->get('digest');
 
         $response = $paymentService->returnMethod($paymentMethods, $params);
-        
         extract($response);
+        
+        if($status == "p" || $status == "s"){
+            $this->removeItemFromCart();
+        }
+        
         $this->generateFlash($txnId,$message,$status);
         redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
@@ -1733,6 +1742,12 @@ class Payment extends MY_Controller{
         $params['digest'] = $this->input->post('digest');
 
         $response = $paymentService->postBack($paymentMethods, null, null, $params);
+        extract($response);
+
+        if(!$postBackCount){
+            $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$order_id, 'invoice_no'=>$invoice));  
+        }
 
         echo 'result=OK'; 
     }
