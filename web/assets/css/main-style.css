@@ -1387,6 +1387,7 @@ td.td-view.p-view2.color-default{
     color: #989898;
     font-weight: normal;
     font-size: 16px;
+    min-height: 10px;
 }
 .p-list-availability{
     font-size: 13px;
@@ -1426,10 +1427,10 @@ td.td-view.p-view2.color-default{
     background: #ff3e1e;
     padding: 6px 0px;
     text-align: center !important;
-    margin-left:95px !important;
+    margin-left:123px !important;
     margin-top:13px;
     font-size: 12px;
-    width: 70px;
+    width: 42px;
     font-weight:bold;
 }
 .grid-span-discount-pin{
@@ -1441,7 +1442,7 @@ td.td-view.p-view2.color-default{
     margin-left:30px;
     margin-top:10px;
     font-size: 12px;
-    width: 70px;
+    width: 42px;
     font-weight:bold;
     right: 0 !important;
     margin-right: 5px !important;
