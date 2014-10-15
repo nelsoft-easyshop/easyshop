@@ -1,7 +1,7 @@
 <?php 
 
 namespace EasyShop\XML;
-
+use EasyShop\Entities\EsBrand as EsBrand;
 class CMS
 {
 
@@ -373,7 +373,7 @@ $string = '<typeNode>
         
         $homePageData['adSection'] = $xmlContent['adSection']['ad'];
 
-
+        //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
@@ -389,6 +389,16 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+
+        //Get Popular Brands
+        foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
+            $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
+                                            ->findOneBy(['idBrand' => $brandId]);
+            $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
+            $popularCategory['popularBrand'][$key]['image']['file'] =
+                $popularCategory['popularBrand'][$key]['brand']->getImage() ?: EsBrand::IMAGE_UNAVAILABLE_FILE;
+        }
+        $homePageData['popularCategory'] = $popularCategory;
 
         return $homePageData;
     }
