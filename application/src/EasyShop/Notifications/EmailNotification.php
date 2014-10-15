@@ -33,9 +33,9 @@ class EmailNotification
     /**
      *  Constructor
      */
-    public function __construct()
+    public function __construct($emailConfig)
     {
-        $this->emailConfig = require(APPPATH . "config/email_swiftmailer.php");
+        $this->emailConfig = $emailConfig;
 
         $transport = \Swift_SmtpTransport::newInstance($this->emailConfig['smtp_host'], $this->emailConfig['smtp_port'], $this->emailConfig['smtp_crypto'])
             ->setUsername($this->emailConfig['smtp_user'])

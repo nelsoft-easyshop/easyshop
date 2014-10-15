@@ -24,9 +24,9 @@ class MobileNotification
     /**
      *  Constructor
      */
-    public function __construct()
+    public function __construct($smsConfig)
     {
-        $this->smsConfig = require(APPPATH . "config/sms.php");
+        $this->smsConfig = $smsConfig;
 
         return $this;
     }
