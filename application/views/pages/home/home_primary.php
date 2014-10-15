@@ -11,28 +11,26 @@
         <div class="right-side-shadow"></div>
         <div id="bxslider" class="container">
             <ul class="bxslider">
-                <li>
-                    <div class="slider-item slider-template-1">
+                <li class="slider-template-1">
+                    <div class="slider-item">
                         <img src="/assets/images/homeslider/hs_0.jpg" alt="Slider item 1">
                     </div>
                  </li>
-                <li>
-                    <div class="slider-item slider-template-2">
+                <li class="slider-template-2">
+                    <div class="slider-item">
                         <img src="/assets/images/homeslider/hs_0_1.jpg" alt="Slider item 2">                        
                     </div>
                 </li>
-                <li>
-                    <div class="slider-item slider-template-2">
+                <li class="slider-template-2">
+                    <div class="slider-item">
                         <img src="/assets/images/homeslider/hs_0_1.jpg" alt="Slider item 3">
                     </div>
                  </li>
 
-                 <li>
-                    <div class="slider-item slider-template-3">
-                        <div class="img-holder img-holder-mrgn-right-10">
-                            <div class="temp3-img-1">
-                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                            </div>
+                 <li class="slider-template-3">
+                    <div class="slider-item">
+                        <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
+                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
                         </div>                        
                         <div class="img-holder temp3-img-2">
                             <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
@@ -41,21 +39,19 @@
                     </div>
                  </li>
 
-                 <li>
-                    <div class="slider-item slider-template-3">
-                        <div class="img-holder img-holder-mrgn-right-10">
-                            <div class="temp3-img-1">
-                                <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                            </div>
-                        </div>    
+                 <li class="slider-template-3">
+                    <div class="slider-item">
+                        <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
+                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
+                        </div>                        
                         <div class="img-holder temp3-img-2">
                             <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
                         </div>
                         <div class="clear"></div>                        
-                    </div>                    
+                    </div>
                  </li>
 
-                 <li>
+                 <!--<li>
                     <div class="slider-item slider-template-4">
                         <div class="img-holder img-holder-mrgn-right-10">
                             <div class="temp4-img-1">
@@ -94,7 +90,7 @@
                         </div>
                         <div class="clear"></div>                       
                     </div>                     
-                 </li>
+                 </li> -->
             </ul>
         </div>
     </div>
