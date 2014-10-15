@@ -161,19 +161,16 @@
 	display:inline-block;
 	width:35px;
 	height:35px;
-	background-color:#444645;
 	background-image:url(../images/sprites/responsive-menu-icon.png);
 	background-repeat:no-repeat;
 	background-position:center center;
 	vertical-align:top;
 	border-radius:3px;
-	margin-left:15px;
-	margin-top:1.5px;
+/*	margin-left:15px;
+	margin-top:1.5px;*/
 	transition:background-color 0.4s;
 	-webkit-transition:background-color 0.4s;
 	-moz-transition:background-color 0.4s;
-	box-shadow:inset 0 1px 1px rgba(255, 255, 255, 0.4);
-	-webkit-box-shadow:inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 #responsive-nav-button:hover #responsive-nav-button-icon,
@@ -188,6 +185,10 @@
 
 
 /* Search Navigation */
+.nav-searchfield-width select {
+	max-width: 128px;
+	width: 100%
+}
 
 .nav-searchfield-width input[type="text"] {
 	max-width: 360px;
@@ -783,7 +784,6 @@
 	#top-links li:first-child a {
 		border-left:1px solid #dcdcdc;
 		margin-left:0;
-		padding-left: 30px;
 	}
 
 	#header .dropdown-menu > li > a {
@@ -835,18 +835,7 @@
 		border:none;
 	}
 
-	#main-nav-container #main-nav #responsive-nav {
-		display:block;
-		padding:5px 0;
-	}
-
-	#responsive-nav-button {
-		color:#fff;
-	}
 	
-	#main-nav-container #main-nav > ul{
-		display:none;	
-	}
 	
 	.col-2 {
 		padding-left:15px;
@@ -1172,7 +1161,9 @@
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
-
+	#top-links li a {
+		padding: 0 8px;
+	}
 	#quick-access {
 		width:50%;
 	}
@@ -1308,7 +1299,6 @@ only screen and (min-device-pixel-ratio: 1.5) {
 	}
 
 	#responsive-nav-button #responsive-nav-button-icon {
-		background-color:#444645;
 		background-image:url(../images/sprites/responsive-menu-icon%402x.png);
 		background-repeat:no-repeat;
 		background-position:center center;

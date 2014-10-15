@@ -132,6 +132,8 @@ sub, sup{
     color: #f70000;
     font-weight: 600 !important;
     font-size: 22px;
+    margin-top: 5px;
+    margin-left: 15px;
 }
 
 .col-countdown-sale > .dsc_header_txt{

@@ -233,12 +233,12 @@ textarea {
     vertical-align: middle;
 }
 
-.new-user-nav-dropdown {
+/*.new-user-nav-dropdown {
     position: absolute;
     right: 0;
     top: 0;
 }
-
+*/
 .new-user-nav-dropdown .user-nav-dropdown {
     margin-right: 18px;
 }
@@ -834,9 +834,9 @@ textarea {
     color: #868487;
     font-size: 0.75em;
     height: 33px;
-    line-height: 26px;
+    line-height: 33px;
     margin-right: -5px;
-    padding: 0px 12px;
+    padding: 0px 12px !important;
     vertical-align: middle;
     width: 148px;
 }
@@ -1020,6 +1020,7 @@ textarea {
 .div-product-view-option{
     height: 30px;
     margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 .bg-product-section{
@@ -1069,7 +1070,7 @@ td.td-view.p-view2.color-default{
     border-radius: 4px;
     width: 200px;
     margin-top: -2px;
-    margin-right: 4px;
+    margin-right: -10px;
 }
 
 .form-select-default > option{
@@ -1377,7 +1378,7 @@ td.td-view.p-view2.color-default{
 
 .list > .product-paging > .panel-list-item{
     display: inline-block;
-    width:830px;
+    width:825px;
     margin-bottom: 10px;
     margin-left: 7px;
     transition: all 0.5s ease;
@@ -1624,7 +1625,7 @@ td.td-view.p-view2.color-default{
 
 .footer-primary input[type="text"] {
     max-width: 373px;
-    width: 66%;
+    width: 63%;
 }
 
 .footer-primary input[type="submit"] {
@@ -1647,6 +1648,10 @@ td.td-view.p-view2.color-default{
 
 .footer-bottom-content p {
     line-height: 52px;
+}
+
+.res-copyright {
+    display: none;
 }
 
 /*** vendor footer ***/

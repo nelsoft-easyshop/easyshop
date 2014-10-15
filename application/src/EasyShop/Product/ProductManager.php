@@ -27,7 +27,6 @@ use EasyShop\Entities\EsCat;
 class ProductManager
 {
 
-
     /**
      * Newness Limit in days 
      *
@@ -102,11 +101,11 @@ class ProductManager
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                            ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
+                              ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping($totalShippingFee === 0);
+        $product->setIsFreeShipping($totalShippingFee === 0);        
         $product->setIsNew($this->isProductNew($product));
         $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
                                            ->getDefaultImage($product->getIdProduct()));
@@ -200,7 +199,7 @@ class ProductManager
 
     /**
      * Apply discounted price to product
-     * This has been refactored with hydrate promo data
+     *
      * @param  array  $products [description]
      * @return mixed
      */
@@ -402,8 +401,22 @@ class ProductManager
      */
     public function isProductNew($product)
     {
-        $lastModifiedDate = $product->getLastModifiedDate()
-                                    ->getTimestamp();
+        if(is_string($product->getLastModifiedDate())){
+            $sql = "
+                SELECT 
+                    p.lastmodifieddate
+                FROM 
+                    EasyShop\Entities\EsProduct p
+                WHERE p.idProduct = :productId
+            ";
+            $query = $this->em->createQuery($sql)
+                                ->setParameter('productId', $product->getIdProduct());
+            $lastModifiedDate = $query->getResult()[0]['lastmodifieddate']->getTimestamp();
+        }
+        else{
+            $lastModifiedDate = $product->getLastModifiedDate()
+                                        ->getTimestamp();
+        }
         $dateNow = new \DateTime('now');
         $dateNow = $dateNow->getTimestamp();
         $datediff = $dateNow - $lastModifiedDate;
