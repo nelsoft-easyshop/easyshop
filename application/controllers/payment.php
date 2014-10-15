@@ -702,7 +702,10 @@ class Payment extends MY_Controller{
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus,0);
 
             if($postBackCount == "0"){
-                $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
+                $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList); 
+            }
+
+            if(strtolower($status) == "s"){ 
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
             }
 
