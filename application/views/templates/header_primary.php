@@ -68,25 +68,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="header-top-left">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <ul id="top-links" class="clearfix">
                                     <li><a href="/sell/step1" title="Sell an item"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">sell an item</span></a></li>
                                     <li><a href="/guide/sell" title="Learn how to sell your items"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">how to sell</span></a></li>
                                     <li><a href="/guide/buy" title="Learn how to make a purchase"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">how to shop</span></a></li>
                                 </ul>
                             </div><!-- End .header-top-left -->
-                            <div class="header-top-right">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
                                         <!-- <span class="login-icon user-acct-icon"></span>
                                         <a href="/login">login</a>&nbsp;or&nbsp;
                                         <a href="/register">create an account</a> -->
-                                        <span class="login-icon user-acct-icon"></span> 
-                                        <a href="" class="header-seller-name">Lorem ipsum</a>
+                                        
                                         <div class="new-user-nav-dropdown">
-                                                <span class="user-nav-dropdown">Account Settings</span>
-                                            </div>
-                                            <ul class="nav-dropdown">
+                                            <span class="login-icon user-acct-icon"></span> 
+                                            <a href="" class="header-seller-name">Lorem ipsum</a>
+                                            <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                            <ul class="default-nav-dropdown">
                                                 <li>
                                                     <a href="/me">Dashboard</a>
                                                 </li>
@@ -111,7 +111,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <a class="prevent" href="/login/logout">Logout</a>
                                                 </li>
                                             </ul>
-                                            <div class="clear"></div>
+                                            <div class="clear"></div>                                            
+                                        </div>
+                                            
                                     </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->

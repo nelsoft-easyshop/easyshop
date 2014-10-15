@@ -207,10 +207,11 @@ header {
 .header-top-right {
     float:right;
     position:relative;
+    width: 40%;
 }
 
 #top-links li {
-    margin-right:20px;
+    margin-right:5%;
     display:block;
     float:left;
 }
@@ -222,34 +223,147 @@ header {
     line-height: 24px;
     margin:7px 0;
     position: relative;
-    padding-left:20px;
 }
 
 #top-links li a:hover{
     color:#4370cc;
 }
 
-.header-seller-name {
-    display: inline-block;
-    width: 125px;
+.header-text-container {
+    width: 100%;
 }
 
-.new-user-nav-dropdown .user-nav-dropdown:after {
+.header-seller-name {
+    display: inline-block;
+    height: 35px;
+    max-width: 125px;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    width: 73%;
+}
+
+.new-user-nav-dropdown {
+    text-align: right;
+}
+
+.default-nav-dropdown-arrow {
+    display: inline-block;
+    height: 25px;
+    overflow: hidden;
+    position: relative;
+    text-indent: 99999px;
+    width: 15px;
+}
+.default-nav-dropdown-arrow:after {
+    border-style: inset;
+     -webkit-transform:rotate(360deg);
+    content: " ";
+    cursor: pointer;
+    height: 0;
+    left: 1px;
+    line-height: 0;
+    position: absolute;
+    top: 16px;
+    width: 0;
+    border-style: solid;
+    border-width: 8px 6px 0;
+    border-color: #cecece transparent transparent transparent;
+    _border-color: #cecece #000000 #000000 #000000;
+    _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+}
+
+.default-nav-dropdown-arrow:hover:after {
+    border-color: #1e1e5d transparent transparent transparent;
+}
+
+.new-user-nav-dropdown:hover .default-nav-dropdown {
+    display: block;
+}
+
+.default-nav-dropdown:before {
+    border-style: inset;
+     -webkit-transform:rotate(360deg);
+    content: " ";
+    position: absolute;
+    right: 15px;
+    top: -9px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 10px 10px;
+    border-color: transparent transparent #fff transparent;
+    -webkit-filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.2));
+    z-index: -9;
+}
+
+.default-nav-dropdown {
+    border: 1px solid #d5d5d5;
+    background-color: #fff;
+    display: none;
+    list-style: none;
+/*    left: -68px;*/
+    top: 32px;
+    padding: 10px 0;
+    position: absolute;
+    right: -3px;
+    width: 200px;
+    z-index: 99;
+    border-radius: 3px;
+    z-index: 9999;
+    -webkit-box-shadow: 0px 2px 6px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow:    0px 2px 6px rgba(50, 50, 50, 0.3);
+    box-shadow:         0px 2px 6px rgba(50, 50, 50, 0.3);
+}
+
+.default-nav-dropdown li {
+    float: none;
+    text-align: left;
+}
+
+.default-nav-dropdown-border {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.default-nav-dropdown li a {
+    color: #494949;
+    display: block;
+    padding:0px 10px;
+}
+
+.default-nav-dropdown li a:hover {
+    color: #fff;
+    background-color: #4370cc;
+    text-decoration: none;
+}
+
+/*.new-user-nav-dropdown .user-nav-dropdown:after {
     border-color:#565656 transparent transparent transparent;
 }
 
-.new-user-nav-dropdown:hover + .nav-dropdown {
+.new-user-nav-dropdown:hover .nav-dropdown {
     display: block;
 }
 
+.nav-dropdown {
+    z-index: 9999;
+}
+
+.nav-dropdown:before {
+    border-width: 0 10px 10px;
+    top: -9px;
+    right: 18px;
+    -webkit-filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.2));
+}*/
+
 .top-icon {
-    display: block;
+    display: inline-block;
     height:22px;
     width:14px;
-    position: absolute;
-    left:0;
-    top:0;
+    margin-right: 5px;
     background: url(../images/sprites/sprite.png) no-repeat;
+    vertical-align: middle;
 }
 
 .top-icon.top-icon-pencil {
@@ -272,6 +386,7 @@ header {
 
 .top-icon.top-icon-cart {
     background-position: -28px -72px;
+    width: 16px;
 }
 
 .top-icon.top-icon-account {
@@ -503,6 +618,7 @@ header {
 
 .sticky-nav-fixed .header-text-container {
     margin-left: 20px;
+    width: 100%;
 }
 
 #main-nav-container #main-nav .menu li {
@@ -2620,6 +2736,7 @@ width: 100% !important;
 }
 
 @media only screen and (max-width: 979px) {
+
     .content-title > .title-bg > h3{
         font-size: 15px;
     }

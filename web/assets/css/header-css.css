@@ -787,7 +787,6 @@
 	#top-links li:first-child a {
 		border-left:1px solid #dcdcdc;
 		margin-left:0;
-		padding-left: 30px;
 	}
 
 	#header .dropdown-menu > li > a {
@@ -1165,7 +1164,9 @@
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
-
+	#top-links li a {
+		padding: 0 8px;
+	}
 	#quick-access {
 		width:50%;
 	}
