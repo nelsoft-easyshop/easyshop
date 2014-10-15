@@ -1267,6 +1267,17 @@ class Payment extends MY_Controller{
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
 
+        $emailService = $this->serviceContainer['email_notification'];
+        $smsService = $this->serviceContainer['mobile_notification'];
+
+        $imageArray = array(
+            "/assets/images/landingpage/templates/header-img.png"
+            , "/assets/images/appbar.home.png"
+            , "/assets/images/appbar.message.png"
+            , "/assets/images/landingpage/templates/facebook.png"
+            , "/assets/images/landingpage/templates/twitter.png"
+        );
+
         $sender = intval($this->xmlmap->getFilenameID($xmlfile,'message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
@@ -1300,26 +1311,30 @@ class Payment extends MY_Controller{
                 break;
         }
 
+        // Send email to buyer
         if($buyerFlag){
-            //Send email to buyer
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
             unset($buyerData['seller']);
             unset($buyerData['buyer_email']);
 
-            // 3 tries to send Email. Quit if success or 3 failed tries met
-            $emailcounter = 0;
-            do{
-                $buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
-                $emailcounter++;
-            }while(!$buyerEmailResult && $emailcounter<3);
+            # Additional buyerData for email template
+            $buyerData['store_link'] = base_url() . "vendor/"; #user appended on template
+            $buyerData['msg_link'] = base_url() . "messages/#"; #user appended on template
+            $buyerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$buyerData,true);
+            $buyerSubject = $this->lang->line('notification_subject_buyer');
 
-     
-            //Send text msg to buyer if mobile provided
+            $emailService->setRecipient($buyerEmail)
+                         ->setSubject($buyerSubject)
+                         ->setMsg($buyerMsg, $imageArray)
+                         ->sendMail();
+
             $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
             if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
-               $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
-               $buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
+                $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+                $smsService->setRecipient($buyerMobile)
+                           ->setMsg($buyerMsg)
+                           ->sendSms();
             }
 
             #Send message via easyshop_messaging to buyer
@@ -1328,8 +1343,8 @@ class Payment extends MY_Controller{
             }
         }
 
+        // Send email to seller of each product - once per seller
         if($sellerFlag){
-            //Send email to seller of each product - once per seller
             $sellerData = array(
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
@@ -1339,32 +1354,35 @@ class Payment extends MY_Controller{
                 'payment_method_name' => $transactionData['payment_method_name']
             );
 
-     
             foreach($transactionData['seller'] as $seller_id => $seller){
                 $sellerEmail = $seller['email'];
                 $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
                 $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
                 $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
 
-                #Send message via easyshop_messaging to seller
-                if($this->user_model->getUserById($sender)){        
-                    $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
-                }
+                # Additional sellerData for email template
+                $sellerSubject = $this->lang->line('notification_subject_seller');
+                $sellerData['store_link'] = base_url() . "vendor/" . $sellerData['buyer_name'];
+                $sellerData['msg_link'] = base_url() . "messages/#" . $sellerData['buyer_name'];
+                $sellerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$sellerData,true);
 
-
-                // 3 tries to send Email. Quit if success or 3 failed tries met
-                $emailcounter = 0;
-                do{
-                    $sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
-                    $emailcounter++;
-                }while(!$sellerEmailResult && $emailcounter<3);
-
+                $emailService->setRecipient($sellerEmail)
+                             ->setSubject($sellerSubject)
+                             ->setMsg($sellerMsg, $imageArray)
+                             ->sendMail();
 
                 //Send text msg to seller if mobile provided
                 $sellerMobile = ltrim($seller['seller_contactno'],'0');
                 if( is_numeric($sellerMobile) && $sellerMobile != 0 ){
                     $sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
-                    $sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+                    $smsService->setRecipient($sellerMobile)
+                               ->setMsg($sellerMsg)
+                               ->sendSms();
+                }
+
+                #Send message via easyshop_messaging to seller
+                if($this->user_model->getUserById($sender)){        
+                    $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
                 }
 
             }//close foreach seller loop
