@@ -451,15 +451,22 @@ class payment_model extends CI_Model
             $parseData['mobile'] = trim($row[0]['buyer_contactno']);
         }
         
-        switch( (int)$row[0]['payment_method_id'] ){
-            case 1:
+        switch( $row[0]['payment_method_id'] ){
+            case "1":
                 $parseData['payment_method_name'] = "PayPal";
-            case 2:
+                break;
+            case "2":
                 $parseData['payment_method_name'] = "DragonPay";
-            case 3:
+                break;
+            case "3":
                 $parseData['payment_method_name'] = "Cash on Delivery";
-            case 5:
+                break;
+            case "5":
                 $parseData['payment_method_name'] = "Bank Deposit";
+                break;
+            default:
+                $parseData['payment_method_name'] = "Payment Method";
+                break;
         }
         
         foreach( $row as $r){
