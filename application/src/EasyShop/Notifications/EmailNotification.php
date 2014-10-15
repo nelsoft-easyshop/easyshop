@@ -22,6 +22,7 @@ class EmailNotification
     private $recipient;
     private $subject;
     private $msg;
+    private $imageArray;
 
     /**
      *  Swift Mailer Parameters
@@ -98,16 +99,7 @@ class EmailNotification
     {
         $imgArray = is_array($img) ? $img : array($img);
 
-        if( count($imgArray)>0 ){
-            foreach($imgArray as $imagePath){
-                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
-                if( strpos($msg, $image) !== false ){
-                    $embeddedImg = $this->message->embed(\Swift_Image::fromPath(getcwd() . $imagePath));
-                    $msg = str_replace($image, $embeddedImg, $msg);
-                }
-            }
-        }
-
+        $this->imageArray = $imgArray;
         $this->msg = $msg;
 
         return $this;
@@ -123,11 +115,24 @@ class EmailNotification
      */
     public function sendMail( &$failedRecipients = array() )
     {
+        $msg = $this->msg;
+        $imgArray = $this->imageArray;
+
+        if( count($imgArray)>0 ){
+            foreach($imgArray as $imagePath){
+                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
+                if( strpos($msg, $image) !== false ){
+                    $embeddedImg = $this->message->embed(\Swift_Image::fromPath(getcwd() . $imagePath));
+                    $msg = str_replace($image, $embeddedImg, $msg);
+                }
+            }
+        }
+
         $this->message
             ->setSubject($this->subject)
             ->setFrom(array($this->emailConfig['from_email'] => $this->emailConfig['from_name']))
             ->setTo($this->recipient)
-            ->setBody($this->msg, 'text/html');
+            ->setBody($msg, 'text/html');
 
         $successCount = $this->mailer->send($this->message, $failedRecipients);
 
@@ -153,7 +158,8 @@ class EmailNotification
                 'from_name' => $this->emailConfig['from_name'],
                 'recipient' => $this->recipient,
                 'subject' => $this->subject,
-                'msg' => $this->msg
+                'msg' => $this->msg,
+                'img' => $this->imageArray
             );
             $queueType = $em->getRepository('EasyShop\Entities\EsQueueType')
                                     ->find($this->emailConfig['queue_type']);
@@ -173,3 +179,4 @@ class EmailNotification
     }
 
 }
+

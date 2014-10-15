@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
 $config = Array(
             'api' => "dgsMQ8q77hewW766aqxK",
             'from' => 'Easyshop.ph',

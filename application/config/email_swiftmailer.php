@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
 $config = Array(
             'protocol' => 'smtp',
             //'smtp_host' => 'ssl://smtp.googlemail.com',

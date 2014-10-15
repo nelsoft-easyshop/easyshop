@@ -14,15 +14,9 @@
     /*
      * Email params
      */
-    $configEmail = array(
-            'username' => 'noreply@easyshop.ph',
-            'password' => '3a5y5h0p_noreply',
-            'from_email' => 'noreply@easyshop.ph',
-            'from_name' => 'Easyshop.ph',
-            'recipients' => array(
-                    'stephenjanz@easyshop.ph',
-            )
-    );
+    $configEmail = require(__DIR__ . "/../config/email_swiftmailer.php");
+
+
 
     echo "\nFetching queued emails...\n"; 
 
@@ -38,9 +32,10 @@
     }
 
     $rawResult = mysqli_query($link,
-                                    "SELECT id_email, email_to, from_member_id, subject, message 
-                                    FROM es_email_queue
-                                    WHERE status = 'QUEUED' "
+                                    "SELECT id_queue, data, type, date_created, date_executed, status
+                                    FROM es_queue
+                                    WHERE type = 1 
+                                        AND status = 1"
     );
 
     
@@ -56,39 +51,43 @@
         
         while( $userData = $rawResult->fetch_assoc() ){
         
-            if( strlen($userData['email_to']) === 0 ){
-                echo "Email id: " . $userData['id_email'] . " has no email address indicated! \n";
+            $emailData = json_decode($userData['data'], TRUE);
+
+            if( count($emailData['recipient']) === 0 ){
+                echo "Queue id: " . $userData['id_queue'] . " has no email address indicated! \n";
                 continue;
             }
         
-            echo "Sending email - id: " . $userData['id_email'] . " ...\n";
+            echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
             
             # SEND EMAIL
             $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-              ->setUsername($configEmail['username'])
-              ->setPassword($configEmail['password']);
+              ->setUsername($configEmail['smtp_user'])
+              ->setPassword($configEmail['smtp_pass']);
             
             $mailer = Swift_Mailer::newInstance($transport);
             
-            $message = Swift_Message::newInstance($userData['subject'])
+            $message = Swift_Message::newInstance($emailData['subject'])
               ->setFrom(array($configEmail['from_email'] => $configEmail['from_name']))
-              ->setTo(array($userData['email_to']));
+              ->setTo($emailData['recipient']);
             
-            $image = $message->embed(Swift_Image::fromPath(__DIR__ . '/../../web/assets/images/img_logo.png'));
-            $msg = str_replace("img_logo.png", $image, $userData['message']);
+            foreach($emailData)
+
+            //$image = $message->embed(Swift_Image::fromPath(__DIR__ . '/../../web/assets/images/img_logo.png'));
+            //$msg = str_replace("img_logo.png", $image, $userData['message']);
             
-            $message->setBody($msg, 'text/html');
+            $message->setBody($emailData['msg'], 'text/html');
         
             $result = $mailer->send($message, $failedRecipients);
         
             if($result){
                 echo "Email sent! \n";
                 $numSent += $result;
-                $query = "UPDATE es_email_queue SET `status` = 'SENT', `datemodified` = NOW() WHERE `id_email` = " . $userData['id_email'];
+                $query = "UPDATE es_queue SET `status` = '2', `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
             }
             else{
                 echo "Email sending FAILED! \n";
-                $query = "UPDATE es_email_queue SET `status` = 'FAILED', `datemodified` = NOW() WHERE `id_email` = " . $userData['id_email'];
+                $query = "UPDATE es_queue SET `status` = '99', `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
             }
         
             $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);

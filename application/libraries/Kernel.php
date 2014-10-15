@@ -372,11 +372,11 @@ class Kernel
         $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
         $smsConfig = require(APPPATH . "config/sms.php");
         $container['email_notification'] = function($c) use ($emailConfig){
-            return new \EasyShop\Notifications\EmailNotification();
-        }
+            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        };
         $container['mobile_notification'] = function($c) use ($smsConfig){
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
-        }
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
