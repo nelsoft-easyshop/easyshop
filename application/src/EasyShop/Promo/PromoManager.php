@@ -104,7 +104,7 @@ class PromoManager
         $isPromoActive = $product->getStartPromo();
         
         if($product->getStartPromo() && $product->getIsPromote()){  
-                $promoConfig = $this->promoConfig[$product->getPromo_type()];
+                $promoConfig = $this->promoConfig[$product->getPromoType()];
                 $promoOptions = $promoConfig['option'];
                 $timeNow = strtotime(date('H:i:s'));
                 $startDateTime = $product->getStartdate()->getTimestamp();

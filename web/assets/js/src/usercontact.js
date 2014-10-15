@@ -1,16 +1,30 @@
 (function ($) {
     $(document).ready (function(){
         window.cities = JSON.parse($( "#cityList" ).val());
-        if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
-            $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
-            
-            $( "#editIconOpen" ).click();
-        }
-        else{
+        if($( "#isEditable" ).val() == false){
+            // hide all fields that are empty
+            if($( "p#validatedStoreName" ).html() == ""){
+                $( "#storeNameRow" ).hide();
+            }
+            if($( "p#validatedContactNo" ).html() == ""){
+                $( "#contactNoRow" ).hide();
+            }
             if($( "a#validatedWebsite" ).html() == ""){
                 $( "#websiteRow" ).hide();
             }
         }
+        else{
+            if( $( "p#validatedStoreName" ).html() == "" || $( "p#validatedContactNo" ).html() == "" || 
+            $( "#validatedStreetAddr" ).val() == "" || parseInt($('#errorCount').val()) > 0){
+            
+                $( "#editIconOpen" ).click();
+            }
+            else{
+                if($( "a#validatedWebsite" ).html() == ""){
+                    $( "#websiteRow" ).hide();
+                }
+            }
+        }        
      });
 
     $(" #contactNo ").numeric(
@@ -50,6 +64,10 @@
         $( "#contactNoRow" ).show();
         $( "#addressRow" ).show();
         $( "#websiteRow" ).show();
+
+        if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
+            $( "#streetAddr" ).val('');
+        }
      });
     
      $( "#editIconClose" ).click(function() {
@@ -66,12 +84,8 @@
         if($( "p#validatedContactNo" ).html() == ""){
             $( "#contactNoRow" ).hide();
         }
-
         if($( "a#validatedWebsite" ).html() == ""){
             $( "#websiteRow" ).hide();
-        }
-        if($("#validatedCity" ).val() == "" && $( "#validatedRegion" ).val() == ""){
-            $( "#addressRow" ).hide();
         }
 
         // revert all changes back to original using post hidden input
@@ -82,8 +96,6 @@
 
         var addr = $("#postStreetAddr").val();
         $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
-        
      });
 })(jQuery);
-
 

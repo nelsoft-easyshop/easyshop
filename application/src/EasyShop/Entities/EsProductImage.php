@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsProductImage
 {
+
+    const IMAGE_UNAVAILABLE_DIRECTORY =  'assets/product/unavailable/';
+    const IMAGE_UNAVAILABLE_FILE =  'unavailable_product_img.jpg';
+
     /**
      * @var integer
      *
@@ -204,8 +208,8 @@ class EsProductImage
                     $this->filename  = substr($this->productImagePath,strlen($reversedPath)-strpos($reversedPath,'/'),strlen($reversedPath));
                 }
                 else{
-                    $this->directory = 'assets/product/unavailable/';
-                    $this->filename = 'unavailable_product_img.jpg';
+                    $this->directory = self::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $this->filename = self::IMAGE_UNAVAILABLE_FILE;
                 }
             }                
         }
