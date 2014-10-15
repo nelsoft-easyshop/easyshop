@@ -30,6 +30,10 @@ class CountDownSalePromo extends AbstractPromo
             return null;
         }
         
+        $this->dateToday = $this->dateToday->getTimestamp();
+        $this->startDateTime = $this->startDateTime->getTimestamp();
+        $this->endDateTime = $this->endDateTime->getTimestamp();
+        
         if(($this->dateToday < $this->startDateTime) || ($this->endDateTime < $this->dateToday)) {
             $diffHours = 0;
         }
@@ -38,7 +42,7 @@ class CountDownSalePromo extends AbstractPromo
             $this->isStartPromo = true;
         }
         else{
-            $diffHours = floor(($this->dateToday->getTimestamp() - $this->startDateTime->getTimestamp()) / 3600.0);
+            $diffHours = floor(($this->dateToday - $this->startDateTime) / 3600.0);
             $this->isStartPromo = true;
         }
         

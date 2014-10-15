@@ -982,7 +982,7 @@ class Home extends MY_Controller
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                ->findOneBy(['slug' => $sellerslug]);
 
-        $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
+        $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
@@ -992,14 +992,14 @@ class Home extends MY_Controller
 
         if($addr === NULL){
             $data['cities'] = '';
-            $data['validatedStreetAddr'] = $data['streetAddr'] = '';
+            $data['validatedStreetAddr'] = $data['streetAddr'] = "Location not set ";
             $data['validatedCity'] = $data['city'] = '';
             $data['validatedRegion'] = $data['region'] = '';
         }
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
+            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
             $data['validatedCity'] = $data['city'] = $addr->getCity()->getLocation(). ", ";
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1054,7 +1054,7 @@ class Home extends MY_Controller
 
                         $this->serviceContainer['entity_manager']->persist($addr);
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
                         $data['validatedCity'] = $city->getLocation(). ", ";
                         $data['validatedRegion'] = $region->getLocation();
                     }
@@ -1073,22 +1073,21 @@ class Home extends MY_Controller
                         $addr->setStateregion($region);
                         $addr->setMobile($member->getContactno());
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
                         $data['validatedCity'] = $addr->getCity()->getLocation(). ", ";
                         $data['validatedRegion'] = $addr->getStateregion()->getLocation();
                     }
                     else{
                         $this->serviceContainer['entity_manager']->remove($addr);
 
-                        $data['validatedStreetAddr'] = '';
+                        $data['validatedStreetAddr'] = "Location not set ";
                         $data['validatedCity'] = '';
                         $data['validatedRegion'] = '';
                     }
                 }
                 $this->serviceContainer['entity_manager']->flush();
                 $data['isValid'] = true;
-
-                $data['validatedStoreName'] = $member->getStoreName();
+                $data['validatedStoreName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
                 $data['validatedContactNo'] = $member->getContactno() === false ? "" : '0' . $member->getContactno();
                 $data['validatedWebsite'] = $member->getWebsite();
             }
