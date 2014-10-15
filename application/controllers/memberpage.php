@@ -645,13 +645,13 @@ class Memberpage extends MY_Controller
                                  ->setSubject($emailSubject)
                                  ->setMsg($emailMsg)
                                  ->sendMail();
-                    if( $parseData['mobile'] != '' && $parseData['mobile'] != 0 ){
+                    $mobileNum = ltrim($parseData['mobile'],'0');
+                    if( $mobileNum != '' && $mobileNum != 0 ){
                         $smsService->setRecipient($parseData['mobile'])
                                    ->setMsg($smsMsg)
                                    ->sendSms();
                     }
                 }
-
             }
 
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';

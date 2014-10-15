@@ -1381,7 +1381,7 @@ class Payment extends MY_Controller{
                 }
 
                 #Send message via easyshop_messaging to seller
-                if($this->user_model->getUserById($sender)){        
+                if($this->user_model->getUserById($sender)){
                     $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
                 }
 
