@@ -279,6 +279,7 @@ class EsProductRepository extends EntityRepository
         if($fieldPrice !== null){
             $fieldPriceFilter = " AND d.value_price = :attr_price";
             $sql1 .= $fieldPriceFilter;
+            $fieldPriceFilter = " AND a.attr_price = :attr_price";
             $sql2 .= $fieldPriceFilter;
         }
         

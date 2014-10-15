@@ -32,8 +32,7 @@ class mobilePayment extends MY_Controller
      */
     function __construct() 
     {
-        parent::__construct();
-        $this->load->model('product_model'); 
+        parent::__construct();  
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
@@ -89,62 +88,8 @@ class mobilePayment extends MY_Controller
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
             $errorMessage = $dataCollection['errMsg'];
-            $paymentType = $dataCollection['paymentType']; 
-            $formattedCartContents = array();
-            foreach($cartData as $rowId => $cartItem){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->findOneBy(['idProduct' => $cartItem['id']]);
-
-                if($product){
-                    $productId = $product->getIdProduct();
-                    $member = $product->getMember();
-                    $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->getAttributesByProductIds($productId);
-
-                    $mappedAttributes = array();
-                    foreach($attributes as $attribute){
-                        $isSelected = false;
-                        $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
-
-                        foreach($cartItem['options'] as $head => $option){
-                            $explodedOption = explode('~',$option);
-                            $fieldValue = $explodedOption[0];
-                            $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
-                            if(strtolower($attribute['head']) == strtolower($head) &&
-                                strtolower($attribute['value']) == strtolower($fieldValue) &&
-                                strtolower($attribute['price']) == strtolower($fieldPrice)){
-                                $isSelected = true;
-                                break;
-                            }
-                        }
-
-                        array_push($mappedAttributes, array(
-                            'id' => $optionalIdentifier.$attribute['detail_id'],
-                            'value' => $attribute['value'],
-                            'name' => $attribute['head'],
-                            'price' => $attribute['price'],
-                            'imageId' => $attribute['image_id'],
-                            'isSelected' => $isSelected,
-                        ));
-                    }
-
-                    $formattedCartContents[$rowId] = [
-                        'rowid' => $cartItem['rowid'],
-                        'productId' =>  $cartItem['id'],
-                        'productItemId' => $cartItem['product_itemID'],
-                        'maximumAvailability' => $cartItem['maxqty'],
-                        'slug' => $cartItem['slug'],
-                        'name' => $cartItem['name'],
-                        'quantity' => $cartItem['qty'], 
-                        'originalPrice' => $cartItem['original_price'],
-                        'finalPrice' => $cartItem['price'],  
-                        'mapAttributes' => $mappedAttributes
-                    ];
-
-                    $format = $this->serviceContainer['api_formatter']->formatItem($cartItem['id']);
-                    $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$format);
-                }
-            }
+            $paymentType = $dataCollection['paymentType'];
+            $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
         }
 
         $outputData = array(

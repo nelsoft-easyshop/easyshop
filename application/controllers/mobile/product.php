@@ -14,8 +14,7 @@ class Product extends MY_Controller {
         $this->load->helper('htmlpurifier');
 
         //Loading Models
-        $this->load->model('product_model'); 
-        $this->load->model('memberpage_model'); 
+        $this->load->model('product_model');   
 
         //Making response json type
         header('Content-type: application/json');
@@ -53,6 +52,7 @@ class Product extends MY_Controller {
             unset($relatedItems[$key]['id_product']);
         } 
         $format = array_merge($format,array('relatedItems'=>$relatedItems));
+
         print(json_encode($format,JSON_PRETTY_PRINT));
     }
 }
