@@ -20,13 +20,51 @@ class CMS
 
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
-        if($nodeName == "sliderSection") {
-            $string = '
-            <image>
+
+        if($nodeName == "categorySectionAdd") {
+             $string = '
+        <categorySection>
+        <categorySlug>'.$value.'</categorySlug>
+        <sub>
+            <text>Default</text>
+            <target>/</target>
+        </sub>
+        <productPanel>
+            <slug>kj-star-wireless-mobile-phone-monopod</slug>
+        </productPanel>            
+    </categorySection>'; 
+        }   
+
+        if($nodeName == "subCategorySection") {
+             $string = '
+        <sub>
+            <text>'.$value.'</text>
+            <target>'.$target.'</target>
+        </sub>'; 
+        }           
+
+        if($nodeName == "adsSection") {
+             $string = '
+            <ad>
+            <img>'.$value.'</img>
+            <target>'.$target.'</target>
+        </ad>'; 
+        }         
+        if($nodeName == "subSliderSection") {
+             $string = '<image>
                 <path>'.$value.'</path>
-                <target>'.$type.'</target>
+                <target>'.$target.'</target>
+            </image>'; 
+        }        
+        if($nodeName == "sliderSection") {
+    $string = '<slide>
+            <template>'.$value.'</template>
+            <image>
+                <path>unavailable_product_img.jpg</path>
+                <target>/</target>
             </image>
-            '; 
+
+        </slide>'; 
         }
         if($nodeName == "categorySubSlug") {
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
@@ -37,7 +75,7 @@ class CMS
 
             <boxContent>
             <value>'.$value.'</value>
-            <type>'.$type.'</type>
+        <type>'.$type.'</type>
             <target>'.$coordinate.'</target>
             <actionType>'.$target.'</actionType>
         </boxContent>';
@@ -68,6 +106,12 @@ class CMS
             <value>'.$value.'</value> 
             <type>'.$type.'</type>
         </product_panel>'; 
+        }        
+        if($nodeName == "productPanelNew" ) {
+            $string = '
+        <productPanel>
+            <slug>'.$value.'</slug>
+        </productPanel>'; 
         }
         if($nodeName == "mainSlide") {
 
@@ -160,6 +204,170 @@ $string = '<typeNode>
         else {
                 return false;
             }
+    }
+
+    /**
+     *  Method used to remove xml contents for  under new_home_files.xml
+     *
+     *  @param string $file
+     *  @param string $nodeName
+     *  @param int $index
+     *  @param int $productindex  
+     *  @return boolean
+     */
+    public function removeXMLForCategoryNavigation($file,$nodeName,$index, $subIndex) 
+    {
+
+        if($nodeName == "mainSliderSection"){
+            $referred = "/map/sliderSection/slide[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }
+
+        else if($nodeName == "categorySectionPanel"){
+            $referred = "/map/categorySection[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }
+        else if($nodeName == "subSliderSection"){
+            $referred = "/map/sliderSection/slide[".$index.']/image['.$subIndex.']'; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }
+        else if($nodeName == "categoryProductPanel") {
+
+            $referred = "/map/categorySection[".$index."]/productPanel[".$subIndex."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }        
+        }        
+        else if($nodeName == "categorySection") {
+
+            $referred = "/map/categorySection[".$index."]/sub[".$subIndex."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }        
+        }
+        else if($nodeName == "adsSection") {
+            $referred = "/map/adSection/ad[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }
+        else if($nodeName == "productPanel") {
+            $referred = "/map/sellerSection/productPanel[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }
+        else {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//category[$index]/sub/categorySubSlug[$subIndex]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }            
+        }
     }
 
     /**
