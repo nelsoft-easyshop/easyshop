@@ -165,7 +165,7 @@
                 -->
                 <?php endif; ?>
                 <li >
-                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Seller Information</a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">About</a>
                 </li>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>

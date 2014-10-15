@@ -367,13 +367,23 @@ class Kernel
             }
             return new \nusoap_client($url,true);
         };
-
+ 
         // API formatter 
         $container['api_formatter'] = function ($c) use($container) {
             $em = $container['entity_manager']; 
             $collectionHelper = $container['collection_helper'];
             $productManager = $container['product_manager'];
             return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager);
+        }; 
+
+        // Notification Services
+        $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
+        $smsConfig = require(APPPATH . "config/sms.php");
+        $container['email_notification'] = function($c) use ($emailConfig){
+            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        };
+        $container['mobile_notification'] = function($c) use ($smsConfig){
+            return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
         /* Register services END */

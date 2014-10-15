@@ -207,7 +207,7 @@ class EsProduct
     /**
      * @var boolean
      *
-     * @ORM\Column(name="promo_type", type="boolean", nullable=false)
+     * @ORM\Column(name="promo_type", type="integer", nullable=false)
      */
     private $promoType = '0';
 
@@ -943,7 +943,7 @@ class EsProduct
     /**
      * Set promoType
      *
-     * @param boolean $promoType
+     * @param integer $promoType
      * @return EsProduct
      */
     public function setPromoType($promoType)
@@ -956,7 +956,7 @@ class EsProduct
     /**
      * Get promoType
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getPromoType()
     {
