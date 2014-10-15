@@ -28,3 +28,4 @@ $config = Array(
 return $config;
 /* End of file email_swiftmailer.php */
 /* Location: ./application/config/email_swiftmailer.php */
+      

@@ -8,3 +8,4 @@ $config = Array(
 return $config;
 /* End of file sms.php */
 /* Location: ./application/config/sms.php */
+    
