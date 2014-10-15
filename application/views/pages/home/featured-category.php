@@ -8,10 +8,10 @@
                     <div class="category-title-container">
                         <p>
                             <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
-                            <span class="pull-right">
+                            <span class="pull-right sn-container">
                                 <span>
-                                    <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="icon-control-left fa-category-item-prev"></i></a>
-                                    <a id="purchased-items-slider-next-cat-<?php echo $sectionCount ?>"><i class="icon-control-right fa-category-item-next"></i></a>
+                                    <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-left fa-category-item-prev"></i></a>
+                                    <a id="purchased-items-slider-next-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-right fa-category-item-next"></i></a>
                                 </span>
                             </span>
                             <span class="pull-right">
@@ -48,7 +48,7 @@
                                     
                                     
                                     <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                        <span class="discount-circle">-<?php echo $product->getDiscountPercentage() ?>%</span>
+                                        <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
                                     <?php endif; ?>
                                     
                                     
