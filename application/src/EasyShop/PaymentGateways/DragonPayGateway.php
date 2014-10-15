@@ -186,6 +186,8 @@ class DragonPayGateway extends AbstractGateway
         $dpReturn = $this->getTxnToken($grandTotal, $name, $member->getEmail(), $txnid);
         $dpReturnArray = json_decode($dpReturn);
 
+        $this->setParameter('amount', $grandTotal);
+
         $return = $paymentService->persistPayment(
                 $grandTotal, 
                 $memberId, 
