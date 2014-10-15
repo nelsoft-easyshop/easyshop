@@ -34,8 +34,8 @@
     $rawResult = mysqli_query($link,
                                     "SELECT id_queue, data, type, date_created, date_executed, status
                                     FROM es_queue
-                                    WHERE type = 1 
-                                        AND status = 1"
+                                    WHERE type = " . $configEmail['queue_type'] . " 
+                                        AND status = " . $configEmail['status']['queued']
     );
 
     
@@ -71,11 +71,15 @@
               ->setFrom(array($configEmail['from_email'] => $configEmail['from_name']))
               ->setTo($emailData['recipient']);
             
-            foreach($emailData)
+            // Embed Image
+            foreach($emailData["img"] as $imagePath){
+                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
+                if( strpos($emailData['msg'], $image) !== false ){
+                    $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
+                    $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
+                }
+            }
 
-            //$image = $message->embed(Swift_Image::fromPath(__DIR__ . '/../../web/assets/images/img_logo.png'));
-            //$msg = str_replace("img_logo.png", $image, $userData['message']);
-            
             $message->setBody($emailData['msg'], 'text/html');
         
             $result = $mailer->send($message, $failedRecipients);
@@ -83,11 +87,11 @@
             if($result){
                 echo "Email sent! \n";
                 $numSent += $result;
-                $query = "UPDATE es_queue SET `status` = '2', `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+                $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['sent'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
             }
             else{
                 echo "Email sending FAILED! \n";
-                $query = "UPDATE es_queue SET `status` = '99', `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+                $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['failed'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
             }
         
             $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);

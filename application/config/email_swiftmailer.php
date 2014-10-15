@@ -17,7 +17,12 @@ $config = Array(
             'smtp_crypto' => 'ssl',
             'from_email' => 'noreply@easyshop.ph',
             'from_name' => 'Easyshop.ph',
-            'queue_type' => 1
+            'queue_type' => 1,
+            'status' => array(
+                        'queued' => 1,
+                        'sent' => 2,
+                        'failed' =>99
+                  )
         );
 
 return $config;
