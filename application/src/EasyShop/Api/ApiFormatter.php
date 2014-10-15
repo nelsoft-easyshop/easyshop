@@ -2,6 +2,7 @@
 
 namespace EasyShop\Api;
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
  
 class ApiFormatter
 {
@@ -32,16 +33,17 @@ class ApiFormatter
 
     public function formatItem($productId)
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
+      
+
+        $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = array(
             'name' => $product->getName(),
             'description' => $product->getDescription(),
             'brand' => $product->getBrand()->getName(),
             'condition' => $product->getCondition(),
-            'discount' => $product->getDiscount(),
-            'basePrice' => $product->getPrice(),
+            'discount' => $product->getDiscountPercentage(),
+            'basePrice' => $product->getFinalPrice(),
             );
 
         // get product images
@@ -276,4 +278,29 @@ class ApiFormatter
 
         return $formattedCartContents;
     }
+
+    public function formatDisplayItem($idProduct)
+    {
+        $product = $this->productManager->getProductDetails($idProduct);
+        $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getDefaultImage($idProduct);
+
+        $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+        $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+        if($productImage != NULL){
+            $imageDirectory = $productImage->getDirectory();
+            $imageFileName = $productImage->getFilename();
+        }
+
+        return array(
+                    'name' => $product->getName(), 
+                    'slug' => $product->getSlug(),
+                    'condition' => $product->getCondition(),
+                    'discount' => $product->getDiscountPercentage(),
+                    'price' => $product->getFinalPrice(),
+                    'product_image' => $imageDirectory.'categoryview/'.$imageFileName
+                );
+    }
 }
+ 

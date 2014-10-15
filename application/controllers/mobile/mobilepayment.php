@@ -242,4 +242,26 @@ class mobilePayment extends MY_Controller
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
     }
+
+    /**
+     * Display transaction details of payment.
+     * @return json
+     */
+    public function getTransactionDetails()
+    {
+        $txnId = $this->input->post('txnid');
+        $paymentDetails = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                                ->findOneBy(['transactionId' => $txnId]);
+
+        $displayArray = array(
+                        'transaction_details' => array(
+                            'grand_total' => $paymentDetails->getTotal(), 
+                            'transaction_id' => $txnId,
+                            'reference_number' => $paymentDetails->getInvoiceNo(),
+                            'transaction_date' => $paymentDetails->getDateadded()->format('Y-m-d H:i:s'),
+                        ),
+                    );
+
+        echo json_encode($displayArray,JSON_PRETTY_PRINT);
+    }
 }
