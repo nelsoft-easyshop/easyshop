@@ -1629,7 +1629,6 @@ class Payment extends MY_Controller{
 
         /* JSON Decode*/
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
-
         $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
         if(reset($paymentMethods)['method'] === 'CashOnDelivery'){

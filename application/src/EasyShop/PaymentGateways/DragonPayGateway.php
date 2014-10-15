@@ -181,7 +181,8 @@ class DragonPayGateway extends AbstractGateway
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
         $name = $prepareData['productName'];
-
+        $this->setParameter('amount', $grandTotal);
+        
         $txnid = $this->generateReferenceNumber($memberId);
         $dpReturn = $this->getTxnToken($grandTotal, $name, $member->getEmail(), $txnid);
         $dpReturnArray = json_decode($dpReturn);
