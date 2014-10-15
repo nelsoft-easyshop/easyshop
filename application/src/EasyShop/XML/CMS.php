@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace EasyShop\XML;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 use EasyShop\Entities\EsBrand as EsBrand;
 class CMS
 {
-
     /**
      * The xml resource getter
      *
@@ -389,6 +389,28 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+
+        //Get vendor page details
+        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
+        $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
+
+        foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+            $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findOneBy(['slug' => $product['slug']]);
+            $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                ->getDefaultImage($productData->getIdProduct());
+            $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if ($productImage != NULL) {
+                $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
+                $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
+            }
+        }
+        $homePageData['seller'] = $featuredVendor;
 
         //Get Popular Brands
         foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
