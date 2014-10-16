@@ -20,7 +20,7 @@
                         <div class="div-item">
                             <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
                                 <?php if($percentage && $percentage > 0):?>
-                                <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                 <?php endif; ?>
                                 <center>
                                     <div class="span-img-container">
@@ -59,7 +59,7 @@
                             <a target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
                                 <div class="span-space">
                                     <?php if($percentage && $percentage > 0):?>
-                                    <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%OFF</span>
+                                    <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                     <?php endif;?>
                                 </div>
                             </a>

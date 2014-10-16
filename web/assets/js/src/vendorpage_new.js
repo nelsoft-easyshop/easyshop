@@ -64,6 +64,8 @@ function ReplaceNumberWithCommas(thisnumber){
         else{
             ItemListAjax(catDiv,page);
         }
+        $('html,body').scrollTo(450); 
+        
     });
 
     $('.tab_categories').on('click', function(){
@@ -79,6 +81,7 @@ function ReplaceNumberWithCommas(thisnumber){
         if(pagingDiv.length === 0){
             ItemListAjax($(divId), 1);
         }
+        $('html,body').scrollTo(450); 
     });
 
     $(document).on('change',".price-field",function () {
@@ -204,7 +207,7 @@ function ItemListAjax(CatDiv,page)
 
             CatDiv.find('[rel=tooltiplist]').tooltip({
                 placement : 'top'
-            });
+            });            
         }
     });
 }

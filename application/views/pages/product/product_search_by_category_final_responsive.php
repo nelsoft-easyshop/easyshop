@@ -82,7 +82,7 @@
                                 <?php foreach ($subCategoryList as $subCatKey => $subCatValue): 
                                     foreach ($subCatValue['item'] as $key => $value) {
                                         $productEntity = $value;
-                                        $popularProductName = html_escape($productEntity->getName());
+                                        $popularProductName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
                                         $popularProductSlug = html_escape($productEntity->getSlug());
                                         $popularProductImage = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
                                         $popularProductPrice = number_format($productEntity->getFinalPrice(),2,'.',',');
@@ -123,7 +123,7 @@
                         <?php 
                         foreach ($products as $key => $value):
                             $productEntity = $value;
-                            $productName = html_escape($productEntity->getName());
+                            $productName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
                             $productSlug = $productEntity->getSlug();
                             $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                             $productCondition = html_escape($productEntity->getCondition());
@@ -224,7 +224,7 @@
                         <?php foreach ($products as $key => $value): ?>
                         <?php
                             $productEntity = $value;
-                            $productName = html_escape($productEntity->getName());
+                            $productName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
                             $productSlug = $productEntity->getSlug();
                             $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                             $productCondition = html_escape($productEntity->getCondition());
