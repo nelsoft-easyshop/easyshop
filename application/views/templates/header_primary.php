@@ -185,22 +185,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     </div><!-- End .dropdown-cart-menu-container -->
 
                                 <div class="header-top-dropdowns">
-                                    <form class="nav-searchbar-inner" ,="" accept-charset="utf-8" role="search" name="site-search" method="get" action="/s/ref=nb_sb_noss" id="nav-searchbar">
+                                    <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
 
-                                    <div class="nav-submit-button nav-sprite">
-                                        <input type="submit" value="" class="span_bg">
-                                    </div>
-                                <div class="nav-searchfield-width">
-                                  <div class="search-container">
-                                        <select class="ui-form-control">
-                                            <option>On Seller's Page</option>
-                                            <option>Main Page</option>
-                                            <option>Other Page</option>
-                                        </select>
-                                        <input type="text" class="ui-form-control">
-                                    </div>
-                                </div>
-                                </form><!-- End .Search Navigation -->
+                                        <div class="nav-submit-button nav-sprite">
+                                            <input type="submit" value="" class="span_bg">
+                                        </div>
+                                        <div class="nav-searchfield-width">
+                                          <div class="search-container">
+                                                <!-- <select class="ui-form-control">
+                                                    <option>On Seller's Page</option>
+                                                    <option>Main Page</option>
+                                                    <option>Other Page</option>
+                                                </select> -->
+                                                <input type="text" name="q_str" class="ui-form-control">
+                                            </div>
+                                        </div>
+                                    </form><!-- End .Search Navigation -->
 
                                 </div><!-- End .header-top-dropdowns -->
                                 </div><!-- End .header-inner-right-wrapper -->
