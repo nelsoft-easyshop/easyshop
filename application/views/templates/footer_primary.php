@@ -37,7 +37,7 @@
                         </p>
                         <div>
                             <?php echo form_open('subscribe');?>
-                                <input type="text" class="subscribe_email ui-form-control" name="subscribe_email">
+                                <input type="text" class="subscribe_email ui-form-control" name="email">
                                 <input type="submit" value="subscribe" class="subscribe_btn btn btn-default-4" name="subscribe_btn">
                             <?php echo form_close();?>
                         </div>
