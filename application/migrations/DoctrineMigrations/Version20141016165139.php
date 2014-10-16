@@ -14,6 +14,18 @@ class Version20141016165139 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("CREATE TABLE `es_queue_status` (
+          `id_status` smallint(6) NOT NULL AUTO_INCREMENT,
+          `name` varchar(45) NOT NULL,
+          PRIMARY KEY (`id_status`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
+        ");
+        $this->addSql("CREATE TABLE `es_queue_type` (
+          `id_type` smallint(6) NOT NULL AUTO_INCREMENT,
+          `name` varchar(45) NOT NULL,
+          PRIMARY KEY (`id_type`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+        ");
         $this->addSql("CREATE TABLE `es_queue` (
           `id_queue` int(10) NOT NULL AUTO_INCREMENT,
           `data` longtext NOT NULL,
@@ -28,11 +40,18 @@ class Version20141016165139 extends AbstractMigration
           CONSTRAINT `fk_es_queue_type` FOREIGN KEY (`type`) REFERENCES `es_queue_type` (`id_type`) ON DELETE NO ACTION ON UPDATE NO ACTION
         ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
         ");
+        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('QUEUED') ");
+        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('SENT') " );
+        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('FAILED') ");
+        $this->addSql("INSERT INTO `es_queue_type` (`name`) VALUES ('EMAIL') ");
     }
 
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP TABLE `es_queue`");
+        $this->addSql("DROP TABLE IF EXISTS `es_queue`");
+        $this->addSql("DROP TABLE IF EXISTS `es_queue_status`");
+        $this->addSql("DROP TABLE IF EXISTS `es_queue_type`");
     }
 }
+
