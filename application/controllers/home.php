@@ -283,6 +283,9 @@ class Home extends MY_Controller
             else if($pageSection === 'contact'){
                 $this->contactUser($vendorSlug);
             }
+            else if($pageSection === 'followers'){
+                $this->followers($vendorSlug);
+            }
             else{
                 $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
                                        ->getVendorDetails($vendorSlug);
@@ -396,21 +399,24 @@ class Home extends MY_Controller
 
     }
     
-     public function followers()
+    private function followers($sellerslug)
     {
-        $vendorSlug = 'justineduazo';
-        $em = $this->serviceContainer["entity_manager"];
-        $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getVendorDetails($vendorSlug);
-        $headerData = $this->fill_header();
-        $headerData = array_merge($headerData, array(
-            "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
-            "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
-        ));
-        
-         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $vendorSlug]);
-        $data['title'] = 'Contact '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';                                           
+        $data = $this->fill_header();
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
+        // assign header_vendor data
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                   ->findOneBy(['slug' => $sellerslug]);
+        $data['title'] = 'Followers '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';                                           
                                          
         $memberUsername = $member->getUsername();
         $memberId = $member->getIdMember();
@@ -419,13 +425,13 @@ class Home extends MY_Controller
                                            ->getRepository('EasyShop\Entities\EsLocationLookup');
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
-                                 ->getVendorDetails($vendorSlug);
+                                 ->getVendorDetails($sellerslug);
                                  
         $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
                                           ->findBy(['member' => $arrVendorDetails['id_member'],
                                                       'isDelete' => 0,'isDraft' => 0]);
 
-        $data = array(
+        $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
@@ -435,17 +441,22 @@ class Home extends MY_Controller
                     , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
                     , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
-                    , "vendorLink" => "contact"
-                ); 
+                    , "vendorLink" => "followers"
+                );
 
+        $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
+        $data['title'] = 'Contact '.html_escape($member->getStoreName()).'| Easyshop.ph';
+        $data['message_recipient'] = $member;
+        $data = array_merge($data, $this->fill_header());
+
+        // get followers
         
+
         // Load View
-        $this->load->view('templates/header_new', $headerData);
-        $this->load->view('templates/header_vendor',$data);
-        $this->load->view('pages/user/followers', $data);
-        $this->load->view('templates/footer_vendor', ['sellerSlug' => $vendorSlug]);
-        
-
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor',$headerVendorData);
+        $this->load->view('pages/user/followers' );
+        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
     
     /**
