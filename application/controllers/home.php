@@ -450,8 +450,15 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
 
         // get followers
-        
-
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe');
+        $getFollowersCount = 8;
+        $pageOffset = 0;
+        $followers = $EsVendorSubscribe->getFollowers($memberId);
+        foreach ($followers as $key => $value) {
+            // echo $value->getMember()->getUsername();
+        } 
+ 
         // Load View
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);

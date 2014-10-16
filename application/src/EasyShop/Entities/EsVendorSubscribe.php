@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsVendorSubscribe
  *
  * @ORM\Table(name="es_vendor_subscribe", indexes={@ORM\Index(name="fk_es_vendor_subscribe_memberId_idx", columns={"member_id"}), @ORM\Index(name="fk_es_vendor_subscribe_vendorId_idx", columns={"vendor_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsVendorSubscribeRepository")
  */
 class EsVendorSubscribe
 {
