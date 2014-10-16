@@ -3336,7 +3336,16 @@ font-size: 15px;
     }
 }
 
-@media only screen and (max-width: 321px) {
+@media only screen and (max-width: 320px) {
+    #top-links li {
+        margin-right: 1px;
+    }
+    .top-icon {
+        margin-right: 0;
+    }
+    .header-seller-name {
+        width: 63%;
+    }
     .sticky-search-wrapper {
         width: 74.5%;
     }
