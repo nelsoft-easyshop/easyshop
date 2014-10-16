@@ -56,10 +56,12 @@ class NewHomeWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
-        $this->xmlCmsService->removeXMLForCategoryNavigation($this->file,$nodename,$index, $subIndex);
+        $remove = $this->xmlCmsService->removeXMLForCategoryNavigation($this->file,$nodename,$index, $subIndex);
+        if($remove == true) {
         return $this->output
             ->set_content_type('application/json')
             ->set_output($this->json);
+        }            
     }
 
     /**
@@ -98,20 +100,40 @@ class NewHomeWebService extends MY_Controller
      *  Method that handles add,edit,delete for othercategories node 
      *  @return JSON
      */
-    public function otherCategories()
+    public function setOtherCategories()
     {
         $map = simplexml_load_file($this->file);
 
         $index = (int)$this->input->get("index");
-        $categorySlug = $this->input->get("categorySlug");        
+        $value = $this->input->get("value");        
 
-        $map->categoryNavigation->otherCategories->categorySlug[$index] = $categorySlug;
+        $map->categoryNavigation->otherCategories->categorySlug[$index] = $value;
 
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }    
+    } 
+
+    /**
+     *  Method that handles add for othercategories node 
+     *  @return JSON
+     */
+    public function addOtherotherCategories()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("otherCategories",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categoryNavigation/otherCategories/categorySlug[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
     } 
 
     /**
