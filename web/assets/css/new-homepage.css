@@ -241,7 +241,7 @@ header {
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: middle;
-    width: 73%;
+    width: 69%;
 }
 
 .new-user-nav-dropdown {
@@ -2726,6 +2726,11 @@ font-size: 15px;
 }
 
 @media only screen and (min-width: 480px) {
+    .new-user-nav-dropdown {
+        float: right;
+        width: 82%;
+    }
+
     .main-slider-container {
         height: 440px;
     }
@@ -2736,6 +2741,11 @@ font-size: 15px;
 }
 
 @media only screen and (min-width: 565px) {
+    .new-user-nav-dropdown {
+        float: right;
+        width: 60%;
+    }
+
     .main-slider-container {
         height: 302px;
     }
@@ -2771,6 +2781,10 @@ font-size: 15px;
 }
 
 @media only screen and (min-width: 991px) {
+    .new-user-nav-dropdown {
+        float: right;
+        width: 42%;
+    }
     .main-slider-container {
         height: 388px;
     }
@@ -2778,14 +2792,6 @@ font-size: 15px;
     .slider-item {
         height: 388px;
     }
-
-/*    .bx-wrapper .bx-controls-direction a {
-        top: 42%;
-    }
-
-    .bx-wrapper .bx-pager, .bx-wrapper .bx-controls-auto {
-        bottom: 100px;
-    }*/
 
     .slider-template-2,
     .slider-template-3,
@@ -2820,6 +2826,11 @@ font-size: 15px;
 @media screen and (min-width: 1200px) {
     #main-nav-container #main-nav .menu li > .mega-menu {
         width:1140px;
+    }
+
+    .new-user-nav-dropdown {
+        width: 32%;
+        float: right;
     } 
 }
 
