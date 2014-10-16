@@ -1,40 +1,68 @@
 <?xml version="1.0"?>
 <map>
+
+    
+    <menu>
+        <newArrivals>
+            <arrival>
+                <text>Male</text>
+                <target>/</target>
+            </arrival>
+           
+             <arrival>
+                <text>Female</text>
+                <target>/</target>
+            </arrival>
+        </newArrivals>
+        
+        <topProducts>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+        </topProducts>
+        
+        <topSellers>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+        </topSellers>
+        
+    </menu>
     
     <categoryNavigation>
         
         <category>
             <categorySlug>promo-daily</categorySlug>
             <sub>
-				<categorySubSlug>shirts</categorySubSlug>
-				
-				<categorySubSlug>mens-shoes</categorySubSlug>	                
+                <categorySubSlug>shirts</categorySubSlug>
+                <categorySubSlug>mens-shoes</categorySubSlug>	                
             </sub>
         </category>
         
         <category>
             <categorySlug>health-beauty</categorySlug>
             <sub>
-				
-				<categorySubSlug>womens-clothing</categorySubSlug>
-				<categorySubSlug>jumpsuits</categorySubSlug>	
+                <categorySubSlug>womens-clothing</categorySubSlug>
+                <categorySubSlug>jumpsuits</categorySubSlug>	
             </sub>
         </category>
         
         <category>
             <categorySlug>clothing-accessories</categorySlug>
             <sub>
-				<categorySubSlug>mens-clothing</categorySubSlug>
-				<categorySubSlug>womens-shoes</categorySubSlug>
+                <categorySubSlug>mens-clothing</categorySubSlug>
+                <categorySubSlug>womens-shoes</categorySubSlug>
             </sub>
         </category>
         
         <category>
             <categorySlug>toys-hobbies-collectibles</categorySlug>
             <sub>
-				<categorySubSlug>swimwear</categorySubSlug>
-				<categorySubSlug>maternity</categorySubSlug>
-				<categorySubSlug>shirts</categorySubSlug>
+                <categorySubSlug>swimwear</categorySubSlug>
+                <categorySubSlug>maternity</categorySubSlug>
+                <categorySubSlug>shirts</categorySubSlug>
             </sub>
         </category>
         
@@ -45,59 +73,61 @@
             <categorySlug>womens-clothing</categorySlug>
             <categorySlug>womens-shoes</categorySlug>
         </otherCategories>
+        
+        
     </categoryNavigation>
-    
-    
+
+
     <sliderSection>
         <slide>
             <template>B</template>
-			<image>
+            <image>
                 <path>140910150932.jpg</path>
                 <target>test</target>
             </image>
         </slide>
-       
+        
         <slide>
             <template>A</template> 
-			<image>
+            <image>
                 <path>141010151014.jpg</path>
                 <target>test</target>
             </image>          
         </slide> 
     </sliderSection>
-    
+
     <sellerSection>
         
         <sellerSlug>test222</sellerSlug>
         <sellerBanner>140110140110.jpg</sellerBanner>
         <sellerLogo>140110140107.jpg</sellerLogo>
 
-		<productPanel>
+        <productPanel>
             <slug>hdmi</slug>
         </productPanel>
-		
-		<productPanel>
+        
+        <productPanel>
             <slug>boom</slug>
         </productPanel>
-		<productPanel>
+        <productPanel>
             <slug>clothing-accessories</slug>
         </productPanel>
-		<productPanel>
+        <productPanel>
             <slug>clothing-accessories</slug>
         </productPanel>
     </sellerSection>
-    
+
     <adSection>
-		<ad>
+        <ad>
             <img>141210151214.jpg</img>
             <target>target</target>
         </ad>
-		<ad>
+        <ad>
             <img>141210151217.jpg</img>
             <target/>
         </ad>
     </adSection>
-    
+
     <categorySection>
         <categorySlug>clothing-and-accessories</categorySlug>
 
@@ -110,21 +140,21 @@
             <text>Men-editsssss</text>
             <target>/--editsssss</target>
         </sub>
-		<sub>
+        <sub>
             <text>qweqwe</text>
             <target>asdasd</target>
         </sub>
-		<sub>
+        <sub>
             <text>wqefads</text>
             <target>qrwafds</target>
         </sub>
         
-		<productPanel>
+        <productPanel>
             <slug>hdmi</slug>
         </productPanel>
         
     </categorySection>
-      
+        
     <categorySection>
         <categorySlug>test2</categorySlug>
 
@@ -132,14 +162,14 @@
             <text>Women</text>
             <target>/-edited</target>
         </sub>
-		
+        
         <productPanel>
             <slug>test-1</slug>
         </productPanel>
         
     </categorySection>
-    
-	<categorySection>
+
+    <categorySection>
         <categorySlug>test3</categorySlug>
         <sub>
             <text>Default</text>
@@ -149,8 +179,8 @@
             <slug>kj-star-wireless-mobile-phone-monopod</slug>
         </productPanel>            
     </categorySection>
-	
-	<categorySection>
+
+    <categorySection>
         <categorySlug>food-beverages</categorySlug>
         <sub>
             <text>Default</text>
@@ -160,7 +190,7 @@
             <slug>kj-star-wireless-mobile-phone-monopod</slug>
         </productPanel>            
     </categorySection>
-    
+
     <brandSection>
         <brandId>1</brandId>
         <brandId>2</brandId>
@@ -173,5 +203,5 @@
         <template>B</template>
         <template>C</template>
     </sliderTemplate>    
-    
+
 </map>
