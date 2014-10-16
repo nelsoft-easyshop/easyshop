@@ -170,7 +170,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
         <?php else: ?>
         <div>
-            <div class="vendor-login-con">
+            <div class="vendor-login-con vendor-out-con">
                 <img src="/assets/images/img-default-icon-user.jpg"> 
                 <a href="/login"><strong>login</strong></a>  or 
                 <a href="/register"><strong>Create and account</strong></a>

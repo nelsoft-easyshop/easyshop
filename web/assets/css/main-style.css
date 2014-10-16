@@ -170,6 +170,11 @@ section {
     width: 70%;
 }
 
+.vendor-login-con.vendor-out-con {
+    max-width: 230px;
+   width: 100%; 
+}
+
 .message-count-con {
     color: #fff;
     background-color: #ff613a;
