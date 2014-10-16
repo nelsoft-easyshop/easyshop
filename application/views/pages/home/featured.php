@@ -41,7 +41,7 @@
                                     <span class="pull-right">
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                               <img src="/assets/images/products/<?=$homeContent['seller']['logo']?>"/>
+                                               <img src="<?=$homeContent['seller']['logo']?>"/>
                                             </div>
                                         </div>
                                     </span>
