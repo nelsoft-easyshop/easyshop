@@ -253,6 +253,26 @@ class EsMember
     const DEFAULT_GENDER = "0";
 
     /**
+     *  @var string
+     */
+    const DEFAULT_IMG_PATH = 'assets/user/default';
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_IMG_SMALL_SIZE = '60x60.png';
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_IMG_NORMAL_SIZE = '150x150.png';
+    
+    /**
+     *  @var string
+     */
+    const DEFAULT_IMG_BANNER = 'banner.png';
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
