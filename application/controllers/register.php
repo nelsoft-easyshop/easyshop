@@ -213,7 +213,8 @@ class Register extends MY_Controller
         $em = $this->serviceContainer['entity_manager'];
         $rules = $this->serviceContainer['form_validation']->getRules('subscribe')['email'];
         $formFactory = $this->serviceContainer['form_factory'];
-        $formErrorHelper = $this->serviceContainer['form_error_helper'];       
+        $formErrorHelper = $this->serviceContainer['form_error_helper']; 
+        $emailer = $this->serviceContainer['email_notification'];
 
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                             ->setMethod('POST')
@@ -233,7 +234,15 @@ class Register extends MY_Controller
                 $em->persist($subscriber);
                 $em->flush();
                 
-                $this->register_model->sendNotification($data, 'subscribe');
+                $images = array("/assets/images/landingpage/templates/facebook.png",
+                                "/assets/images/landingpage/templates/twitter.png",
+                                "/assets/images/landingpage/templates/header-img.png");
+                $message = $this->load->view('templates/landingpage/lp_subscription_email', array(), true);
+                
+                $emailer->setRecipient($subscriber->getEmail());
+                $emailer->setSubject($this->lang->line('subscription_subject'));
+                $emailer->setMessage($message, $images);
+                $emailer->sendMail();
                 
                 $data['content'] = 'You have successfully Subscribed!';
             }

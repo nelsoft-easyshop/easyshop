@@ -1,50 +1,177 @@
 <?xml version="1.0"?>
 <map>
     
+    <categoryNavigation>
+        
+        <category>
+            <categorySlug>promo-daily</categorySlug>
+            <sub>
+				<categorySubSlug>shirts</categorySubSlug>
+				
+				<categorySubSlug>mens-shoes</categorySubSlug>	                
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>health-beauty</categorySlug>
+            <sub>
+				
+				<categorySubSlug>womens-clothing</categorySubSlug>
+				<categorySubSlug>jumpsuits</categorySubSlug>	
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>clothing-accessories</categorySlug>
+            <sub>
+				<categorySubSlug>mens-clothing</categorySubSlug>
+				<categorySubSlug>womens-shoes</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>toys-hobbies-collectibles</categorySlug>
+            <sub>
+				<categorySubSlug>swimwear</categorySubSlug>
+				<categorySubSlug>maternity</categorySubSlug>
+				<categorySubSlug>shirts</categorySubSlug>
+            </sub>
+        </category>
+        
+        <otherCategories>
+            <categorySlug>books-music-movies</categorySlug>
+            <categorySlug>furniture-home-garden</categorySlug>
+            <categorySlug>business-industrial</categorySlug>
+            <categorySlug>womens-clothing</categorySlug>
+            <categorySlug>womens-shoes</categorySlug>
+        </otherCategories>
+    </categoryNavigation>
+    
+    
+    <sliderSection>
+        <slide>
+            <template>B</template>
+			<image>
+                <path>140910150932.jpg</path>
+                <target>test</target>
+            </image>
+        </slide>
+       
+        <slide>
+            <template>A</template> 
+			<image>
+                <path>141010151014.jpg</path>
+                <target>test</target>
+            </image>          
+        </slide> 
+    </sliderSection>
+    
+    <sellerSection>
+        
+        <sellerSlug>test222</sellerSlug>
+        <sellerBanner>140110140110.jpg</sellerBanner>
+        <sellerLogo>140110140107.jpg</sellerLogo>
+
+		<productPanel>
+            <slug>hdmi</slug>
+        </productPanel>
+		
+		<productPanel>
+            <slug>boom</slug>
+        </productPanel>
+		<productPanel>
+            <slug>clothing-accessories</slug>
+        </productPanel>
+		<productPanel>
+            <slug>clothing-accessories</slug>
+        </productPanel>
+    </sellerSection>
+    
+    <adSection>
+		<ad>
+            <img>141210151214.jpg</img>
+            <target>target</target>
+        </ad>
+		<ad>
+            <img>141210151217.jpg</img>
+            <target/>
+        </ad>
+    </adSection>
+    
     <categorySection>
-        <type>category</type>
         <categorySlug>clothing-and-accessories</categorySlug>
-        
-        <sub>
-            <text>New Arrival</text>
-            <target>/</target>
-        </sub>
-        
+
         <sub>
             <text>Popular Items</text>
             <target>/</target>
         </sub>
         
         <sub>
-            <text>Women</text>
-            <target>/</target>
+            <text>Men-editsssss</text>
+            <target>/--editsssss</target>
+        </sub>
+		<sub>
+            <text>qweqwe</text>
+            <target>asdasd</target>
+        </sub>
+		<sub>
+            <text>wqefads</text>
+            <target>qrwafds</target>
         </sub>
         
-        <sub>
-            <text>Men</text>
-            <target>/</target>
-        </sub>
-        
-        <product_panel>
-            <slug>ubuntu-valid-gd</slug>
-        </product_panel>
-        
-         <product_panel>
-            <slug>ubuntu-valid-gd</slug>
-        </product_panel>
-        
-         <product_panel>
-            <slug>ubuntu-valid-gd</slug>
-        </product_panel>
-        
-         <product_panel>
-            <slug>ubuntu-valid-gd</slug>
-        </product_panel>
-        
-        <product_panel>
-            <slug>ubuntu-valid-gd</slug>
-        </product_panel>
+		<productPanel>
+            <slug>hdmi</slug>
+        </productPanel>
         
     </categorySection>
+      
+    <categorySection>
+        <categorySlug>test2</categorySlug>
+
+        <sub>
+            <text>Women</text>
+            <target>/-edited</target>
+        </sub>
+		
+        <productPanel>
+            <slug>test-1</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+	<categorySection>
+        <categorySlug>test3</categorySlug>
+        <sub>
+            <text>Default</text>
+            <target>/</target>
+        </sub>
+        <productPanel>
+            <slug>kj-star-wireless-mobile-phone-monopod</slug>
+        </productPanel>            
+    </categorySection>
+	
+	<categorySection>
+        <categorySlug>food-beverages</categorySlug>
+        <sub>
+            <text>Default</text>
+            <target>/</target>
+        </sub>
+        <productPanel>
+            <slug>kj-star-wireless-mobile-phone-monopod</slug>
+        </productPanel>            
+    </categorySection>
+    
+    <brandSection>
+        <brandId>1</brandId>
+        <brandId>2</brandId>
+        <brandId>3</brandId>
+        <brandId>4</brandId>
+    </brandSection>
+
+    <sliderTemplate>
+        <template>A</template>
+        <template>B</template>
+        <template>C</template>
+    </sliderTemplate>    
     
 </map>

@@ -10,6 +10,7 @@ $config = array(
             'bypassFirstSegment' => array(
                             'webservice',
                             'mobile',
+                            'api',
             ),
         );
         

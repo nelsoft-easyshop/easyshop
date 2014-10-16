@@ -15,18 +15,30 @@ class CollectionHelper
      * @param  array  $array [description]
      * @return array
      */
-    public function organizeArray($array = array())
+    public function organizeArray($array = array(),$all = false)
     {
         $organizeArray = array();
 
-        foreach ($array as $key => $value) {
-            $arrayKey = array_keys($value); 
-            $head = $value[$arrayKey[0]];
-            if(!array_key_exists($head,$organizeArray)){
-                $organizeArray[$head] = array();
+        if(!$all){
+            foreach ($array as $key => $value) {
+                $arrayKey = array_keys($value); 
+                $head = $value[$arrayKey[0]];
+                if(!array_key_exists($head,$organizeArray)){
+                    $organizeArray[$head] = array();
+                }
+                $organizeArray[$head][] = $value[$arrayKey[1]]; 
+                $organizeArray[$head] = array_unique($organizeArray[$head]);
             }
-            $organizeArray[$head][] = $value[$arrayKey[1]]; 
-            $organizeArray[$head] = array_unique($organizeArray[$head]);
+        }
+        else{ 
+            foreach($array as $key=>$row){ 
+                $arrayKey = array_keys($row); 
+                $head = "'".strtolower($row[$arrayKey[0]])."'";
+                if(!array_key_exists($head, $organizeArray)){
+                    $organizeArray[$head] = array();
+                } 
+                $organizeArray[$head][] = $row; 
+            }
         }
 
         return $organizeArray;
