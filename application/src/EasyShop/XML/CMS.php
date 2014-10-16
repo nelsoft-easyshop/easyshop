@@ -20,7 +20,22 @@ class CMS
 
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
+        if($nodeName == "addTopSellers") {
+             $string = '
+            <seller>'.$value.'</seller>';   
+        }             
+        if($nodeName == "addTopProducts") {
+             $string = '
+            <product>'.$value.'</product>';   
+        }         
 
+        if($nodeName == "newArrivals") {
+             $string = '
+        <arrival>
+                <text>'.$value.'</text>
+                <target>'.$target.'</target>
+            </arrival>'; 
+        }  
         if($nodeName == "categorySectionAdd") {
              $string = '
         <categorySection>
@@ -240,7 +255,26 @@ $string = '<typeNode>
             else {
                     return false;
             }
-        }      
+        }    
+        else if($nodeName == "newArrival"){
+            $referred = "/map/menu/newArrivals/arrival[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }           
 
         else if($nodeName == "categorySectionPanel"){
             $referred = "/map/categorySection[".$index."]"; 
@@ -358,6 +392,36 @@ $string = '<typeNode>
                     return false;
             }
         }
+
+        else if($nodeName == "topSellers") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//topSellers/seller[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        }        
+        else if($nodeName == "topProducts") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//topProducts/product[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        }
+
         else if($nodeName == "otherCategories") {
             $xml = new \SimpleXMLElement(file_get_contents($file) );            
             $result = current($xml->xpath( "//otherCategories/categorySlug[$index]" ));
