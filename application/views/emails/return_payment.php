@@ -47,7 +47,7 @@
                                         <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                             <table width="100%" style="border-collapse: collapse; font-size: 12px;">
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                         Transaction # :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -55,7 +55,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                         Product Order # :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -63,7 +63,7 @@
                                                     </td>
                                                 </tr>
                                                  <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                         Product Name :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -71,7 +71,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                         Base Price :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -79,7 +79,7 @@
                                                     </td>
                                                 </tr>
                                                  <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                         Quantity :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -87,7 +87,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                        Handling Fee :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
@@ -95,14 +95,14 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                        Product Total Price :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
                                                         Php {total}
                                                     </td>
                                                 </tr>
-                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                <tr align="right" style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
                                                     <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                        Easyshop Charge :
                                                     </td>
@@ -111,7 +111,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                        {payment_method_name} Charge :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
@@ -119,7 +119,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
                                                        Net Amount to be Received :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
@@ -127,13 +127,13 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight:bold; vertical-align: top;" colspan="2">
+                                                    <td align="right" style="font-weight:bold; vertical-align: top;" colspan="2">
                                                     Product Attributes : 
                                                     </td>
                                                 </tr>
                                                 {attr}
                                                 <tr>
-                                                    <td style="font-weight:bold; text-transform: capitalize;padding-left:10px; width: 70px;" colspan="2">
+                                                    <td align="right" style="font-weight:bold; text-transform: capitalize;padding-left:10px; width: 70px;" colspan="2">
                                                         <span>{field} : </span>
                                                         <span  style="font-weight: normal">{value}</span>
                                                     </td>
@@ -152,11 +152,11 @@
             <div style="background: #3c475c; width: 100%; min-height: 100px; border-width:0px 0px 5px 0px; border-style:solid; border-color:#f18200; padding-top: 15px; padding-bottom: 15px;">
                 <div style="min-height: 50px;">
                     <center>
-                        <table>
+                        <table width="100%">
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="facebook.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
