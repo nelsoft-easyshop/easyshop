@@ -81,38 +81,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <!-- <span class="login-icon user-acct-icon"></span>
                                         <a href="/login">login</a>&nbsp;or&nbsp;
                                         <a href="/register">create an account</a> -->
-                                        
-                                        <div class="new-user-nav-dropdown">
-                                            <span class="login-icon user-acct-icon"></span> 
-                                            <a href="" class="header-seller-name">Lorem ipsum</a>
-                                            <span class="default-nav-dropdown-arrow">Account Settings</span>
-                                            <ul class="default-nav-dropdown">
-                                                <li>
-                                                    <a href="/me">Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a href="/me?me=pending">On-going Transactions</a>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a href="/me?me=settings">Settings</a>
-                                                </li>
-                                                <li class="nav-dropdown-border pos-rel">
-                                                    <a href="/messages">Messages</a>
-                                                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                    <?=$msgs['unread_msgs'];?>
-                                                    </div>
-                                                    <?php endif;?>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a class="prevent" href="/sell/step1">Sell an item</a>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a class="prevent" href="/login/logout">Logout</a>
-                                                </li>
-                                            </ul>
-                                            <div class="clear"></div>                                            
-                                        </div>
+                                        <?php if(isset($logged_in) && $logged_in): ?>
+                                            <div class="new-user-nav-dropdown">
+                                                <img src="<?=$user_details->profileImage;?>"> 
+                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                                <ul class="default-nav-dropdown">
+                                                    <li>
+                                                        <a href="/me">Dashboard</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/me?me=pending">On-going Transactions</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a href="/me?me=settings">Settings</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border pos-rel">
+                                                        <a href="/messages">Messages</a>
+                                                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                        <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                        <?=$msgs['unread_msgs'];?>
+                                                        </div>
+                                                        <?php endif;?>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a class="prevent" href="/sell/step1">Sell an item</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a class="prevent" href="/login/logout">Logout</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clear"></div>                                            
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="new-user-nav-dropdown">
+                                                <img src="/assets/images/img-default-icon-user.jpg"> 
+                                                <a href="/login"><strong>login</strong></a>  or 
+                                                <a href="/register"><strong>Create and account</strong></a>
+                                            </div>
+                                        <?php endif; ?>
                                             
                                     </div>
                                 </div><!-- End .pull-right -->
