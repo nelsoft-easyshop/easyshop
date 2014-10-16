@@ -68,19 +68,52 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="header-top-left">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <ul id="top-links" class="clearfix">
                                     <li><a href="/sell/step1" title="Sell an item"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">sell an item</span></a></li>
                                     <li><a href="/guide/sell" title="Learn how to sell your items"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">how to sell</span></a></li>
                                     <li><a href="/guide/buy" title="Learn how to make a purchase"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">how to shop</span></a></li>
                                 </ul>
                             </div><!-- End .header-top-left -->
-                            <div class="header-top-right">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
-                                        <span class="login-icon user-acct-icon"></span>
+                                        <!-- <span class="login-icon user-acct-icon"></span>
                                         <a href="/login">login</a>&nbsp;or&nbsp;
-                                        <a href="/register">create an account</a>
+                                        <a href="/register">create an account</a> -->
+                                        
+                                        <div class="new-user-nav-dropdown">
+                                            <span class="login-icon user-acct-icon"></span> 
+                                            <a href="" class="header-seller-name">Lorem ipsum</a>
+                                            <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                            <ul class="default-nav-dropdown">
+                                                <li>
+                                                    <a href="/me">Dashboard</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/me?me=pending">On-going Transactions</a>
+                                                </li>
+                                                <li class="nav-dropdown-border">
+                                                    <a href="/me?me=settings">Settings</a>
+                                                </li>
+                                                <li class="nav-dropdown-border pos-rel">
+                                                    <a href="/messages">Messages</a>
+                                                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                    <?=$msgs['unread_msgs'];?>
+                                                    </div>
+                                                    <?php endif;?>
+                                                </li>
+                                                <li class="nav-dropdown-border">
+                                                    <a class="prevent" href="/sell/step1">Sell an item</a>
+                                                </li>
+                                                <li class="nav-dropdown-border">
+                                                    <a class="prevent" href="/login/logout">Logout</a>
+                                                </li>
+                                            </ul>
+                                            <div class="clear"></div>                                            
+                                        </div>
+                                            
                                     </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->
@@ -114,7 +147,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </a>
                                                 <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
                                                 <?PHP else : ?>
-                                                    <div class="header-cart-item-list">
+                                                <div class="header-cart-item-list">
                                                     <p>Recently add item(s)</p>
                                                     <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
                                                         <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
@@ -152,22 +185,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     </div><!-- End .dropdown-cart-menu-container -->
 
                                 <div class="header-top-dropdowns">
-                                    <form class="nav-searchbar-inner" ,="" accept-charset="utf-8" role="search" name="site-search" method="get" action="/s/ref=nb_sb_noss" id="nav-searchbar">
+                                    <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
 
-                                    <div class="nav-submit-button nav-sprite">
-                                        <input type="submit" value="" class="span_bg">
-                                    </div>
-                                <div class="nav-searchfield-width">
-                                  <div class="search-container">
-                                        <select class="ui-form-control">
-                                            <option>On Seller's Page</option>
-                                            <option>Main Page</option>
-                                            <option>Other Page</option>
-                                        </select>
-                                        <input type="text" class="ui-form-control">
-                                    </div>
-                                </div>
-                                </form><!-- End .Search Navigation -->
+                                        <div class="nav-submit-button nav-sprite">
+                                            <input type="submit" value="" class="span_bg">
+                                        </div>
+                                        <div class="nav-searchfield-width">
+                                          <div class="search-container">
+                                                <!-- <select class="ui-form-control">
+                                                    <option>On Seller's Page</option>
+                                                    <option>Main Page</option>
+                                                    <option>Other Page</option>
+                                                </select> -->
+                                                <input type="text" name="q_str" class="ui-form-control">
+                                            </div>
+                                        </div>
+                                    </form><!-- End .Search Navigation -->
 
                                 </div><!-- End .header-top-dropdowns -->
                                 </div><!-- End .header-inner-right-wrapper -->
@@ -265,52 +298,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart">
-                                                        <span class="header-cart-item">2 item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon">
-                                                        <span class="cart-item-notif">1</span>
+                                                        <span class="cart-item-notif"><?=$cart_size?></span>
                                                     </span>
-                                                </a>                                                
+                                                </a>
+                                            <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                            <?PHP else : ?>
                                                 <div class="sticky-header-cart-item-list">
                                                     <p>Recently add item(s)</p>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
-                                                    <div class="mrgn-bttm-15">
-                                                        <div class="header-cart-item-img">
-                                                            <a href="">
-                                                                <span><img src="<?=base_url()?>assets/images/img_doraemon.png" alt="Doraemon"></span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="header-cart-item-con">
-                                                            <a href=""><span>Doraemon - blue</span></a>
-                                                            <span>x 1</span>
-                                                            <span class="header-cart-item-price">&#8369; 450.00</span>
-                                                        </div>
-                                                        <div class="clear"></div>
-                                                    </div>
+                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
+                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                            <div class="mrgn-bttm-15">
+                                                                <div class="header-cart-item-img">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
+                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="header-cart-item-con">
+                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
+                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                </div>
+                                                                <div class="clear"></div>
+                                                            </div>
+                                                        <?PHP endif; ?>
+                                                    <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Shipping: <span>&#8369; 50.00</span></p>
-                                                            <p>Total: <span>&#8369; 100,500.00</span></p>
+                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
-                                                            <a href="" class="header-cart-lnk-cart">go to cart</a>
-                                                            <a href="" class="header-cart-lnk-checkout">checkout</a>
+                                                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
                                                         </div>
                                                         <div class="clear"></div>
                                                     </div>
                                                 </div>
+                                            <?PHP endif; ?>
                                             </div>
                                             <div class="header-text-container pull-right">                                               
                                                 <div class="header-link">

@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace EasyShop\XML;
-
+use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\Entities\EsBrand as EsBrand;
 class CMS
 {
-
     /**
      * The xml resource getter
      *
@@ -373,7 +373,7 @@ $string = '<typeNode>
         
         $homePageData['adSection'] = $xmlContent['adSection']['ad'];
 
-
+        //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
@@ -389,6 +389,38 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+
+        //Get vendor page details
+        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
+        $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
+
+        foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+            $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                ->findOneBy(['slug' => $product['slug']]);
+            $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                ->getDefaultImage($productData->getIdProduct());
+            $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if ($productImage != NULL) {
+                $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
+                $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
+            }
+        }
+        $homePageData['seller'] = $featuredVendor;
+
+        //Get Popular Brands
+        foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
+            $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
+                                            ->findOneBy(['idBrand' => $brandId]);
+            $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
+            $popularCategory['popularBrand'][$key]['image']['file'] =
+                $popularCategory['popularBrand'][$key]['brand']->getImage() ?: EsBrand::IMAGE_UNAVAILABLE_FILE;
+        }
+        $homePageData['popularCategory'] = $popularCategory;
 
         return $homePageData;
     }

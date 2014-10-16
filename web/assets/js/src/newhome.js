@@ -1,14 +1,16 @@
 (function ($) {
 
     $('.bxslider').bxSlider({
-        maxSlides: 8,
+        minslides : 1,
+        maxSlides: 1,
         moveSlides: 1,
         speed: 1000,
         auto: true,
         pause: 6000,
         prevText : '',
         nextText : '',
-        slideMargin : 8
+        slideMargin : 10,
+        touchEnabled : true
     });
 
     $('#content .bx-wrapper').removeAttr("style");

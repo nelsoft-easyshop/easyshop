@@ -233,12 +233,12 @@ textarea {
     vertical-align: middle;
 }
 
-.new-user-nav-dropdown {
+/*.new-user-nav-dropdown {
     position: absolute;
     right: 0;
     top: 0;
 }
-
+*/
 .new-user-nav-dropdown .user-nav-dropdown {
     margin-right: 18px;
 }
@@ -1625,7 +1625,7 @@ td.td-view.p-view2.color-default{
 
 .footer-primary input[type="text"] {
     max-width: 373px;
-    width: 66%;
+    width: 63%;
 }
 
 .footer-primary input[type="submit"] {
