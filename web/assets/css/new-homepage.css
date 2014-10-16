@@ -435,6 +435,10 @@ header {
     color:#7f7d74;
 }
 
+.header-link-login {
+    text-align: right;
+}
+
 #inner-header {
     background-color: #fff;
     padding-top:35px;
@@ -625,8 +629,8 @@ header {
 }
 
 .sticky-nav-fixed .header-text-container {
-    margin-left: 20px;
-    width: 100%;
+    margin-left: 18px;
+    width: auto;
 }
 
 #main-nav-container #main-nav .menu li {
@@ -3195,7 +3199,8 @@ font-size: 15px;
 	}
 
 	.sticky-nav-fixed {
-		position: absolute;
+		position: relative;
+        z-index: 4;
 	}
 
 	.sticky-search-cart-wrapper {

@@ -78,12 +78,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
-                                        <!-- <span class="login-icon user-acct-icon"></span>
-                                        <a href="/login">login</a>&nbsp;or&nbsp;
-                                        <a href="/register">create an account</a> -->
+                                        <div class="header-link-login">
+                                            <img src="assets/images/img-login-icon.png" alt="login">
+                                            <a href="/login">login</a>&nbsp;or&nbsp;
+                                            <a href="/register">create an account</a>
+                                        </div>
                                         
-                                        <div class="new-user-nav-dropdown">
-                                            <span class="login-icon user-acct-icon"></span> 
+                                        <!-- <div class="new-user-nav-dropdown">
+                                            <img src="assets/images/img-login-icon.png" alt="login">
                                             <a href="" class="header-seller-name">Lorem ipsum</a>
                                             <span class="default-nav-dropdown-arrow">Account Settings</span>
                                             <ul class="default-nav-dropdown">
@@ -112,7 +114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </li>
                                             </ul>
                                             <div class="clear"></div>                                            
-                                        </div>
+                                        </div> -->
                                             
                                     </div>
                                 </div><!-- End .pull-right -->
@@ -297,7 +299,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
-                                                    <span class="header-cart-items-con sticky-cart">
+                                                    <span class="header-cart-items-con sticky-cart ui-form-control">
                                                         <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon">
@@ -341,7 +343,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                             <div class="header-text-container pull-right">                                               
                                                 <div class="header-link">
-                                                    <span class="login-icon user-acct-icon"></span>
+                                                    <img src="assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
                                                     <a href="/register">create an account</a>
                                                 </div>
