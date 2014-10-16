@@ -11,78 +11,9 @@
         <div class="right-side-shadow"></div>
         <div id="bxslider" class="container">
             <ul class="bxslider">
-                <li class="slider-template-1">
-                    <div class="slider-item">
-                        <img src="/assets/images/homeslider/hs_0.jpg" alt="Slider item 1">
-                    </div>
-                 </li>
-                <li class="slider-template-2">
-                    <div class="slider-item">
-                        <img src="/assets/images/homeslider/hs_0_1.jpg" alt="Slider item 2">                        
-                    </div>
-                </li>
-                <li class="slider-template-2">
-                    <div class="slider-item">
-                        <img src="/assets/images/homeslider/hs_0_1.jpg" alt="Slider item 3">
-                    </div>
-                 </li>
-
-                 <li class="slider-template-3">
-                    <div class="slider-item">
-                        <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>                        
-                        <div class="img-holder temp3-img-2">
-                            <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="clear"></div>                        
-                    </div>
-                 </li>
-
-                 <li class="slider-template-3">
-                    <div class="slider-item">
-                        <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>                        
-                        <div class="img-holder temp3-img-2">
-                            <img src="/assets/images/homeslider/hs_0_2_2.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="clear"></div>                        
-                    </div>
-                 </li>
-
-                 <li class="slider-template-4">
-                    <div class="slider-item">
-                        <div class="img-holder temp4-img-1 img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder temp4-img-2">                            
-                            <div class="display-ib img-holder-mrgn-btn-10">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
-                            </div>
-                            <div class="">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
-                            </div>
-                        </div>
-                        <div class="clear"></div>                       
-                    </div>                   
-                 </li>
-                 <li class="slider-template-4">
-                    <div class="slider-item">
-                        <div class="img-holder temp4-img-1 img-holder-mrgn-right-10">
-                            <img src="/assets/images/homeslider/hs_0_2_1.jpg" alt="Slider item 3">
-                        </div>
-                        <div class="img-holder temp4-img-2">                            
-                            <div class="display-ib img-holder-mrgn-btn-10">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
-                            </div>
-                            <div class="">
-                                <img src="/assets/images/homeslider/hs_0_3.jpg" alt="Slider item 3">
-                            </div>
-                        </div>
-                        <div class="clear"></div>                       
-                    </div>                   
-                 </li>
+                <?php foreach($homeContent['slider'] as $slideView): ?>
+                    <?php echo $slideView; ?>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>

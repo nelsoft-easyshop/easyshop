@@ -53,7 +53,13 @@ class Home extends MY_Controller
     {
         $em = $this->serviceContainer["entity_manager"];
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = array();
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+            array_push($homeContent['slider'], $sliderView);
+        }
+        
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
             'homeContent' => $homeContent,

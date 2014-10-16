@@ -4,161 +4,276 @@
     <categoryNavigation>
         
         <category>
-            <categorySlug>promo-daily</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
             <sub>
-				<categorySubSlug>shirts</categorySubSlug>
-				
-				<categorySubSlug>mens-shoes</categorySubSlug>	                
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
             </sub>
         </category>
         
         <category>
-            <categorySlug>health-beauty</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
             <sub>
-				
-				<categorySubSlug>womens-clothing</categorySubSlug>
-				<categorySubSlug>jumpsuits</categorySubSlug>	
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
             </sub>
         </category>
         
         <category>
-            <categorySlug>clothing-accessories</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
             <sub>
-				<categorySubSlug>mens-clothing</categorySubSlug>
-				<categorySubSlug>womens-shoes</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
             </sub>
         </category>
         
         <category>
-            <categorySlug>toys-hobbies-collectibles</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
             <sub>
-				<categorySubSlug>swimwear</categorySubSlug>
-				<categorySubSlug>maternity</categorySubSlug>
-				<categorySubSlug>shirts</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
             </sub>
         </category>
         
         <otherCategories>
-            <categorySlug>books-music-movies</categorySlug>
-            <categorySlug>furniture-home-garden</categorySlug>
-            <categorySlug>business-industrial</categorySlug>
-            <categorySlug>womens-clothing</categorySlug>
-            <categorySlug>womens-shoes</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
         </otherCategories>
+        
+        
     </categoryNavigation>
+    
     
     
     <sliderSection>
         <slide>
-            <template>B</template>
-			<image>
-                <path>140910150932.jpg</path>
-                <target>test</target>
+            <template>A</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0.jpg</path>
+                <target>/</target>
             </image>
         </slide>
        
         <slide>
-            <template>A</template> 
-			<image>
-                <path>141010151014.jpg</path>
-                <target>test</target>
-            </image>          
-        </slide> 
+            <template>B</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0_2_1.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_2_2.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+       
+        
+        <slide>
+            <template>D</template>
+            <image>
+                <path>/assets/images/homeslider/hs_6.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+        
+        
     </sliderSection>
+    
+    
     
     <sellerSection>
         
-        <sellerSlug>test222</sellerSlug>
-        <sellerBanner>140110140110.jpg</sellerBanner>
-        <sellerLogo>140110140107.jpg</sellerLogo>
-
-		<productPanel>
-            <slug>hdmi</slug>
+        <sellerSlug>patriots21</sellerSlug>
+        <sellerBanner>/assets/images/clothes-closet.jpg</sellerBanner>
+        <sellerLogo>/assets/images/products/uniqlo-logo-big.png</sellerLogo>
+        
+        <productPanel>
+            <slug>testability</slug>
         </productPanel>
-		
-		<productPanel>
-            <slug>boom</slug>
+        
+        <productPanel>
+            <slug>testability</slug>
         </productPanel>
-		<productPanel>
-            <slug>clothing-accessories</slug>
+        
+        <productPanel>
+            <slug>testability</slug>
         </productPanel>
-		<productPanel>
-            <slug>clothing-accessories</slug>
-        </productPanel>
+        
     </sellerSection>
     
     <adSection>
-		<ad>
-            <img>141210151214.jpg</img>
-            <target>target</target>
+        <ad>
+            <img>assets/images/big-banner-1.png</img>
+            <target></target>
         </ad>
-		<ad>
-            <img>141210151217.jpg</img>
-            <target/>
+        
+        <ad>
+            <img>assets/images/big-banner-2.png</img>
+            <target></target>
+        </ad>
+        
+        <ad>
+            <img>assets/images/big-banner-3.png</img>
+            <target></target>
         </ad>
     </adSection>
     
     <categorySection>
-        <categorySlug>clothing-and-accessories</categorySlug>
-
+        <categorySlug>jewellery-watches</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
         <sub>
             <text>Popular Items</text>
             <target>/</target>
         </sub>
         
         <sub>
-            <text>Men-editsssss</text>
-            <target>/--editsssss</target>
-        </sub>
-		<sub>
-            <text>qweqwe</text>
-            <target>asdasd</target>
-        </sub>
-		<sub>
-            <text>wqefads</text>
-            <target>qrwafds</target>
+            <text>Women</text>
+            <target>/</target>
         </sub>
         
-		<productPanel>
-            <slug>hdmi</slug>
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>testability</slug>
         </productPanel>
         
-    </categorySection>
-      
-    <categorySection>
-        <categorySlug>test2</categorySlug>
-
-        <sub>
-            <text>Women</text>
-            <target>/-edited</target>
-        </sub>
-		
         <productPanel>
-            <slug>test-1</slug>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>hjh</slug>
         </productPanel>
         
     </categorySection>
     
-	<categorySection>
-        <categorySlug>test3</categorySlug>
+    <categorySection>
+        <categorySlug>jewellery-watches</categorySlug>
+        
         <sub>
-            <text>Default</text>
+            <text>New Arrival</text>
             <target>/</target>
         </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
         <productPanel>
-            <slug>kj-star-wireless-mobile-phone-monopod</slug>
-        </productPanel>            
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>hjh</slug>
+        </productPanel>
+        
     </categorySection>
-	
-	<categorySection>
-        <categorySlug>food-beverages</categorySlug>
+    
+      
+    <categorySection>
+        <categorySlug>clothing-accessories</categorySlug>
+        
         <sub>
-            <text>Default</text>
+            <text>New Arrival</text>
             <target>/</target>
         </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
         <productPanel>
-            <slug>kj-star-wireless-mobile-phone-monopod</slug>
-        </productPanel>            
+            <slug>hjh</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
     </categorySection>
     
     <brandSection>
@@ -167,11 +282,13 @@
         <brandId>3</brandId>
         <brandId>4</brandId>
     </brandSection>
-
+    
+    
     <sliderTemplate>
         <template>A</template>
         <template>B</template>
         <template>C</template>
+        <template>D</template>
     </sliderTemplate>    
     
 </map>

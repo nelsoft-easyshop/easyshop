@@ -6,25 +6,21 @@
                             <div class="col-md-6 col-xs-6">
                                 <h1>Help Center</h1>
                                 <ul>
-                                    <li><a href="">Registration</a></li>
-                                    <li><a href="">How to Shop</a></li>
-                                    <li><a href="">How to Sell</a></li>
-                                    <li><a href="">Payment Methods</a></li>
-                                    <li><a href="">FAQ</a></li>
-                                    <li><a href="">Live Chat</a></li>
-                                    <li><a href="">Report a Problem</a></li>
+                                    <li><a href="/register">Registration</a></li>
+                                    <li><a href="/guide/buy">How to Shop</a></li>
+                                    <li><a href="/guide/sell">How to Sell</a></li>
+                                    <li><a href="/faq">FAQ</a></li>
+                                    <li><a href="/report">Report a Problem</a></li>
                                 </ul>
                             </div>
                             <div class="col-md-6 col-xs-6">
                                 <h1>Information</h1>
                                 <ul>
-                                    <li><a href="">View Cart</a></li>
-                                    <li><a href="">My Wishlist</a></li>
-                                    <li><a href="">About Us</a></li>
-                                    <li><a href="">Contact Us</a></li>
-                                    <li><a href="">Shipping Policy</a></li>
-                                    <li><a href="">Privacy Policy</a></li>
-                                    <li><a href="">Terms of Use</a></li>
+                                    <li><a href="/cart">View Cart</a></li>
+                                    <li><a href="/about">About Us</a></li>
+                                    <li><a href="/contact">Contact Us</a></li>
+                                    <li><a href="/policy">Privacy Policy</a></li>
+                                    <li><a href="/terms">Terms of Use</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -45,10 +41,8 @@
                         <h1>Follow Us</h1>
                         <div class="social-media-wrapper">
                             <ul>
-                                <li><a href=""><img src="/assets/images/img-facebook-new.png" alt="easyshop facebook"></a></li>
-                                <li><a href=""><img src="/assets/images/img-twitter-new.png" alt="easyshop twitter"></a></li>
-                                <li><a href=""><img src="/assets/images/img-googleplus-new.png" alt="easyshop google plus"></a></li>
-                                <li><a href=""><img src="/assets/images/img-linkdin-new.png" alt="easyshop linkdin"></a></li>
+                                <li><a href="https://www.facebook.com/EasyShopPhilippines"><img src="/assets/images/img-facebook-new.png" alt="easyshop facebook"></a></li>
+                                <li><a href="https://twitter.com/EasyShopPH"><img src="/assets/images/img-twitter-new.png" alt="easyshop twitter"></a></li>
                             </ul>
                             <div class="clear"></div>
                         </div>
