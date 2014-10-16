@@ -54,12 +54,12 @@ class ApiFormatter
         $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = array(
-            'name' => $product->getName(),
-            'description' => $product->getDescription(),
-            'brand' => $product->getBrand()->getName(),
-            'condition' => $product->getCondition(),
-            'discount' => $product->getDiscountPercentage(),
-            'basePrice' => $product->getFinalPrice(),
+                'name' => $product->getName(),
+                'description' => $product->getDescription(),
+                'brand' => $product->getBrand()->getName(),
+                'condition' => $product->getCondition(),
+                'discount' => $product->getDiscountPercentage(),
+                'basePrice' => $product->getFinalPrice(),
             );
 
         // get product images
@@ -105,6 +105,12 @@ class ApiFormatter
         // get product combination
         $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->getProductAttributeDetailByName($productId);
+
+        $productAttributesPrice = [];
+        foreach ($productAttributes as $key => $value) {
+            $productAttributesPrice[$value['attr_id']] = $value['attr_price'];
+        }
+
         $productAttributes = $this->collectionHelper->organizeArray($productAttributes,true);
 
         // get product specification
@@ -126,16 +132,16 @@ class ApiFormatter
  
 
             if(count($productOption)>1){
-                $productCombinationAttributes = $newArrayOption; 
+                $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
             }
             elseif((count($productOption) === 1)
                         &&(($productOption[0]['datatype_id'] === '5'))
-                        ||($productOption[0]['type'] === 'option')){
-                $productCombinationAttributes = $newArrayOption; 
-                $productSpecification = $newArrayOption;
+                        ||($productOption[0]['type'] === 'option')){ 
+                $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
+                $productSpecification[] = $newArrayOption[0];
             }
             else{
-                $productSpecification = $newArrayOption; 
+                $productSpecification[] = $newArrayOption[0]; 
             }
         }
 
@@ -167,15 +173,17 @@ class ApiFormatter
         $productQuantity = [];
         foreach ($temporaryArray as $key => $valuex) { 
             $newCombinationKey = array();
-
+            $totalPrice = 0;
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
                 array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
+                $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
-            $temporaryArray[$key]['combinationId'] = $newCombinationKey;
+            $temporaryArray[$key]['combinationId'] = ($newCombinationKey[0] == "a_0") ? [] : $newCombinationKey;
             $temporaryArray[$key]['id'] = $key;
+            $temporaryArray[$key]['price'] = number_format($totalPrice + $product->getFinalPrice(), 2,'.','');
             $productQuantity[] = $temporaryArray[$key];
         }
 
