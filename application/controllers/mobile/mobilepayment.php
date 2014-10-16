@@ -74,6 +74,9 @@ class mobilePayment extends MY_Controller
      */
     public function doPaymentReview()
     { 
+        $mobileCartContents = json_decode($this->input->post('cartData'));
+        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
+        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
 
         $cartData = unserialize($this->member->getUserdata()); 
         $formattedCartContents = array();
