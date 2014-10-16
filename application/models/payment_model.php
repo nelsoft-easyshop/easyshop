@@ -439,27 +439,34 @@ class payment_model extends CI_Model
         $parseData = array_splice($row[0], 1, 10);
         $parseData['attr'] = array();
         
-        if($data['status'] === 1){ // if forward to seller
+        if($data['status'] === 1){ // if forward to seller (email to seller)
             $parseData['user'] = $row[0]['buyer'];
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
-        } else if($data['status'] === 2){ // if return to buyer
+            $parseData['recipient'] = $row[0]['seller'];
+        } 
+        else if($data['status'] === 2 || $data['status'] === 3){ // if return to buyer or COD (email to buyer)
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
             $parseData['mobile'] = trim($row[0]['buyer_contactno']);
+            $parseData['recipient'] = $row[0]['buyer'];
         }
         
         switch( (int)$row[0]['payment_method_id'] ){
             case 1:
                 $parseData['payment_method_name'] = "PayPal";
+                break;
             case 2:
                 $parseData['payment_method_name'] = "DragonPay";
+                break;
             case 3:
                 $parseData['payment_method_name'] = "Cash on Delivery";
+                break;
             case 5:
                 $parseData['payment_method_name'] = "Bank Deposit";
+                break;
         }
         
         foreach( $row as $r){
