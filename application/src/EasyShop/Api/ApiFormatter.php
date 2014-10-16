@@ -2,6 +2,7 @@
 
 namespace EasyShop\Api;
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
  
 class ApiFormatter
 {
@@ -20,28 +21,45 @@ class ApiFormatter
     private $collectionHelper;
 
     /**
+     * The product manager
+     *
+     * @var EasyShop\Cart\CartManager
+     */
+    private $cartManager;
+
+    /**
+     * The cartManager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager)
+    public function __construct($em,$collectionHelper,$productManager,$cartManager)
     {
         $this->em = $em;  
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
+        $this->cartManager = $cartManager;
+        $this->cartImplementation = $cartManager->getCartObject();
     }
 
     public function formatItem($productId)
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
+      
+
+        $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = array(
             'name' => $product->getName(),
             'description' => $product->getDescription(),
             'brand' => $product->getBrand()->getName(),
             'condition' => $product->getCondition(),
-            'discount' => $product->getDiscount(),
-            'basePrice' => $product->getPrice(),
+            'discount' => $product->getDiscountPercentage(),
+            'basePrice' => $product->getFinalPrice(),
             );
 
         // get product images
@@ -276,4 +294,49 @@ class ApiFormatter
 
         return $formattedCartContents;
     }
+
+    public function formatDisplayItem($idProduct)
+    {
+        $product = $this->productManager->getProductDetails($idProduct);
+        $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getDefaultImage($idProduct);
+
+        $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+        $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+        if($productImage != NULL){
+            $imageDirectory = $productImage->getDirectory();
+            $imageFileName = $productImage->getFilename();
+        }
+
+        return array(
+                    'name' => $product->getName(), 
+                    'slug' => $product->getSlug(),
+                    'condition' => $product->getCondition(),
+                    'discount' => $product->getDiscountPercentage(),
+                    'price' => $product->getFinalPrice(),
+                    'product_image' => $imageDirectory.'categoryview/'.$imageFileName
+                );
+    }
+
+    public function updateCart($mobileCartContents,$memberId)
+    {
+        foreach($mobileCartContents as $mobileCartContent){
+                              
+            $options = array();
+            foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
+                if(intval($attributeArray->isSelected) === 1){
+                    $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
+                }
+               
+            }
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => $mobileCartContent->slug]);
+            if($product){
+                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+            }
+        }
+        $this->cartImplementation->persist($memberId);
+    }
 }
+ 

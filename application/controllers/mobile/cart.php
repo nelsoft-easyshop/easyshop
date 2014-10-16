@@ -88,29 +88,11 @@ class cart extends MY_Controller
      * @return JSON
      */
     public function persist()
-    {
-        $response = array();
-        
-
+    { 
         $mobileCartContents = json_decode($this->input->post('cartData'));
         $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
-        foreach($mobileCartContents as $mobileCartContent){
-                              
-            $options = array();
-            foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1){
-                    $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
-                }
-               
-            }
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->findOneBy(['slug' => $mobileCartContent->slug]);
-            if($product){
-                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
-            }
-        }
-        $this->cartImplementation->persist($this->member->getIdMember());
-        
+        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
+
         return $this->getCartData();
     }
 

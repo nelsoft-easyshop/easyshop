@@ -74,7 +74,17 @@ class mobilePayment extends MY_Controller
      */
     public function doPaymentReview()
     { 
+        // Load controller
+        $this->paymentController = $this->loadController('payment');
 
+        // update cart
+        $mobileCartContents = json_decode($this->input->post('cartData'));
+        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
+        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
+
+        // refresh member object to get update cart content
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->member->getIdMember());
+        
         $cartData = unserialize($this->member->getUserdata()); 
         $formattedCartContents = array();
         $canContinue = false;
@@ -83,7 +93,6 @@ class mobilePayment extends MY_Controller
 
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
-            $this->paymentController = $this->loadController('payment');
             $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
@@ -241,5 +250,27 @@ class mobilePayment extends MY_Controller
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Display transaction details of payment.
+     * @return json
+     */
+    public function getTransactionDetails()
+    {
+        $txnId = $this->input->post('txnid');
+        $paymentDetails = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                                ->findOneBy(['transactionId' => $txnId]);
+
+        $displayArray = array(
+                        'transaction_details' => array(
+                            'grand_total' => $paymentDetails->getTotal(), 
+                            'transaction_id' => $txnId,
+                            'reference_number' => $paymentDetails->getInvoiceNo(),
+                            'transaction_date' => $paymentDetails->getDateadded()->format('Y-m-d H:i:s'),
+                        ),
+                    );
+
+        echo json_encode($displayArray,JSON_PRETTY_PRINT);
     }
 }
