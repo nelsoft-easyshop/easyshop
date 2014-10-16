@@ -78,9 +78,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
-                                        <!-- <span class="login-icon user-acct-icon"></span>
-                                        <a href="/login">login</a>&nbsp;or&nbsp;
-                                        <a href="/register">create an account</a> -->
+                                        
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <img src="<?=$user_details->profileImage;?>"> 
@@ -114,11 +112,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="clear"></div>                                            
                                             </div>
                                         <?php else: ?>
-                                            <div class="new-user-nav-dropdown">
-                                                <img src="/assets/images/img-default-icon-user.jpg"> 
-                                                <a href="/login"><strong>login</strong></a>  or 
-                                                <a href="/register"><strong>Create and account</strong></a>
-                                            </div>
+                                            <span class="login-icon user-acct-icon"></span>
+                                            <a href="/login">login</a>&nbsp;or&nbsp;
+                                            <a href="/register">create an account</a>
                                         <?php endif; ?>
                                             
                                     </div>
@@ -299,8 +295,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         
                                         <div class="sticky-search-cart-wrapper">
                                             <div class="sticky-search-wrapper">
-                                                <input type="text" class="ui-form-control">
+                                             <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                <input type="text" name="q_str" class="ui-form-control">
                                                 <input type="submit" value="" class="span_bg">
+                                            </form>
                                             </div>
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
@@ -346,12 +344,53 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </div>
                                             <?PHP endif; ?>
                                             </div>
-                                            <div class="header-text-container pull-right">                                               
+                                            <div class="header-text-container pull-right">
+                                            <?php if(isset($logged_in) && $logged_in): ?>
+                                                <div class="new-user-nav-dropdown">
+                                                    <img src="<?=$user_details->profileImage;?>"> 
+                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                    <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                                    <ul class="default-nav-dropdown">
+                                                        <li>
+                                                            <a href="/me">Dashboard</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/me?me=pending">On-going Transactions</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a href="/me?me=settings">Settings</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border pos-rel">
+                                                            <a href="/messages">Messages</a>
+                                                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                            <?=$msgs['unread_msgs'];?>
+                                                            </div>
+                                                            <?php endif;?>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a class="prevent" href="/sell/step1">Sell an item</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a class="prevent" href="/login/logout">Logout</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="clear"></div>                                            
+                                                </div>
+                                            <?php else: ?> 
                                                 <div class="header-link">
                                                     <span class="login-icon user-acct-icon"></span>
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
                                                     <a href="/register">create an account</a>
                                                 </div>
+                                            <?php endif; ?>
+
+                                            <!--                                                
+                                                <div class="header-link">
+                                                    <span class="login-icon user-acct-icon"></span>
+                                                    <a href="/login">login</a>&nbsp;or&nbsp;
+                                                    <a href="/register">create an account</a>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
