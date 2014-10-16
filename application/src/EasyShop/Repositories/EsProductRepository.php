@@ -89,7 +89,7 @@ class EsProductRepository extends EntityRepository
     public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
     {   
         if(!empty($productIds)){
-            $this->em =  $this->_em;
+                $this->em =  $this->_em;
 
                 $sql = "
                     SELECT 
@@ -108,6 +108,7 @@ class EsProductRepository extends EntityRepository
                 }
                 
                 $results = $query->getResult();
+
                 return $results;
             }
             

@@ -28,6 +28,12 @@ class ProductManager
 {
 
     /**
+     * Newness Limit in days 
+     *
+     */
+    const NEWNESS_LIMIT = 14;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -95,11 +101,15 @@ class ProductManager
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                            ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
+                              ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping($totalShippingFee === 0);
+        $product->setIsFreeShipping($totalShippingFee === 0);        
+        $product->setIsNew($this->isProductNew($product));
+        $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                           ->getDefaultImage($product->getIdProduct()));
+        
         $this->promoManager->hydratePromoData($product);
 
         return $product;
@@ -189,7 +199,7 @@ class ProductManager
 
     /**
      * Apply discounted price to product
-     * This has been refactored with hydrate promo data
+     *
      * @param  array  $products [description]
      * @return mixed
      */
@@ -382,8 +392,38 @@ class ProductManager
         $this->em->flush();
         return true;
     }
-
     
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        if(is_string($product->getLastModifiedDate())){
+            $sql = "
+                SELECT 
+                    p.lastmodifieddate
+                FROM 
+                    EasyShop\Entities\EsProduct p
+                WHERE p.idProduct = :productId
+            ";
+            $query = $this->em->createQuery($sql)
+                                ->setParameter('productId', $product->getIdProduct());
+            $lastModifiedDate = $query->getResult()[0]['lastmodifieddate']->getTimestamp();
+        }
+        else{
+            $lastModifiedDate = $product->getLastModifiedDate()
+                                        ->getTimestamp();
+        }
+        $dateNow = new \DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::NEWNESS_LIMIT;
+    }
+
     /**
      * Returns the recommended products list for a certain product
      *
