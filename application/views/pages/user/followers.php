@@ -93,8 +93,8 @@
                         <div class="col-xs-6 col-follower">
                             <div class="follower-div">
                                 <div class="div-img-cover">
-                                    <img src="/assets/images/img_cover.jpg"/>
-                                    <img src="/assets/images/img_profile_pic_3.jpg" class="vendor-img"/>
+                                    <img src="/assets/images/img_cover.jpg" class="img-follower-cover"/>
+                                    <img src="/assets/images/img_profile_pic_3.jpg" class="vendor-follower-img"/>
                                 </div>
                                 <div class="div-follower-details">
                                     <div class="row">
