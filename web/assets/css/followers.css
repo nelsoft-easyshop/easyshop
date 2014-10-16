@@ -1,0 +1,120 @@
+
+.td-vendor-img{
+    width: 75px;
+    padding-top: 20px;
+}
+
+.vendor-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+}
+
+.td-vendor-details{
+    vertical-align: top;
+    padding-left: 15px;
+    padding-top: 20px;
+}
+
+.p-vendor-name{
+    font-weight: bold;
+    color: #565656;
+    margin: 0px;
+    display: block;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease !important;
+}
+
+.td-vendor-details > a, .p-vendor-name:hover{
+    color: #ff893b;
+    text-decoration: none !important;
+}
+
+.follow-btn{
+    width: 133px;
+    font-weight: bold;
+    display: block;
+}
+
+.follow-btn > span{
+    margin-right: 5px;
+}
+
+.p-vendor-location{
+    font-size: 12px;
+    display: block;
+    margin:0px;
+    margin-top: -5px;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.followers-container{
+    margin-left: 15px;
+    border-left: solid #cccbc7 1px;
+    padding-left: 10px;
+    padding-top: 10px;
+    min-height: 500px !important;
+}
+
+.col-follower{
+    padding-right: 0px !important;
+}
+
+.follower-div{
+    width: 100%;
+    min-height: 200px;
+    background: #fff;
+    border-radius: 7px;
+}
+
+.div-img-cover{
+    height: 100px;
+    width: 100%;
+    border-radius: 7px 7px 0px 0px;
+    padding: 10px 10px;
+    background-size:100%;
+}
+
+.div-follower-details{
+    padding: 10px;
+}
+
+.p-follower-name{
+    font-size: 18px;
+    font-weight: bold;
+    color: #565656;
+    margin: 0px;
+    display: block;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease !important;
+}
+
+.p-follower-location{
+    font-size: 10px;
+    display: block;
+    margin:0px;
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-follow-button{
+    min-height: 40px;
+    margin-top: 5px;
+}
+
+.p-follower-description{
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 10px;
+}
