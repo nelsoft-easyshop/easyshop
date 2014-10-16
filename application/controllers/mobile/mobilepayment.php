@@ -83,7 +83,7 @@ class mobilePayment extends MY_Controller
         $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
 
         // refresh member object to get update cart content
-        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->member->getIdMember());
         
         $cartData = unserialize($this->member->getUserdata()); 
         $formattedCartContents = array();
