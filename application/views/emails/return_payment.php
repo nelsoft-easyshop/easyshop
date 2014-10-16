@@ -1,12 +1,14 @@
 <style>
-    @import url(https://fonts.googleapis.com/css?family=Roboto:400,300)
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
 </style>
 <html style="font-family: 'Roboto', Arial Century Gothic, Calibri">
     <body>
         <div style="padding-right: 15px; padding-left:15px; margin-right: auto; margin-left:auto;">
             <div style="background-color: #013f94;">
                 <center>
-                  <img src="images/header-img.png" style="display: block; max-width: 100%; height: auto;">
+                    <a href="{home_link}">
+                        <img src="header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
+                    </a>
                 </center>
              </div>
              <br/>
@@ -14,19 +16,23 @@
                 <p style="margin-top:-10px; margin-bottom:-20px;">
                     <!--FOR MOBILE SCREEN SIZE-->
                     <span>
-                      <img src="images/appbar.home.png" width="30" height="30">
+                        <a href="{store_link}">
+                            <img src="appbar.home.png" width="30" height="30">
+                        </a>
                     </span>
                     <span>
-                      <img src="images/appbar.message.png" width="30" height="30">
+                        <a href="{msg_link}">
+                            <img src="appbar.message.png" width="30" height="30">
+                        </a>
                     </span>
                 </p>
             </div>
             <div style="margin-top: 20px; font-size: 13px;">
                 <p>
-                    Dear patriots21,
+                    Dear {recipient},
                 </p>
                  <p>
-                    <b style="font-weight:bold"><span style="color: #f18200;">sampleuser1</span> has just confirmed to return your payment for the following product: 
+                    <b style="font-weight:bold"><span style="color: #f18200;">{user}</span> has just confirmed to return your payment for the following product: 
                  </p>
             </div>
             <div style="margin-bottom: 20px;background-color: #fff;border: 1px solid transparent; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05); box-shadow: 0 1px 1px rgba(0, 0, 0, .05); border-color: #bce8f1; border-radius: 0px !important;">
@@ -40,89 +46,99 @@
                                     <td style="padding: 10px; vertical-align: top; width:50%">
                                         <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                             <table width="100%" style="border-collapse: collapse; font-size: 12px;">
-                                               <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                        Product Order Number:
+                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                        Transaction # :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                         318
+                                                         {invoice_no}
+                                                    </td>
+                                                </tr>
+                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                        Product Order # :
+                                                    </td>
+                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
+                                                        {id_order_product}
                                                     </td>
                                                 </tr>
                                                  <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                        Product Name:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                        Product Name :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                         Test
+                                                        {product_name}
+                                                    </td>
+                                                </tr>
+                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                        Base Price :
+                                                    </td>
+                                                    <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
+                                                        Php {price}
                                                     </td>
                                                 </tr>
                                                  <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                        Quantity:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                        Quantity :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                         1
+                                                        {order_quantity}
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                        Base Price:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                       Handling Fee :
                                                     </td>
                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                         Php 14.07
+                                                        Php {handling_fee}
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Handling Fee:
-                                                    </td>
-                                                    <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                        Php 21.00
-                                                    </td>
-                                                </tr>
-                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Product Total Price:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                       Product Total Price :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php 35.07
+                                                        Php {total}
+                                                    </td>
+                                                </tr>
+                                                <tr align="right" style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
+                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                       Easyshop Charge :
+                                                    </td>
+                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
+                                                        Php {easyshop_charge}
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Easyshop Charge:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                       {payment_method_name} Charge :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php 0.00
+                                                        Php {payment_method_charge}
                                                     </td>
                                                 </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Dragonpay Charge:
+                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
+                                                       Net Amount to be Received :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php 0.00
-                                                    </td>
-                                                </tr>
-                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Net Amount to be Receive:
-                                                    </td>
-                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php 0.00
+                                                        Php {net}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight:bold; vertical-align: top;" colspan="2">
-                                                    Product Attributes
+                                                    <td align="right" style="font-weight:bold; vertical-align: top;" colspan="2">
+                                                    Product Attributes : 
                                                     </td>
                                                 </tr>
+                                                {attr}
                                                 <tr>
-                                                    <td style="font-weight:bold; text-transform: capitalize;padding-left:10px; width: 70px;" colspan="2">
-                                                        <span>Size: </span>
-                                                        <span  style="font-weight: normal">Small</span>
+                                                    <td align="right" style="font-weight:bold; text-transform: capitalize;padding-left:10px; width: 70px;" colspan="2">
+                                                        <span>{field} : </span>
+                                                        <span  style="font-weight: normal">{value}</span>
                                                     </td>
                                                 </tr>
+                                                {/attr}
                                             </table>
                                         </div>
                                     </td>
@@ -136,14 +152,17 @@
             <div style="background: #3c475c; width: 100%; min-height: 100px; border-width:0px 0px 5px 0px; border-style:solid; border-color:#f18200; padding-top: 15px; padding-bottom: 15px;">
                 <div style="min-height: 50px;">
                     <center>
-                        <table>
+                        <table width="100%">
                             <tr>
                                 <td>
-                                    <a href="#">
-                                    <img src="images/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                    <a href="https://www.facebook.com/EasyShopPhilippines">
+                                        <img src="facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
+                                    </a>
                                 </td>
                                 <td>
-                                    <img src="images/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                    <a href="https://twitter.com/EasyShopPH">
+                                        <img src="twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
+                                    </a>
                                 </td>
                             </tr>
                         </table>

@@ -297,9 +297,10 @@ class payment_model extends CI_Model
                 break;
             case 'return_payment':
                 $this->email->subject($this->lang->line('notification_returntobuyer'));
-                $data['store_link'] = base_url() . "vendor/" . $data['user'];
+                $data['store_link'] = base_url() . $data['user_slug'];
                 $data['msg_link'] = base_url() . "messages/#" . $data['user'];
-                $msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
+                $data['home_link'] = base_url();
+                $msg = $this->parser->parse('emails/return_payment',$data,true);
                 break;
         }
         
@@ -444,11 +445,14 @@ class payment_model extends CI_Model
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
-        } else if($data['status'] === 2){ // if return to buyer
+            $parseData['recipient'] = $row[0]['seller'];
+        } 
+        else if($data['status'] === 2){ // if return to buyer
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
             $parseData['mobile'] = trim($row[0]['buyer_contactno']);
+            $parseData['recipient'] = $row[0]['buyer'];
         }
         
         switch( $row[0]['payment_method_id'] ){
