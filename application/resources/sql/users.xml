@@ -41,7 +41,7 @@
 
 <!-- Used during registration. Checks for both username and slug fields in es_member -->
 <select id="getUsernameOrSlug">
-    SELECT id_member FROM `es_member` WHERE username = :username OR slug = :username;
+    SELECT id_member FROM `es_member` WHERE BINARY username = :username OR slug = :username;
 </select>
 
 <select id="get_member_by_username">
