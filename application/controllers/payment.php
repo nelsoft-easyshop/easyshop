@@ -981,8 +981,13 @@ class Payment extends MY_Controller{
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus,0);
 
             if($postBackCount == "0"){
-                $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
+                // send email to buyer
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice),TRUE,FALSE);  
+            }
+
+            if(strtolower($status) == "s"){ 
+                // send email to seller
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice),FALSE,TRUE);  
             }
 
         }elseif(strtolower($status) == "f" ){
@@ -1139,8 +1144,6 @@ class Payment extends MY_Controller{
             }
 
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,0,0);
-
-            $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
 
         }else{
@@ -1259,7 +1262,7 @@ class Payment extends MY_Controller{
      *   'order_id' => Transaction Number
      *   'invoice_no' => Invoice number)
      */
-    function sendNotification($data) 
+    function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
@@ -1297,72 +1300,75 @@ class Payment extends MY_Controller{
                 break;
         }
 
-        //Send email to buyer
-        $buyerEmail = $transactionData['buyer_email'];
-        $buyerData = $transactionData;
-        unset($buyerData['seller']);
-        unset($buyerData['buyer_email']);
-
-        // 3 tries to send Email. Quit if success or 3 failed tries met
-        $emailcounter = 0;
-        do{
-            $buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
-            $emailcounter++;
-        }while(!$buyerEmailResult && $emailcounter<3);
-
- 
-        //Send text msg to buyer if mobile provided
-        $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
-        if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
-           $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
-           $buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
-        }
-
-        #Send message via easyshop_messaging to buyer
-        if($this->user_model->getUserById($sender)){    
-            $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
-        }
-
-
-        //Send email to seller of each product - once per seller
-        $sellerData = array(
-            'id_order' => $transactionData['id_order'],
-            'dateadded' => $transactionData['dateadded'],
-            'buyer_name' => $transactionData['buyer_name'],
-            'invoice_no' => $transactionData['invoice_no'],
-            'payment_msg_seller' => $transactionData['payment_msg_seller'],
-            'payment_method_name' => $transactionData['payment_method_name']
-        );
-
- 
-        foreach($transactionData['seller'] as $seller_id => $seller){
-            $sellerEmail = $seller['email'];
-            $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
-            $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
-            $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
-
-            #Send message via easyshop_messaging to seller
-            if($this->user_model->getUserById($sender)){        
-                $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
-            }
-
+        if($buyerFlag){
+            //Send email to buyer
+            $buyerEmail = $transactionData['buyer_email'];
+            $buyerData = $transactionData;
+            unset($buyerData['seller']);
+            unset($buyerData['buyer_email']);
 
             // 3 tries to send Email. Quit if success or 3 failed tries met
             $emailcounter = 0;
             do{
-                $sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+                $buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
                 $emailcounter++;
-            }while(!$sellerEmailResult && $emailcounter<3);
+            }while(!$buyerEmailResult && $emailcounter<3);
 
-
-            //Send text msg to seller if mobile provided
-            $sellerMobile = ltrim($seller['seller_contactno'],'0');
-            if( is_numeric($sellerMobile) && $sellerMobile != 0 ){
-                $sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
-                $sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+     
+            //Send text msg to buyer if mobile provided
+            $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
+            if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
+               $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+               $buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
             }
 
-        }//close foreach seller loop
+            #Send message via easyshop_messaging to buyer
+            if($this->user_model->getUserById($sender)){    
+                $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
+            }
+        }
+
+        if($sellerFlag){
+            //Send email to seller of each product - once per seller
+            $sellerData = array(
+                'id_order' => $transactionData['id_order'],
+                'dateadded' => $transactionData['dateadded'],
+                'buyer_name' => $transactionData['buyer_name'],
+                'invoice_no' => $transactionData['invoice_no'],
+                'payment_msg_seller' => $transactionData['payment_msg_seller'],
+                'payment_method_name' => $transactionData['payment_method_name']
+            );
+
+     
+            foreach($transactionData['seller'] as $seller_id => $seller){
+                $sellerEmail = $seller['email'];
+                $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
+                $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
+                $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
+
+                #Send message via easyshop_messaging to seller
+                if($this->user_model->getUserById($sender)){        
+                    $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
+                }
+
+
+                // 3 tries to send Email. Quit if success or 3 failed tries met
+                $emailcounter = 0;
+                do{
+                    $sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+                    $emailcounter++;
+                }while(!$sellerEmailResult && $emailcounter<3);
+
+
+                //Send text msg to seller if mobile provided
+                $sellerMobile = ltrim($seller['seller_contactno'],'0');
+                if( is_numeric($sellerMobile) && $sellerMobile != 0 ){
+                    $sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
+                    $sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+                }
+
+            }//close foreach seller loop
+        }
     }
 
     /*
