@@ -221,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div  class="sticky-nav-logo-con">
                                 <div class="sticky-nav-logo">
                                     <a href="">
-                                        <img src="<?=base_url()?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                                        <img src="/assets/images/img-sticky-logo.png" alt="Easyshop Logo">
                                     </a>
                                 </div>
                             </div>
@@ -279,7 +279,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <a href="javascript:void(0)">TOP PRODUCTS</a>
                                                 <ul class="nav-2nd-level">
                                                     <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
-                                                        <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
+                                                        <?php if($topProduct): ?>
+                                                            <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
+                                                        <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </ul>
                                             </li>
@@ -287,14 +289,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <a href="#">TOP SELLERS</a>
                                                 <ul class="nav-2nd-level top-seller-list">
                                                     <li>
-                                                        <a href="">
-                                                            <div class="top-seller-profile-photo">
-                                                                <img src="assets/images/clothes-closet.jpg" alt="seller profile photo">
-                                                            </div>
-                                                            <div class="top-seller-name">
-                                                                Lorem Ipsum
-                                                            </div>
-                                                        </a>
+                                                        <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
+                                                            <?php if($topSeller['details']): ?>
+                                                                <a href="<?php echo $topSeller['details']->getSlug() ?>">
+                                                                    <div class="top-seller-profile-photo">
+                                                                        <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
+                                                                    </div>
+                                                                    <div class="top-seller-name">
+                                                                        <?php $storeName = $topSeller['details']->getStoreName(); ?>
+                                                                        <?php echo html_escape(($storeName && strlen(trim($storeName)) > 0) ? $storeName : $topSeller['details']->getUsername()); ?>
+                                                                    </div>
+
+                                                                </a>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                        
                                                     </li>                                                    
                                                 </ul>
                                             </li>
