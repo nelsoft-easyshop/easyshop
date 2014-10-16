@@ -207,67 +207,47 @@ class Register extends MY_Controller
         }
     } 
     
-    /**
-     * Subscribe to the newsletter
-     * 
-     */
-    public function subscribe()
-    {
-        if($this->input->post('subscribe_btn') && $this->form_validation->run('subscription_form')){
-            $this->load->model('register_model');
-            $data['email'] = $this->input->post('subscribe_email');
-            $result = $this->register_model->subscribe($data['email']);
-            // Send notification email to user 
-            if($result){
-                $this->register_model->sendNotification($data, 'subscribe');
-                $data['title'] = 'Successful Subscription | Easyshop.ph';
-                $data['content'] = 'You have successfully Subscribed!';
-                $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
-                $this->load->view('pages/user/register_subscribe_success', $data);
-            }else{
-                redirect('home','refresh');
-            }
-        }else{
-            redirect('home','refresh');
-        }
 
-    }
-    
-    
-    public function newSubscribe()
+    public function subscribe()
     {
         $em = $this->serviceContainer['entity_manager'];
         $rules = $this->serviceContainer['form_validation']->getRules('subscribe')['email'];
         $formFactory = $this->serviceContainer['form_factory'];
-        $request = $this->serviceContainer['http_request'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];       
 
-        $form = $formFactory->createBuilder()
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                             ->setMethod('POST')
                             ->add('email', 'text', array('required' => false, 'label' => false, 'constraints' => $rules))
                             ->getForm();
 
-        $form->handleRequest($request);
+        $form->submit([ 'email' => $this->input->post('email')]);
+
 
         if ($form->isValid()) {
+  
             $formData = $form->getData();
-            if(!$em->getRepository('Easyshop\Entities\EsSubscribe')->findBy(['email' => $formData['email']])){
+            if(!$em->getRepository('EasyShop\Entities\EsSubscribe')->findBy(['email' => $formData['email']])){
                 $subscriber = new EasyShop\Entities\EsSubscribe();
                 $subscriber->setEmail($formData['email']);
                 $subscriber->setDatecreated(date_create(date("Y-m-d H:i:s")));
                 $em->persist($subscriber);
                 $em->flush();
+                
+                $this->register_model->sendNotification($data, 'subscribe');
+                
                 $data['content'] = 'You have successfully Subscribed!';
             }
             else{
                 $data['content'] = 'You are already subscribed to Easyshop.ph.';
             }
-
             $data['title'] = 'Successful Subscription | Easyshop.ph';
             $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
             $this->load->view('pages/user/register_subscribe_success', $data);
-            exit();
         }
-        redirect('home','refresh');
+        else{
+            redirect('/','refresh');
+        }
+       
     }
     
     /**
