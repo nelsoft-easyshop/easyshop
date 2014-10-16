@@ -179,7 +179,7 @@ class SocialMediaManager
         $existingMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                         ->findOneBy(['username' => $username]);
         if($existingMember){
-            $username = $this->stringUtility->cleanString(strtolower($fullname));
+            $username = '';
         }
 
         $member = new EsMember();

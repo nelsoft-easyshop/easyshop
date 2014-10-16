@@ -14,6 +14,7 @@ class SocialMediaController extends MY_Controller
         $this->load->library('session');
         $this->load->config('oauth', TRUE);
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
+        $this->entityManager = $this->serviceContainer['entity_manager'];
     }
     /**
      * Register Facebook account to easyshop
@@ -43,8 +44,13 @@ class SocialMediaController extends MY_Controller
             else {
                 $response = $validateFacebookData;
             }
-            $this->login($response);
-            redirect('/', 'refresh');
+            if ($response->getUsername()) {
+                $this->login($response);
+                redirect('/', 'refresh');
+            }
+            else {
+                redirect('/SocialMediaController/register?id=' . $response->getIdMember(), 'refresh');
+            }
         }
         
         redirect('/login', 'refresh');
@@ -133,5 +139,10 @@ class SocialMediaController extends MY_Controller
         $em->flush();
     }
 
+    public function register()
+    {
+        $data['member'] = $this->entityManager->find('EasyShop\Entities\EsMember', ['idMember' => $this->input->get('id')]);
+        $this->load->view('pages/user/SocialMediaRegistration', $data);
+    }
 
 }
