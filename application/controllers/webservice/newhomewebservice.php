@@ -58,11 +58,134 @@ class NewHomeWebService extends MY_Controller
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
         $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
         if($remove == true) {
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output($this->json);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);
         }            
     }
+
+    /**
+     *  Method that handles add,edit,delete for topSellers node 
+     *  @return JSON
+     */
+    public function setTopSellers()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->menu->topSellers->seller[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    } 
+
+    /**
+     *  Method that handles add for topSellers node 
+     *  @return JSON
+     */
+    public function addTopSellers()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addTopSellers",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
+     *  Method that handles add for topProducts node 
+     *  @return JSON
+     */
+    public function addTopProducts()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+    /**
+     *  Method that handles add,edit,delete for topProducts node 
+     *  @return JSON
+     */
+    public function setTopProducts()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->menu->topProducts->product[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }      
+
+
+    /**
+     *  Method that handles add for newArrival node 
+     *  @return JSON
+     */
+    public function addNewArrival()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $target = $this->input->get("target");
+        $string = $this->xmlCmsService->getString("newArrivals",$value, "", "", $target); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/newArrivals/arrival[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
+     *  Method that handles add,edit,delete for newArrival node 
+     *  @return JSON
+     */
+    public function setNewArrival()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+        $target = $this->input->get("target");        
+
+        $map->menu->newArrivals->arrival[$index]->text = $value;
+        $map->menu->newArrivals->arrival[$index]->target = $target;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }     
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
