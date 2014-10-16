@@ -54,58 +54,58 @@
                                 </p>
                                 <table style="font-size: 14px;">
                                     <tr>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left"  style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Transaction Number: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px !important; width:20%;">
                                             {invoice_no}
                                         </td>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             State/Region: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {stateregion}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Sold To: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {buyer_name} 
                                         </td>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             City: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {city}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Date: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {dateadded}
                                         </td>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Street Address: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {address}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Contact Number: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {buyer_contactno}
                                         </td>
-                                        <td style="font-weight:bold; padding-bottom:15px !important; width:20%;">
+                                        <td align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             Telephone: 
                                         </td>
-                                        <td style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
+                                        <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
                                             {buyer_telephone}
                                         </td>
                                     </tr>
@@ -119,7 +119,7 @@
                                     <tr>
                                         <td style="padding: 10px; vertical-align: top; width:50%">
                                         
-                                        <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
+                                        <div style='overflow-y:scroll; overflow: scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                             {products}
                                             
                                             <table width="100%" style="border-collapse: collapse; font-size: 12px;">
@@ -236,11 +236,11 @@
             <div style="background: #3c475c; width: 100%; min-height: 100px; border-width:0px 0px 5px 0px; border-style:solid; border-color:#f18200; padding-top: 15px; padding-bottom: 15px;">
                 <div style="min-height: 50px;">
                     <center>
-                        <table>
+                        <table width="100%">
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="float: right, display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
