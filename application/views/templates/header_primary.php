@@ -264,34 +264,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </li>
                                             
                                             <li class="mobile-menu-nav-hide">
-                                                <a href="#">NEW ARRIVALS</a>
+                                                <a href="javascript:void(0)">NEW ARRIVALS</a>
                                                 <ul class="nav-2nd-level">
-                                                    <li><a href="#">Male</a></li>
-                                                    <li><a href="#">Female</a></li>
-                                                    <li><a href="c#">Gadgets</a>
-                                                        <ul class="nav-3rd-level">
-                                                            <li><a href="#">Camera</a></li>
-                                                            <li><a href="#">Phone</a></li>
-                                                            <li><a href="#">Computer</a></li>
-                                                            <li><a href="#">Accessories</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="#">Children</a></li>
-                                                    <li><a href="#">Toys</a></li>
-                                                    <li><a href="#">Auto Supplies</a></li>
-                                                    <li><a href="#">Food &amp; Beverages</a></li>
-                                                    <li><a href="#">Beers</a></li>
+                                                    <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
+
+                                                        <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">TOP PRODUCTS</a>
+                                            <li class="mobile-menu-nav-hide">
+                                                <a href="javascript:void(0)">TOP PRODUCTS</a>
+                                                <ul class="nav-2nd-level">
+                                                    <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
+                                                        <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
+                                                    <?php endforeach; ?>
+                                                </ul>
                                             </li>
                                             <li class="mobile-menu-nav-hide"><a href="#">TOP SELLERS</a></li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">EASY TREATS</a>
-                                                <ul class="nav-2nd-level">
-                                                    <li><a href="#">Hot Deals</a></li>
-                                                </ul>
+                                            <li class="mobile-menu-nav-hide"><a href="/deals">EASY TREATS</a>
                                             </li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">EASY DEALS</a></li>
                                         </ul>
                                         
                                         <div class="sticky-search-cart-wrapper">
