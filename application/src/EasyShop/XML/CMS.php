@@ -676,11 +676,20 @@ $string = '<typeNode>
         
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
         $homePageData['menu']['topProducts']  = array();
+        $homePageData['menu']['topSellers']  = array();
+        
         foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $productSlug]);
             array_push($homePageData['menu']['topProducts'], $product);
         }
+        
+        foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
+            $seller = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy(['slug' => $sellerSlug]);
+            array_push($homePageData['menu']['topSellers'], $seller);
+        }
+        
         
         //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {

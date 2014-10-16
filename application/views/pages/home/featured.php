@@ -1,5 +1,5 @@
 <div class="row mo">
-    <div class="row" style="background: url('/assets/images/<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
+    <div class="row" style="background: url('<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
             <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
             <a class="next"><i class="fa fa-angle-right fa-next-slide"></i></a>
@@ -41,7 +41,7 @@
                                     <span class="pull-right">
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                               <img src="/assets/images/products/<?=$homeContent['seller']['logo']?>"/>
+                                               <img src="<?=$homeContent['seller']['logo']?>"/>
                                             </div>
                                         </div>
                                     </span>
@@ -59,7 +59,7 @@
                 <center>
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
-                       <img src="/assets/images/products/<?=$homeContent['seller']['logo']?>"/>
+                       <img src="<?=$homeContent['seller']['logo']?>"/>
                     </div>
                 </div>
                 </center>
