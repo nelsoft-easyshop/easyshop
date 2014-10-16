@@ -14,6 +14,13 @@ src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
 font-weight: bold;
 }
 
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
+font-weight: 900;
+}
+
 /*** global style ***/
 html, body{
     font-family: 'Helvetica', Arial, Calibri;
@@ -620,6 +627,20 @@ section {
 .vendor-nav li a.vendor-nav-active {
     color: #fe893a;
     border-bottom: 3px solid #fe893a;
+}
+
+.followers-circle{
+    background: #fe893a;
+    position: absolute;
+    color: #ffffff;
+    margin-top: -16px;
+    margin-left: 37px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size:12px;
+    text-align: center;
+    padding-top: 5px;
 }
 
 .fixed-vendor-content {
