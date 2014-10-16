@@ -257,7 +257,7 @@
                 },
                 errorElement: "span",
                 errorPlacement: function(error, element) {
-                        error.addClass('red');
+                        error.addClass('review-error');
                         error.appendTo(element.parent());
                 },
                 submitHandler: function(form) {

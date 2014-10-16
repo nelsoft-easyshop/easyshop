@@ -124,10 +124,17 @@ else {
 
     #PAYMENT CASH ON DELIVERY
     $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #UNIVERSAL PAYMENT
-    $route['(?i)pay/pay'] = 'payment/pay';  
+    $route['(?i)pay/pay'] = 'payment/pay';
+
+    #RETURN PAYMENT DRAGON PAY (GATEWAY)
+    $route['(?i)pay/returnDragonPay'] = 'payment/returnDragonPay';  # la roberto
+    $route['(?i)pay/postBackDragonPay'] = 'payment/postBackDragonPay';  # la roberto
+    
     #PAYMENT DIRECT BANK DEPOSIT
     $route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #PAYMENT PAYPAL
     $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
     $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez

@@ -103,7 +103,7 @@ class PaymentService
      *
      * @var mixed
      */
-    private $lockPaymentMethods = ['Dragonpay', 'PesoPay'];
+    private $lockPaymentMethods = ['DragonPay', 'PesoPay'];
 
     /**
      * Gateway path
@@ -598,19 +598,35 @@ class PaymentService
         // Initialize gateways
         $this->initializeGateways($paymentMethods);
 
-        /* PUT PAYMENT GATEWAY PAY HERE*/
+        // Execute payment gateway pay method
         $returnValue = $this->primaryGateway->pay($validatedCart, $memberId, $this);
 
         return $returnValue;
     }
 
-    public function postBack($paymentMethods, $validatedCart, $memberId)
+    public function postBack($paymentMethods, $validatedCart, $memberId, $params=[])
     {
         // Initialize gateways
         $this->initializeGateways($paymentMethods);
 
         // Execute payment gateway postback method
-        $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this);
+        if($validatedCart === null && $memberId === null){
+            $returnValue = $this->primaryGateway->postBackMethod($this, $params);
+        }
+        else{
+            $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this, $params);
+        }
+
+        return $returnValue;
+    }
+
+    public function returnMethod($paymentMethods, $params=[])
+    {
+        // Initialize gateways
+        $this->initializeGateways($paymentMethods);
+
+        // Execute payment gateway return method
+        $returnValue = $this->primaryGateway->returnMethod($params);
 
         return $returnValue;
     }
