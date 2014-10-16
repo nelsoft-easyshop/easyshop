@@ -673,7 +673,15 @@ $string = '<typeNode>
                 array_push($homePageData['slider'][$idx]['image'], $temporary);
             }
         }
-
+        
+        $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
+        $homePageData['menu']['topProducts']  = array();
+        foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => $productSlug]);
+            array_push($homePageData['menu']['topProducts'], $product);
+        }
+        
         //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')

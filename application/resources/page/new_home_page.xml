@@ -1,6 +1,35 @@
 <?xml version="1.0"?>
 <map>
     
+    <menu>
+        <newArrivals>
+            <arrival>
+                <text>Male</text>
+                <target>/</target>
+            </arrival>
+           
+             <arrival>
+                <text>Female</text>
+                <target>/</target>
+            </arrival>
+        </newArrivals>
+        
+        <topProducts>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+        </topProducts>
+        
+        <topSellers>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+        </topSellers>
+        
+    </menu>
+    
     <categoryNavigation>
         
         <category>
