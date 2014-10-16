@@ -34,6 +34,10 @@ class CMS
         </productPanel>            
     </categorySection>'; 
         }   
+        if($nodeName == "otherCategories") {
+             $string = '
+            <categorySlug>'.$value.'</categorySlug>';       
+         }           
 
         if($nodeName == "subCategorySection") {
              $string = '
@@ -236,7 +240,7 @@ $string = '<typeNode>
             else {
                     return false;
             }
-        }
+        }      
 
         else if($nodeName == "categorySectionPanel"){
             $referred = "/map/categorySection[".$index."]"; 
@@ -354,6 +358,20 @@ $string = '<typeNode>
                     return false;
             }
         }
+        else if($nodeName == "otherCategories") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//otherCategories/categorySlug[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        }        
         else {
             $xml = new \SimpleXMLElement(file_get_contents($file) );            
             $result = current($xml->xpath( "//category[$index]/sub/categorySubSlug[$subIndex]" ));
