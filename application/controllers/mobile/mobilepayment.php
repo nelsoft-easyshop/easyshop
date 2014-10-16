@@ -74,10 +74,17 @@ class mobilePayment extends MY_Controller
      */
     public function doPaymentReview()
     { 
+        // Load controller
+        $this->paymentController = $this->loadController('payment');
+
+        // update cart
         $mobileCartContents = json_decode($this->input->post('cartData'));
         $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
         $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
 
+        // refresh member object to get update cart content
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        
         $cartData = unserialize($this->member->getUserdata()); 
         $formattedCartContents = array();
         $canContinue = false;
@@ -86,7 +93,6 @@ class mobilePayment extends MY_Controller
 
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
-            $this->paymentController = $this->loadController('payment');
             $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
