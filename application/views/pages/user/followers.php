@@ -13,7 +13,7 @@
                         <table width="100%">
                             <tr>
                                 <td class="td-vendor-img">
-                                   <img src="/assets/images/img_profile_pic.jpg" class="vendor-img"/>
+                                   <a href="#"><img src="/assets/images/img_profile_pic.jpg" class="vendor-img"/></a>
                                 </td>
                                 <td class="td-vendor-details">
                                     <a href="#">
@@ -31,7 +31,7 @@
                             </tr>
                             <tr>
                                 <td class="td-vendor-img">
-                                   <img src="/assets/images/img_profile_pic_2.jpg" class="vendor-img"/>
+                                   <a href="#"><img src="/assets/images/img_profile_pic_2.jpg" class="vendor-img"/></a>
                                 </td>
                                 <td class="td-vendor-details">
                                     <a href="#">
@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <td class="td-vendor-img">
-                                   <img src="/assets/images/img_profile_pic_3.jpg" class="vendor-img"/>
+                                   <a href="#"><img src="/assets/images/img_profile_pic_3.jpg" class="vendor-img"/></a>
                                 </td>
                                 <td class="td-vendor-details">
                                     <a href="#">
