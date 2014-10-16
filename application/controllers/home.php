@@ -455,6 +455,7 @@ class Home extends MY_Controller
         $pageOffset = 0;
         $followers = $EsVendorSubscribe->getFollowers($memberId);
         foreach ($followers as $key => $value) {
+          // $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
             // echo $value->getMember()->getUsername();
         } 
 

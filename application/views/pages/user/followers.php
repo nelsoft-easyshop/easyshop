@@ -101,6 +101,16 @@
                                                     <span class="glyphicon glyphicon-plus-sign"></span>Follow
                                                 </span>
                                             </div>
+
+<!--                                             <div class="col-xs-5 col-follow-button" align="right">
+                                                <span class="follow-btn follow-right btn btn-default-following" id="following">
+                                                    <i class="fa fa-check"></i>Following
+                                                </span>
+                                                <span class="follow-btn follow-right btn btn-default-following" id="unfollow">
+                                                    <i class="fa fa-minus-circle"></i> Unfollow
+                                                </span>
+                                            </div> -->
+
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12">
@@ -137,3 +147,17 @@
         </div>
     </div>
 </section>
+
+                                                           <script>
+                                                $( "#following" ).mouseenter(function() {
+                                                  $( "#following" ).css("display", "none");
+                                                  $( "#unfollow" ).css("display", "block");
+                                                });
+                                                
+                                                $( "#unfollow" ).mouseout(function() {
+                                                  $( "#following" ).css("display", "block");
+                                                  $( "#unfollow" ).css("display", "none");
+                                                });
+                                                
+                                                
+                                            </script>
