@@ -48,7 +48,8 @@ class Product extends MY_Controller {
             unset($productImages[$key]['path']);
             unset($productImages[$key]['file']);
             unset($productImages[$key]['id_product_image']);
-            $newProductImageArray[$value['id_product_image']] = $productImages[$key];
+            $productImages[$key]['id'] = $value['id_product_image'];
+            $newProductImageArray[] = $productImages[$key];
         }
 
         foreach ($productAttributes as $key => $productOption) {
@@ -59,6 +60,7 @@ class Product extends MY_Controller {
                 $newKey = $type.'_'.$productAttributes[$key][$i]['value_id']; 
                 $newArrayOption[$newKey] = $productOption[$i];
                 $newArrayOption[$newKey]['name'] = $key; 
+                $newArrayOption[$newKey]['id'] = $newKey; 
             }
 
             foreach ($newArrayOption as $key => $value) {
@@ -86,12 +88,18 @@ class Product extends MY_Controller {
             }
         }
 
+        $productSpecificationNew = [];
+        foreach ($productSpecification as $key => $value) {
+            $productSpecificationNew[] = $value;
+        }
+        
         foreach ($productCombinationAttributes as $key => $value) {
-             foreach ($productCombinationAttributes[$key] as $key2 => $value2) {
-                    $complete[$key2] = $value2; 
-             }
+            foreach ($productCombinationAttributes[$key] as $key2 => $value2) {
+                $complete[] = $value2; 
+            }
         }
 
+        $productQuantityNew = [];
         foreach ($productQuantity as $key => $valuex) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
             unset($productQuantity[$key]['attr_name']);
@@ -104,8 +112,10 @@ class Product extends MY_Controller {
 
             unset($productQuantity[$key]['product_attribute_ids']);
             $productQuantity[$key]['combinationId'] = $newCombinationKey;
-        }  
-
+            $productQuantity[$key]['id'] = $key;
+            $productQuantityNew[] = $productQuantity[$key];
+        }
+ 
         $productDetails = array(
             'name' => $productRow['product_name'],
             'description' => $productRow['description'],
@@ -139,35 +149,6 @@ class Product extends MY_Controller {
         $paymentMethodNoKey = array();
         foreach ($paymentMethodArray as $keyPm => $valuePm) {
             array_push($paymentMethodNoKey,$valuePm);
-        }
-
-        $data = array ( 
-            'attr' => $this->product_model->getPrdShippingAttr($id), 
-            'shipping_summary' => $this->product_model->getShippingSummary($id)  
-            );
-
-        $jsonFdata = array();
-        if($data['shipping_summary']['has_shippingsummary']){
-            if($data['attr']['has_attr'] === 1){
-                $i = 0;
-                foreach($data['attr']['attributes'] as $attrk=>$attrarr){
-                    if( isset($data['shipping_summary'][$attrk]) ){ 
-                        foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
-                            $jsonFdata[$attrk][$data['shipping_summary']['location'][$lockey]] = $price;
-                        }
-                        $i++;
-                    }
-                }
-            }
-            else{ 
-                foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
-                    $jsonFdata[$data['attr']['product_item_id']][$data['shipping_summary']['location'][$lockey]] = $price;
-                }
-            }
-        }
-
-        foreach ($jsonFdata as $key => $value) {
-            $productQuantity[$key]['location'] = $jsonFdata[$key];
         }
 
         foreach ($relatedItems as $key => $value) {
@@ -204,9 +185,9 @@ class Product extends MY_Controller {
             "productImages" => $newProductImageArray,
             "sellerDetails" => $sellerDetails,
             "productCombinationAttributes" => $complete,
-            "productSpecification" => $productSpecification,
+            "productSpecification" => $productSpecificationNew,
             "paymentMethod" => $paymentMethodNoKey,
-            "productCombinatiobDetails" => $productQuantity,
+            "productCombinatiobDetails" => $productQuantityNew,
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
             ); 

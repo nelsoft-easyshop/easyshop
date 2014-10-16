@@ -57,6 +57,8 @@ class EsProductRepository extends EntityRepository
                     SELECT 
                         (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 10) +
                         (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
+                        (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 10) +
+                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1.5) +
                         (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 15) +
                         (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) 
                          AS weight,
@@ -69,6 +71,7 @@ class EsProductRepository extends EntityRepository
             ORDER BY weight DESC,name ASC
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
+        $query->setParameter('param1', $stringCollection[1]);
         $query->setParameter('param2', $stringCollection[2]);
         $results = $query->execute();  
 

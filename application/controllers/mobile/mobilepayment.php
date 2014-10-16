@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+
 class mobilePayment extends MY_Controller 
 {
     /**
@@ -82,7 +84,7 @@ class mobilePayment extends MY_Controller
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
-            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember());
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
             $cartData = $dataCollection['cartData']; 
             $canContinue = $dataCollection['canContinue'];
             $errorMessage = $dataCollection['errMsg'];
@@ -177,7 +179,147 @@ class mobilePayment extends MY_Controller
             'paymentType' => $paymentType,
         );
 
-        print(json_encode($outputData));
+        print(json_encode($outputData,JSON_PRETTY_PRINT));
     }
 
+    /**
+     * Persist Cash on delivery payment
+     * @return JSON
+     */
+    public function doMobilePayCod()
+    {   
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        $cartData = unserialize($this->member->getUserdata()); 
+        if(!empty($cartData)){
+            unset($cartData['total_items'],$cartData['cart_total']);
+            $this->paymentController = $this->loadController('payment');
+            $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
+            $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
+            $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
+            $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid],$dataProcess);
+        }
+        else{
+            $returnArray = array(
+                    'isSuccess' => false,
+                    'status' => 'f',
+                    'message' => 'You have no item in your cart',
+                );
+        }
+
+        echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Request payment token
+     * @return JSON
+     */
+    public function doPayRequestToken()
+    {
+        $returnUrl = "";
+        $cancelUrl = "";
+        $isSuccess = false;
+        $cartData = unserialize($this->member->getUserdata()); 
+        if(!empty($cartData) && $this->input->post('paymentType')){
+            unset($cartData['total_items'],$cartData['cart_total']);
+
+            if($this->input->post('paymentType') == "paypal"){
+                $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+            }
+            elseif($this->input->post('paymentType') == "dragonpay"){
+                $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
+            }
+
+            $this->paymentController = $this->loadController('payment');
+            $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
+            $urlReturn = ""; 
+
+            if($this->input->post('paymentType') == "paypal"){
+                if($requestData['e'] == 1){
+                    $isSuccess = true;
+                    $urlReturn = $requestData['d'];
+                    $message = "";
+                    $returnUrl = $requestData['returnUrl'];
+                    $cancelUrl = $requestData['cancelUrl'];
+                }
+                else{
+                    $message = $requestData['d'];
+                }
+            }
+            elseif($this->input->post('paymentType') == "dragonpay"){
+                if($requestData['e'] == 1){
+                    $isSuccess = true;
+                    $urlReturn = $requestData['u'];
+                    $message = "";
+                    $returnUrl = base_url().'payment/dragonPayReturn'; 
+                }
+                else{
+                    $message = $requestData['m'];
+                }
+            }
+
+            $returnArray = array(
+                    'isSuccess' => $isSuccess, 
+                    'message' => '',
+                    'url' => $urlReturn,
+                    'returnUrl' => $returnUrl,
+                    'cancelUrl' => $cancelUrl,
+                );
+        }
+        else{
+            $returnArray = array(
+                    'isSuccess' => $isSuccess, 
+                    'message' => 'You have no item in your cart',
+                    'url' => '',
+                    'returnUrl' => $returnUrl,
+                    'cancelUrl' => $cancelUrl,
+                );
+        }
+
+        echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Return url for payment in webview
+     * @return json
+     */
+    public function paypalReturn()
+    {
+        echo json_encode(array('isSuccess' => 1),JSON_PRETTY_PRINT);
+    }
+    /**
+     * Cancel url for payment in webview
+     * @return json
+     */
+    public function paypalCancel()
+    {
+        echo json_encode(array('isSuccess' => 1),JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Persist Payment in paypal
+     * @return json
+     */
+    public function doPaypalPersistPayment()
+    {
+        $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+        $payerId = $this->input->post('PayerID');
+        $token = $this->input->post('token');
+        $cartData = unserialize($this->member->getUserdata()); 
+        if(!empty($cartData)){
+            unset($cartData['total_items'],$cartData['cart_total']);
+            $this->paymentController = $this->loadController('payment');
+            $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
+            $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
+            $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
+        }
+        else{
+            $returnArray = array(
+                    'isSuccess' => false,
+                    'status' => 'f',
+                    'message' => 'You have no item in your cart',
+                );
+        }
+
+        echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
 }

@@ -9,34 +9,38 @@
             <div class="col-xs-9 col-feedback-container">
                 
                
-                <div class="panel-about-seller">
-                    <?php if($isEditable): ?>
-                        <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
-                        <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
-                    <?php endif; ?>
-                    <p class="panel-title-feedback">
-                        About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
-                    </p>
-                    <div class="clear"></div>
-                    <div class="div-about-content">
-
-                        <p>
-                            <pre class="p-about"><?php echo html_escape($member->getStoreDesc()); ?></pre>
+               
+                <?php if($isEditable || strlen(trim($member->getStoreDesc())) > 0 ): ?>
+                
+                    <div class="panel-about-seller">
+                        <?php if($isEditable): ?>
+                            <i class="fa fa-edit fa-edit-about pull-right" rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Edit vendor about content"></i>
+                            <i class="fa fa-ban fa-cancel-about pull-right"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
+                        <?php endif; ?>
+                        <p class="panel-title-feedback">
+                            About <?php echo html_escape( strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $member->getUsername() ); ?>
                         </p>
-                        <div class="div-about-edit-area">
-                            <?php echo form_open('home/doUpdateDescription') ?>
-                                <textarea class="input-lg input-message textarea-about" name='description' maxlength="1024" rows="12" id="description" placeholder="'Say something about your shop...'" data-value="<?php echo html_escape($member->getStoreDesc()); ?>"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
-                                <center>
-                                    <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
-                                </center>
-                                <input type='hidden' name='userId' value="<?php echo $member->getIdMember(); ?>" />
-                            <?php echo form_close(); ?>
-                        </div>
-                        <input type='hidden' id='open-description' value='<?php echo $isEditable && (!$member->getStoreDesc() || strlen($member->getStoreDesc() === 0))  ? 'true' : 'false' ?>'/>
-                    </div>
-                    
-                </div>
+                        <div class="clear"></div>
+                        <div class="div-about-content">
 
+                            <p>
+                                <pre class="p-about"><?php echo html_escape($member->getStoreDesc()); ?></pre>
+                            </p>
+                            <div class="div-about-edit-area">
+                                <?php echo form_open('home/doUpdateDescription') ?>
+                                    <textarea class="input-lg input-message textarea-about" name='description' maxlength="1024" rows="12" id="description" placeholder="'Say something about your shop...'" data-value="<?php echo html_escape($member->getStoreDesc()); ?>"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
+                                    <center>
+                                        <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
+                                    </center>
+                                    <input type='hidden' name='userId' value="<?php echo $member->getIdMember(); ?>" />
+                                <?php echo form_close(); ?>
+                            </div>
+                            <input type='hidden' id='open-description' value='<?php echo $isEditable && (!$member->getStoreDesc() || strlen($member->getStoreDesc() === 0))  ? 'true' : 'false' ?>'/>
+                        </div>
+                        
+                    </div>
+                
+                <?php endif; ?>
             
             
             

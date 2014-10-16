@@ -73,13 +73,15 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = str_replace('"', '', $queryString);
+        $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
         $stringCollection = array();
         $ids = array(); 
 
         if(trim($clearString) != ""){
             $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '+"'.implode('*" +"', $explodedString) .'*"'; 
+            $stringCollection[0] = '+"'.implode('" +"', $explodedString) .'"';
+            $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+            $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
             $stringCollection[2] = '"'.trim($clearString).'"'; 
 
             if(trim($queryString) === ""){

@@ -132,6 +132,8 @@ sub, sup{
     color: #f70000;
     font-weight: 600 !important;
     font-size: 22px;
+    margin-top: 5px;
+    margin-left: 15px;
 }
 
 .col-countdown-sale > .dsc_header_txt{
@@ -514,6 +516,14 @@ height: 100px  !important;
 width: 160px !important;
 height: 30px !important;
 line-height: 30px !important;
+}
+
+.review-error {
+    color: #ff3600;
+    display: block;
+    font-size: 11px;
+    padding: 4px 0;
+    text-align: left;
 }
 
 .modal-container{

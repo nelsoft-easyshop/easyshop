@@ -108,7 +108,8 @@ class cart extends MY_Controller
             }
         }
         $this->cartImplementation->persist($this->member->getIdMember());
-        $this->getCartData();
+        
+        return $this->getCartData();
     }
 
     /**

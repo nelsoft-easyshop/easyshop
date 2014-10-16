@@ -98,6 +98,9 @@ class UserManager
         $this->configLoader = $configLoader;
         $this->hasError = FALSE;
         $this->err = array();
+        $this->formFactory = $formFactory;
+        $this->formValidation = $formValidation;
+        $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
     }
 

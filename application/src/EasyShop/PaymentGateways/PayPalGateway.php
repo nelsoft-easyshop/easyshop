@@ -189,8 +189,10 @@ class PayPalGateway extends AbstractGateway
         $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
                             ->findOneBy(["member" => intval($memberId)]);
 
-        $userPoints->setCreditPoint(intval($pointSpent));
-        $this->em->flush();
+        if($userPoints !== null){
+            $userPoints->setCreditPoint(intval($pointSpent));
+            $this->em->flush();
+        }
 
         $shipping_amt = round(floatval($prepareData['othersumfee']),2);
         $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
@@ -309,7 +311,7 @@ class PayPalGateway extends AbstractGateway
      * Postback function for paypal
      * 
      */
-    public function postBackMethod($validatedCart, $memberId, $paymentService)
+    public function postBackMethod($validatedCart, $memberId, $paymentService, $params=[])
     {
         // Point Gateway
         $pointGateway = $paymentService->getPointGateway();
