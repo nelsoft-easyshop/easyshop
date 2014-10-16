@@ -703,6 +703,8 @@ class Memberpage extends MY_Controller
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
         
+        $em = $this->serviceContainer['entity_manager'];
+
         if( $this->form_validation->run('addShippingComment') ){
             $postData = array(
                 'comment' => $this->input->post('comment'),
@@ -715,9 +717,38 @@ class Memberpage extends MY_Controller
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
 
+            $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
+            $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
+                                      ->findOneBy(["idOrderProduct" => 10 //$postData['order_product']
+                                                 , "seller" => $memberEntity
+                                        ]);
+            $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                        ->findOneBy(["orderProduct" => $orderProductEntity
+                                                    , "member" => $memberEntity
+                                                    ]);
+
+            print(sizeof($orderProductEntity));
+            print(sizeof($memberEntity));
+            print(sizeof($shippingCommentEntity));
+
+            // Verify order details submitted
             $result = $this->payment_model->checkOrderProductBasic($postData);
-            
-            if( count($result) == 1 ){ // insert comment
+
+            exit();
+
+            if( count($result) === 1 ){ // Insert Comment
+                
+                $isSendEmail = FALSE;
+
+                // Check for previous entry
+                /*$orderProductEntity  = $em->findOneBy("EasyShop\Entities\EsOrderProduct", $postData['order_product']);
+                $memberEntity = $em->findOneBy("EasyShop\Entities\EsMember", $postData['member_id']);
+                $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                            ->findOneBy(["orderProduct" => $orderProductEntity
+                                                        , "member" => $memberEntity
+                                                        ]);
+                */
+
                 $r = $this->payment_model->addShippingComment($postData);
                 $serverResponse['result'] = $r ? 'success' : 'fail';
                 $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
