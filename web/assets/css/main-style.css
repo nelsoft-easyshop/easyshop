@@ -148,16 +148,35 @@ section {
     margin-right: 18px;
 }
 
+.vendor-log-in-wrapper {
+    width: 200px;
+    text-align: center;
+}
+
 .vendor-login-con {
     background-color: #4370cc;
     border-radius: 4px;
+    display: table;
     color: #fff;
     font-size: 12px;
     height: 34px;
     line-height: 34px;
+    margin: 0 auto;
+    max-width: 200px;
+    min-width: 125px;
+    padding: 0 10px;
     position: relative;
-    text-align: center;
-    width: 220px;
+    text-align: left;
+    width: 70%;
+}
+
+.vendor-login-con.vendor-out-con {
+    max-width: 230px;
+   width: 100%; 
+}
+
+.vendor-out-con img {
+    margin-right: 5px;
 }
 
 .message-count-con {
@@ -165,7 +184,7 @@ section {
     background-color: #ff613a;
     border-radius: 90px;
     height: 20px;
-    left: 0px;
+    left: -5px;
     line-height: 19px;
     position: absolute;
     text-align: center;
@@ -184,13 +203,22 @@ section {
     text-decoration: none;
 }
 
+.user-login img {
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 5px;
+    margin-right: 5px;
+}
+
 .vendor-login-name {
-    display: inline-block;
+    display: table-cell;
     font-weight: bold;
     height: 34px;
-    margin-right: 15px;
-    max-width: 140px;
+    min-width: 85px;
+    max-width: 145px;
+    padding-right: 15px;
     overflow: hidden;
+    text-align: left;
     text-overflow: ellipsis;
     vertical-align: middle;
 }
@@ -286,6 +314,7 @@ section {
     border-radius: 4px;
     display: table-cell;
     height: 110px;
+    overflow: hidden;
     position: relative;
     text-align: center;
     vertical-align: middle;
@@ -303,8 +332,8 @@ section {
     font-size: 1.5em;
     font-weight: bold;
     height: 24px;
-    line-height: 22px;
     margin-bottom: 2px;
+    margin-top: 31px;
     overflow: hidden;
     padding: 0 20px;
     text-overflow: ellipsis;
@@ -316,7 +345,7 @@ section {
 }
 
 .vendor-profile-btn {
-    margin-top: 39px;
+    margin-top: 34px;
 }
 
 .vendor-profile-btn a,
@@ -324,6 +353,10 @@ section {
     font-weight: bold;
     max-width: 133px;
     width: 47%;
+}
+
+.vendor-profile-btn .subscription_btn {
+    margin-right: 10px;
 }
 
 .vendor-profile-btn a:first-child {
@@ -598,7 +631,7 @@ section {
     border-bottom: 3px solid #fff;
     color: #565656;
     display: block;
-    font-size: 0.95em;
+    font-size: 1em;
     height: 55px;
     line-height: 55px;
     padding: 0 21px;
@@ -686,6 +719,7 @@ section {
 
 .sticky-nav h4 {
     display: inline-block;
+    font-weight: bold;
     height: 22px;
     line-height: 22px;
     margin: 0;
@@ -1387,6 +1421,7 @@ td.td-view.p-view2.color-default{
     color: #989898;
     font-weight: normal;
     font-size: 16px;
+    min-height: 10px;
 }
 .p-list-availability{
     font-size: 13px;
@@ -1426,10 +1461,10 @@ td.td-view.p-view2.color-default{
     background: #ff3e1e;
     padding: 6px 0px;
     text-align: center !important;
-    margin-left:95px !important;
+    margin-left:123px !important;
     margin-top:13px;
     font-size: 12px;
-    width: 70px;
+    width: 42px;
     font-weight:bold;
 }
 .grid-span-discount-pin{
@@ -1441,7 +1476,7 @@ td.td-view.p-view2.color-default{
     margin-left:30px;
     margin-top:10px;
     font-size: 12px;
-    width: 70px;
+    width: 42px;
     font-weight:bold;
     right: 0 !important;
     margin-right: 5px !important;

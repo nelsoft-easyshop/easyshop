@@ -524,6 +524,52 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
+     *  Count Not Custom categorized products
+     *
+     *  @param integer $memberId
+     *  @param array $catId
+     *
+     *  @return integer 
+     */
+    public function countNotCustomCategorizedProducts($memberId, $catId)
+    {
+        $em = $this->_em;
+        $result = array();
+
+        // Generate category IN condition
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        $dql = "
+            SELECT COUNT(p.idProduct)
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0 ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
      *  Get user products that have no assigned custom category
      *  Returns Product IDs ONLY!
      *
@@ -532,11 +578,74 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getNotCustomCategorizedProducts($memberId, $catId)
+    public function getPagedNotCustomCategorizedProducts($memberId, $catId, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC") )
     {
         $em = $this->_em;
         $result = array();
 
+        // Generate category IN condition
+        $catCount = count($catId);
+        $arrCatParam = array();
+        for($i=1;$i<=$catCount;$i++){
+            $arrCatParam[] = ":i" . $i;
+        }
+        $catInCondition = implode(',',$arrCatParam);
+
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
+
+        $dql = "
+            SELECT p
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat IN ( " . $catInCondition . " )
+                AND p.isDelete = 0
+                AND p.isDraft = 0 
+                ORDER BY " . $orderCondition;
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setFirstResult($page)
+                    ->setMaxResults($productLimit);
+
+        for($i=1;$i<=$catCount;$i++){
+            $query->setParameter('i'.$i, $catId[$i-1]);
+        }
+
+        $rawResult = new Paginator($query, $fetchJoinCollection = TRUE);
+
+        foreach( $rawResult as $row ){
+            $result[] = $row->getIdProduct();
+        }
+
+        return $result;
+    }
+
+    /**
+     *  Get user products that have no assigned custom category
+     *  Returns Product IDs ONLY!
+     *
+     *  @param integer $memberId
+     *  @param array $catId
+     *
+     *  @return array
+     */
+    public function getAllNotCustomCategorizedProducts($memberId, $catId){
+        $em = $this->_em;
+        $result = array();
+
+        // Generate category IN condition
         $catCount = count($catId);
         $arrCatParam = array();
         for($i=1;$i<=$catCount;$i++){
@@ -574,7 +683,7 @@ class EsProductRepository extends EntityRepository
 
         return $result;
     }
-    
+
     /**
      * Get popular items by seller or category based on click count
      * @param  $offset   [description]
@@ -583,7 +692,6 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
-
     public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
     {
         $this->em =  $this->_em;
