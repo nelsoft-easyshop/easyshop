@@ -32,7 +32,7 @@
                     Dear {recipient},
                 </p>
                  <p>
-                    <b style="font-weight:bold"><span style="color: #f18200;">{user}</span> has just confirmed to return your payment for the following product: 
+                    <b style="font-weight:bold"><span style="color: #f18200;">{user}</span> has just confirmed receipt of your product:
                  </p>
             </div>
             <div style="margin-bottom: 20px;background-color: #fff;border: 1px solid transparent; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05); box-shadow: 0 1px 1px rgba(0, 0, 0, .05); border-color: #bce8f1; border-radius: 0px !important;">
@@ -102,28 +102,12 @@
                                                         Php {total}
                                                     </td>
                                                 </tr>
-                                                <tr align="right" style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Easyshop Charge :
-                                                    </td>
-                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php {easyshop_charge}
-                                                    </td>
-                                                </tr>
                                                 <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
                                                     <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       {payment_method_name} Charge :
+                                                        Payment Method :
                                                     </td>
                                                      <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php {payment_method_charge}
-                                                    </td>
-                                                </tr>
-                                                <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
-                                                    <td align="right" style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                       Net Amount to be Received :
-                                                    </td>
-                                                     <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
-                                                        Php {net}
+                                                        {payment_method_name}
                                                     </td>
                                                 </tr>
                                                 <tr>
