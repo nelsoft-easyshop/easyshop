@@ -288,14 +288,27 @@ header {
     content: " ";
     position: absolute;
     right: 15px;
+    top: -10px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 10px 10px;
+    border-color: transparent transparent #c5c5c5 transparent;
+    /*-webkit-filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.2));*/
+}
+
+.default-nav-dropdown:after {
+    border-style: inset;
+     -webkit-transform:rotate(360deg);
+    content: " ";
+    position: absolute;
+    right: 15px;
     top: -9px;
     width: 0px;
     height: 0px;
     border-style: solid;
     border-width: 0 10px 10px;
     border-color: transparent transparent #fff transparent;
-    -webkit-filter: drop-shadow(0 -1px 1px rgba(0,0,0,0.2));
-    z-index: -9;
 }
 
 .default-nav-dropdown {
