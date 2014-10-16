@@ -689,8 +689,10 @@ $string = '<typeNode>
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
             $seller['details'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                           ->findOneBy(['slug' => $sellerSlug]);
-            $seller['image'] = $this->userManager->getUserImage($seller['details']->getIdMember());
-            array_push($homePageData['menu']['topSellers'], $seller);
+            if($seller['details']){
+                $seller['image'] = $this->userManager->getUserImage($seller['details']->getIdMember());
+                array_push($homePageData['menu']['topSellers'], $seller);
+            }
         }
         
         //Get Category Navigation
