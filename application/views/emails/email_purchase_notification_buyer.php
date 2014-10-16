@@ -3,7 +3,7 @@
         <div style="padding-right: 15px; padding-left:15px; margin-right: auto; margin-left:auto;">
             <div style="background-color: #013f94;">
                 <center>
-                    <img src="images/landingpage/templates/header-img.png" style="display: block; max-width: 100%; height: auto;">
+                    <img src="header-img.png" style="display: block; max-width: 100%; height: auto;">
                 </center>
             </div>
             <br/>
@@ -80,12 +80,12 @@
                                                             {seller} 
                                                             <span>
                                                                 <a href="{store_link}{seller_slug}" style="text-decoration: none;">
-                                                                    <img src="images/appbar.home.png" width="15" height="15"/>
+                                                                    <img src="appbar.home.png" width="15" height="15"/>
                                                                 </a>
                                                             </span>
                                                             <span>
                                                                 <a href="{store_link}{seller_slug}/contact" style="text-decoration: none;">
-                                                                    <img src="images/appbar.message.png" width="15" height="15"/>
+                                                                    <img src="appbar.message.png" width="15" height="15"/>
                                                                 </a>
                                                             </span>
                                                             
@@ -172,12 +172,12 @@
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
                                     <a href="https://twitter.com/EasyShopPH">
-                                        <img src="images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>

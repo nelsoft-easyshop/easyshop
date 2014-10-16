@@ -1321,26 +1321,23 @@ class Payment extends MY_Controller{
             unset($buyerData['buyer_email']);
 
             # Additional buyerData for email template
-            $buyerData['store_link'] = base_url() . "vendor/"; #user appended on template
+            $buyerData['store_link'] = base_url() ; #user appended on template
             $buyerData['msg_link'] = base_url() . "messages/#"; #user appended on template
-            $buyerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$buyerData,true);
+            $buyerMsg = $this->parser->parse('emails/email_purchase_notification_buyer',$buyerData,true);
             $buyerSubject = $this->lang->line('notification_subject_buyer');
+            $buyerSmsMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
 
             $emailService->setRecipient($buyerEmail)
                          ->setSubject($buyerSubject)
-                         ->setMsg($buyerMsg, $imageArray)
+                         ->setMessage($buyerMsg, $imageArray)
                          ->sendMail();
 
-            $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
-            if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
-                $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
-                $smsService->setRecipient($buyerMobile)
-                           ->setMsg($buyerMsg)
-                           ->sendSms();
-            }
-
+            $smsService->setMobile($buyerData['buyer_contactno'])
+                       ->setMessage($buyerSmsMsg)
+                       ->sendSms();
+            
             #Send message via easyshop_messaging to buyer
-            if($this->user_model->getUserById($sender)){    
+            if($this->user_model->getUserById($sender)){
                 $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
             }
         }
@@ -1364,23 +1361,19 @@ class Payment extends MY_Controller{
 
                 # Additional sellerData for email template
                 $sellerSubject = $this->lang->line('notification_subject_seller');
-                $sellerData['store_link'] = base_url() . "vendor/" . $sellerData['buyer_name'];
+                $sellerData['store_link'] = base_url() . $sellerData['buyer_slug'];
                 $sellerData['msg_link'] = base_url() . "messages/#" . $sellerData['buyer_name'];
                 $sellerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$sellerData,true);
+                $sellerSmsMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
 
                 $emailService->setRecipient($sellerEmail)
                              ->setSubject($sellerSubject)
-                             ->setMsg($sellerMsg, $imageArray)
+                             ->setMessage($sellerMsg, $imageArray)
                              ->sendMail();
-
-                //Send text msg to seller if mobile provided
-                $sellerMobile = ltrim($seller['seller_contactno'],'0');
-                if( is_numeric($sellerMobile) && $sellerMobile != 0 ){
-                    $sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
-                    $smsService->setRecipient($sellerMobile)
-                               ->setMsg($sellerMsg)
-                               ->sendSms();
-                }
+                
+                $smsService->setMobile($seller['seller_contactno'])
+                           ->setMessage($sellerSmsMsg)
+                           ->sendSms();
 
                 #Send message via easyshop_messaging to seller
                 if($this->user_model->getUserById($sender)){

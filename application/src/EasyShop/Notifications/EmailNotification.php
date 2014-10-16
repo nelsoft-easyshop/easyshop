@@ -135,7 +135,7 @@ class EmailNotification
             ->setBody($msg, 'text/html');
 
         $successCount = $this->mailer->send($this->message, $failedRecipients);
-
+        
         return $successCount;
     }
 
