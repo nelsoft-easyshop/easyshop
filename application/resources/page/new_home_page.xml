@@ -4,10 +4,15 @@
     
     <menu>
         <newArrivals>
-            <text>Male</text>
-            <text>Female</text>
-            <text>Gadgets</text>
-            <text>Children</text>
+            <arrival>
+                <text>Male</text>
+                <target>/</target>
+            </arrival>
+           
+             <arrival>
+                <text>Female</text>
+                <target>/</target>
+            </arrival>
         </newArrivals>
         
         <topProducts>
