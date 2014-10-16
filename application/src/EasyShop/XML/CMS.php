@@ -732,6 +732,7 @@ $string = '<typeNode>
                     $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
                     $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
                 }
+            }
         }
         $homePageData['seller'] = $featuredVendor;
 
