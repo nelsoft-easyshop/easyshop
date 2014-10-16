@@ -219,7 +219,7 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXMLForCategoryNavigation($file,$nodeName,$index, $subIndex) 
+    public function removeXmlNode($file,$nodeName,$index, $subIndex) 
     {
 
         if($nodeName == "mainSliderSection"){
