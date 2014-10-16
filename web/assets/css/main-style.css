@@ -1624,7 +1624,9 @@ td.td-view.p-view2.color-default{
 }
 
 .footer-primary input[type="text"] {
+    height: 35px;
     max-width: 373px;
+    vertical-align: middle;
     width: 63%;
 }
 
@@ -1635,7 +1637,17 @@ td.td-view.p-view2.color-default{
 
 .social-media-wrapper li {
     float: left;
-    margin-right: 16px;
+    max-width: 79px;
+    width: 25%;
+}
+
+.social-media-wrapper li:last-child {
+    margin-right: 0;
+}
+
+.social-media-wrapper img {
+    max-width: 56px;
+    width: 100%;
 }
 
 .footer-bottom-content {
