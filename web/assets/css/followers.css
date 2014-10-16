@@ -65,6 +65,7 @@
 
 .col-follower{
     padding-right: 0px !important;
+    margin-bottom: 15px;
 }
 
 .follower-div{
@@ -72,14 +73,22 @@
     min-height: 200px;
     background: #fff;
     border-radius: 7px;
+    transition: all 0.3s ease;
+}
+
+.follower-div:hover{
+    -webkit-box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
+-moz-box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
+box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
 }
 
 .div-img-cover{
     height: 100px;
     width: 100%;
     border-radius: 7px 7px 0px 0px;
-    padding: 10px 10px;
+    padding: 11px 10px;
     background-size:100%;
+    background: #fff;
 }
 
 .div-follower-details{
@@ -92,15 +101,20 @@
     color: #565656;
     margin: 0px;
     display: block;
-    width: 190px;
+    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: all 0.3s ease !important;
 }
 
+.p-follower-name:hover, .col-xs-7 > a:hover{
+    color: #ff893b;
+    text-decoration: none !important;
+}
+
 .p-follower-location{
-    font-size: 10px;
+    font-size: 12px;
     display: block;
     margin:0px;
     width: 230px;
@@ -118,13 +132,14 @@
     font-size: 13px;
     line-height: 20px;
     margin-top: 10px;
+    font-weight: 900;
 }
 
 .vendor-follower-img{
     width: 80px;
     height: 80px;
-    border-radius: 5px;
-    z-index: 2;
+    border-radius: 4px;
+    z-index: 3;
     position: absolute;
 }
 
@@ -137,3 +152,28 @@
     top: 0;
     z-index: 1;
 }
+
+.cover-overlay{
+    width: 411px;
+    height: 102px;
+    position: absolute;
+    left: 15px;
+    border-radius: 7px 7px 0px 0px;
+    top: 0;
+    background: #000;
+    opacity: 0.4;
+    z-index: 2;
+}
+
+.btn-default-following{
+    border: 2px solid #868686;
+    background-color: #868686;
+    color: #fff;
+}
+
+.btn-default-following:hover{
+    border: 2px solid #4c4c4c;
+    background-color: #4c4c4c;
+    color: #fff;
+}
+
