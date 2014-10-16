@@ -444,12 +444,14 @@ class payment_model extends CI_Model
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
+            $parseData['recipient'] = $row[0]['seller'];
         } 
         else if($data['status'] === 2 || $data['status'] === 3){ // if return to buyer or COD (email to buyer)
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
             $parseData['mobile'] = trim($row[0]['buyer_contactno']);
+            $parseData['recipient'] = $row[0]['buyer'];
         }
         
         switch( (int)$row[0]['payment_method_id'] ){
