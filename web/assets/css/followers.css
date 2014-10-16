@@ -101,11 +101,7 @@ box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
     color: #565656;
     margin: 0px;
     display: block;
-    width: 230px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: all 0.3s ease !important;
+    transition: all 0.3s ease;
 }
 
 .p-follower-name:hover, .col-xs-7 > a:hover{
@@ -176,12 +172,14 @@ box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
     background-color: #4c4c4c;
     color: #fff;
     width: 133px;
-font-weight: bold;
-display: block;
+    font-weight: bold;
+    display: block;
 }
+
 .btn-default-following > i{
     margin-right: 5px;
 }
+
 #unfollow{
     display: none;
 }
