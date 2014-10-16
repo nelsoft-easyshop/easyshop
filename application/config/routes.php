@@ -108,6 +108,8 @@ else {
 
     # USER
     $route['(?i)me'] = 'memberpage'; # janz
+    $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
+    $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio

@@ -7,6 +7,24 @@ $(document).ready(function(){
     $('input.items').each(function(k,v){
         $(this).val($(this).data('value'));
     });
+
+    $(document).on('click','#printTransactions', function(){
+        var url = $(this).data("url");
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function(json) {
+                var originalContents = $(document.body).html();
+                $(document.body).html(json);        
+                window.print();
+                location.reload();
+            },
+            error: function(e) {
+                alert("Action failed, please try again");
+            }
+        });
+    });      
     
     progress_update('');
     handle_fields('');

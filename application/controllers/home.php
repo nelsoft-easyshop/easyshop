@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsMember as EsMember;
+
 class Home extends MY_Controller 
 {
  
@@ -49,8 +51,15 @@ class Home extends MY_Controller
      */
     public function index() 
     {
+        $em = $this->serviceContainer["entity_manager"];
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = array();
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+            array_push($homeContent['slider'], $sliderView);
+        }
+        
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
             'homeContent' => $homeContent,
@@ -60,10 +69,17 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $cart = array();
         $cartSize = 0;
+        $isLoggedIn = false;
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
             $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
             $cartSize = $this->cartImplementation->getSize(TRUE);
+            $data['logged_in'] = true;
+            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                              ->find($memberId);
+            $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
+                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                    : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
         }
         $data['cart_items'] = $cart;
         $data['cart_size'] = $cartSize;

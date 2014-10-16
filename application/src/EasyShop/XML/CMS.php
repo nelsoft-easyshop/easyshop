@@ -641,7 +641,6 @@ $string = '<typeNode>
         $homePageData = array();
         $homePageData['categorySection'] = array(); 
         
-
         if(isset($xmlContent['categorySection']['categorySlug'])){
             $temporary = $xmlContent['categorySection'];
             $xmlContent['categorySection'] = array();
@@ -652,7 +651,6 @@ $string = '<typeNode>
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);
             $sectionData['subHeaders'] = $categorySection['sub'];
-            
             foreach($categorySection['productPanel'] as $idx=>$product){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
@@ -663,7 +661,27 @@ $string = '<typeNode>
         }
         
         $homePageData['adSection'] = $xmlContent['adSection']['ad'];
-
+        $sliderTemplates = $xmlContent['sliderTemplate']['template'];
+        $homePageData['slider'] = $xmlContent['sliderSection']['slide'];
+        foreach($homePageData['slider'] as $idx => $slide){
+            $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
+            $template = 'partials/homesliders/'.$template;
+            $homePageData['slider'][$idx]['template'] = $template;
+            if(isset($homePageData['slider'][$idx]['image']['path'])){
+                $temporary = $homePageData['slider'][$idx]['image'];
+                $homePageData['slider'][$idx]['image'] = array();
+                array_push($homePageData['slider'][$idx]['image'], $temporary);
+            }
+        }
+        
+        $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
+        $homePageData['menu']['topProducts']  = array();
+        foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => $productSlug]);
+            array_push($homePageData['menu']['topProducts'], $product);
+        }
+        
         //Get Category Navigation
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
@@ -681,7 +699,7 @@ $string = '<typeNode>
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
 
-        //Get vendor page details
+        //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];

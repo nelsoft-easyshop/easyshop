@@ -78,44 +78,48 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
-                                        <div class="header-link-login">
-                                            <img src="assets/images/img-login-icon.png" alt="login">
-                                            <a href="/login">login</a>&nbsp;or&nbsp;
-                                            <a href="/register">create an account</a>
-                                        </div>
-                                        
-                                        <!-- <div class="new-user-nav-dropdown">
-                                            <img src="assets/images/img-login-icon.png" alt="login">
-                                            <a href="" class="header-seller-name">Lorem ipsum</a>
-                                            <span class="default-nav-dropdown-arrow">Account Settings</span>
-                                            <ul class="default-nav-dropdown">
-                                                <li>
-                                                    <a href="/me">Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a href="/me?me=pending">On-going Transactions</a>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a href="/me?me=settings">Settings</a>
-                                                </li>
-                                                <li class="nav-dropdown-border pos-rel">
-                                                    <a href="/messages">Messages</a>
-                                                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                    <?=$msgs['unread_msgs'];?>
-                                                    </div>
-                                                    <?php endif;?>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a class="prevent" href="/sell/step1">Sell an item</a>
-                                                </li>
-                                                <li class="nav-dropdown-border">
-                                                    <a class="prevent" href="/login/logout">Logout</a>
-                                                </li>
-                                            </ul>
-                                            <div class="clear"></div>                                            
-                                        </div> -->
-                                            
+                                                                               
+                                        <?php if(isset($logged_in) && $logged_in): ?>
+                                            <div class="new-user-nav-dropdown">
+                                                <div class="login-profile-con">
+                                                    <img src="<?=$user_details->profileImage;?>">
+                                                </div>
+                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                                <ul class="default-nav-dropdown">
+                                                    <li>
+                                                        <a href="/me">Dashboard</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/me?me=pending">On-going Transactions</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a href="/me?me=settings">Settings</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border pos-rel">
+                                                        <a href="/messages">Messages</a>
+                                                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                        <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                        <?=$msgs['unread_msgs'];?>
+                                                        </div>
+                                                        <?php endif;?>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a class="prevent" href="/sell/step1">Sell an item</a>
+                                                    </li>
+                                                    <li class="nav-dropdown-border">
+                                                        <a class="prevent" href="/login/logout">Logout</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clear"></div>                                            
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="header-link-login">
+                                                <img src="assets/images/img-login-icon.png" alt="login">
+                                                <a href="/login">login</a>&nbsp;or&nbsp;
+                                                <a href="/register">create an account</a>
+                                            </div>
+                                        <?php endif; ?>                                           
                                     </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->
@@ -262,40 +266,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </li>
                                             
                                             <li class="mobile-menu-nav-hide">
-                                                <a href="#">NEW ARRIVALS</a>
+                                                <a href="javascript:void(0)">NEW ARRIVALS</a>
                                                 <ul class="nav-2nd-level">
-                                                    <li><a href="#">Male</a></li>
-                                                    <li><a href="#">Female</a></li>
-                                                    <li><a href="c#">Gadgets</a>
-                                                        <ul class="nav-3rd-level">
-                                                            <li><a href="#">Camera</a></li>
-                                                            <li><a href="#">Phone</a></li>
-                                                            <li><a href="#">Computer</a></li>
-                                                            <li><a href="#">Accessories</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="#">Children</a></li>
-                                                    <li><a href="#">Toys</a></li>
-                                                    <li><a href="#">Auto Supplies</a></li>
-                                                    <li><a href="#">Food &amp; Beverages</a></li>
-                                                    <li><a href="#">Beers</a></li>
+                                                    <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
+
+                                                        <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">TOP PRODUCTS</a>
+                                            <li class="mobile-menu-nav-hide">
+                                                <a href="javascript:void(0)">TOP PRODUCTS</a>
+                                                <ul class="nav-2nd-level">
+                                                    <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
+                                                        <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
+                                                    <?php endforeach; ?>
+                                                </ul>
                                             </li>
                                             <li class="mobile-menu-nav-hide"><a href="#">TOP SELLERS</a></li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">EASY TREATS</a>
-                                                <ul class="nav-2nd-level">
-                                                    <li><a href="#">Hot Deals</a></li>
-                                                </ul>
+                                            <li class="mobile-menu-nav-hide"><a href="/deals">EASY TREATS</a>
                                             </li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">EASY DEALS</a></li>
                                         </ul>
                                         
                                         <div class="sticky-search-cart-wrapper">
                                             <div class="sticky-search-wrapper">
-                                                <input type="text" class="ui-form-control">
+                                             <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                <input type="text" name="q_str" class="ui-form-control">
                                                 <input type="submit" value="" class="span_bg">
+                                            </form>
                                             </div>
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
@@ -341,12 +338,55 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </div>
                                             <?PHP endif; ?>
                                             </div>
-                                            <div class="header-text-container pull-right">                                               
+                                            <div class="header-text-container pull-right">
+                                            <?php if(isset($logged_in) && $logged_in): ?>
+                                                <div class="new-user-nav-dropdown">
+                                                    <div class="login-profile-con">
+                                                        <img src="<?=$user_details->profileImage;?>">
+                                                    </div>
+                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                    <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                                    <ul class="default-nav-dropdown">
+                                                        <li>
+                                                            <a href="/me">Dashboard</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/me?me=pending">On-going Transactions</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a href="/me?me=settings">Settings</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border pos-rel">
+                                                            <a href="/messages">Messages</a>
+                                                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                            <?=$msgs['unread_msgs'];?>
+                                                            </div>
+                                                            <?php endif;?>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a class="prevent" href="/sell/step1">Sell an item</a>
+                                                        </li>
+                                                        <li class="nav-dropdown-border">
+                                                            <a class="prevent" href="/login/logout">Logout</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="clear"></div>                                            
+                                                </div>
+                                            <?php else: ?> 
                                                 <div class="header-link">
                                                     <img src="assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
                                                     <a href="/register">create an account</a>
                                                 </div>
+                                            <?php endif; ?>
+
+                                            <!--                                                
+                                                <div class="header-link">
+                                                    <span class="login-icon user-acct-icon"></span>
+                                                    <a href="/login">login</a>&nbsp;or&nbsp;
+                                                    <a href="/register">create an account</a>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>

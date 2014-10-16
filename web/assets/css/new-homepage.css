@@ -439,6 +439,21 @@ header {
     text-align: right;
 }
 
+.login-profile-con {
+    display: inline-block;
+    width: 14px;
+    height: 16px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.login-profile-con img {
+    max-width: 14px;
+    max-height: 16px;
+    width: auto;
+    height: auto;
+}
+
 #inner-header {
     background-color: #fff;
     padding-top:35px;
@@ -630,7 +645,16 @@ header {
 
 .sticky-nav-fixed .header-text-container {
     margin-left: 18px;
-    width: auto;
+    width: 23%;
+}
+
+.sticky-nav-fixed .header-text-container .new-user-nav-dropdown {
+    width: 100%;
+}
+
+.sticky-nav-fixed .header-text-container .new-user-nav-dropdown .default-nav-dropdown {
+    right: -18px;
+    top: 42px;
 }
 
 #main-nav-container #main-nav .menu li {
@@ -3116,6 +3140,11 @@ font-size: 15px;
     .sticky-nav-fixed .mobile-menu-nav-hide {
         display: block;
     }
+
+    .sticky-header-nav .header-text-container {
+        display: none;
+    }
+
 
     .mega-menu .col-md-20p,
     .mega-menu .col-md-80p {
