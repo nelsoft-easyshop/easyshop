@@ -91,7 +91,7 @@ class cart extends MY_Controller
     { 
         $mobileCartContents = json_decode($this->input->post('cartData'));
         $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
-        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents);
+        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
         // foreach($mobileCartContents as $mobileCartContent){
                               
         //     $options = array();

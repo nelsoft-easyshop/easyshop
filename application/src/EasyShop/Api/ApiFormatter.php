@@ -319,7 +319,7 @@ class ApiFormatter
                 );
     }
 
-    public function updateCart($mobileCartContents)
+    public function updateCart($mobileCartContents,$memberId)
     {
         foreach($mobileCartContents as $mobileCartContent){
                               
@@ -336,7 +336,7 @@ class ApiFormatter
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
             }
         }
-        $this->cartImplementation->persist($this->member->getIdMember());
+        $this->cartImplementation->persist($memberId);
     }
 }
  
