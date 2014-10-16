@@ -9,7 +9,7 @@
             <div class="signup">
                     <h5>Signup for Newsletter</h5>
                     <?php echo form_open('subscribe');?>
-                        <input type="text" class="subscribe_email" name="subscribe_email">
+                        <input type="text" class="subscribe_email" name="email">
                         <input type="submit" value="Submit" class="subscribe_btn" name="subscribe_btn">
                     <?php echo form_close();?>
             </div>
