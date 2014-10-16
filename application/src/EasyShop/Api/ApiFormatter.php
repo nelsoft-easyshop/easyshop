@@ -132,12 +132,12 @@ class ApiFormatter
  
 
             if(count($productOption)>1){
-                $productCombinationAttributes[] = $newArrayOption; 
+                $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
             }
             elseif((count($productOption) === 1)
                         &&(($productOption[0]['datatype_id'] === '5'))
-                        ||($productOption[0]['type'] === 'option')){
-                $productCombinationAttributes[] = $newArrayOption; 
+                        ||($productOption[0]['type'] === 'option')){ 
+                $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
                 $productSpecification[] = $newArrayOption[0];
             }
             else{
