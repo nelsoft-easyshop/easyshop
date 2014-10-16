@@ -373,7 +373,8 @@ class Kernel
             $em = $container['entity_manager']; 
             $collectionHelper = $container['collection_helper'];
             $productManager = $container['product_manager'];
-            return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager);
+            $cartManager = $container['cart_manager'];
+            return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager,$cartManager);
         }; 
 
         // Notification Services

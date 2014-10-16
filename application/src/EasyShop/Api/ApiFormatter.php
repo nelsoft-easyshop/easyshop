@@ -21,14 +21,30 @@ class ApiFormatter
     private $collectionHelper;
 
     /**
+     * The product manager
+     *
+     * @var EasyShop\Cart\CartManager
+     */
+    private $cartManager;
+
+    /**
+     * The cartManager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager)
+    public function __construct($em,$collectionHelper,$productManager,$cartManager)
     {
         $this->em = $em;  
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
+        $this->cartManager = $cartManager;
+        $this->cartImplementation = $cartManager->getCartObject();
     }
 
     public function formatItem($productId)
@@ -301,6 +317,26 @@ class ApiFormatter
                     'price' => $product->getFinalPrice(),
                     'product_image' => $imageDirectory.'categoryview/'.$imageFileName
                 );
+    }
+
+    public function updateCart($mobileCartContents)
+    {
+        foreach($mobileCartContents as $mobileCartContent){
+                              
+            $options = array();
+            foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
+                if(intval($attributeArray->isSelected) === 1){
+                    $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
+                }
+               
+            }
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => $mobileCartContent->slug]);
+            if($product){
+                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+            }
+        }
+        $this->cartImplementation->persist($this->member->getIdMember());
     }
 }
  
