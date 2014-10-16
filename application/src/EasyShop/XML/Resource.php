@@ -104,5 +104,21 @@ class Resource
     }    
 
 
+    /**
+     * Returns the home xml file used by the application
+     *
+     * @return string
+     */
+    public function getNewHomeXML()
+    {
+        $xmlfile = 'page/new_home_page';
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_home');
+        }
+        
+        return $xmlfile;
+    
+    }      
+
 }
 

@@ -158,6 +158,7 @@ else {
 
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
+    $route['newhomewebservice'] = 'webservice/newhomewebservice';
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
