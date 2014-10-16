@@ -31,24 +31,6 @@
                             </tr>
                             <tr>
                                 <td class="td-vendor-img">
-                                   <img src="/assets/images/img_profile_pic_4.jpg" class="vendor-img"/>
-                                </td>
-                                <td class="td-vendor-details">
-                                    <a href="#">
-                                        <p class="p-vendor-name">
-                                            Inon B
-                                        </p>
-                                    </a>
-                                    <p class="p-vendor-location">
-                                        Antipolo Rizal
-                                    </p>
-                                    <span class="follow-btn btn btn-default-2">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td-vendor-img">
                                    <img src="/assets/images/img_profile_pic_2.jpg" class="vendor-img"/>
                                 </td>
                                 <td class="td-vendor-details">
@@ -104,7 +86,7 @@
                                         <div class="col-xs-7">
                                             <a href="#" class="a-follower">
                                                 <p class="p-follower-name">
-                                                    Senyora Angelica Santiba&ntilde;ez
+                                                    <?=(strlen("Senyora Angelica Santiba&ntilde;ez")>22)?substr_replace("Senyora Angelica Santiba&ntilde;ez", "...", 22):"Senyora Angelica Santiba&ntilde;ez";?>
                                                 </p>
                                             </a>
                                             <p class="p-follower-location">
