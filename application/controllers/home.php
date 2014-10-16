@@ -445,7 +445,6 @@ class Home extends MY_Controller
                 );
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
-        $data['title'] = 'Contact '.html_escape($member->getStoreName()).'| Easyshop.ph';
         $data['message_recipient'] = $member;
         $data = array_merge($data, $this->fill_header());
 
@@ -458,11 +457,13 @@ class Home extends MY_Controller
         foreach ($followers as $key => $value) {
             // echo $value->getMember()->getUsername();
         } 
+
+        $followerData['followers'] = $followers;
  
         // Load View
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
-        $this->load->view('pages/user/followers' );
+        $this->load->view('pages/user/followers' ,$followerData);
         $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
     }
     
