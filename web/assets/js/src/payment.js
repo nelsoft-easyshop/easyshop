@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var PAY_BY_GATEWAY = true;
+    var PAY_BY_GATEWAY = false;
 
     PAY_BY_GATEWAY ? $('#pointInput').show() : $('#pointInput').hide();
     $('.paypal_loader').hide();
