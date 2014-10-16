@@ -85,8 +85,7 @@
                         </tr>
                     </table>
                 <?php endif; ?>
-                <!--<a href="javascript:void(0);"  class="link_address btn btn-default btn-gray" style="text-decoration: none;">Change Shipping Address</a> -->
-                <a class="btn btn-default btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Address</a> 
+                <a class="btn btn-default btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Details</a> 
             </div>
         </div>
         <div class="col-md-6">
@@ -560,7 +559,7 @@
     <div class="modal-content no-border">
       <div class="modal-header no-border bg-orange">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" style="color: #ffffff;">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Change Shipping Address</h4>
+        <h4 class="modal-title" id="myModalLabel">Change Shipping Details</h4>
       </div>
       <?php 
         $attr = array('class' => 'delAddressFrm','id' => 'delAddressFrm','name' => 'delAddressFrm','enctype' => 'multipart/form-data');
@@ -624,7 +623,7 @@
       <?php echo form_close();?>
       <div class="modal-footer" style="border-radius:0px !important;">
         <center>
-            <input type="button" value="Change Shipping Address" class="changeAddressBtn orange_btn3">
+            <input type="button" value="Change Shipping Details" class="changeAddressBtn orange_btn3">
         </center>
       </div>
     </div>
