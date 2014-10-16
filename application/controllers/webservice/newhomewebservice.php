@@ -56,7 +56,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
-        $remove = $this->xmlCmsService->removeXMLForCategoryNavigation($this->file,$nodename,$index, $subIndex);
+        $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
         if($remove == true) {
         return $this->output
             ->set_content_type('application/json')
