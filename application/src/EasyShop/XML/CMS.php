@@ -654,8 +654,10 @@ $string = '<typeNode>
             foreach($categorySection['productPanel'] as $idx=>$product){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
-                $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
-                $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
+                if($product){
+                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
+                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
+                }
             }
             array_push($homePageData['categorySection'], $sectionData);
         }
@@ -687,8 +689,10 @@ $string = '<typeNode>
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
             $seller['details'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                           ->findOneBy(['slug' => $sellerSlug]);
-            $seller['image'] = $this->userManager->getUserImage($seller['details']->getIdMember());
-            array_push($homePageData['menu']['topSellers'], $seller);
+            if($seller['details']){
+                $seller['image'] = $this->userManager->getUserImage($seller['details']->getIdMember());
+                array_push($homePageData['menu']['topSellers'], $seller);
+            }
         }
         
         //Get Category Navigation
@@ -717,16 +721,17 @@ $string = '<typeNode>
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
                 ->findOneBy(['slug' => $product['slug']]);
-            $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
-            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                ->getDefaultImage($productData->getIdProduct());
-            $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            if($productData){
+                $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                    ->getDefaultImage($productData->getIdProduct());
+                $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
-            if ($productImage != NULL) {
-                $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
-                $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
-            }
+                if ($productImage != NULL) {
+                    $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
+                    $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
+                }
         }
         $homePageData['seller'] = $featuredVendor;
 
