@@ -7,9 +7,13 @@
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
                 <div class="item">
                     <div class="item-image-container" style="background: url(<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>) center no-repeat; background-size: cover">
-                        <span class="new-circle">NEW</span>
+
+                        <?php if ($product['product']->getIsNew()): ?>
+                            <span class="new-circle">NEW</span>
+                        <?php endif; ?>
+
                         <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                        <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?></span>
+                        <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
                         <?PHP endif; ?>
 
                     </div><!-- End .item-image -->
