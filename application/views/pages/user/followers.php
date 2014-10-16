@@ -249,6 +249,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clear"></div>
+                    <div class="pagination-container">
+                        <center>
+                            <ul class="pagination pagination-followers">
+                                <li><a href="#">&laquo;</a></li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </center>
+                    </div>
                 </div>
             </div>
         </div>
