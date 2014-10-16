@@ -439,12 +439,13 @@ class payment_model extends CI_Model
         $parseData = array_splice($row[0], 1, 10);
         $parseData['attr'] = array();
         
-        if($data['status'] === 1){ // if forward to seller
+        if($data['status'] === 1){ // if forward to seller (email to seller)
             $parseData['user'] = $row[0]['buyer'];
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
-        } else if($data['status'] === 2){ // if return to buyer
+        } 
+        else if($data['status'] === 2 || $data['status'] === 3){ // if return to buyer or COD (email to buyer)
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];

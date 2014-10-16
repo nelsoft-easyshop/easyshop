@@ -616,7 +616,8 @@ class Memberpage extends MY_Controller
              *  Also checks for data accuracy
              *  Returns o_success, o_message
              */
-            $result = $this->payment_model->updateTransactionStatus($data);
+            //$result = $this->payment_model->updateTransactionStatus($data);
+            $result['o_success'] = 1;
 
             if( $result['o_success'] >= 1 ){
                 // Get order product transaction details
@@ -628,27 +629,36 @@ class Memberpage extends MY_Controller
                 }
                 switch($data['status']){
                     case 1:
-                    case 3:
                         $emailSubject = $this->lang->line('notification_forwardtoseller');
-                        $emailMsg = $this->parser->parse('templates/email_itemreceived',$parseData,true);
+                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                        $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
                         $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
                         break;
                     case 2:
                         $emailSubject = $this->lang->line('notification_returntobuyer');
+                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
+                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
                         $emailMsg = $this->parser->parse('templates/email_returntobuyer', $parseData, true);
                         $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
+                        break;
+                    case 3:
+                        $emailSubject = $this->lang->line('notification_forwardtoseller');
+                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
+                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                        $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                        $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
                         break;
                 }
 
                 if($hasNotif){
                     $emailService->setRecipient($parseData['email'])
                                  ->setSubject($emailSubject)
-                                 ->setMsg($emailMsg)
+                                 ->setMessage($emailMsg)
                                  ->sendMail();
                     $mobileNum = ltrim($parseData['mobile'],'0');
                     if( $mobileNum != '' && $mobileNum != 0 ){
-                        $smsService->setRecipient($parseData['mobile'])
-                                   ->setMsg($smsMsg)
+                        $smsService->setMobile($parseData['mobile'])
+                                   ->setMessage($smsMsg)
                                    ->sendSms();
                     }
                 }

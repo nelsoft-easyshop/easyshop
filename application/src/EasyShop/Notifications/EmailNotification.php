@@ -118,6 +118,9 @@ class EmailNotification
         $msg = $this->msg;
         $imgArray = $this->imageArray;
 
+        print($msg);
+        die();
+
         if( count($imgArray)>0 ){
             foreach($imgArray as $imagePath){
                 $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
