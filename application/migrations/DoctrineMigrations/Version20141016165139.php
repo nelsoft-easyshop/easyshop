@@ -40,10 +40,10 @@ class Version20141016165139 extends AbstractMigration
           CONSTRAINT `fk_es_queue_type` FOREIGN KEY (`type`) REFERENCES `es_queue_type` (`id_type`) ON DELETE NO ACTION ON UPDATE NO ACTION
         ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
         ");
-        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('QUEUED') ");
-        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('SENT') " );
-        $this->addSql("INSERT INTO `es_queue_status` (`name`) VALUES ('FAILED') ");
-        $this->addSql("INSERT INTO `es_queue_type` (`name`) VALUES ('EMAIL') ");
+        $this->addSql("INSERT INTO `es_queue_status` (`id_status`, `name`) VALUES ('1','QUEUED') ");
+        $this->addSql("INSERT INTO `es_queue_status` (`id_status`, `name`) VALUES ('2','SENT') " );
+        $this->addSql("INSERT INTO `es_queue_status` (`id_status`, `name`) VALUES ('3','FAILED') ");
+        $this->addSql("INSERT INTO `es_queue_type` (`id_type`, `name`) VALUES ('1', 'EMAIL') ");
     }
 
     public function down(Schema $schema)
