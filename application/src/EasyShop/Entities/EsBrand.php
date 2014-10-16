@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsBrand
 {
-    const IMAGE_DIRECTORY =  'assets/images/products/brands/';
+    const IMAGE_DIRECTORY =  'assets/images/brands/';
     const IMAGE_UNAVAILABLE_FILE =  'unavailable/easyshop-logo.png';
 
     /**
