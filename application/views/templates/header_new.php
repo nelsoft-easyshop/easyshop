@@ -66,8 +66,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <header class="new-header-con">
     <div class="main-container">
         <div>
-            <a href="<?=base_url()?>">
-                <img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
+            <a href="/">
+                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
             </a>
         </div>
         <div class="search-container">
@@ -82,7 +82,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                <a href="/cart" class="header-cart-wrapper">
                     <span class="header-cart-items-con ui-form-control">
                         <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
                     </span>

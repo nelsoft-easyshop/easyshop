@@ -4,8 +4,55 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a436297c7b2679da0b68182d4cc3c48",
+    "hash": "4ae79401b94a6afbfefbdf69cba615f9",
     "packages": [
+        {
+            "name": "bshaffer/oauth2-server-php",
+            "version": "v1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-php.git",
+                "reference": "95e731e0855b8156a161b93dc3f1909a8dd98abe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-php/zipball/95e731e0855b8156a161b93dc3f1909a8dd98abe",
+                "reference": "95e731e0855b8156a161b93dc3f1909a8dd98abe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "predis/predis": "Required to use the Redis storage engine",
+                "thobbs/phpcassa": "Required to use the Cassandra storage engine"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://github.com/bshaffer"
+                }
+            ],
+            "description": "OAuth2 Server for PHP",
+            "homepage": "http://github.com/bshaffer/oauth2-server-php",
+            "keywords": [
+                "auth",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2014-02-27 13:40:40"
+        },
         {
             "name": "cboden/ratchet",
             "version": "v0.3.2",
@@ -580,16 +627,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.4.5",
+            "version": "v2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "c0d3cdbdfbf873871167050ab077e49b1ad02ab0"
+                "reference": "bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c0d3cdbdfbf873871167050ab077e49b1ad02ab0",
-                "reference": "c0d3cdbdfbf873871167050ab077e49b1ad02ab0",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9",
+                "reference": "bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9",
                 "shasum": ""
             },
             "require": {
@@ -649,7 +696,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2014-09-22 21:58:51"
+            "time": "2014-10-06 13:22:50"
         },
         {
             "name": "elnur/blowfish-password-encoder-bundle",
@@ -1117,6 +1164,68 @@
             "time": "2013-04-30 19:58:08"
         },
         {
+            "name": "noiselabs/nusoap-bundle",
+            "version": "dev-master",
+            "target-dir": "NoiseLabs/Bundle/NuSOAPBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/noiselabs/NoiselabsNuSOAPBundle.git",
+                "reference": "5f4057b77b3ce1799840d2aad651475f71afa415"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/noiselabs/NoiselabsNuSOAPBundle/zipball/5f4057b77b3ce1799840d2aad651475f71afa415",
+                "reference": "5f4057b77b3ce1799840d2aad651475f71afa415",
+                "shasum": ""
+            },
+            "require": {
+                "nusphere/nusoap": "0.9.5",
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": ">=2.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "NoiseLabs\\Bundle\\NuSOAPBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Vítor Brandão",
+                    "email": "vitor@noiselabs.org",
+                    "homepage": "http://noiselabs.org"
+                }
+            ],
+            "description": "Symfony2 bundle for NuSOAP - SOAP Toolkit for PHP",
+            "homepage": "https://github.com/noiselabs/NoiselabsNuSOAPBundle",
+            "keywords": [
+                "noiselabs",
+                "soap",
+                "symfony"
+            ],
+            "time": "2014-02-05 14:07:22"
+        },
+        {
+            "name": "nusphere/nusoap",
+            "version": "0.9.5",
+            "dist": {
+                "type": "zip",
+                "url": "http://downloads.sourceforge.net/project/nusoap/nusoap/0.9.5/nusoap-0.9.5.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "system/libraries"
+                ]
+            }
+        },
+        {
             "name": "pimple/pimple",
             "version": "v2.1.1",
             "source": {
@@ -1377,20 +1486,20 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.2.2",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "e02f71a35436af4bd58a1bd90116089e632e29e1"
+                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/e02f71a35436af4bd58a1bd90116089e632e29e1",
-                "reference": "e02f71a35436af4bd58a1bd90116089e632e29e1",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/b86b927dfefdb56ab0b22d1350033d9a38e9f205",
+                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.4"
+                "php": ">=5.3.3"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1"
@@ -1398,7 +1507,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.2-dev"
+                    "dev-master": "5.3-dev"
                 }
             },
             "autoload": {
@@ -1425,7 +1534,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-09-20 07:17:36"
+            "time": "2014-10-04 05:53:18"
         },
         {
             "name": "symfony/config",
@@ -1753,12 +1862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "d93465f214b8a3e8b1fb200f7c945ce389fa4d85"
+                "reference": "c9c9227a66a83f517257d682630bbcbc6b043514"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/d93465f214b8a3e8b1fb200f7c945ce389fa4d85",
-                "reference": "d93465f214b8a3e8b1fb200f7c945ce389fa4d85",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/c9c9227a66a83f517257d682630bbcbc6b043514",
+                "reference": "c9c9227a66a83f517257d682630bbcbc6b043514",
                 "shasum": ""
             },
             "require": {
@@ -1808,7 +1917,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-05 13:59:22"
         },
         {
             "name": "symfony/framework-bundle",
@@ -1897,12 +2006,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "58b264c83927d7888bc422534d365a29274dc08e"
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/58b264c83927d7888bc422534d365a29274dc08e",
-                "reference": "58b264c83927d7888bc422534d365a29274dc08e",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/c24942a7ec2d8409d1f60d02c4460ca8317e885a",
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a",
                 "shasum": ""
             },
             "require": {
@@ -1941,7 +2050,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-07 14:06:18"
         },
         {
             "name": "symfony/http-kernel",
@@ -2611,12 +2720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "b8b6d00ba0be12798f00ec18bc6b8b58e206e83b"
+                "reference": "6e0f32ca5b8cad53f4008d49832c6ed554e04b5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/b8b6d00ba0be12798f00ec18bc6b8b58e206e83b",
-                "reference": "b8b6d00ba0be12798f00ec18bc6b8b58e206e83b",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/6e0f32ca5b8cad53f4008d49832c6ed554e04b5a",
+                "reference": "6e0f32ca5b8cad53f4008d49832c6ed554e04b5a",
                 "shasum": ""
             },
             "require": {
@@ -2676,7 +2785,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-09-30 21:16:13"
+            "time": "2014-10-06 12:52:17"
         },
         {
             "name": "symfony/validator",
@@ -2685,12 +2794,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "0f52e41e8cc476e58b34ab305a2e51750bc4d8c5"
+                "reference": "0ebff0a1b5248033179ed443557abd66e5ebc109"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/0f52e41e8cc476e58b34ab305a2e51750bc4d8c5",
-                "reference": "0f52e41e8cc476e58b34ab305a2e51750bc4d8c5",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/0ebff0a1b5248033179ed443557abd66e5ebc109",
+                "reference": "0ebff0a1b5248033179ed443557abd66e5ebc109",
                 "shasum": ""
             },
             "require": {
@@ -2746,7 +2855,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-04 07:54:45"
         },
         {
             "name": "symfony/yaml",
@@ -2755,12 +2864,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "656e03eeedc827e4830ac43547eae10bacaa1bbb"
+                "reference": "499f7d7aa96747ad97940089bd7a1fb24ad8182a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/656e03eeedc827e4830ac43547eae10bacaa1bbb",
-                "reference": "656e03eeedc827e4830ac43547eae10bacaa1bbb",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/499f7d7aa96747ad97940089bd7a1fb24ad8182a",
+                "reference": "499f7d7aa96747ad97940089bd7a1fb24ad8182a",
                 "shasum": ""
             },
             "require": {
@@ -2793,7 +2902,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-05 13:53:50"
         },
         {
             "name": "twig/twig",
@@ -2872,8 +2981,10 @@
         "symfony/security": 20,
         "symfony/twig-bridge": 20,
         "symfony/config": 20,
-        "google/apiclient": 10
+        "google/apiclient": 10,
+        "noiselabs/nusoap-bundle": 20
     },
+    "prefer-stable": false,
     "platform": [
 
     ],

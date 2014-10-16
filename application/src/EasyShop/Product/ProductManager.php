@@ -101,7 +101,7 @@ class ProductManager
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
         $this->promoManager->hydratePromoData($product);
-        
+
         return $product;
     }
 
@@ -187,8 +187,6 @@ class ProductManager
         return $productItemLocks;
     }
 
-    
-    
     /**
      * Apply discounted price to product
      * This has been refactored with hydrate promo data
@@ -200,7 +198,7 @@ class ProductManager
         foreach ($products as $key => $value) {  
             $resultObject = $this->getProductDetails($value->getIdProduct());
         } 
-        
+
         return $products;
     }
 
@@ -383,6 +381,45 @@ class ProductManager
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;
+    }
+
+    
+    /**
+     * Returns the recommended products list for a certain product
+     *
+     * @param integer $productId
+     * @param integer $limit
+     * @return \EasyShop\Entities\EsProduct
+     */
+    public function getRecommendedProducts($productId, $limit = null)
+    {    
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+
+        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->createQueryBuilder("p")
+                                ->select("p")
+                                ->where('p.cat = :category')
+                                ->andWhere("p.idProduct != :productId")
+                                ->andWhere("p.isDraft = :isDraft")
+                                ->andWhere("p.isDelete = :isDelete")
+                                ->setParameter('productId',$product->getIdProduct())
+                                ->setParameter('category',$product->getCat())
+                                ->setParameter('isDraft',0)
+                                ->setParameter('isDelete',0)
+                                ->orderBy('p.clickcount', 'DESC')
+                                ->getQuery();
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $products = $queryBuilder->getResult();
+        
+        foreach($products as $key => $product){
+            $products[$key] = $this->getProductDetails($product->getIdProduct());
+        }
+        
+        return $products;
     }
 
     /**

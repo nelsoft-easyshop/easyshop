@@ -129,53 +129,53 @@
                                     This item is not available in your location. 
                                     <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item" data-toggle="modal" data-target="#avail_loc" >See the item location availability here.</a>
                                         or <a href="javascript:void(0);" class="removeitem" data-cart-id="<?php echo $value["rowid"] ?>" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endif; ?>
+							</div>
+						</td>
+					</tr>
+					<?php endif; ?>
+					
+					<?php endforeach; ?>
+					<tr>
+						<td colspan="2">
+							Subtotal:
+						</td>
+						<td colspan="2" align="right">
+							<?php echo number_format($total, 2, '.',','); ?>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="border: 0px;">
+							Shipping fee:
+						</td>
+						<td colspan="2" style="border: 0px;" align="right">
+							Php <?php echo number_format($shipping_fee, 2, '.',','); ?>
+						</td>
+					</tr>
+					<tr class="tr-header-summary">
+						<td colspan="2">
+							<b>Total:</b>
+						</td>
+						<td colspan="2" align="right">
+							<b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
+						</td>
+					</tr>
                     
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="2">
-                            Subtotal:
-                        </td>
-                        <td colspan="2" align="right">
-                            <?php echo number_format($total, 2, '.',','); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="border: 0px;">
-                            Shipping fee:
-                        </td>
-                        <td colspan="2" style="border: 0px;" align="right">
-                            Php <?php echo number_format($shipping_fee, 2, '.',','); ?>
-                        </td>
-                    </tr>
-                    <tr class="tr-header-summary">
-                        <td colspan="2">
-                            <b>Total:</b>
-                        </td>
-                        <td colspan="2" align="right">
-                            <b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
-                        </td>
-                    </tr>
-                    <!--
-                    <tr>
+                    <tr id ="pointInput">
                         <td colspan="2">
                             Point Allocation:
                         </td>
                         <td colspan="2" align="right">
-                            <input type="number" id="pointsAllocated" name="pointsAllocated" min="0" value="0" max="<?php echo $maxPoint; ?>">
+                            <input type="number" id="pointsAllocated" name="pointsAllocated" value="0" min="0" value="0" max="<?php echo $maxPoint; ?>">
                             <br/> <br/> Max points allowable: <?php echo $maxPoint; ?>
                         </td>
-                    </tr>
-                    -->
+                    </tr> 
                     
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row">
+
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
         <div class="col-md-12">
             <div class="display-when-desktop-payment">
              <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>

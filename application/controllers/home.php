@@ -539,7 +539,6 @@ class Home extends MY_Controller
         $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
                                                   ->findBy(['member' => $arrVendorDetails['id_member'],
                                                               'isDelete' => 0,'isDraft' => 0]);
-
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -733,11 +732,10 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);
-                                 
-        $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
-                                          ->findBy(['member' => $arrVendorDetails['id_member'],
-                                                      'isDelete' => 0,'isDraft' => 0]);
 
+        $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
+                                  ->findBy(['member' => $arrVendorDetails['id_member'],
+                                            'isDelete' => 0,'isDraft' => 0]);
         $headerVendorData = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
@@ -1133,6 +1131,7 @@ class Home extends MY_Controller
 
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
+
 }
 
 /* End of file home.php */

@@ -100,6 +100,9 @@ class Kernel
         $container['user_manager'] = function ($c) use ($container) {
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
+                                                ,$container['form_validation']
+                                                ,$container['form_factory']
+                                                ,$container['form_error_helper']
                                                 ,$container['string_utility']);
         };
         
@@ -349,6 +352,20 @@ class Kernel
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
+        };
+
+        // NUSoap Client
+        $container['nusoap_client'] = function ($c) {
+            $url = '';
+            if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
+            // LIVE
+                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            else{
+            // SANDBOX
+                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            return new \nusoap_client($url,true);
         };
 
         /* Register services END */
