@@ -188,3 +188,12 @@ box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
 #unfollow{
     display: none;
 }
+
+.pagination-followers > li > a{
+    color: #575759;
+}
+
+.pagination-followers > li.active > a{
+    background: #ff893b !important;
+    border-color: #ff893b !important;
+}
