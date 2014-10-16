@@ -177,7 +177,9 @@ class ApiFormatter
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
                 array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
-                $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
+                if(isset($productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']])){
+                    $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
+                }
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
