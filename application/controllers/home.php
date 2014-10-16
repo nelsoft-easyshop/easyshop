@@ -51,8 +51,14 @@ class Home extends MY_Controller
      */
     public function index() 
     {
+        // Load services
         $em = $this->serviceContainer["entity_manager"];
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+        $categoryManager = $this->serviceContainer['category_manager']; 
+
+        // Load repositories
+        $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
+
         $sliderSection = $homeContent['slider']; 
         $homeContent['slider'] = array();
         foreach($sliderSection as $slide){
@@ -84,6 +90,9 @@ class Home extends MY_Controller
         $data['cart_items'] = $cart;
         $data['cart_size'] = $cartSize;
         $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
+        $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
+        $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/home/home_primary', $data);
