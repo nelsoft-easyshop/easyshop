@@ -300,7 +300,6 @@ class payment_model extends CI_Model
                 $data['store_link'] = base_url() . $data['user_slug'];
                 $data['msg_link'] = base_url() . "messages/#" . $data['user'];
                 $data['home_link'] = base_url();
-                $data['facebook_link'] = "https://www.facebook.com/EasyShopPhilippines";
                 $msg = $this->parser->parse('emails/return_payment',$data,true);
                 break;
         }

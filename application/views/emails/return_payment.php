@@ -155,12 +155,12 @@
                         <table>
                             <tr>
                                 <td>
-                                    <a href="{facebook_link}">
+                                    <a href="https://www.facebook.com/EasyShopPhilippines">
                                         <img src="facebook.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{home_link}">
+                                    <a href="https://twitter.com/EasyShopPH">
                                         <img src="twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
