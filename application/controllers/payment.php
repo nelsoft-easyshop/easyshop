@@ -102,6 +102,7 @@ class Payment extends MY_Controller{
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
         $paymentType = $purchaseLimitPaymentType['payment_type'];
+        unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
         $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
 
@@ -121,8 +122,9 @@ class Payment extends MY_Controller{
         }
 
         if($codCount != count($itemArray)){
-            $canContinue = false;
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.');
+            // $canContinue = false;
+            unset($paymentType['cod']);
+            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.'); 
         }
 
         if(!$purchaseLimit){

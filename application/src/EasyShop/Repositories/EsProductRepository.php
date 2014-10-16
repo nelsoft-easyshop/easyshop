@@ -226,7 +226,7 @@ class EsProductRepository extends EntityRepository
      * @return mixed
      *
      */
-    public function getProductAttributeDetailByName($productId, $fieldName, $fieldValue, $fieldPrice = null)
+    public function getProductAttributeDetailByName($productId, $fieldName = null, $fieldValue = null, $fieldPrice = null)
     {
     
         $this->em =  $this->_em;
@@ -237,25 +237,49 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('attr_id', 'attr_id');
         $rsm->addScalarResult('image_path', 'image_path');
         $rsm->addScalarResult('is_other', 'is_other');
+        $rsm->addScalarResult('type', 'type');
+        $rsm->addScalarResult('datatype_id', 'datatype_id');
             
         $sql1 = "     
-            SELECT h.field_name AS `name`, d.value_name AS attr_value, d.value_price AS attr_price,d.id_optional_attrdetail as attr_id, COALESCE(i.product_image_path,'') AS image_path, '1' as is_other 
+            SELECT 
+                h.field_name AS `name`,
+                d.value_name AS attr_value, 
+                d.value_price AS attr_price,
+                d.id_optional_attrdetail as attr_id, 
+                COALESCE(i.product_image_path,'') AS image_path, 
+                '1' as is_other,
+                'option' as 'type',
+                '0' as 'datatype_id'
             FROM es_optional_attrhead h 
             LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
             LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image
-            WHERE h.product_id=:id AND h.`field_name`= :attr  AND d.`value_name` = :attr_value
+            WHERE h.product_id=:id 
         ";
         
         $sql2 = "
-            SELECT  b.name, a.attr_value, a.attr_price,a.id_product_attr, '', '0'
+            SELECT 
+                b.name, 
+                a.attr_value, 
+                a.attr_price,
+                a.id_product_attr, 
+                '', 
+                '0',
+                'specific' as 'type',
+                b.datatype_id as 'datatype_id'
             FROM es_product_attr a 
             LEFT JOIN  es_attr b ON a.attr_id = b.id_attr
-            WHERE a.product_id =:id AND b.`name`= :attr  AND a.`attr_value` = :attr_value;
+            WHERE a.product_id =:id 
         ";
         
+        if($fieldName !== null || $fieldValue !== null){ 
+            $sql1 .= " AND h.`field_name`= :attr  AND d.`value_name` = :attr_value"; 
+            $sql2 .= " AND b.`name`= :attr  AND a.`attr_value` = :attr_value";
+        }
+
         if($fieldPrice !== null){
             $fieldPriceFilter = " AND d.value_price = :attr_price";
             $sql1 .= $fieldPriceFilter;
+            $fieldPriceFilter = " AND a.attr_price = :attr_price";
             $sql2 .= $fieldPriceFilter;
         }
         
@@ -263,14 +287,21 @@ class EsProductRepository extends EntityRepository
         
         $query = $this->em->createNativeQuery($sql,$rsm);
         $query->setParameter('id', $productId);
-        $query->setParameter('attr', $fieldName);
-        $query->setParameter('attr_value', $fieldValue);
+
+        if($fieldName !== null || $fieldValue !== null){
+            $query->setParameter('attr', $fieldName);
+            $query->setParameter('attr_value', $fieldValue);
+        }
 
         if($fieldPrice !== null){
             $query->setParameter('attr_price', $fieldPrice);
         }
         
-        return $query->getOneOrNullResult();
+        if($fieldName !== null || $fieldValue !== null){ 
+            return $query->getOneOrNullResult();
+        }
+        
+        return $query->getResult();
     }
 
     /**
