@@ -102,5 +102,7 @@ $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
 $lang['message_to_seller'] = "This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details can be seen in you transactions page.  This is a system generated message, please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
 $lang['message_to_buyer'] = "This is to notify you that you have made a purchase through Easyshop.ph. Transaction details can be seen in you transactions page.  This is a system generated message,  please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
 
+#Notification shipping comment provided
+$lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
 ?>
 
