@@ -783,6 +783,49 @@ header {
     width: 25%;
 }
 
+.top-seller-list {
+    min-width: 270px;
+}
+
+.top-seller-profile-photo {
+    background-color: #e2e2e2;
+    border-radius: 4px;
+    display: inline-block;
+    height: 35px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 35px;
+}
+
+.top-seller-profile-photo img {
+    bottom: 0;
+    left: 0;
+    height: auto;
+    margin: auto;
+    max-height: 33px;
+    max-width: 33px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+}
+
+.top-seller-name {
+    display: inline-block;
+    height: 25px;   
+    line-height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    width: 180px;
+}
+
+.responsive-nav .top-seller-name {
+    width: 80%;
+}
+
 /*#main-nav-container #main-nav .menu .mega-menu-container.drop-category .mega-menu-title {
     padding-left:45px;
     padding-right:150px;

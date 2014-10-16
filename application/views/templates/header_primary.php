@@ -283,7 +283,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <?php endforeach; ?>
                                                 </ul>
                                             </li>
-                                            <li class="mobile-menu-nav-hide"><a href="#">TOP SELLERS</a></li>
+                                            <li class="mobile-menu-nav-hide">
+                                                <a href="#">TOP SELLERS</a>
+                                                <ul class="nav-2nd-level top-seller-list">
+                                                    <li>
+                                                        <a href="">
+                                                            <div class="top-seller-profile-photo">
+                                                                <img src="assets/images/clothes-closet.jpg" alt="seller profile photo">
+                                                            </div>
+                                                            <div class="top-seller-name">
+                                                                Lorem Ipsum
+                                                            </div>
+                                                        </a>
+                                                    </li>                                                    
+                                                </ul>
+                                            </li>
                                             <li class="mobile-menu-nav-hide"><a href="/deals">EASY TREATS</a>
                                             </li>
                                         </ul>
