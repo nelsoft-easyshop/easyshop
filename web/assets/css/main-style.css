@@ -175,6 +175,10 @@ section {
    width: 100%; 
 }
 
+.vendor-out-con img {
+    margin-right: 5px;
+}
+
 .message-count-con {
     color: #fff;
     background-color: #ff613a;
