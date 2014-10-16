@@ -60,6 +60,7 @@ class product_search extends MY_Controller {
     */
     public function advance()
     {
+        header ('Content-type: text/html; charset=ISO-8859-1');
         // Load Repository
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
@@ -139,6 +140,8 @@ class product_search extends MY_Controller {
      */
     public function searchfaster()
     { 
+        header ('Content-type: text/html; charset=ISO-8859-1');
+
         // Check if search is empty if true redirect to all category view
         if(trim($this->input->get('q_str')) === "" && intval(trim($this->input->get('category'))) <= 1){
             redirect('cat/all');
@@ -158,7 +161,7 @@ class product_search extends MY_Controller {
 
         // getting all products
         $response['products'] = $searchProductService->getProductBySearch($parameter); 
-
+ 
         // get total product Count
         $parameter['limit'] = PHP_INT_MAX;
         $response['productCount'] = count($searchProductService->getProductBySearch($parameter));
