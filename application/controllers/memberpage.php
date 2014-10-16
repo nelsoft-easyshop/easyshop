@@ -255,12 +255,13 @@ class Memberpage extends MY_Controller
      */
     public function printBuyTransactions()
     {
-        $attribs = "";
+
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
         foreach($boughTransactions["transactions"] as $key => $value) {
-            $attr = $EsOrderRepository->getOrderProductAttributes($value["idOrder"]);
+            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
                 array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
             }
@@ -275,11 +276,12 @@ class Memberpage extends MY_Controller
     public function printSellTransactions()
     {
         $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');        
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
 
             foreach($soldTransaction["transactions"] as $key => $value) {
-                $attr = $EsOrderRepository->getOrderProductAttributes($value["idOrder"]);
+                $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
                     array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
                 }
