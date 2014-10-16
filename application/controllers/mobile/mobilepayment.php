@@ -32,7 +32,7 @@ class mobilePayment extends MY_Controller
      */
     function __construct() 
     {
-        parent::__construct();
+        parent::__construct();  
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
@@ -89,87 +89,7 @@ class mobilePayment extends MY_Controller
             $canContinue = $dataCollection['canContinue'];
             $errorMessage = $dataCollection['errMsg'];
             $paymentType = $dataCollection['paymentType'];
-
-            foreach($cartData as $rowId => $cartItem){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['idProduct' => $cartItem['id']]);
-                
-                if($product){
-                    $member = $product->getMember();
-                    $productId = $product->getIdProduct();
-                           
-                    $ratings = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                                    ->getAverageRatings($member->getIdMember());
-                    $sellerRating = array();
-                    $sellerRating['rateCount'] = $ratings['count'] ;
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[0]] = $ratings['rating1'];
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[1]] = $ratings['rating2'];
-                    $sellerRating['rateDescription'][$this->lang->line('rating')[2]] = $ratings['rating3'];  
-                    
-                    $sellerDetails = array(
-                        'sellerName' => $member->getUsername(),
-                        'sellerRating' => $sellerRating,
-                        'sellerContactNumber' => $member->getContactno(),
-                        'sellerEmail ' => $member->getEmail()
-                        );
-                        
-                    $images = array();
-                    foreach($product->getImages() as $image){
-                        $images[$image->getIdProductImage()] = $image->getProductImagePath();
-                    }
-
-                    
-                    $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                ->getAttributesByProductIds($productId);
-                    $mappedAttributes = array();
-                    foreach($attributes as $attribute){
-                        $isSelected = false;
-                        $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
-
-                        foreach($cartItem['options'] as $head => $option){
-                            $explodedOption = explode('~',$option);
-                            $fieldValue = $explodedOption[0];
-                            $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
-                            if(strtolower($attribute['head']) == strtolower($head) &&
-                                strtolower($attribute['value']) == strtolower($fieldValue) &&
-                                strtolower($attribute['price']) == strtolower($fieldPrice)){
-                                $isSelected = true;
-                                break;
-                            }
-                        }
-
-                        array_push($mappedAttributes, array(
-                            'id' => $optionalIdentifier.$attribute['detail_id'],
-                            'value' => $attribute['value'],
-                            'name' => $attribute['head'],
-                            'price' => $attribute['price'],
-                            'imageId' => $attribute['image_id'],
-                            'isSelected' => $isSelected,
-                        ));
-                    }
-                    
-                    $formattedCartItem = [
-                        'rowid' => $cartItem['rowid'],
-                        'productId' =>  $cartItem['id'],
-                        'productItemId' => $cartItem['product_itemID'],
-                        'maximumAvailability' => $cartItem['maxqty'],
-                        'slug' => $cartItem['slug'],
-                        'name' => $cartItem['name'],
-                        'quantity' => $cartItem['qty'],
-                        'description' => $product->getDescription(),
-                        'brand' => $product->getBrand()->getName(),
-                        'originalPrice' => $cartItem['original_price'],
-                        'finalPrice' => $cartItem['price'],
-                        'sellerDetails' => $sellerDetails,
-                        'images' => $images, 
-                        'mapAttributes' => $mappedAttributes,
-                        'cashOnDelivery' =>  (isset($cartItem['cash_delivery'])) ? $cartItem['cash_delivery'] : 0 ,
-                        'locationAvalailability' => $cartItem['availability'],
-                    ];
-                    
-                    $formattedCartContents = array_merge($formattedCartContents, [$rowId => $formattedCartItem]);
-                }
-            }
+            $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
         }
 
         $outputData = array(
