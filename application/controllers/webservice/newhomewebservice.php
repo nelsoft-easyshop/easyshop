@@ -36,7 +36,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
-        $this->file  = APPPATH . "resources/". $this->xmlFileService->getNewHomeXML().".xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
         if($this->input->get()) {
@@ -241,26 +241,6 @@ class NewHomeWebService extends MY_Controller
     }    
 
     /**
-     *  Sets Brand Section
-     *  @return JSON
-     */
-    public function setBrandSection()
-    {
-        $map = simplexml_load_file($this->file);
-
-        $index = (int)$this->input->get("index");
-        $brandId = $this->input->get("brandId");        
-
-        $map->brandSection->brandId[$index] = $brandId;
-
-        if($map->asXML($this->file)) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }          
-    }
-
-    /**
      *  Method that handles add,edit,delete for othercategories node 
      *  @return JSON
      */
@@ -349,7 +329,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
+            $value = $path_directory."/".$filename.'.'.$file_ext; 
             $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
 
             $index = $index == 0 ? 1 : $index + 1;
@@ -394,7 +374,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
+                $value = $path_directory."/".$filename.'.'.$file_ext; 
                 $map->adSection->ad[$index]->img = $value;
                 $map->adSection->ad[$index]->target = $target;
  
