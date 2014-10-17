@@ -36,7 +36,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
-        $this->file  = APPPATH . "resources/". $this->xmlFileService->getNewHomeXML().".xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
         if($this->input->get()) {
@@ -239,26 +239,6 @@ class NewHomeWebService extends MY_Controller
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->file));
     }    
-
-    /**
-     *  Sets Brand Section
-     *  @return JSON
-     */
-    public function setBrandSection()
-    {
-        $map = simplexml_load_file($this->file);
-
-        $index = (int)$this->input->get("index");
-        $brandId = $this->input->get("brandId");        
-
-        $map->brandSection->brandId[$index] = $brandId;
-
-        if($map->asXML($this->file)) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }          
-    }
 
     /**
      *  Method that handles add,edit,delete for othercategories node 
