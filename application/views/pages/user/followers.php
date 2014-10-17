@@ -10,69 +10,41 @@
                         <p class="panel-title-contact">
                             WHO TO FOLLOW
                         </p>
-                        <table width="100%">
-                            <tr>
-                                <td class="td-vendor-img">
-                                   <a href="#"><img src="/assets/images/img_profile_pic.jpg" class="vendor-img"/></a>
-                                </td>
-                                <td class="td-vendor-details">
-                                    <a href="#">
-                                        <p class="p-vendor-name">
-                                            Neneng B
+                        <table width="100%"> 
+                            <?php foreach ($recommendToFollow as $key => $value): ?>
+                                 <?php $memberEntity = $value; ?>
+                                <tr>
+                                    <td class="td-vendor-img">
+                                       <a href="/<?=$memberEntity->getSlug();?>"><img src="<?=$value->avatarImage?>" class="vendor-img"/></a>
+                                    </td>
+                                    <td class="td-vendor-details">
+                                        <a href="/<?=$memberEntity->getSlug();?>">
+                                            <p class="p-vendor-name">
+                                                <?=strlen($memberEntity->getStoreName()) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
+                                            </p>
+                                        </a>
+                                        <p class="p-vendor-location">
+                                            Unit 8C Marc 2000 Tower, Manila
                                         </p>
-                                    </a>
-                                    <p class="p-vendor-location">
-                                        Unit 8C Marc 2000 Tower, Manila
-                                    </p>
-                                    <span class="follow-btn btn btn-default-2">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td-vendor-img">
-                                   <a href="#"><img src="/assets/images/img_profile_pic_2.jpg" class="vendor-img"/></a>
-                                </td>
-                                <td class="td-vendor-details">
-                                    <a href="#">
-                                        <p class="p-vendor-name">
-                                            Boy Pick Up
-                                        </p>
-                                    </a>
-                                    <p class="p-vendor-location">
-                                        1620 Bulacan Street, Sta. Cruz, Manila
-                                    </p>
-                                    <span class="follow-btn btn btn-default-2">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td-vendor-img">
-                                   <a href="#"><img src="/assets/images/img_profile_pic_3.jpg" class="vendor-img"/></a>
-                                </td>
-                                <td class="td-vendor-details">
-                                    <a href="#">
-                                        <p class="p-vendor-name">
-                                            Senyora Angelica Santiba&ntilde;ez
-                                        </p>
-                                    </a>
-                                    <p class="p-vendor-location">
-                                        Hacienda Luisita Tarlac City, Tarlac, Philippines
-                                    </p>
-                                    <span class="follow-btn btn btn-default-2">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                    </span>
-                                </td>
-                            </tr>
+                                        <span class="follow-btn btn btn-default-2">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>Follow
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </table>
                     </div>
                 </div>
             </div>
             <div class="col-xs-9">
                 <div class="followers-container">
+                    <div class="loading_div" style="text-align:center;display:none;">
+                        <img src="/assets/images/orange_loader.gif">
+                    </div>
                     <div id="follower-container" class="row">
-                        <?=$follower_view;?>
+                        <div id="follow-div-page-0">
+                            <?=$follower_view;?>
+                        </div>
                     </div>
                     <div class="clear"></div>
                     <div class="pagination-container">
@@ -85,16 +57,34 @@
         </div>
     </div>
 </section>
- <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
- <input type="hidden" id="vendor_id" value="<?=$memberId?>">
+<div id="storage" style="display:none">
+    <div id="follow-div-page-0">
+        <?=$follower_view;?>
+    </div>
+</div>
+<input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
+<input type="hidden" id="vendor_id" value="<?=$memberId?>">
     <script type='text/javascript'>
         (function($) {
 
                 $('.pagination-container').on('click', '.individual', function(){
+          
+                    var page = $(this).data('page');
+                    var vendorId = $("#vendor_id").val(); 
+                    if($(this).hasClass('active')){
+                        return false;
+                    }
+                    var currentPage = parseInt(page) - 1;
+
                     $(this).siblings('.individual').removeClass('active');
                     $(this).addClass('active');
-                    var page = $(this).data('page');
-                    var vendorId = $("#vendor_id").val();
+
+                    // start counting
+                    var currentPage = page - 1;
+                    if($('#storage > #follow-div-page-'+currentPage).length > 0){ 
+                        $('#follower-container').empty().append($('#storage > #follow-div-page-'+currentPage).clone());
+                        return false;
+                    }
 
                     ajaxRequest = $.ajax({
                         type: "GET",
@@ -102,10 +92,13 @@
                         data: {page:page,vendorId:vendorId} ,
                         beforeSend: function(){ 
                             $('#follower-container').hide(); 
+                            $('.loading_div').show();
                         },
                         success: function(d){ 
                             var obj = jQuery.parseJSON(d); 
+                            $('.loading_div').hide();
                             $('#follower-container').empty().append(obj.html).show();
+                            $('#storage').append(obj.html);
                         }
                     });
                 });

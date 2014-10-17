@@ -27,4 +27,24 @@ class EsVendorSubscribeRepository extends EntityRepository
 
         $result;
     }
+
+    public function getRecommendToFollow($userId,$memberId,$perPage = 6)
+    { 
+        $this->em =  $this->_em;
+ 
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('m')
+                            ->from('EasyShop\Entities\EsMember','m')
+                            // ->join('EasyShop\Entities\EsVendorSubscribe','vs', 
+                            //                 'WITH','m.idMember = vs.member')
+                            ->where('m.idMember != :userId') 
+                            ->setParameter('userId', $userId)
+                            ->andWhere('m.idMember != :memberId') 
+                            ->setParameter('memberId', $memberId)
+                            ->getQuery()  
+                            ->setMaxResults($perPage);
+
+        $result = $qbResult->getResult();
+        return $result;
+    }
 }

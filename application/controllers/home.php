@@ -466,8 +466,14 @@ class Home extends MY_Controller
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId;
-        $followerData['memberId'] = $this->session->userdata('member_id');
+        $followerData['memberId'] = $memberId;
+        $followerData['page'] = 0; 
 
+        // get who to follow
+        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId);
+        foreach ($followerData['recommendToFollow'] as $key => $value) { 
+            $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
+        }
         // Generate pagination view
         $paginationData = array(
             'lastPage' => ceil($followers['count']/$vendorPerpage)
@@ -506,6 +512,7 @@ class Home extends MY_Controller
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId; 
+        $followerData['page'] = $pageOffset; 
 
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
