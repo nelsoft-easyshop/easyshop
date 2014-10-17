@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberCat
  *
  * @ORM\Table(name="es_member_cat", indexes={@ORM\Index(name="fk_es_member_cat_1_idx", columns={"member_id"})})
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberCatRepository")
+ * @ORM\Entity
  */
 class EsMemberCat
 {
@@ -34,6 +34,13 @@ class EsMemberCat
      * @ORM\Column(name="is_featured", type="boolean", nullable=false)
      */
     private $isFeatured = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createddate", type="datetime", nullable=false)
+     */
+    private $createddate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsMember
@@ -101,6 +108,29 @@ class EsMemberCat
     public function getIsFeatured()
     {
         return $this->isFeatured;
+    }
+
+    /**
+     * Set createddate
+     *
+     * @param \DateTime $createddate
+     * @return EsMemberCat
+     */
+    public function setCreateddate($createddate)
+    {
+        $this->createddate = $createddate;
+
+        return $this;
+    }
+
+    /**
+     * Get createddate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateddate()
+    {
+        return $this->createddate;
     }
 
     /**
