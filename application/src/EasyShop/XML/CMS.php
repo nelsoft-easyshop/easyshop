@@ -120,7 +120,7 @@ class CMS
     $string = '<slide>
             <template>'.$value.'</template>
             <image>
-                <path>unavailable_product_img.jpg</path>
+                <path>/assets/images/homeslider/unavailable_product_img.jpg</path>
                 <target>/</target>
             </image>
 
