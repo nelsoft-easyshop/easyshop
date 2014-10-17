@@ -450,22 +450,66 @@ class Home extends MY_Controller
 
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
-                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe');
-        $getFollowersCount = 8;
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
         $pageOffset = 0;
-        $followers = $EsVendorSubscribe->getFollowers($memberId);
-        foreach ($followers as $key => $value) {
-          // $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
-            // echo $value->getMember()->getUsername();
-        } 
+        $vendorPerpage = 1;
+        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$vendorPerpage);
+        if($followers['followers']){
+            foreach ($followers['followers'] as $key => $value) {
+                $value->subscriptionStatus = $this->serviceContainer['user_manager']
+                          ->getVendorSubscriptionStatus($viewerId, $value->getMember()->getUsername());
+                $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
+                $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
+            } 
+        }
 
-        $followerData['followers'] = $followers;
- 
+        $followerData['followers'] = $followers['followers'];
+        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['viewerId'] = $viewerId;
+        $followerData['memberId'] = $this->session->userdata('member_id');
+
+        // Generate pagination view
+        $paginationData = array(
+            'lastPage' => ceil($followers['count']/$vendorPerpage)
+            ,'isHyperLink' => false
+        );
+
+        $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+        $followerData['follower_view'] = $this->load->view('pages/user/followers_content', $followerData, true);
+
         // Load View
         $this->load->view('templates/header_new', $data);
         $this->load->view('templates/header_vendor',$headerVendorData);
         $this->load->view('pages/user/followers' ,$followerData);
         $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
+    }
+
+    public function getMoreFollowers()
+    {
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+        $data = $this->fill_header();
+        $pageOffset = $this->input->get('page') - 1; // start count page in 1.
+        $viewerId = $this->session->userdata('member_id');
+        $memberId = $this->input->get('vendorId');
+        $vendorPerpage = 1; 
+        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$vendorPerpage);
+        if($followers['followers']){
+            foreach ($followers['followers'] as $key => $value) {
+                $value->subscriptionStatus = $this->serviceContainer['user_manager']
+                          ->getVendorSubscriptionStatus($viewerId, $value->getMember()->getUsername());
+                $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
+                $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
+            } 
+        }
+
+        $followerData['followers'] = $followers['followers'];
+        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['viewerId'] = $viewerId; 
+
+        $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
+
+        echo json_encode($response);
     }
     
     /**

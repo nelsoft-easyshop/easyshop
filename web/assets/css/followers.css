@@ -185,7 +185,7 @@ box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
     margin-right: 5px;
 }
 
-#unfollow{
+.unfollow-user{
     display: none;
 }
 

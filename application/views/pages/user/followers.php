@@ -71,75 +71,13 @@
             </div>
             <div class="col-xs-9">
                 <div class="followers-container">
-                    <div class="row">
-                        <!-- foreach  -->
-                        <?php foreach ($followers as $key => $value): ?>
-                            <?php $memberEntity = $value->getMember(); ?>
-                            <div class="col-xs-6 col-follower">
-                                <div class="follower-div">
-                                    <a href="#">
-                                    <div class="div-img-cover">
-                                        <img src="/assets/images/img_cover_2.png" class="img-follower-cover"/>
-                                        <img src="/assets/images/img_profile_pic_5.png" class="vendor-follower-img"/>
-                                        <div class="cover-overlay"></div>
-                                    </div>
-                                    </a>
-                                    <div class="div-follower-details">
-                                        <div class="row">
-                                            <div class="col-xs-7">
-                                                <a href="#">
-                                                    <p class="p-follower-name">
-                                                        <?=strlen($memberEntity->getStoreName()) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
-                                                    </p>
-                                                </a>
-                                                <p class="p-follower-location">
-                                                    Greenhills, San Juan City, Metro Manila
-                                                </p>
-                                            </div>
-                                            <div class="col-xs-5 col-follow-button" align="right">
-                                                <span class="follow-btn follow-right btn btn-default-2">
-                                                    <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                                </span>
-                                            </div>
-
-<!--                                             <div class="col-xs-5 col-follow-button" align="right">
-                                                <span class="follow-btn follow-right btn btn-default-following" id="following">
-                                                    <i class="fa fa-check"></i>Following
-                                                </span>
-                                                <span class="follow-btn follow-right btn btn-default-following" id="unfollow">
-                                                    <i class="fa fa-minus-circle"></i> Unfollow
-                                                </span>
-                                            </div> -->
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <?php
-                                                    $storeDesc = $memberEntity->getStoreDesc();
-                                                ?>
-                                                <p class="p-follower-description">
-                                                    <?=(strlen($storeDesc)>190)?substr_replace($storeDesc, "...", 190):$storeDesc;?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                        <!-- end of foreach -->
+                    <div id="follower-container" class="row">
+                        <?=$follower_view;?>
                     </div>
                     <div class="clear"></div>
                     <div class="pagination-container">
                         <center>
-                            <ul class="pagination pagination-followers">
-                                <li><a href="#">&laquo;</a></li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">&raquo;</a></li>
-                            </ul>
+                            <?=$pagination;?>
                         </center>
                     </div>
                 </div>
@@ -147,17 +85,82 @@
         </div>
     </div>
 </section>
+ <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
+ <input type="hidden" id="vendor_id" value="<?=$memberId?>">
+    <script type='text/javascript'>
+        (function($) {
 
-                                                           <script>
-                                                $( "#following" ).mouseenter(function() {
-                                                  $( "#following" ).css("display", "none");
-                                                  $( "#unfollow" ).css("display", "block");
-                                                });
-                                                
-                                                $( "#unfollow" ).mouseout(function() {
-                                                  $( "#following" ).css("display", "block");
-                                                  $( "#unfollow" ).css("display", "none");
-                                                });
-                                                
-                                                
-                                            </script>
+                $('.pagination-container').on('click', '.individual', function(){
+                    $(this).siblings('.individual').removeClass('active');
+                    $(this).addClass('active');
+                    var page = $(this).data('page');
+                    var vendorId = $("#vendor_id").val();
+
+                    ajaxRequest = $.ajax({
+                        type: "GET",
+                        url: config.base_url+'home/getMoreFollowers',
+                        data: {page:page,vendorId:vendorId} ,
+                        beforeSend: function(){ 
+                            $('#follower-container').hide(); 
+                        },
+                        success: function(d){ 
+                            var obj = jQuery.parseJSON(d); 
+                            $('#follower-container').empty().append(obj.html).show();
+                        }
+                    });
+                });
+
+                $(document).on('mouseenter',".following-user",function () {
+                    $(this).next('span').css("display", "block");
+                    $(this).css("display", "none");
+                });
+
+                $(document).on('mouseleave',".unfollow-user",function () {
+                    $(this).prev('span').css("display", "block");
+                    $(this).css("display", "none");
+                });
+ 
+                $(document).on('click',".subscription",function () {
+                    var $this = $(this);
+                    var csrftoken = $("meta[name='csrf-token']").attr('content');
+                    var status = $this.data('status');
+                    var name = $this.data('username');
+                    var slug = $this.data('slug');
+                    var isLoggedIn = parseInt($('#is_loggedin').val());
+
+                    if(isLoggedIn){ 
+                        if(status == "follow"){
+                            var text = '<span class="follow-btn follow-right btn btn-default-following following-user subscription" style="display:none" data-status="unfollow" data-slug="'+slug+'" data-username="'+name+'">\
+                                            <i class="fa fa-check"></i>Following\
+                                        </span>\
+                                        <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" style="display:block" data-status="unfollow" data-slug="'+slug+'" data-username="'+name+'">\
+                                            <i class="fa fa-minus-circle"></i> Unfollow\
+                                        </span>';
+                        }else{
+                            var text = '<span class="follow-btn follow-right btn btn-default-2 subscription" data-status="follow"  data-slug="'+slug+'" data-username="'+name+'">\
+                                            <span class="glyphicon glyphicon-plus-sign"></span>Follow\
+                                        </span>';
+                        }
+                        $.ajax({ 
+                            url: config.base_url+"memberpage/vendorSubscription",
+                            type: "POST",
+                            dataType: "json",
+                            data: {name: name,vendorlink:slug, csrfname: csrftoken},
+                            success: function (data) {
+                                if (data.result != "success") {  
+                                    alert(data.error);
+                                }
+                                else{ 
+                                    $this.parent().empty().append(text);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        $.removeCookie('es_vendor_subscribe');
+                        $.cookie('es_vendor_subscribe', slug, {path: '/'});
+                        window.location.href = config.base_url + 'login';
+                    }
+                });
+        })( jQuery );
+    </script>
