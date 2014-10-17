@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <!-- show product list, go to site, show product details -->
-<map>
-
 <!--
     Here the list of action types:
     1. show product details
     2. go to site
     3. go to page
 -->
+<map>
+
+
 
     <mainSlide>
         <value>assets/images/mainslide/140309010304.jpg</value>
@@ -68,6 +69,13 @@
         <bgcolor>#FFFFF</bgcolor>
         <type>categories</type>
 
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+        
         <boxContent>
             <value>n9-super-smart-watch-phone</value>
             <type>category</type>
