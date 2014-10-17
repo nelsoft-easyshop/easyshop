@@ -198,8 +198,8 @@
                             </span>
                             <span class="header-cart-icon-con span_bg cart-icon"></span>
                         </a>
-                        <div class="sticky-header-cart-item-list">
-                            <?PHP if ((intval(sizeof($cartSize))) === 0 ) : ?>
+                        <div class="sticky-header-cart-item-list">                        
+                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                             <?PHP else : ?>
                                 <p>Recently add item(s)</p>
                                 <?PHP for($cnt = sizeof($cartSize) - 1; $cnt > -1 ;$cnt--) : ?>
