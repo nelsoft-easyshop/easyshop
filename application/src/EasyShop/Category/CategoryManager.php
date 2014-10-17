@@ -65,7 +65,8 @@ class CategoryManager
         $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         $category = new EsMemberCat();
         $category->setCatName($catName)
-                 ->setMember($memberObj);
+                 ->setMember($memberObj)
+                 ->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
         $this->em->persist($category);
         $this->em->flush();
 
