@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsMember as EsMember;
+
 class Home extends MY_Controller 
 {
  
@@ -49,43 +51,52 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+        // Load services
+        $em = $this->serviceContainer["entity_manager"];
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+        $categoryManager = $this->serviceContainer['category_manager']; 
 
+        // Load repositories
+        $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
 
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = array();
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+            array_push($homeContent['slider'], $sliderView);
+        }
+        
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
-
-            'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+            'homeContent' => $homeContent,
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
-        
+
         $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
-        
-        if( $data['logged_in'] && $view !== 'basic'){
-            $data = array_merge($data, $this->getFeed());            
-            $this->load->view("templates/home_layout/layoutF",$data);
-            $this->load->view('templates/footer', array('minborder' => true));
+        $cart = array();
+        $cartSize = 0;
+        $isLoggedIn = false;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+            $data['logged_in'] = true;
+            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                              ->find($memberId);
+            $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
+                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                    : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
         }
-        else{
-        
-            $xmlResourceService = $this->serviceContainer['xml_resource'];
-            $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
 
-            $layout_arr = array();
-            if(!$this->session->userdata('member_id') || $view === 'basic'){
-                foreach($home_content['section'] as $section){
-                    array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
-                }
-            }
-        
-            $data['data'] = $home_content;
-            $data['sections'] = $layout_arr;
+        $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
+        $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-            $this->load->view('pages/home_view', $data);
-            $this->load->view('templates/footer_full');
-        }
-
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/home/home_primary', $data);
+        $this->load->view('templates/footer_primary');
     }
     
     
@@ -159,8 +170,7 @@ class Home extends MY_Controller
         $this->load->view('pages/web/policy');
         $this->load->view('templates/footer_full');
     }
-    
-    
+  
     /**
      * Renders terms and conditions page
      *
@@ -291,7 +301,6 @@ class Home extends MY_Controller
                     "title" => html_escape( $arrVendorDetails['store_name'] ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'])." | Easyshop.ph",
                     "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
                 ));
-
                 $userProduct = $em->getRepository("EasyShop\Entities\EsProduct")->findBy(['member' => $arrVendorDetails['id_member'],'isDelete' => 0,'isDraft' => 0]);
                 
                 if (count($userProduct) <= 0) {

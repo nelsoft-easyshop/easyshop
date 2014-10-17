@@ -50,6 +50,7 @@ class product extends MY_Controller
      */
     public function categoryPage($categorySlug)
     {
+        header ('Content-type: text/html; charset=ISO-8859-1');
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager'];
         

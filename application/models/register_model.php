@@ -483,48 +483,48 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-	/*
-	 *	Send notification email after registration / subscription
-	 *	$data = 'username', 'email', 'password', emailcode
-	 */
-	public function sendNotification($data, $type="")
-	{
-		$this->load->library('email');	
-		$this->load->library('parser');
-		$this->load->library('encrypt');
-		
-		$this->email->set_newline("\r\n");
-		$this->email->to($data['email']);
-		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');		
-		
-		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/facebook.png", "inline");
-		//$this->email->attach(getcwd() . "/assets/images/landingpage/templates/googleplus.png", "inline");
-		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/twitter.png", "inline");
-		
-		if($type === 'signup'){
-			//$this->email->attach(getcwd() . "/assets/images/landingpage/templates/easyshoplogo-transp.png", "inline"); 
-			$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
-			$this->email->subject($this->lang->line('registration_subject'));
-			$parseData = array(
-				'user' => $data['username'],
-				'hash' => $this->encrypt->encode($data['email'].'|'.$data['username'].'|'.$data['emailcode']),
-				'site_url' => site_url('register/email_verification')
-			);
-			$msg = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
-			//$msg = $this->parser->parse('templates/temp_emailreg',$parseData,true);
-		}
-		else if ($type === 'subscribe'){
-			$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
-			$this->email->subject($this->lang->line('subscription_subject'));
-			$parseData = array();
-			$msg = $this->parser->parse('templates/landingpage/lp_subscription_email',$parseData,true);
-		}
-		
-		$this->email->message($msg);
-		$result = $this->email->send();
+    /**
+     *  Send notification email after registration / subscription
+     *  $data = 'username', 'email', 'password', emailcode
+     */
+    public function sendNotification($data, $type="")
+    {
+        $this->load->library('email');	
+        $this->load->library('parser');
+        $this->load->library('encrypt');
+        
+        $this->email->set_newline("\r\n");
+        $this->email->to($data['email']);
+        $this->email->from('noreply@easyshop.ph', 'Easyshop.ph');		
+        
+        $this->email->attach(getcwd() . "/assets/images/landingpage/templates/facebook.png", "inline");
+        //$this->email->attach(getcwd() . "/assets/images/landingpage/templates/googleplus.png", "inline");
+        $this->email->attach(getcwd() . "/assets/images/landingpage/templates/twitter.png", "inline");
+        
+        if($type === 'signup'){
+            //$this->email->attach(getcwd() . "/assets/images/landingpage/templates/easyshoplogo-transp.png", "inline"); 
+            $this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
+            $this->email->subject($this->lang->line('registration_subject'));
+            $parseData = array(
+                'user' => $data['username'],
+                'hash' => $this->encrypt->encode($data['email'].'|'.$data['username'].'|'.$data['emailcode']),
+                'site_url' => site_url('register/email_verification')
+            );
+            $msg = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
+            //$msg = $this->parser->parse('templates/temp_emailreg',$parseData,true);
+        }
+        else if ($type === 'subscribe'){
+            $this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
+            $this->email->subject($this->lang->line('subscription_subject'));
+            $parseData = array();
+            $msg = $this->parser->parse('templates/landingpage/lp_subscription_email',$parseData,true);
+        }
+        
+        $this->email->message($msg);
+        $result = $this->email->send();
 
-		return $result;
-	}
+        return $result;
+    }
     
     function is_validmobile($mobile)
 	{
