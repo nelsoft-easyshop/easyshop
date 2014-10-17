@@ -27,18 +27,28 @@ class Home extends MY_Controller {
         $bannerImages = [];
         foreach ($pageContent['mainSlide'] as $key => $value) {
             $bannerImages[] = array(
-                            'image_path' => $value['value'],
+                            'name' => '0',
+
+                            'image' => $value['value'],
                             'target' => $value['imagemap']['target'],
+                            'actionType' => $value['imagemap']['target'],
+
                         );
         }
+        $sectionImages = array(
+                        'name' => '',
+                        'bgcolor' => '',
+                        'type' => 'promo',
+                        'data' => $bannerImages,
+                    ); 
 
-        // product sections
-        $productSections = [];
+        $productSections[] = $sectionImages; 
+        // product sections 
         foreach ($pageContent['section'] as $key => $value) {
             $productArray = [];
             // loop products
         
-            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) { 
+            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) {
 
                 $slug = (isset($valueLevel2['value'])) ? $valueLevel2['value'] : ""; 
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -50,6 +60,7 @@ class Home extends MY_Controller {
                 $productFinalPrice = "";
                 $productDiscount = "";
                 $productImagePath = "";
+                $target = "";
 
                 if($product){
                     $product = $this->pm->getProductDetails($product->getIdProduct());
@@ -71,6 +82,7 @@ class Home extends MY_Controller {
                     $productBasePrice = $product->getPrice();
                     $productFinalPrice = $product->getFinalPrice();
                     $productImagePath = $directory.$imageFileName;
+                    $target = base_url().'mobile/product/item/'.$productSlug;
                 }
 
                 $productArray[] = array(
@@ -79,21 +91,44 @@ class Home extends MY_Controller {
                                     'discount_percentage' => $productDiscount,
                                     'base_price' => $productBasePrice,
                                     'final_price' => $productFinalPrice,
-                                    'product_image' => $productImagePath,
+                                    'image' => $productImagePath,
+                                    'actionType' => $valueLevel2['actionType'],
+                                    'target' => $target,
                                 );
             }
 
+
+            $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                ->findOneBy(['slug' => $value['name']]);
+
+            $categoryName = "";
+            if($categoryObject){
+                $categoryName = $categoryObject->getName();
+                $categorySlug = $categoryObject->getSlug();
+
+
+                $productArray[] = array(
+                                        'name' => 0,
+                                        'slug' => 0,
+                                        'discount_percentage' => 0,
+                                        'base_price' => 0,
+                                        'final_price' => 0,
+                                        'image' => 0,
+                                        'actionType' => 'show product list',
+                                        'target' => base_url().'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                                    );
+            }
+
             $productSections[] = array(
-                                'title' => $value['name'],
-                                'background_color' => $value['bgcolor'],
+                                'name' => $categoryName,
+                                'bgcolor' => $value['bgcolor'],
                                 'type' => $value['type'],
-                                'products' => $productArray,
+                                'data' => $productArray,
                             );
         }
 
-        $display = array(
-                    'mainSlider' => $bannerImages,
-                    'productSections' => $productSections,
+        $display = array( 
+                    'section' => $productSections,
                 );
 
         echo json_encode($display,JSON_PRETTY_PRINT);
