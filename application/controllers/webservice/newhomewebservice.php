@@ -36,7 +36,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
-        $this->file  = APPPATH . "resources/". $this->xmlFileService->getNewHomeXML().".xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
         if($this->input->get()) {
