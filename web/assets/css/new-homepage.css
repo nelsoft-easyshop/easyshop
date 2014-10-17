@@ -2932,7 +2932,7 @@ font-size: 15px;
 
 @media only screen and (max-width: 1200px) {
     .nav-searchfield-width input[type="text"] {
-        width: 34%;
+        width: 55%;
     }
     .sticky-nav-fixed #main-nav .menu {
         width: 22%;
@@ -3083,6 +3083,33 @@ font-size: 15px;
 }
 
 @media only screen and (max-width: 479px) {
+    #header-top .row {
+        margin-right: -30px;
+        margin-left: -30px;
+    }
+
+    #top-links li {
+        margin-right: 0;
+    }
+
+    #header-top .row .col-md-12 .top-header-left {
+        width: 43%;
+        padding-right: 0;
+    }
+
+    #header-top .row .col-md-12 .top-header-right {
+        width: 57%;
+        padding: 0 10px 0 0;
+    }
+
+    #header-top .row .col-md-12 .top-header-right .header-link-login img {
+        display: none;
+    }
+
+    .sticky-search-cart-wrapper {
+        width: 89%;
+    }
+
     .item-image-container{
         width: 100%;
         height: 100px !important;
@@ -3169,6 +3196,10 @@ font-size: 15px;
 }
 
 @media only screen and (max-width: 320px) {
+    .sticky-search-cart-wrapper {
+        width: 87%;
+    }
+
     .item-price {
         display: block;
         margin-top: 4px;
@@ -3235,94 +3266,94 @@ font-size: 15px;
         display: none;
     }
 
-	#main-nav-container #main-nav #responsive-nav {
-		display:block;
-		float: left;
-		padding:5px 0;
-	}
+    #main-nav-container #main-nav #responsive-nav {
+        display:block;
+        float: left;
+        padding:5px 0;
+    }
 
-	#responsive-nav-button {
-		color:#fff;
-	}
-	
-	#main-nav-container #main-nav > ul{
-		display:none;	
-	}
+    #responsive-nav-button {
+        color:#fff;
+    }
+    
+    #main-nav-container #main-nav > ul{
+        display:none;   
+    }
 
     #main-nav-container #main-nav #responsive-nav .responsive-nav {
         top: 52px;
     }
 
-	.header-inner-right {
-		display: none;
-	}
+    .header-inner-right {
+        display: none;
+    }
 
-	#inner-header .logo-container {
-		width: 100%;
-		text-align: center;
-	}
+    #inner-header .logo-container {
+        width: 100%;
+        text-align: center;
+    }
 
-	.logo {
-		width: 100%;
-	}
+    .logo {
+        width: 100%;
+    }
 
-	.sticky-nav-fixed #main-nav-container {		
-		background-color: #4370cc;
-	}
+    .sticky-nav-fixed #main-nav-container {     
+        background-color: #4370cc;
+    }
 
-	.sticky-nav-fixed {
-		position: relative;
+    .sticky-nav-fixed {
+        position: relative;
         z-index: 4;
-	}
+    }
 
-	.sticky-search-cart-wrapper {
-		display: block;
-		float: right;
-		line-height: 46px;
-		text-align: right;
-		width: 85%;
-	}
+    .sticky-search-cart-wrapper {
+        display: block;
+        float: right;
+        line-height: 46px;
+        text-align: right;
+        width: 95%;
+    }
 
-	.sticky-search-cart-wrapper .header-link {
-		display: none;
-	}
+    .sticky-search-cart-wrapper .header-link {
+        display: none;
+    }
 
-	.sticky-search-wrapper {
-		width: 62.5%;
-	}
-	.sticky-search-wrapper input[type="text"] {
-		width: 80.5%;
-	}
+    .sticky-search-wrapper {
+        width: 62.5%;
+    }
+    .sticky-search-wrapper input[type="text"] {
+        width: 80.5%;
+    }
 
-	.sticky-search-cart-wrapper .header-cart-items-con {
-		background-color: #fff;
-		width: 78%;
-	}
+    .sticky-search-cart-wrapper .header-cart-items-con {
+        background-color: #fff;
+        width: 78%;
+    }
 
-	.sticky-search-cart-wrapper .header-cart-wrapper {
-		width: 33%;
-	}
+    .sticky-search-cart-wrapper .header-cart-wrapper {
+        width: 33%;
+    }
 
-	.header-cart-container:hover .sticky-header-cart-item-list {
-	    display: block;
-	    top: 47px;
-	    width: 252px;
-	}
+    .header-cart-container:hover .sticky-header-cart-item-list {
+        display: block;
+        top: 47px;
+        width: 252px;
+    }
 
-	.footer-primary {
-		text-align: center;
-	}
+    .footer-primary {
+        text-align: center;
+    }
 
-	.social-media-wrapper ul {
-		display: inline-block;
-		margin-left: auto;
-		margin-right: auto;
+    .social-media-wrapper ul {
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
         width: 316px;
-	}
+    }
 
-	.footer-bottom-content .col-md-6 {
-		text-align: center;
-	}
+    .footer-bottom-content .col-md-6 {
+        text-align: center;
+    }
 
     .footer-hide {
         display: none;
@@ -3351,17 +3382,19 @@ font-size: 15px;
 }
 
 @media only screen and (max-width: 717px) {
-	.sticky-search-wrapper {
-		width: 60.5%;
-	}
+    .sticky-search-wrapper {
+        width: 60.5%;
+    }
 
-	.sticky-search-wrapper input[type="text"] {
-		width: 77.5%;
-	}
+    .sticky-search-wrapper input[type="text"] {
+        width: 77.5%;
+    }
 }
 
 @media (max-width: 767px) {
-	
+    .sticky-search-cart-wrapper {
+        width: 93%;
+    }
 }
 
 @media only screen and (max-width: 681px) {
@@ -3381,13 +3414,23 @@ font-size: 15px;
 }
 
 @media only screen and (max-width: 589px) {
-    .sticky-search-wrapper {
-        width: 81.5%;
+    .sticky-search-cart-wrapper {
+        width: 91%;
     }
+
+    .sticky-search-wrapper {
+        margin-right: 0;
+        width: 85.5%;
+    }
+
+    .sticky-search-wrapper input[type="text"] {
+        width: 79.5%;
+    }
+
     .sticky-search-cart-wrapper .header-cart-wrapper {
         padding-top: 8px;
         text-align: center;
-        width: 13%;
+        width: 14%;
     }
 
     .sticky-search-cart-wrapper .header-cart-items-con {
@@ -3414,16 +3457,43 @@ font-size: 15px;
     }
 }
 
-@media only screen and (max-width: 398px) {
+@media only screen and (max-width: 479px) {
+    .sticky-search-wrapper {
+        width: 83.5%;
+    }
+
+}
+
+@media only screen and (max-width: 450px) {
+    .sticky-search-cart-wrapper .header-cart-wrapper {
+        width: 18%;
+    }
+
+    .sticky-search-cart-wrapper {
+        width: 89%;
+    }
+
+    .sticky-search-wrapper {
+        width: 82.5%;
+    }
+
     .sticky-search-wrapper input[type="text"] {
-        width: 65.5%;
+        width: 68.5%; 
     }
 }
 
-@media only screen and (max-width: 479px) {
-    .sticky-search-wrapper {
-        width: 79.5%;
+@media only screen and (max-width: 398px) {
+    .sticky-search-cart-wrapper {
+        width: 82%;
     }
+
+    .sticky-search-wrapper {
+        width: 77.5%;
+    }
+    .sticky-search-wrapper input[type="text"] {
+        width: 64.5%;
+    }
+    
 }
 
 @media only screen and (max-width: 320px) {
@@ -3447,9 +3517,5 @@ font-size: 15px;
     /*** Footer ***/
     .social-media-wrapper ul {
         width: 256px;
-    }
-
-    .footer-primary input[type="text"] {
-        width: 57%;
     }
 }
