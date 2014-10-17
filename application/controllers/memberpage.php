@@ -813,6 +813,11 @@ class Memberpage extends MY_Controller
                     $buyerEntity = $orderEntity->getBuyer();
                     $buyerEmail = $buyerEntity->getEmail();
                     $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
+                    $imageArray = array(
+                        "/assets/images/landingpage/templates/header-img.png"
+                        , "/assets/images/landingpage/templates/facebook.png"
+                        , "/assets/images/landingpage/templates/twitter.png"
+                    );
 
                     $parseData = $postData;
                     $parseData = array_merge($parseData, array(
@@ -829,7 +834,7 @@ class Memberpage extends MY_Controller
 
                     $emailService->setRecipient($buyerEmail)
                                  ->setSubject($buyerEmailSubject)
-                                 ->setMessage($buyerEmailMsg)
+                                 ->setMessage($buyerEmailMsg, $imageArray)
                                  ->queueMail();
                 }
 

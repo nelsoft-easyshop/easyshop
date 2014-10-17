@@ -9,7 +9,7 @@
             <br/>
             <div style="margin-top: 20px; font-size: 13px;">
                 <p>
-                    Dear {buyer_name},
+                    Dear {buyer},
                 </p>
                 <br/>
                 <p>
@@ -32,7 +32,7 @@
                                                             Transaction Number:
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                            {order_product_id}
+                                                            {invoice}
                                                         </td>
                                                     </tr>
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
@@ -40,7 +40,7 @@
                                                             Product Name:
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                            {name}
+                                                            {product_name}
                                                         </td>
                                                     </tr>
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
