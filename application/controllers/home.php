@@ -287,7 +287,7 @@ class Home extends MY_Controller
                 $this->contactUser($vendorSlug);
             }
             else{
-                $viewerId = intval($sessionData['member_id'] ? 0 : $sessionData['member_id']);
+                $viewerId = intval(isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $headerData = $this->fill_header();
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
                 
