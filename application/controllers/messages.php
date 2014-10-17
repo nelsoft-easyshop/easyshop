@@ -70,9 +70,14 @@ class messages extends MY_Controller
      */
     public function send_msg()
     {
+        $this->load->library('parser');
+        
         $sessionData = $this->session->all_userdata();
         $username = trim($this->input->post("recipient"));
         $qResult = $this->user_model->getUserByUsername($username);
+
+        $em = $this->serviceContainer['entity_manager'];
+        $emailService = $this->serviceContainer['email_notification'];
 
         if($qResult === false){
             $result['success'] = 0;
@@ -91,16 +96,34 @@ class messages extends MY_Controller
                 // TODO: query count only
                 $recipientMessages = $this->messages_model->get_all_messages($qResult['id_member'], "Get_UnreadMsgs");
                 
-                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
+                /*$dc = new \EasyShop\WebSocket\Pusher\DataContainer();
                 $dc->set('messageCount', $recipientMessages['unread_msgs']);
                 $dc->set('unreadMessages', $recipientMessages);
                 
                 $userPusher = $this->serviceContainer['user_pusher'];
-                $userPusher->push($qResult['id_member'], $dc);
+                $userPusher->push($qResult['id_member'], $dc);*/
+
+                # Queue email notification
+                $memberEntity = $em->find("EasyShop\Entities\EsMember", $sessionData['member_id']);
+                $emailRecipient = $qResult['email'];
+                $emailSubject = $this->lang->line('new_message_notif');
+                $parseData = array(
+                    'user' => $memberEntity->getUsername()
+                    , 'recipient' => $qResult['username']
+                    , 'home_link' => base_url()
+                    , 'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername()
+                    , 'msg' => $msg
+                );
+                $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, TRUE);
+
+                $emailService->setRecipient($emailRecipient)
+                             ->setSubject($emailSubject)
+                             ->setMessage($emailMsg)
+                             ->queueMail();
             }
         }
 
-    echo json_encode($result);
+        echo json_encode($result);
     }
 
     /**
