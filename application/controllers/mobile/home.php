@@ -79,8 +79,8 @@ class Home extends MY_Controller {
                     $productName = $product->getName();
                     $productSlug = $product->getSlug();
                     $productDiscount = $product->getDiscountPercentage();
-                    $productBasePrice = $product->getPrice();
-                    $productFinalPrice = $product->getFinalPrice();
+                    $productBasePrice = floatval($product->getPrice());
+                    $productFinalPrice = floatval($product->getFinalPrice());
                     $productImagePath = $directory.$imageFileName;
                     $target = base_url().'mobile/product/item/'.$productSlug;
                 }
