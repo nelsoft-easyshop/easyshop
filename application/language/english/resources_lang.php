@@ -93,6 +93,7 @@ $lang['notification_txtmsg_seller'] = ' - This is to notify you that you have so
 #Transaction response by buyer or seller 
 #payment flow direction (forward to seller or return to buyer)
 $lang['notification_returntobuyer'] = "Easyshop.ph - Returned Payment Confirmation";
+$lang['notification_forwardtoseller'] = "Easyshop.ph - Item Receipt Confirmation";
 
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";

@@ -77,24 +77,26 @@ class MobileNotification
      */
     public function sendSMS()
     {
-        $smsParam = array(
-            'api' => $this->smsConfig['api'],
-            'number' => $this->mobileNum,
-            'message' => $this->msg,
-            'from' => $this->smsConfig['from'],
-        );
-        $outbound_endpoint = $this->smsConfig['outbound_endpoint'];
-        $smsParam_string = http_build_query($smsParam);
+        if( preg_match('/^(8|9)[0-9]{9}$/', $this->mobileNum) ){
+            $smsParam = array(
+                'api' => $this->smsConfig['api'],
+                'number' => $this->mobileNum,
+                'message' => $this->msg,
+                'from' => $this->smsConfig['from'],
+            );
+            $outbound_endpoint = $this->smsConfig['outbound_endpoint'];
+            $smsParam_string = http_build_query($smsParam);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
-        curl_setopt($ch,CURLOPT_POST, count($smsParam));
-        curl_setopt($ch,CURLOPT_POSTFIELDS, $smsParam_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        
-        return $output;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
+            curl_setopt($ch,CURLOPT_POST, count($smsParam));
+            curl_setopt($ch,CURLOPT_POSTFIELDS, $smsParam_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            
+            return $output;
+        }
     }
 
 }

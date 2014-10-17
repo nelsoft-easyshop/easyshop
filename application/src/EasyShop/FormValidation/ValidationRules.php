@@ -94,6 +94,12 @@ class ValidationRules
                     ),
                     
                 ),
+            'subscribe' => array(
+                    'email' => array(
+                                new Assert\Email(),
+                                new Assert\NotBlank(),
+                    ),
+                ),
             'vendor_contact' => array(
                     'shop_name' => array(
                                 new CustomAssert\IsValidStoreNameOptional(),

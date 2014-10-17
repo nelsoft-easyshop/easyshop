@@ -58,7 +58,8 @@ class Memberpage extends MY_Controller
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
     }
-    
+
+
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
@@ -247,6 +248,49 @@ class Memberpage extends MY_Controller
             }
         }
     }
+
+    /**
+     * Returns bought on-going transactions of the user
+     *  @return VIEW
+     */
+    public function printBuyTransactions()
+    {
+
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        foreach($boughTransactions["transactions"] as $key => $value) {
+            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
+            if(count($attr) > 0) {
+                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+            }
+        }        
+        $this->load->view("pages/user/printboughttransactions", $boughTransactions);
+    }
+
+    /**
+     * Returns sold on-going transactions of the user
+     *  @return VIEW
+     */
+    public function printSellTransactions()
+    {
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+
+            foreach($soldTransaction["transactions"] as $key => $value) {
+                $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
+                if(count($attr) > 0) {
+                    array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                }
+            }
+           
+        $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
+    
+    }
+    
 
     /**
      *  Fetch all data needed when displaying the Member page
@@ -566,6 +610,16 @@ class Memberpage extends MY_Controller
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
         
+        $emailService = $this->serviceContainer['email_notification'];
+        $smsService = $this->serviceContainer['mobile_notification'];
+        $imageArray = array(
+            "/assets/images/landingpage/templates/header-img.png"
+            , "/assets/images/appbar.home.png"
+            , "/assets/images/appbar.message.png"
+            , "/assets/images/landingpage/templates/facebook.png"
+            , "/assets/images/landingpage/templates/twitter.png"
+        );
+
         /**
          *  DEFAULT RESPONSE HANDLER
          *  Item Received / Cancel Order / Complete(CoD)
@@ -608,36 +662,48 @@ class Memberpage extends MY_Controller
              */
             $result = $this->payment_model->updateTransactionStatus($data);
 
-            // If database update is successful and response is 'return to buyer', 
-            // get order_product transaction details and send notification (email mobile)
-            if( $result['o_success'] >= 1 && $data['status'] == 2 ){
+            if( $result['o_success'] >= 1 ){
+                // Get order product transaction details
                 $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
-                
-                // 3 tries to send email. Exit if success or 3 fail limit reached
-                $emailcounter = 0;
-                do{
-                    $emailstat = $this->payment_model->sendNotificationEmail($parseData, $parseData['email'], 'return_payment');
-                    $emailcounter++;
-                }while(!$emailstat && $emailcounter < 3);
-                
-                if($parseData['mobile'] != '' && $parseData['mobile'] != 0){
-                    $msg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
-                    $mobilestat = $this->payment_model->sendNotificationMobile($parseData['mobile'], $msg);
+                $parseData['store_link'] = base_url() . $parseData['user_slug'];
+                $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+
+                $hasNotif = FALSE;
+                if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
+                    $hasNotif = TRUE;
                 }
-                
-            }
-            else if( $result['o_success'] >= 1 && ( $data['status'] === 1 || $data['status'] === 3) ){
-                $emailstat = true;
+                switch($data['status']){
+                    case 1: // Forward to seller
+                        $emailSubject = $this->lang->line('notification_forwardtoseller');
+                        $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
+                        $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
+                        break;
+                    case 2: // Return to buyer
+                        $emailSubject = $this->lang->line('notification_returntobuyer');
+                        $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
+                        $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
+                        break;
+                    case 3: // CoD complete
+                        $emailSubject = $this->lang->line('notification_forwardtoseller');
+                        $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                        $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
+                        break;
+                }
+
+                if($hasNotif){
+                    $emailService->setRecipient($parseData['email'])
+                                 ->setSubject($emailSubject)
+                                 ->setMessage($emailMsg, $imageArray)
+                                 ->sendMail();
+                    $smsService->setMobile($parseData['mobile'])
+                               ->setMessage($smsMsg)
+                               ->sendSms();
+                }
             }
 
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
             $serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
-            
-            if($result['o_success'] >= 1){
-                if(!$emailstat){
-                    $serverResponse['error'] = 'Failed to send notification email.';
-                }
-            }
+
         /**
          *  DRAGONPAY HANDLER
          */

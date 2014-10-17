@@ -436,6 +436,7 @@ class UserManager
      * 
      * @param integer $memberId
      * @param string $selector
+     * @return string
      */
     public function getUserImage($memberId, $selector = NULL)
     {
