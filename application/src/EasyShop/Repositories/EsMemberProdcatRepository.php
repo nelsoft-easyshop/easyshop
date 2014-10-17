@@ -11,47 +11,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class EsMemberProdcatRepository extends EntityRepository
 {
     /**
-     *  Fetch Custom categorized products
-     *
-     *  @return array - array of objects
-     */
-    public function getCustomCategoryProduct($memberId, $memcatId, $prodLimit, $page = 0, $orderBy = "p.idProduct DESC")
-    {
-        $product = array();
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
-
-        $em = $this->_em;
-        $dql = "SELECT pc, p
-                FROM EasyShop\Entities\EsMemberProdcat pc
-                JOIN pc.memcat mc
-                JOIN mc.member m
-                JOIN pc.product p
-                WHERE mc.idMemcat = :cat_id
-                    AND m.idMember = :member_id
-                    AND p.isDelete = 0
-                    AND p.isDraft = 0
-                ORDER BY " . $orderBy;
-        $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId)
-                    ->setParameter('cat_id', $memcatId)
-                    ->setFirstResult($page)
-                    ->setMaxResults($prodLimit);
-
-        $paginator = new Paginator($query, $fetchJoinCollection = true);
-
-        foreach($paginator as $prod){
-            $product[] = $prod->getProduct();
-        }
-
-        return $product;
-    }
-
-    /**
      *  Count number of products under custom category
      *
      *  @return integer
      */
-    public function countCustomCategoryProduct($memberId, $memcatId)
+    public function countCustomCategoryProducts($memberId, $memcatId)
     {
         $em = $this->_em;
         $dql = "
@@ -71,5 +35,82 @@ class EsMemberProdcatRepository extends EntityRepository
                     ->setParameter("memcat_id", $memcatId);
 
         return $query->getSingleScalarResult();
+    }
+
+
+    /**
+     *  Fetch Custom categorized products
+     *
+     *  @return array - array of product ids
+     */
+    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $page = 0, $orderBy = array("idProduct" => "DESC") )
+    {
+        $productIds = array();
+
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
+
+        $em = $this->_em;
+        $dql = "SELECT pc,p
+                FROM EasyShop\Entities\EsMemberProdcat pc
+                JOIN pc.memcat mc
+                JOIN mc.member m
+                JOIN pc.product p
+                WHERE mc.idMemcat = :cat_id
+                    AND m.idMember = :member_id
+                    AND p.isDelete = 0
+                    AND p.isDraft = 0
+                ORDER BY " . $orderCondition;
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('cat_id', $memcatId)
+                    ->setFirstResult($page)
+                    ->setMaxResults($prodLimit);
+
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+
+        foreach($paginator as $prod){
+            $productIds[] = $prod->getProduct()->getIdProduct();
+        }
+
+        return $productIds;
+    }
+
+    /**
+     *  Get all custom categorized product ids
+     *
+     *  @return array - array of product ids
+     */
+    public function getAllCustomCategoryProducts($memberId, $memcatId)
+    {
+        $productIds = array();
+
+        $em = $this->_em;
+        $dql = "SELECT pc,p
+                FROM EasyShop\Entities\EsMemberProdcat pc
+                JOIN pc.memcat mc
+                JOIN mc.member m
+                JOIN pc.product p
+                WHERE mc.idMemcat = :cat_id
+                    AND m.idMember = :member_id
+                    AND p.isDelete = 0
+                    AND p.isDraft = 0";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('cat_id', $memcatId);
+
+        $result = $query->getResult();
+
+        foreach($result as $prod){
+            $productIds[] = $prod->getProduct()->getIdProduct();
+        }
+
+        return $productIds;
     }
 }

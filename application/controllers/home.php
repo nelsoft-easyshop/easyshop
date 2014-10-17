@@ -352,6 +352,8 @@ class Home extends MY_Controller
                 $data = array(
                     "arrVendorDetails" => $arrVendorDetails 
                     , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
+                    //, "customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory']
+                    , "customCatProd" => array() // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
                     , "defaultCatProd" => $productView['defaultCatProd']
                     , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
                     , "product_condition" => $this->lang->line('product_condition')
@@ -367,15 +369,15 @@ class Home extends MY_Controller
 
                 //Determine active Div for first load
                 $showFirstDiv = TRUE;
-                foreach($data['defaultCatProd'] as $catId => $catDetails){
-                    if( isset($productView['isSearching']) ){
-                        $data['defaultCatProd'][$catId]['isActive'] = (int)$catId === 0 ? TRUE : FALSE;
-                    }
-                    else{
-                        $data['defaultCatProd'][$catId]['isActive'] = $showFirstDiv;
-                        $showFirstDiv = FALSE;
-                    }
+                if( isset($productView['isSearching']) ){
+                    $data['defaultCatProd'][0]['isActive'] = TRUE;
                 }
+                else{
+                    $selector = count($data['customCatProd']) > 0 ? 'customCatProd' : 'defaultCatProd';
+                }
+                reset($data[$selector]);
+                $key = key($data[$selector]);
+                $data[$selector][$key]['isActive'] = TRUE;
 
                 // Load Location
                 $data = array_merge($data, $EsLocationLookupRepository->getLocationLookup());
@@ -409,19 +411,33 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId)
+    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
         $pm = $this->serviceContainer['product_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+        switch($catType){
+            case "custom":
+                $parentCat = $pm->getAllUserProductCustomCategory($memberId);
+                break;
+            default:
+                $parentCat = $pm->getAllUserProductParentCategory($memberId);
+                break;
+        }
 
         $categoryProducts = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat']);
+            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            
+            // Unset DEFAULT categories with no products fetched (due to being custom categorized)
+            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+                unset($parentCat[$idCat]);
+                break;
+            }
+
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
