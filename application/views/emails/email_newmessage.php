@@ -31,19 +31,27 @@
                 <p>
                     Dear {recipient},
                 </p>
-                 <p>
+                <p>
                     <b style="font-weight:bold"><span style="color: #f18200;">{user}</span> has just sent you a personal message in Easyshop!
-                 </p>
+                </p>
             </div>
-            <div style="margin-bottom: 20px;background-color: #fff;border: 1px solid transparent; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05); box-shadow: 0 1px 1px rgba(0, 0, 0, .05); border-color: #bce8f1; border-radius: 0px !important;">
+            <div style="margin-bottom: 20px; background-color: #fff;border: 1px solid transparent; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05); box-shadow: 0 1px 1px rgba(0, 0, 0, .05); border-color: #bce8f1; border-radius: 0px !important; ">
                 <div style="padding: 10px 15px; border-bottom: 1px solid transparent; color: #31708f;background-color: #d9edf7; border-color: #bce8f1; font-weight: bold;">Message</div>
-                <div style="padding: 15px;">
+                <div style="margin: 20px;">
+                <div style=" margin-left : 20px; padding: 15px; min-height: 50px; display: table-cell; vertical-align: middle; width: 100%; border-left: solid #868686  4px; word-break: break-all">
                     "{msg}"
+                    <br/>
+                    <br/>
+                    <a href="{msg_link}" style="text-decoration: none; color: #ffffff">
+                        <span style="padding:10px 20px; border: solid #f18200 1px; background: #f18200; ">
+                            Send {user} a reply
+                        </span>
+                    </a>
                 </div>
+                </div>
+                
             </div>
-            <div style="margin-top: 10px">
-                    Send {user} a <a href="{msg_link}">reply</a>
-            </div>
+           
             <div style="background: #3c475c; width: 100%; min-height: 100px; border-width:0px 0px 5px 0px; border-style:solid; border-color:#f18200; padding-top: 15px; padding-bottom: 15px;">
                 <div style="min-height: 50px;">
                     <center>
