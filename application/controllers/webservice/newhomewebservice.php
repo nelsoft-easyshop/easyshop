@@ -470,8 +470,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $subIndex = (int)$this->input->get("subIndex");
-        $value = $this->input->get("text");
-        $value = $this->input->get("target");
+        $value = $this->input->get("value");
 
         $map->categoryNavigation->category[$index]->sub->categorySubSlug[$subIndex] = $value;
         if($map->asXML($this->file)) {
