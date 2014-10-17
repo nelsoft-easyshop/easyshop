@@ -287,7 +287,7 @@ class Home extends MY_Controller
                 $this->contactUser($vendorSlug);
             }
             else{
-                $viewerId = intval(empty($sessionData['member_id']) ? 0 : $sessionData['member_id']);
+                $viewerId = intval($sessionData['member_id'] ? 0 : $sessionData['member_id']);
                 $headerData = $this->fill_header();
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
                 
@@ -495,7 +495,7 @@ class Home extends MY_Controller
                                                                               'ratingHeaders' => $ratingHeaders,
                                                                               ), TRUE);
 
-        $viewerId = empty($this->session->userdata('member_id')) ? 0 : $this->session->userdata('member_id');
+        $viewerId = $this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id');
         $orderRelations = array();
         
         if($viewerId !== 0){
