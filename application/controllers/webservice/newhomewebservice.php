@@ -66,6 +66,46 @@ class NewHomeWebService extends MY_Controller
     }
 
     /**
+     *  Method that handles edit for brands node 
+     *  @return JSON
+     */
+    public function setBrands()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->brandSection->brandId[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }
+
+    /**
+     *  Method that handles add for topSellers node 
+     *  @return JSON
+     */
+    public function addBrands()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addBrands",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/brandSection/brandId[last()]',"\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
      *  Method that handles add,edit,delete for topSellers node 
      *  @return JSON
      */
