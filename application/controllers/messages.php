@@ -96,12 +96,12 @@ class messages extends MY_Controller
                 // TODO: query count only
                 $recipientMessages = $this->messages_model->get_all_messages($qResult['id_member'], "Get_UnreadMsgs");
                 
-                /*$dc = new \EasyShop\WebSocket\Pusher\DataContainer();
+                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
                 $dc->set('messageCount', $recipientMessages['unread_msgs']);
                 $dc->set('unreadMessages', $recipientMessages);
                 
                 $userPusher = $this->serviceContainer['user_pusher'];
-                $userPusher->push($qResult['id_member'], $dc);*/
+                $userPusher->push($qResult['id_member'], $dc);
 
                 # Queue email notification
                 $memberEntity = $em->find("EasyShop\Entities\EsMember", $sessionData['member_id']);
