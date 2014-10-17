@@ -2360,7 +2360,7 @@ font-size: 15px;
 .fa-prev-slide{
     position: absolute;
     left: 0;
-    margin-left: 15px;
+    margin-left: 7px;
     width: 44px;
     height: 44px;
     border: solid #fff 2px;
@@ -2381,7 +2381,7 @@ font-size: 15px;
 .fa-next-slide{
     position: absolute;
     right: 0;
-    margin-right: -44px;
+    margin-right: -54px;
     width: 44px;
     height: 44px;
     border: solid #fff 2px;
@@ -2547,6 +2547,7 @@ font-size: 15px;
 .fa-category-item-prev:hover, .fa-category-item-next:hover{
     color: #ffffff;
     background: #ff893b;
+    border: solid #ff893b 2px;
     cursor: pointer;
 }
 
