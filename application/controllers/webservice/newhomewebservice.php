@@ -56,6 +56,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
+
         $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
         if($remove == true) {
             return $this->output
@@ -289,7 +290,7 @@ class NewHomeWebService extends MY_Controller
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/cms/home';
+        $path_directory = 'assets/images';
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -308,7 +309,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = $filename.'.'.$file_ext; 
+            $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
             $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
 
             $index = $index == 0 ? 1 : $index + 1;
@@ -336,7 +337,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images';
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
                 "overwrite" => FALSE, 
@@ -353,7 +354,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
                 $map->adSection->ad[$index]->img = $value;
                 $map->adSection->ad[$index]->target = $target;
  
@@ -649,7 +650,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images/';
 
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
@@ -667,7 +668,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/".$path_directory.$filename.'.'.$file_ext; 
 
                 if($action == "logo") {
                     $map->sellerSection->sellerLogo = $value;
@@ -723,7 +724,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images/homeslider';
 
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
@@ -741,7 +742,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
                 $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
 
@@ -820,7 +821,7 @@ class NewHomeWebService extends MY_Controller
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/cms/home';
+        $path_directory = 'assets/images/homeslider';
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -839,7 +840,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = $filename.'.'.$file_ext; 
+            $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
             if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
                 $map->sliderSection->slide[$index]->image->path = $value;
