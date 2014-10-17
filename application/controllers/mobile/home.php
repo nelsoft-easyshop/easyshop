@@ -114,12 +114,12 @@ class Home extends MY_Controller {
                 }
 
                 $productArray[] = array(
-                                        'name' => 0,
-                                        'slug' => 0,
-                                        'discount_percentage' => 0,
+                                        'name' => "",
+                                        'slug' => "",
+                                        'discount_percentage' => "",
                                         'base_price' => 0,
                                         'final_price' => 0,
-                                        'image' => 0,
+                                        'image' => "",
                                         'actionType' => 'show product list',
                                         'target' => base_url().'mobile/category/getCategoriesProduct?slug='.$categorySlug,
                                     );
