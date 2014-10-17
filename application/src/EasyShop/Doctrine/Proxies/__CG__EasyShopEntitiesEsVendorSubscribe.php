@@ -64,10 +64,10 @@ class EsVendorSubscribe extends \EasyShop\Entities\EsVendorSubscribe implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'idVendorSubscribe', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsVendorSubscribe' . "\0" . 'vendor');
     }
 
     /**
@@ -186,6 +186,28 @@ class EsVendorSubscribe extends \EasyShop\Entities\EsVendorSubscribe implements 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdVendorSubscribe', array());
 
         return parent::getIdVendorSubscribe();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCreateddate($createddate)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreateddate', array($createddate));
+
+        return parent::setCreateddate($createddate);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreateddate()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreateddate', array());
+
+        return parent::getCreateddate();
     }
 
     /**
