@@ -107,10 +107,18 @@ class messages extends MY_Controller
                 $memberEntity = $em->find("EasyShop\Entities\EsMember", $sessionData['member_id']);
                 $emailRecipient = $qResult['email'];
                 $emailSubject = $this->lang->line('new_message_notif');
+                $imageArray = array(
+                    "/assets/images/landingpage/templates/header-img.png"
+                    , "/assets/images/appbar.home.png"
+                    , "/assets/images/appbar.message.png"
+                    , "/assets/images/landingpage/templates/facebook.png"
+                    , "/assets/images/landingpage/templates/twitter.png"
+                );
                 $parseData = array(
                     'user' => $memberEntity->getUsername()
                     , 'recipient' => $qResult['username']
                     , 'home_link' => base_url()
+                    , 'store_link' => base_url() . $memberEntity->getSlug()
                     , 'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername()
                     , 'msg' => $msg
                 );
@@ -118,7 +126,7 @@ class messages extends MY_Controller
 
                 $emailService->setRecipient($emailRecipient)
                              ->setSubject($emailSubject)
-                             ->setMessage($emailMsg)
+                             ->setMessage($emailMsg, $imageArray)
                              ->queueMail();
             }
         }
