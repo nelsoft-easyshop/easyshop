@@ -61,6 +61,10 @@ class CMS
      */
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
+        if($nodeName == "addBrands") {
+             $string = '
+            <brandId>'.$value.'</brandId>';   
+        }            
         if($nodeName == "addTopSellers") {
              $string = '
             <seller>'.$value.'</seller>';   
@@ -433,6 +437,21 @@ $string = '<typeNode>
                     return false;
             }
         }
+
+        else if($nodeName == "brands") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//brandSection/brandId[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        } 
 
         else if($nodeName == "topSellers") {
             $xml = new \SimpleXMLElement(file_get_contents($file) );            
