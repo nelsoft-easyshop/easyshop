@@ -30,8 +30,8 @@ class Home extends MY_Controller {
                             'name' => '0',
 
                             'image' => $value['value'],
-                            'target' => $value['imagemap']['target'],
-                            'actionType' => $value['imagemap']['target'],
+                            'target' => base_url().$value['imagemap']['target'],
+                            'actionType' => $value['actionType'],
 
                         );
         }
@@ -97,15 +97,21 @@ class Home extends MY_Controller {
                                 );
             }
 
-
             $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
                                 ->findOneBy(['slug' => $value['name']]);
 
             $categoryName = "";
+            $categoryIcon = base_url()."assets/images/img_icon_bag2.png";
             if($categoryObject){
                 $categoryName = $categoryObject->getName();
                 $categorySlug = $categoryObject->getSlug();
 
+                $categoryIconObject = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                                ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
+
+                if($categoryIconObject){
+                    $categoryIcon = base_url().'assets/'.$categoryIconObject->getPath();
+                }
 
                 $productArray[] = array(
                                         'name' => 0,
@@ -123,6 +129,7 @@ class Home extends MY_Controller {
                                 'name' => $categoryName,
                                 'bgcolor' => $value['bgcolor'],
                                 'type' => $value['type'],
+                                'icon' => $categoryIcon,
                                 'data' => $productArray,
                             );
         }
