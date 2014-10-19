@@ -3,6 +3,12 @@
 namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository; 
+use Doctrine\ORM\Query\ResultSetMapping;
+
+// NOTE
+// If a user follows another, add their ids to this table
+// where member_id is the user that follows 
+// and vendor_id is the user he's following.
 
 class EsVendorSubscribeRepository extends EntityRepository
 {
@@ -28,23 +34,46 @@ class EsVendorSubscribeRepository extends EntityRepository
         $result;
     }
 
-    public function getRecommendToFollow($userId,$memberId,$perPage = 6)
-    { 
-        $this->em =  $this->_em;
- 
-        $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('m')
-                            ->from('EasyShop\Entities\EsMember','m')
-                            // ->join('EasyShop\Entities\EsVendorSubscribe','vs', 
-                            //                 'WITH','m.idMember = vs.member')
-                            ->where('m.idMember != :userId') 
-                            ->setParameter('userId', $userId)
-                            ->andWhere('m.idMember != :memberId') 
-                            ->setParameter('memberId', $memberId)
-                            ->getQuery()  
-                            ->setMaxResults($perPage);
+    /**
+     * get recommended followers on page
+     * @param  integer $memberId member id of the page owner
+     * @param  integer $viewerId member id of the page viewer
+     * @param  integer $perPage
+     * @return mixed
+     */
+    public function getRecommendToFollow($memberId,$viewerId,$perPage = 6)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id_member','id_member'); 
 
-        $result = $qbResult->getResult();
-        return $result;
+        $sql = 'SELECT id_member
+                FROM es_member  a  
+                WHERE a.id_member NOT IN (:member_id,:viewer_id)
+                AND a.id_member NOT IN (
+                    SELECT vendor_id from es_vendor_subscribe where member_id = :viewer_id
+                )
+                AND a.id_member NOT IN (
+                    SELECT member_id from es_vendor_subscribe where vendor_id = :member_id
+                )
+                ORDER BY RAND()
+                LIMIT :per_page';
+ 
+
+        $query = $em->createNativeQuery($sql,$rsm)
+                        ->setParameter('member_id', $memberId)
+                        ->setParameter('viewer_id', $viewerId)
+                        ->setParameter('per_page', 1);
+    
+        $result = $query->getResult();
+        $memberIds = [];
+        foreach ($result as $key => $value) {
+            $memberIds[] = $value['id_member'];
+        }
+
+        $resultMembers = $em->getRepository('EasyShop\Entities\EsMember')
+                        ->findBy(['idMember' => $memberIds]); 
+
+        return $resultMembers;
     }
 }

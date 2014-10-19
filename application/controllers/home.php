@@ -452,7 +452,7 @@ class Home extends MY_Controller
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
         $pageOffset = 0;
-        $vendorPerpage = 1;
+        $vendorPerpage = 6;
         $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$vendorPerpage);
         if($followers['followers']){
             foreach ($followers['followers'] as $key => $value) {
@@ -471,6 +471,7 @@ class Home extends MY_Controller
 
         // get who to follow
         $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId);
+
         foreach ($followerData['recommendToFollow'] as $key => $value) { 
             $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
         }
@@ -498,8 +499,7 @@ class Home extends MY_Controller
         $pageOffset = $this->input->get('page') - 1; // start count page in 1.
         $viewerId = $this->session->userdata('member_id');
         $memberId = $this->input->get('vendorId');
-        $vendorPerpage = 1; 
-        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$vendorPerpage);
+        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset);
         if($followers['followers']){
             foreach ($followers['followers'] as $key => $value) {
                 $value->subscriptionStatus = $this->serviceContainer['user_manager']

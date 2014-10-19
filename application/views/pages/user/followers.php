@@ -26,7 +26,7 @@
                                         <p class="p-vendor-location">
                                             Unit 8C Marc 2000 Tower, Manila
                                         </p>
-                                        <span class="follow-btn btn btn-default-2">
+                                        <span class="follow-btn follow-right btn btn-default-2 subscription" data-status="follow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
                                             <span class="glyphicon glyphicon-plus-sign"></span>Follow
                                         </span>
                                     </td>
