@@ -13,7 +13,9 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=$avatarImage?>" alt="Profile Photo">
+                            <div class="vendor-profile-photo-wrapper">
+                                <img src="<?=$avatarImage?>" alt="Profile Photo">
+                            </div>
                         </div>
                     </div>
                 </div>

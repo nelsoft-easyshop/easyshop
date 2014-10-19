@@ -22,6 +22,13 @@ class EsVendorSubscribe
     private $idVendorSubscribe;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createddate", type="datetime", nullable=false)
+     */
+    private $createddate = 'CURRENT_TIMESTAMP';
+
+    /**
      * @var \EasyShop\Entities\EsMember
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
@@ -51,6 +58,29 @@ class EsVendorSubscribe
     public function getIdVendorSubscribe()
     {
         return $this->idVendorSubscribe;
+    }
+
+    /**
+     * Set createddate
+     *
+     * @param \DateTime $createddate
+     * @return EsVendorSubscribe
+     */
+    public function setCreateddate($createddate)
+    {
+        $this->createddate = $createddate;
+
+        return $this;
+    }
+
+    /**
+     * Get createddate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateddate()
+    {
+        return $this->createddate;
     }
 
     /**

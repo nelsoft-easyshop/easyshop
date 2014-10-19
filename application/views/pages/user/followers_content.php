@@ -21,7 +21,11 @@
                                     </p>
                                 </a>
                                 <p class="p-follower-location">
-                                    Greenhills, San Juan City, Metro Manila
+                                    <?php if($value->location):?>
+                                        <?=$value->city;?>, <?=$value->stateRegion;?>
+                                    <?php else: ?>
+                                        Location not set
+                                    <?php endif; ?>
                                 </p>
                             </div>
                             <div class="col-xs-5 col-follow-button follow-button-area" align="right">
