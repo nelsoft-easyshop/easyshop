@@ -18,6 +18,7 @@
             <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>item/lg-optimus-g-pro-e985</target>
         </imagemap>
+        <actionType>show product details</actionType>
     </mainSlide>
 
     <mainSlide>

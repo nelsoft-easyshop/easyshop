@@ -59,7 +59,7 @@ class ApiFormatter
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
-                'basePrice' => $product->getFinalPrice(),
+                'basePrice' => floatval($product->getFinalPrice()),
             );
 
         // get product images
@@ -185,7 +185,7 @@ class ApiFormatter
             unset($temporaryArray[$key]['product_attribute_ids']);
             $temporaryArray[$key]['combinationId'] = ($newCombinationKey[0] == "a_0") ? [] : $newCombinationKey;
             $temporaryArray[$key]['id'] = $key;
-            $temporaryArray[$key]['price'] = number_format($totalPrice + $product->getFinalPrice(), 2,'.','');
+            $temporaryArray[$key]['price'] = floatval(number_format($totalPrice + $product->getFinalPrice(), 2,'.',''));
             $productQuantity[] = $temporaryArray[$key];
         }
 
@@ -323,8 +323,8 @@ class ApiFormatter
                     'name' => $product->getName(), 
                     'slug' => $product->getSlug(),
                     'condition' => $product->getCondition(),
-                    'discount' => $product->getDiscountPercentage(),
-                    'price' => $product->getFinalPrice(),
+                    'discount' => floatval($product->getDiscountPercentage()),
+                    'price' => floatval($product->getFinalPrice()),
                     'product_image' => $imageDirectory.'categoryview/'.$imageFileName
                 );
     }

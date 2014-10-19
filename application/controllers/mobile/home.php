@@ -56,9 +56,9 @@ class Home extends MY_Controller {
 
                 $productName = "";
                 $productSlug = "";
-                $productBasePrice = "";
-                $productFinalPrice = "";
-                $productDiscount = "";
+                $productBasePrice = 0;
+                $productFinalPrice = 0;
+                $productDiscount = 0;
                 $productImagePath = "";
                 $target = "";
 
@@ -78,7 +78,7 @@ class Home extends MY_Controller {
 
                     $productName = $product->getName();
                     $productSlug = $product->getSlug();
-                    $productDiscount = $product->getDiscountPercentage();
+                    $productDiscount = floatval($product->getDiscountPercentage());
                     $productBasePrice = floatval($product->getPrice());
                     $productFinalPrice = floatval($product->getFinalPrice());
                     $productImagePath = $directory.$imageFileName;
@@ -116,7 +116,7 @@ class Home extends MY_Controller {
                 $productArray[] = array(
                                         'name' => "",
                                         'slug' => "",
-                                        'discount_percentage' => "",
+                                        'discount_percentage' => 0,
                                         'base_price' => 0,
                                         'final_price' => 0,
                                         'image' => "",
