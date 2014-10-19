@@ -28,6 +28,12 @@ class ProductManager
 {
 
     /**
+     * Newness Limit in days 
+     *
+     */
+    const NEWNESS_LIMIT = 14;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -95,11 +101,15 @@ class ProductManager
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                            ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
+                              ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping($totalShippingFee === 0);
+        $product->setIsFreeShipping($totalShippingFee === 0);        
+        $product->setIsNew($this->isProductNew($product));
+        $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                           ->getDefaultImage($product->getIdProduct()));
+        
         $this->promoManager->hydratePromoData($product);
 
         return $product;
@@ -189,7 +199,7 @@ class ProductManager
 
     /**
      * Apply discounted price to product
-     * This has been refactored with hydrate promo data
+     *
      * @param  array  $products [description]
      * @return mixed
      */
@@ -382,8 +392,38 @@ class ProductManager
         $this->em->flush();
         return true;
     }
-
     
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        if(is_string($product->getLastModifiedDate())){
+            $sql = "
+                SELECT 
+                    p.lastmodifieddate
+                FROM 
+                    EasyShop\Entities\EsProduct p
+                WHERE p.idProduct = :productId
+            ";
+            $query = $this->em->createQuery($sql)
+                                ->setParameter('productId', $product->getIdProduct());
+            $lastModifiedDate = $query->getResult()[0]['lastmodifieddate']->getTimestamp();
+        }
+        else{
+            $lastModifiedDate = $product->getLastModifiedDate()
+                                        ->getTimestamp();
+        }
+        $dateNow = new \DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::NEWNESS_LIMIT;
+    }
+
     /**
      * Returns the recommended products list for a certain product
      *
@@ -442,8 +482,19 @@ class ProductManager
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
 
-        $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                        ->getNotCustomCategorizedProducts($memberId, $arrCatId);
+        // Identify which query to use in fetching product Ids and product count
+        if($condition === "" && $lprice === "" && $uprice === ""){
+            $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                     ->countNotCustomCategorizedProducts($memberId, $arrCatId);
+            $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                        ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+            $isAllProductIds = FALSE;
+        }
+        else{
+            $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                           ->getAllNotCustomCategorizedProducts($memberId, $arrCatId);
+            $isAllProductIds = TRUE;
+        }
         
         // Fetch product object and append image
         foreach($categoryProductIds as $productId){
@@ -461,64 +512,67 @@ class ProductManager
             $categoryProducts[] = $product;
         }
 
-        // Flag for triggering andWhere in criteria
-        $hasWhere = FALSE;
+        // IF FILTER CONDITIONS ARE PROVIDED
+        if($isAllProductIds){
+            // Flag for triggering andWhere in criteria
+            $hasWhere = FALSE;
 
-        $arrCollectionProducts = new ArrayCollection($categoryProducts);
-        $criteria = new Criteria();
+            $arrCollectionProducts = new ArrayCollection($categoryProducts);
+            $criteria = new Criteria();
 
-        // Start appending filter conditions
-        if($condition !== ""){
-            $criteria->where(Criteria::expr()->eq("condition", $condition));
-            $hasWhere = TRUE;
-        }
-
-        if($lprice !== ""){
-            if(!$hasWhere){
-                $criteria->where(Criteria::expr()->gte("finalPrice", $lprice));
+            // Start appending filter conditions
+            if($condition !== ""){
+                $criteria->where(Criteria::expr()->eq("condition", $condition));
                 $hasWhere = TRUE;
             }
-            else{
-                $criteria->andWhere(Criteria::expr()->gte("finalPrice", $lprice));
+
+            if($lprice !== ""){
+                if(!$hasWhere){
+                    $criteria->where(Criteria::expr()->gte("finalPrice", $lprice));
+                    $hasWhere = TRUE;
+                }
+                else{
+                    $criteria->andWhere(Criteria::expr()->gte("finalPrice", $lprice));
+                }
             }
+
+            if($uprice !== ""){
+                if(!$hasWhere){
+                    $criteria->where(Criteria::expr()->lte("finalPrice", $uprice));
+                    $hasWhere = TRUE;
+                }
+                else{
+                    $criteria->andWhere(Criteria::expr()->lte("finalPrice", $uprice));
+                }   
+            }
+
+            // Generate orderby criteria - Implemented to handle multiple conditions
+            $criteriaOrderBy = array();
+            foreach($orderBy as $sortBy=>$sort){
+                if($sort === "ASC"){
+                    $criteriaOrderBy[$sortBy] = Criteria::ASC;
+                }
+                else{
+                    $criteriaOrderBy[$sortBy] = Criteria::DESC;
+                }
+            }
+            $criteria->orderBy($criteriaOrderBy);
+
+            // Count product result after filtering
+            $productCount = count($arrCollectionProducts->matching($criteria));
+
+            // Filter number of results (pagination)
+            $criteria->setFirstResult($page)
+                    ->setMaxResults($productLimit);
+
+            // Push products to be displayed
+            $categoryProducts = $arrCollectionProducts->matching($criteria);
         }
-
-        if($uprice !== ""){
-            if(!$hasWhere){
-                $criteria->where(Criteria::expr()->lte("finalPrice", $uprice));
-                $hasWhere = TRUE;
-            }
-            else{
-                $criteria->andWhere(Criteria::expr()->lte("finalPrice", $uprice));
-            }   
-        }
-
-        // Generate orderby criteria - Implemented to handle multiple conditions
-        $criteriaOrderBy = array();
-        foreach($orderBy as $sortBy=>$sort){
-            if($sort === "ASC"){
-                $criteriaOrderBy[$sortBy] = Criteria::ASC;
-            }
-            else{
-                $criteriaOrderBy[$sortBy] = Criteria::DESC;
-            }
-        }
-        $criteria->orderBy($criteriaOrderBy);
-
-        // Count product result after filtering
-        $filteredProductsCount = count($arrCollectionProducts->matching($criteria));
-
-        // Filter number of results (pagination)
-        $criteria->setFirstResult($page)
-                ->setMaxResults($productLimit);
-
-        // Push products to be displayed
-        $displayProducts = $arrCollectionProducts->matching($criteria);
-
+        
         // Generate result array
         $result = array(
-            'products' => $displayProducts,
-            'filtered_product_count' => $filteredProductsCount
+            'products' => $categoryProducts,
+            'filtered_product_count' => $productCount
         );
 
         return $result;

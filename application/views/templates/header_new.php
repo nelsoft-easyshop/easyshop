@@ -84,27 +84,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="header-cart-container">
                 <a href="/cart" class="header-cart-wrapper">
                     <span class="header-cart-items-con ui-form-control">
-                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                 </a>
                 <div class="header-cart-item-list">
-                    <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                    <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                     <p>You have no item in cart</p>
                     <?PHP else : ?>
                         <p>Recently add item(s)</p>
-                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                            <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                    <?PHP for($cnt = sizeof($cartItems) - 1; $cnt > -1 ;$cnt--) : ?>
+                            <?PHP if(sizeof($cartItems) - 1 === $cnt || sizeof($cartItems) - 1 === $cnt +1) : ?>
                     <div class="mrgn-bttm-15">
                         <div class="header-cart-item-img">
-                            <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                            <a href="/item/<?=$cartItems[$cnt]['slug']?>">
+                                <span><img src="/<?=$cartItems[$cnt]['imagePath']; ?>thumbnail/<?=$cartItems[$cnt]['imageFile']; ?>" alt="<?=$cartItems[$cnt]['name']?>"></span>
                             </a>
                         </div>
                         <div class="header-cart-item-con">
-                            <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                            <span>x <?=$cart_items[$cnt]['qty']?></span>
-                            <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                            <a href="/item/<?=$cartItems[$cnt]['slug']?>"><span><?=$cartItems[$cnt]['name']?></span></a>
+                            <span>x <?=$cartItems[$cnt]['qty']?></span>
+                            <span class="header-cart-item-price">&#8369; <?=$cartItems[$cnt]['price']?></span>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -112,8 +112,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?PHP endfor; ?>
                     <div class="header-cart-lower-content">
                         <div class="header-cart-shipping-total">
-                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
-                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                            <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                         </div>
                         <div class="header-cart-buttons">
                             <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -125,55 +125,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
             </div>
         </div>
-        <div>
-            <?php if(isset($logged_in) && $logged_in): ?>
-                <div class="vendor-login-con">
-                    <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                        <span id="unread-messages-count" class="msg_countr message-count-con">
-                    <?=$msgs['unread_msgs'];?>
-                    </span>
-                    <?php endif;?>
-                    <img src="/assets/images/img-default-icon-user.jpg"> 
-                    <a href="/<?php echo html_escape($user['slug'])?>"><span class="vendor-login-name"><strong><?php echo html_escape($user['username']); ?></strong></span></a>
-                    <div class="new-user-nav-dropdown">
-                        <span class="user-nav-dropdown">Account Settings</span>
-                    </div>
-                    <ul class="nav-dropdown">
-                        <li>
-                            <a href="/me">Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="/me?me=pending">On-going Transactions</a>
-                        </li>
-                        <li class="nav-dropdown-border">
-                            <a href="/me?me=settings">Settings</a>
-                        </li>
-                        <li class="nav-dropdown-border pos-rel">
-                            <a href="/messages">Messages</a>
-                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                            <div id="unread-messages-count" class="msg_countr message-count-con">
-                            <?=$msgs['unread_msgs'];?>
-                            </div>
-                            <?php endif;?>
-                        </li>
-                        <li class="nav-dropdown-border">
-                            <a class="prevent" href="/sell/step1">Sell an item</a>
-                        </li>
-                        <li class="nav-dropdown-border">
-                            <a class="prevent" href="/login/logout">Logout</a>
-                        </li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-            <?php else: ?>
-                <div class="vendor-login-con">
-                    <img src="/assets/images/img-default-icon-user.jpg"> 
-                    <a href="/login"><strong>login</strong></a>  or 
-                    <a href="/register"><strong>Create and account</strong></a>
-                </div>
-            <?php endif; ?>
         
+        <?php if(isset($logged_in) && $logged_in): ?>
+        <div class="vendor-log-in-wrapper">
+            <div class="vendor-login-con user-login">
+                <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                    <span id="unread-messages-count" class="msg_countr message-count-con">
+                <?=$msgs['unread_msgs'];?>
+                </span>
+                <?php endif;?>
+                <img src="/assets/images/img-default-icon-user.jpg"> 
+                <a href="/<?php echo html_escape($user['slug'])?>" class="vendor-login-name">
+                    <span>
+                        <strong><?php echo html_escape($user['username']); ?></strong>
+                    </span>
+                </a>
+                <div class="new-user-nav-dropdown">
+                    <span class="user-nav-dropdown">Account Settings</span>
+                </div>
+                <ul class="nav-dropdown">
+                    <li>
+                        <a href="/me">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/me?me=pending">On-going Transactions</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a href="/me?me=settings">Settings</a>
+                    </li>
+                    <li class="nav-dropdown-border pos-rel">
+                        <a href="/messages">Message</a>
+                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                        <div id="unread-messages-count" class="msg_countr message-count-con">
+                        <?=$msgs['unread_msgs'];?>
+                        </div>
+                        <?php endif;?>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a class="prevent" href="/login/logout">Logout</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
         </div>
+        <?php else: ?>
+        <div>
+            <div class="vendor-login-con vendor-out-con">
+                <img src="/assets/images/img-default-icon-user.jpg"> 
+                <a href="/login"><strong>login</strong></a>  or 
+                <a href="/register"><strong>Create and account</strong></a>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        
         <div class="clear"></div>
     </div>
 </header>

@@ -436,6 +436,7 @@ class UserManager
      * 
      * @param integer $memberId
      * @param string $selector
+     * @return string
      */
     public function getUserImage($memberId, $selector = NULL)
     {
@@ -544,7 +545,8 @@ class UserManager
 
         $subscriptionEntity = new EsVendorSubscribe();
         $subscriptionEntity->setMember($memberEntity)
-                            ->setVendor($vendorEntity);
+                            ->setVendor($vendorEntity)
+                            ->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
         $this->em->persist($subscriptionEntity);
         $this->em->flush();
 
