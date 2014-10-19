@@ -11,31 +11,7 @@
                             WHO TO FOLLOW
                         </p>
                         <table width="100%"> 
-                            <?php foreach ($recommendToFollow as $key => $value): ?>
-                                <?php $memberEntity = $value; ?>
-                                <tr>
-                                    <td class="td-vendor-img">
-                                       <a href="/<?=$memberEntity->getSlug();?>"><img src="<?=$value->avatarImage?>" class="vendor-img"/></a>
-                                    </td>
-                                    <td class="td-vendor-details">
-                                        <a href="/<?=$memberEntity->getSlug();?>">
-                                            <p class="p-vendor-name">
-                                                <?=strlen($memberEntity->getStoreName()) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
-                                            </p>
-                                        </a>
-                                        <p class="p-vendor-location">
-                                            <?php if($value->location):?>
-                                                <?=$value->city;?>, <?=$value->stateRegion;?>
-                                            <?php else: ?>
-                                                Location not set
-                                            <?php endif; ?>
-                                        </p>
-                                        <span class="follow-btn follow-right btn btn-default-2 subscription" data-status="follow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
-                                            <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                        </span>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <?=$follower_recommed_view;?>
                         </table>
                     </div>
                 </div>
@@ -71,10 +47,10 @@
     <script type='text/javascript'>
         (function($) {
 
+                var vendorId = $("#vendor_id").val(); 
                 $('.pagination-container').on('click', '.individual', function(){
           
                     var page = $(this).data('page');
-                    var vendorId = $("#vendor_id").val(); 
                     if($(this).hasClass('active')){
                         return false;
                     }
@@ -124,6 +100,7 @@
                     var name = $this.data('username');
                     var slug = $this.data('slug');
                     var isLoggedIn = parseInt($('#is_loggedin').val());
+                    var buttonType = $this.data('btn');//recommend
 
                     if(isLoggedIn){ 
                         if(status == "follow"){
@@ -147,8 +124,26 @@
                                 if (data.result != "success") {  
                                     alert(data.error);
                                 }
-                                else{ 
-                                    $this.parent().empty().append(text);
+                                else{
+                                    if(buttonType == "default"){
+                                        $this.parent().empty().append(text);
+                                    }
+                                    else{
+                                        $.ajax({ 
+                                            url: config.base_url+"home/getMoreRecommendToFollow",
+                                            type: "GET",
+                                            dataType: "json",
+                                            data: {vendorId:vendorId},
+                                            success: function (data2) {
+                                                if(data2.count <= 0){
+                                                    $this.closest('tr').remove();
+                                                }
+                                                else{
+                                                    $this.closest('tr').replaceWith(data2.html);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });

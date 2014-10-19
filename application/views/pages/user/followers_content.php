@@ -31,14 +31,14 @@
                             <div class="col-xs-5 col-follow-button follow-button-area" align="right">
                                 <?php if($isLoggedIn && $memberEntity->getIdMember() == $viewerId): ?>
                                 <?php elseif(strtolower($value->subscriptionStatus) === "unfollowed" || !$isLoggedIn): ?>
-                                    <span class="follow-btn follow-right btn btn-default-2 subscription" data-status="follow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-2 subscription" data-btn="default" data-status="follow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
                                         <span class="glyphicon glyphicon-plus-sign"></span>Follow
                                     </span>
                                 <?php else: ?> 
-                                    <span class="follow-btn follow-right btn btn-default-following following-user subscription"  data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-following following-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
                                         <i class="fa fa-check"></i>Following
                                     </span>
-                                    <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription"  data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
                                         <i class="fa fa-minus-circle"></i> Unfollow
                                     </span>
                                 <?php endif; ?>

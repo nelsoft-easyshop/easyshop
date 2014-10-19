@@ -500,6 +500,7 @@ class Home extends MY_Controller
                 $value->stateRegion = $userAddress->getStateregion()->getLocation();
             }
         }
+
         // Generate pagination view
         $paginationData = array(
             'lastPage' => ceil($followers['count']/$this->followerPerPage)
@@ -508,6 +509,7 @@ class Home extends MY_Controller
 
         $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
         $followerData['follower_view'] = $this->load->view('pages/user/followers_content', $followerData, true);
+        $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
 
         // Load View
         $this->load->view('templates/header_new', $data);
@@ -549,6 +551,36 @@ class Home extends MY_Controller
 
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
+        echo json_encode($response);
+    }
+
+    public function getMoreRecommendToFollow()
+    {
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+
+        $viewerId = $this->session->userdata('member_id');
+        $memberId = $this->input->get('vendorId'); 
+                                                           // get who to follow
+        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId,1);
+
+        foreach ($followerData['recommendToFollow'] as $key => $value) {
+            // get user images for display
+            $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
+            
+            // get user address
+            $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
+                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => 0]);
+            $value->location = false;
+            if($userAddress){
+                $value->location = TRUE;
+                $value->city = $userAddress->getCity()->getLocation();
+                $value->stateRegion = $userAddress->getStateregion()->getLocation();
+            }
+        }
+        $response['count'] = count($followerData['recommendToFollow']);
+        $response['html'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
+        
         echo json_encode($response);
     }
     

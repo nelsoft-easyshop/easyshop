@@ -63,7 +63,7 @@ class EsVendorSubscribeRepository extends EntityRepository
         $query = $em->createNativeQuery($sql,$rsm)
                         ->setParameter('member_id', $memberId)
                         ->setParameter('viewer_id', $viewerId)
-                        ->setParameter('per_page', 1);
+                        ->setParameter('per_page', $perPage);
     
         $result = $query->getResult();
         $memberIds = [];
