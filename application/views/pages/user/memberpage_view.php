@@ -1720,7 +1720,7 @@
         <h2>Bought Items | <span  class="fa fa-print print" style="cursor:pointer;size:1px;"></span></h2>
             <ul class="print-ul">
                 <a id="printTransactions" data-url="printbuytransactions"><li>Print</li></a>
-                <a href="#"><li>Export to CSV</li></a>
+                <a id="exportTransactions" data-url="/exportbuytransactions"><li>Export to CSV</li></a>
             </ul>
         <?php if($transaction['count']['buy']===0):?>
             <br/>
@@ -2033,7 +2033,8 @@
         <h2>Sold Items  | <span  class="fa fa-print print-s" style="cursor:pointer;size:1px;"></span></h2>
         <ul class="print-ul-s">
             <a id="printTransactions" data-url="printselltransactions"><li>Print</li></a>
-            <a href="#"><li>Export to CSV</li></a>
+            <a id="exportTransactions" data-url="/exportsoldtransactions"><li>Export to CSV</li></a>
+
         </ul>
         <?php if($transaction['count']['sell']===0):?>
         <br/>

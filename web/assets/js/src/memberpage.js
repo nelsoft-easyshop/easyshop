@@ -37,7 +37,7 @@ $(document).ready(function(){
             $print_ul_s.show();
         });
     });
-    
+
     $(document).on('click','#printTransactions', function(){
         var url = $(this).data("url");
 
@@ -54,6 +54,11 @@ $(document).ready(function(){
                 alert("Action failed, please try again");
             }
         });
+    });      
+    
+    $(document).on('click','#exportTransactions', function(){
+        var url = $(this).data("url");
+        document.location.href = url;
     });      
     
     progress_update('');
