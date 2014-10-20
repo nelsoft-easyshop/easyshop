@@ -2443,6 +2443,10 @@ font-size: 15px;
   text-align: center;
 }
 
+.a-item-image{
+    width: 100%;
+    height: 100%;
+}
 
 .owl-theme .owl-controls .owl-buttons div {
   padding: 5px 9px;
