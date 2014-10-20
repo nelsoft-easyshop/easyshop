@@ -106,5 +106,6 @@ $lang['message_to_buyer'] = "This is to notify you that you have made a purchase
 # New Message notification
 $lang['new_message_notif'] = "Easyshop.ph - New message received";
 
+
 ?>
 
