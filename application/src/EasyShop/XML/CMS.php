@@ -879,7 +879,7 @@ $string = '<typeNode>
                 $target = "";
 
                 if($product){
-                    $product = $this->pm->getProductDetails($product->getIdProduct());
+                    $product = $this->productManager->getProductDetails($product->getIdProduct());
 
                     $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($product->getIdProduct());
