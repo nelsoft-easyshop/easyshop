@@ -119,30 +119,42 @@ class AccountManager
         $form->submit([ 'username' => $username,
                         'password' => $password
                     ]);
+        
         if ($form->isValid()) {
             $formData = $form->getData();
             $validatedUsername = $formData['username'];
             $validatedPassword = $formData['password'];
-            $hashedPassword = $this->hashMemberPassword($username,$password);
+
+            if(strpos($validatedUsername, '@') !== false){
+                $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy(['email' => $validatedUsername]);
+                if($member){
+                    $validatedUsername = $member->getUsername();
+                    $member = null;
+                }
+            }
+
+            $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
             
             $query =  $this->em->createQueryBuilder()
                     ->select('m')
                     ->from('EasyShop\Entities\EsMember', 'm')
                     ->where('m.username= :username')
                     ->andWhere('m.password= :password')
-                    ->setParameter('username', $username)
+                    ->setParameter('username', $validatedUsername)
                     ->setParameter('password', $hashedPassword)
                     ->setMaxResults(1)
                     ->getQuery();
             $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
             $member = $query->getResult($hydrator);
             $member = isset($member[0]) ? $member[0] : $member;
+            
             if(!$member){
                 array_push($errors, ['login' => 'invalid username/password']);
             }
         }
 
-         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                  'member' => $member];
     
     }
@@ -191,6 +203,7 @@ class AccountManager
             $member->setDatecreated(new DateTime('now'));
             $member->setLastmodifieddate(new DateTime('now'));
             $member->setLastLoginDatetime(new DateTime('now'));
+            $member->setLastFailedLoginDateTime(new DateTime('now'));
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             

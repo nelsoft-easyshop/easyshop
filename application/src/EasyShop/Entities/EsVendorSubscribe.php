@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsVendorSubscribe
  *
- * @ORM\Table(name="es_vendor_subscribe", indexes={@ORM\Index(name="fk_es_vendor_subscribe_memberId_idx", columns={"member_id"}), @ORM\Index(name="fk_es_vendor_subscribe_vendorId_idx", columns={"vendor_id"})})
+ * @ORM\Table(name="es_vendor_subscribe", indexes={@ORM\Index(name="fk_es_vendor_subscribe_memberId_idx", columns={"member_id"}), @ORM\Index(name="fk_es_vendor_subscribe_vendorId", columns={"vendor_id"})})
  * @ORM\Entity
  */
 class EsVendorSubscribe
@@ -20,6 +20,13 @@ class EsVendorSubscribe
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idVendorSubscribe;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createddate", type="datetime", nullable=false)
+     */
+    private $createddate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsMember
@@ -51,6 +58,29 @@ class EsVendorSubscribe
     public function getIdVendorSubscribe()
     {
         return $this->idVendorSubscribe;
+    }
+
+    /**
+     * Set createddate
+     *
+     * @param \DateTime $createddate
+     * @return EsVendorSubscribe
+     */
+    public function setCreateddate($createddate)
+    {
+        $this->createddate = $createddate;
+
+        return $this;
+    }
+
+    /**
+     * Get createddate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateddate()
+    {
+        return $this->createddate;
     }
 
     /**

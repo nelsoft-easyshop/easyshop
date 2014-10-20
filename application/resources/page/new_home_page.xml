@@ -1,0 +1,323 @@
+<?xml version="1.0"?>
+<map>
+    
+    <menu>
+        <newArrivals>
+            <arrival>
+                <text>Male</text>
+                <target>/</target>
+            </arrival>
+           
+             <arrival>
+                <text>Female</text>
+                <target>/</target>
+            </arrival>
+        </newArrivals>
+        
+        <topProducts>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+            <product>ubuntu-valid-gd</product>
+        </topProducts>
+        
+        <topSellers>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+            <seller>easyshop</seller>
+        </topSellers>
+        
+    </menu>
+    
+    <categoryNavigation>
+        
+        <category>
+            <categorySlug>jewellery-watches</categorySlug>
+            <sub>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>jewellery-watches</categorySlug>
+            <sub>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>jewellery-watches</categorySlug>
+            <sub>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+            </sub>
+        </category>
+        
+        <category>
+            <categorySlug>jewellery-watches</categorySlug>
+            <sub>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>jewellery-watches</categorySubSlug>
+            </sub>
+        </category>
+        
+        <otherCategories>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>jewellery-watches</categorySlug>
+        </otherCategories>
+        
+        
+    </categoryNavigation>
+    
+    
+    
+    <sliderSection>
+        <slide>
+            <template>A</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+       
+        <slide>
+            <template>B</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0_2_1.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_2_2.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+       
+        
+        <slide>
+            <template>D</template>
+            <image>
+                <path>/assets/images/homeslider/hs_6.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+        </slide>
+        
+        
+    </sliderSection>
+    
+    
+    
+    <sellerSection>
+        
+        <sellerSlug>patriots21</sellerSlug>
+        <sellerBanner>/assets/images/clothes-closet.jpg</sellerBanner>
+        <sellerLogo>/assets/images/products/uniqlo-logo-big.png</sellerLogo>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+    </sellerSection>
+    
+    <adSection>
+        <ad>
+            <img>assets/images/big-banner-1.png</img>
+            <target></target>
+        </ad>
+        
+        <ad>
+            <img>assets/images/big-banner-2.png</img>
+            <target></target>
+        </ad>
+        
+        <ad>
+            <img>assets/images/big-banner-3.png</img>
+            <target></target>
+        </ad>
+    </adSection>
+    
+    <categorySection>
+        <categorySlug>jewellery-watches</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>hjh</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+    <categorySection>
+        <categorySlug>jewellery-watches</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>hjh</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+      
+    <categorySection>
+        <categorySlug>clothing-accessories</categorySlug>
+        
+        <sub>
+            <text>New Arrival</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Popular Items</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Women</text>
+            <target>/</target>
+        </sub>
+        
+        <sub>
+            <text>Men</text>
+            <target>/</target>
+        </sub>
+        
+        <productPanel>
+            <slug>hjh</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>testability</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+    <brandSection>
+        <brandId>1</brandId>
+        <brandId>2</brandId>
+        <brandId>3</brandId>
+        <brandId>4</brandId>
+    </brandSection>
+    
+    
+    <sliderTemplate>
+        <template>A</template>
+        <template>B</template>
+        <template>C</template>
+        <template>D</template>
+    </sliderTemplate>    
+    
+</map>

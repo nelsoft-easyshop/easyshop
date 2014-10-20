@@ -28,6 +28,12 @@ class ProductManager
 {
 
     /**
+     * Newness Limit in days 
+     *
+     */
+    const NEWNESS_LIMIT = 14;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -95,13 +101,17 @@ class ProductManager
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                            ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
+                              ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping($totalShippingFee === 0);
-        $this->promoManager->hydratePromoData($product);
+        $product->setIsFreeShipping($totalShippingFee === 0);        
+        $product->setIsNew($this->isProductNew($product));
+        $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                           ->getDefaultImage($product->getIdProduct()));
         
+        $this->promoManager->hydratePromoData($product);
+
         return $product;
     }
 
@@ -187,11 +197,9 @@ class ProductManager
         return $productItemLocks;
     }
 
-    
-    
     /**
      * Apply discounted price to product
-     * This has been refactored with hydrate promo data
+     *
      * @param  array  $products [description]
      * @return mixed
      */
@@ -200,7 +208,7 @@ class ProductManager
         foreach ($products as $key => $value) {  
             $resultObject = $this->getProductDetails($value->getIdProduct());
         } 
-        
+
         return $products;
     }
 
@@ -383,6 +391,75 @@ class ProductManager
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
         return true;
+    }
+    
+    /**
+     * Determines if a product is new
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isProductNew($product)
+    {
+        if(is_string($product->getLastModifiedDate())){
+            $sql = "
+                SELECT 
+                    p.lastmodifieddate
+                FROM 
+                    EasyShop\Entities\EsProduct p
+                WHERE p.idProduct = :productId
+            ";
+            $query = $this->em->createQuery($sql)
+                                ->setParameter('productId', $product->getIdProduct());
+            $lastModifiedDate = $query->getResult()[0]['lastmodifieddate']->getTimestamp();
+        }
+        else{
+            $lastModifiedDate = $product->getLastModifiedDate()
+                                        ->getTimestamp();
+        }
+        $dateNow = new \DateTime('now');
+        $dateNow = $dateNow->getTimestamp();
+        $datediff = $dateNow - $lastModifiedDate;
+        $daysDifferential = floor($datediff/(60*60*24));
+        return $daysDifferential <= self::NEWNESS_LIMIT;
+    }
+
+    /**
+     * Returns the recommended products list for a certain product
+     *
+     * @param integer $productId
+     * @param integer $limit
+     * @return \EasyShop\Entities\EsProduct
+     */
+    public function getRecommendedProducts($productId, $limit = null)
+    {    
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+
+        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->createQueryBuilder("p")
+                                ->select("p")
+                                ->where('p.cat = :category')
+                                ->andWhere("p.idProduct != :productId")
+                                ->andWhere("p.isDraft = :isDraft")
+                                ->andWhere("p.isDelete = :isDelete")
+                                ->setParameter('productId',$product->getIdProduct())
+                                ->setParameter('category',$product->getCat())
+                                ->setParameter('isDraft',0)
+                                ->setParameter('isDelete',0)
+                                ->orderBy('p.clickcount', 'DESC')
+                                ->getQuery();
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $products = $queryBuilder->getResult();
+        
+        foreach($products as $key => $product){
+            $products[$key] = $this->getProductDetails($product->getIdProduct());
+        }
+        
+        return $products;
     }
 
     /**

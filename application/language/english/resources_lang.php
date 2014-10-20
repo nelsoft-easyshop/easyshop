@@ -93,14 +93,19 @@ $lang['notification_txtmsg_seller'] = ' - This is to notify you that you have so
 #Transaction response by buyer or seller 
 #payment flow direction (forward to seller or return to buyer)
 $lang['notification_returntobuyer'] = "Easyshop.ph - Returned Payment Confirmation";
+$lang['notification_forwardtoseller'] = "Easyshop.ph - Item Receipt Confirmation";
 
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
 
 #Notification to Seller and Buyer
-$lang['message_to_seller'] = "This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details can be seen in you transactions page.  This is a system generated message, please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
-$lang['message_to_buyer'] = "This is to notify you that you have made a purchase through Easyshop.ph. Transaction details can be seen in you transactions page.  This is a system generated message,  please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
+$lang['message_to_seller'] = "This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details can be seen in your transactions page.  This is a system generated message, please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
+$lang['message_to_buyer'] = "This is to notify you that you have made a purchase through Easyshop.ph. Transaction details can be seen in your transactions page.  This is a system generated message,  please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
+
+# New Message notification
+$lang['new_message_notif'] = "Easyshop.ph - New message received";
+
 
 ?>
 

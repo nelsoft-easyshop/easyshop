@@ -87,8 +87,11 @@ class Kernel
         };
         
         //CMS Service
-        $container['xml_cms'] = function ($c) {
-            return new \EasyShop\XML\CMS();
+        $container['xml_cms'] = function ($c) use ($container) {
+            return new \EasyShop\XML\CMS($container['xml_resource'],
+                                         $container['entity_manager'],
+                                         $container['product_manager'],
+                                         $container['user_manager']);
         };
         
         //XML Resource Service
@@ -100,6 +103,9 @@ class Kernel
         $container['user_manager'] = function ($c) use ($container) {
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
+                                                ,$container['form_validation']
+                                                ,$container['form_factory']
+                                                ,$container['form_error_helper']
                                                 ,$container['string_utility']);
         };
         
@@ -349,6 +355,39 @@ class Kernel
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
+        };
+
+        // NUSoap Client
+        $container['nusoap_client'] = function ($c) {
+            $url = '';
+            if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
+            // LIVE
+                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            else{
+            // SANDBOX
+                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            }
+            return new \nusoap_client($url,true);
+        };
+ 
+        // API formatter 
+        $container['api_formatter'] = function ($c) use($container) {
+            $em = $container['entity_manager']; 
+            $collectionHelper = $container['collection_helper'];
+            $productManager = $container['product_manager'];
+            $cartManager = $container['cart_manager'];
+            return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager,$cartManager);
+        }; 
+
+        // Notification Services
+        $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
+        $smsConfig = require(APPPATH . "config/sms.php");
+        $container['email_notification'] = function($c) use ($emailConfig){
+            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        };
+        $container['mobile_notification'] = function($c) use ($smsConfig){
+            return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
         /* Register services END */

@@ -50,6 +50,7 @@ class product extends MY_Controller
      */
     public function categoryPage($categorySlug)
     {
+        header ('Content-type: text/html; charset=ISO-8859-1');
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager'];
         
@@ -328,7 +329,7 @@ class product extends MY_Controller
             $categories[$index]['subcategories'] = $this->product_model->getDownLevelNode($category['id_cat']);
             foreach($categories[$index]['subcategories'] as $inner_index=>$subcategory){
 
-                $down_cat = $this->product_model->selectChild($subcategory['id_cat']);		
+                $down_cat = $this->product_model->selectChild($subcategory['id_cat']);      
                 if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
                     $down_cat = array();
                 array_push($down_cat, $subcategory['id_cat']);
@@ -343,7 +344,7 @@ class product extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/all_categories_view', $data); 
-        $this->load->view('templates/footer_full'); 	
+        $this->load->view('templates/footer_full');     
     }
 
     /**
@@ -378,7 +379,7 @@ class product extends MY_Controller
         $this->load->model("user_model");
         $this->load->config('promo', TRUE);
         $uid = $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProductBySlug($slug);  	
+        $product_row = $this->product_model->getProductBySlug($slug);   
         $data = $this->fill_header();
 
         $um = $this->serviceContainer['user_manager'];
