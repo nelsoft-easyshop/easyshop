@@ -3025,10 +3025,10 @@ div.pass-hint {
     list-style: none;
     width: 435px;*/
     display: inline-block;
-list-style: none;
-width: 435px;
-position: absolute;
-top: 8px;
+    list-style: none;
+    width: 435px;
+    position: absolute;
+    top: 8px;
 }
 
 .profile_top_nav ul li {
@@ -3099,10 +3099,10 @@ top: 8px;
     text-align: right;
     width: 285px;*/
     padding-bottom: 9px;
-text-align: right;
-width: 285px;
-position: relative;
-margin-left: 435px;
+    text-align: right;
+    width: 285px;
+    position: relative;
+    margin-left: 435px;
 }
 
 .ie9 .profile_top_nav .member_srch_wrapper {
