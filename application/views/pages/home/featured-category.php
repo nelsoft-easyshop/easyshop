@@ -41,17 +41,16 @@
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
-                                <a href="/item/<?php echo $productSlug ?>">
                                     <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
-                                        <?php if ($product->getIsNew()): ?>
-                                            <span class="new-circle">NEW</span>
-                                        <?php endif; ?>
-                                        <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                            <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
-                                        <?php endif; ?>
+                                        <a class="a-item-image" href="/item/<?php echo $productSlug ?>">
+                                            <?php if ($product->getIsNew()): ?>
+                                                <span class="new-circle">NEW</span>
+                                            <?php endif; ?>
+                                            <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                                <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
+                                            <?php endif; ?>
+                                        </a>
                                     </div><!-- End .item-image -->
-                                </a>
-                                                                
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
                                         <a href="/item/<?php echo $productSlug ?>">
@@ -93,7 +92,6 @@
                             </div>
 
                         <?php endforeach; ?>
-
                     </div><!--purchased-items-slider -->
                 </div><!-- End .purchased-items-container -->
             </div><!-- End .col-md-12 -->
