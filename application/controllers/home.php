@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsAddress as EsAddress;
+
 class Home extends MY_Controller 
 {
  
@@ -27,6 +29,13 @@ class Home extends MY_Controller
      * @var integer
      */
     public $feedbackPerPage = 15;
+
+    /**
+     * Number of followers per page
+     *
+     * @var integer
+     */
+    public $followerPerPage = 6;
     
     /**
      * Load class dependencies
@@ -249,6 +258,7 @@ class Home extends MY_Controller
         $this->load->view('pages/web/how-to-sell');
     }
     
+    
     /**
      * Renders vendorpage
      *
@@ -281,6 +291,9 @@ class Home extends MY_Controller
             }
             else if($pageSection === 'contact'){
                 $this->contactUser($vendorSlug);
+            }
+            else if($pageSection === 'followers'){
+                $this->followers($vendorSlug);
             }
             else{
                 $arrVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
@@ -393,6 +406,188 @@ class Home extends MY_Controller
             $this->pagenotfound();
         }
 
+    }
+
+    /**
+     * Render users follower page
+     * @param  string $sellerslug
+     */
+    private function followers($sellerslug)
+    {
+        $data = $this->fill_header();
+        $cart = array();
+        $cartSize = 0;
+        if ($this->session->userdata('usersession')) {
+            $memberId = $this->session->userdata('member_id');
+            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
+            $cartSize = $this->cartImplementation->getSize(TRUE);
+        }
+        $data['cart_items'] = $cart;
+        $data['cart_size'] = $cartSize;
+        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+
+        // assign header_vendor data
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                   ->findOneBy(['slug' => $sellerslug]);
+        $data['title'] = 'Followers '.html_escape($member->getStoreName() ? $member->getStoreName() : $member->getUsername()).' | Easyshop.ph';                                           
+                                         
+        $memberUsername = $member->getUsername();
+        $memberId = $member->getIdMember();
+        $viewerId = $this->session->userdata('member_id');
+        $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
+                                           ->getRepository('EasyShop\Entities\EsLocationLookup');
+        $arrVendorDetails = $this->serviceContainer['entity_manager']
+                                 ->getRepository("EasyShop\Entities\EsMember")
+                                 ->getVendorDetails($sellerslug);
+                                 
+        $userProduct = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsProduct")
+                                          ->findBy(['member' => $arrVendorDetails['id_member'],
+                                                      'isDelete' => 0,'isDraft' => 0]);
+
+        $headerVendorData = array(
+                    "arrVendorDetails" => $arrVendorDetails 
+                    , "storeNameDisplay" => strlen($member->getStoreName()) > 0 ? $member->getStoreName() : $memberUsername
+                    , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
+                    , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($memberId)
+                    , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($memberId,"banner")
+                    , "isEditable" => ($viewerId && $memberId == $viewerId) ? TRUE : FALSE
+                    , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
+                    , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $memberUsername)
+                    , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
+                    , "vendorLink" => "followers"
+                );
+
+        $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
+        $data['message_recipient'] = $member;
+        $data = array_merge($data, $this->fill_header());
+
+        // get followers
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+        $pageOffset = 0;
+        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$this->followerPerPage);
+        if($followers['followers']){
+            foreach ($followers['followers'] as $key => $value) {
+                $value->subscriptionStatus = $this->serviceContainer['user_manager']
+                          ->getVendorSubscriptionStatus($viewerId, $value->getMember()->getUsername());
+                $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
+                $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
+                $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
+                                            ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
+                $value->location = false;
+                if($userAddress){
+                    $value->location = TRUE;
+                    $value->city = $userAddress->getCity()->getLocation();
+                    $value->stateRegion = $userAddress->getStateregion()->getLocation();
+                }
+            } 
+        }
+
+        $followerData['followers'] = $followers['followers'];
+        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['viewerId'] = $viewerId;
+        $followerData['memberId'] = $memberId;
+        $followerData['page'] = 0; 
+
+        // get who to follow
+        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId);
+
+        foreach ($followerData['recommendToFollow'] as $key => $value) {
+            // get user images for display
+            $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
+            
+            // get user address
+            $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
+                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
+            $value->location = false;
+            if($userAddress){
+                $value->location = TRUE;
+                $value->city = $userAddress->getCity()->getLocation();
+                $value->stateRegion = $userAddress->getStateregion()->getLocation();
+            }
+        }
+
+        // Generate pagination view
+        $paginationData = array(
+            'lastPage' => ceil($followers['count']/$this->followerPerPage)
+            ,'isHyperLink' => false
+        );
+
+        $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+        $followerData['follower_view'] = $this->load->view('pages/user/followers_content', $followerData, true);
+        $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
+
+        // Load View
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor',$headerVendorData);
+        $this->load->view('pages/user/followers' ,$followerData);
+        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
+    }
+
+    public function getMoreFollowers()
+    {
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+        $data = $this->fill_header();
+        $pageOffset = $this->input->get('page') - 1; // start count page in 1.
+        $viewerId = $this->session->userdata('member_id');
+        $memberId = $this->input->get('vendorId'); 
+        $followers = $EsVendorSubscribe->getFollowers($memberId,$pageOffset,$this->followerPerPage);
+        if($followers['followers']){
+            foreach ($followers['followers'] as $key => $value) {
+                $value->subscriptionStatus = $this->serviceContainer['user_manager']
+                          ->getVendorSubscriptionStatus($viewerId, $value->getMember()->getUsername());
+                $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
+                $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
+                $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
+                              ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
+                $value->location = false;
+                if($userAddress){
+                    $value->location = TRUE;
+                    $value->city = $userAddress->getCity()->getLocation();
+                    $value->stateRegion = $userAddress->getStateregion()->getLocation();
+                }
+            } 
+        }
+
+        $followerData['followers'] = $followers['followers'];
+        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['viewerId'] = $viewerId; 
+        $followerData['page'] = $pageOffset; 
+
+        $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
+
+        echo json_encode($response);
+    }
+
+    public function getMoreRecommendToFollow()
+    {
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+
+        $viewerId = $this->session->userdata('member_id');
+        $memberId = $this->input->get('vendorId'); 
+                                                           // get who to follow
+        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId,1);
+
+        foreach ($followerData['recommendToFollow'] as $key => $value) {
+            // get user images for display
+            $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
+            
+            // get user address
+            $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
+                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
+            $value->location = false;
+            if($userAddress){
+                $value->location = TRUE;
+                $value->city = $userAddress->getCity()->getLocation();
+                $value->stateRegion = $userAddress->getStateregion()->getLocation();
+            }
+        }
+        $response['count'] = count($followerData['recommendToFollow']);
+        $response['html'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
+        
+        echo json_encode($response);
     }
     
     /**
@@ -990,7 +1185,7 @@ class Home extends MY_Controller
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
+                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
 
         if($addr === NULL){
             $data['cities'] = '';
@@ -1032,7 +1227,7 @@ class Home extends MY_Controller
                 $member->setWebsite($formData['website']);
 
                 $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
+                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
 
                 if($addr === null){
                     if($formData['city'] !== null || $formData['region'] !== null){
