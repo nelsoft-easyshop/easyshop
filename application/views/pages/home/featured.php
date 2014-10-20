@@ -4,53 +4,65 @@
             <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
             <a class="next"><i class="fa fa-angle-right fa-next-slide"></i></a>
             <div id="featured-seller" class="owl-carousel owl-theme">
+            
+                <?php $featuredSellerSlug = reset($homeContent['seller']['product'])['product']->getMember()->getSlug(); ?>
+            
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
-                <div class="item">
-                    <div class="item-image-container" style="background: url(<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>) center no-repeat; background-size: cover">
+                    <?php $productSlug = $product['product']->getSlug(); ?>
+                    <div class="item">
+                        <a href="<?php echo $productSlug ?>">
+                            <div class="item-image-container" style="background: url(<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>) center no-repeat; background-size: cover">
 
-                        <?php if ($product['product']->getIsNew()): ?>
-                            <span class="new-circle">NEW</span>
-                        <?php endif; ?>
+                                <?php if ($product['product']->getIsNew()): ?>
+                                    <span class="new-circle">NEW</span>
+                                <?php endif; ?>
 
-                        <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                        <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
-                        <?PHP endif; ?>
-
-                    </div><!-- End .item-image -->
-
-                    <div class="item-meta-container" align="left">
-                        <h3 class="item-name"><a href="/item/<?=$product['product']->getSlug()?>"><?=(strlen($product['product']->getName())>15)?substr_replace($product['product']->getName(), "...", 15):$product['product']->getName();?></a></h3>
-                        <div class="item-meta-inner-container clearfix">
-                            <div class="item-price-container">
                                 <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                                <span class="old-price">P<?=number_format($product['product']->getPrice(), 2, '.', ',') ?></span><span class="item-price">P<?=number_format($product['product']->getFinalPrice(), 2, '.', ',') ?></span>
-                                <?PHP else : ?>
-                                <span class="item-price">P<?=number_format($product['product']->getFinalPrice(), 2, '.', ',') ?></span>
+                                    <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
                                 <?PHP endif; ?>
+
+                            </div><!-- End .item-image -->
+                        </a>
+
+                        <div class="item-meta-container" align="left">
+                            <h3 class="item-name">
+                                <a href="/item/<?=$productSlug?>">
+                                    <?=(strlen($product['product']->getName())>15)?substr_replace($product['product']->getName(), "...", 15):$product['product']->getName();?>
+                                </a>
+                            </h3>
+                            <div class="item-meta-inner-container clearfix">
+                                <div class="item-price-container">
+                                    <?PHP if ($product['product']->getDiscount() > 0) : ?>
+                                    <span class="old-price">P<?=number_format($product['product']->getPrice(), 2, '.', ',') ?></span><span class="item-price">P<?=number_format($product['product']->getFinalPrice(), 2, '.', ',') ?></span>
+                                    <?PHP else : ?>
+                                    <span class="item-price">P<?=number_format($product['product']->getFinalPrice(), 2, '.', ',') ?></span>
+                                    <?PHP endif; ?>
+                                </div>
+                            </div>
+                            <div class="item-action">
+                                <table width="100%">
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$product['product']->getSlug()?>">
+                                            <span class="icon-cart"></span> ADD TO CART
+                                        </a>
+                                    </td>
+                                    <td class="td-logo-store">
+                                        <span class="pull-right">
+                                            <div class="store-logo-container ">
+                                                <div class="span-store-logo">
+                                                    <a href="/<?php echo $featuredSellerSlug ?>">
+                                                        <img src="<?=$homeContent['seller']['logo']?>"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </table>
                             </div>
                         </div>
-                        <div class="item-action">
-                            <table width="100%">
-                            <tr>
-                                <td>
-                                    <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$product['product']->getSlug()?>">
-                                        <span class="icon-cart"></span> ADD TO CART
-                                    </a>
-                                </td>
-                                <td class="td-logo-store">
-                                    <span class="pull-right">
-                                        <div class="store-logo-container ">
-                                            <div class="span-store-logo">
-                                               <img src="<?=$homeContent['seller']['logo']?>"/>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </td>
-                            </tr>
-                            </table>
-                        </div>
                     </div>
-                </div>
             <?PHP endforeach; ?>
             </div>
         </div>
@@ -59,7 +71,9 @@
                 <center>
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
-                       <img src="<?=$homeContent['seller']['logo']?>"/>
+                        <a href="/<?php echo $featuredSellerSlug ?>">
+                            <img src="<?=$homeContent['seller']['logo']?>"/>
+                        </a>
                     </div>
                 </div>
                 </center>
