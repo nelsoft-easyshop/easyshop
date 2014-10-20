@@ -1546,6 +1546,18 @@ td.td-view.p-view2.color-default{
     width: 42px;
     font-weight:bold;
 }
+.span-new-pin-list{
+    position:absolute;
+    color: #FFFFFF;
+    background: #00a388;
+    padding: 6px 0px;
+    text-align: center !important;
+    margin-left:0px !important;
+    margin-top:13px;
+    font-size: 12px;
+    width: 42px;
+    font-weight:bold;
+}
 .grid-span-discount-pin{
     position:absolute;
     color: #FFFFFF;
@@ -1560,6 +1572,22 @@ td.td-view.p-view2.color-default{
     right: 0 !important;
     margin-right: 5px !important;
 }
+
+.grid-span-new-pin{
+    position:absolute;
+    color: #ffffff;
+    background: #00a388;
+    padding: 6px 0px;
+    text-align: center !important;
+    margin-left: 5px;
+    margin-top:10px;
+    font-size: 12px;
+    width: 42px;
+    font-weight:bold;
+    left: 0 !important;
+    margin-right: 5px !important;
+}
+
 .span-new-tag{
     font-weight: bold;
     color: #02846f;
@@ -1666,7 +1694,7 @@ td.td-view.p-view2.color-default{
     height: 35px;
     max-width: 373px;
     vertical-align: middle;
-    width: 63%;
+    width: 54%;
 }
 
 .footer-primary input[type="submit"] {
@@ -1674,14 +1702,8 @@ td.td-view.p-view2.color-default{
     text-transform: uppercase;
 }
 
-.social-media-wrapper li {
-    float: left;
-    max-width: 79px;
-    width: 25%;
-}
-
-.social-media-wrapper li:last-child {
-    margin-right: 0;
+.social-media-wrapper a:first-child {
+    margin-right: 10px;
 }
 
 .social-media-wrapper img {
