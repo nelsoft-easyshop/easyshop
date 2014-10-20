@@ -7,7 +7,37 @@ $(document).ready(function(){
     $('input.items').each(function(k,v){
         $(this).val($(this).data('value'));
     });
-
+    
+    $(function () {
+        var $print = $(".print");
+        var $print_ul = $(".print-ul");
+        $(document).mouseup(function (e) {
+            if (!$print.is(e.target) // if the target of the click isn't the container...
+                && $print.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $print_ul.hide(1);
+            }
+        });
+        $print.click(function() {
+            $print_ul.show();
+        });
+    });
+    
+     $(function () {
+        var $print_s = $(".print-s");
+        var $print_ul_s = $(".print-ul-s");
+        $(document).mouseup(function (e) {
+            if (!$print_s.is(e.target) // if the target of the click isn't the container...
+                && $print_s.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $print_ul_s.hide(1);
+            }
+        });
+        $print_s.click(function() {
+            $print_ul_s.show();
+        });
+    });
+    
     $(document).on('click','#printTransactions', function(){
         var url = $(this).data("url");
 
