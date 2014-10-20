@@ -2,6 +2,9 @@
 <div class="row-fluid row-promo-ads">
     <div class="col-md-12">
         <div class="row">
+        
+            <?php shuffle($homeContent['adSection']); ?>
+        
             <div class="col-md-4 col-sm-4 col-xs-6 promo-1" style="padding: 4px;">
                 <a href="/<?php echo count($homeContent['adSection'][0]['target']) === 0 ? '' : $homeContent['adSection'][0]['target']; ?>">
                     <img src="/<?php echo $homeContent['adSection'][0]['img']; ?>" class="img-responsive img-promo-banner">
@@ -19,6 +22,11 @@
                     <img src="/<?php echo $homeContent['adSection'][2]['img']; ?>" class="img-responsive img-promo-banner">
                 </a>
             </div>
+            
+            
+            
+            
+            
         </div>
     </div>
 </div>
