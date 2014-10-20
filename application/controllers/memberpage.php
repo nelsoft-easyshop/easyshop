@@ -263,7 +263,7 @@ class Memberpage extends MY_Controller
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
         }        
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
