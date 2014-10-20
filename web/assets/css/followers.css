@@ -189,6 +189,11 @@ box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
     display: none;
 }
 
+.unfollow-user:hover{ 
+    border: 2px solid #FF3D1F;
+    background-color: #FF3D1F;
+}
+
 .pagination-followers > li > a{
     color: #575759;
 }

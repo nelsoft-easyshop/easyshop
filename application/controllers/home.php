@@ -351,6 +351,7 @@ class Home extends MY_Controller
                     );
                     $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
                 }
+
                 
                 // Data for the view
                 $data = array(
@@ -368,6 +369,12 @@ class Home extends MY_Controller
                     , "prodLimit" => $this->vendorProdPerPage
                     , "vendorLink" => ""
                 );
+ 
+                // count the followers 
+                $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+        
+                $data["followerCount"] = $EsVendorSubscribe->getFollowers($arrVendorDetails['id_member'])['count'];
 
                 //Determine active Div for first load
                 $showFirstDiv = TRUE;
@@ -456,6 +463,12 @@ class Home extends MY_Controller
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "followers"
                 );
+
+        // count the followers 
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                        ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+
+        $headerVendorData["followerCount"] = $EsVendorSubscribe->getFollowers($memberId)['count'];
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $data['message_recipient'] = $member;
@@ -748,6 +761,12 @@ class Home extends MY_Controller
                     , "vendorLink" => "about"
                 ); 
 
+        // count the followers 
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                        ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+
+        $headerVendorData["followerCount"] = $EsVendorSubscribe->getFollowers($idMember)['count'];
+
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $cart = array();
         $cartSize = 0;
@@ -945,6 +964,12 @@ class Home extends MY_Controller
                     , "isLoggedIn" => $data['logged_in'] ? TRUE : FALSE
                     , "vendorLink" => "contact"
                 ); 
+
+        // count the followers 
+        $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                        ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+
+        $headerVendorData["followerCount"] = $EsVendorSubscribe->getFollowers($memberId)['count'];
 
         $headerVendorData = array_merge($headerVendorData, $EsLocationLookupRepository->getLocationLookup());
         $userDetails = $this->doUpdateUserDetails($sellerslug,'contact');
