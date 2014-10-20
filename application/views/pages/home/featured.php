@@ -10,20 +10,20 @@
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
                     <?php $productSlug = $product['product']->getSlug(); ?>
                     <div class="item">
-                        <a href="<?php echo $productSlug ?>">
+                            
                             <div class="item-image-container" style="background: url(<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>) center no-repeat; background-size: cover">
+                                <a class="a-item-image" href="/item/<?php echo $productSlug ?>">
+                                    <?php if ($product['product']->getIsNew()): ?>
+                                        <span class="new-circle">NEW</span>
+                                    <?php endif; ?>
 
-                                <?php if ($product['product']->getIsNew()): ?>
-                                    <span class="new-circle">NEW</span>
-                                <?php endif; ?>
-
-                                <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                                    <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
-                                <?PHP endif; ?>
-
-                            </div><!-- End .item-image -->
-                        </a>
-
+                                    <?PHP if ($product['product']->getDiscount() > 0) : ?>
+                                        <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
+                                    <?PHP endif; ?>
+                                </a>
+                            </div>
+                            <!-- End .item-image -->
+                          
                         <div class="item-meta-container" align="left">
                             <h3 class="item-name">
                                 <a href="/item/<?=$productSlug?>">
