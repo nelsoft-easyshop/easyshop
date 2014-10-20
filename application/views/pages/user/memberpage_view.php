@@ -1717,7 +1717,7 @@
     </div>
     
     <div id="bought" class="transactions-buy dashboard_table" data-key="buy" data-controller="2">
-        <h2>Bought Items | <span  class="fa fa-print print" style="cursor:pointer;size:1px;"></span></h2>
+        <h2>Bought Items | <span  class="fa fa-download print" style="cursor:pointer;size:1px;"></span></h2>
             <ul class="print-ul">
                 <a id="printTransactions" data-url="printbuytransactions"><li>Print</li></a>
                 <a id="exportTransactions" data-url="/exportbuytransactions"><li>Export to CSV</li></a>
@@ -2030,7 +2030,7 @@
 </div>
 
     <div id="sold" class="transactions-sell dashboard_table" data-key="sell" data-controller="2">
-        <h2>Sold Items  | <span  class="fa fa-print print-s" style="cursor:pointer;size:1px;"></span></h2>
+        <h2>Sold Items  | <span  class="fa fa-download print-s" style="cursor:pointer;size:1px;"></span></h2>
         <ul class="print-ul-s">
             <a id="printTransactions" data-url="printselltransactions"><li>Print</li></a>
             <a id="exportTransactions" data-url="/exportsoldtransactions"><li>Export to CSV</li></a>
