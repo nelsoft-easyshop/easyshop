@@ -228,6 +228,7 @@ section {
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .new-user-nav-dropdown {
@@ -342,12 +343,12 @@ section {
 .vendor-profile-content h4 {
     font-size: 1.5em;
     font-weight: bold;
-    height: 24px;
     margin-bottom: 2px;
     margin-top: 31px;
     overflow: hidden;
     padding: 0 20px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .vendor-profile-content p {
@@ -753,6 +754,7 @@ section {
     text-overflow: ellipsis;
     vertical-align: middle;
     width: 284px;
+    white-space: nowrap;
 }
 
 .sticky-nav li:nth-child(2) a {
