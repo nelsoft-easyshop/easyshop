@@ -38,25 +38,23 @@
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
                             <?php $sellerimage = $productSection['userimage']; ?>
+                            <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
-                                <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
-                                    
-                                    <?php if ($product->getIsNew()): ?>
-                                        <span class="new-circle">NEW</span>
-                                    <?php endif; ?>
-                                    
-                                    
-                                    <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                        <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
-                                    <?php endif; ?>
-                                    
-                                    
-                                </div><!-- End .item-image -->
+                                <a href="/item/<?php echo $productSlug ?>">
+                                    <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
+                                        <?php if ($product->getIsNew()): ?>
+                                            <span class="new-circle">NEW</span>
+                                        <?php endif; ?>
+                                        <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                            <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
+                                        <?php endif; ?>
+                                    </div><!-- End .item-image -->
+                                </a>
                                                                 
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
-                                        <a href="/item/<?php echo $product->getSlug() ?>">
+                                        <a href="/item/<?php echo $productSlug ?>">
                                             <?php echo html_escape((strlen($product->getName())> 15)?substr_replace($product->getName(), "...", 15):$product->getName());?>
                                         </a>
                                     </h3>
@@ -81,7 +79,9 @@
                                                 <span class="pull-right">
                                                     <div class="store-logo-container ">
                                                         <div class="span-store-logo">
-                                                        <img src="<?php echo $sellerimage ?>"/>
+                                                            <a href="/<?php echo $product->getMember()->getSlug() ?>">
+                                                                <img src="<?php echo $sellerimage ?>"/>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </span>
