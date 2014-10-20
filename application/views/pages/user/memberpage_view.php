@@ -1717,7 +1717,11 @@
     </div>
     
     <div id="bought" class="transactions-buy dashboard_table" data-key="buy" data-controller="2">
-        <h2>Bought Items | <span id="printTransactions" data-url="printbuytransactions" class="fa fa-print" style="cursor:pointer;size:1px;"></span></h2>
+        <h2>Bought Items | <span  class="fa fa-print print" style="cursor:pointer;size:1px;"></span></h2>
+            <ul class="print-ul">
+                <a id="printTransactions" data-url="printbuytransactions"><li>Print</li></a>
+                <a href="#"><li>Export to CSV</li></a>
+            </ul>
         <?php if($transaction['count']['buy']===0):?>
             <br/>
             <div><span class='nocontent'>You have not bought any items yet.</span></div>
@@ -2026,7 +2030,11 @@
 </div>
 
     <div id="sold" class="transactions-sell dashboard_table" data-key="sell" data-controller="2">
-        <h2>Sold Items  | <span id="printTransactions" data-url="printselltransactions" class="fa fa-print" style="cursor:pointer;size:1px;"></span></h2>
+        <h2>Sold Items  | <span  class="fa fa-print print-s" style="cursor:pointer;size:1px;"></span></h2>
+        <ul class="print-ul-s">
+            <a id="printTransactions" data-url="printselltransactions"><li>Print</li></a>
+            <a href="#"><li>Export to CSV</li></a>
+        </ul>
         <?php if($transaction['count']['sell']===0):?>
         <br/>
         <div><span class='nocontent'>You have not sold any items yet.</span></div>
