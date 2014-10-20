@@ -12,6 +12,13 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class EsVendorSubscribeRepository extends EntityRepository
 {
+    /**
+     * Get users followers
+     * @param  integer $userId
+     * @param  integer $offset
+     * @param  integer $perPage
+     * @return mixed
+     */
     public function getFollowers($userId,$offset = 0,$perPage = 6)
     {
         $this->em =  $this->_em;
@@ -30,8 +37,6 @@ class EsVendorSubscribeRepository extends EntityRepository
                     'count' =>  $totalCount,
                     'followers' => $result
                 );
-
-        $result;
     }
 
     /**

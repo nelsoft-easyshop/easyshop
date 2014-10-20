@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsAddress as EsAddress;
+
 class Home extends MY_Controller 
 {
  
@@ -405,7 +407,11 @@ class Home extends MY_Controller
         }
 
     }
-    
+
+    /**
+     * Render users follower page
+     * @param  string $sellerslug
+     */
     private function followers($sellerslug)
     {
         $data = $this->fill_header();
@@ -467,7 +473,7 @@ class Home extends MY_Controller
                 $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
                 $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
                 $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
-                                            ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => 0]);
+                                            ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
                 $value->location = false;
                 if($userAddress){
                     $value->location = TRUE;
@@ -492,7 +498,7 @@ class Home extends MY_Controller
             
             // get user address
             $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
-                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => 0]);
+                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
             $value->location = false;
             if($userAddress){
                 $value->location = TRUE;
@@ -534,7 +540,7 @@ class Home extends MY_Controller
                 $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember());
                 $value->bannerImage = $this->serviceContainer['user_manager']->getUserImage($value->getMember()->getIdMember(),"banner");
                 $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
-                              ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => 0]);
+                              ->findOneBy(['idMember' => $value->getMember()->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
                 $value->location = false;
                 if($userAddress){
                     $value->location = TRUE;
@@ -570,7 +576,7 @@ class Home extends MY_Controller
             
             // get user address
             $userAddress = $this->serviceContainer['entity_manager']->getRepository("EasyShop\Entities\EsAddress")
-                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => 0]);
+                                        ->findOneBy(['idMember' => $value->getIdMember(),'type' => EsAddress::TYPE_DEFAULT]);
             $value->location = false;
             if($userAddress){
                 $value->location = TRUE;
@@ -1179,7 +1185,7 @@ class Home extends MY_Controller
         $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
+                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
 
         if($addr === NULL){
             $data['cities'] = '';
@@ -1221,7 +1227,7 @@ class Home extends MY_Controller
                 $member->setWebsite($formData['website']);
 
                 $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => '0']);
+                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
 
                 if($addr === null){
                     if($formData['city'] !== null || $formData['region'] !== null){

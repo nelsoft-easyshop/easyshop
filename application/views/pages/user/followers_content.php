@@ -5,7 +5,7 @@
             <?php $memberEntity = $value->getMember(); ?>
             <div class="col-xs-6 col-follower">
                 <div class="follower-div">
-                    <a href="/<?=$memberEntity->getSlug(); ?>">
+                    <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                         <div class="div-img-cover">
                             <img src="<?=$value->bannerImage ;?>" class="img-follower-cover"/>
                             <img src="<?=$value->avatarImage;?>" class="vendor-follower-img"/>
@@ -15,9 +15,9 @@
                     <div class="div-follower-details">
                         <div class="row">
                             <div class="col-xs-7">
-                                <a href="/<?=$memberEntity->getSlug(); ?>">
+                                <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                                     <p class="p-follower-name">
-                                        <?=strlen($memberEntity->getStoreName()) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
+                                        <?=strlen(trim($memberEntity->getStoreName())) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
                                     </p>
                                 </a>
                                 <p class="p-follower-location">
@@ -31,14 +31,14 @@
                             <div class="col-xs-5 col-follow-button follow-button-area" align="right">
                                 <?php if($isLoggedIn && $memberEntity->getIdMember() == $viewerId): ?>
                                 <?php elseif(strtolower($value->subscriptionStatus) === "unfollowed" || !$isLoggedIn): ?>
-                                    <span class="follow-btn follow-right btn btn-default-2 subscription" data-btn="default" data-status="follow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-2 subscription" data-btn="default" data-status="follow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
                                         <span class="glyphicon glyphicon-plus-sign"></span>Follow
                                     </span>
                                 <?php else: ?> 
-                                    <span class="follow-btn follow-right btn btn-default-following following-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-following following-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
                                         <i class="fa fa-check"></i>Following
                                     </span>
-                                    <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=$memberEntity->getSlug(); ?>" data-username="<?=$memberEntity->getUsername();?>">
+                                    <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
                                         <i class="fa fa-minus-circle"></i> Unfollow
                                     </span>
                                 <?php endif; ?>
@@ -50,7 +50,7 @@
                                     $storeDesc = $memberEntity->getStoreDesc();
                                 ?>
                                 <p class="p-follower-description">
-                                    <?=(strlen($storeDesc)>190)?substr_replace($storeDesc, "...", 190):$storeDesc;?>
+                                    <?=(strlen($storeDesc)>190)?substr_replace(html_escape($storeDesc), "...", 190):html_escape($storeDesc);?>
                                 </p>
                             </div>
                         </div>
