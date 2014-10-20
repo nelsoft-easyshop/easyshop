@@ -3008,6 +3008,7 @@ div.pass-hint {
 
 /*** PROFILE STYLE ***/
 .profile_top_nav {
+    border-bottom: 3px solid #CECECE;
     float: left;
 /*	background-color: #ff4400;*/
     width: 720px;
@@ -3020,20 +3021,24 @@ div.pass-hint {
 }
 
 .profile_top_nav ul {
-    border-bottom: 3px solid #CECECE;
+/*    display: inline-block;
+    list-style: none;
+    width: 435px;*/
     display: inline-block;
     list-style: none;
     width: 435px;
+    position: absolute;
+    top: 8px;
 }
 
 .profile_top_nav ul li {
     float: left;
     margin-bottom: -3px;
-    border-bottom: 3px solid #cecece;
 }
 .profile_top_nav ul li:hover {
 /*	background-color: #ffae00;*/
     border-bottom: 3px solid #f18200;
+    margin-bottom: -3px;
 }
 
 .profile_top_nav ul li:hover a {
@@ -3044,9 +3049,10 @@ div.pass-hint {
 .profile_top_nav ul li span {
     color: #494949;
     display: inline-block;
-    padding: 15px;
+    padding: 10px 15px;
     text-transform: uppercase;
     cursor: pointer;
+    -webkit-padding-after : 11px;
 }
 
 .profile_top_nav ul li ul {
@@ -3056,6 +3062,7 @@ div.pass-hint {
     min-width: 180px;
     width: auto;
     z-index: 999;
+    top: 35px;
 }
 
 .profile_top_nav ul li:hover ul {
@@ -3088,10 +3095,14 @@ div.pass-hint {
 }
 
 .profile_top_nav .member_srch_wrapper {
-    border-bottom: 3px solid #CECECE;
-    padding-bottom: 11px;
+/*    padding-bottom: 9px;
+    text-align: right;
+    width: 285px;*/
+    padding-bottom: 9px;
     text-align: right;
     width: 285px;
+    position: relative;
+    margin-left: 435px;
 }
 
 .ie9 .profile_top_nav .member_srch_wrapper {
