@@ -15,7 +15,7 @@
                                 </span>
                             </span>
                             <span class="pull-right">
-                                <a class="a-see-all" href="#"><span class="span-see-all">see all</span></a>
+                                <a class="a-see-all" href="/category/<?php echo $categorySection['category']->getSlug()?>"><span class="span-see-all">see all</span></a>
                             </span>
                         </p>
                     </div>
