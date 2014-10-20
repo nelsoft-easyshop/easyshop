@@ -103,8 +103,8 @@
         </p>
 
         <p>
-        <strong>Will I get my items delivered to me?</strong>
-        The seller should always indicate if he is willing to deliver.
+            <strong>Will I get my items delivered to me?</strong>
+            The seller should always indicate if he is willing to deliver.
         </p>
 
         <p>
