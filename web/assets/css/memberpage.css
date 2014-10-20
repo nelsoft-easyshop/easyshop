@@ -581,4 +581,9 @@ table.sales_summary tr.sales_info:hover td.amount{
     border-radius: 3px;
 }
 
+.sales-details-modal {
+    width: 1024px !important;
+    overflow: hidden !important;
+}
+
 
