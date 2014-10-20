@@ -174,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
                                                             <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
@@ -350,7 +350,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
                                                             <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
