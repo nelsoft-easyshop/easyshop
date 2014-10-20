@@ -5,21 +5,21 @@ namespace EasyShop\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * OauthRefreshTokens
+ * OauthAccessTokens
  *
- * @ORM\Table(name="oauth_refresh_tokens")
+ * @ORM\Table(name="oauth_access_tokens")
  * @ORM\Entity
  */
-class OauthRefreshTokens
+class OauthAccessToken
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="refresh_token", type="string", length=40, nullable=false)
+     * @ORM\Column(name="access_token", type="string", length=40, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $refreshToken;
+    private $accessToken;
 
     /**
      * @var string
@@ -52,20 +52,20 @@ class OauthRefreshTokens
 
 
     /**
-     * Get refreshToken
+     * Get accessToken
      *
      * @return string 
      */
-    public function getRefreshToken()
+    public function getAccessToken()
     {
-        return $this->refreshToken;
+        return $this->accessToken;
     }
 
     /**
      * Set clientId
      *
      * @param string $clientId
-     * @return OauthRefreshTokens
+     * @return OauthAccessTokens
      */
     public function setClientId($clientId)
     {
@@ -88,7 +88,7 @@ class OauthRefreshTokens
      * Set userId
      *
      * @param string $userId
-     * @return OauthRefreshTokens
+     * @return OauthAccessTokens
      */
     public function setUserId($userId)
     {
@@ -111,7 +111,7 @@ class OauthRefreshTokens
      * Set expires
      *
      * @param \DateTime $expires
-     * @return OauthRefreshTokens
+     * @return OauthAccessTokens
      */
     public function setExpires($expires)
     {
@@ -134,7 +134,7 @@ class OauthRefreshTokens
      * Set scope
      *
      * @param string $scope
-     * @return OauthRefreshTokens
+     * @return OauthAccessTokens
      */
     public function setScope($scope)
     {

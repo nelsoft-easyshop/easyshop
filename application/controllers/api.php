@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 use EasyShop\Entities\EsAddress;
-use EasyShop\Entities\OauthTokenLookup as OauthTokenLookup;
+use EasyShop\Entities\OauthTokenLookup;
 
 class Api extends MY_Controller
 {
@@ -136,10 +136,10 @@ class Api extends MY_Controller
         }
 
         // Delete tokens
-        $accessToken = $this->em->getRepository('EasyShop\Entities\OauthAccessTokens')
+        $accessToken = $this->em->getRepository('EasyShop\Entities\OauthAccessToken')
                 ->find($token->getAccessToken());
 
-        $refreshToken = $this->em->getRepository('EasyShop\Entities\OauthRefreshTokens')
+        $refreshToken = $this->em->getRepository('EasyShop\Entities\OauthRefreshToken')
                 ->find($token->getRefreshToken());
 
         $this->em->remove($accessToken);

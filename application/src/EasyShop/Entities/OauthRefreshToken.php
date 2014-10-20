@@ -5,21 +5,21 @@ namespace EasyShop\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * OauthAccessTokens
+ * OauthRefreshTokens
  *
- * @ORM\Table(name="oauth_access_tokens")
+ * @ORM\Table(name="oauth_refresh_tokens")
  * @ORM\Entity
  */
-class OauthAccessTokens
+class OauthRefreshToken
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="access_token", type="string", length=40, nullable=false)
+     * @ORM\Column(name="refresh_token", type="string", length=40, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $accessToken;
+    private $refreshToken;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class OauthAccessTokens
      *
      * @ORM\Column(name="expires", type="datetime", nullable=false)
      */
-    private $expires = 'CURRENT_TIMESTAMP';
+    private $expiryDate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var string
@@ -52,20 +52,20 @@ class OauthAccessTokens
 
 
     /**
-     * Get accessToken
+     * Get refreshToken
      *
      * @return string 
      */
-    public function getAccessToken()
+    public function getRefreshToken()
     {
-        return $this->accessToken;
+        return $this->refreshToken;
     }
 
     /**
      * Set clientId
      *
      * @param string $clientId
-     * @return OauthAccessTokens
+     * @return OauthRefreshTokens
      */
     public function setClientId($clientId)
     {
@@ -88,7 +88,7 @@ class OauthAccessTokens
      * Set userId
      *
      * @param string $userId
-     * @return OauthAccessTokens
+     * @return OauthRefreshTokens
      */
     public function setUserId($userId)
     {
@@ -108,33 +108,33 @@ class OauthAccessTokens
     }
 
     /**
-     * Set expires
+     * Set expiryDate
      *
-     * @param \DateTime $expires
-     * @return OauthAccessTokens
+     * @param \DateTime $expiryDate
+     * @return OauthRefreshTokens
      */
-    public function setExpires($expires)
+    public function setExpiryDate($expiryDate)
     {
-        $this->expires = $expires;
+        $this->expiryDate = $expiryDate;
 
         return $this;
     }
 
     /**
-     * Get expires
+     * Get expiryDate
      *
      * @return \DateTime 
      */
-    public function getExpires()
+    public function getExpiryDate()
     {
-        return $this->expires;
+        return $this->expiryDate;
     }
 
     /**
      * Set scope
      *
      * @param string $scope
-     * @return OauthAccessTokens
+     * @return OauthRefreshTokens
      */
     public function setScope($scope)
     {
