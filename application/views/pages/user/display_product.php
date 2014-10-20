@@ -21,7 +21,9 @@
                             <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
                                 <?php if($percentage && $percentage > 0):?>
                                 <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                
                                 <?php endif; ?>
+                                <span class="grid-span-new-pin">NEW</span>
                                 <center>
                                     <div class="span-img-container">
                                     </div>
@@ -61,6 +63,7 @@
                                     <?php if($percentage && $percentage > 0):?>
                                     <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                     <?php endif;?>
+                                    <span class="span-new-pin-list">NEW</span>
                                 </div>
                             </a>
                         </td>
