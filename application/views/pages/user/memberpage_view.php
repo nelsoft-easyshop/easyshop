@@ -1722,24 +1722,6 @@
                 <a id="printTransactions" data-url="printbuytransactions"><li>Print</li></a>
                 <a href="#"><li>Export to CSV</li></a>
             </ul>
-            <script>
-                (function(){
-                    $(function () {
-                        var $print = $(".print");
-                        var $print_ul = $(".print-ul");
-                        $(document).mouseup(function (e) {
-                            if (!$print.is(e.target) // if the target of the click isn't the container...
-                                && $print.has(e.target).length === 0) // ... nor a descendant of the container
-                            {
-                                $print_ul.hide(1);
-                            }
-                        });
-                        $print.click(function() {
-                            $print_ul.show();
-                        });
-                    });
-                })(jQuery); 
-            </script>
         <?php if($transaction['count']['buy']===0):?>
             <br/>
             <div><span class='nocontent'>You have not bought any items yet.</span></div>
@@ -2053,24 +2035,6 @@
             <a id="printTransactions" data-url="printselltransactions"><li>Print</li></a>
             <a href="#"><li>Export to CSV</li></a>
         </ul>
-        <script>
-            (function(){
-                $(function () {
-                    var $print_s = $(".print-s");
-                    var $print_ul_s = $(".print-ul-s");
-                    $(document).mouseup(function (e) {
-                        if (!$print_s.is(e.target) // if the target of the click isn't the container...
-                            && $print_s.has(e.target).length === 0) // ... nor a descendant of the container
-                        {
-                            $print_ul_s.hide(1);
-                        }
-                    });
-                    $print_s.click(function() {
-                        $print_ul_s.show();
-                    });
-                });
-            })(jQuery); 
-        </script>
         <?php if($transaction['count']['sell']===0):?>
         <br/>
         <div><span class='nocontent'>You have not sold any items yet.</span></div>
