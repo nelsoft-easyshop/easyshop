@@ -253,19 +253,18 @@ class Memberpage extends MY_Controller
      */
     public function exportSellTransactions()
     {       
-
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
-
 
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
                 array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
             }
-        }      
+        }  
+
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=soldtransactions.csv');
@@ -279,7 +278,6 @@ class Memberpage extends MY_Controller
                                 ,'Price'
                                 ,'Product Specifications'));    
 
-
         foreach($soldTransaction["transactions"] as $value) {
             if(isset($value["0"])) {
                 foreach($value["0"]["attributes"] as $key => $attr) {
@@ -289,15 +287,14 @@ class Memberpage extends MY_Controller
             else {
                 $prodSpecs = "N/A";
             }
-            fputcsv($output, array(
-                    $value["invoiceNo"],
-                    $value["productname"],
-                    $value["dateadded"]->format('Y-m-d H:i:s'),
-                    $value["fullname"],
-                    $value["orderQuantity"],
-                    ucwords(strtolower($value["paymentMethod"])),
-                    number_format((float)$value["totalOrderProduct"], 2, '.', ''),
-                    $prodSpecs
+            fputcsv($output, array( $value["invoiceNo"]
+                                    , $value["productname"]
+                                    , $value["dateadded"]->format('Y-m-d H:i:s')
+                                    , $value["fullname"]
+                                    , $value["orderQuantity"]
+                                    , ucwords(strtolower($value["paymentMethod"]))
+                                    , number_format((float)$value["totalOrderProduct"], 2, '.', '')
+                                    , $prodSpecs
             ));
             $prodSpecs = "";
         }
@@ -312,16 +309,19 @@ class Memberpage extends MY_Controller
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
                 array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
         }      
+
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=boughttransactions.csv');
         $output = fopen('php://output', 'w');
+
         fputcsv($output, array(' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
@@ -340,15 +340,15 @@ class Memberpage extends MY_Controller
             else {
                 $prodSpecs = "N/A";
             }
-            fputcsv($output, array(
-                    $value["invoiceNo"],
-                    $value["productname"],
-                    $value["dateadded"]->format('Y-m-d H:i:s'),
-                    $value["fullname"],
-                    $value["orderQuantity"],
-                    ucwords(strtolower($value["paymentMethod"])),
-                    number_format((float)$value["total"], 2, '.', ''),
-                    $prodSpecs
+
+            fputcsv($output, array( $value["invoiceNo"]
+                                    , $value["productname"]
+                                    , $value["dateadded"]->format('Y-m-d H:i:s')
+                                    , $value["fullname"]
+                                    , $value["orderQuantity"]
+                                    , ucwords(strtolower($value["paymentMethod"]))
+                                    , number_format((float)$value["total"], 2, '.', '')
+                                    , $prodSpecs
             ));
             $prodSpecs = "";
         }
