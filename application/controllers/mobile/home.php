@@ -28,11 +28,9 @@ class Home extends MY_Controller {
         foreach ($pageContent['mainSlide'] as $key => $value) {
             $bannerImages[] = array(
                             'name' => '0',
-
                             'image' => $value['value'],
                             'target' => base_url().$value['imagemap']['target'],
                             'actionType' => $value['actionType'],
-
                         );
         }
         $sectionImages = array(

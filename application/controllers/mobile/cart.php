@@ -72,13 +72,13 @@ class cart extends MY_Controller
         header('Content-type: application/json');
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
-        // if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
-        //     $this->oauthServer->getResponse()->send();
-        //     die;
-        // }
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            $this->oauthServer->getResponse()->send();
+            die;
+        }
         
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
-        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find(128);
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
     }
 
 
