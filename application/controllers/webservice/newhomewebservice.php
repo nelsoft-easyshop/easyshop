@@ -37,6 +37,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
+        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
         if($this->input->get()) {
@@ -310,12 +311,24 @@ class NewHomeWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sellerSection/productPanel[last()]',"\t\t","\n");    
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
         }
+        else {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sellerSection/productPanel[last()]',"\t\t","\n");    
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }   
+        }
+
+
     }
 
     /**
@@ -473,13 +486,23 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $slug = $this->input->get("value");        
 
-        $map->sellerSection->productPanel[$index]->slug = $slug;
-
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $slug]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $map->sellerSection->productPanel[$index]->slug = $slug;
+
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }  
+        }
     }    
 
     /**
@@ -576,12 +599,24 @@ class NewHomeWebService extends MY_Controller
         $subIndex = (int)$this->input->get("subindex");
         $value = $this->input->get("value");
 
-        $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        } 
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);            
+        }
+        else {
+            $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }             
+        }
+
+
     }  
 
     /**
@@ -614,13 +649,24 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
         $index = $index == 0 ? 1 : $index + 1;  
-
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
         }
+        else {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }
+        }
+
+
     }      
 
     /**

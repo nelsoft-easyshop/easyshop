@@ -68,14 +68,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="col-xs-6 col-sm-6 col-md-6 top-header-left">
                                 <ul id="top-links" class="clearfix">
                                     <li><a href="/sell/step1" title="Sell an item"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">sell an item</span></a></li>
                                     <li><a href="/guide/sell" title="Learn how to sell your items"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">how to sell</span></a></li>
                                     <li><a href="/guide/buy" title="Learn how to make a purchase"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">how to shop</span></a></li>
                                 </ul>
                             </div><!-- End .header-top-left -->
-                            <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="col-xs-6 col-sm-6 col-md-6 top-header-right">
                                 <div class="header-text-container pull-right">
                                     <div class="header-link">
                                                                                
@@ -174,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
                                                             <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
@@ -198,12 +198,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                           <div class="search-container">
-                                                <select name="category" class="ui-form-control">
+                                                <!-- <select name="category" class="ui-form-control">
                                                     <option value="1">- All -</option>
                                                     <?php foreach ($parentCategory as $key => $value): ?>
                                                         <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
                                                     <?php endforeach; ?>
-                                                </select>
+                                                </select> -->
                                                 <input type="text" name="q_str" class="ui-form-control">
                                             </div>
                                         </div>
@@ -350,7 +350,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <?PHP endfor; ?>
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
                                                             <p>Total: <span>&#8369; <?=$total?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
