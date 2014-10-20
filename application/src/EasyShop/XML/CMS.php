@@ -836,7 +836,7 @@ $string = '<typeNode>
      * Returns the mobile home page data
      * @return array
      */
-    public function getMobileHomeData()
+    public function getMobileHomeData($baseUrl)
     {
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
@@ -847,7 +847,7 @@ $string = '<typeNode>
             $bannerImages[] = array(
                             'name' => '0',
                             'image' => $value['value'],
-                            'target' => base_url().$value['imagemap']['target'],
+                            'target' => $baseUrl.$value['imagemap']['target'],
                             'actionType' => $value['actionType'],
                         );
         }
@@ -898,7 +898,7 @@ $string = '<typeNode>
                     $productBasePrice = floatval($product->getPrice());
                     $productFinalPrice = floatval($product->getFinalPrice());
                     $productImagePath = $directory.$imageFileName;
-                    $target = base_url().'mobile/product/item/'.$productSlug;
+                    $target = $baseUrl.'mobile/product/item/'.$productSlug;
                 }
 
                 $productArray[] = array(
@@ -917,7 +917,7 @@ $string = '<typeNode>
                                 ->findOneBy(['slug' => $value['name']]);
 
             $categoryName = "";
-            $categoryIcon = base_url()."assets/images/img_icon_bag2.png";
+            $categoryIcon = $baseUrl.EsBrand::IMAGE_DIRECTORY.EsBrand::IMAGE_UNAVAILABLE_FILE;
             if($categoryObject){
                 $categoryName = $categoryObject->getName();
                 $categorySlug = $categoryObject->getSlug();
@@ -926,7 +926,7 @@ $string = '<typeNode>
                                 ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
 
                 if($categoryIconObject){
-                    $categoryIcon = base_url().'assets/'.$categoryIconObject->getPath();
+                    $categoryIcon = $baseUrl.'assets/'.$categoryIconObject->getPath();
                 }
 
                 $productArray[] = array(
@@ -937,7 +937,7 @@ $string = '<typeNode>
                                         'final_price' => 0,
                                         'image' => "",
                                         'actionType' => 'show product list',
-                                        'target' => base_url().'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                                        'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
                                     );
             }
 

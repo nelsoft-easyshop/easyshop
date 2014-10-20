@@ -21,7 +21,8 @@ class Home extends MY_Controller {
 
     public function index()
     { 
-        $mobileHomeContent = $this->serviceContainer['xml_cms']->getMobileHomeData();
+        $baseUrl = base_url();
+        $mobileHomeContent = $this->serviceContainer['xml_cms']->getMobileHomeData($baseUrl);
         
 
         echo json_encode($mobileHomeContent,JSON_PRETTY_PRINT);
