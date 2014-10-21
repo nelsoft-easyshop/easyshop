@@ -54,7 +54,7 @@
                         else{
                             if(data.o_success <= 0){
                                 $("#login_error").empty();
-                                $("#login_error").html(data[3]);
+                                $("#login_error").html(data["o_message"]);
                                 $('#loading_img').hide();
                                 $('#login').show();
                             }
