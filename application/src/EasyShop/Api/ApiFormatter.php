@@ -260,7 +260,7 @@ class ApiFormatter
 
                 $mappedAttributes = array();
                 foreach($attributes as $attribute){
-                    $isSelected = false;
+                    $isSelected = "false";
                     $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
 
                     foreach($cartItem['options'] as $head => $option){
@@ -270,7 +270,7 @@ class ApiFormatter
                         if(strtolower($attribute['head']) == strtolower($head) &&
                             strtolower($attribute['value']) == strtolower($fieldValue) &&
                             strtolower($attribute['price']) == strtolower($fieldPrice)){
-                            $isSelected = true;
+                            $isSelected = "true";
                             break;
                         }
                     }
@@ -301,8 +301,8 @@ class ApiFormatter
                 $format = $this->formatItem($cartItem['id']);
                 $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
             }
-        }
-// print_r($finalCart);
+        } 
+
         return $finalCart;
     }
 
