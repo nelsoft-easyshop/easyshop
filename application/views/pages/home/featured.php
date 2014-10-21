@@ -52,7 +52,7 @@
                                             <div class="store-logo-container ">
                                                 <div class="span-store-logo">
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
-                                                        <img src="<?=$homeContent['seller']['logo']?>"/>
+                                                        <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
                                                     </a>
                                                 </div>
                                             </div>
@@ -72,7 +72,7 @@
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
-                            <img src="<?=$homeContent['seller']['logo']?>"/>
+                            <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
                         </a>
                     </div>
                 </div>
