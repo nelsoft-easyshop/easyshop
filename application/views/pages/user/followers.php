@@ -22,21 +22,21 @@
                         <img src="/assets/images/orange_loader.gif">
                     </div>
                     <div id="follower-container" class="row" style="min-height: 500px;">
-                        <!--will appear if the vendor has no follower-->
-                        <div class="panel-no-followers">
-                            <div class="jumbotron no-feedback-list">
-                                <center>
-                                    <strong>justineduazo doesn't have followers</strong>
-                                    <span class="follow-btn follow-right btn btn-default-2 subscription no-follower-btn">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
-                                    </span>
-                                </center>
+                        <?php if(intval($followerCount) <= 0): ?>
+                            <!--will appear if the vendor has no follower-->
+                            <div class="panel-no-followers">
+                                <div class="jumbotron no-feedback-list">
+                                    <center>
+                                        <strong><?=$storeName; ?> doesn't have followers</strong> 
+                                    </center>
+                                </div>
                             </div>
-                        </div>
-                        <!--end of div-->
-                        <div id="follow-div-page-0">
-                            <?=$follower_view;?>
-                        </div>
+                            <!--end of div-->
+                        <?php else:?>
+                            <div id="follow-div-page-0">
+                                <?=$follower_view;?>
+                            </div>
+                        <?php endif;?>
                     </div>
                     <div class="clear"></div>
                     <div class="pagination-container">
