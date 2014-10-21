@@ -104,8 +104,8 @@ class Login extends MY_Controller
             //$row = $this->user_model->verify_member($dataval);                 
             $row = $this->accountManager->authenticateMember($uname, $pass);
             #if user is valid: member i, usersession and cart_contents will be set in the session
- 
-            if (empty($row["errors"][0]["login"])) {
+
+            if (!empty($row["member"])) {
             
                 $row['o_success'] = 1;
                 $row["0"] = 1;
