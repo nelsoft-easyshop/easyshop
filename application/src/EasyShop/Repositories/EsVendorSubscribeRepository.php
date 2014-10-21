@@ -44,6 +44,7 @@ class EsVendorSubscribeRepository extends EntityRepository
      * @param  integer $memberId member id of the page owner
      * @param  integer $viewerId member id of the page viewer
      * @param  integer $perPage
+     * @param  array   $ids list of member id that will not be displayed
      * @return mixed
      */
     public function getRecommendToFollow($memberId,$viewerId,$perPage = 6,$ids=[])
