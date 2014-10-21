@@ -19,16 +19,17 @@ class SocialMediaController extends MY_Controller
         $this->stringUtility = $this->serviceContainer['string_utility'];
         $this->emailNotification = $this->serviceContainer['email_notification'];
     }
+
     /**
      * Register Facebook account to easyshop
      * @return mixed Returns the member entity if exist or successfully registered and false if sharing of email was declined
      */
     public function registerFacebookUser()
     {
-    
         if ($this->input->get('error')) {
             redirect('/login', 'refresh');
         }
+
         $facebookType = $this->socialMediaManager->getFacebookTypeConstant();
         $facebookData = $this->socialMediaManager->getAccount($facebookType);
         if ($facebookData->getProperty('email')) {
@@ -72,25 +73,21 @@ class SocialMediaController extends MY_Controller
         }
         
         redirect('/login', 'refresh');
-
     }
 
     /**
      * Register Google account to easyshop
-     * 
      */
     public function registerGoogleAccount()
     {
-        if ($this->input->get('error')){
+        if ($this->input->get('error')) {
             redirect('/login', 'refresh');
         }
 
         $google = $this->socialMediaManager->getGoogleClient();  
         $googleType = $this->socialMediaManager->getGoogleTypeConstant();
         $httpRequest = $this->serviceContainer['http_request'];
-        
-        if($this->input->get('code'))
-        {
+        if ($this->input->get('code')) {
             $code = $this->input->get('code');
             $google->authenticate($code);
             $this->session->set_userdata('access_token', $google->getAccessToken());
@@ -105,8 +102,6 @@ class SocialMediaController extends MY_Controller
         if ($this->session->userdata('access_token')) {
             $google->setAccessToken($this->session->userdata('access_token'));
             $googleData = $this->socialMediaManager->getAccount($googleType);
-            
-            $validateGoogleData = $this->socialMediaManager->authenticateAccount($googleData->getId(), 'Google');
             $esMember = $this->entityManager
                 ->getRepository('EasyShop\Entities\EsMember')
                 ->findOneBy(['email' => $googleData->getEmail()]);
@@ -142,10 +137,11 @@ class SocialMediaController extends MY_Controller
                     redirect('SocialMediaController/register?h=' . $data, 'refresh');
                 }
             }
+
             $this->login($response);
             redirect('/', 'refresh');
         }
-        
+
         redirect('/login', 'refresh');
     }
 
@@ -206,7 +202,6 @@ class SocialMediaController extends MY_Controller
             'site_url' => site_url('SocialMediaController/mergeAccount')
         );
         $message = $this->parser->parse('templates/email_merge_account', $parseData, true);
-
         $this->emailNotification->setRecipient($data['member']->getEmail());
         $this->emailNotification->setSubject($this->lang->line('merge_subject'));
         $this->emailNotification->setMessage($message);
