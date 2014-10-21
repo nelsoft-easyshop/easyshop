@@ -38,11 +38,6 @@
         });
     });
     
-    $('.pagination-container').on('click', '.extremes', function(){
-        var page = $(this).attr('data-page');
-        $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
-    });
-
 
     $(document).on('mouseenter',".following-user",function () {
         $(this).next('span').css("display", "block");
