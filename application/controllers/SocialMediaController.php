@@ -102,43 +102,48 @@ class SocialMediaController extends MY_Controller
             redirect($uri);
         }
         
-        if($this->session->userdata('access_token')){
+        if ($this->session->userdata('access_token')) {
             $google->setAccessToken($this->session->userdata('access_token'));
             $googleData = $this->socialMediaManager->getAccount($googleType);
             
             $validateGoogleData = $this->socialMediaManager->authenticateAccount($googleData->getId(), 'Google');
-            if(!$validateGoogleData) {
-                $response = $this->socialMediaManager->registerAccount(
-                    $googleData->getGivenName(),
-                    $googleData->getName(),
-                    '',
-                    $googleData->getEmail(),
-                    TRUE,
-                    $googleData->getId(),
-                    'Google'
-                );
+            $esMember = $this->entityManager
+                ->getRepository('EasyShop\Entities\EsMember')
+                ->findOneBy(['email' => $googleData->getEmail()]);
+            $isUsernameExists = $esMember->getUsername() ? true : false;
+            if($esMember && !$isUsernameExists) {
+                if (!$esMember->getOauthProvider()) {
+                    $data = $this->encrypt->encode(
+                        $esMember->getIdMember() . '~' . $googleType
+                    );
+                    redirect('SocialMediaController/merge?h=' . $data, 'refresh');
+                }
             }
             else {
-                $response = $validateGoogleData;
-            }
-
-            if ($response->getUsername() && $response->getEmail()) {
-                $this->login($response);
-                redirect('/', 'refresh');
-            }
-            else {
-                $url = '/SocialMediaController/register?id=' . $response->getIdMember();
                 $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
-                if ($response->getUsername() === "") {
-                    $url .= '&username=' . $username;
+                if (!$esMember && !$isUsernameExists) {
+                    $response = $this->socialMediaManager->registerAccount(
+                        $username,
+                        $googleData->getName(),
+                        '',
+                        $googleData->getEmail(),
+                        TRUE,
+                        $googleData->getId(),
+                        $googleType
+                    );
                 }
 
-                if ($response->getEmail() === "") {
-                    $url .= '&email=' . $googleData->getEmail();
+                if (!$esMember->getUsername()) {
+                    $data = $this->encrypt->encode(
+                        $esMember->getIdMember().
+                        '~'.
+                        $username
+                    );
+                    redirect('SocialMediaController/register?h=' . $data, 'refresh');
                 }
-
-                redirect($url, 'refresh');
             }
+            $this->login($response);
+            redirect('/', 'refresh');
         }
         
         redirect('/login', 'refresh');
