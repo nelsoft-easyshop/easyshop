@@ -496,6 +496,8 @@ class Home extends MY_Controller
             } 
         }
 
+        $followerData['followerCount'] = $headerVendorData["followerCount"];
+        $followerData['storeName'] = $headerVendorData['storeNameDisplay'];
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId;
