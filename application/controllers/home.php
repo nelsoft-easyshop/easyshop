@@ -349,6 +349,7 @@ class Home extends MY_Controller
                 $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
+
                 // Data for the view
                 $viewData = array(
                       "defaultCatProd" => $productView['defaultCatProd']
@@ -356,6 +357,12 @@ class Home extends MY_Controller
                     , "isLoggedIn" => $headerData['logged_in']
                     , "prodLimit" => $this->vendorProdPerPage
                 );
+ 
+                // count the followers 
+                $EsVendorSubscribe = $this->serviceContainer['entity_manager']
+                                ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+        
+                $data["followerCount"] = $EsVendorSubscribe->getFollowers($arrVendorDetails['id_member'])['count'];
 
                 //Determine active Div for first load
                 $showFirstDiv = TRUE;
@@ -364,8 +371,7 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
                     }
                     else{
-                        $viewData['defaultCatProd'][$catId]['isActive'] = $showFirstDiv;
-                        $showFirstDiv = FALSE;
+                        $data['defaultCatProd'][$catId]['isActive'] = $data['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
 
@@ -419,6 +425,8 @@ class Home extends MY_Controller
             } 
         }
 
+        $followerData['followerCount'] = $headerVendorData["followerCount"];
+        $followerData['storeName'] = $headerVendorData['storeNameDisplay'];
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $headerData['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId;
@@ -539,7 +547,7 @@ class Home extends MY_Controller
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
-        $categoryProducts = array();
+        $categoryProductCount = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
@@ -548,7 +556,9 @@ class Home extends MY_Controller
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-
+            $parentCat[$idCat]['hasMostProducts'] = false; 
+            $categoryProductCount[$idCat] = count($result['products']);
+            
             // Generate pagination view
             $paginationData = array(
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
@@ -565,6 +575,9 @@ class Home extends MY_Controller
 
             $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
+        
+        $categoryWithMostProducts = reset(array_keys($categoryProductCount, max($categoryProductCount)));
+        $parentCat[$categoryWithMostProducts]['hasMostProducts'] = true;
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;

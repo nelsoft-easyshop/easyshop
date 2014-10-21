@@ -2903,6 +2903,12 @@ div.reg_step3 ul li:nth-child(3) {
     padding-left:3px;
 }
 
+#changepass .fill_out_form input[type="submit"] {
+    line-height: 24px;
+    margin-left: 160px;
+    width: 180px;
+}
+
 .fill_out_form input[type="text"]:focus,
 .fill_out_form input[type="password"]:focus,
 .fill_out_form select:focus {

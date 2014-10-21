@@ -2258,6 +2258,9 @@ $(document).ready(function(){
                 $.modal.close();
             }
         });
+
+        $('#simplemodal-container').addClass('sales-details-modal');
+
     });
 });
 
