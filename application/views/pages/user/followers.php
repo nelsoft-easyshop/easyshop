@@ -27,7 +27,7 @@
                             <div class="panel-no-followers">
                                 <div class="jumbotron no-feedback-list">
                                     <center>
-                                        <strong><?=$storeName; ?> doesn't have followers</strong> 
+                                        <strong><?=html_escape($storeName); ?> doesn't have followers</strong> 
                                     </center>
                                 </div>
                             </div>
