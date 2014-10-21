@@ -14,6 +14,13 @@ src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
 font-weight: bold;
 }
 
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
+font-weight: 900;
+}
+
 /*** global style ***/
 html, body{
     font-family: 'Helvetica', Arial, Calibri;
@@ -221,6 +228,7 @@ section {
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .new-user-nav-dropdown {
@@ -335,12 +343,12 @@ section {
 .vendor-profile-content h4 {
     font-size: 1.5em;
     font-weight: bold;
-    height: 24px;
     margin-bottom: 2px;
     margin-top: 31px;
     overflow: hidden;
     padding: 0 20px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .vendor-profile-content p {
@@ -659,6 +667,20 @@ section {
     border-bottom: 3px solid #fe893a;
 }
 
+.followers-circle{
+    background: #fe893a;
+    position: absolute;
+    color: #ffffff;
+    margin-top: -16px;
+    margin-left: 37px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size:12px;
+    text-align: center;
+    padding-top: 5px;
+}
+
 .fixed-vendor-content {
     margin-top: 100px;
 }
@@ -732,6 +754,7 @@ section {
     text-overflow: ellipsis;
     vertical-align: middle;
     width: 284px;
+    white-space: nowrap;
 }
 
 .sticky-nav li:nth-child(2) a {

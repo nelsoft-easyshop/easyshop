@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOrderBillingInfo
  *
  * @ORM\Table(name="es_order_billing_info")
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOrderBillingInfoRepository")
+ * @ORM\Entity
  */
 class EsOrderBillingInfo
 {
@@ -20,7 +20,6 @@ class EsOrderBillingInfo
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idOrderBillingInfo;
-
 
     /**
      * @var string
@@ -42,6 +41,20 @@ class EsOrderBillingInfo
      * @ORM\Column(name="account_number", type="string", length=1024, nullable=true)
      */
     private $accountNumber = '';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     */
+    private $updatedAt = 'CURRENT_TIMESTAMP';
 
 
 
@@ -122,5 +135,51 @@ class EsOrderBillingInfo
     public function getAccountNumber()
     {
         return $this->accountNumber;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return EsOrderBillingInfo
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return EsOrderBillingInfo
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
