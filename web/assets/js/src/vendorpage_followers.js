@@ -54,6 +54,7 @@
         var slug = $this.data('slug');
         var isLoggedIn = parseInt($('#is_loggedin').val());
         var buttonType = $this.data('btn');
+        var ids = $("#userIds").val();
 
         if(isLoggedIn){ 
             if(status == "follow"){
@@ -86,14 +87,15 @@
                                 url: config.base_url+"home/getMoreRecommendToFollow",
                                 type: "GET",
                                 dataType: "json",
-                                data: {vendorId:vendorId},
+                                data: {vendorId:vendorId,ids:ids},
                                 success: function (data2) {
                                     if(data2.count <= 0){
                                         $this.closest('tr').remove();
                                     }
                                     else{
                                         $this.closest('tr').replaceWith(data2.html);
-                                    }
+                                    } 
+                                    $("#userIds").val(data2.ids);
                                 }
                             });
                         }

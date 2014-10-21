@@ -507,7 +507,9 @@ class Home extends MY_Controller
         // get who to follow
         $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId);
 
+        $followerData['memberIdsDisplay'] = []; 
         foreach ($followerData['recommendToFollow'] as $key => $value) {
+            $followerData['memberIdsDisplay'][] = $value->getIdMember();
             // get user images for display
             $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
             
@@ -582,10 +584,13 @@ class Home extends MY_Controller
 
         $viewerId = $this->session->userdata('member_id');
         $memberId = $this->input->get('vendorId'); 
-                                                           // get who to follow
-        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId,1);
+        $ids = json_decode($this->input->get('ids'));
+
+       // get who to follow
+        $followerData['recommendToFollow'] = $EsVendorSubscribe->getRecommendToFollow($memberId,$viewerId,1,$ids);
 
         foreach ($followerData['recommendToFollow'] as $key => $value) {
+            $ids[] = $value->getIdMember();
             // get user images for display
             $value->avatarImage = $this->serviceContainer['user_manager']->getUserImage($value->getIdMember());
             
@@ -600,6 +605,7 @@ class Home extends MY_Controller
             }
         }
         $response['count'] = count($followerData['recommendToFollow']);
+        $response['ids'] = json_encode($ids);
         $response['html'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
         
         echo json_encode($response);
