@@ -101,11 +101,16 @@ class mobilePayment extends MY_Controller
             $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
         }
 
+        $finalPaymentType = [];
+        foreach ($paymentType as $key => $value) {
+            $finalPaymentType[] = $value;
+        }
+
         $outputData = array(
             'cartData' => $formattedCartContents,
             'canContinue' => $canContinue,
             'errorMessage' => $errorMessage,
-            'paymentType' => $paymentType,
+            'paymentType' => $finalPaymentType,
         );
 
         print(json_encode($outputData,JSON_PRETTY_PRINT));

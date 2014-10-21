@@ -46,11 +46,32 @@ class search extends MY_Controller
             }
 
             $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
-            $sortType = array('hot','new');
+            $sortType = array('name','price');
 
+            $specialFilter = ['filterprice' => 
+                                [
+                                    'P0 - P1000' => [
+                                        'startprice' => 0,
+                                        'endprice' => 1000,
+                                    ],
+                                    'P1000 - P5000' => [
+                                        'startprice' => 1000,
+                                        'endprice' => 5000,
+                                    ],
+                                    'P5000 - P10000' => [
+                                        'startprice' => 5000,
+                                        'endprice' => 10000,
+                                    ],
+                                    'P10000 and above' => [
+                                        'startprice' => 10000,
+                                        'endprice' => PHP_INT_MAX,
+                                    ]
+                                ]
+                            ];
             $arrayDisplay = array(
                                 'products' => $productArray,
-                                'attributes' => $attributes,
+                                'filter' => $attributes,
+                                'specialFilter' => $specialFilter,
                                 'sort_available' => $sortType,
                             ); 
         }

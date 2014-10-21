@@ -511,6 +511,9 @@ class EsProductRepository extends EntityRepository
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
                                         ->addOrderBy(' p.clickcount',$order);
                     break;
+                case "NAME":
+                    $qbResult = $qbResult->orderBy('p.name', $order);
+                    break;
                 default:
                     $qbResult = $qbResult->orderBy('p.clickcount', $order);
                     break;
