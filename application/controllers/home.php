@@ -362,7 +362,7 @@ class Home extends MY_Controller
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                 ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
         
-                $data["followerCount"] = $EsVendorSubscribe->getFollowers($arrVendorDetails['id_member'])['count'];
+                $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
                 //Determine active Div for first load
                 $showFirstDiv = TRUE;
@@ -371,7 +371,7 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
                     }
                     else{
-                        $data['defaultCatProd'][$catId]['isActive'] = $data['defaultCatProd'][$catId]['hasMostProducts'];
+                        $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
 
@@ -425,8 +425,8 @@ class Home extends MY_Controller
             } 
         }
 
-        $followerData['followerCount'] = $headerVendorData["followerCount"];
-        $followerData['storeName'] = $headerVendorData['storeNameDisplay'];
+        $followerData['followerCount'] = $bannerData["followerCount"];
+        $followerData['storeName'] = strlen($bannerData['arrVendorDetails']['store_name']) > 0 ? $bannerData['arrVendorDetails']['store_name'] : $bannerData['arrVendorDetails']['username'];
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $headerData['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId;
