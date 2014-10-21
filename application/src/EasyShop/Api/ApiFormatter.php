@@ -247,6 +247,7 @@ class ApiFormatter
     public function formatCart($cartData)
     { 
         $formattedCartContents = array();
+        $finalCart = array();
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['idProduct' => $cartItem['id']]);
@@ -298,11 +299,11 @@ class ApiFormatter
                 ];
 
                 $format = $this->formatItem($cartItem['id']);
-                $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$format);
+                $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
             }
         }
-
-        return $formattedCartContents;
+// print_r($finalCart);
+        return $finalCart;
     }
 
     public function formatDisplayItem($idProduct)
