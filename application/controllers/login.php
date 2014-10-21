@@ -152,7 +152,8 @@ class Login extends MY_Controller
     }
     
     
-    function logout() {
+    public function logout() 
+    {
         
         $cart_items = serialize($this->session->userdata('cart_contents'));
         $id = $this->session->userdata('member_id');        
@@ -167,44 +168,42 @@ class Login extends MY_Controller
 
         $this->user_model->dbdelete_cookie_keeplogin($temp);
         delete_cookie('es_usr');
-		
         $this->session->sess_destroy();
-	$referrer = $this->input->get('referrer');
-	if(trim($referrer))
-		redirect(base_url().$referrer);
-	else
-		redirect(base_url().'login');		
+        $referrer = $this->input->get('referrer');
+        if(trim($referrer))
+            redirect(base_url().$referrer);
+        else
+            redirect(base_url().'login');		
     }
-	
-    function identify(){
-		
+
+    public function identify(){
         $data = array(
             'title' => 'Forgot Password | Easyshop.ph',
             'render_searchbar' => false,
-		);
-	$data = array_merge($data, $this->fill_header());
+        );
+        $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
-		
-	$temp['toggle_view'] = "";
-	if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
-            $email = $this->input->post('email');
-            $result = $this->register_model->check_registered_email($email);
-	    if (isset($result['username'])){
-		    // Send email and update database 
-		    if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
-			    $temp['toggle_view'] = "1";
-		    }else{
-			    $temp['toggle_view'] = "3";		
-		    }
-	    }else{
-		    $temp['toggle_view'] = "2";
-	    }
+            
+        $temp['toggle_view'] = "";
+        if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
+                $email = $this->input->post('email');
+                $result = $this->register_model->check_registered_email($email);
+            if (isset($result['username'])){
+                // Send email and update database 
+                if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
+                    $temp['toggle_view'] = "1";
+                }else{
+                    $temp['toggle_view'] = "3";		
+                }
+            }else{
+                $temp['toggle_view'] = "2";
+            }
         }
         $this->load->view('pages/user/forgotpass', $temp);
         $this->load->view('templates/footer');	
     }
 
-    function resetconfirm()
+    public function resetconfirm()
     {
         $data = array(
                 'title' => 'Reset Password | Easyshop.ph',
@@ -221,34 +220,34 @@ class Login extends MY_Controller
         $this->load->view('templates/header', $data);		
         $this->load->view('pages/user/forgotpass_confirm', $response);
         $this->load->view('templates/footer');
-    }	
-	
-    function xresetconfirm()
+    }
+
+    public function xresetconfirm()
     {
-	$pass = $this->input->post('password');
-	$hash = $this->input->post('hash');
-	$result = $this->register_model->forgotpass_email($hash);
-	if(isset($pass) && !empty($pass) && $this->form_validation->run('forgotpass')){
-		if(isset($result['username'])){
-			$user = $result['username'];
-			$curpass = $result['password'];
-			$mid = $result['member_id'];			
-			$data = array(
-					'username' => $user,
-					'cur_password' => $curpass,
-					'member_id' => $mid,
-					'password' => $pass
-			);
-			$this->register_model->forgotpass_update($data); 
-			echo "1";	
-		}else{
-			echo "0";
-		}	
-	}else{
-		echo "0";
-	}
-    }	
-    	
+        $pass = $this->input->post('password');
+        $hash = $this->input->post('hash');
+        $result = $this->register_model->forgotpass_email($hash);
+        if(isset($pass) && !empty($pass) && $this->form_validation->run('forgotpass')){
+            if(isset($result['username'])){
+                $user = $result['username'];
+                $curpass = $result['password'];
+                $mid = $result['member_id'];			
+                $data = array(
+                        'username' => $user,
+                        'cur_password' => $curpass,
+                        'member_id' => $mid,
+                        'password' => $pass
+                );
+                $this->register_model->forgotpass_update($data); 
+                echo "1";	
+            }else{
+                echo "0";
+            }
+        }else{
+            echo "0";
+        }
+    }
+
 }
 
 
