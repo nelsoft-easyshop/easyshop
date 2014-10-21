@@ -383,8 +383,7 @@ class Home extends MY_Controller
                         $data['defaultCatProd'][$catId]['isActive'] = (int)$catId === 0 ? TRUE : FALSE;
                     }
                     else{
-                        $data['defaultCatProd'][$catId]['isActive'] = $showFirstDiv;
-                        $showFirstDiv = FALSE;
+                        $data['defaultCatProd'][$catId]['isActive'] = $data['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
 
@@ -618,7 +617,7 @@ class Home extends MY_Controller
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
 
-        $categoryProducts = array();
+        $categoryProductCount = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
@@ -627,7 +626,9 @@ class Home extends MY_Controller
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-
+            $parentCat[$idCat]['hasMostProducts'] = false; 
+            $categoryProductCount[$idCat] = count($result['products']);
+            
             // Generate pagination view
             $paginationData = array(
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
@@ -644,6 +645,9 @@ class Home extends MY_Controller
 
             $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
+        
+        $categoryWithMostProducts = reset(array_keys($categoryProductCount, max($categoryProductCount)));
+        $parentCat[$categoryWithMostProducts]['hasMostProducts'] = true;
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;
