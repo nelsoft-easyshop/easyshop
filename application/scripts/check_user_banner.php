@@ -23,7 +23,9 @@ while($rows = mysqli_fetch_array($users)) {
     }
 }
 
+$countString = "TOTAL COUNT:" . $totalCount ."\n \n";
+echo $countString;
 // write file
 $fp=fopen("user_list_banner_changed.txt","w+"); 
-fwrite($fp,$writeString); 
+fwrite($fp,$countString.$writeString); 
 fclose($fp);
