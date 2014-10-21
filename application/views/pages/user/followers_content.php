@@ -17,7 +17,12 @@
                             <div class="col-xs-7">
                                 <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                                     <p class="p-follower-name">
-                                        <?=strlen(trim($memberEntity->getStoreName())) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
+                                        <?php $displayName = strlen(trim($memberEntity->getStoreName())) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
+                                        <?php if(strlen($displayName) > 18 ):?>
+                                            <?=substr($displayName,0,18).' ...'; ?>
+                                        <?php else: ?>
+                                            <?=$displayName; ?>
+                                        <?php endif; ?>
                                     </p>
                                 </a>
                                 <p class="p-follower-location">

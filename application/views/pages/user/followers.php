@@ -56,4 +56,5 @@
 </div>
 <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
 <input type="hidden" id="vendor_id" value="<?=$memberId?>"> 
+<input type="hidden" id="userIds" value="<?=json_encode($memberIdsDisplay)?>" />
 <script src="/assets/js/src/vendorpage_followers.js" type="text/javascript"></script>

@@ -44,15 +44,21 @@ class EsVendorSubscribeRepository extends EntityRepository
      * @param  integer $memberId member id of the page owner
      * @param  integer $viewerId member id of the page viewer
      * @param  integer $perPage
+     * @param  array   $ids list of member id that will not be displayed
      * @return mixed
      */
-    public function getRecommendToFollow($memberId,$viewerId,$perPage = 6)
+    public function getRecommendToFollow($memberId,$viewerId,$perPage = 6,$ids=[])
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('id_member','id_member'); 
 
-        $sql = 'SELECT id_member
+        $addQuery = "";
+        if(!empty($ids)){
+            $addQuery = " AND a.id_member NOT IN (:ids) ";
+        }
+
+        $sql = "SELECT id_member
                 FROM es_member  a  
                 WHERE a.id_member NOT IN (:member_id,:viewer_id)
                 AND a.id_member NOT IN (
@@ -61,15 +67,19 @@ class EsVendorSubscribeRepository extends EntityRepository
                 AND a.id_member NOT IN (
                     SELECT member_id from es_vendor_subscribe where vendor_id = :member_id
                 )
+                $addQuery
                 ORDER BY RAND()
-                LIMIT :per_page';
- 
+                LIMIT :per_page";
 
         $query = $em->createNativeQuery($sql,$rsm)
                         ->setParameter('member_id', $memberId)
                         ->setParameter('viewer_id', $viewerId)
                         ->setParameter('per_page', $perPage);
-    
+
+        if(!empty($ids)){
+            $query = $query->setParameter('ids', $ids);
+        }
+
         $result = $query->getResult();
         $memberIds = [];
         foreach ($result as $key => $value) {
