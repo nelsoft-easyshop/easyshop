@@ -50,7 +50,7 @@
                                     $storeDesc = $memberEntity->getStoreDesc();
                                 ?>
                                 <p class="p-follower-description">
-                                    <?=(strlen($storeDesc)>190)?substr_replace(html_escape($storeDesc), "...", 190):html_escape($storeDesc);?>
+                                    <?=(strlen($storeDesc)>140)?substr_replace(html_escape($storeDesc), "...", 140):html_escape($storeDesc);?>
                                 </p>
                             </div>
                         </div>
