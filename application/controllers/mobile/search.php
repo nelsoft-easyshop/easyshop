@@ -26,26 +26,35 @@ class search extends MY_Controller
         $searchProductService = $this->serviceContainer['search_product'];
 
         $parameter = $this->input->get();
+        $arrayDisplay = array(
+                'products' => [],
+                'attributes' => [],
+                'sort_available' => [],
+            ); 
 
-        // Get all product
-        $response['products'] = $searchProductService->getProductBySearch($parameter);
+        if($parameter){ 
 
-        // product display
-        $productArray = array();
+            // Get all product
+            $response['products'] = $searchProductService->getProductBySearch($parameter);
 
-        foreach ($response['products'] as $key => $value) {
-            $productArray[] = $this->serviceContainer['api_formatter']
-                                                ->formatDisplayItem($value->getIdProduct());
+            // product display
+            $productArray = array();
+
+            foreach ($response['products'] as $key => $value) {
+                $productArray[] = $this->serviceContainer['api_formatter']
+                                                    ->formatDisplayItem($value->getIdProduct());
+            }
+
+            $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
+            $sortType = array('hot','new');
+
+            $arrayDisplay = array(
+                                'products' => $productArray,
+                                'attributes' => $attributes,
+                                'sort_available' => $sortType,
+                            ); 
         }
 
-        $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
-        $sortType = array('hot','new');
-
-        $arrayDisplay = array(
-                            'products' => $productArray,
-                            'attributes' => $attributes,
-                            'sort_available' => $sortType,
-                        ); 
 
         print(json_encode($arrayDisplay,JSON_PRETTY_PRINT)); 
     }
