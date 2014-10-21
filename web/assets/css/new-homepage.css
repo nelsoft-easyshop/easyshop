@@ -2587,6 +2587,14 @@ font-size: 15px;
     vertical-align: middle;
 }
 
+.img-store-logo{
+    max-height: 40px;
+}
+
+.img-featured-seller{
+    max-height: 150px;
+}
+
 .store-logo-container{
     display: table-cell;
     width: 40px;
