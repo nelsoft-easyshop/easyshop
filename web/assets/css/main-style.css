@@ -261,7 +261,7 @@ textarea {
     height: 34px;
     min-width: 85px;
     max-width: 145px;
-    padding-right: 15px;
+    padding-right: 30px;
     overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
@@ -546,13 +546,11 @@ textarea {
 
 .jcrop-holder {
     background-color: #fff !important;
-    height: 395px !important;
+    height: 325px !important;
     margin: 10px auto;
-    width: auto !important;
 }
 
 .jcrop-holder img {
-    bottom: 0;
     height: auto !important;
     margin: auto !important;
     max-height: 296px;   
@@ -561,18 +559,18 @@ textarea {
     width: auto !important;
 }
 
-.jcrop-holder div + div + input + div > div {
+/*.jcrop-holder div + div + input + div > div {
     height: auto !important;
     max-height: 296px !important;
-}
+}*/
 
 .jcrop-tracker {
     bottom: 0;
-    height: auto !important;
+    height: 325px !important;
     left: 0 !important;
     margin: auto;
     right: 0;
-    top: 0 !important;    
+    top: 0 !important;
 }
     
 #div_user_image_prev {
@@ -594,8 +592,8 @@ textarea {
 .img-editor-container img {
     width: auto;
     height: auto;
-    max-width: 500px;
-    max-height: 320px;
+    max-width: 500px !important;
+    max-height: 320px !important;
 }
 
 #div_user_image_prev span {
@@ -808,14 +806,23 @@ textarea {
 }
 
 .sticky-nav .vendor-profile-img-con {
+    border-radius: 4px;
     display: inline-block;
     height: 30px;
+    overflow: hidden;
+    vertical-align: middle;
     width: 33px;
 }
 
 .sticky-nav .vendor-profile-img-con img {
-    max-height: 25px;
+    bottom: 0;
+    left: 0;
+    max-height: 30px;
     max-width: 33px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .sticky-nav h4 {
