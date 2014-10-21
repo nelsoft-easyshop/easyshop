@@ -1,1 +1,1 @@
-<label></label>
+<p>This username "<?=$invalidUsername?>" is currently unavailable.</p>

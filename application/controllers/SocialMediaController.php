@@ -12,9 +12,12 @@ class SocialMediaController extends MY_Controller
         parent::__construct();
 
         $this->load->library('session');
+        $this->load->library('encrypt');
         $this->load->config('oauth', TRUE);
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
         $this->entityManager = $this->serviceContainer['entity_manager'];
+        $this->stringUtility = $this->serviceContainer['string_utility'];
+        $this->emailNotification = $this->serviceContainer['email_notification'];
     }
     /**
      * Register Facebook account to easyshop
@@ -23,34 +26,49 @@ class SocialMediaController extends MY_Controller
     public function registerFacebookUser()
     {
     
-        if ($this->input->get('error')){
+        if ($this->input->get('error')) {
             redirect('/login', 'refresh');
         }
         $facebookType = $this->socialMediaManager->getFacebookTypeConstant();
         $facebookData = $this->socialMediaManager->getAccount($facebookType);
         if ($facebookData->getProperty('email')) {
-            $validateFacebookData = $this->socialMediaManager->authenticateAccount($facebookData->getId(), 'Facebook');
-            if (!$validateFacebookData) {
-                $response = $this->socialMediaManager->registerAccount(
-                    $facebookData->getFirstName(),
-                    $facebookData->getName(),
-                    $facebookData->getProperty('gender') === 'male' ? 'M' : 'F',
-                    $facebookData->getProperty('email'),
-                    TRUE,
-                    $facebookData->getId(),
-                    'Facebook'
-                );
+            $esMember = $this->entityManager
+                                ->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['email' => $facebookData->getProperty('email')]);
+            $isUsernameExists = $esMember->getUsername() ? true : false;
+            if ($esMember && $isUsernameExists) {
+                if (!$esMember->getOauthProvider()) {
+                    $data = $this->encrypt->encode(
+                        $esMember->getIdMember() . '~' . $facebookType
+                    );
+                    redirect('SocialMediaController/merge?h=' . $data, 'refresh');
+                }
             }
             else {
-                $response = $validateFacebookData;
+                $username = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
+                if (!$esMember && !$isUsernameExists) {
+                    $esMember = $this->socialMediaManager->registerAccount(
+                        $username,
+                        $facebookData->getName(),
+                        $facebookData->getProperty('gender') === 'male' ? 'M' : 'F',
+                        $facebookData->getProperty('email'),
+                        TRUE,
+                        $facebookData->getId(),
+                        $facebookType
+                    );
+                }
+
+                if (!$esMember->getUsername()) {
+                    $data = $this->encrypt->encode(
+                        $esMember->getIdMember().
+                        '~'.
+                        $username
+                    );
+                    redirect('SocialMediaController/register?h=' . $data, 'refresh');
+                }
             }
-            if ($response->getUsername()) {
-                $this->login($response);
-                redirect('/', 'refresh');
-            }
-            else {
-                redirect('/SocialMediaController/register?id=' . $response->getIdMember(), 'refresh');
-            }
+            $this->login($esMember);
+            redirect('/', 'refresh');
         }
         
         redirect('/login', 'refresh');
@@ -103,8 +121,24 @@ class SocialMediaController extends MY_Controller
             else {
                 $response = $validateGoogleData;
             }
-            $this->login($response);
-            redirect('/', 'refresh'); 
+
+            if ($response->getUsername() && $response->getEmail()) {
+                $this->login($response);
+                redirect('/', 'refresh');
+            }
+            else {
+                $url = '/SocialMediaController/register?id=' . $response->getIdMember();
+                $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
+                if ($response->getUsername() === "") {
+                    $url .= '&username=' . $username;
+                }
+
+                if ($response->getEmail() === "") {
+                    $url .= '&email=' . $googleData->getEmail();
+                }
+
+                redirect($url, 'refresh');
+            }
         }
         
         redirect('/login', 'refresh');
@@ -116,8 +150,7 @@ class SocialMediaController extends MY_Controller
     public function login($userData)
     {
         $session = $this->socialMediaManager->createSession($userData->getIdMember());
-        $em = $this->serviceContainer['entity_manager'];
-        $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
+        $user = $this->entityManager->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
         $cartData = $this->serviceContainer['cart_manager']->synchCart($user->getIdMember());;
 
         $this->session->set_userdata('member_id', $userData->getIdMember());
@@ -131,18 +164,118 @@ class SocialMediaController extends MY_Controller
         $userData->setLastLoginIp($this->serviceContainer['http_request']->getClientIp());
         $userData->setFailedLoginCount(0);
 
-        $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+        $session = $this->entityManager->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
         $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
         $authenticatedSession->setMember($user)
                              ->setSession($session);
-        $em->persist($authenticatedSession);
-        $em->flush();
+        $this->entityManager->persist($authenticatedSession);
+        $this->entityManager->flush();
     }
 
+    /**
+     * Show merge page
+     */
+    public function merge()
+    {
+        $this->load->library('parser');
+        $hash = html_escape($this->input->get('h'));
+        $enc = str_replace(" ", "+", $hash);
+        $decrypted = $this->encrypt->decode($enc);
+        $getdata = explode('~', $decrypted);
+        if (intval($getdata[0]) === 0 || !$this->input->get('h')) {
+            redirect('/login', 'refresh');
+        }
+
+        $data['member'] = $this->entityManager
+            ->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getdata[0],
+                'oauthProvider' => '',
+                'oauthId' => '0'
+            ]);
+        $data['oauthProvider'] = $getdata[1];
+        #Send Email notification
+        $parseData = array(
+            'username' => $data['member']->getUsername(),
+            'hash' => $this->encrypt->encode($data['member']->getIdMember() . '~' . $data['oauthProvider']),
+            'site_url' => site_url('SocialMediaController/mergeAccount')
+        );
+        $message = $this->parser->parse('templates/email_merge_account', $parseData, true);
+
+        $this->emailNotification->setRecipient($data['member']->getEmail());
+        $this->emailNotification->setSubject($this->lang->line('merge_subject'));
+        $this->emailNotification->setMessage($message);
+        $this->emailNotification->sendMail();
+
+        $this->load->view('pages/user/SocialMediaMerge', $data);
+    }
+
+    /**
+     * Merge account
+     */
+    public function mergeAccount()
+    {
+        $hash = html_escape($this->input->get('h'));
+        $enc = str_replace(" ", "+", $hash);
+        $decrypted = $this->encrypt->decode($enc);
+        $getData = explode("~", $decrypted);
+        $member = $this->entityManager
+            ->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'oauthProvider' => '',
+                'oauthId' => '0'
+            ]);
+
+        if (intval($getData[0]) === 0 || !$member) {
+            redirect('/login', 'refresh');
+        }
+        $member = $this->socialMediaManager->updateOauthProvider($member->getIdMember() ,$getData[1]);
+        $this->login($member);
+        redirect('/', 'refresh');
+    }
+
+    /**
+     * Show update username page
+     */
     public function register()
     {
-        $data['member'] = $this->entityManager->find('EasyShop\Entities\EsMember', ['idMember' => $this->input->get('id')]);
+        $hash = html_escape($this->input->get('h'));
+        $enc = str_replace(' ', '+', $hash);
+        $decrypt = $this->encrypt->decode($enc);
+        $getData = explode('~', $decrypt);
+        $member = $this->entityManager
+            ->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'oauthProvider' => '',
+                'oauthId' => '0'
+            ]);
+        if (intval($getData[0]) === 0) {
+            redirect('/login', 'refresh');
+        }
+        $data['member'] = $member;
+        $data['invalidUsername'] = $getData[1];
+
         $this->load->view('pages/user/SocialMediaRegistration', $data);
     }
 
+    /**
+     * Update username
+     * @return bool
+     */
+    public function updateUsername()
+    {
+        $result = false;
+        $username = $this->stringUtility->cleanString(strtolower($this->input->get('username')));
+        $esMember = $this->entityManager('EasyShop\Entities\EsMember')
+                        ->findOneBy(['username' => $username]);
+        if (!$esMember) {
+            $result = $this->socialMediaManager->updateUsername($esMember->getIdMember(), $username);
+        }
+
+        return $result;
+    }
 }
+
+#landing page for update user's username
