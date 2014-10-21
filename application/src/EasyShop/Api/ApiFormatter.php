@@ -335,7 +335,7 @@ class ApiFormatter
                               
             $options = array();
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1){
+                if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
                     $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
