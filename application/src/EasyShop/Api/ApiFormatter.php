@@ -55,6 +55,7 @@ class ApiFormatter
 
         $productDetails = array(
                 'name' => $product->getName(),
+                'slug' => $product->getSlug(),
                 'description' => $product->getDescription(),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
