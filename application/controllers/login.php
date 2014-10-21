@@ -168,6 +168,7 @@ class Login extends MY_Controller
 
         $this->user_model->dbdelete_cookie_keeplogin($temp);
         delete_cookie('es_usr');
+        delete_cookie('es_vendor_subscribe');
         $this->session->sess_destroy();
         $referrer = $this->input->get('referrer');
         if(trim($referrer))
