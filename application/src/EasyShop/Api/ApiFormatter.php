@@ -60,7 +60,8 @@ class ApiFormatter
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
-                'basePrice' => floatval($product->getFinalPrice()),
+                'price' => floatval($product->getFinalPrice()),
+                'original_price' => floatval($product->getFinalPrice()),
             );
 
         // get product images
@@ -115,7 +116,7 @@ class ApiFormatter
         $productAttributes = $this->collectionHelper->organizeArray($productAttributes,true);
 
         // get product specification
-        $productSpecification = array() ; $productCombinationAttributes = array();
+        $productSpecification = array() ; $productCombinationAttributes = array(); 
         foreach ($productAttributes as $key => $productOption) {
             $newArrayOption = array(); 
 
@@ -126,7 +127,7 @@ class ApiFormatter
                                     'value' => $productOption[$i]['attr_value'],
                                     'price'=> $productOption[$i]['attr_price'],
                                     'img_id'=> $productImages[0]['id'],
-                                    'name'=> $key,
+                                    'name'=> $productOption[$i]['attr_name'],
                                     'id'=> $newKey
                                 ); 
             }
