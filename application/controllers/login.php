@@ -22,6 +22,7 @@ class Login extends MY_Controller
         $this->load->config('oauth', TRUE);
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
         $this->throttleService = $this->serviceContainer['login_throttler'];
+        $this->accountManager = $this->serviceContainer['account_manager'];
     }
     
     /**
@@ -100,10 +101,19 @@ class Login extends MY_Controller
         }
         else{
             $dataval = array('login_username' => $uname, 'login_password' => $pass);
-            $row = $this->user_model->verify_member($dataval);                 
+            //$row = $this->user_model->verify_member($dataval);                 
+            $row = $this->accountManager->authenticateMember($uname, $pass);
             #if user is valid: member i, usersession and cart_contents will be set in the session
-            if ($row['o_success'] >= 1) {
+ 
+            if (empty($row["errors"][0]["login"])) {
             
+                $row['o_success'] = 1;
+                $row["0"] = 1;
+                $row["o_memberid"] = $row["member"]->getIdMember();
+                $row["1"] = $row["member"]->getIdMember();
+                $row["o_session"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
+                $row["2"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
+
                 $em = $this->serviceContainer['entity_manager'];
                 $cartManager = $this->serviceContainer['cart_manager'];
                 $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
@@ -146,6 +156,9 @@ class Login extends MY_Controller
                 // set new timeout
                 $this->throttleService->updateMemberAttempt($uname);
                 $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+                $row['o_message'] = $row["errors"][0]["login"];
+                $row["3"] = $row["errors"][0]["login"];
+                $row['o_success'] = 0;
             }
         }
         return $row;
