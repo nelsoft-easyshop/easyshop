@@ -104,7 +104,7 @@
             });
         }
         else{
-            $.removeCookie('es_vendor_subscribe');
+            $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', slug, {path: '/'});
             window.location.href = config.base_url + 'login';
         }
