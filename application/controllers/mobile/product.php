@@ -66,7 +66,7 @@ class Product extends MY_Controller {
                                                 ->formatDisplayItem($value->getIdProduct());
         }
 
-        print(json_encode(array('products'=>$formattedDeals),JSON_PRETTY_PRINT));
+        print(json_encode($formattedDeals,JSON_PRETTY_PRINT));
     }
 }
 
