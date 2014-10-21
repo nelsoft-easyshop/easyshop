@@ -79,7 +79,7 @@
                                                     <div class="store-logo-container ">
                                                         <div class="span-store-logo">
                                                             <a href="/<?php echo $product->getMember()->getSlug() ?>">
-                                                                <img src="<?php echo $sellerimage ?>"/>
+                                                                <img src="<?php echo $sellerimage ?>" class="img-store-logo"/>
                                                             </a>
                                                         </div>
                                                     </div>
