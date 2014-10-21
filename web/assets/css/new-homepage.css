@@ -2656,6 +2656,19 @@ font-size: 15px;
     padding-left: 0px !important;
 }
 
+.img-category{
+    width: 35px;
+    height: 35px;
+    margin: -8px 5px 5px 0px;
+}
+
+.img-category-mobile{
+    width: 25px;
+    height: 25px;
+    margin: -3px 3px 5px 0px;
+    display: none !important;
+}
+
 .title-bg > h3{
     background: none !important;
     background-color: none !important;
@@ -3087,15 +3100,22 @@ font-size: 15px;
         width: 40%;
     }
     
-   #tag-1 a, #tag-2 a, #tag-3 a{
+    #tag-1 a, #tag-2 a, #tag-3 a{
          display:none;
-   }
+    }
     #tag-1 a:nth-child(1),#tag-1 a:nth-child(2),
     #tag-2 a:nth-child(1),#tag-2 a:nth-child(2),
     #tag-3 a:nth-child(1),#tag-3 a:nth-child(2){
         display:inline !important;
     }
    
+   .img-category{
+        display: none !important;
+    }
+
+    .img-category-mobile{
+        display: inline !important;
+    }
 
 }
 
