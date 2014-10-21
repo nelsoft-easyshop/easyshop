@@ -108,11 +108,8 @@ class Login extends MY_Controller
             if (!empty($row["member"])) {
             
                 $row['o_success'] = 1;
-                $row["0"] = 1;
                 $row["o_memberid"] = $row["member"]->getIdMember();
-                $row["1"] = $row["member"]->getIdMember();
                 $row["o_session"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
-                $row["2"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
 
                 $em = $this->serviceContainer['entity_manager'];
                 $cartManager = $this->serviceContainer['cart_manager'];
@@ -157,7 +154,6 @@ class Login extends MY_Controller
                 $this->throttleService->updateMemberAttempt($uname);
                 $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
                 $row['o_message'] = $row["errors"][0]["login"];
-                $row["3"] = $row["errors"][0]["login"];
                 $row['o_success'] = 0;
             }
         }
