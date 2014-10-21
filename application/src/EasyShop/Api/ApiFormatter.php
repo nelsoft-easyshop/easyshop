@@ -326,6 +326,7 @@ class ApiFormatter
                     'condition' => $product->getCondition(),
                     'discount' => floatval($product->getDiscountPercentage()),
                     'price' => floatval($product->getFinalPrice()),
+                    'original_price' => floatval($product->getOriginalPrice()),
                     'product_image' => $imageDirectory.'categoryview/'.$imageFileName
                 );
     }
