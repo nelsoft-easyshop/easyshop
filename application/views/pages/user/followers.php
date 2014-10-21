@@ -21,7 +21,19 @@
                     <div class="loading_div" style="text-align:center;display:none;">
                         <img src="/assets/images/orange_loader.gif">
                     </div>
-                    <div id="follower-container" class="row">
+                    <div id="follower-container" class="row" style="min-height: 500px;">
+                        <!--will appear if the vendor has no follower-->
+                        <div class="panel-no-followers">
+                            <div class="jumbotron no-feedback-list">
+                                <center>
+                                    <strong>justineduazo doesn't have followers</strong>
+                                    <span class="follow-btn follow-right btn btn-default-2 subscription no-follower-btn">
+                                        <span class="glyphicon glyphicon-plus-sign"></span>Follow
+                                    </span>
+                                </center>
+                            </div>
+                        </div>
+                        <!--end of div-->
                         <div id="follow-div-page-0">
                             <?=$follower_view;?>
                         </div>
