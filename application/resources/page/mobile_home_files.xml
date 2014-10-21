@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <!-- show product list, go to site, show product details -->
-<map>
-
 <!--
     Here the list of action types:
     1. show product details
     2. go to site
     3. go to page
+    4. show product list
 -->
+<map>
+
+
 
     <mainSlide>
         <value>assets/images/mainslide/140309010304.jpg</value>
@@ -16,6 +18,7 @@
             <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>item/lg-optimus-g-pro-e985</target>
         </imagemap>
+        <actionType>show product details</actionType>
     </mainSlide>
 
     <mainSlide>
@@ -25,6 +28,7 @@
             <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>item/lg-optimus-g-pro-e985</target>
         </imagemap>
+        <actionType>show product details</actionType>
     </mainSlide>
 
     <mainSlide>
@@ -34,12 +38,20 @@
             <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>item/lg-optimus-g-pro-e985</target>
         </imagemap>
+        <actionType>show product details</actionType>
     </mainSlide>
 
     <section>
-        <name>Promo </name>
+        <name>health-beauty</name>
         <bgcolor>#FFFFF</bgcolor>
         <type>theme 1</type>
+
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>product</type>
+            <target></target>
+            <actionType>show product details</actionType>
+        </boxContent>
 
         <boxContent>
             <value>n9-super-smart-watch-phone</value>
@@ -60,14 +72,70 @@
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
-        </boxContent>
+        </boxContent> 
+
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>product</type>
+            <target></target>
+            <actionType>show product details</actionType>
+        </boxContent> 
+
     </section>
  
     <section>
-        <name>Categories</name>
+        <name>health-beauty</name>
         <bgcolor>#FFFFF</bgcolor>
-        <type>categories</type>
+        <type>theme 2</type>
 
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+        
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+    </section>
+
+    <section>
+        <name>health-beauty</name>
+        <bgcolor>#FFFFF</bgcolor>
+        <type>theme 3</type>
+
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+        
+        <boxContent>
+            <value>n9-super-smart-watch-phone</value>
+            <type>category</type>
+            <target></target>
+            <actionType>go to site</actionType>
+        </boxContent>
+        
         <boxContent>
             <value>n9-super-smart-watch-phone</value>
             <type>category</type>
