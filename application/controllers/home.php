@@ -35,7 +35,7 @@ class Home extends MY_Controller
      *
      * @var integer
      */
-    public $followerPerPage = 1;
+    public $followerPerPage = 6;
     
     /**
      * Load class dependencies
