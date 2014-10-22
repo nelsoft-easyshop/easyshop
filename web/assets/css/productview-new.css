@@ -102,8 +102,15 @@ a, li, input, textarea, button{
     color: #555555;
 }
 
+
+.text-cancel{
+    display: none;
+}
+
 .p-reply-text{
     color: #3e93e6;
+    cursor: pointer;
+    margin-bottom: 20px;
 }
 
 .p-reply-text:hover{
@@ -114,7 +121,9 @@ a, li, input, textarea, button{
     margin-top: 20px;
     background: #e2e2e2;
     padding: 15px;
+    display: none;
 }
+
 
 .p-reply-title{
     font-weight: bold;
