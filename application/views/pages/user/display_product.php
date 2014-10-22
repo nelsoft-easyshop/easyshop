@@ -99,6 +99,13 @@
             
             
         <?php endforeach;?>
+        <!-- <?php echo $arrCat['pagination']?> -->
+            <div class="clear"></div>
+             
+            <center>
+                <?php echo $arrCat['pagination']?> 
+            </center>
+           
     </div>
 
    
