@@ -29,7 +29,7 @@ class EsVendorSubscribeRepository extends EntityRepository
                             ->setParameter('userId', $userId)
                             ->getQuery();
         $totalCount = count($qbResult->getResult());
-        $qbResult->setFirstResult($offset)
+        $qbResult->setFirstResult($offset*$perPage)
                  ->setMaxResults($perPage);
         $result = $qbResult->getResult();
 

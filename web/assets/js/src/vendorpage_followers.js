@@ -32,9 +32,12 @@
                 $('.loading_div').hide();
                 $('#follower-container').empty().append(obj.html).show();
                 $('#storage').append(obj.html);
+                $('html,body').scrollTo(450); 
+
             }
         });
     });
+    
 
     $(document).on('mouseenter',".following-user",function () {
         $(this).next('span').css("display", "block");
