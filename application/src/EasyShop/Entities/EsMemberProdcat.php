@@ -24,9 +24,9 @@ class EsMemberProdcat
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createddate", type="datetime", nullable=false)
+     * @ORM\Column(name="created_date", type="datetime", nullable=false)
      */
-    private $createddate = 'CURRENT_TIMESTAMP';
+    private $createdDate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsMemberCat
@@ -61,26 +61,26 @@ class EsMemberProdcat
     }
 
     /**
-     * Set createddate
+     * Set createdDate
      *
-     * @param \DateTime $createddate
+     * @param \DateTime $createdDate
      * @return EsMemberProdcat
      */
-    public function setCreateddate($createddate)
+    public function setCreatedDate($createdDate)
     {
-        $this->createddate = $createddate;
+        $this->createdDate = $createdDate;
 
         return $this;
     }
 
     /**
-     * Get createddate
+     * Get createdDate
      *
      * @return \DateTime 
      */
-    public function getCreateddate()
+    public function getCreatedDate()
     {
-        return $this->createddate;
+        return $this->createdDate;
     }
 
     /**

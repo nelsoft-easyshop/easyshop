@@ -2,6 +2,8 @@
 
 namespace EasyShop\Category;
 
+use EasyShop\Entities\EsMemberCat;
+
 /**
  *  Promo class
  *
@@ -66,7 +68,8 @@ class CategoryManager
         $category = new EsMemberCat();
         $category->setCatName($catName)
                  ->setMember($memberObj)
-                 ->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
+                 //->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
+                 ->setCreatedDate(date_create());
         $this->em->persist($category);
         $this->em->flush();
 

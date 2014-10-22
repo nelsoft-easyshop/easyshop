@@ -292,7 +292,8 @@ class ProductManager
             $memProd = new EsMemberProdcat();
             $memProd->setMemcat($category)
                     ->setProduct($product)
-                    ->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
+                    //->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
+                    ->setCreatedDate(date_create());
             $this->em->persist($memProd);
         }
 
@@ -379,12 +380,12 @@ class ProductManager
 
         foreach( $arrCustomCategories as $customCat ){
             $customCategories[$customCat['id_memcat']] = array(
-                'name' => $customCat['cat_name']
-                , 'is_featured' => $customCat['is_featured']
-                , 'child_cat' => array($customCat['id_memcat'])
-                , 'products' => array()
-                , 'cat_type' => 1
-                , 'isActive' => FALSE
+                'name' => $customCat['cat_name'],
+                'is_featured' => $customCat['is_featured'],
+                'child_cat' => array($customCat['id_memcat']),
+                'products' => array(),
+                'cat_type' => 1,
+                'isActive' => FALSE
             );
         }
 

@@ -350,21 +350,21 @@ class Home extends MY_Controller
                 
                 // Data for the view
                 $data = array(
-                    "arrVendorDetails" => $arrVendorDetails 
-                    , "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username']
-                    //, "customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory']
-                    , "customCatProd" => array() // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
-                    , "defaultCatProd" => $productView['defaultCatProd']
-                    , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE
-                    , "product_condition" => $this->lang->line('product_condition')
-                    , "avatarImage" => $um->getUserImage($arrVendorDetails['id_member'])
-                    , "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner")
-                    , "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE
-                    , "noItem" => (count($userProduct) > 0) ? TRUE : FALSE
-                    , "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username'])
-                    , "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE
-                    , "prodLimit" => $this->vendorProdPerPage
-                    , "vendorLink" => ""
+                    "arrVendorDetails" => $arrVendorDetails,
+                    "storeNameDisplay" => strlen($arrVendorDetails['store_name']) > 0 ? $arrVendorDetails['store_name'] : $arrVendorDetails['username'],
+                    //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
+                     "customCatProd" => array(), // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
+                     "defaultCatProd" => $productView['defaultCatProd'],
+                     "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE,
+                     "product_condition" => $this->lang->line('product_condition'),
+                     "avatarImage" => $um->getUserImage($arrVendorDetails['id_member']),
+                     "bannerImage" => $um->getUserImage($arrVendorDetails['id_member'],"banner"),
+                     "isEditable" => ($this->session->userdata('member_id') && $arrVendorDetails['id_member'] == $this->session->userdata('member_id')) ? TRUE : FALSE,
+                     "noItem" => (count($userProduct) > 0) ? TRUE : FALSE,
+                     "subscriptionStatus" => $um->getVendorSubscriptionStatus($headerData['my_id'], $arrVendorDetails['username']),
+                     "isLoggedIn" => $headerData['logged_in'] ? TRUE : FALSE,
+                     "prodLimit" => $this->vendorProdPerPage,
+                     "vendorLink" => ""
                 );
 
                 //Determine active Div for first load

@@ -15,15 +15,15 @@ class Version20141017171459 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `es_member_prodcat` 
-                       ADD COLUMN `createddate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                       ADD COLUMN `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
         $this->addSql("ALTER TABLE `es_member_cat` 
-                       ADD COLUMN `createddate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                       ADD COLUMN `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP");
     }
 
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `es_member_prodcat` DROP COLUMN `createddate`");
-        $this->addSql("ALTER TABLE `es_member_cat` DROP COLUMN `createddate`");
+        $this->addSql("ALTER TABLE `es_member_prodcat` DROP COLUMN `created_date`");
+        $this->addSql("ALTER TABLE `es_member_cat` DROP COLUMN `created_date`");
     }
 }
