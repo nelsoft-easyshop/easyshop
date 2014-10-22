@@ -290,8 +290,7 @@ class ApiFormatter
                 $formattedCartContents[$rowId] = [
                     'rowid' => $cartItem['rowid'],
                     'productId' =>  $cartItem['id'],
-                    'productItemId' => $cartItem['product_itemID'],
-                    'maximumAvailability' => $cartItem['maxqty'],
+                    'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
                     'name' => $cartItem['name'],
                     'quantity' => $cartItem['qty'], 

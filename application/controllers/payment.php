@@ -96,19 +96,22 @@ class Payment extends MY_Controller{
         // check the availability of the product
         $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
         $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count'];
-        $codCount = $productAvailability['cod_count']; 
-
+        $successCount = $productAvailability['success_count']; 
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
         $itemArray = $purchaseLimitPaymentType['itemArray'];
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
-        $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+        $soloRestriction = $purchaseLimitPaymentType['solo_restriction'];  
 
         foreach ($itemArray as $key => $value) {
-            $itemArray[$key]['isAvailable'] = ($value['maxqty'] <= 0) ? "false" : "true";
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
+            $product_array =  $this->product_model->getProductById($productId);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
+            $maxqty = $newQty[$itemId]['quantity'];
+            $itemArray[$key]['isAvailable'] = ($maxqty <= 0) ? "false" : "true";
         }
 
         // get all possible error message
@@ -125,12 +128,6 @@ class Payment extends MY_Controller{
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
                                     Check the availability of your item and try again.');
-        }
-
-        if($codCount != count($itemArray)){
-            // $canContinue = false;
-            unset($paymentType['cod']);
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.'); 
         }
 
         if(!$purchaseLimit){
