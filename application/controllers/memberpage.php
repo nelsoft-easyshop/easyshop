@@ -787,48 +787,48 @@ class Memberpage extends MY_Controller
             $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
             $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
             $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
-                                      ->findOneBy(["idOrderProduct" => $postData['order_product']
-                                                 , "seller" => $memberEntity
-                                                 , "order" => $orderEntity
+                                      ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                                 "seller" => $memberEntity,
+                                                 "order" => $orderEntity
                                         ]);
             $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                        ->findOneBy(["orderProduct" => $orderProductEntity
-                                                    , "member" => $memberEntity
+                                        ->findOneBy(["orderProduct" => $orderProductEntity,
+                                                    "member" => $memberEntity
                                                     ]);
 
-            if( sizeof($shippingCommentEntity) === 1 ){
+            if( count($shippingCommentEntity) === 1 ){
                 $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
                                            ->getExactShippingComment($postData);
             }
 
             // If order product entry exists, insert/update comment
-            if( sizeof($orderProductEntity) === 1 ){
-                $r = $this->payment_model->addShippingComment($postData);
-                $serverResponse['result'] = $r ? 'success' : 'fail';
-                $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
+            if( count($orderProductEntity) === 1 ){
+                $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
+                $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
+                $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
 
                 // If no previous entry of exact shipping detail && successful insert in database,
                 // queue email notification
-                if( $r && ( sizeof($shippingCommentEntity) === 0 || sizeof($exactShippingComment) === 0 ) ){
+                if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
                     $buyerEntity = $orderEntity->getBuyer();
                     $buyerEmail = $buyerEntity->getEmail();
                     $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
                     $imageArray = array(
-                        "/assets/images/landingpage/templates/header-img.png"
-                        , "/assets/images/landingpage/templates/facebook.png"
-                        , "/assets/images/landingpage/templates/twitter.png"
+                        "/assets/images/landingpage/templates/header-img.png",
+                        "/assets/images/landingpage/templates/facebook.png",
+                        "/assets/images/landingpage/templates/twitter.png"
                     );
 
                     $parseData = $postData;
                     $parseData = array_merge($parseData, array(
-                            "seller" => $memberEntity->getUsername()
-                            , "store_link" => base_url() . $memberEntity->getSlug()
-                            , "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername()
-                            , "buyer" => $buyerEntity->getUsername()
-                            , "invoice" => $orderEntity->getInvoiceNo()
-                            , "product_name" => $orderProductEntity->getProduct()->getName()
-                            , "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date']))
-                            , "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
+                            "seller" => $memberEntity->getUsername(),
+                            "store_link" => base_url() . $memberEntity->getSlug(),
+                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
+                            "buyer" => $buyerEntity->getUsername(),
+                            "invoice" => $orderEntity->getInvoiceNo(),
+                            "product_name" => $orderProductEntity->getProduct()->getName(),
+                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
+                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
                         ));
                     $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
 
