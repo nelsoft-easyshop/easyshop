@@ -37,22 +37,14 @@
                                 <?=$follower_view;?>
                             </div>
                         <?php endif;?>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="pagination-container">
-                        <center>
-                            <?=$pagination;?>
-                        </center>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
 </section>
 <div id="storage" style="display:none">
-    <div id="follow-div-page-0">
-        <?=$follower_view;?>
-    </div>
+    <?=$follower_view;?>
 </div>
 <input type="hidden" id="is_loggedin" value="<?php echo $isLoggedIn ? 1 : 0 ?>">
 <input type="hidden" id="vendor_id" value="<?=$memberId?>"> 
