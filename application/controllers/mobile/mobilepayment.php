@@ -77,6 +77,10 @@ class mobilePayment extends MY_Controller
         // Load controller
         $this->paymentController = $this->loadController('payment');
 
+        $mobileCartContents = json_decode($this->input->post('cartData'));
+        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
+        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
+
         // refresh member object to get update cart content
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->member->getIdMember());
         
