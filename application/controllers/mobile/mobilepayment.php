@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 
 class mobilePayment extends MY_Controller 
 {
@@ -288,6 +289,34 @@ class mobilePayment extends MY_Controller
                             'transaction_date' => $paymentDetails->getDateadded()->format('Y-m-d H:i:s'),
                         ),
                     );
+
+        $paymentProductDetails = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                ->findBy(['order' => $paymentDetails->getIdOrder()]);
+
+        foreach ($paymentProductDetails as $key => $value) {
+
+            $productDetails = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                                ->findOneBy(['idProductItem' => $value->getProductItemId()]);
+
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getDefaultImage($productDetails->getProduct()->getIdProduct());
+
+            $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($productImage != NULL){
+                $imageDirectory = $productImage->getDirectory();
+                $imageFileName = $productImage->getFilename();
+            }
+
+            $displayArray['products'][] = array(
+                                        'quantity' => $value->getOrderQuantity(),
+                                        'price' => $value->getTotal(),
+                                        'name' => $productDetails->getProduct()->getName(),
+                                        'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
+                                    );
+            
+        }
 
         echo json_encode($displayArray,JSON_PRETTY_PRINT);
     }
