@@ -1,6 +1,7 @@
 
     <!-- foreach  --> 
     <div id="follow-div-page-<?=$page?>">
+    <h3><?=$page?></h3>
         <?php foreach ($followers as $key => $value): ?>
             <?php $memberEntity = $value->getMember(); ?>
             <div class="col-xs-6 col-follower">
@@ -69,5 +70,12 @@
                 </div>
             </div>
         <?php endforeach; ?>
+        <!-- end of foreach -->
+        
+        <div class="clear"></div>
+        <div class="pagination-container">
+            <center>
+                <?=$pagination;?>
+            </center>
+        </div>
     </div>
-    <!-- end of foreach -->

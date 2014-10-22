@@ -35,7 +35,7 @@ class Home extends MY_Controller
      *
      * @var integer
      */
-    public $followerPerPage = 6;
+    public $followerPerPage = 1;
     
     /**
      * Load class dependencies
@@ -578,7 +578,7 @@ class Home extends MY_Controller
             , 'currentPage' => $pageOffset + 1
         );
 
-        $response['paginationData'] = $this->load->view('pagination/default', $paginationData, true);
+        $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
         echo json_encode($response);
