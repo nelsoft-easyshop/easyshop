@@ -669,7 +669,8 @@ class Home extends MY_Controller
                                                                               'ratingHeaders' => $ratingHeaders,
                                                                               ), TRUE);
 
-        $viewerId = $this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id');
+        $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
+        
         $orderRelations = array();
         
         if($viewerId !== 0){
@@ -868,7 +869,6 @@ class Home extends MY_Controller
                                     ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
 
         $followers = $EsVendorSubscribe->getFollowers($sellerId);
-
         $bannerData = array(
                   "arrVendorDetails" => $arrVendorDetails 
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
