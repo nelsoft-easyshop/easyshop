@@ -38,19 +38,19 @@ function ReplaceNumberWithCommas(thisnumber){
         ItemListAjax(catDiv,1);
     }); 
 
-    $('.pagination-container').on('click', '.extremes', function(){
+    $('.div-products').on('click', '.extremes', function(){
         var page = $(this).attr('data-page');
         $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
     });
 
-    $('.pagination-container').on('click', '.individual', function(){
+    $('.div-products').on('click', '.individual', function(){
         var page = $(this).data('page');
         var catDiv = $(this).closest('div.category-products');
         var pageDiv = catDiv.find('.product-paging[data-page="'+page+'"]');
         var paginationContainer = catDiv.find('.pagination-container');
 
-        $(this).siblings('.individual').removeClass('active');
-        $(this).addClass('active');
+        // $(this).siblings('.individual').removeClass('active');
+        // $(this).addClass('active');
 
         if(pageDiv.length === 1){
             var lastPage = $(this).parent('ul').attr('data-lastpage');

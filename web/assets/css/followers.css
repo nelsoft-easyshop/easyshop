@@ -80,6 +80,10 @@
     min-height: 500px !important;
 }
 
+.div-follower-container-inner{
+    min-height: 690px;
+}
+
 .col-follower{
     padding-right: 0px !important;
     margin-bottom: 15px;
@@ -155,6 +159,7 @@
     border-radius: 4px;
     z-index: 3;
     position: absolute;
+    background: #ffffff;
 }
 
 .img-follower-cover{
