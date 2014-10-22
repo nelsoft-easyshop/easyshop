@@ -321,7 +321,7 @@ class SearchProduct
                 $sortString = "DESC"; 
             }
             $iterator->uasort(function ($a, $b) use($sortString) {
-                if($a->getFinalPrice() == $b->getFinalPrice()) {
+                if($a->getFinalPrice() === $b->getFinalPrice()) {
                     return 0;
                 } 
                 if($sortString === "DESC"){
