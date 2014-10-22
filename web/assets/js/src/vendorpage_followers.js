@@ -28,6 +28,7 @@
         var currentPage = page - 1;
         if($('#storage > #follow-div-page-'+currentPage).length > 0){ 
             $('#follower-container').empty().append($('#storage > #follow-div-page-'+currentPage).clone());
+            $('html,body').scrollTo(450); 
             return false;
         }
 
