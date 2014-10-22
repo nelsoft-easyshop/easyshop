@@ -71,11 +71,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </li>
                     <li class="top_nav_main">
                         <a class="prevent" href="<?php echo base_url()."cart/"; ?>">
-                            <?PHP if(!($total_items) &&  !($logged_in)): ?>
+                            <?PHP if(!($cartSize) &&  !($logged_in)): ?>
                                 <span class="span_bg big_cart cart cart_zero"></span>
                             <?PHP else: ?>
-                                <span class="span_bg big_cart cart <?PHP echo (intval($total_items) === 0) ? 'cart_zero' : ''; ?>"></span>
-                                <span class="cart_no <?PHP echo (intval($total_items) === 0) ? 'cart_icon_hide' : ''; ?>"><?PHP echo $total_items; ?></span>
+                                <span class="span_bg big_cart cart <?PHP echo (intval($cartSize) === 0) ? 'cart_zero' : ''; ?>"></span>
+                                <span class="cart_no <?PHP echo (intval($cartSize) === 0) ? 'cart_icon_hide' : ''; ?>"><?PHP echo $cartSize; ?></span>
                             <?PHP endif;?>
                             <span class="txt_hide">View my Cart</span>
                         </a>

@@ -636,5 +636,29 @@ class PaymentService
         return $this->pointGateway;
     }
 
+    /**
+     * Get payment method type per user
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function getUserPaymentMethod($memberId)
+    {
+        $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethodUser')
+                                            ->findBy(['member'=>$memberId]);
+        
+        $paymentArray = [];
+        $paymentArray['all'] = false;
+        if($paymentMethod){
+            foreach ($paymentMethod as $key => $value) {
+                $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
+            }
+        }
+        else{
+            $paymentArray['all'] = true;
+        }
+
+        return $paymentArray;
+    }
+
 }
 

@@ -36,7 +36,8 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
-        $this->file  = APPPATH . "resources/". $this->xmlFileService->getNewHomeXML().".xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
+        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
         if($this->input->get()) {
@@ -56,13 +57,177 @@ class NewHomeWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
+
         $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
         if($remove == true) {
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output($this->json);
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);
         }            
     }
+
+    /**
+     *  Method that handles edit for brands node 
+     *  @return JSON
+     */
+    public function setBrands()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->brandSection->brandId[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }
+
+    /**
+     *  Method that handles add for topSellers node 
+     *  @return JSON
+     */
+    public function addBrands()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addBrands",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/brandSection/brandId[last()]',"\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
+     *  Method that handles add,edit,delete for topSellers node 
+     *  @return JSON
+     */
+    public function setTopSellers()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->menu->topSellers->seller[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    } 
+
+    /**
+     *  Method that handles add for topSellers node 
+     *  @return JSON
+     */
+    public function addTopSellers()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addTopSellers",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
+     *  Method that handles add for topProducts node 
+     *  @return JSON
+     */
+    public function addTopProducts()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+    /**
+     *  Method that handles add,edit,delete for topProducts node 
+     *  @return JSON
+     */
+    public function setTopProducts()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+
+        $map->menu->topProducts->product[$index] = $value;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }      
+
+
+    /**
+     *  Method that handles add for newArrival node 
+     *  @return JSON
+     */
+    public function addNewArrival()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $value = $this->input->get("value");
+        $target = $this->input->get("target");
+        $string = $this->xmlCmsService->getString("newArrivals",$value, "", "", $target); 
+
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/newArrivals/arrival[last()]',"\t\t\t","\n");
+
+        if($addXml === TRUE) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }   
+    } 
+
+    /**
+     *  Method that handles add,edit,delete for newArrival node 
+     *  @return JSON
+     */
+    public function setNewArrival()
+    {
+        $map = simplexml_load_file($this->file);
+
+        $index = (int)$this->input->get("index");
+        $value = $this->input->get("value");        
+        $target = $this->input->get("target");        
+
+        $map->menu->newArrivals->arrival[$index]->text = $value;
+        $map->menu->newArrivals->arrival[$index]->target = $target;
+
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }    
+    }     
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
@@ -146,12 +311,24 @@ class NewHomeWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sellerSection/productPanel[last()]',"\t\t","\n");    
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
         }
+        else {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sellerSection/productPanel[last()]',"\t\t","\n");    
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }   
+        }
+
+
     }
 
     /**
@@ -166,7 +343,7 @@ class NewHomeWebService extends MY_Controller
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/cms/home';
+        $path_directory = 'assets/images';
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -185,7 +362,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = $filename.'.'.$file_ext; 
+            $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
             $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
 
             $index = $index == 0 ? 1 : $index + 1;
@@ -213,7 +390,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images';
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
                 "overwrite" => FALSE, 
@@ -230,7 +407,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
                 $map->adSection->ad[$index]->img = $value;
                 $map->adSection->ad[$index]->target = $target;
  
@@ -309,13 +486,23 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $slug = $this->input->get("value");        
 
-        $map->sellerSection->productPanel[$index]->slug = $slug;
-
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $slug]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $map->sellerSection->productPanel[$index]->slug = $slug;
+
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }  
+        }
     }    
 
     /**
@@ -347,8 +534,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $subIndex = (int)$this->input->get("subIndex");
-        $value = $this->input->get("text");
-        $value = $this->input->get("target");
+        $value = $this->input->get("value");
 
         $map->categoryNavigation->category[$index]->sub->categorySubSlug[$subIndex] = $value;
         if($map->asXML($this->file)) {
@@ -413,12 +599,24 @@ class NewHomeWebService extends MY_Controller
         $subIndex = (int)$this->input->get("subindex");
         $value = $this->input->get("value");
 
-        $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        } 
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);            
+        }
+        else {
+            $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }             
+        }
+
+
     }  
 
     /**
@@ -451,13 +649,24 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
         $index = $index == 0 ? 1 : $index + 1;  
-
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
         }
+        else {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }
+        }
+
+
     }      
 
     /**
@@ -527,7 +736,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images/';
 
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
@@ -545,7 +754,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/".$path_directory.$filename.'.'.$file_ext; 
 
                 if($action == "logo") {
                     $map->sellerSection->sellerLogo = $value;
@@ -601,7 +810,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/cms/home';
+            $path_directory = 'assets/images/homeslider';
 
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
@@ -619,7 +828,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = $filename.'.'.$file_ext; 
+                $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
                 $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
 
@@ -698,7 +907,7 @@ class NewHomeWebService extends MY_Controller
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/cms/home';
+        $path_directory = 'assets/images/homeslider';
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -717,7 +926,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = $filename.'.'.$file_ext; 
+            $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
             if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
                 $map->sliderSection->slide[$index]->image->path = $value;

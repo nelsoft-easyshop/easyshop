@@ -103,7 +103,14 @@ class AccountManager
         return $response;
     }
     
-    
+    /**
+     * Authenticate a member
+     * 
+     * @param string $username
+     * @param string $password
+     * @param bool $asArray
+     * @return mixed Returns an array of the error and the member entity
+     */    
     public function authenticateMember($username, $password, $asArray = false)
     {
         $errors = array();
@@ -119,30 +126,41 @@ class AccountManager
         $form->submit([ 'username' => $username,
                         'password' => $password
                     ]);
+        
         if ($form->isValid()) {
             $formData = $form->getData();
             $validatedUsername = $formData['username'];
             $validatedPassword = $formData['password'];
-            $hashedPassword = $this->hashMemberPassword($username,$password);
-            
-            $query =  $this->em->createQueryBuilder()
-                    ->select('m')
-                    ->from('EasyShop\Entities\EsMember', 'm')
-                    ->where('m.username= :username')
-                    ->andWhere('m.password= :password')
-                    ->setParameter('username', $username)
-                    ->setParameter('password', $hashedPassword)
-                    ->setMaxResults(1)
-                    ->getQuery();
-            $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
-            $member = $query->getResult($hydrator);
-            $member = isset($member[0]) ? $member[0] : $member;
-            if(!$member){
-                array_push($errors, ['login' => 'invalid username/password']);
+
+            if(strpos($validatedUsername, '@') !== false){
+                $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy(['email' => $validatedUsername]);
+                if($member){
+                    $validatedUsername = $member->getUsername();              
+                }
             }
+
+            $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->findBy(['username' => $validatedUsername]);
+
+            $member = isset($member[0]) ? $member[0] : $member;
+            if($member) {
+                if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
+                    if(!$this->oldAuthentication($validatedUsername, $validatedPassword)) {
+                        $member = null;                        
+                        array_push($errors, ['login' => 'Invalid Username/Password']);  
+                    }
+                }
+            }
+            else {
+                $member = null;
+                array_push($errors, ['login' => 'Invalid Username/Password']);
+            }
+
+
         }
 
-         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                  'member' => $member];
     
     }
@@ -205,9 +223,51 @@ class AccountManager
     }
     
     /**
+     * Authentication implementation for accounts with old password hashing
+     *
+     * @param string $username
+     * @param string $password
+     * @param bool $asArray
+     * @return Entity
+     */
+    public function oldAuthentication($username, $password, $asArray = false)
+    {
+        $hashedPassword = $this->hashMemberPassword($username, $password);
+        $query =  $this->em->createQueryBuilder()
+                ->select('m')
+                ->from('EasyShop\Entities\EsMember', 'm')
+                ->where('m.username= :username')
+                ->andWhere('m.password= :password')
+                ->setParameter('username', $username)
+                ->setParameter('password', $hashedPassword)
+                ->setMaxResults(1)
+                ->getQuery();
+        $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
+        $member = $query->getResult($hydrator);
+        $member = isset($member[0]) ? $member[0] : $member;
+        if($member) {
+            $this->migrateMemberPasswordToBcrypt($member->getIdMember(), $this->bcryptEncoder->encodePassword($password));
+        }
+
+        return $member;        
+    }
+
+    /**
+     * Converts password hashing to bCrypt encryption
+     *
+     * @param int $memberId
+     * @param string $bCryptPassword
+     */
+    public function migrateMemberPasswordToBcrypt($memberId, $bCryptPassword)
+    {   
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->findOneBy(['idMember' => $memberId]);
+        $member->setPassword($bCryptPassword);
+        $this->em->flush();
+    }
+
+    /**
      * Hashes the user password, previously implemented in a stored procedure
-     * BCrypt the password later on as it is much more secure
-     * $hash = $this->bcryptEncoder->encodePassword($password);
      *
      * @param string $username
      * @param string $password
@@ -224,6 +284,8 @@ class AccountManager
         $result = $query->getOneOrNullResult();
 
         return $result['hash'];
-    }
+    }    
+
+
 
 }

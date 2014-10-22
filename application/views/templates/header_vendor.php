@@ -13,12 +13,14 @@
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
-                            <img src="<?=$avatarImage?>" alt="Profile Photo">
+                            <div class="vendor-profile-photo-wrapper">
+                                <img src="<?=$avatarImage?>" alt="Profile Photo">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div> 
-                    <h4 class="storeName"><?=html_escape($storeNameDisplay)?></h4>
+                    <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name'])?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
                     <p>
                         <img src="/assets/images/img-icon-marker.png" alt="marker">
@@ -110,7 +112,7 @@
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($storeNameDisplay); ?>" data-origval="<?=html_escape($storeNameDisplay); ?>" placeholder="Seller Name">
+                    <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Seller Name">
                     <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
@@ -152,20 +154,19 @@
                 <?php
                     $url_id = $this->uri->segment(2, 0);
                 ?>
-                <?php if($noItem): ?>
+                <?php if(!$hasNoItems): ?>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']?>" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
                         <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
-                <!--
-                <li>
-                    <a href="/">Promo Page</a>
-                </li>
-                -->
                 <?php endif; ?>
-                <li >
+                <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">About</a>
+                </li>
+                <li>
+                    <span class="followers-circle"><?=$followerCount; ?></span>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/followers" class="<?php if($url_id === "followers"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Followers</a>
                 </li>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
@@ -176,7 +177,7 @@
                     <div class="vendor-profile-img-con">
                         <img src="<?=$avatarImage?>" alt="Profile Photo">
                     </div>
-                    <h4><?=html_escape($storeNameDisplay);?></h4>
+                    <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
                 </li>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
@@ -197,26 +198,26 @@
                     <div class="header-cart-container">
                         <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
                             <span class="header-cart-items-con sticky-cart ui-form-control">
-                                <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                                <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                             </span>
                             <span class="header-cart-icon-con span_bg cart-icon"></span>
                         </a>
-                        <div class="sticky-header-cart-item-list">
-                            <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                        <div class="sticky-header-cart-item-list">                        
+                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                             <?PHP else : ?>
                                 <p>Recently add item(s)</p>
-                                <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                    <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                <?PHP for($cnt = sizeof($cartSize) - 1; $cnt > -1 ;$cnt--) : ?>
+                                    <?PHP if(sizeof($cartSize) - 1 === $cnt || sizeof($cartSize) - 1 === $cnt +1) : ?>
                                         <div class="mrgn-bttm-15">
                                             <div class="header-cart-item-img">
-                                                <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                    <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                <a href="/item/<?=$cartItems[$cnt]['slug']?>">
+                                                    <span><img src="/<?=$cartItems[$cnt]['imagePath']; ?>thumbnail/<?=$cartItems[$cnt]['imageFile']; ?>" alt="<?=$cartItems[$cnt]['name']?>"></span>
                                                 </a>
                                             </div>
                                             <div class="header-cart-item-con">
-                                                <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                                                <span>x <?=$cart_items[$cnt]['qty']?></span>
-                                                <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                <a href="/item/<?=$cartItems[$cnt]['slug']?>"><span><?=$cartItems[$cnt]['name']?></span></a>
+                                                <span>x <?=$cartItems[$cnt]['qty']?></span>
+                                                <span class="header-cart-item-price">&#8369; <?=$cartItems[$cnt]['price']?></span>
                                             </div>
                                             <div class="clear"></div>
                                         </div>
@@ -224,8 +225,8 @@
                                 <?PHP endfor; ?>
                                 <div class="header-cart-lower-content">
                                     <div class="header-cart-shipping-total">
-                                        <p>Items(s) in cart: <span><?=$cart_size?></span></p>
-                                        <p>Total: <span>&#8369; <?=$total?></span></p>
+                                        <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                                        <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                     </div>
                                     <div class="header-cart-buttons">
                                         <a href="/cart" class="header-cart-lnk-cart">go to cart</a>

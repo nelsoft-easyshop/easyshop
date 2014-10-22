@@ -40,10 +40,12 @@
 
                         <h1>Follow Us</h1>
                         <div class="social-media-wrapper">
-                            <ul>
-                                <li><a href="https://www.facebook.com/EasyShopPhilippines"><img src="/assets/images/img-facebook-new.png" alt="easyshop facebook"></a></li>
-                                <li><a href="https://twitter.com/EasyShopPH"><img src="/assets/images/img-twitter-new.png" alt="easyshop twitter"></a></li>
-                            </ul>
+                            <a href="https://www.facebook.com/EasyShopPhilippines">
+                                <img src="/assets/images/img-facebook-new.png" alt="easyshop facebook">
+                            </a>
+                            <a href="https://twitter.com/EasyShopPH">
+                                <img src="/assets/images/img-twitter-new.png" alt="easyshop twitter">
+                            </a>
                             <div class="clear"></div>
                         </div>
                     </div>

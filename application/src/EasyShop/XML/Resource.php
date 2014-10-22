@@ -35,21 +35,7 @@ class Resource
         return $xmlfile;
     }
     
-    /**
-     * Returns the home xml file used by the application
-     *
-     * @return string
-     */
-    public function getHomeXMLfile()
-    {
-        $xmlfile = 'page/home_files';
-        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){
-            $xmlfile = $this->configurationService->getConfigValue('XML_home');
-        }
-        
-        return $xmlfile;
-    }
-    
+
     
     /**
      * Returns a specific content of an xml
@@ -109,7 +95,7 @@ class Resource
      *
      * @return string
      */
-    public function getNewHomeXML()
+    public function getHomeXMLfile()
     {
         $xmlfile = 'page/new_home_page';
         if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){

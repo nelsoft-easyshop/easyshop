@@ -61,7 +61,26 @@ class CMS
      */
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
+        if($nodeName == "addBrands") {
+             $string = '
+            <brandId>'.$value.'</brandId>';   
+        }            
+        if($nodeName == "addTopSellers") {
+             $string = '
+            <seller>'.$value.'</seller>';   
+        }             
+        if($nodeName == "addTopProducts") {
+             $string = '
+            <product>'.$value.'</product>';   
+        }         
 
+        if($nodeName == "newArrivals") {
+             $string = '
+        <arrival>
+                <text>'.$value.'</text>
+                <target>'.$target.'</target>
+            </arrival>'; 
+        }  
         if($nodeName == "categorySectionAdd") {
              $string = '
         <categorySection>
@@ -105,7 +124,7 @@ class CMS
     $string = '<slide>
             <template>'.$value.'</template>
             <image>
-                <path>unavailable_product_img.jpg</path>
+                <path>/assets/images/homeslider/unavailable_product_img.jpg</path>
                 <target>/</target>
             </image>
 
@@ -281,7 +300,26 @@ $string = '<typeNode>
             else {
                     return false;
             }
-        }      
+        }    
+        else if($nodeName == "newArrival"){
+            $referred = "/map/menu/newArrivals/arrival[".$index."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                if($doc->asXml($file)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                    return false;
+            }
+        }           
 
         else if($nodeName == "categorySectionPanel"){
             $referred = "/map/categorySection[".$index."]"; 
@@ -399,6 +437,51 @@ $string = '<typeNode>
                     return false;
             }
         }
+
+        else if($nodeName == "brands") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//brandSection/brandId[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        } 
+
+        else if($nodeName == "topSellers") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//topSellers/seller[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        }        
+        else if($nodeName == "topProducts") {
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath( "//topProducts/product[$index]" ));
+
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+            if($xml->asXml($file)) {
+                return true;            
+            }
+            else {
+                    return false;
+            }  
+        }
+
         else if($nodeName == "otherCategories") {
             $xml = new \SimpleXMLElement(file_get_contents($file) );            
             $result = current($xml->xpath( "//otherCategories/categorySlug[$index]" ));
@@ -749,7 +832,130 @@ $string = '<typeNode>
         return $homePageData;
     }
     
-    
+    /**
+     * Returns the mobile home page data
+     * @return array
+     */
+    public function getMobileHomeData($baseUrl)
+    {
+        $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
+        $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
+
+        // banner images
+        $bannerImages = [];
+        foreach ($pageContent['mainSlide'] as $key => $value) {
+            $bannerImages[] = array(
+                            'name' => '0',
+                            'image' => $value['value'],
+                            'target' => $baseUrl.$value['imagemap']['target'],
+                            'actionType' => $value['actionType'],
+                        );
+        }
+        $sectionImages = array(
+                        'name' => '',
+                        'bgcolor' => '',
+                        'type' => 'promo',
+                        'data' => $bannerImages,
+                    ); 
+
+        $productSections[] = $sectionImages; 
+        // product sections 
+        foreach ($pageContent['section'] as $key => $value) {
+            $productArray = [];
+            // loop products
+        
+            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) {
+
+                $slug = (isset($valueLevel2['value'])) ? $valueLevel2['value'] : ""; 
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findOneBy(['slug' => $slug]);
+
+                $productName = "";
+                $productSlug = "";
+                $productBasePrice = 0;
+                $productFinalPrice = 0;
+                $productDiscount = 0;
+                $productImagePath = "";
+                $target = "";
+
+                if($product){
+                    $product = $this->productManager->getProductDetails($product->getIdProduct());
+
+                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                      ->getDefaultImage($product->getIdProduct());
+        
+                    $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+                    if($productImage != NULL){
+                        $directory = $productImage->getDirectory();
+                        $imageFileName = $productImage->getFilename();
+                    }
+
+                    $productName = $product->getName();
+                    $productSlug = $product->getSlug();
+                    $productDiscount = floatval($product->getDiscountPercentage());
+                    $productBasePrice = floatval($product->getPrice());
+                    $productFinalPrice = floatval($product->getFinalPrice());
+                    $productImagePath = $directory.$imageFileName;
+                    $target = $baseUrl.'mobile/product/item/'.$productSlug;
+                }
+
+                $productArray[] = array(
+                                    'name' => $productName,
+                                    'slug' => $productSlug,
+                                    'discount_percentage' => $productDiscount,
+                                    'base_price' => $productBasePrice,
+                                    'final_price' => $productFinalPrice,
+                                    'image' => $productImagePath,
+                                    'actionType' => $valueLevel2['actionType'],
+                                    'target' => $target,
+                                );
+            }
+
+            $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                ->findOneBy(['slug' => $value['name']]);
+
+            $categoryName = "";
+            $categoryIcon = $baseUrl.EsBrand::IMAGE_DIRECTORY.EsBrand::IMAGE_UNAVAILABLE_FILE;
+            if($categoryObject){
+                $categoryName = $categoryObject->getName();
+                $categorySlug = $categoryObject->getSlug();
+
+                $categoryIconObject = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                                ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
+
+                if($categoryIconObject){
+                    $categoryIcon = $baseUrl.'assets/'.$categoryIconObject->getPath();
+                }
+
+                $productArray[] = array(
+                                        'name' => "",
+                                        'slug' => "",
+                                        'discount_percentage' => 0,
+                                        'base_price' => 0,
+                                        'final_price' => 0,
+                                        'image' => "",
+                                        'actionType' => 'show product list',
+                                        'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                                    );
+            }
+
+            $productSections[] = array(
+                                'name' => $categoryName,
+                                'bgcolor' => $value['bgcolor'],
+                                'type' => $value['type'],
+                                'icon' => $categoryIcon,
+                                'data' => $productArray,
+                            );
+        }
+
+        $display = array( 
+                    'section' => $productSections,
+                );
+
+        return $display;
+    }
 }
 
 

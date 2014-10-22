@@ -7,6 +7,36 @@ $(document).ready(function(){
     $('input.items').each(function(k,v){
         $(this).val($(this).data('value'));
     });
+    
+    $(function () {
+        var $print = $(".print");
+        var $print_ul = $(".print-ul");
+        $(document).mouseup(function (e) {
+            if (!$print.is(e.target) // if the target of the click isn't the container...
+                && $print.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $print_ul.hide(1);
+            }
+        });
+        $print.click(function() {
+            $print_ul.show();
+        });
+    });
+    
+     $(function () {
+        var $print_s = $(".print-s");
+        var $print_ul_s = $(".print-ul-s");
+        $(document).mouseup(function (e) {
+            if (!$print_s.is(e.target) // if the target of the click isn't the container...
+                && $print_s.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                $print_ul_s.hide(1);
+            }
+        });
+        $print_s.click(function() {
+            $print_ul_s.show();
+        });
+    });
 
     $(document).on('click','#printTransactions', function(){
         var url = $(this).data("url");
@@ -24,6 +54,11 @@ $(document).ready(function(){
                 alert("Action failed, please try again");
             }
         });
+    });      
+    
+    $(document).on('click','#exportTransactions', function(){
+        var url = $(this).data("url");
+        document.location.href = url;
     });      
     
     progress_update('');
@@ -157,7 +192,7 @@ var memconf = {
     }
 };
 
-/******************	EDIT USER SLUG	******************************/
+/****************** EDIT USER SLUG  ******************************/
 (function($){
     
     $('div.quickheader').on('click', '.edit_userslug', function(){
@@ -183,7 +218,7 @@ var memconf = {
         datafield.show();
     });
     
-    $('#security_settings').on('click', '.cancel_userslug', function(){		
+    $('#security_settings').on('click', '.cancel_userslug', function(){     
         var datafield = $(this).closest('div');
         var urlDisplay = datafield.siblings('div.disp_vendor_url');
         var inputSlug = $(this).siblings('input[name="userslug"]');
@@ -207,7 +242,7 @@ var memconf = {
         errorPlacement: function(error, element) {
                 error.addClass('red');
                 error.appendTo(element.parent());
-        },	
+        },  
         submitHandler: function(form){
             var datafield = $(form).closest('div.datafield');
             var urlDisplay = $('div.disp_vendor_url');
@@ -260,7 +295,7 @@ var memconf = {
 })(window.jQuery)
 
 
-/*********	AJAX PAGING	************/
+/*********  AJAX PAGING ************/
 function ItemListAjax(ItemDiv,start,pageindex,count){
     var loadingDiv = ItemDiv.children('div.page_load');
     var key = ItemDiv.data('key');
@@ -450,9 +485,9 @@ $(document).ready(function(){
     
 });
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /**************************************  PERSONAL INFORMATION MAIN    *****************************************/   
-/**************************************************************************************************************/		
+/**************************************************************************************************************/        
 $(document).ready(function(){
 
     $(".year").numeric({negative : false});
@@ -494,7 +529,7 @@ $(document).ready(function(){
         errorPlacement: function(error, element) {
                 error.addClass('red');
                 error.appendTo(element.parent());
-        },	
+        },  
         submitHandler: function(form) {
             var thisbtn = $('#ppm_btn');
             
@@ -656,7 +691,7 @@ $(document).ready(function(){
     });
     
     /**
-     *	CSRF TOKEN
+     *  CSRF TOKEN
      */
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -721,7 +756,7 @@ $(document).ready(function(){
             
             if(data!=0){
                 try{
-                    var obj = jQuery.parseJSON(data);	
+                    var obj = jQuery.parseJSON(data);   
                 }
                 catch(e){
                     alert('An error was encountered while processing your data. Please try again later.');
@@ -782,11 +817,11 @@ $(document).ready(function(){
 });
 
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /********************************  DROP DOWN PROFILE - GEN FUNCTIONS    ***************************************/   
 /**************************************************************************************************************/
 $(document).ready(function(){
-    /***********	Delete information on click - GENERAL	**************/
+    /***********    Delete information on click - GENERAL   **************/
     $('.delete_information').on('click', function(){
         var name = $(this).attr('name');
         var parentinfocont = $(this).parent();
@@ -811,7 +846,7 @@ $(document).ready(function(){
                 //Clear echoed info from server
                 echoedinfo.html('');
                 
-                if(name === 'del_school'){					
+                if(name === 'del_school'){                  
                     $('#container_school').html('');
                     var schlevel = editfields.find('select');
                     schlevel.attr('data-status', "");
@@ -834,13 +869,13 @@ $(document).ready(function(){
         });
     });
     
-    /*******************	ADD Field - General		********************************/
+    /*******************    ADD Field - General     ********************************/
     $('.edit_profile').on('click', function(){
         $(this).siblings('.edit_fields').fadeIn(300);
         $(this).hide();
     });
     
-    /*******************	Mouse Event - General	********************************/
+    /*******************    Mouse Event - General   ********************************/
     $('.work_information, .school_information, .address_information').mouseover(function(){
         $(this).children('.edit_info_btn').addClass('show');
         $(this).children('.delete_information').addClass('show');
@@ -850,13 +885,13 @@ $(document).ready(function(){
         $(this).children('.delete_information').removeClass('show');
     });
     
-    /*******************	Edit button - General	********************************/
+    /*******************    Edit button - General   ********************************/
     $(".edit_info_btn").click(function(){
         $(this).parent('.gen_information').siblings('.edit_fields').fadeIn(300);
         $(this).parent('.gen_information').hide();
       });
     
-    /*******************	Cancel button - General	********************************/
+    /*******************    Cancel button - General ********************************/
     $('.cancel').on('click', function(){
         var editfields = $(this).closest('div.edit_fields');
         var innerfields = editfields.children('div.inner_profile_fields');
@@ -875,7 +910,7 @@ $(document).ready(function(){
             $(this).val($(this).attr('data-status'));
         });
         
-        if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){		
+        if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){     
             innerfields.find('div.dynamic_dd').find('input[type="text"]').each(function(){
                 if(!($.trim($(this).attr('value')))){
                     $(this).closest('div.dynamic_dd').remove();
@@ -938,7 +973,7 @@ function displaySetDefaultAddress(o)
     }
 }
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /**************************************  PERSONAL INFORMATION ADDRESS    ***************************************/   
 /**************************************************************************************************************/
 $(document).ready(function(){
@@ -954,7 +989,7 @@ $(document).ready(function(){
         $(this).valid();
     });
     
-    //************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
+    //************  PERSONAL PROFILE ADDRESS VALIDATION ***************//
     $("#personal_profile_address").validate({
         rules: {
             stateregion:{
@@ -1005,7 +1040,7 @@ $(document).ready(function(){
                         alert(obj['errmsg']);
                         window.location.reload(true);
                         return false;
-                    }else if(obj['result'] === 'success'){					
+                    }else if(obj['result'] === 'success'){                  
                         //overwrite div to display new address data
                         $('.address_information .add_info').html(function(){
                             var string = obj['stateregion'] + ", " + obj['city'] + "<br>" + htmlDecode(obj['address']);
@@ -1050,13 +1085,13 @@ $(document).ready(function(){
                     }
                 });
             $(form).find('input[type="submit"]').attr('disabled', true);
-            return false;					
+            return false;                   
         }
     });
 });
 
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /**************************************  PERSONAL INFORMATION SCHOOL    ***************************************/   
 /**************************************************************************************************************/  
 $(document).ready(function(){
@@ -1071,7 +1106,7 @@ $(document).ready(function(){
         $html1.find('[name=schoolname1]').attr('name',"schoolname" + len);
         $html1.find('[name=schoolyear1]').attr('name',"schoolyear" + len);
         $html1.find('[name=schoollevel1]').attr('name',"schoollevel" + len);
-        $html1.find('[name=schoolcount1]').attr('name',"schoolcount" + len);	
+        $html1.find('[name=schoolcount1]').attr('name',"schoolcount" + len);    
         $html1.find('.error.red').remove();
         return $html1.html();
     }
@@ -1086,7 +1121,7 @@ $(document).ready(function(){
                                            messages: {required: '* The year field is required', range: '* This is an invalid year' }});
         cont.find('*[name^="schoolname"]').rules('add', {required: true, 
                                            messages: {required: '* The school field is required'}});
-        cont.find('*[name^="schoollevel"]').rules('add', {select_is_set: 0});		   
+        cont.find('*[name^="schoollevel"]').rules('add', {select_is_set: 0});          
         $(".year").numeric({negative : false});
         var len = $("#container_school").find(".add_another_school").length;
         if(len == 3){
@@ -1095,7 +1130,7 @@ $(document).ready(function(){
     });
     
 
-    //*****************	PERSONAL PROFILE SCHOOL SUBMIT	****************************//
+    //***************** PERSONAL PROFILE SCHOOL SUBMIT  ****************************//
     $("#personal_profile_school").validate({
         rules: {
             schoolname1:{
@@ -1166,7 +1201,7 @@ $(document).ready(function(){
                         // UPDATE TEXT BOX AND SELECT PROPERTIES
                         var i = 1;
                         $.each(obj.school, function(){
-                            $.each(this, function(k, v){	
+                            $.each(this, function(k, v){    
                                 if(k !='schoollevel'){
                                     $(".school_fields input[name='" + k + i +"']").prop('value',htmlDecode(v));
                                     $(".school_fields input[name='" + k + i +"']").attr('value',htmlDecode(v));
@@ -1191,11 +1226,11 @@ $(document).ready(function(){
 });
 
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /**************************************  PERSONAL INFORMATION WORK    *****************************************/   
 /**************************************************************************************************************/
     
-$(document).ready(function(){	
+$(document).ready(function(){   
    //clone input fields for work
     function GetHtml() {
         var len = $('.add_another_work').length+2;
@@ -1222,7 +1257,7 @@ $(document).ready(function(){
         cont.find("*[name^='companyname']").rules('add',{required: true, messages:{required: '* Company name is required'}});
         cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
         cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
-        cont.find("*[name^='year']").numeric({negative : false});	
+        cont.find("*[name^='year']").numeric({negative : false});   
         
         var len = $("#container_work").find(".add_another_work").length;
         if(len == 3){
@@ -1230,7 +1265,7 @@ $(document).ready(function(){
         }
     });
 
-    //***************	PERSONAL PROFILE WORK	************************//
+    //***************   PERSONAL PROFILE WORK   ************************//
     $("#personal_profile_work input[name='year1']").numeric({negative : false});
 
     $('#personal_profile_work').validate({
@@ -1285,7 +1320,7 @@ $(document).ready(function(){
                         alert(obj['errmsg']);
                         window.location.reload(true);
                         return false;
-                    }else if(obj['result'] === 'success'){	
+                    }else if(obj['result'] === 'success'){  
                         var string = "";
                         
                         //UPDATE DIV CONTENTS
@@ -1299,7 +1334,7 @@ $(document).ready(function(){
                         //UPDATE TEXTBOX PROPERTIES
                         var i = 1;
                         $.each(obj.work, function(){
-                            $.each(this, function(k, v){	
+                            $.each(this, function(k, v){    
                                 $(".work_fields input[name='" + k + i +"']").prop('value',htmlDecode(v));
                                 $(".work_fields input[name='" + k + i +"']").attr('value',htmlDecode(v));
                             });
@@ -1319,7 +1354,7 @@ $(document).ready(function(){
 
 });
 
-/**************************************************************************************************************/	
+/**************************************************************************************************************/    
 /****************************  DELIVERY ADDRESS AND CONSIGNEE DETAILS    **************************************/   
 /**************************************************************************************************************/
 
@@ -1400,7 +1435,7 @@ $(document).ready(function(){
                         //UPDATE INPUTfield ATTRIBUTE and PROPERTY VALUES in Delivery Address Page
                         $('#c_deliver_address .inner_profile_fields input[type="text"]').each(function(){
                             $(this).attr('value', htmlDecode(obj[$(this).attr('name')]));
-                            $(this).prop('value', htmlDecode(obj[$(this).attr('name')]));						
+                            $(this).prop('value', htmlDecode(obj[$(this).attr('name')]));                       
                         });
                         
                         // UPDATE SELECT FIELDS
@@ -1487,7 +1522,7 @@ $(document).ready(function(){
     });
 });
 
-/***********************************************************************************/	
+/***********************************************************************************/   
 /****************************  TRANSACTIONS    **************************************/   
 /***********************************************************************************/
 $(document).ready(function(){
@@ -1694,7 +1729,7 @@ $(document).ready(function(){
         return false;
     });
     
-    /******	Submit / View shipping Comments	******/
+    /****** Submit / View shipping Comments ******/
     $('.dashboard_table').on('click', '.shipping_comment', function(){
         var divcont = $(this).parent().siblings('div.shipping_comment_cont');
         var thisbtn = $(this);
@@ -1814,7 +1849,7 @@ $(document).ready(function(){
         }
     });
     
-    /***************	BANK DEPOSIT HANDLERS	*********************/
+    /***************    BANK DEPOSIT HANDLERS   *********************/
     $('.dashboard_table').on('click', '.payment_details_btn', function(){
         var thisdiv = $(this).siblings('div.payment_details_cont');
         var thisform = thisdiv.children('form.payment_bankdeposit');
@@ -1860,7 +1895,7 @@ $(document).ready(function(){
                     errorPlacement: function(error, element) {
                         error.addClass('red');
                         error.insertAfter(element);
-                    },	
+                    },  
                     submitHandler: function(form) {
                         submitbtn.val('Sending...');
                         input.attr('disabled',false);
@@ -1975,7 +2010,7 @@ $(document).ready(function(){
     
 });
 
-/*******************	HTML Decoder	********************************/
+/*******************    HTML Decoder    ********************************/
 function htmlDecode(value) {
     
     //value = value.replace(/script>/g, '');
@@ -1987,7 +2022,7 @@ function htmlDecode(value) {
     }
 }
 
-/*******************	Handle Fields Display	********************************/
+/*******************    Handle Fields Display   ********************************/
 function handle_fields(form)
 {
     if(form === '')
@@ -2016,9 +2051,9 @@ function handle_fields(form)
     });
 }
 
-/**************************	CITY FILTER SELECT	**************************************/
+/************************** CITY FILTER SELECT  **************************************/
 /*
- *	Function to generate provinces in dropdown.
+ *  Function to generate provinces in dropdown.
  */
 function cityFilter(stateregionselect,cityselect){
     var stateregionID = stateregionselect.find('option:selected').attr('value');
@@ -2039,7 +2074,7 @@ function cityFilter(stateregionselect,cityselect){
     
 }
 
-/***************************** PERSONAL PROFILE PROGRESSBAR	************************************/
+/***************************** PERSONAL PROFILE PROGRESSBAR ************************************/
 function progress_update(form){
     var fcount = 0;
     
@@ -2115,7 +2150,7 @@ function progress_update(form){
 }
 
 
-/***************	Image preview for cropping	************************/
+/***************    Image preview for cropping  ************************/
 function imageprev(input) {
 
     var jcrop_api, width, height;
@@ -2195,7 +2230,7 @@ function resetCoords(){
 }
 
 
-/*********	DASHBOARD BUTTONS - ETC	***************/
+/*********  DASHBOARD BUTTONS - ETC ***************/
 $(document).ready(function(){
 
     $('div.dashboard_table').on('click', '.show_prod_desc', function(){
@@ -2223,10 +2258,13 @@ $(document).ready(function(){
                 $.modal.close();
             }
         });
+
+        $('#simplemodal-container').addClass('sales-details-modal');
+
     });
 });
 
-/********************	PAGING FUNCTIONS	************************************************/
+/********************   PAGING FUNCTIONS    ************************************************/
 $(document).ready(function(){
     
     $('#op_buyer .paging:not(:first)').hide();
@@ -2278,13 +2316,13 @@ $(document).ready(function(){
 
 
 
-/***********************	GOOGLE MAPS		***************************/
+/***********************    GOOGLE MAPS     ***************************/
 
 $(document).ready(function(){
     var mapPersonal, markerPersonal, geocoder;
     var mapDelivery, markerDelivery;
 
-    $(".refresh_map").click(function(){		
+    $(".refresh_map").click(function(){     
         if($(this).attr('name') === 'personal_rmap'){
             var stateregion = $('#personal_stateregion').find('option:selected').text();
             var city = $('#personal_city').find('option:selected').text();
@@ -2399,12 +2437,12 @@ $(document).ready(function(){
             }else{
                 google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
             }
-        }	
+        }   
         
         $(this).fadeOut();
         $(this).parent('div').siblings('.map_nav').fadeIn();
         $(this).parent('div').siblings('.map-canvas').addClass('map_canvas');
-        $(this).parent('div').siblings('.map-canvas').fadeIn();				
+        $(this).parent('div').siblings('.map-canvas').fadeIn();             
     });
     
     $('.current_loc').on('click', function(){
@@ -2436,7 +2474,7 @@ $(document).ready(function(){
 });
 
 
-/*******************	TRANSACTION MAPS	********************************************/
+/*******************    TRANSACTION MAPS    ********************************************/
 $(document).ready(function(){
     
     var map, marker;
@@ -2474,7 +2512,7 @@ $(document).ready(function(){
 
 
 
-/*******************	Billing Info - Bank Selection	********************************/
+/*******************    Billing Info - Bank Selection   ********************************/
 
 
 $(document).ready(function(){
@@ -2500,10 +2538,10 @@ $(document).ready(function(){
                     return $(this).text() == SelectedValue;
                 }).first().prop("selected", true);
             });
-            return this;	   
+            return this;       
        }; 
     })(jQuery);
-    //// GET BANK DROPDOWN - END	
+    //// GET BANK DROPDOWN - END    
         
     $('#abi_btn').click(function(){
         $('#bi_bank').getbank("");
@@ -2523,10 +2561,10 @@ $(document).ready(function(){
         var bictr = getbictr.substring(7,30);
         var bid = 'bi_id_' + bictr;
         var def = confirm("Set as default account?");
-        if(def){			
+        if(def){            
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
-            var bidval = $("#"+bid).val();				
+            var bidval = $("#"+bid).val();              
             var currentRequest = null;
             var redurl =  config.base_url+'memberpage/billing_info_f';
             currentRequest = jQuery.ajax({
@@ -2536,9 +2574,9 @@ $(document).ready(function(){
                 success: function(data){
                     window.location.href = config.base_url+'me?me=pmnt';
                 }
-            });		
+            });     
         }
-    });	
+    }); 
     
     // DELETE BUTTON
     $(":button[name^='del_bictr']").click(function(){
@@ -2590,12 +2628,12 @@ $(document).ready(function(){
         $("#"+bn).prop("disabled", false).removeClass("bi_input");
         $("#"+bch).prop("disabled", false).removeClass("bi_input");
         
-        $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show();		
+        $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show();       
         $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).hide();
         $(":button[name^='bictr']").prop("disabled", true);
         $(":button[name^='del_bictr']").prop("disabled", true);
         
-        var bankname = $('#bi_bn_' + bictr).val();	
+        var bankname = $('#bi_bn_' + bictr).val();  
         $('#bi_bns_' + bictr).getbank(bankname).show();
             
     });
@@ -2632,9 +2670,9 @@ $(document).ready(function(){
         $("#"+ban).prop("disabled", true).addClass("bi_input");
         $("#"+bar).prop("disabled", true).addClass("bi_input");
         $("#"+bn).prop("disabled", true).addClass("bi_input");
-        $("#"+bch).prop("disabled", true).addClass("bi_input");			
+        $("#"+bch).prop("disabled", true).addClass("bi_input");         
 
-        $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+        $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();       
         $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
         $(":button[name^='bictr']").prop("disabled", false);
         $(":button[name^='del_bictr']").prop("disabled", false);
@@ -2682,7 +2720,7 @@ $(document).ready(function(){
         }
         if(del){
             var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');		
+            var csrfname = $("meta[name='csrf-name']").attr('content');     
             var currentRequest = null;
             var redurl =  config.base_url+'memberpage/billing_info_d';
             currentRequest = jQuery.ajax({
@@ -2692,7 +2730,7 @@ $(document).ready(function(){
                 success: function(data){
                     window.location.href = config.base_url+'me?me=pmnt';
                 }
-            });		
+            });     
         }
     }
 
@@ -2739,7 +2777,7 @@ $(document).ready(function(){
                 errorPlacement: function(error, element){
                         error.addClass('red');
                         error.appendTo(element.parent());
-                }		
+                }       
             });
 
             $("[name='bi_ban_"+bictr+"']").rules("add", banRule);
@@ -2753,10 +2791,10 @@ $(document).ready(function(){
             var bnval = $("#"+bns).val();
             var bntit = $("#"+bns).find("option:selected").attr("title");
             var bidval = $("#"+bid).val();
-            var bchval = $("#"+bch).val();		
+            var bchval = $("#"+bch).val();      
             
             var redurl = config.base_url+'memberpage/billing_info_u';
-            if($("#ubi_"+bictr).valid()){	
+            if($("#ubi_"+bictr).valid()){   
                 currentRequest = jQuery.ajax({
                     type: "POST",
                     url: redurl, 
@@ -2771,22 +2809,22 @@ $(document).ready(function(){
                                 }else{
                                     $("#h"+hid).val("");
                                 }
-                            });							
+                            });                         
                             $("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
                             $("#h"+ban).val($("#"+ban).val());
                             $("#h"+bar).val($("#"+bar).val());
                             $("#h"+bn).val(bntit);
-                            $("#"+bn).val(bntit);							
+                            $("#"+bn).val(bntit);                           
                             
                             $("#"+ban).prop("disabled", true).addClass("bi_input");;
                             $("#"+bar).prop("disabled", true).addClass("bi_input");;
                             $("#"+bn).prop("disabled", true).addClass("bi_input");;
-                            $("#"+bch).prop("disabled", true).addClass("bi_input");;			
+                            $("#"+bch).prop("disabled", true).addClass("bi_input");;            
                 
-                            $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+                            $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();       
                             $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
                             $(":button[name^='bictr']").prop("disabled", false);
-                            $(":button[name^='del_bictr']").prop("disabled", false);	
+                            $(":button[name^='del_bictr']").prop("disabled", false);    
 
                             return false;
                         }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
@@ -2795,7 +2833,7 @@ $(document).ready(function(){
                             alert('Something went wrong. Please try again later.');
                         }
                     }
-                });		
+                });     
             }
         }else{
             return false;
@@ -2811,14 +2849,14 @@ $(document).ready(function(){
          ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
          rules: {
             bi_bank: {
-                required: true			
+                required: true          
             },
             bi_acct_name: {
-                required: true		
-            },			
+                required: true      
+            },          
             bi_acct_no: {
                 //required: true, minlength: 12, maxlength: 18
-                required: true					
+                required: true                  
             } 
          },
          messages:{
@@ -2830,7 +2868,7 @@ $(document).ready(function(){
             },
             bi_acct_no: {
                 required: '* Account Number Required'
-            }						
+            }                       
          },
         errorElement: "span",
         errorPlacement: function(error, element) {
@@ -2842,7 +2880,7 @@ $(document).ready(function(){
          
     var redurl =  config.base_url+'memberpage/billing_info';
     $("#billing_info_btn").click(function() {
-        if($("#billing_info").valid()){	
+        if($("#billing_info").valid()){ 
             jQuery.ajax({
                 type: "POST",
                 url: redurl, 
@@ -2850,7 +2888,7 @@ $(document).ready(function(){
                 success: function(data){
                     var obj = JSON.parse(data);
                     if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
-                        $("#bi_err_add").show().delay(2000).fadeOut(800);						
+                        $("#bi_err_add").show().delay(2000).fadeOut(800);                       
                     }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
                         $("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
                         window.location.href = config.base_url+'me?me=pmnt';
@@ -2858,9 +2896,9 @@ $(document).ready(function(){
                         alert('Something went wrong. Please try again later.');
                     }
                 }
-            });		
-        }		
-    });	
+            });     
+        }       
+    }); 
     
     
     $(document).on('click','.fulldelete',function(event){ 
