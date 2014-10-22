@@ -43,6 +43,7 @@
                 var obj = jQuery.parseJSON(d); 
                 $('.loading_div').hide();
                 $('#follower-container').empty().append(obj.html).show();
+                $('.pagination-container > center > ul').replaceWith(obj.paginationData);
                 $('#storage').append(obj.html);
                 $('html,body').scrollTo(450); 
 

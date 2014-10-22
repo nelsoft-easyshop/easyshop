@@ -569,8 +569,16 @@ class Home extends MY_Controller
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId; 
-        $followerData['page'] = $pageOffset; 
+        $followerData['page'] = $pageOffset;
 
+
+        $paginationData = array(
+            'lastPage' => ceil($followers['count']/$this->followerPerPage)
+            , 'isHyperLink' => false
+            , 'currentPage' => $pageOffset + 1
+        );
+
+        $response['paginationData'] = $this->load->view('pagination/default', $paginationData, true);
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
         echo json_encode($response);
