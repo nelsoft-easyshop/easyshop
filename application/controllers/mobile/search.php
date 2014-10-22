@@ -26,26 +26,56 @@ class search extends MY_Controller
         $searchProductService = $this->serviceContainer['search_product'];
 
         $parameter = $this->input->get();
+        $arrayDisplay = array(
+                'products' => [],
+                'attributes' => [],
+                'sort_available' => [],
+            ); 
 
-        // Get all product
-        $response['products'] = $searchProductService->getProductBySearch($parameter);
+        if($parameter){ 
 
-        // product display
-        $productArray = array();
+            // Get all product
+            $response['products'] = $searchProductService->getProductBySearch($parameter);
 
-        foreach ($response['products'] as $key => $value) {
-            $productArray[] = $this->serviceContainer['api_formatter']
-                                                ->formatDisplayItem($value->getIdProduct());
+            // product display
+            $productArray = array();
+
+            foreach ($response['products'] as $key => $value) {
+                $productArray[] = $this->serviceContainer['api_formatter']
+                                                    ->formatDisplayItem($value->getIdProduct());
+            }
+
+            $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
+            $sortType = array('name','price');
+
+            $specialFilter = ['filterprice' => 
+                                [
+                                    'P0 - P1000' => [
+                                        'startprice' => 0,
+                                        'endprice' => 1000,
+                                    ],
+                                    'P1000 - P5000' => [
+                                        'startprice' => 1000,
+                                        'endprice' => 5000,
+                                    ],
+                                    'P5000 - P10000' => [
+                                        'startprice' => 5000,
+                                        'endprice' => 10000,
+                                    ],
+                                    'P10000 and above' => [
+                                        'startprice' => 10000,
+                                        'endprice' => PHP_INT_MAX,
+                                    ]
+                                ]
+                            ];
+            $arrayDisplay = array(
+                                'products' => $productArray,
+                                'filter' => $attributes,
+                                'specialFilter' => $specialFilter,
+                                'sort_available' => $sortType,
+                            ); 
         }
 
-        $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
-        $sortType = array('hot','new');
-
-        $arrayDisplay = array(
-                            'products' => $productArray,
-                            'attributes' => $attributes,
-                            'sort_available' => $sortType,
-                        ); 
 
         print(json_encode($arrayDisplay,JSON_PRETTY_PRINT)); 
     }

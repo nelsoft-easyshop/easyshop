@@ -55,11 +55,13 @@ class ApiFormatter
 
         $productDetails = array(
                 'name' => $product->getName(),
+                'slug' => $product->getSlug(),
                 'description' => $product->getDescription(),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
-                'basePrice' => floatval($product->getFinalPrice()),
+                'price' => floatval($product->getFinalPrice()),
+                'original_price' => floatval($product->getFinalPrice()),
             );
 
         // get product images
@@ -114,7 +116,7 @@ class ApiFormatter
         $productAttributes = $this->collectionHelper->organizeArray($productAttributes,true);
 
         // get product specification
-        $productSpecification = array() ; $productCombinationAttributes = array();
+        $productSpecification = array() ; $productCombinationAttributes = array(); 
         foreach ($productAttributes as $key => $productOption) {
             $newArrayOption = array(); 
 
@@ -125,7 +127,7 @@ class ApiFormatter
                                     'value' => $productOption[$i]['attr_value'],
                                     'price'=> $productOption[$i]['attr_price'],
                                     'img_id'=> $productImages[0]['id'],
-                                    'name'=> $key,
+                                    'name'=> $productOption[$i]['attr_name'],
                                     'id'=> $newKey
                                 ); 
             }
@@ -247,6 +249,7 @@ class ApiFormatter
     public function formatCart($cartData)
     { 
         $formattedCartContents = array();
+        $finalCart = array();
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['idProduct' => $cartItem['id']]);
@@ -259,7 +262,7 @@ class ApiFormatter
 
                 $mappedAttributes = array();
                 foreach($attributes as $attribute){
-                    $isSelected = false;
+                    $isSelected = "false";
                     $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
 
                     foreach($cartItem['options'] as $head => $option){
@@ -269,7 +272,7 @@ class ApiFormatter
                         if(strtolower($attribute['head']) == strtolower($head) &&
                             strtolower($attribute['value']) == strtolower($fieldValue) &&
                             strtolower($attribute['price']) == strtolower($fieldPrice)){
-                            $isSelected = true;
+                            $isSelected = "true";
                             break;
                         }
                     }
@@ -287,22 +290,22 @@ class ApiFormatter
                 $formattedCartContents[$rowId] = [
                     'rowid' => $cartItem['rowid'],
                     'productId' =>  $cartItem['id'],
-                    'productItemId' => $cartItem['product_itemID'],
-                    'maximumAvailability' => $cartItem['maxqty'],
+                    'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
                     'name' => $cartItem['name'],
                     'quantity' => $cartItem['qty'], 
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],  
+                    'isAvailable' => isset($cartItem['isAvailable']) ? $cartItem['isAvailable'] : "true",  
                     'mapAttributes' => $mappedAttributes
                 ];
 
                 $format = $this->formatItem($cartItem['id']);
-                $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$format);
+                $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
             }
-        }
+        } 
 
-        return $formattedCartContents;
+        return $finalCart;
     }
 
     public function formatDisplayItem($idProduct)
@@ -325,6 +328,7 @@ class ApiFormatter
                     'condition' => $product->getCondition(),
                     'discount' => floatval($product->getDiscountPercentage()),
                     'price' => floatval($product->getFinalPrice()),
+                    'original_price' => floatval($product->getOriginalPrice()),
                     'product_image' => $imageDirectory.'categoryview/'.$imageFileName
                 );
     }
@@ -335,7 +339,7 @@ class ApiFormatter
                               
             $options = array();
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1){
+                if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
                     $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
