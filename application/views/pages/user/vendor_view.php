@@ -105,23 +105,12 @@
 
                         <?=$arrCat['product_html_data'];?>
 
-                        <div class="clear"></div>
+                      <!--   <div class="clear"></div>
                         <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
                             <center>
-                                <?php echo $arrCat['pagination']?>
-                                <!--<ul class="pagination pagination-items">
-                                    <li data-group="<?php echo $catId?>" class="pagination-maxleft"><a href="javascript:void(0)"><span>&laquo;</span></a></li>
-                                    <?php for($i=1; $i<=ceil($arrCat['non_categorized_count']/$prodLimit); $i++):?>
-                                        <li data-group="<?php echo $catId?>" class="pagination-indiv <?php echo $i===1 ? "active" : "" ?>" data-page="<?php echo $i;?>">
-                                            <a href="javascript:void(0)">
-                                                <span><?php echo $i?></span>
-                                            </a>
-                                        </li>
-                                    <?php endfor;?>
-                                    <li data-group="<?php echo $catId?>" class="pagination-maxright"><a href="javascript:void(0)"><span>&raquo;</span></a></li>
-                                </ul>-->
+                                <?php echo $arrCat['pagination']?> 
                             </center>
-                        </div>
+                        </div> -->
                    <?php endif;?>
 
                 </div>
