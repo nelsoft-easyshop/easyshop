@@ -292,7 +292,6 @@ class ProductManager
             $memProd = new EsMemberProdcat();
             $memProd->setMemcat($category)
                     ->setProduct($product)
-                    //->setCreateddate(date_create(date("Y-m-d H:i:s", time())));
                     ->setCreatedDate(date_create());
             $this->em->persist($memProd);
         }
