@@ -161,8 +161,12 @@
                     </a>
                 </li>
                 <?php endif; ?>
-                <li >
+                <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">About</a>
+                </li>
+                <li>
+                    <span class="followers-circle"><?=$followerCount; ?></span>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/followers" class="<?php if($url_id === "followers"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Followers</a>
                 </li>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>

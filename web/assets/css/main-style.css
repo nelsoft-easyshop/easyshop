@@ -14,6 +14,13 @@ src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
 font-weight: bold;
 }
 
+@font-face
+{
+font-family: Helvetica;
+src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
+font-weight: 900;
+}
+
 /*** global style ***/
 html, body{
     font-family: 'Helvetica', Arial, Calibri;
@@ -254,19 +261,20 @@ textarea {
     height: 34px;
     min-width: 85px;
     max-width: 145px;
-    padding-right: 15px;
+    padding-right: 30px;
     overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
-/*.new-user-nav-dropdown {
+.new-user-nav-dropdown {
     position: absolute;
     right: 0;
     top: 0;
 }
-*/
+
 .new-user-nav-dropdown .user-nav-dropdown {
     margin-right: 18px;
 }
@@ -373,12 +381,12 @@ textarea {
 .vendor-profile-content h4 {
     font-size: 1.5em;
     font-weight: bold;
-    height: 24px;
     margin-bottom: 2px;
     margin-top: 31px;
     overflow: hidden;
     padding: 0 20px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .vendor-profile-content p {
@@ -538,13 +546,11 @@ textarea {
 
 .jcrop-holder {
     background-color: #fff !important;
-    height: 395px !important;
+    height: 325px !important;
     margin: 10px auto;
-    width: auto !important;
 }
 
 .jcrop-holder img {
-    bottom: 0;
     height: auto !important;
     margin: auto !important;
     max-height: 296px;   
@@ -553,18 +559,18 @@ textarea {
     width: auto !important;
 }
 
-.jcrop-holder div + div + input + div > div {
+/*.jcrop-holder div + div + input + div > div {
     height: auto !important;
     max-height: 296px !important;
-}
+}*/
 
 .jcrop-tracker {
     bottom: 0;
-    height: auto !important;
+    height: 325px !important;
     left: 0 !important;
     margin: auto;
     right: 0;
-    top: 0 !important;    
+    top: 0 !important;
 }
     
 #div_user_image_prev {
@@ -586,8 +592,8 @@ textarea {
 .img-editor-container img {
     width: auto;
     height: auto;
-    max-width: 500px;
-    max-height: 320px;
+    max-width: 500px !important;
+    max-height: 320px !important;
 }
 
 #div_user_image_prev span {
@@ -734,6 +740,20 @@ textarea {
     border-bottom: 3px solid #fe893a;
 }
 
+.followers-circle{
+    background: #fe893a;
+    position: absolute;
+    color: #ffffff;
+    margin-top: -16px;
+    margin-left: 37px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size:12px;
+    text-align: center;
+    padding-top: 5px;
+}
+
 .fixed-vendor-content {
     margin-top: 100px;
 }
@@ -786,14 +806,23 @@ textarea {
 }
 
 .sticky-nav .vendor-profile-img-con {
+    border-radius: 4px;
     display: inline-block;
     height: 30px;
+    overflow: hidden;
+    vertical-align: middle;
     width: 33px;
 }
 
 .sticky-nav .vendor-profile-img-con img {
-    max-height: 25px;
+    bottom: 0;
+    left: 0;
+    max-height: 30px;
     max-width: 33px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .sticky-nav h4 {
@@ -807,6 +836,7 @@ textarea {
     text-overflow: ellipsis;
     vertical-align: middle;
     width: 284px;
+    white-space: nowrap;
 }
 
 .sticky-nav li:nth-child(2) a {
@@ -1546,6 +1576,18 @@ td.td-view.p-view2.color-default{
     width: 42px;
     font-weight:bold;
 }
+.span-new-pin-list{
+    position:absolute;
+    color: #FFFFFF;
+    background: #00a388;
+    padding: 6px 0px;
+    text-align: center !important;
+    margin-left:0px !important;
+    margin-top:13px;
+    font-size: 12px;
+    width: 42px;
+    font-weight:bold;
+}
 .grid-span-discount-pin{
     position:absolute;
     color: #FFFFFF;
@@ -1560,6 +1602,22 @@ td.td-view.p-view2.color-default{
     right: 0 !important;
     margin-right: 5px !important;
 }
+
+.grid-span-new-pin{
+    position:absolute;
+    color: #ffffff;
+    background: #00a388;
+    padding: 6px 0px;
+    text-align: center !important;
+    margin-left: 5px;
+    margin-top:10px;
+    font-size: 12px;
+    width: 42px;
+    font-weight:bold;
+    left: 0 !important;
+    margin-right: 5px !important;
+}
+
 .span-new-tag{
     font-weight: bold;
     color: #02846f;

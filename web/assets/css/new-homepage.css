@@ -278,6 +278,10 @@ header {
     border-color: #1e1e5d transparent transparent transparent;
 }
 
+.new-user-nav-dropdown {
+    position: relative !important;
+}
+
 .new-user-nav-dropdown:hover .default-nav-dropdown {
     display: block;
 }
@@ -320,7 +324,7 @@ header {
     top: 36px;
     padding: 10px 0;
     position: absolute;
-    right: -3px;
+    right: -18px;
     width: 200px;
     z-index: 99;
     border-radius: 3px;
@@ -2585,6 +2589,14 @@ font-size: 15px;
     height: 40px;
     display: table-cell;
     vertical-align: middle;
+}
+
+.img-store-logo{
+    max-height: 40px;
+}
+
+.img-featured-seller{
+    max-height: 150px;
 }
 
 .store-logo-container{
