@@ -1,6 +1,12 @@
 
 (function($) {
     var vendorId = $("#vendor_id").val(); 
+
+    $('.pagination-container').on('click', '.extremes', function(){
+        var page = $(this).attr('data-page');
+        $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
+    });
+
     $('.pagination-container').on('click', '.individual', function(){
 
         var page = $(this).data('page');
@@ -11,6 +17,12 @@
 
         $(this).siblings('.individual').removeClass('active');
         $(this).addClass('active');
+
+ 
+        var paginationContainer = $('.pagination-container');
+
+        paginationContainer.find('.extremes.previous').attr('data-page', page - 1);
+        paginationContainer.find('.extremes.next').attr('data-page', page + 1);
 
         // start counting
         var currentPage = page - 1;
@@ -32,9 +44,12 @@
                 $('.loading_div').hide();
                 $('#follower-container').empty().append(obj.html).show();
                 $('#storage').append(obj.html);
+                $('html,body').scrollTo(450); 
+
             }
         });
     });
+    
 
     $(document).on('mouseenter',".following-user",function () {
         $(this).next('span').css("display", "block");
