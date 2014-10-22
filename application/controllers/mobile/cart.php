@@ -63,7 +63,6 @@ class cart extends MY_Controller
     {
         parent::__construct();
 
-        $this->load->model('product_model'); 
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->productManager = $this->serviceContainer['product_manager'];
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
