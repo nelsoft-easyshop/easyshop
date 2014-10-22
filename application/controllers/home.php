@@ -338,8 +338,9 @@ class Home extends MY_Controller
 
                     $view = array(
                         'arrCat' => array(
-                            'products' => $searchProduct,
-                            'page' => 1
+                            'products'=>$searchProduct,
+                            'page' => 1,
+                            'pagination' => $productView['defaultCatProd'][0]['pagination'],
                         )
                     );
                     $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
@@ -508,7 +509,7 @@ class Home extends MY_Controller
             , 'currentPage' => $pageOffset + 1
         );
 
-        $response['paginationData'] = $this->load->view('pagination/default', $paginationData, true);
+        $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
         echo json_encode($response);
@@ -583,7 +584,8 @@ class Home extends MY_Controller
             $view = array(
                 'arrCat' => array(
                     'products'=>$result['products'],
-                    'page' => 1
+                    'page' => 1,
+                    'pagination' => $parentCat[$idCat]['pagination'],
                 )
             );
 

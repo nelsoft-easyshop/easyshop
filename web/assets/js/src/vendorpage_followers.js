@@ -2,12 +2,12 @@
 (function($) {
     var vendorId = $("#vendor_id").val(); 
 
-    $('.pagination-container').on('click', '.extremes', function(){
+    $('#follower-container').on('click', '.extremes', function(){
         var page = $(this).attr('data-page');
         $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
     });
 
-    $('.pagination-container').on('click', '.individual', function(){
+    $('#follower-container').on('click', '.individual', function(){
 
         var page = $(this).data('page');
         if($(this).hasClass('active')){
@@ -28,6 +28,7 @@
         var currentPage = page - 1;
         if($('#storage > #follow-div-page-'+currentPage).length > 0){ 
             $('#follower-container').empty().append($('#storage > #follow-div-page-'+currentPage).clone());
+            $('html,body').scrollTo(450); 
             return false;
         }
 
