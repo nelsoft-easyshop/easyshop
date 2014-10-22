@@ -9,6 +9,7 @@
             $percentage = $objProduct->getDiscountPercentage();
             $isPromote = intval($objProduct->getIsPromote());
             $isFreeShipping = $objProduct->getIsFreeShipping();
+            $isNew = $objProduct->getIsNew();
             $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
             $briefDesc = html_escape($objProduct->getBrief());
             $catObj = $objProduct->getCat();
@@ -21,7 +22,17 @@
                             <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
                                 <?php if($percentage && $percentage > 0):?>
                                 <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                
                                 <?php endif; ?>
+                                
+                                
+                                           
+                                
+                                <?php if($isNew): ?>
+                                    <span class="grid-span-new-pin">NEW</span>
+                                <?php endif; ?>
+                                
+                                
                                 <center>
                                     <div class="span-img-container">
                                     </div>
@@ -75,6 +86,13 @@
                                         <?php echo $escapeName;?>
                                     </a>
                                 <?php endif;?>
+                                
+                                
+                                <?php if($isNew): ?>
+                                      <span style="float:right; font-weight:bold; color:#00a388;">NEW</span>
+                                <?php endif; ?>
+                                
+                              
                             </p>
                             <p class="p-list-item-category">
                                 <?php echo $immediateCat?>
