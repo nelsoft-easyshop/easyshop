@@ -36,7 +36,7 @@ class SocialMediaController extends MY_Controller
             $esMember = $this->entityManager
                                 ->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['email' => $facebookData->getProperty('email')]);
-            $isUsernameExists = $esMember->getUsername() ? true : false;
+            $isUsernameExists = $esMember && $esMember->getUsername() ? true : false;
             if ($esMember && $isUsernameExists) {
                 if (!$esMember->getOauthProvider()) {
                     $data = $this->encrypt->encode(
