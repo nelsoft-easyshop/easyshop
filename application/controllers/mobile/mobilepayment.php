@@ -250,7 +250,7 @@ class mobilePayment extends MY_Controller
             $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
             $cartData = $dataCollection['cartData']; 
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
-            
+
             $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
             $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
@@ -307,7 +307,7 @@ class mobilePayment extends MY_Controller
         foreach ($itemArray as $key => $value) {
             $value['isAvailable'] = "true";
             if(!$value[$keyString]){
-                $value['isAvailable'] = "false";
+                $itemArray[$key]['isAvailable'] = "false";
                 $error++;
             }
         }
@@ -319,7 +319,7 @@ class mobilePayment extends MY_Controller
                     'url' => '',
                     'returnUrl' => '',
                     'cancelUrl' => '',
-                    'cartData' => $itemArray,
+                    'cartData' => $this->serviceContainer['api_formatter']->formatCart($itemArray),
                 );
             echo json_encode($returnArray,JSON_PRETTY_PRINT);
             exit();
