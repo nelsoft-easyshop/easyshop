@@ -670,6 +670,7 @@ class Home extends MY_Controller
                                                                               ), TRUE);
 
         $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
+        
         $orderRelations = array();
         
         if($viewerId !== 0){
