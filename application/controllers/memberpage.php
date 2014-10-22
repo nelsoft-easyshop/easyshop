@@ -1647,7 +1647,6 @@ class Memberpage extends MY_Controller
     public function vendorLoadProducts()
     {
         $prodLimit = 12;
-
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
@@ -1749,7 +1748,7 @@ class Memberpage extends MY_Controller
             , 'isHyperLink' => false
             , 'currentPage' => $page
         );
-
+        $parseData['arrCat']['pagination'] = $this->load->view("pagination/default", $paginationData, true);
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount

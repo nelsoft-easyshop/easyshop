@@ -1304,21 +1304,27 @@ td.td-view.p-view2.color-default{
     padding-left: 15px;
     min-height: 580px !important;
 }
+
 .product-paging{
     min-height: 600px;
 }
-.grid > .product-paging > .panel-list-item{
+
+.product-inner-container{
+    min-height: 620px;
+}
+
+.grid > .product-paging > .product-inner-container > .panel-list-item{
     display: none;
 
 }
-.grid > .product-paging > .thumb{
+.grid > .product-paging > .product-inner-container > .thumb{
     padding-right: 5px !important;
     padding-left: 5px !important;
     margin-bottom: 11px !important;
 
 }
 
-.grid > .product-paging > .thumb > .panel-item{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item{
     width: 100%;
     height: 275px;
     border-radius: 4px;
@@ -1328,18 +1334,18 @@ td.td-view.p-view2.color-default{
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
 }
-.grid > .product-paging > .thumb > .panel-item:hover{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item:hover{
     -webkit-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     -moz-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
 }
-.grid > .product-paging > .thumb > .panel-item > a > .div-item{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item{
     width: 100%;
     height: 165px;
     border-radius: 4px 4px 0px 0px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
     text-align: center !important;
     height: 165px !important;
     width: 100% !important;
@@ -1349,7 +1355,7 @@ td.td-view.p-view2.color-default{
     border: transparent red 1px;
     border-radius: 4px 4px 0px 0px;
 }
-.grid > .product-paging > .thumb > .panel-item > a > .div-item > .span-img-wrapper > .span-img-container{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper > .span-img-container{
     width: 100%;
     height: 165px;
     display: table-cell;
@@ -1359,7 +1365,7 @@ td.td-view.p-view2.color-default{
     border-radius: 4px 4px 0px 0px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > a > .div-item > .span-img-wrapper > .span-img-container >.img-item{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper > .span-img-container >.img-item{
     max-height: 165px !important;
     max-width: 100% !important;
     width: auto !important;
@@ -1369,7 +1375,7 @@ td.td-view.p-view2.color-default{
     border-radius: 4px 4px 0px 0px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .p-item-name{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name{
     text-align: center;
     font-weight: bold;
     margin: 0px;
@@ -1377,26 +1383,26 @@ td.td-view.p-view2.color-default{
     font-size:15px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .p-category{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-category{
     display: none;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-desc-container{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-desc-container{
     display:none;
 }
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .p-item-name > a{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name > a{
     transition: all 0.5s ease;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .p-item-name > a:hover{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name > a:hover{
     text-decoration: none;
     color: #ff3d1f;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > .p-price{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > .p-price{
     margin: 0px;
     text-align: center;
     color: #ff3d1f;
@@ -1404,17 +1410,17 @@ td.td-view.p-view2.color-default{
     font-size:15px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > .p-price > span > s{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > .p-price > span > s{
     color: #989898;
     font-weight: normal;
     margin-right: 5px;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > .p-discount{
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > .p-discount{
     display:none;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart {
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart {
     border: 2px solid #585a59;
     background-color: #fff;
     color: #565656;
@@ -1427,7 +1433,7 @@ td.td-view.p-view2.color-default{
     -o-transition: all 0.3s ease;
 }
 
-.grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart:hover {
+.grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart:hover {
     background-color: #585a59;
     color: #fff;
 }
@@ -1440,11 +1446,11 @@ td.td-view.p-view2.color-default{
     -o-transition: all 0.5s ease;
 }
 
-.list > .product-paging > .thumb > .panel-item{
+.list > .product-paging > .product-inner-container > .thumb > .panel-item{
     display: none;
 }
 
-.list > .product-paging > .panel-list-item{
+.list > .product-paging > .product-inner-container > .panel-list-item{
     display: inline-block;
     width:825px;
     margin-bottom: 10px;
@@ -1455,7 +1461,7 @@ td.td-view.p-view2.color-default{
     -o-transition: all 0.5s ease;
 }
 
-.list > .product-paging > .panel-list-item:hover{
+.list > .product-paging > .product-inner-container > .panel-list-item:hover{
     -webkit-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     -moz-box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
     box-shadow: 0px 3px 9px 0px rgba(163,155,163,1);
