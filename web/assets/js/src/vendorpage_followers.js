@@ -1,6 +1,12 @@
 
 (function($) {
     var vendorId = $("#vendor_id").val(); 
+
+    $('.pagination-container').on('click', '.extremes', function(){
+        var page = $(this).attr('data-page');
+        $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
+    });
+
     $('.pagination-container').on('click', '.individual', function(){
 
         var page = $(this).data('page');
@@ -11,6 +17,12 @@
 
         $(this).siblings('.individual').removeClass('active');
         $(this).addClass('active');
+
+ 
+        var paginationContainer = $('.pagination-container');
+
+        paginationContainer.find('.extremes.previous').attr('data-page', page - 1);
+        paginationContainer.find('.extremes.next').attr('data-page', page + 1);
 
         // start counting
         var currentPage = page - 1;
