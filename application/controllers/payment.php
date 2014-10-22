@@ -101,10 +101,15 @@ class Payment extends MY_Controller{
 
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
+        $itemArray = $purchaseLimitPaymentType['itemArray'];
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
         $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+
+        foreach ($itemArray as $key => $value) {
+            $itemArray[$key]['isAvailable'] = ($value['maxqty'] <= 0) ? "false" : "true";
+        }
 
         // get all possible error message
         $errorMessage = [];
@@ -115,6 +120,7 @@ class Payment extends MY_Controller{
         }
 
         if($qtySuccess != count($itemArray)){
+
             $canContinue = false;
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
@@ -134,6 +140,9 @@ class Payment extends MY_Controller{
 
         if(!$soloRestriction){
             $canContinue = false;
+            foreach ($itemArray as $key => $value) {
+                $itemArray[$key]['isAvailable'] = "false";
+            }
             array_push($errorMessage, 'One of your items can only be purchased individually.');
         }
 
@@ -324,6 +333,7 @@ class Payment extends MY_Controller{
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available" ? "true" : "false");
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
@@ -362,6 +372,7 @@ class Payment extends MY_Controller{
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
                 $can_purchase = $this->product_model->is_purchase_allowed($memberId ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
+                    $itemArray[$key]['isAvailable'] = "false";
                     $purchaseLimit = false;
                     break;
                 }
@@ -375,6 +386,7 @@ class Payment extends MY_Controller{
             'payment_type' => $paymentType,
             'purchase_limit' => $purchaseLimit,
             'solo_restriction' => $soloRestriction,
+            'itemArray' => $itemArray,
         );
     }
     

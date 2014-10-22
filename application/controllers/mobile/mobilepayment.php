@@ -119,9 +119,14 @@ class mobilePayment extends MY_Controller
     {   
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
+
+        $this->paymentController = $this->loadController('payment');
+        $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+        $cartData = $dataCollection['cartData']; 
+        $check = $this->checkAvailableInPayment($cartData,$paymentType);
+
         if(!empty($cartData)){
-            unset($cartData['total_items'],$cartData['cart_total']);
-            $this->paymentController = $this->loadController('payment');
+            unset($cartData['total_items'],$cartData['cart_total']); 
             $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
             $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
             $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
@@ -147,7 +152,7 @@ class mobilePayment extends MY_Controller
         $returnUrl = "";
         $cancelUrl = "";
         $isSuccess = false;
-        $cartData = unserialize($this->member->getUserdata()); 
+        $cartData = unserialize($this->member->getUserdata());
         if(!empty($cartData) && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
@@ -157,8 +162,12 @@ class mobilePayment extends MY_Controller
             elseif($this->input->post('paymentType') == "dragonpay"){
                 $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
             }
-
+ 
             $this->paymentController = $this->loadController('payment');
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $cartData = $dataCollection['cartData']; 
+            $check = $this->checkAvailableInPayment($cartData,$paymentType);
+
             $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
             $urlReturn = ""; 
 
@@ -237,6 +246,11 @@ class mobilePayment extends MY_Controller
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
+
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $cartData = $dataCollection['cartData']; 
+            $check = $this->checkAvailableInPayment($cartData,$paymentType);
+            
             $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
             $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
@@ -272,5 +286,46 @@ class mobilePayment extends MY_Controller
                     );
 
         echo json_encode($displayArray,JSON_PRETTY_PRINT);
+    }
+
+    private function checkAvailableInPayment($itemArray,$paymentType)
+    {
+        if($paymentType == EsPaymentMethod::PAYMENT_PAYPAL){
+            $keyString = "paypal";
+            $label = "Paypal";
+        }
+        elseif($paymentType == EsPaymentMethod::PAYMENT_DRAGONPAY){
+            $keyString = "dragonpay";
+            $label = "Dragonpay";
+        }
+        elseif($paymentType == EsPaymentMethod::PAYMENT_CASHONDELIVERY){
+            $keyString = "cash_delivery";
+            $label = "Cash on Delivery";
+        }
+
+        $error = 0;
+        foreach ($itemArray as $key => $value) {
+            $value['isAvailable'] = "true";
+            if(!$value[$keyString]){
+                $value['isAvailable'] = "false";
+                $error++;
+            }
+        }
+
+        if($error > 0){
+            $returnArray = array(
+                    'isSuccess' => false, 
+                    'message' => 'One of you item is not avaialble in '.$label,
+                    'url' => '',
+                    'returnUrl' => '',
+                    'cancelUrl' => '',
+                    'cartData' => $itemArray,
+                );
+            echo json_encode($returnArray,JSON_PRETTY_PRINT);
+            exit();
+        }
+
+
+        return $itemArray;
     }
 }

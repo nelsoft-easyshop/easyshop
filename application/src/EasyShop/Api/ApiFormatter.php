@@ -297,6 +297,7 @@ class ApiFormatter
                     'quantity' => $cartItem['qty'], 
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],  
+                    'isAvailable' => isset($cartItem['isAvailable']) ? $cartItem['isAvailable'] : "true",  
                     'mapAttributes' => $mappedAttributes
                 ];
 
