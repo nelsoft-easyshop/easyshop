@@ -1414,6 +1414,11 @@ td.td-view.p-view2.color-default{
     display:none;
 }
 
+.discount-value{
+margin-bottom: -9px;
+font-size: 12px;
+}
+
 .grid > .product-paging > .thumb > .panel-item > .div-item-info > .div-amount > center > .btn.btn-default-cart {
     border: 2px solid #585a59;
     background-color: #fff;
