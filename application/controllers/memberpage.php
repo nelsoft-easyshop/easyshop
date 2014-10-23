@@ -1718,18 +1718,18 @@ class Memberpage extends MY_Controller
                 $tempCountContainer = $searchProductService->getProductBySearch($parameter);
                 $productCount = count($tempCountContainer);
                 break;
-            case 1: // Custom - NOT YET USED
-                //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                //                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                //$productCount = 0;
+            case 1: // Custom Categories
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
                 break;
             case 2: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
             default: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;

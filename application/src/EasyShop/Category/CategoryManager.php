@@ -2,6 +2,8 @@
 
 namespace EasyShop\Category;
 
+use EasyShop\Entities\EsMemberCat;
+
 /**
  *  Promo class
  *
@@ -65,7 +67,8 @@ class CategoryManager
         $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         $category = new EsMemberCat();
         $category->setCatName($catName)
-                 ->setMember($memberObj);
+                 ->setMember($memberObj)
+                 ->setCreatedDate(date_create());
         $this->em->persist($category);
         $this->em->flush();
 
