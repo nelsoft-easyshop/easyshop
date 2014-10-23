@@ -335,8 +335,9 @@ class ApiFormatter
 
     public function updateCart($mobileCartContents,$memberId)
     {
+		$this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
-                              
+
             $options = array();
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
                 if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
@@ -351,6 +352,7 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
+		
     }
 }
  
