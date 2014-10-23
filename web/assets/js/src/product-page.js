@@ -3,12 +3,38 @@
         $( ".div-reply-container" ).toggle("slow");
         $( ".text-cancel" ).toggle("fade");
     });
-    
+
     $( ".p-reply-text-replied-item" ).click(function() {
         $( ".div-reply-container-replied-item" ).toggle("slow");
         $( ".text-cancel-replied-item" ).toggle("fade");
     });
-    
+
+    $( "#prodDetails" ).click(function() {
+        $( "#tdDetails" ).addClass("active");
+        $( "#tdReviews" ).removeClass("active");
+    });
+
+    $( "#prodReviews" ).click(function() {
+        $( "#tdDetails" ).removeClass("active");
+        $( "#tdReviews" ).addClass("active");
+    });
+
+    $(".span-star-container .fa-star-rate").mouseover(function(){
+        $(this).css("color","#fbd022");
+        $( this ).prevAll().css("color","#fbd022");
+    });
+
+    $( ".span-star-container .fa-star-rate" ).mouseout(function() {
+        $(this).css("color","#d4d4d4");
+        $( this ).prevAll().css("color","#d4d4d4");
+    });
+
+    $( ".span-star-container .fa-star-rate" ).click(function() {
+        $(this).addClass("star-active");
+        $(this).prevAll().addClass("star-active");
+        $(this).nextAll().removeClass("star-active");
+    });
+
     $(document).ready(function() {
         var recommended = $("#recommended");
         recommended.owlCarousel({
@@ -30,5 +56,4 @@
             recommended.trigger('owl.prev');
         })
     });
-    
 })(jQuery);
