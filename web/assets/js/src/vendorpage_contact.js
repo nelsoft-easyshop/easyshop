@@ -23,4 +23,22 @@
         }
     });
 
+    $(function()
+    {
+        initSectorUI();
+        $("#navigator a").click(function()
+        {
+            showSectorMini($(this).attr('href'));
+        });
+    });
+
+    var initSectorUI = function(){
+        if (location.hash) showSectorMini(location.hash);
+    };
+
+    var showSectorMini = function(sector){
+        if (sector === "#SendMessage") {
+            alert('Message sent.');
+        }
+    };
 })(jQuery);
