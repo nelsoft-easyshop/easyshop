@@ -13,7 +13,6 @@
             dataType: "json",
             data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
             success: function(result) {
-                console.log(result.isLoggedIn);
                 if(!result.isLoggedIn){
                     window.location.replace("/login");
                 }
