@@ -8,7 +8,7 @@
                     <div class="category-title-container">
                         <span class="pull-left">
                             <img src="/assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
-                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.PNG" class="img-category-mobile">
+                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
                         </span>
                         <p>
                             <span><?php echo html_escape(strtoupper($categorySection['category']->getName())); ?></span>
