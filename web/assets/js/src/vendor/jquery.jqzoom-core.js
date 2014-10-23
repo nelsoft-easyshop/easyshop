@@ -75,7 +75,7 @@
         //setting the default zoomType if not in settings
         var zoomtypes = ['standard', 'drag', 'innerzoom', 'reverse'];
         if ($.inArray($.trim(settings.zoomType), zoomtypes) < 0) {
-            settings.zoomType = 'standard';
+            settings.zoomType = 'innerzoom';
         }
         $.extend(obj, {
             create: function () { //create the main objects
@@ -400,18 +400,41 @@
                 /*** end here ****/
 
                 /**** start fixed height of large image window ****/
-                    var zoombigview= $('.zoomWindow');
+                   //  var zoombigview= $('.zoomWindow');
+                   //  var img= $('.zoomPad img');
+                   //  var zoomwindowpos= (400 - img.height() )/ 2;
+                   //  if(img.height() < 400)
+                   //  {
+                   //      zoombigview.css('top', -zoomwindowpos + 'px');
+                   //  }
+
+                   // if (img.height() == 400)
+                   //  {
+                   //      zoombigview.css('top', '0px');
+                   //  }
+                /**** start fixed height of large image window ****/
+                    var zoompadcon= $('.zoomPad');
+                    var zoomwindowscreen= $('.zoomWindow');
                     var img= $('.zoomPad img');
-                    var zoomwindowpos= (400 - img.height() )/ 2;
-                    if(img.height() < 400)
+                    var zoomwindowpos= (500 - img.height() )/ 2;
+                    var zoomwrappercon= $('.zoomWrapperImage');
+                    var zoompadimgheight= $('.zoomPad img').height();
+                    if(img.height() < 500)
                     {
-                        zoombigview.css('top', -zoomwindowpos + 'px');
+                        // zoomwindowscreen.css('top', zoomwindowpos + 'px');
+                        zoomwindowscreen.css('top', '0px');
+                        zoompadcon.css('height', zoompadimgheight);
                     }
 
-                   if (img.height() == 400)
+                    if (img.height() == 500)
                     {
-                        zoombigview.css('top', '0px');
+                        zoomwindowscreen.css('top', '-129px');
                     }
+
+                    
+
+                    $(zoomwrappercon).css('height', zoompadimgheight);
+
                 /*** end here ****/
                 
                 this.node.css({
@@ -583,7 +606,7 @@
                 this.node.css({
                     // 'left': this.node.leftpos + 'px',
                     // 'top': this.node.toppos + 'px',
-                     'left': '410px',
+                    // 'left': '410px',
                      
                 });
                 return this;
@@ -602,16 +625,18 @@
                     var thickness = (smallimage.bleft == 0) ? 1 : smallimage.bleft;
                     $('.zoomWrapper', this.node).css({
                         borderWidth: thickness + 'px'
-                    });    
+                    });
                 }
                 
                   $('.zoomWrapper', this.node).css({
                       width: Math.round(settings.zoomWidth) + 'px' ,
                       borderWidth: thickness + 'px'
                   });
+
                   $('.zoomWrapperImage', this.node).css({
                       width: '100%',
-                      height: Math.round(settings.zoomHeight) + 'px'
+                      // height: zoompadimgheight
+                      // height: Math.round(settings.zoomHeight) + 'px'
                   });
                   //zoom title
                  $('.zoomWrapperTitle', this.node).css({
@@ -737,11 +762,11 @@
     //es. $.jqzoom.disable('#jqzoom1');
     $.jqzoom = {
         defaults: {
-            zoomType: 'standard',
+            zoomType: 'innerzoom',
             //innerzoom/standard/reverse/drag
-            zoomWidth: 400,
+            zoomWidth: 445,
             //zoomWindow  default width
-            zoomHeight: 400,
+            zoomHeight: 500,
             //zoomWindow  default height
             xOffset: 10,
             //zoomWindow x offset, can be negative(more on the left) or positive(more on the right)
@@ -781,4 +806,16 @@
             jqzoompluging_disabled = false;
         }
     };
+
+    // function getImgSize(imgSrc) {
+    // var newImg = $('.zoomPad img');
+
+    // newImg.onload = function() {
+    //   var height = $(newImg.height);
+    //   var width = $(newImg.width);
+    //   alert ('The image size is '+width+'*'+height);
+    // }
+
+    // newImg.src = imgSrc; // this must be done AFTER setting onload
+    // }
 })(jQuery);
