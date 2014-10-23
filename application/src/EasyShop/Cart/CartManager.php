@@ -89,7 +89,7 @@ class CartManager
             $attrPrice = isset($explodedOption[1]) ? $explodedOption[1] : null;
             $attrName = $key;
             $productAttribute = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->getProductAttributeDetailByName($productId, $attrName, $attrValue,$attrPrice);
+                                         ->getProductAttributeDetailByName($productId, $attrName, $attrValue,$attrPrice);
 
             if(empty($productAttribute)){
                 return false;
@@ -103,7 +103,14 @@ class CartManager
         /**
          * Validate attributes in the cart with the attributes in the database
          */
-        $inventoryDetails = $this->productManager->getProductInventory($product, false, false, $product->getStartPromo());
+
+         
+        $isListingOnly = $this->productManager->isListingOnly($product);
+        if($isListingOnly){
+            return false;
+        }
+        
+        $inventoryDetails = $this->productManager->getProductInventory($product);
         $areAllAttributesMatched = false;
         $productItemId = null;
         
