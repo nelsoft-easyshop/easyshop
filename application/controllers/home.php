@@ -1148,8 +1148,11 @@ class Home extends MY_Controller
               'website' => $this->input->post('website')
             ]);
 
-            $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $this->input->post('streetAddress') !== '') 
-                                || ($this->input->post('regionSelect') === '' && $this->input->post('streetAddress') === ''));
+            // Do not allow whitespaces as streetAddress
+            $streetAddressTrimmed = trim($this->input->post('streetAddress'));
+
+            $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') 
+                                || ($this->input->post('regionSelect') === '' && $streetAddressTrimmed === ''));
 
             if($form->isValid() && $isAddressValid){
                 $formData = $form->getData();
