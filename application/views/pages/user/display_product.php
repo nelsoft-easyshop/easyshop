@@ -51,10 +51,11 @@
                         </p>
                         <div class="div-amount">
                             <p class="p-price">
-                                  <?php if($percentage && $percentage > 0):?><span><s class="discount-value"> P <?=$originalPrice?>  </s> </span> <span style="font-size: 12px;"> P <?=$productPrice;?></span>
-                                  <?php else:?>
-                                  <span> P <?=$productPrice;?></span>
-                                  <?php endif;?>
+                                <?php if($percentage && $percentage > 0):?>
+                                    <span><s class="discount-value"> P <?=$originalPrice?>  </s> </span> <span style="font-size: 12px;"> P <?=$productPrice;?></span>
+                                <?php else:?>
+                                    <span> P <?=$productPrice;?></span>
+                                <?php endif;?>
                             </p>
                             <center>
                                 <a class="btn btn-default-cart" target="_blank" href="/item/<?=$productSlug; ?>">
