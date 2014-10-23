@@ -9,6 +9,24 @@
                     <li><a href="#reviews" role="tab" data-toggle="tab">Reviews (1)</a></li>
                 </ul>
             </div>
+            <div class="div-detail-nav-mobile">
+                <table width="100%" class="table-nav-prod">
+                    <tbody>
+                        <tr>
+                            <td class="td-detail active" width="50%" id="tdDetails">
+                                <a href="#details" role="tab" data-toggle="tab" id="prodDetails">
+                                    <p class="p-detail-a">Product Detail</p>
+                                </a>
+                            </td>
+                            <td class="td-review" width="50%" id="tdReviews">
+                                <a href="#reviews" role="tab" data-toggle="tab" id="prodReviews">
+                                     <p class="p-detail-a">Reviews (1)</p>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="details">
                     <div class="div-detail-container ">
@@ -26,12 +44,13 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="div-review-item-container">
+                                        <!-- DISPLAY THIS ROW WHEN REVIEW IS ZERO
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <p class="p-no-review-note">This product has 0 reviews so far. Be the first to review it.</p>
                                             </div>
                                         </div>
-                                        <!--
+                                        -->
                                         <div class="row">
                                             <div class="col-xs-2 col-user-image" align="center">
                                                 <a href="#"><div class="div-user-image">
@@ -43,7 +62,7 @@
                                             </div>
                                             <div class="col-xs-10">
                                                 <div class="div-review-content-container">
-                                                    <p class="p-review-title">Subject title here 
+                                                    <p class="p-review-title">Subject title here
                                                         <span class="span-review-item-rate">
                                                             <span class="fa fa-star fa-star-active"></span>
                                                             <span class="fa fa-star fa-star-active"></span>
@@ -95,7 +114,7 @@
                                                     </div>
                                                     <div class="clear"></div>
                                                     <div class="row">
-                                                        <div class="col-md-12">  
+                                                        <div class="col-md-12">
                                                             <form class="form-horizontal" role="form">
                                                                 <div class="form-group">
                                                                     <label for="subject" class="col-xs-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
@@ -114,99 +133,95 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
                                                 <div class="clear"></div>
-                                                    <div class="div-review-item-container">
-                                                        <div class="row">
-                                                            <div class="col-xs-2 col-user-image no-padding" align="center">
-                                                                <a href="#"><div class="div-user-image">
-                                                                    <img src="/assets/images/img_main_product.png" class="img-user"/>
-                                                                </div></a>
+                                                <div class="div-review-item-container">
+                                                    <div class="row">
+                                                        <div class="col-xs-2 col-user-image no-padding" align="center">
+                                                            <a href="#"><div class="div-user-image">
+                                                                <img src="/assets/images/img_main_product.png" class="img-user"/>
+                                                            </div></a>
+                                                            <div class="clear"></div>
+                                                            <a href="#"><p class="p-username">UserName</p></a>
+                                                            <p class="p-date-review-replied-item">17-Oct-2014 11:30 AM</p>
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <div class="div-review-content-container">
+                                                                <p class="p-review-title">Subject title here
+                                                                    <span class="span-review-item-rate">
+                                                                        <span class="fa fa-star fa-star-active"></span>
+                                                                        <span class="fa fa-star fa-star-active"></span>
+                                                                        <span class="fa fa-star fa-star-active"></span>
+                                                                        <span class="fa fa-star fa-star-active"></span>
+                                                                        <span class="fa fa-star"></span>
+                                                                    </span>
+                                                                </p>
                                                                 <div class="clear"></div>
-                                                                <a href="#"><p class="p-username">UserName</p></a>
-                                                                <p class="p-date-review-replied-item">17-Oct-2014 11:30 AM</p>
+                                                                <p class="p-review-content">
+                                                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat 
+                                                                </p>
+                                                                <a class="p-reply-text-replied-item" >
+                                                                    <p class="pull-right">
+                                                                        <span class="text-cancel-replied-item">Cancel </span>Reply
+                                                                    </p>
+                                                                </a>
+                                                                <div class="clear"></div>
                                                             </div>
-                                                            <div class="col-xs-10">
-                                                                <div class="div-review-content-container">
-                                                                    <p class="p-review-title">Subject title here 
-                                                                        <span class="span-review-item-rate">
-                                                                            <span class="fa fa-star fa-star-active"></span>
-                                                                            <span class="fa fa-star fa-star-active"></span>
-                                                                            <span class="fa fa-star fa-star-active"></span>
-                                                                            <span class="fa fa-star fa-star-active"></span>
-                                                                            <span class="fa fa-star"></span>
-                                                                        </span>
-                                                                    </p>
-                                                                    <div class="clear"></div>
-                                                                    <p class="p-review-content">
-                                                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat 
-                                                                    </p>
-                                                                    <a class="p-reply-text-replied-item" >
-                                                                        <p class="pull-right">
-                                                                            <span class="text-cancel-replied-item">Cancel </span>Reply
-                                                                        </p>
-                                                                    </a>
-                                                                    <div class="clear"></div>
-                                                                </div>
-                                                                <div class="div-reply-container-replied-item">
-                                                                    <p class="p-reply-title">Write Reply</p>
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">  
-                                                                            <form class="form-horizontal" role="form">
-                                                                                <div class="form-group">
-                                                                                    <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
-                                                                                    <div class="col-xs-9">
-                                                                                        <input type="text" class="input-reply" id="subject" autocomplete="off">
-                                                                                    </div>
+                                                            <div class="div-reply-container-replied-item">
+                                                                <p class="p-reply-title">Write Reply</p>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <form class="form-horizontal" role="form">
+                                                                            <div class="form-group">
+                                                                                <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
+                                                                                <div class="col-xs-9">
+                                                                                    <input type="text" class="input-reply" id="subject" autocomplete="off">
                                                                                 </div>
-                                                                            </form>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <form class="form-horizontal" role="form">
-                                                                                <div class="form-group">
-                                                                                    <label for="subject" class="col-xs-3 control-label">Rating: </label>
-                                                                                    <div class="col-xs-9" style="vertical-align: middle;">
-                                                                                        <div class="span-star-container">
-                                                                                            <i class="fa fa-star fa-star-rate"></i>
-                                                                                            <i class="fa fa-star fa-star-rate"></i>
-                                                                                            <i class="fa fa-star fa-star-rate"></i>
-                                                                                            <i class="fa fa-star fa-star-rate"></i>
-                                                                                            <i class="fa fa-star fa-star-rate"></i>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
-                                                                    <div class="clear"></div>
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">  
-                                                                            <form class="form-horizontal" role="form">
-                                                                                <div class="form-group">
-                                                                                    <label for="subject" class="col-xs-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
-                                                                                    <div class="col-xs-10" style="margin-left: -10px;">
-                                                                                        <textarea class="input-textarea-replied-item" rows="7"></textarea>
+                                                                    <div class="col-md-6">
+                                                                        <form class="form-horizontal" role="form">
+                                                                            <div class="form-group">
+                                                                                <label for="subject" class="col-xs-3 control-label">Rating: </label>
+                                                                                <div class="col-xs-9" style="vertical-align: middle;">
+                                                                                    <div class="span-star-container">
+                                                                                        <i class="fa fa-star fa-star-rate"></i>
+                                                                                        <i class="fa fa-star fa-star-rate"></i>
+                                                                                        <i class="fa fa-star fa-star-rate"></i>
+                                                                                        <i class="fa fa-star fa-star-rate"></i>
+                                                                                        <i class="fa fa-star fa-star-rate"></i>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-md-12" align="center">
-                                                                            <button class="btn-reply">
-                                                                                Submit
-                                                                            </button>
-                                                                        </div>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
-                                                                    
+                                                                <div class="clear"></div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <form class="form-horizontal" role="form">
+                                                                            <div class="form-group">
+                                                                                <label for="subject" class="col-xs-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
+                                                                                <div class="col-xs-10" style="margin-left: -10px;">
+                                                                                    <textarea class="input-textarea-replied-item" rows="7"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12" align="center">
+                                                                        <button class="btn-reply">
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                               
+                                                </div>
                                             </div>
                                         </div>
-                                        -->
                                     </div>
                                 </div>
                                 <div class="col-md-2">
