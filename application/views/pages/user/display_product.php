@@ -27,8 +27,9 @@
                                         <div class="span-img-container">
                                         </div>
                                     </center>
-                                </span>
-                            </div>
+                                
+                            </span>
+                        </div>
                         </a>
                         <div class="div-item-info">
                             <p class="p-item-name">
@@ -41,13 +42,18 @@
                             </p>
                             <div class="div-amount">
                                 <p class="p-price">
-                                    <span><s>  <?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s></span> P <?=$productPrice;?>
+                                    <?php if($percentage && $percentage > 0):?>
+                                        <span><s class="discount-value"> P <?=$originalPrice?>  </s> </span> <span style="font-size: 12px;"> P <?=$productPrice;?></span>
+                                    <?php else:?>
+                                        <span> P <?=$productPrice;?></span>
+                                    <?php endif;?>
                                 </p>
                                 <center>
                                     <a class="btn btn-default-cart" target="_blank" href="/item/<?=$productSlug; ?>">
                                         <span class="fa fa-shopping-cart"></span> BUY NOW
                                     </a>
                                 </center>
+
                             </div>
                         </div>
                     </div>

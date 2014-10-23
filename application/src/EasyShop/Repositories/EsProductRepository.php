@@ -377,7 +377,7 @@ class EsProductRepository extends EntityRepository
              * es_product_item_attr (which happens with the default qty), we query using the non-verbose
              * version to get the default quantity result set.
              */
-            if(count($data) === 0){
+            if(count($result) === 0){
                 $result = $defaultQuery->getResult();
             }
         }

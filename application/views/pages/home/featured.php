@@ -43,9 +43,9 @@
                                 <table width="100%">
                                 <tr>
                                     <td>
-                                        <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$product['product']->getSlug()?>">
+                                        <a class="btn btn-default-1 btn-add-cart" href="javascript:void(0);" data-slug="<?php echo $product['product']->getSlug(); ?>" data-productid="<?php echo $product['product']->getIdProduct(); ?>>
                                             <span class="icon-cart"></span> ADD TO CART
-                                        </a>
+                                        </a>     
                                     </td>
                                     <td class="td-logo-store">
                                         <span class="pull-right">
