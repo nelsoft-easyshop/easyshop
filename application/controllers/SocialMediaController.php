@@ -277,5 +277,3 @@ class SocialMediaController extends MY_Controller
         return $result;
     }
 }
-
-#landing page for update user's username
