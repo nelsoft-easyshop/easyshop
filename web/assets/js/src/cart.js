@@ -81,9 +81,9 @@ function changeQuantity(inputField)
                 $(inputField).val(data.qty);
             }
             $(inputField).attr("max-quantity", data.maxqty);
+            checkTotal();
         }
     });
-    checkTotal();
 }
 
 
