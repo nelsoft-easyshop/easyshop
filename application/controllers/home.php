@@ -302,7 +302,7 @@ class Home extends MY_Controller
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $headerData = $this->fill_header();
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
-                
+
                 if ($bannerData['hasNoItems']){
                     redirect($vendorSlug.'/about');
                 }
@@ -311,7 +311,7 @@ class Home extends MY_Controller
                 $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
                 
                 // If searching in  page
-                if($this->input->get() && count($userProduct) > 0){
+                if($this->input->get() && !$bannerData['hasNoItems']){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
@@ -338,8 +338,9 @@ class Home extends MY_Controller
 
                     $view = array(
                         'arrCat' => array(
-                            'products' => $searchProduct,
-                            'page' => 1
+                            'products'=>$searchProduct,
+                            'page' => 1,
+                            'pagination' => $productView['defaultCatProd'][0]['pagination'],
                         )
                     );
                     $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
@@ -499,8 +500,16 @@ class Home extends MY_Controller
         $followerData['followers'] = $followers['followers'];
         $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
         $followerData['viewerId'] = $viewerId; 
-        $followerData['page'] = $pageOffset; 
+        $followerData['page'] = $pageOffset;
 
+
+        $paginationData = array(
+            'lastPage' => ceil($followers['count']/$this->followerPerPage)
+            , 'isHyperLink' => false
+            , 'currentPage' => $pageOffset + 1
+        );
+
+        $followerData['pagination'] = $this->load->view('pagination/default', $paginationData, true);
         $response['html'] = $this->load->view('pages/user/followers_content', $followerData, true);
 
         echo json_encode($response);
@@ -575,7 +584,8 @@ class Home extends MY_Controller
             $view = array(
                 'arrCat' => array(
                     'products'=>$result['products'],
-                    'page' => 1
+                    'page' => 1,
+                    'pagination' => $parentCat[$idCat]['pagination'],
                 )
             );
 

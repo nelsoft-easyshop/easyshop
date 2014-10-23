@@ -6,8 +6,12 @@
             <div class="col-md-12">
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
+                        <span class="pull-left">
+                            <img src="/assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
+                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
+                        </span>
                         <p>
-                            <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
+                            <span><?php echo html_escape(strtoupper($categorySection['category']->getName())); ?></span>
                             <span class="pull-right sn-container">
                                 <span>
                                     <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-left fa-category-item-prev"></i></a>

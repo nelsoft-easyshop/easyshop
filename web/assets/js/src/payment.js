@@ -339,6 +339,11 @@ $(document).ready(function(){
 // -- END OF PESO PAY CC PROCESS PAYMENT SECTION -- // 
 
 // -- CHANGE ADDRESS SECTION -- // 
+ 
+    $(document).on('click','.show-form-address',function () {
+        $("#delAddressFrm")[0].reset();
+        $('.stateregionselect').trigger('change');
+    });
 
     $(document).on('click','.link_address',function () {
         $('.div_change_addree').modal({
