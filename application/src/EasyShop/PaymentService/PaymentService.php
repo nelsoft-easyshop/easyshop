@@ -20,7 +20,6 @@ use EasyShop\Entities\EsOrderProductAttr;
 use EasyShop\Entities\EsOrderProductHistory;
 use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsPoint;
-use \DateTime;
 
 /**
  * Payment Service Class
@@ -310,13 +309,14 @@ class PaymentService
 
             $orderStatusObj = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
                                             ->findOneBy(['orderStatus' => $orderStatus]); 
-    
+        
+            
             $order = new EsOrder();
             $order->setInvoiceNo($invoiceNo);
             $order->setBuyer($buyer);
             $order->setTotal($totalAmount);
-            $order->setDateadded(new DateTime("now"));
-            $order->setDatemodified(new DateTime("now"));
+            $order->setDateadded(date_create(date("Y-m-d H:i:s")));
+            $order->setDatemodified(date_create(date("Y-m-d H:i:s")));
             $order->setIp($ip);
             $order->setShippingAddressId($addrId);
             $order->setPaymentMethod($paymentMethod);
@@ -328,6 +328,7 @@ class PaymentService
             $this->em->persist($order);
             $this->em->flush();
             
+
             $response['o_message'] = $this->error['EsOrderHistory-failed-insert']['code'];
             $orderHistory = new EsOrderHistory();
             $orderHistory->setOrder($order);
@@ -336,6 +337,7 @@ class PaymentService
             $orderHistory->setOrderStatus($orderStatusObj);
             $this->em->persist($orderHistory);
             $this->em->flush();
+
 
             $response['o_message'] = $this->error['EsOrder-failed-update']['code'];
             $order->setInvoiceNo($order->getIdOrder().'-'.$invoiceNo);
@@ -368,6 +370,8 @@ class PaymentService
                     $orderBillingInfo->setBankName($bankInfo->getBankName());
                     $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
                     $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
+                    $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
+                    $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
                     $this->em->persist($orderBillingInfo);
                     $this->em->flush();                    
                 }
@@ -420,6 +424,7 @@ class PaymentService
                     }
                 }
 
+                
                 $response['o_message'] = $this->error['EsOrderProductHistory-failed-insert']['code'];
                 $orderProductHistory = new EsOrderProductHistory();
                 $orderProductHistory->setOrderProduct($orderProduct);
@@ -432,6 +437,7 @@ class PaymentService
             $response['o_success'] = true;
             
             $this->em->getConnection()->commit();
+
 
             $response['v_order_id'] = $order->getIdOrder();
             $response['invoice_no'] = $order->getInvoiceNo();
