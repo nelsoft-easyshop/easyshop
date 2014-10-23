@@ -1737,6 +1737,7 @@ class Payment extends MY_Controller{
 
         extract($response);
         $this->generateFlash($txnid,$message,$status);
+
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 
