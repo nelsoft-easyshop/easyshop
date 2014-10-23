@@ -70,7 +70,7 @@ class Cart extends MY_Controller
     public function doAddItem()
     {
         $productId = $this->input->post('productId');
-        if($this->input->post('express') || true){
+        if($this->input->post('express')){
             $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
             $options = array();
             foreach($defaultAttributes as $attribute){
