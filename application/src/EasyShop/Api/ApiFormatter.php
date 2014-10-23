@@ -335,7 +335,7 @@ class ApiFormatter
 
     public function updateCart($mobileCartContents,$memberId)
     {
-		$this->cartImplementation->destroy();
+        $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
 
             $options = array();
