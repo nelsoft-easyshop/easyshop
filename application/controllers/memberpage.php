@@ -32,11 +32,17 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        
+        $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
     }
-    
+
+    public function sample()
+    {
+        $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
+        echo '<img src="/'.$this->qrManager->getImagePath('asd').'"/>';
+    }
+
     /**
      *  Class Index. Renders Memberpage
      */
