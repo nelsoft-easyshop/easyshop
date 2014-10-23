@@ -43,9 +43,10 @@ class Cart extends MY_Controller
             $data['cart_items'] = $cartContents;
             $cartSize = $this->cartImplementation->getSize(TRUE);
             $data['total'] = $cartSize ? $this->cartImplementation->getTotalPrice() : 0;
-            $loginURL = base_url() . 'login';
-            $continueUrl = $this->input->server('HTTP_REFERER');
-            if ($this->input->server('HTTP_REFERER') === $loginURL) {
+            
+            $referer =  $this->serviceContainer['http_request']->headers->get('referer');
+            $continueUrl = $referer;
+            if(strpos($referer, '/item/') === false){
                 $continueUrl = '/product/categories_all';
             }
             $data['continue_url'] = $continueUrl;
