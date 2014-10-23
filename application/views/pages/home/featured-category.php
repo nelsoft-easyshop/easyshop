@@ -74,7 +74,7 @@
                                         <table width="100%">
                                         <tr>
                                             <td>
-                                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?php echo $product->getSlug() ?>">
+                                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="javascript:void(0);" data-slug="<?php echo $product->getSlug(); ?>" data-productid="<?php echo $product->getIdProduct(); ?>">
                                                     <span class="icon-cart"></span> ADD TO CART
                                                 </a>
                                             </td>
