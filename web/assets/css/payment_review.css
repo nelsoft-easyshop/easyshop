@@ -49,6 +49,21 @@
     font-size: 12px;
 }
 
+.ui-dialog{
+    font-family: 'Roboto', Arial !important;
+}
+
+.btn-default-3{
+    background: #f48000;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-default-3:hover{
+    background: #ff4400;
+    color: #ffffff;
+}
+
  /* Overlay */
 #simplemodal-overlay {
     background-color:#bcbcbc;
