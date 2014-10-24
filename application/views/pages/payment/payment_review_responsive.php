@@ -254,13 +254,10 @@
                             
                            <img src="<?php echo base_url()?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto; margin-bottom: 15px;">
                            <br><br><br>
-                            
 
-                            <!--
                             <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                           
                             <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
-                            -->
                             
                             
                             <br>
