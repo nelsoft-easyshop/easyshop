@@ -92,7 +92,7 @@ class EsProductShippingDetailRepository extends EntityRepository
      * @param integer $majorIslandId
      * @return mixed
      */
-    public function getShippingDetails($productId ,$productItemId, $cityId, $regionId, $majorIslandId)
+    public function getShippingDetailsByLocation($productId ,$productItemId, $cityId, $regionId, $majorIslandId)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 

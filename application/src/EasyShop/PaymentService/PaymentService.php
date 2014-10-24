@@ -481,7 +481,7 @@ class PaymentService
             $productItem =  $value['product_itemID'];
             
             $details = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                            ->getShippingDetails($productId,$productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+                            ->getShippingDetailsByLocation($productId,$productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
 
             $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
             
