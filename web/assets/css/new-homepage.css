@@ -236,6 +236,7 @@ header {
 .header-seller-name {
     display: inline-block;
     height: 35px;
+    line-height: 33px;
     max-width: 125px;
     overflow: hidden;
     text-align: left;
