@@ -2830,13 +2830,15 @@ font-size: 15px;
 .div-rec-product-image{
     width: 100% !important;
     height: 228px;
+    position: static;
+    display: table-cell;
     vertical-align: middle;
     text-align: center;
     background: #fff;
 }
 
 .span-me{
-    width: inherit !important;
+    width: 100% !important;
     max-width: 100% !important;
     height: 228px;
     max-height: 228px;
@@ -2846,6 +2848,7 @@ font-size: 15px;
 }
 
 .img-rec-product{
+    width: inherit;
     max-width: 100%;
     height: auto;
     max-height: 228px !important;
