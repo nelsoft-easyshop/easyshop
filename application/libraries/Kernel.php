@@ -390,6 +390,15 @@ class Kernel
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
+        $awsConfig = require_once(APPPATH . "config/param/aws.php");
+
+        $container["s3client"] = function($c) use ($awsConfig){
+            return \Aws\S3\S3Client::factory(array( 'key' => $awsConfig['s3']['key'],
+                                                    'secret' => $awsConfig['s3']['secret']
+                                            ));
+        };
+                                
+        
         /* Register services END */
         $this->serviceContainer = $container;
     }
