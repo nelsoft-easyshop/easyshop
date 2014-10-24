@@ -335,7 +335,7 @@ function resetCoords(){
             });    
         }
         else{
-            $.removeCookie('es_vendor_subscribe');
+            $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
             window.location.href = config.base_url + 'login';
         }
@@ -352,7 +352,8 @@ function resetCoords(){
         if( typeof vendorLink !== "undefined" && logInStatus === "true" && subscribeStatus === "unfollowed"){
             $('#follow_btn').trigger('click');
             alert("You are now following " + vendorName + "'s store!");
-            $.removeCookie('es_vendor_subscribe');
+            
+            $.removeCookie('es_vendor_subscribe', {path: '/'});
         }
     });
 

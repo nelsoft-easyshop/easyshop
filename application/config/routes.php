@@ -110,6 +110,8 @@ else {
     $route['(?i)me'] = 'memberpage'; # janz
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
+    $route['(?i)exportbuytransactions'] = 'memberpage/exportBuyTransactions'; # inon baguio
+    $route['(?i)exportsoldtransactions'] = 'memberpage/exportSellTransactions'; # inon baguio    
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
@@ -148,6 +150,7 @@ else {
     #PROMO PAGE
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';

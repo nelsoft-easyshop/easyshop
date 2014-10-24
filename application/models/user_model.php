@@ -234,10 +234,10 @@ class user_model extends CI_Model {
         
         foreach($row as $k=>$r){
             if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
-                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
+                $row[$k]['imgurl'] = "assets/user/default/60x60.png?ver=".date("Ymdhis");
             }
             else{
-                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
+                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png?ver=".date("Ymdhis");
             }
         }
         

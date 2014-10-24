@@ -106,6 +106,7 @@ class ValidationRules
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
+                                new CustomAssert\IsMobileUnique(),
                     ), 
                     'street_address' => array(
                                 new CustomAssert\IsValidAddressOptional(),

@@ -215,7 +215,7 @@
     </div>
     <div class="display-when-desktop pull-right">
         <div class="may_cart_payment">
-            <a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url() . 'product/categories_all'; ?>"
+            <a href="<?=$continue_url?>"
                class="continue">Continue Shopping</a>
             <?php if (!count($cart_items) <= 0) { ?>
                 <a class="btn payment" id="proceed_payment_desktop" onclick="proceedPayment(this)" child="single1_checkAll_desktop">Proceed to Payment<span></span></a>

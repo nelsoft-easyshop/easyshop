@@ -210,8 +210,7 @@ function htmlDecode(value) {
         $('#imgupload').click();
     });
 
-
-    $("#imgupload").on("change", function(){
+    $(document).on('change','#imgupload',function(){ 
         var oldIE;
         var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0; 
         formAction = (imageUploadType == "avatar") ? "upload_img" : "banner_upload";
@@ -309,6 +308,7 @@ function htmlDecode(value) {
             },
             onClose: function(){
                 $('#user_image_prev').attr('src', '');
+                $("#imgupload").replaceWith($("#imgupload").clone(true))
                 resetCoords();
                 jcrop_api.destroy();
                 $('#div_user_image_prev span').after('<img src="" id="user_image_prev">');
@@ -370,7 +370,7 @@ function htmlDecode(value) {
             });
         }
         else{
-            $.removeCookie('es_vendor_subscribe');
+            $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
             window.location.href = config.base_url + 'login';
         }
@@ -386,7 +386,7 @@ function htmlDecode(value) {
         if( typeof vendorLink !== "undefined" && logInStatus && subscribeStatus === "unfollowed"){
             $('#follow_btn').trigger('click');
             alert("You are now following " + vendorName + "'s store!");
-            $.removeCookie('es_vendor_subscribe');
+            $.removeCookie('es_vendor_subscribe',{path: '/'});
         }
     });
 

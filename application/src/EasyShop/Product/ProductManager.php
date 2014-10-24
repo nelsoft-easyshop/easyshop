@@ -602,7 +602,7 @@ class ProductManager
     /**
      * Generates slugs 
      * @param string $title
-     * @return STRING
+     * @return string
      */ 
     public function generateSlug($title)   
     {
@@ -626,5 +626,77 @@ class ProductManager
         }
         return $slugGenerate;
     }
+    
+    /**
+     * Gets a default attribute for a particular product
+     * The first available attribute combination will be used
+     *
+     * @param int $productId
+     * @return mixed
+     */
+    public function getProductDefaultAttribute($productId)
+    {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+        $defaultAttributes = array();                    
+        if($product){
+            $inventoryDetails = $this->getProductInventory($product);
+            $defaultInventory = array();
+            foreach($inventoryDetails as $inventory){
+                if($inventory['quantity'] > 0){
+                    $defaultInventory = $inventory;
+                    break;
+                }
+            }
+
+            $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                   ->getProductAttributeDetailByName($productId);
+            /**
+             *  If the default quantity has been set
+             */
+            if( intval($defaultInventory['product_attribute_ids'][0]['id']) === 0 &&
+                intval($defaultInventory['product_attribute_ids'][0]['is_other']) === 0)
+            {
+                foreach($attributes as $attributeIndex => $attribute){
+                    if(!array_key_exists($attribute['attr_name'],$defaultAttributes)){
+                        $defaultAttributes[$attribute['attr_name']] = $attribute;
+                    }
+                }
+            }
+            else{
+                foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
+                    foreach($attributes as $attributeIndex => $attribute){
+                        if(intval($productAttributeId['id']) === intval($attribute['attr_id']) &&
+                        intval($productAttributeId['is_other']) === intval($attribute['is_other'])){
+                            array_push($defaultAttributes, $attribute);
+                            unset($attributes[$attributeIndex]);
+                        } 
+                    }
+                }
+            }
+           
+        }
+        return $defaultAttributes;
+    }
+    
+    /**
+     * Determines if a product is posted as a listing only
+     *
+     * @param EasyShop\Entities\EsProduct $product
+     * @return bool
+     */
+    public function isListingOnly($product)
+    {
+        $isListingOnly = false;
+        if($product->getIsMeetUp()){
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                ->getShippingDetailsByProductId($product->getIdProduct());
+            if(count($shippingDetails) === 0){
+                $isListingOnly = true;
+            }
+        }
+        return $isListingOnly;
+    }
+    
 }
 

@@ -20,7 +20,6 @@ use EasyShop\Entities\EsOrderProductAttr;
 use EasyShop\Entities\EsOrderProductHistory;
 use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsPoint;
-use \DateTime;
 
 /**
  * Payment Service Class
@@ -310,13 +309,14 @@ class PaymentService
 
             $orderStatusObj = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
                                             ->findOneBy(['orderStatus' => $orderStatus]); 
-    
+        
+            
             $order = new EsOrder();
             $order->setInvoiceNo($invoiceNo);
             $order->setBuyer($buyer);
             $order->setTotal($totalAmount);
-            $order->setDateadded(new DateTime("now"));
-            $order->setDatemodified(new DateTime("now"));
+            $order->setDateadded(date_create(date("Y-m-d H:i:s")));
+            $order->setDatemodified(date_create(date("Y-m-d H:i:s")));
             $order->setIp($ip);
             $order->setShippingAddressId($addrId);
             $order->setPaymentMethod($paymentMethod);
@@ -328,6 +328,7 @@ class PaymentService
             $this->em->persist($order);
             $this->em->flush();
             
+
             $response['o_message'] = $this->error['EsOrderHistory-failed-insert']['code'];
             $orderHistory = new EsOrderHistory();
             $orderHistory->setOrder($order);
@@ -336,6 +337,7 @@ class PaymentService
             $orderHistory->setOrderStatus($orderStatusObj);
             $this->em->persist($orderHistory);
             $this->em->flush();
+
 
             $response['o_message'] = $this->error['EsOrder-failed-update']['code'];
             $order->setInvoiceNo($order->getIdOrder().'-'.$invoiceNo);
@@ -368,6 +370,8 @@ class PaymentService
                     $orderBillingInfo->setBankName($bankInfo->getBankName());
                     $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
                     $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
+                    $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
+                    $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
                     $this->em->persist($orderBillingInfo);
                     $this->em->flush();                    
                 }
@@ -420,6 +424,7 @@ class PaymentService
                     }
                 }
 
+                
                 $response['o_message'] = $this->error['EsOrderProductHistory-failed-insert']['code'];
                 $orderProductHistory = new EsOrderProductHistory();
                 $orderProductHistory->setOrderProduct($orderProduct);
@@ -432,6 +437,7 @@ class PaymentService
             $response['o_success'] = true;
             
             $this->em->getConnection()->commit();
+
 
             $response['v_order_id'] = $order->getIdOrder();
             $response['invoice_no'] = $order->getInvoiceNo();
@@ -448,19 +454,15 @@ class PaymentService
      * Computes Shipping Fee and Reorganizes Data (processData)
      * 
      * @param mixed $itemList List of items to compute shipping fee
-     * @param string $address Used for shipping fee calcl
+     * @param int $address Used for shipping fee calculation
      *
      * @return mixed
      */
     public function computeFeeAndParseData($itemList, $address)
     {
         $city = ($address > 0 ? $address :  0);
-        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getParentLocation($city);
-        $region = $cityDetails->getParent();
-        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getParentLocation($region);
-        $majorIsland = $cityDetails->getParent();
+        $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
+        $majorIsland = $region->getParent();
 
         $grandTotal = 0;
         $productstring = "";
@@ -478,10 +480,10 @@ class PaymentService
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
             
-            /* TO BE IMPLEMENTED*/
-            //$details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            //$shipping_amt = $details[0]['price'];
-            $shipping_amt = 0.00;
+            $details = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                            ->getShippingDetailsByLocation($productId,$productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+
+            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
             
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $totalAdditionalFee += $otherFee;
@@ -634,6 +636,30 @@ class PaymentService
     public function getPointGateway()
     {
         return $this->pointGateway;
+    }
+
+    /**
+     * Get payment method type per user
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function getUserPaymentMethod($memberId)
+    {
+        $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethodUser')
+                                            ->findBy(['member'=>$memberId]);
+        
+        $paymentArray = [];
+        $paymentArray['all'] = false;
+        if($paymentMethod){
+            foreach ($paymentMethod as $key => $value) {
+                $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
+            }
+        }
+        else{
+            $paymentArray['all'] = true;
+        }
+
+        return $paymentArray;
     }
 
 }

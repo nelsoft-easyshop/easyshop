@@ -1,0 +1,227 @@
+
+.td-vendor-img{
+    width: 75px;
+    padding-top: 20px;
+}
+
+.vendor-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.td-vendor-details{
+    vertical-align: top;
+    padding-left: 15px;
+    padding-top: 20px;
+}
+
+.p-vendor-name{
+    font-weight: bold;
+    color: #565656;
+    margin: 0px;
+    display: block;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease !important;
+}
+
+.td-vendor-details > a, .p-vendor-name:hover{
+    color: #ff893b;
+    text-decoration: none !important;
+}
+
+.follow-btn{
+    width: 133px;
+    font-weight: bold;
+    display: block;
+}
+
+.follow-btn > span{
+    margin-right: 5px;
+}
+
+.p-vendor-location{
+    font-size: 12px;
+    display: block;
+    margin:0px;
+    margin-top: -5px;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#follower-container{
+    min-height: 675px;
+}
+
+.no-follower-btn{
+    margin-top: 5px;
+}
+
+.panel-no-followers{
+    width: 100%;
+    margin-left: 15px;
+    background: #fff;
+    padding: 30px 30px;
+    border-radius: 5px;
+    min-height: 683px;
+}
+
+.followers-container{
+    margin-left: 15px;
+    border-left: solid #cccbc7 1px;
+    padding-left: 10px;
+    padding-top: 10px;
+    min-height: 500px !important;
+}
+
+.div-follower-container-inner{
+    min-height: 690px;
+}
+
+.col-follower{
+    padding-right: 0px !important;
+    margin-bottom: 15px;
+}
+
+.follower-div{
+    width: 100%;
+    min-height: 228px;
+    background: #fff;
+    border-radius: 7px;
+    transition: all 0.3s ease;
+}
+
+.follower-div:hover{
+    -webkit-box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
+    -moz-box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
+    box-shadow: 0px 3px 13px 0px rgba(134,134,134,1);
+}
+
+.div-img-cover{
+    height: 100px;
+    width: 100%;
+    border-radius: 7px 7px 0px 0px;
+    padding: 11px 10px;
+    background-size:100%;
+    background: #fff;
+}
+
+.div-follower-details{
+    padding: 10px;
+}
+
+.p-follower-name{
+    font-size: 18px;
+    font-weight: bold;
+    color: #565656;
+    margin: 0px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.p-follower-name:hover, .col-xs-7 > a:hover{
+    color: #ff893b;
+    text-decoration: none !important;
+}
+
+.p-follower-location{
+    font-size: 12px;
+    display: block;
+    margin:0px;
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-follow-button{
+    min-height: 40px;
+    margin-top: 5px;
+}
+
+.p-follower-description{
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 10px;
+    font-weight: 900;
+    word-break: break-all;
+}
+
+.vendor-follower-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    z-index: 3;
+    position: absolute;
+    background: #ffffff;
+}
+
+.img-follower-cover{
+    width: 411px;
+    height: 102px;
+    position: absolute;
+    left: 15px;
+    border-radius: 7px 7px 0px 0px;
+    top: 0;
+    z-index: 1;
+}
+
+.cover-overlay{
+    width: 411px;
+    height: 102px;
+    position: absolute;
+    left: 15px;
+    border-radius: 7px 7px 0px 0px;
+    top: 0;
+    background: #000;
+    opacity: 0.4;
+    z-index: 2;
+    transition: all 0.3s ease; 
+}
+
+.cover-overlay:hover{
+    opacity: 0 !important;
+}
+
+.btn-default-following{
+    border: 2px solid #868686;
+    background-color: #868686;
+    color: #fff;
+}
+
+.btn-default-following:hover{
+    border: 2px solid #4c4c4c;
+    background-color: #4c4c4c;
+    color: #fff;
+    width: 133px;
+    font-weight: bold;
+    display: block;
+}
+
+.btn-default-following > i{
+    margin-right: 5px;
+}
+
+.unfollow-user{
+    display: none;
+}
+
+.unfollow-user:hover{ 
+    border: 2px solid #FF3D1F;
+    background-color: #FF3D1F;
+}
+
+.pagination-followers > li > a{
+    color: #575759;
+}
+
+.pagination-followers > li.active > a{
+    background: #ff893b !important;
+    border-color: #ff893b !important;
+}
