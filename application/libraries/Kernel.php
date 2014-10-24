@@ -275,7 +275,11 @@ class Kernel
         };
         $container['string_utility'] = function ($c) {
             return new \EasyShop\Utility\StringUtility();
-         };
+        };
+        $container['hash_utility'] = function($c) {
+            $encrypt = '';
+            return new \EasyShop\HashUtilityManager\HashUtility($encrypt);
+        };
         $socialMediaConfig = require APPPATH . 'config/oauth.php';
         $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
             $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
