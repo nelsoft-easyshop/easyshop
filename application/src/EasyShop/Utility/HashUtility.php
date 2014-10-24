@@ -1,8 +1,13 @@
 <?php
-namespace EasyShop\HashUtilityManager;
+namespace EasyShop\Utility;
 
 class HashUtility
 {
+    private $encrypt;
+
+    /**
+     * @param $encrypt
+     */
     public function __contruct($encrypt)
     {
         $this->encrypt = $encrypt;

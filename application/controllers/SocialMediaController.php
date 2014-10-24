@@ -177,6 +177,12 @@ class SocialMediaController extends MY_Controller
         $enc = str_replace(" ", "+", $hash);
         $decrypted = $this->encrypt->decode($enc);
         $getdata = explode('~', $decrypted);
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getdata2 = $hashUtility->decode($this->input->get('h'));
+        print "<pre>";
+        print_r($getdata2);
+        print "</pre>";
+
         if (intval($getdata[0]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
