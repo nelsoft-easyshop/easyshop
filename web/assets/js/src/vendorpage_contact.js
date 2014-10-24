@@ -33,7 +33,9 @@
     });
 
     var initSectorUI = function(){
-        if (location.hash) showSectorMini(location.hash);
+        if (location.hash) {
+            showSectorMini(location.hash);
+        }
     };
 
     var showSectorMini = function(sector){
