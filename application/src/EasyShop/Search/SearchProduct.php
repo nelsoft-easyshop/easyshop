@@ -312,6 +312,7 @@ class SearchProduct
         // assign each image and image path of the product
         foreach ($collection as $key => $value) {
             $productId = $value->getIdProduct();
+            $value = $productManager->getProductDetails($productId); 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($productId);
             $value->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
