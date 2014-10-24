@@ -59,7 +59,6 @@ class Memberpage extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
@@ -250,6 +249,112 @@ class Memberpage extends MY_Controller
     }
 
     /**
+     *  Export Sold transactions to CSV file
+     */
+    public function exportSellTransactions()
+    {       
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+
+        foreach($soldTransaction["transactions"] as $key => $value) {
+            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
+            if(count($attr) > 0) {
+                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+            }
+        }  
+
+        $prodSpecs = "";
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=soldtransactions.csv');
+        $output = fopen('php://output', 'w');
+        fputcsv($output, array(' Transaction Number '
+                                , 'Product Name'
+                                , 'Date of Transaction'
+                                ,'Sellers Name'
+                                ,'Order Quantity'
+                                ,'Payment Method'
+                                ,'Price'
+                                ,'Product Specifications'));    
+
+        foreach($soldTransaction["transactions"] as $value) {
+            if(isset($value["0"])) {
+                foreach($value["0"]["attributes"] as $key => $attr) {
+                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+                }
+            }
+            else {
+                $prodSpecs = "N/A";
+            }
+            fputcsv($output, array( $value["invoiceNo"]
+                                    , $value["productname"]
+                                    , $value["dateadded"]->format('Y-m-d H:i:s')
+                                    , $value["fullname"]
+                                    , $value["orderQuantity"]
+                                    , ucwords(strtolower($value["paymentMethod"]))
+                                    , number_format((float)$value["totalOrderProduct"], 2, '.', '')
+                                    , $prodSpecs
+            ));
+            $prodSpecs = "";
+        }
+    }
+
+    /**
+     *  Export Buy transactions to CSV file
+     */
+    public function exportBuyTransactions()
+    {       
+        $this->em = $this->serviceContainer['entity_manager'];
+        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        
+        foreach($boughTransactions["transactions"] as $key => $value) {
+            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
+            if(count($attr) > 0) {
+                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
+            }
+        }      
+
+        $prodSpecs = "";
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=boughttransactions.csv');
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, array(' Transaction Number '
+                                , 'Product Name'
+                                , 'Date of Transaction'
+                                ,'Buyers Name'
+                                ,'Order Quantity'
+                                ,'Payment Method'
+                                ,'Price'
+                                ,'Product Specifications'));    
+
+        foreach($boughTransactions["transactions"] as $value) {
+            if(isset($value["0"])) {
+                foreach($value["0"]["attributes"] as $key => $attr) {
+                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+                }
+            }
+            else {
+                $prodSpecs = "N/A";
+            }
+
+            fputcsv($output, array( $value["invoiceNo"]
+                                    , $value["productname"]
+                                    , $value["dateadded"]->format('Y-m-d H:i:s')
+                                    , $value["fullname"]
+                                    , $value["orderQuantity"]
+                                    , ucwords(strtolower($value["paymentMethod"]))
+                                    , number_format((float)$value["total"], 2, '.', '')
+                                    , $prodSpecs
+            ));
+            $prodSpecs = "";
+        }
+    }
+
+    /**
      * Returns bought on-going transactions of the user
      *  @return VIEW
      */
@@ -263,7 +368,7 @@ class Memberpage extends MY_Controller
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
         }        
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
@@ -556,7 +661,7 @@ class Memberpage extends MY_Controller
             // Check if transaction exists based on post details
             // current user is buyer
             if($data['feedb_kind'] == 0){
-                $transacData = array(					
+                $transacData = array(                   
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
@@ -564,7 +669,7 @@ class Memberpage extends MY_Controller
             // current user is seller
             }
             else if($data['feedb_kind'] == 1){
-                $transacData = array(					
+                $transacData = array(                   
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
                     'order_id' => $data['order_id']
@@ -769,6 +874,9 @@ class Memberpage extends MY_Controller
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
         
+        $em = $this->serviceContainer['entity_manager'];
+        $emailService = $this->serviceContainer['email_notification'];
+
         if( $this->form_validation->run('addShippingComment') ){
             $postData = array(
                 'comment' => $this->input->post('comment'),
@@ -781,12 +889,60 @@ class Memberpage extends MY_Controller
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
 
-            $result = $this->payment_model->checkOrderProductBasic($postData);
-            
-            if( count($result) == 1 ){ // insert comment
-                $r = $this->payment_model->addShippingComment($postData);
-                $serverResponse['result'] = $r ? 'success' : 'fail';
-                $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
+            $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
+            $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
+            $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
+                                      ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                                 "seller" => $memberEntity,
+                                                 "order" => $orderEntity
+                                        ]);
+            $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                        ->findOneBy(["orderProduct" => $orderProductEntity,
+                                                    "member" => $memberEntity
+                                                    ]);
+
+            if( count($shippingCommentEntity) === 1 ){
+                $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                           ->getExactShippingComment($postData);
+            }
+
+            // If order product entry exists, insert/update comment
+            if( count($orderProductEntity) === 1 ){
+                $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
+                $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
+                $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
+
+                // If no previous entry of exact shipping detail && successful insert in database,
+                // queue email notification
+                if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
+                    $buyerEntity = $orderEntity->getBuyer();
+                    $buyerEmail = $buyerEntity->getEmail();
+                    $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
+                    $imageArray = array(
+                        "/assets/images/landingpage/templates/header-img.png",
+                        "/assets/images/landingpage/templates/facebook.png",
+                        "/assets/images/landingpage/templates/twitter.png"
+                    );
+
+                    $parseData = $postData;
+                    $parseData = array_merge($parseData, array(
+                            "seller" => $memberEntity->getUsername(),
+                            "store_link" => base_url() . $memberEntity->getSlug(),
+                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
+                            "buyer" => $buyerEntity->getUsername(),
+                            "invoice" => $orderEntity->getInvoiceNo(),
+                            "product_name" => $orderProductEntity->getProduct()->getName(),
+                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
+                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
+                        ));
+                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
+
+                    $emailService->setRecipient($buyerEmail)
+                                 ->setSubject($buyerEmailSubject)
+                                 ->setMessage($buyerEmailMsg, $imageArray)
+                                 ->queueMail();
+                }
+
             }
             else{
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
@@ -1385,7 +1541,7 @@ class Memberpage extends MY_Controller
             $view = 'memberpage_tx_buy_view';
             $querySelect = 'buy';
             break;
-            case 'sell':				
+            case 'sell':                
             $data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
             $view = 'memberpage_tx_sell_view';
             $querySelect = 'sell';
@@ -1491,7 +1647,6 @@ class Memberpage extends MY_Controller
     public function vendorLoadProducts()
     {
         $prodLimit = 12;
-
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
@@ -1593,7 +1748,7 @@ class Memberpage extends MY_Controller
             , 'isHyperLink' => false
             , 'currentPage' => $page
         );
-
+        $parseData['arrCat']['pagination'] = $this->load->view("pagination/default", $paginationData, true);
         $serverResponse = array(
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
             , 'isCount' => $isCount

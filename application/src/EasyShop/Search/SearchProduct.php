@@ -239,7 +239,11 @@ class SearchProduct
                 $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
                 $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
                 $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
-                $organizedAttribute['Condition'] =  array_unique($availableCondition);
+                $condition =  array_unique($availableCondition);
+
+                foreach ($condition as $key => $value) {
+                    $organizedAttribute['Condition'][] = $value;
+                }
                 ksort($organizedAttribute);
             }
         }
@@ -308,6 +312,27 @@ class SearchProduct
             return $position1 - $position2;
         });
         $collection = new ArrayCollection(iterator_to_array($iterator));
+
+        if($sortBy && strtolower($sortBy) == "price"){
+            $data = new ArrayCollection($filteredProducts);
+            $iterator = $data->getIterator();
+            $sortString = "ASC";
+            if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
+                $sortString = "DESC"; 
+            }
+            $iterator->uasort(function ($a, $b) use($sortString) {
+                if($a->getFinalPrice() === $b->getFinalPrice()) {
+                    return 0;
+                } 
+                if($sortString === "DESC"){
+                    return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1; 
+                }
+                else{ 
+                    return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
+                }
+            });
+            $collection = new ArrayCollection(iterator_to_array($iterator));
+        }
 
         // assign each image and image path of the product
         foreach ($collection as $key => $value) {

@@ -31,7 +31,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class="password_info"> 
-                    	Passwords must be within 6-25 characters, and include numbers and upper-case and lower-case letters. 
+                    	Passwords must be within 6-25 characters, and include numbers and letters. 
                     </div>
                     <div class="field">
                           <label>Confirm New Password:</label>

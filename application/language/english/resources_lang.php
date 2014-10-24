@@ -107,5 +107,7 @@ $lang['message_to_buyer'] = "This is to notify you that you have made a purchase
 $lang['new_message_notif'] = "Easyshop.ph - New message received";
 
 
+#Notification shipping comment provided
+$lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
 ?>
 

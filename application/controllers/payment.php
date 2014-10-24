@@ -96,15 +96,23 @@ class Payment extends MY_Controller{
         // check the availability of the product
         $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
         $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count'];
-        $codCount = $productAvailability['cod_count']; 
-
+        $successCount = $productAvailability['success_count']; 
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
+        $itemArray = $purchaseLimitPaymentType['itemArray'];
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
-        $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+        $soloRestriction = $purchaseLimitPaymentType['solo_restriction'];  
+
+        foreach ($itemArray as $key => $value) {
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
+            $product_array =  $this->product_model->getProductById($productId);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
+            $maxqty = $newQty[$itemId]['quantity'];
+            $itemArray[$key]['isAvailable'] = ($maxqty <= 0) ? "false" : "true";
+        }
 
         // get all possible error message
         $errorMessage = [];
@@ -115,16 +123,11 @@ class Payment extends MY_Controller{
         }
 
         if($qtySuccess != count($itemArray)){
+
             $canContinue = false;
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
                                     Check the availability of your item and try again.');
-        }
-
-        if($codCount != count($itemArray)){
-            // $canContinue = false;
-            unset($paymentType['cod']);
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.'); 
         }
 
         if(!$purchaseLimit){
@@ -134,6 +137,9 @@ class Payment extends MY_Controller{
 
         if(!$soloRestriction){
             $canContinue = false;
+            foreach ($itemArray as $key => $value) {
+                $itemArray[$key]['isAvailable'] = "false";
+            }
             array_push($errorMessage, 'One of your items can only be purchased individually.');
         }
 
@@ -226,6 +232,10 @@ class Payment extends MY_Controller{
     {
         $successCount = 0;
         $codCount = 0;
+        $paypalCount = 0;
+        $dragonpayCount = 0;
+        $pesopayCreditCardCount = 0;
+        $directBankCount = 0;
         $shippingDetails = false;
 
         $address = $this->memberpage_model->get_member_by_id($memberId);
@@ -255,8 +265,63 @@ class Payment extends MY_Controller{
                 } 
 
                 if(count($details) > 0){
-                    $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
-                    $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
+
+                    $paymentService = $this->serviceContainer['payment_service'];
+                    $paymentMethod = $paymentService->getUserPaymentMethod($value['member_id']);
+
+                    $itemArray[$value['rowid']]['dragonpay'] = FALSE;
+                    $itemArray[$value['rowid']]['paypal'] = FALSE; 
+                    $itemArray[$value['rowid']]['cash_delivery'] = FALSE;
+                    $itemArray[$value['rowid']]['pesopaycdb'] = FALSE;
+                    $itemArray[$value['rowid']]['directbank'] = FALSE;
+
+                    if($paymentMethod['all']){
+                        $itemArray[$value['rowid']]['dragonpay'] = TRUE;
+                        $itemArray[$value['rowid']]['paypal'] = TRUE; 
+                        $itemArray[$value['rowid']]['cash_delivery'] = TRUE;
+                        $itemArray[$value['rowid']]['pesopaycdb'] = TRUE;
+                        $itemArray[$value['rowid']]['directbank'] = TRUE;
+
+                        $paypalCount++;
+                        $dragonpayCount++;
+                        $pesopayCreditCardCount++;
+                        $directBankCount++;
+                    }
+                    else{
+                        foreach ($paymentMethod['payment_method'] as $payKey => $payValue) {
+                            if($payValue === EsPaymentMethod::PAYMENT_PAYPAL){
+                                $itemArray[$value['rowid']]['paypal'] = TRUE;
+                                $paypalCount++;
+                            }
+                            elseif ($payValue === EsPaymentMethod::PAYMENT_DRAGONPAY){
+                                $itemArray[$value['rowid']]['dragonpay'] = TRUE;
+                                $dragonpayCount++;
+                            }
+                            elseif ($payValue === EsPaymentMethod::PAYMENT_PESOPAYCC){
+                                $itemArray[$value['rowid']]['pesopaycdb'] = TRUE;
+                                $pesopayCreditCardCount++;
+                            }
+                            elseif ($payValue === EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT){
+                                $itemArray[$value['rowid']]['directbank'] = TRUE;
+                                $directBankCount++;
+                            }
+                            else{
+                                $itemArray[$value['rowid']]['cash_delivery'] = TRUE;
+                            }
+                        }
+                    }
+
+                    $codCount = ($details[0]['is_cod'] >= 1 
+                                && $itemArray[$value['rowid']]['cash_delivery']) 
+                                        ? $codCount + 1 
+                                        : $codCount + 0;
+                    if($itemArray[$value['rowid']]['cash_delivery'] && $details[0]['is_cod']){
+                        $itemArray[$value['rowid']]['cash_delivery'] = TRUE;
+                    }
+                    else{
+                        $itemArray[$value['rowid']]['cash_delivery'] = FALSE;
+                    }
+                    
                 }
 
                 $shippingDetails = true; 
@@ -265,13 +330,18 @@ class Payment extends MY_Controller{
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available" ? "true" : "false");
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
         return $returnData = array(
             'item_array' => $itemArray,
             'success_count' => $successCount,
-            'cod_count' =>$codCount,
+            'cod_count' => $codCount,
+            'paypal_count' => $paypalCount,
+            'dragonpay_count' => $dragonpayCount,
+            'pesopay_count' => $pesopayCreditCardCount,
+            'directbank_count' => $directBankCount,
             'shipping_details' => $shippingDetails,
         );
     }
@@ -299,6 +369,7 @@ class Payment extends MY_Controller{
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
                 $can_purchase = $this->product_model->is_purchase_allowed($memberId ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
+                    $itemArray[$key]['isAvailable'] = "false";
                     $purchaseLimit = false;
                     break;
                 }
@@ -312,10 +383,14 @@ class Payment extends MY_Controller{
             'payment_type' => $paymentType,
             'purchase_limit' => $purchaseLimit,
             'solo_restriction' => $soloRestriction,
+            'itemArray' => $itemArray,
         );
     }
     
-    function review()
+    /**
+     * Render payment review
+     */
+    public function review()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
@@ -333,6 +408,10 @@ class Payment extends MY_Controller{
         $itemArray = $productAvailability['item_array'];
         $successCount = $productAvailability['success_count'];
         $codCount = $productAvailability['cod_count'];
+        $paypalCount = $productAvailability['paypal_count'];
+        $dragonpayCount = $productAvailability['dragonpay_count'];
+        $pesoPayCount = $productAvailability['pesopay_count'];
+        $directBankCount = $productAvailability['directbank_count'];
         $data['shippingDetails'] = $productAvailability['shipping_details'];
 
         // check the purchase limit and payment type available
@@ -349,7 +428,11 @@ class Payment extends MY_Controller{
             $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
             $data['success'] = ($successCount == $itemCount ? true : false);
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
-
+            $data['paypalsuccess'] = ($paypalCount == $itemCount ? true : false);
+            $data['dragonpaysuccess'] = ($dragonpayCount == $itemCount ? true : false);
+            $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
+            $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
+ 
             $header['title'] = 'Payment Review | Easyshop.ph';
             $header = array_merge($header,$this->fill_header()); 
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
