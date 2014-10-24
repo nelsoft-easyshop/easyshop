@@ -237,7 +237,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <ul class="menu clearfix">
                                             <li class="mega-menu-container drop-category">
                                                 <span class="category-icon"></span>
-                                                <a href="#" class="mega-menu-title">CATEGORIES</a>
+                                                <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
                                                 <span class="drop-icon"></span>
                                                 <div class="mega-menu clearfix">
                                                     <div class="col-md-80p border-right">                                                    
