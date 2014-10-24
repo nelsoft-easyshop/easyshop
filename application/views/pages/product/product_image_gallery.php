@@ -35,24 +35,9 @@
     <div id="mobile-product-gallery" class="owl-carousel">
         <?php foreach($product_images as $image): ?>
             <div> 
-                 <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'>
+                 <img src='/<?php echo $image['path']; ?><?php echo $image['file']; ?>'>
             </div>
         <?php endforeach;?>
-        <div>
-                <img src="/assets/images/homeslider/hs_0.jpg">
-            </div>
-            <div>
-                <img src="/assets/images/homeslider/hs_0_1.jpg">
-            </div>
-            <div>
-                <img src="/assets/images/homeslider/hs_0_2_1.jpg">
-            </div>
-            <div>
-                <img src="/assets/images/homeslider/hs_0_2_2.jpg">
-            </div>
-            <div>
-                <img src="/assets/images/homeslider/hs_1.jpg">
-            </div>
     </div>
 </div>
 
@@ -65,24 +50,38 @@
 </script>
 
 <script>
-// ------- new script 10/23/2014 
+    
+    var $window = $(window);
+    $window.on('load resize', function() {
+        $('.owl-item div').each(function () {
+            var parentWidth = $(this).width();
+            if ($(this).find('img').length) {
+                $(this).find('img').css( 'maxWidth', parentWidth)
+            }
+        });
+        
+    });
 
 $(document).ready(function() {
  
     $("#mobile-product-gallery").owlCarousel({
         itemsTablet: [768,2],
+        itemsMobile : [479,1],
         responsive: true,
         responsiveRefreshRate : 200,
         responsiveBaseWidth: window,
         pagination : true,
         navigation : true,
         navigationText : ["prev","next"],
-        rewindNav : true,
         scrollPerPage : false,
+        dragBeforeAnimFinish : true,
         mouseDrag : true,
-        touchDrag : true
+        touchDrag : true,
+        navigation : true,
     });
- 
+
 });
+
+
 
 </script>
