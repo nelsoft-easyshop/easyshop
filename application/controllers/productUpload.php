@@ -141,6 +141,8 @@ class productUpload extends MY_Controller
      */
     public function step2()
     { 
+        $assetsBaseUrl = $this->serviceContainer['config_loader']->getItem('assets', 'assetsBaseUrl');
+        
         $data = $this->fill_view();
         $data['$render_searchbar'] = false; 
         $this->load->view('templates/header', $data); 
@@ -202,10 +204,12 @@ class productUpload extends MY_Controller
             $response['img_max_dimension'] = $this->img_dimension['usersize'];
 
             $date = date("Ymd");
-            $tempDirectory = './assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
+
+            $tempDirectory = $assetsBaseUrl.'temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
             $response['tempdirectory'] = $tempDirectory;
             $this->session->set_userdata('tempId', $response['tempId']);
             $this->session->set_userdata('tempDirectory',  $tempDirectory);
+
             mkdir($tempDirectory, 0777, true);
             mkdir($tempDirectory.'categoryview/', 0777, true);
             mkdir($tempDirectory.'small/', 0777, true);
@@ -430,13 +434,29 @@ class productUpload extends MY_Controller
                 }
             }
         }
-
+ 
         $_FILES['files']['name'] = array_values($_FILES['files']['name']);
         $_FILES['files']['type'] = array_values($_FILES['files']['type']);
         $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
         $filenames_ar = array_values($filenames_ar); 
+      
+        $awsS3Client = $this->serviceContainer['s3client'];
+        $bucket = $this->serviceContainer['config_loader']->getItem('assets')["bucket"];
+        foreach($filenames_ar as $idx => $file){
+            $result = $awsS3Client->putObject(array(
+                'Bucket' => $bucket,
+                'Key'    => $pathDirectory.'/'.$file,
+                'SourceFile'  => $_FILES['files']["tmp_name"][$idx],
+                'ContentType' => $_FILES['files']["type"][$idx],
+                'ACL'    => 'public-read',
+            ));
+        }   
+        exit();
+        
+        
+
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);;
@@ -463,7 +483,7 @@ class productUpload extends MY_Controller
             "xss_clean" => FALSE
             )
         );
-
+        
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
             for ($i=0; $i < sizeof($filenames_ar); $i++) { 
