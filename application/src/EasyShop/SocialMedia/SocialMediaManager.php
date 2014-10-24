@@ -235,35 +235,4 @@ class SocialMediaManager
         return self::GOOGLE;
     }
 
-    /**
-     * Merge social media account to existing EasyShop Account
-     * @param $memberId
-     * @param $oauthProvider
-     * @return EsMember
-     */
-    public function updateOauthProvider($memberId, $oauthProvider)
-    {
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-            ->findOneBy(['idMember' => $memberId]);
-        $member->setOauthProvider($oauthProvider);
-        $this->em->flush();
-
-        return $member;
-    }
-
-    /**
-     *
-     * @param $memberId
-     * @param $username
-     * @return EsMember
-     */
-    public function updateUsername($memberId, $username)
-    {
-        $member = $this->entityManager('EasyShop\Entities\EsMember')
-            ->findOneBy(['idMember' => $memberId]);
-        $member->setUsername($username);
-        $this->em->flush();
-
-        return $member;
-    }
 }
