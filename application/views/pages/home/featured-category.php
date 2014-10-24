@@ -45,16 +45,21 @@
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
-                                    <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
-                                        <a class="a-item-image" href="/item/<?php echo $productSlug ?>">
-                                            <?php if ($product->getIsNew()): ?>
-                                                <span class="new-circle">NEW</span>
-                                            <?php endif; ?>
-                                            <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                                <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
-                                            <?php endif; ?>
-                                        </a>
-                                    </div><!-- End .item-image -->
+                                    <a href="/item/<?php echo $productSlug ?>">
+                                        <div class="div-rec-product-image">
+                                            <center>
+                                                <span class="span-me">
+                                                    <img src="<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                                </span>
+                                            </center>
+                                        </div>
+                                    </a>
+                                    <?php if ($product->getIsNew()): ?>
+                                        <span class="new-circle-2">NEW</span>
+                                    <?php endif; ?>
+                                    <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                        <span class="discount-circle-2"><?php echo $product->getDiscountPercentage() ?>%</span>
+                                    <?php endif; ?>
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
                                         <a href="/item/<?php echo $productSlug ?>">
