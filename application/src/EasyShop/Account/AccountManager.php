@@ -136,33 +136,33 @@ class AccountManager
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->findOneBy(['email' => $validatedUsername]);
                 if($member){
-                    $validatedUsername = $member->getUsername();
-                    $member = null;
+                    $validatedUsername = $member->getUsername();         
                 }
             }
+            else {
+                $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy(['username' => $validatedUsername]);
+            }         
 
-            $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
-            
-            $query =  $this->em->createQueryBuilder()
-                    ->select('m')
-                    ->from('EasyShop\Entities\EsMember', 'm')
-                    ->where('m.username= :username')
-                    ->andWhere('m.password= :password')
-                    ->setParameter('username', $validatedUsername)
-                    ->setParameter('password', $hashedPassword)
-                    ->setMaxResults(1)
-                    ->getQuery();
-            $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
-            $member = $query->getResult($hydrator);
-            $member = isset($member[0]) ? $member[0] : $member;
-            
-            if(!$member){
-                array_push($errors, ['login' => 'invalid username/password']);
+            if($member) {
+                if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
+                    if(!$this->oldAuthentication($validatedUsername, $validatedPassword, $asArray)) {
+                        $member = null;                        
+                        array_push($errors, ['login' => 'Invalid Username/Password']);  
+                    }
+                }
             }
+            else {
+                $member = null;
+                array_push($errors, ['login' => 'Invalid Username/Password']);
+            }
+
+
         }
 
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                  'member' => $member];
+    
     }
     
     /**
