@@ -286,7 +286,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </ul>
                                             </li>
                                             <li class="mobile-menu-nav-hide">
-                                                <a href="#">TOP SELLERS</a>
+                                                <a href="javascript:void(0)">TOP SELLERS</a>
                                                 <ul class="nav-2nd-level top-seller-list">
                                                     <li>
                                                         <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
