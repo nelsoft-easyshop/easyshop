@@ -237,7 +237,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <ul class="menu clearfix">
                                             <li class="mega-menu-container drop-category">
                                                 <span class="category-icon"></span>
-                                                <a href="#" class="mega-menu-title">CATEGORIES</a>
+                                                <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
                                                 <span class="drop-icon"></span>
                                                 <div class="mega-menu clearfix">
                                                     <div class="col-md-80p border-right">                                                    
@@ -286,7 +286,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </ul>
                                             </li>
                                             <li class="mobile-menu-nav-hide">
-                                                <a href="#">TOP SELLERS</a>
+                                                <a href="javascript:void(0)">TOP SELLERS</a>
                                                 <ul class="nav-2nd-level top-seller-list">
                                                     <li>
                                                         <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
