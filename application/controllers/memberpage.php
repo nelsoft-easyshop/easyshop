@@ -32,11 +32,17 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        
+        $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
     }
-    
+
+    public function sample()
+    {
+        $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
+        echo '<img src="/'.$this->qrManager->getImagePath('asd').'"/>';
+    }
+
     /**
      *  Class Index. Renders Memberpage
      */
@@ -1718,18 +1724,18 @@ class Memberpage extends MY_Controller
                 $tempCountContainer = $searchProductService->getProductBySearch($parameter);
                 $productCount = count($tempCountContainer);
                 break;
-            case 1: // Custom - NOT YET USED
-                //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                //                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                //$productCount = 0;
+            case 1: // Custom Categories
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
                 break;
             case 2: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
             default: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
