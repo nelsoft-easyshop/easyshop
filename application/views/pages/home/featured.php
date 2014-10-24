@@ -56,7 +56,11 @@
                                             <div class="store-logo-container ">
                                                 <div class="span-store-logo">
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
-                                                        <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                        <?PHP if($homeContent['seller']['logo']) : ?>
+                                                            <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                        <?PHP else : ?>
+                                                            <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
+                                                        <?PHP endif; ?>
                                                     </a>
                                                 </div>
                                             </div>
@@ -76,7 +80,11 @@
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
-                            <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                            <?PHP if($homeContent['seller']['logo']) : ?>
+                                <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                            <?PHP else : ?>
+                                <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
+                            <?PHP endif; ?>
                         </a>
                     </div>
                 </div>

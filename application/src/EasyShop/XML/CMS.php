@@ -798,6 +798,7 @@ $string = '<typeNode>
         //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
