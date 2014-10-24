@@ -143,7 +143,7 @@ class PayPalGateway extends AbstractGateway
         $paypalReturnURL = base_url().'pay/postBackPayPal'; 
         $paypalCancelURL = base_url().'payment/review'; 
         // RELEASE ALL LOCK
-        // $remove = $this->payment_model->releaseAllLock($member_id);
+        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
 
         $productCount = count($validatedCart['itemArray']);
         $cnt = 0;
@@ -258,7 +258,7 @@ class PayPalGateway extends AbstractGateway
 
             if($return['o_success'] > 0){
                 $orderId = $return['v_order_id'];
-                //$locked = $this->lockItem($toBeLocked,$orderId,'insert');
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($toBeLocked,$orderId); 
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
@@ -349,7 +349,7 @@ class PayPalGateway extends AbstractGateway
             $lockCountExist = 10;
 
             if($lockCountExist >= 1){
-                // $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked,$orderId); 
                 if($validatedCart['itemCount'] === $productCount){
 
                     $padata = '&TOKEN='.urlencode($token).
