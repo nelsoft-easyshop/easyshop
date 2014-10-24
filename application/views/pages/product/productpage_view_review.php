@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/assets/css/productview-new.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
 <link rel="stylesheet" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
 <div class="container">
     <div class="prod-detail-main">
@@ -52,7 +51,7 @@
                                         </div>
                                         -->
                                         <div class="row">
-                                            <div class="col-xs-2 col-user-image" align="center">
+                                            <div class="col-sm-2 col-xs-12 col-user-image" align="center">
                                                 <a href="#"><div class="div-user-image">
                                                     <img src="/assets/images/products/nikon-logo.png" class="img-user"/>
                                                 </div></a>
@@ -60,15 +59,36 @@
                                                 <a href="#"><p class="p-username">UserName</p></a>
                                                 <p class="p-date-review">17-Oct-2014 11:30 AM</p>
                                             </div>
-                                            <div class="col-xs-10">
+                                            <div class="col-sm-10 col-xs-12">
                                                 <div class="div-review-content-container">
+                                                    <div class="row div-row-user">
+                                                        <div class="me">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="#">
+                                                                        <div class="div-user-image">
+                                                                            <img src="/assets/images/img_main_product.png" class="img-user"/>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                                <td class="td-user-info">
+                                                                    <a href="#"><p class="p-username">UserName</p></a>
+                                                                    <p class="p-date-review">17-Oct-2014 11:30 AM</p>
+                                                                    
+                                                
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        </div>
+                                                    </div>
                                                     <p class="p-review-title">Subject title here
                                                         <span class="span-review-item-rate">
-                                                            <span class="fa fa-star fa-star-active"></span>
-                                                            <span class="fa fa-star fa-star-active"></span>
-                                                            <span class="fa fa-star fa-star-active"></span>
-                                                            <span class="fa fa-star fa-star-active"></span>
-                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star fa-review-rate fa-star-active"></span>
+                                                            <span class="fa fa-star fa-review-rate fa-star-active"></span>
+                                                            <span class="fa fa-star fa-review-rate fa-star-active"></span>
+                                                            <span class="fa fa-star fa-review-rate fa-star-active"></span>
+                                                            <span class="fa fa-star fa-review-rate"></span>
                                                         </span>
                                                     </p>
                                                     <div class="clear"></div>
@@ -88,8 +108,8 @@
                                                         <div class="col-md-6">  
                                                             <form class="form-horizontal" role="form">
                                                                 <div class="form-group">
-                                                                    <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
-                                                                    <div class="col-xs-9">
+                                                                    <label for="subject" class="col-sm-3 control-label label-subject">Subject: </label>
+                                                                    <div class="col-sm-9">
                                                                         <input type="text" class="input-reply" id="subject" autocomplete="off">
                                                                     </div>
                                                                 </div>
@@ -98,8 +118,8 @@
                                                         <div class="col-md-6">
                                                             <form class="form-horizontal" role="form">
                                                                 <div class="form-group">
-                                                                    <label for="subject" class="col-xs-3 control-label">Rating: </label>
-                                                                    <div class="col-xs-9" style="vertical-align: middle;">
+                                                                    <label for="subject" class="col-sm-3 control-label">Rating: </label>
+                                                                    <div class="col-sm-9" style="vertical-align: middle;">
                                                                         <div class="span-star-container">
                                                                             <i class="fa fa-star fa-star-rate"></i>
                                                                             <i class="fa fa-star fa-star-rate"></i>
@@ -117,8 +137,8 @@
                                                         <div class="col-md-12">
                                                             <form class="form-horizontal" role="form">
                                                                 <div class="form-group">
-                                                                    <label for="subject" class="col-xs-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
-                                                                    <div class="col-xs-10" style="margin-left: -10px;">
+                                                                    <label for="subject" class="col-sm-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
+                                                                    <div class="col-sm-10 col-text-area" style="margin-left: -10px;">
                                                                         <textarea class="input-textarea" rows="7"></textarea>
                                                                     </div>
                                                                 </div>
@@ -138,15 +158,36 @@
                                                     <div class="row">
                                                         <div class="col-xs-2 col-user-image no-padding" align="center">
                                                             <a href="#"><div class="div-user-image">
-                                                                <img src="/assets/images/img_main_product.png" class="img-user"/>
+                                                                <img src="/assets/images/product/nikon-logo.png" class="img-user"/>
                                                             </div></a>
                                                             <div class="clear"></div>
                                                             <a href="#"><p class="p-username">UserName</p></a>
                                                             <p class="p-date-review-replied-item">17-Oct-2014 11:30 AM</p>
                                                         </div>
-                                                        <div class="col-xs-10">
-                                                            <div class="div-review-content-container">
-                                                                <p class="p-review-title">Subject title here
+                                                        <div class="col-sm-10 col-xs-12">
+                                                            <div class="div-review-content-container div-reply-content-container">
+                                                                <div class="row div-row-user">
+                                                                    <div class="me">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <a href="#">
+                                                                                        <div class="div-user-image">
+                                                                                            <img src="/assets/images/products/nikon-logo.png" class="img-user"/>
+                                                                                        </div>
+                                                                                    </a>
+                                                                                </td>
+                                                                                <td class="td-user-info">
+                                                                                    <a href="#"><p class="p-username">UserName</p></a>
+                                                                                    <p class="p-date-review">17-Oct-2014 11:30 AM</p>
+                                                                                    
+                                                                
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <p class="p-review-title">Subject reply here
                                                                     <span class="span-review-item-rate">
                                                                         <span class="fa fa-star fa-star-active"></span>
                                                                         <span class="fa fa-star fa-star-active"></span>
@@ -172,8 +213,8 @@
                                                                     <div class="col-md-6">
                                                                         <form class="form-horizontal" role="form">
                                                                             <div class="form-group">
-                                                                                <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
-                                                                                <div class="col-xs-9">
+                                                                                <label for="subject" class="col-sm-3 control-label label-subject">Subject: </label>
+                                                                                <div class="col-sm-9">
                                                                                     <input type="text" class="input-reply" id="subject" autocomplete="off">
                                                                                 </div>
                                                                             </div>
@@ -182,8 +223,8 @@
                                                                     <div class="col-md-6">
                                                                         <form class="form-horizontal" role="form">
                                                                             <div class="form-group">
-                                                                                <label for="subject" class="col-xs-3 control-label">Rating: </label>
-                                                                                <div class="col-xs-9" style="vertical-align: middle;">
+                                                                                <label for="subject" class="col-sm-3 control-label">Rating: </label>
+                                                                                <div class="col-sm-9" style="vertical-align: middle;">
                                                                                     <div class="span-star-container">
                                                                                         <i class="fa fa-star fa-star-rate"></i>
                                                                                         <i class="fa fa-star fa-star-rate"></i>
@@ -201,8 +242,8 @@
                                                                     <div class="col-md-12">
                                                                         <form class="form-horizontal" role="form">
                                                                             <div class="form-group">
-                                                                                <label for="subject" class="col-xs-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
-                                                                                <div class="col-xs-10" style="margin-left: -10px;">
+                                                                                <label for="subject" class="col-sm-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
+                                                                                <div class="col-sm-10 col-text-area" >
                                                                                     <textarea class="input-textarea-replied-item" rows="7"></textarea>
                                                                                 </div>
                                                                             </div>
