@@ -841,7 +841,7 @@ header {
 }*/
 
 #main-nav-container #main-nav .menu .drop-category:hover .drop-icon {
-    background-position: -326px -93px;
+    background-position: -328px -93px;
 }
 
 #main-nav .drop-category .category-icon{
@@ -856,7 +856,7 @@ header {
 }
 #main-nav .drop-category .drop-icon {
     background-image: url("../images/sprites/sprite.png");
-    background-position: -292px -93px;
+    background-position: -298px -93px;
     border-radius: 0 4px 4px 0;
     height: 36px;
 /*    height: 100%;*/
