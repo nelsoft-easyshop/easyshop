@@ -19,7 +19,7 @@
                 <?php foreach ($subCategory as $key => $value):?>
                     <li style="border:0px">
                         <a class="cbx" data-head="category" data-value="<?=$value->getIdCat()?>" >
-                            <input type='checkbox' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
+                            <input type='radio' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
                             <?=html_escape($value->getName())?>
                         </a>
                     </li>
