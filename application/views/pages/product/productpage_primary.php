@@ -184,6 +184,7 @@
 
 <?php
     include("productpage_view_review.php");
+    include("productpage_view_recommend.php");
 ?>
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
