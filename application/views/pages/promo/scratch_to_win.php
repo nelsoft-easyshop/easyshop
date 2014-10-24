@@ -115,7 +115,7 @@
                     <ol>
                         <li>Participants must obtain a scratch card distributed in the following areas: Manila, Makati, and Ortigas from September 1-December 31, 2014 for a chance to win HOT items from EasyShop.ph.</li>
                         <li>Participants must scratch the card to reveal a special code.</li>
-                        <li>Participants should visit <a href="/Scratch-And-Win">https://easyshop.ph/Scratch-And-Win</a> to enter the code. They automatically get an item for FREE if they have the winning code.</li>
+                        <li>Participants should visit <a href="/Scratch-And-Win">https://easyshop.ph/ScratchAndWin</a> to enter the code. They automatically get an item for FREE if they have the winning code.</li>
                         <li>Participants need to click on “CLAIM ITEM” and fill out the registration form or login to their accounts.</li>
                         <li>To be eligible to join the promo, participants must complete their registration by providing their complete name, email address, and contact number on their EasyShop.ph profile page. Participants with incomplete profile details will not be qualified to win any item.</li>
                         <h3>Prizes: </h3>
