@@ -104,7 +104,7 @@ $config = array(
         ),
         /* Scratch and win promo */
         '5' =>array(
-            'implementation' => 'EasyShop\Promo\ListingPromo',
+            'implementation' => 'EasyShop\Promo\ScratchAndWinPromo',
             'calculation_id' => '5',
             'purchase_limit' => 1,
             'payment_method' => array(),

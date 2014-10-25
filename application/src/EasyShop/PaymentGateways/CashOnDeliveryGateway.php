@@ -57,7 +57,6 @@ class CashOnDeliveryGateway extends AbstractGateway
         }
         
         $this->setParameter('paymentType', $response['paymentType']);
-        
         $productCount = count($validatedCart['itemArray']);
 
         // get address Id
@@ -66,15 +65,10 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         // Compute shipping fee
         $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
-
         $grandTotal = $prepareData['totalPrice'];
-
         $this->setParameter('amount', $grandTotal);
-
         $productString = $prepareData['productstring'];
         $itemList = $prepareData['newItemList']; 
-
-
         $txnid = $this->generateReferenceNumber($memberId);
         $response['txnid'] = $txnid;
 
@@ -93,17 +87,14 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['message'] = $return['o_message'];
             }
             else{
-                $v_order_id = $return['v_order_id'];
-                $invoice = $return['invoice_no'];
+                $response['orderId'] = $v_order_id = $return['v_order_id'];
+                $response['invoice'] = $invoice = $return['invoice_no'];
                 $response['status'] = 's';
 
                 foreach ($itemList as $key => $value) {  
                     $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                     $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                 }
-
-                /* remove item from cart function */ 
-                /* send notification function */ 
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                             ->find($v_order_id);

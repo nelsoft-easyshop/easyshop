@@ -454,19 +454,15 @@ class PaymentService
      * Computes Shipping Fee and Reorganizes Data (processData)
      * 
      * @param mixed $itemList List of items to compute shipping fee
-     * @param string $address Used for shipping fee calcl
+     * @param int $address Used for shipping fee calculation
      *
      * @return mixed
      */
     public function computeFeeAndParseData($itemList, $address)
     {
         $city = ($address > 0 ? $address :  0);
-        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getParentLocation($city);
-        $region = $cityDetails->getParent();
-        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getParentLocation($region);
-        $majorIsland = $cityDetails->getParent();
+        $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
+        $majorIsland = $region->getParent();
 
         $grandTotal = 0;
         $productstring = "";
@@ -484,10 +480,10 @@ class PaymentService
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
             
-            /* TO BE IMPLEMENTED*/
-            //$details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            //$shipping_amt = $details[0]['price'];
-            $shipping_amt = 0.00;
+            $details = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                            ->getShippingDetailsByLocation($productId,$productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+
+            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
             
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $totalAdditionalFee += $otherFee;
