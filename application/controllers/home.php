@@ -59,52 +59,51 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-        // Load services
-        $em = $this->serviceContainer["entity_manager"];
-        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
-        // Load repositories
-        $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
-
-        $sliderSection = $homeContent['slider']; 
-        $homeContent['slider'] = array();
-        foreach($sliderSection as $slide){
-            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
-            array_push($homeContent['slider'], $sliderView);
-        }
-        
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
-            'homeContent' => $homeContent,
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
 
         $data = array_merge($data, $this->fill_header());
-        $cart = array();
-        $cartSize = 0;
-        $isLoggedIn = false;
-        if ($this->session->userdata('usersession')) {
-            $memberId = $this->session->userdata('member_id');
-            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
-            $cartSize = $this->cartImplementation->getSize(TRUE);
-            $data['logged_in'] = true;
-            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                              ->find($memberId);
-            $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
-                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+        
+        if( $data['logged_in'] && $view !== 'basic'){
+            $this->load->view('templates/header', $data);
+            $data = array_merge($data, $this->getFeed());            
+            $data['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+            $this->load->view("templates/home_layout/layoutF",$data);
+            $this->load->view('templates/footer', array('minborder' => true));
         }
-        $data['cart_items'] = $cart;
-        $data['cart_size'] = $cartSize;
-        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+        else{
+            $em = $this->serviceContainer["entity_manager"];
+            $categoryManager = $this->serviceContainer['category_manager']; 
+            $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
+            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+            $sliderSection = $homeContent['slider']; 
+            $homeContent['slider'] = array();
+            foreach($sliderSection as $slide){
+                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+                array_push($homeContent['slider'], $sliderView);
+            }
+            $data['homeContent'] = $homeContent;
 
-        $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
-        $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+            if($data['logged_in']){
+                $memberId = $this->session->userdata('member_id');
+                $data['logged_in'] = true;
+                $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                                ->find($memberId);
+                $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
+                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                        : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            }
+            $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
+            $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/home/home_primary', $data);
-        $this->load->view('templates/footer_primary');
+            $this->load->view('templates/header_primary', $data);
+            $this->load->view('pages/home/home_primary', $data);
+            $this->load->view('templates/footer_primary');
+        }
+
     }
     
     

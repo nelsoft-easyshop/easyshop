@@ -36,16 +36,23 @@ class CMS
     
     
     /**
+     * Url Utility
+     *
+     * @var EasyShop\Utility\urlUtility
+     */
+    private $urlUtility;
+    
+    /**
      * Loads dependencies
      *
-     * @param EasyShop\XML\Resource
      */
-    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager, $urlUtility)
     {
         $this->xmlResourceGetter = $xmlResourceGetter;
         $this->em = $em;
         $this->productManager = $productManager;
         $this->userManager = $userManager;
+        $this->urlUtility = $urlUtility;
     }
 
     /**
@@ -751,12 +758,19 @@ $string = '<typeNode>
         foreach($homePageData['slider'] as $idx => $slide){
             $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
             $template = 'partials/homesliders/'.$template;
-            $homePageData['slider'][$idx]['template'] = $template;
+            $homePageData['slider'][$idx]['template'] = $template;            
             if(isset($homePageData['slider'][$idx]['image']['path'])){
                 $temporary = $homePageData['slider'][$idx]['image'];
                 $homePageData['slider'][$idx]['image'] = array();
                 array_push($homePageData['slider'][$idx]['image'], $temporary);
             }
+            
+            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
+                $target = $sliderImage['target'];
+                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
+            }
+            
+            
         }
         
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
