@@ -1,14 +1,14 @@
 <li class="slider-template-3">
     <div class="slider-item">
 
-         <?php $sliderImage = $image; ?>
+        <?php $sliderImage = $image; ?>
         <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
-            <a href="<?php echo $sliderImage[0]['target'] ?>">
+            <a href="<?php echo $sliderImage[0]['target']['url'] ?>" target=<?php echo $sliderImage[0]['target']['targetString'];?>>
                 <img src="<?php echo $sliderImage[0]['path'] ?>">
             </a>
         </div>                        
         <div class="img-holder temp3-img-2">
-            <a href="<?php echo $sliderImage[1]['target'] ?>">
+              <a href="<?php echo $sliderImage[1]['target']['url'] ?>" target=<?php echo $sliderImage[1]['target']['targetString'];?>>
                 <img src="<?php echo $sliderImage[1]['path'] ?>">
             </a>
         </div>
