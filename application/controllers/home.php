@@ -81,13 +81,9 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
-        $cart = array();
-        $cartSize = 0;
         $isLoggedIn = false;
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
-            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
-            $cartSize = $this->cartImplementation->getSize(TRUE);
             $data['logged_in'] = true;
             $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
                                               ->find($memberId);
@@ -95,10 +91,6 @@ class Home extends MY_Controller
                                     ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
                                     : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
         }
-        $data['cart_items'] = $cart;
-        $data['cart_size'] = $cartSize;
-        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
-
         $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
         $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
