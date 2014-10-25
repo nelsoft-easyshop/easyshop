@@ -69,9 +69,7 @@
                           
 
                                     <div class='following-lnk'>
-                                        <a href='/<?php echo $userslug?>?tab=following'>
-                                            <span>See all (<?php echo count($followed_users)?>) </span>
-                                        </a>
+                                            <span>Following (<?php echo count($followed_users)?>) users </span>
                                     </div>
 
                                 <?php endif;?>

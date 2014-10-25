@@ -147,35 +147,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-cart-container">
                                                 <a href="/cart" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con ui-form-control">
-                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                                                 </a>
-                                                <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                                <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                                                 <?PHP else : ?>
                                                 <div class="header-cart-item-list">
-                                                    <p>Recently add item(s)</p>
-                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                    <p>Recently added item(s)</p>
+                                                    <?php $cartItems = array_reverse($cartItems); ?>
+                                                    <?php for($i = 0 ; $i < 2; $i++): ?>
+                                                            <?php if(!isset($cartItems[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItems[$i]['imagePath']; ?>thumbnail/<?=$cartItems[$i]['imageFile']; ?>" alt="<?=$cartItems[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>"><span><?=$cartItems[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItems[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItems[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
-                                                        <?PHP endif; ?>
-                                                    <?PHP endfor; ?>
+                                                    <?php endfor; ?>
+            
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
-                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
                                                             <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -321,37 +322,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart ui-form-control">
-                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon">
-                                                        <span class="cart-item-notif"><?=$cart_size?></span>
+                                                        <span class="cart-item-notif"><?=$cartSize?></span>
                                                     </span>
                                                 </a>
-                                            <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                                             <?PHP else : ?>
                                                 <div class="sticky-header-cart-item-list">
                                                     <p>Recently add item(s)</p>
-                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                    <?php $cartItems = array_reverse($cartItems); ?>
+                                                    <?php for($i = 0 ; $i < 2; $i++): ?>
+                                                            <?php if(!isset($cartItems[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItems[$i]['imagePath']; ?>thumbnail/<?=$cartItems[$i]['imageFile']; ?>" alt="<?=$cartItems[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>"><span><?=$cartItems[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItems[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItems[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
-                                                        <?PHP endif; ?>
-                                                    <?PHP endfor; ?>
+                                                    <?php endfor; ?>
+            
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
-                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
                                                             <a href="/cart" class="header-cart-lnk-cart">go to cart</a>

@@ -90,37 +90,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </a>
                 <div class="header-cart-item-list">
                     <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
-                    <p>You have no item in cart</p>
+                        <p>You have no item in your cart</p>
                     <?PHP else : ?>
-                        <p>Recently add item(s)</p>
-                    <?PHP for($cnt = sizeof($cartItems) - 1; $cnt > -1 ;$cnt--) : ?>
-                            <?PHP if(sizeof($cartItems) - 1 === $cnt || sizeof($cartItems) - 1 === $cnt +1) : ?>
-                    <div class="mrgn-bttm-15">
-                        <div class="header-cart-item-img">
-                            <a href="/item/<?=$cartItems[$cnt]['slug']?>">
-                                <span><img src="/<?=$cartItems[$cnt]['imagePath']; ?>thumbnail/<?=$cartItems[$cnt]['imageFile']; ?>" alt="<?=$cartItems[$cnt]['name']?>"></span>
-                            </a>
+                        <p>Recently added item(s)</p>
+                        <?php $cartItems = array_reverse($cartItems); ?>
+                        <?php for($i = 0 ; $i < 2; $i++): ?>
+                                <?php if(!isset($cartItems[$i])) break; ?>
+                                <div class="mrgn-bttm-15">
+                                    <div class="header-cart-item-img">
+                                        <a href="/item/<?=$cartItems[$i]['slug']?>">
+                                            <span><img src="/<?=$cartItems[$i]['imagePath']; ?>thumbnail/<?=$cartItems[$i]['imageFile']; ?>" alt="<?=$cartItems[$i]['name']?>"></span>
+                                        </a>
+                                    </div>
+                                    <div class="header-cart-item-con">
+                                        <a href="/item/<?=$cartItems[$i]['slug']?>"><span><?=$cartItems[$i]['name']?></span></a>
+                                        <span>x <?=$cartItems[$i]['qty']?></span>
+                                        <span class="header-cart-item-price">&#8369; <?=$cartItems[$i]['price']?></span>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                        <?php endfor; ?>
+         
+                        <div class="header-cart-lower-content">
+                            <div class="header-cart-shipping-total">
+                                <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                                <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
+                            </div>
+                            <div class="header-cart-buttons">
+                                <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        <div class="header-cart-item-con">
-                            <a href="/item/<?=$cartItems[$cnt]['slug']?>"><span><?=$cartItems[$cnt]['name']?></span></a>
-                            <span>x <?=$cartItems[$cnt]['qty']?></span>
-                            <span class="header-cart-item-price">&#8369; <?=$cartItems[$cnt]['price']?></span>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                            <?PHP endif; ?>
-                    <?PHP endfor; ?>
-                    <div class="header-cart-lower-content">
-                        <div class="header-cart-shipping-total">
-                            <p>Items(s) in cart: <span><?=$cartSize?></span></p>
-                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
-                        </div>
-                        <div class="header-cart-buttons">
-                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
-                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
                     <?PHP endif;?>
                 </div>
             </div>
