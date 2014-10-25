@@ -151,6 +151,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <li>
                         <a href="/me?me=pending">On-going Transactions</a>
                     </li>
+                    <li>
+                        <a href="/?view=basic">Easyshop.ph</a>
+                    </li>
                     <li class="nav-dropdown-border">
                         <a href="/me?me=settings">Settings</a>
                     </li>

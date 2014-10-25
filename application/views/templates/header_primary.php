@@ -46,10 +46,9 @@
  
     <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
     
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/header-css.css" media='screen'>
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/bootstrap.css" media='screen'>
-    <link type="text/css" href='<?=base_url()?>assets/css/new-homepage.css' rel="stylesheet" media='screen'/>
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css" media='screen'>
 </head>
 <body>
 
@@ -84,7 +83,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="login-profile-con">
                                                     <img src="<?=$user_details->profileImage;?>">
                                                 </div>
-                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
+                                                    <?php echo html_escape($user_details->getUsername()); ?>
+                                                </a>
                                                 <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                 <ul class="default-nav-dropdown">
                                                     <li>
@@ -92,6 +93,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li>
                                                         <a href="/me?me=pending">On-going Transactions</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/?view=basic">Easyshop.ph</a>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a href="/me?me=settings">Settings</a>
@@ -103,9 +107,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <?=$msgs['unread_msgs'];?>
                                                         </div>
                                                         <?php endif;?>
-                                                    </li>
-                                                    <li class="nav-dropdown-border">
-                                                        <a class="prevent" href="/sell/step1">Sell an item</a>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
@@ -370,7 +371,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <div class="login-profile-con">
                                                         <img src="<?=$user_details->profileImage;?>">
                                                     </div>
-                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
+                                                        <?php echo html_escape($user_details->getUsername()) ;?>
+                                                    </a>
                                                     <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                     <ul class="default-nav-dropdown">
                                                         <li>
@@ -379,19 +382,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <li>
                                                             <a href="/me?me=pending">On-going Transactions</a>
                                                         </li>
+                                                        <li>
+                                                            <a href="/?view=basic">Easyshop.ph</a>
+                                                        </li>
                                                         <li class="nav-dropdown-border">
                                                             <a href="/me?me=settings">Settings</a>
                                                         </li>
                                                         <li class="nav-dropdown-border pos-rel">
                                                             <a href="/messages">Messages</a>
                                                             <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                            <?=$msgs['unread_msgs'];?>
-                                                            </div>
+                                                                <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                                    <?php echo $msgs['unread_msgs'];?>
+                                                                </div>
                                                             <?php endif;?>
-                                                        </li>
-                                                        <li class="nav-dropdown-border">
-                                                            <a class="prevent" href="/sell/step1">Sell an item</a>
                                                         </li>
                                                         <li class="nav-dropdown-border">
                                                             <a class="prevent" href="/login/logout">Logout</a>
