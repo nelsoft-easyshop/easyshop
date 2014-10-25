@@ -206,7 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
                                                     <?php endforeach; ?>
                                                 </select> -->
-                                                <input type="text" name="q_str" class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -316,7 +316,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <div class="sticky-search-cart-wrapper">
                                             <div class="sticky-search-wrapper">
                                              <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                <input type="text" name="q_str" class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                                 <input type="submit" value="" class="span_bg">
                                             </form>
                                             </div>
