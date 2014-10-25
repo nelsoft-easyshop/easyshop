@@ -19,7 +19,7 @@
      *
      * @var integer
      */
-    $maxPages = isset($maxPages) ? $maxPages : 10;
+    $maxPages = isset($maxPages) ? $maxPages : 9;
 
     /**
      * Minimum number of pages to the left of the currentPage to maintain
@@ -72,7 +72,9 @@
                 <span>1</span>
             </a>
         </li>
-        <li><span>...</span></li>
+        <?php if(intval($start) !== 2): ?>
+            <li><span>...</span></li>
+        <?php endif; ?>
     <?php endif; ?>
 
     <?php for($i = $start ; $i <= $end; $i++): ?>
@@ -84,7 +86,9 @@
     <?php endfor; ?>
     
     <?php if($end < $lastPage): ?>
-        <li><span>...</span></li>
+        <?php if(intval($end) !== intval($lastPage)-1): ?>
+            <li><span>...</span></li>
+        <?php endif; ?>
         <li class='individual' data-page='<?php echo $lastPage ?>'>
             <a href='<?php echo $isHyperLink ? $url.'?page='.$lastPage : 'javascript:void(0)' ?>'>
                 <span><?php echo $lastPage?></span>
