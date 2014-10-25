@@ -95,6 +95,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <p>Recently added item(s)</p>
                         <?php $cartItems = array_reverse($cartItems); ?>
                         <?php for($i = 0 ; $i < 2; $i++): ?>
+                                <?php if(!isset($cartItems[$i])) break; ?>
                                 <div class="mrgn-bttm-15">
                                     <div class="header-cart-item-img">
                                         <a href="/item/<?=$cartItems[$i]['slug']?>">
