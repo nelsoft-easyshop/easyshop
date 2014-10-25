@@ -19,7 +19,7 @@
      *
      * @var integer
      */
-    $maxPages = isset($maxPages) ? $maxPages : 8;
+    $maxPages = isset($maxPages) ? $maxPages : 9;
 
     /**
      * Minimum number of pages to the left of the currentPage to maintain
