@@ -1741,12 +1741,13 @@ class Payment extends MY_Controller{
         // Validate Cart Data and subtract points
         $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
-
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
         extract($response);
-        $this->generateFlash($txnid,$message,$status);
 
+        $this->removeItemFromCart();  
+        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+        $this->generateFlash($txnid,$message,$status);
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 

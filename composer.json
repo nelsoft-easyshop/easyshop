@@ -36,5 +36,12 @@
                 }
             }
         }
-    ]
+    ],
+    
+    "autoload": {
+         "classmap" : [
+            "system/libraries/"
+        ]
+    }
+
 }

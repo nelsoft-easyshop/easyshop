@@ -194,7 +194,7 @@ class messages extends MY_Controller
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($recipient);
         $this->messageManager->send( $this->userId, $recipient, $this->input->post('msg'));
-        Redirect('/'.$member->getSlug().'/contact' ,'refresh');
+        redirect('/'.$member->getSlug().'/contact#SendMessage' ,'refresh');
     }
 
 }
