@@ -205,24 +205,26 @@
                         <div class="sticky-header-cart-item-list">                        
                             <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                             <?PHP else : ?>
-                                <p>Recently add item(s)</p>
-                                <?PHP for($cnt = sizeof($cartSize) - 1; $cnt > -1 ;$cnt--) : ?>
-                                    <?PHP if(sizeof($cartSize) - 1 === $cnt || sizeof($cartSize) - 1 === $cnt +1) : ?>
+                                <p>Recently added item(s)</p>
+                                <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                                <?php for($i = 0 ; $i < 2; $i++): ?>
+                                        <?php if(!isset($cartItemsReversed[$i])) break; ?>
                                         <div class="mrgn-bttm-15">
                                             <div class="header-cart-item-img">
-                                                <a href="/item/<?=$cartItems[$cnt]['slug']?>">
-                                                    <span><img src="/<?=$cartItems[$cnt]['imagePath']; ?>thumbnail/<?=$cartItems[$cnt]['imageFile']; ?>" alt="<?=$cartItems[$cnt]['name']?>"></span>
+                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                 </a>
                                             </div>
                                             <div class="header-cart-item-con">
-                                                <a href="/item/<?=$cartItems[$cnt]['slug']?>"><span><?=$cartItems[$cnt]['name']?></span></a>
-                                                <span>x <?=$cartItems[$cnt]['qty']?></span>
-                                                <span class="header-cart-item-price">&#8369; <?=$cartItems[$cnt]['price']?></span>
+                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                             </div>
                                             <div class="clear"></div>
                                         </div>
-                                    <?PHP endif; ?>
-                                <?PHP endfor; ?>
+                                <?php endfor; ?>
+         
+                                
                                 <div class="header-cart-lower-content">
                                     <div class="header-cart-shipping-total">
                                         <p>Items(s) in cart: <span><?=$cartSize?></span></p>

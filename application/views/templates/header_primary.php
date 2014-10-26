@@ -156,19 +156,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <?PHP else : ?>
                                                 <div class="header-cart-item-list">
                                                     <p>Recently added item(s)</p>
-                                                    <?php $cartItems = array_reverse($cartItems); ?>
+                                                    <?php $cartItemsReversed = array_reverse($cartItems); ?>
                                                     <?php for($i = 0 ; $i < 2; $i++): ?>
-                                                            <?php if(!isset($cartItems[$i])) break; ?>
+                                                            <?php if(!isset($cartItemsReversed[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItems[$i]['imagePath']; ?>thumbnail/<?=$cartItems[$i]['imageFile']; ?>" alt="<?=$cartItems[$i]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>"><span><?=$cartItems[$i]['name']?></span></a>
-                                                                    <span>x <?=$cartItems[$i]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItems[$i]['price']?></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
@@ -332,20 +332,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                                             <?PHP else : ?>
                                                 <div class="sticky-header-cart-item-list">
-                                                    <p>Recently add item(s)</p>
-                                                    <?php $cartItems = array_reverse($cartItems); ?>
+                                                    <p>Recently added item(s)</p>
                                                     <?php for($i = 0 ; $i < 2; $i++): ?>
-                                                            <?php if(!isset($cartItems[$i])) break; ?>
+                                                            <?php if(!isset($cartItemsReversed[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItems[$i]['imagePath']; ?>thumbnail/<?=$cartItems[$i]['imageFile']; ?>" alt="<?=$cartItems[$i]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cartItems[$i]['slug']?>"><span><?=$cartItems[$i]['name']?></span></a>
-                                                                    <span>x <?=$cartItems[$i]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItems[$i]['price']?></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
