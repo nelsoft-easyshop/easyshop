@@ -1,18 +1,6 @@
 // global jsonCity
 var jsonCity = jQuery.parseJSON($('#json_city').val());
 
-/*******************    HTML Decoder    ********************************/
-function htmlDecode(value) {
-    
-    //value = value.replace(/script>/g, '');
-    
-    if (value) {
-        return $('<div />').html(value).text();
-    } else {
-        return '';
-    }
-}
-
 (function ($) {
 
     // Numeric characters only. Disable negative
@@ -121,19 +109,19 @@ function htmlDecode(value) {
                     // change all related display
                     $('#display-banner-view').show();
                     $('#edit-banner-view').hide();
-                    $(".storeName").html(htmlDecode(storName));
+                    $(".storeName").html(escapeHtml(storName));
 
                     if( stateRegion === "0" && city === "0" ){
                         $("#placeStock > strong").html("Location not set");
                     }
                     else{
-                        $("#placeStock > strong").html(htmlDecode(citySelected)+', '+htmlDecode(stateRegionSelected));
+                        $("#placeStock > strong").html(escapeHtml(citySelected)+', '+escapeHtml(stateRegionSelected));
                     }
                     
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
 
                     // Update custom attr origval for "Cancel" functionality
-                    $("#storeNameTxt").attr('data-origval', htmlDecode(data.new_data.store_name));
+                    $("#storeNameTxt").attr('data-origval', escapeHtml(data.new_data.store_name));
                     $("#mobileNumberTxt").attr('data-origval', data.new_data.mobile);
                     $(".stateregionselect").attr('data-origval', data.new_data.state_region_id);
                     $(".cityselect").attr('data-origval',data.new_data.city_id);
