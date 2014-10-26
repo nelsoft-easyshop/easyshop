@@ -94,81 +94,91 @@
                 <h5>Product Delivery</h5>
             </div>
             <div class="clear"></div>
+            
+            
+            
             <div class="step4_content step4_delivery col-xs-12 pd-top-15">
-                <?php if( (int)$product['is_meetup'] === 1 ):?>
+            
                 <div class="row">
                     <div class="col-sx-12 col-sm-12 col-md-9">
                         <div class="row">
-                            <div class="col-sx-12 col-sm-12 col-md-3 pd-bttm-15">						
-                                <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                <span class="pd-lr-10">For meetup</span>
-                            </div>
-                    <?php endif;?>
-                    <?php if( $shipping_summary['is_delivery'] ):?>
-                            <div class="col-sx-12 col-sm-12 col-md-3">
-                                <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                <span class="pd-lr-10">For delivery</span>
-                            </div>
+                            <?php if( (int)$product['is_meetup'] === 1 ):?>
+                                <div class="col-sx-12 col-sm-12 col-md-3 pd-bttm-15">
+                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                                    <span class="pd-lr-10">For meetup</span>
+                                </div>
+                            <?php endif;?>                
+            
+                            <?php if( $shipping_summary['is_delivery'] ):?>
+                                <div class="col-sx-12 col-sm-12 col-md-3">
+                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                                    <span class="pd-lr-10">For delivery</span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <div class="clear"></div>
+                                
+             
+                <?php if( $shipping_summary['is_delivery'] ):?>   
+                    <div class="clear"></div>
                     <div>
                         <div class="step4_delivery_sub">
-                            
                             <div class="clear"></div>
-                        <?php if( $shipping_summary['is_freeshipping'] ):?>
-                            <p>Free shipping</p>
-                        <?php elseif( $shipping_summary['has_shippingsummary'] ):?>
-                            <p><strong>Shipping Details:</strong></p>
-                            <?php foreach( $shipping_summary['shipping_display'] as $garr ):?>
-                            <div>
-                                <div class="clear"></div>
-                                <div class="pd-top-4">
-                                    <?php foreach( $garr['location'] as $price=>$locarr ):?>
-                                    <div class="row col-sx-mrgn">
-                                        <div class="col-sx-12 col-sm-4 col-md-4">
-                                            <span>&#8369;</span>
-                                            <div class="delivery-sub-box step4-price"><?php echo html_escape($price)?></div>
-                                        </div>									
-                                    <!-- </div>
-                                    <div class="row col-sx-mrgn"> -->
-                                        <div class="col-sx-12 col-sm-8 col-md-8">
-                                            <span class="display-ib line-height">Locations:</span>
-                                            <div class="delivery-sub-box width-75p">
-                                                <?php foreach($locarr as $locID):?>
-                                                <span class="delivery-sub-box-item"><?php echo $shipping_summary['location_lookup'][$locID]?></span>
-                                                <?php endforeach;?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach;?>
-                                    <div class="clear"></div>
-                                    <div class="step4_attr">
-                                        
-                                        <div class="col-sx-12 col-sm-12 col-md-12">
-                                            <?php if( (int)$attr['has_attr']===0 ):?>
-                                                <p>&bull; All Combinations</p>
-                                            <?php else:?>
-                                                <?php foreach($garr['attr'] as $attrID): ?>
-                                                    <p><span class="glyphicon glyphicon-chevron-right"></span>
-                                                        <?php foreach( $attr['attributes'][$attrID] as $pattr ):?>
-                                                            <?php echo $pattr['name'] . ' : ' . $pattr['value'] . ' '?>
+                            <?php if( $shipping_summary['is_freeshipping'] ):?>
+                                <p>Free shipping</p>
+                            <?php elseif( $shipping_summary['has_shippingsummary'] ):?>
+                                <p><strong>Shipping Details:</strong></p>
+                                <?php foreach( $shipping_summary['shipping_display'] as $garr ):?>
+                                    <div>
+                                        <div class="clear"></div>
+                                        <div class="pd-top-4">
+                                            <?php foreach( $garr['location'] as $price=>$locarr ):?>
+                                            <div class="row col-sx-mrgn">
+                                                <div class="col-sx-12 col-sm-4 col-md-4">
+                                                    <span>&#8369;</span>
+                                                    <div class="delivery-sub-box step4-price"><?php echo html_escape($price)?></div>
+                                                </div>									
+                                            <!-- </div>
+                                            <div class="row col-sx-mrgn"> -->
+                                                <div class="col-sx-12 col-sm-8 col-md-8">
+                                                    <span class="display-ib line-height">Locations:</span>
+                                                    <div class="delivery-sub-box width-75p">
+                                                        <?php foreach($locarr as $locID):?>
+                                                        <span class="delivery-sub-box-item"><?php echo $shipping_summary['location_lookup'][$locID]?></span>
                                                         <?php endforeach;?>
-                                                    </p>
-                                                <?php endforeach; ?>
-                                            <?php endif;?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php endforeach;?>
+                                            <div class="clear"></div>
+                                            <div class="step4_attr">
+                                                
+                                                <div class="col-sx-12 col-sm-12 col-md-12">
+                                                    <?php if( (int)$attr['has_attr']===0 ):?>
+                                                        <p>&bull; All Combinations</p>
+                                                    <?php else:?>
+                                                        <?php foreach($garr['attr'] as $attrID): ?>
+                                                            <p><span class="glyphicon glyphicon-chevron-right"></span>
+                                                                <?php foreach( $attr['attributes'][$attrID] as $pattr ):?>
+                                                                    <?php echo $pattr['name'] . ' : ' . $pattr['value'] . ' '?>
+                                                                <?php endforeach;?>
+                                                            </p>
+                                                        <?php endforeach; ?>
+                                                    <?php endif;?>
+                                                </div>
+                                            </div>
+                                            <div class="clear"></div>
                                         </div>
                                     </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                            <?php endforeach;?>
-                        <?php endif;?>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </div>
                     </div>
                 <?php endif;?>
+ 
             </div>
+
             <div class="clear"></div>
         </div>
         
@@ -226,7 +236,7 @@
                                     <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
                                     <span class="seller-name"> 
                                         <img src="<?=$avatarImage?>"><br />
-                                        <span><?php echo html_escape($product['sellerusername']);?></span> 
+                                        <span><?php echo html_escape(  $product['storename'] && strlen($product['storename']) > 0 ? $product['storename'] : $product['sellerusername']  );?></span> 
                                         <p>No ratings received.</p>
                                     </span>
                                 </h4>
@@ -264,16 +274,16 @@
                                 <?php endforeach;?>
                         
                                 <!-- Quantity -->
-                                <div class="product_option_preview"> <span>Quantity</span>
+                                <div class="product_option_preview"> <span class='quantity-label'>Quantity</span>
                                     <div class="">
                                         <input type="text" value ="1" class="product_quantity" disabled>
                                     </div>
                                 </div>
                                 <div class="price_details">
                                     <div class="price_box step-4-price-con col-xs-4 col-sm-4 col-md-4">
-                                        <div class="pbt pbt1">Price</div>
+                                        <div class="pbt pbt1"><span style="font-size:12px;">Price</span></div>
                                         <div>
-                                            PHP 
+                                            <span style="font-size:12px;">PHP</span> 
                                             <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
                                                 <?php echo number_format($product['price'],2,'.',',');?> 
                                             </span> 
@@ -285,7 +295,7 @@
                                         <?PHP endif;?>
                                     </div>
                                     <div class="availability col-xs-3 col-sm-3 col-md-3">
-                                        <p> Availability <br />
+                                        <p> <span style="font-size:12px;">Availability</span> <br />
                                             <span class="quantity" id="p_availability"><?php echo $availability;?></span>
                                         </p>
                                     </div>
@@ -293,7 +303,7 @@
                                         <!-- <a href="JavaScript:void(0)" id="send" class="fm1 preview_buy_btn disabled">Buy Now</a> <br/>
                                         <span>Delivers in 5-8 business days*</span>  -->
                                         <p class="product_content_payment"> 
-                                            <strong>Payment:</strong><br />
+                                            <strong style="font-size:12px;">Payment:</strong><br />
                                             <span class="mastercard"></span>
                                             <span class="visa"></span>
                                             <span class="paypal"></span>
