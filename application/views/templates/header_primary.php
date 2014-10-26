@@ -118,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-link-login">
                                                 <img src="assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
-                                                <a href="/register">create an account</a>
+                                                <a href="/register">register</a>
                                             </div>
                                         <?php endif; ?>                                           
                                     </div>
@@ -250,7 +250,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                     <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                     <ul class="cat-sub-list">
                                                                         <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
-                                                                            <li><a href="/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
+                                                                            <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
                                                                         <?PHP endforeach; ?>
                                                                     </ul>
                                                                 </div><!-- End .col-5 -->
@@ -261,7 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <h2>other categories</h2>
                                                         <ul class="other-cat-con">
                                                             <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
-                                                            <li><a href="/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
+                                                            <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
                                                             <?PHP endforeach; ?>
                                                         </ul>
                                                     </div>    
@@ -405,16 +405,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="header-link">
                                                     <img src="assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
+                                                    <a href="/register">register</a>
                                                 </div>
                                             <?php endif; ?>
-
-                                            <!--                                                
-                                                <div class="header-link">
-                                                    <span class="login-icon user-acct-icon"></span>
-                                                    <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
