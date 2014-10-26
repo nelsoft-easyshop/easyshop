@@ -58,7 +58,7 @@
                                         <span class="new-circle-2">NEW</span>
                                     <?php endif; ?>
                                     <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                        <span class="discount-circle-2"><?php echo $product->getDiscountPercentage() ?>%</span>
+                                        <span class="discount-circle-2"><?php echo number_format($product->getDiscountPercentage(), 0); ?>%</span>
                                     <?php endif; ?>
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
