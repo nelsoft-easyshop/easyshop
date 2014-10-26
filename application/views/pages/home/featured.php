@@ -24,7 +24,7 @@
                             <?php endif; ?>
 
                             <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                                <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
+                                <span class="discount-circle"><?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
                             <?PHP endif; ?>
                             <!-- End .item-image -->
                           
