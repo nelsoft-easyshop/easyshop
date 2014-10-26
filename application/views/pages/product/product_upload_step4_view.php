@@ -274,16 +274,16 @@
                                 <?php endforeach;?>
                         
                                 <!-- Quantity -->
-                                <div class="product_option_preview"> <span>Quantity</span>
+                                <div class="product_option_preview"> <span class='quantity-label'>Quantity</span>
                                     <div class="">
                                         <input type="text" value ="1" class="product_quantity" disabled>
                                     </div>
                                 </div>
                                 <div class="price_details">
                                     <div class="price_box step-4-price-con col-xs-4 col-sm-4 col-md-4">
-                                        <div class="pbt pbt1">Price</div>
+                                        <div class="pbt pbt1"><span style="font-size:12px;">Price</span></div>
                                         <div>
-                                            PHP 
+                                            <span style="font-size:12px;">PHP</span> 
                                             <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
                                                 <?php echo number_format($product['price'],2,'.',',');?> 
                                             </span> 
@@ -295,7 +295,7 @@
                                         <?PHP endif;?>
                                     </div>
                                     <div class="availability col-xs-3 col-sm-3 col-md-3">
-                                        <p> Availability <br />
+                                        <p> <span style="font-size:12px;">Availability</span> <br />
                                             <span class="quantity" id="p_availability"><?php echo $availability;?></span>
                                         </p>
                                     </div>
@@ -303,7 +303,7 @@
                                         <!-- <a href="JavaScript:void(0)" id="send" class="fm1 preview_buy_btn disabled">Buy Now</a> <br/>
                                         <span>Delivers in 5-8 business days*</span>  -->
                                         <p class="product_content_payment"> 
-                                            <strong>Payment:</strong><br />
+                                            <strong style="font-size:12px;">Payment:</strong><br />
                                             <span class="mastercard"></span>
                                             <span class="visa"></span>
                                             <span class="paypal"></span>
