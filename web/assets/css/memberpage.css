@@ -13,6 +13,47 @@
 #tx_dialog{
     font-size: 12px;
 }
+.print-ul{
+    position: absolute;
+    border: #494949;
+    border-radius: 4px;
+    background: #ffffff;
+    border-top: solid #ededed 1px;
+    border-left: solid #ededed 1px;
+    border-right: solid #ededed 1px;
+    display: none;
+    margin-left: 181px;
+    margin-top: -10px;
+}
+
+.print-ul > a > li{
+    width: 80px;
+    border-bottom: solid 2px #F08E1C;
+    padding: 9px 30px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.print-ul-s{
+    position: absolute;
+    border: #494949;
+    border-radius: 4px;
+    background: #ffffff;
+    border-top: solid #ededed 1px;
+    border-left: solid #ededed 1px;
+    border-right: solid #ededed 1px;
+    display: none;
+    margin-left: 145px;
+    margin-top: -10px;
+}
+
+.print-ul-s > a > li{
+    width: 80px;
+    border-bottom: solid 2px #F08E1C;
+    padding: 9px 30px;
+    list-style: none;
+    cursor: pointer;
+}
 
 .btn2 {
   padding: 6px 12px;

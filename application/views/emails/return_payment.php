@@ -6,7 +6,7 @@
         <div style="padding-right: 15px; padding-left:15px; margin-right: auto; margin-left:auto;">
             <div style="background-color: #013f94;">
                 <center>
-                    <a href="{home_link}">
+                    <a href="https://www.easyshop.ph">
                         <img src="header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
                     </a>
                 </center>

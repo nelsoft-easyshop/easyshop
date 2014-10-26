@@ -5,6 +5,7 @@ namespace EasyShop\Search;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsProductShippingHead;
 use EasyShop\Entities\EsKeywordsTemp;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Search Product Class
@@ -311,10 +312,11 @@ class SearchProduct
         // assign each image and image path of the product
         foreach ($collection as $key => $value) {
             $productId = $value->getIdProduct();
+            $value = $productManager->getProductDetails($productId); 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($productId);
-            $value->directory = "assets/product/unavailable/";
-            $value->imageFileName = "unavailable_product_img.jpg";
+            $value->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $value->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
             if($productImage != NULL){
                 $value->directory = $productImage->getDirectory();
@@ -344,8 +346,8 @@ class SearchProduct
                 $productId = $valueProduct->getIdProduct();
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                 ->getDefaultImage($productId);
-                $valueProduct->directory = "assets/product/unavailable/";
-                $valueProduct->imageFileName = "unavailable_product_img.jpg";
+                $valueProduct->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $valueProduct->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
                 if($productImage != NULL){
                     $valueProduct->directory = $productImage->getDirectory();

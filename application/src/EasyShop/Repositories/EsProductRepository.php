@@ -60,12 +60,16 @@ class EsProductRepository extends EntityRepository
                         (MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 10) +
                         (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1.5) +
                         (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 15) +
-                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) 
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) +
+                        (MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE) * 10)  
                          AS weight,
-                        id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
+                        id_product,`name`,price,brief,a.`slug`,`condition`,startdate, enddate,is_promote,promo_type,discount
                         ,`is_sold_out`
-                    FROM es_product
-                    WHERE is_delete = 0 AND is_draft = 0
+                    FROM es_product a,
+                         es_member b
+                    WHERE is_delete = 0 
+                            AND is_draft = 0
+                            AND a.member_id = b.id_member
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -89,7 +93,7 @@ class EsProductRepository extends EntityRepository
     public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
     {   
         if(!empty($productIds)){
-            $this->em =  $this->_em;
+                $this->em =  $this->_em;
 
                 $sql = "
                     SELECT 
@@ -108,6 +112,7 @@ class EsProductRepository extends EntityRepository
                 }
                 
                 $results = $query->getResult();
+
                 return $results;
             }
             
@@ -129,9 +134,14 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
+            $rsm->addScalarResult('head_id', 'head_id');
+            $rsm->addScalarResult('detail_id', 'detail_id');
+            $rsm->addScalarResult('is_other', 'is_other');
+            $rsm->addScalarResult('price', 'price');
+            $rsm->addScalarResult('image_id', 'image_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -139,7 +149,12 @@ class EsProductRepository extends EntityRepository
                 SELECT 
                     a.product_id as product_id
                     , b.name AS name
-                    , a.attr_value 
+                    , a.attr_value
+                    , a.attr_id as head_id
+                    , a.id_product_attr as detail_id
+                    , '0' as is_other
+                    , a.attr_price as price
+                    , '0' as image_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -153,6 +168,11 @@ class EsProductRepository extends EntityRepository
                      a.product_id as product_id
                     , a.`field_name`
                     , b.value_name 
+                    , b.head_id
+                    , b.id_optional_attrdetail as detail_id
+                    , '1' as is_other
+                    , b.value_price as price
+                    , b. product_img_id as price
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
@@ -211,7 +231,7 @@ class EsProductRepository extends EntityRepository
      * @return mixed
      *
      */
-    public function getProductAttributeDetailByName($productId, $fieldName, $fieldValue, $fieldPrice = null)
+    public function getProductAttributeDetailByName($productId, $fieldName = null, $fieldValue = null, $fieldPrice = null)
     {
     
         $this->em =  $this->_em;
@@ -222,25 +242,49 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('attr_id', 'attr_id');
         $rsm->addScalarResult('image_path', 'image_path');
         $rsm->addScalarResult('is_other', 'is_other');
+        $rsm->addScalarResult('type', 'type');
+        $rsm->addScalarResult('datatype_id', 'datatype_id');
             
         $sql1 = "     
-            SELECT h.field_name AS `name`, d.value_name AS attr_value, d.value_price AS attr_price,d.id_optional_attrdetail as attr_id, COALESCE(i.product_image_path,'') AS image_path, '1' as is_other 
+            SELECT 
+                h.field_name AS `name`,
+                d.value_name AS attr_value, 
+                d.value_price AS attr_price,
+                d.id_optional_attrdetail as attr_id, 
+                COALESCE(i.product_image_path,'') AS image_path, 
+                '1' as is_other,
+                'option' as 'type',
+                '0' as 'datatype_id'
             FROM es_optional_attrhead h 
             LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
             LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image
-            WHERE h.product_id=:id AND h.`field_name`= :attr  AND d.`value_name` = :attr_value
+            WHERE h.product_id=:id 
         ";
         
         $sql2 = "
-            SELECT  b.name, a.attr_value, a.attr_price,a.id_product_attr, '', '0'
+            SELECT 
+                b.name, 
+                a.attr_value, 
+                a.attr_price,
+                a.id_product_attr, 
+                '', 
+                '0',
+                'specific' as 'type',
+                b.datatype_id as 'datatype_id'
             FROM es_product_attr a 
             LEFT JOIN  es_attr b ON a.attr_id = b.id_attr
-            WHERE a.product_id =:id AND b.`name`= :attr  AND a.`attr_value` = :attr_value;
+            WHERE a.product_id =:id 
         ";
         
+        if($fieldName !== null || $fieldValue !== null){ 
+            $sql1 .= " AND h.`field_name`= :attr  AND d.`value_name` = :attr_value"; 
+            $sql2 .= " AND b.`name`= :attr  AND a.`attr_value` = :attr_value";
+        }
+
         if($fieldPrice !== null){
             $fieldPriceFilter = " AND d.value_price = :attr_price";
             $sql1 .= $fieldPriceFilter;
+            $fieldPriceFilter = " AND a.attr_price = :attr_price";
             $sql2 .= $fieldPriceFilter;
         }
         
@@ -248,14 +292,21 @@ class EsProductRepository extends EntityRepository
         
         $query = $this->em->createNativeQuery($sql,$rsm);
         $query->setParameter('id', $productId);
-        $query->setParameter('attr', $fieldName);
-        $query->setParameter('attr_value', $fieldValue);
+
+        if($fieldName !== null || $fieldValue !== null){
+            $query->setParameter('attr', $fieldName);
+            $query->setParameter('attr_value', $fieldValue);
+        }
 
         if($fieldPrice !== null){
             $query->setParameter('attr_price', $fieldPrice);
         }
         
-        return $query->getOneOrNullResult();
+        if($fieldName !== null || $fieldValue !== null){ 
+            return $query->getOneOrNullResult();
+        }
+        
+        return $query->getResult();
     }
 
     /**
@@ -330,7 +381,7 @@ class EsProductRepository extends EntityRepository
              * es_product_item_attr (which happens with the default qty), we query using the non-verbose
              * version to get the default quantity result set.
              */
-            if(count($data) === 0){
+            if(count($result) === 0){
                 $result = $defaultQuery->getResult();
             }
         }

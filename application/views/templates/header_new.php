@@ -66,8 +66,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <header class="new-header-con">
     <div class="main-container">
         <div>
-            <a href="<?=base_url()?>">
-                <img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
+            <a href="/">
+                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
             </a>
         </div>
         <div class="search-container">
@@ -82,45 +82,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
         <div class="pos-rel mrgn-rght-8">
             <div class="header-cart-container">
-                <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                <a href="/cart" class="header-cart-wrapper">
                     <span class="header-cart-items-con ui-form-control">
-                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                 </a>
                 <div class="header-cart-item-list">
-                    <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
-                    <p>You have no item in cart</p>
+                    <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
+                        <p>You have no item in your cart</p>
                     <?PHP else : ?>
-                        <p>Recently add item(s)</p>
-                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                            <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
-                    <div class="mrgn-bttm-15">
-                        <div class="header-cart-item-img">
-                            <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
-                            </a>
+                        <p>Recently added item(s)</p>
+                        <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                        <?php for($i = 0 ; $i < 2; $i++): ?>
+                                <?php if(!isset($cartItemsReversed[$i])) break; ?>
+                                <div class="mrgn-bttm-15">
+                                    <div class="header-cart-item-img">
+                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                        </a>
+                                    </div>
+                                    <div class="header-cart-item-con">
+                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                        <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                        <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                        <?php endfor; ?>
+         
+                        <div class="header-cart-lower-content">
+                            <div class="header-cart-shipping-total">
+                                <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                                <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
+                            </div>
+                            <div class="header-cart-buttons">
+                                <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        <div class="header-cart-item-con">
-                            <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                            <span>x <?=$cart_items[$cnt]['qty']?></span>
-                            <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                            <?PHP endif; ?>
-                    <?PHP endfor; ?>
-                    <div class="header-cart-lower-content">
-                        <div class="header-cart-shipping-total">
-                            <p>Items(s) in cart: <span><?=$cart_size?></span></p>
-                            <p>Total: <span>&#8369; <?=$total?></span></p>
-                        </div>
-                        <div class="header-cart-buttons">
-                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
-                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
                     <?PHP endif;?>
                 </div>
             </div>
@@ -149,6 +150,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </li>
                     <li>
                         <a href="/me?me=pending">On-going Transactions</a>
+                    </li>
+                    <li>
+                        <a href="/?view=basic">Easyshop.ph</a>
                     </li>
                     <li class="nav-dropdown-border">
                         <a href="/me?me=settings">Settings</a>

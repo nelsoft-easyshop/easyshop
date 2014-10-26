@@ -107,8 +107,8 @@ class PromoManager
                 $promoConfig = $this->promoConfig[$product->getPromoType()];
                 $promoOptions = $promoConfig['option'];
                 $timeNow = strtotime(date('H:i:s'));
-                $startDateTime = $product->getStartdate()->getTimestamp();
-                $endDateTime = $product->getEnddate()->getTimestamp();
+                $startDatetime = $product->getStartdate()->getTimestamp();
+                $endDatetime = $product->getEnddate()->getTimestamp();
                 
                 foreach($promoOptions as $option ){
                     if((strtotime($option['start']) <= $timeNow) && (strtotime($option['end']) > $timeNow)){

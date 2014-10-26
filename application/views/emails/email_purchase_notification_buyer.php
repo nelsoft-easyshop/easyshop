@@ -3,7 +3,7 @@
         <div style="padding-right: 15px; padding-left:15px; margin-right: auto; margin-left:auto;">
             <div style="background-color: #013f94;">
                 <center>
-                    <img src="images/landingpage/templates/header-img.png" style="display: block; max-width: 100%; height: auto;">
+                    <img src="header-img.png" style="display: block; max-width: 100%; height: auto;">
                 </center>
             </div>
             <br/>
@@ -26,7 +26,7 @@
             <div style="margin-bottom: 20px;background-color: #fff;border: 1px solid transparent; border-radius: 4px; -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05); box-shadow: 0 1px 1px rgba(0, 0, 0, .05); border-color: #bce8f1; border-radius: 0px !important;">
                 
                 <div style="padding: 10px 15px; border-bottom: 1px solid transparent; color: #31708f;background-color: #d9edf7; border-color: #bce8f1; font-weight: bold;">Summary of Sold Items</div>
-                <div style="padding: 15px;">
+                <div style="padding: 15px;" align="center">
                
                    <div style="min-height: 500px; display: static">
                         <center>
@@ -69,7 +69,7 @@
                                     <tr>
                                         <td style="padding: 10px; vertical-align: top; width:50%">
                                             
-                                        <div style='overflow-y:scroll;overflow-x:no-scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
+                                        <div style='overflow: scroll; min-height:260px; max-height: 290px; width: 100%; padding-right: 7px; '>
                                                 {products}
                                                 <table width="100%" style="border-collapse: collapse; font-size: 12px;">
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
@@ -80,12 +80,12 @@
                                                             {seller} 
                                                             <span>
                                                                 <a href="{store_link}{seller_slug}" style="text-decoration: none;">
-                                                                    <img src="images/appbar.home.png" width="15" height="15"/>
+                                                                    <img src="appbar.home.png" width="15" height="15"/>
                                                                 </a>
                                                             </span>
                                                             <span>
                                                                 <a href="{store_link}{seller_slug}/contact" style="text-decoration: none;">
-                                                                    <img src="images/appbar.message.png" width="15" height="15"/>
+                                                                    <img src="appbar.message.png" width="15" height="15"/>
                                                                 </a>
                                                             </span>
                                                             
@@ -168,16 +168,16 @@
             <div style="background: #3c475c; width: 100%; min-height: 100px; border-width:0px 0px 5px 0px; border-style:solid; border-color:#f18200; padding-top: 15px; padding-bottom: 15px;">
                 <div style="min-height: 50px;">
                     <center>
-                        <table>
+                        <table width="100%">
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="float: right; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
                                     <a href="https://twitter.com/EasyShopPH">
-                                        <img src="images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>

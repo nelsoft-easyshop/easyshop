@@ -19,14 +19,14 @@
      *
      * @var integer
      */
-    $maxPages = isset($maxPages) ? $maxPages : 10;
+    $maxPages = isset($maxPages) ? $maxPages : 9;
 
     /**
      * Minimum number of pages to the left of the currentPage to maintain
      *
      * @var integer
      */
-    $pagesBefore = isset($pagesBefore) ? $pagesBefore : 4;
+    $pagesBefore = isset($pagesBefore) ? $pagesBefore : 3;
     
     /**
      * Add hyperlink or not
@@ -46,7 +46,7 @@
     $start = $start < 1 ? 1 : $start;
     
     //$range = ($currentPage - $start);
-    $range = $lastPage - $currentPage;
+    $range = $lastPage - $currentPage -1;
     $range = $range > $maxPages ? $maxPages : $range;
 
     $end = $lastPage > $maxPages ? $currentPage+$range : $lastPage; 
@@ -65,6 +65,17 @@
             </a>
         </li>
     <?php endif; ?>
+    
+    <?php if($start > 1): ?>
+        <li class='individual' data-page='1'>
+            <a href='<?php echo $isHyperLink ? $url.'?page=1' : 'javascript:void(0)' ?>'>
+                <span>1</span>
+            </a>
+        </li>
+        <?php if(intval($start) !== 2): ?>
+            <li><span>...</span></li>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <?php for($i = $start ; $i <= $end; $i++): ?>
         <li class='<?php echo (int)$i === (int)$currentPage ? 'active' : '' ?> individual' data-page='<?php echo $i ?>'>
@@ -74,6 +85,17 @@
         </li>
     <?php endfor; ?>
     
+    <?php if($end < $lastPage): ?>
+        <?php if(intval($end) !== intval($lastPage)-1): ?>
+            <li><span>...</span></li>
+        <?php endif; ?>
+        <li class='individual' data-page='<?php echo $lastPage ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page='.$lastPage : 'javascript:void(0)' ?>'>
+                <span><?php echo $lastPage?></span>
+            </a>
+        </li>
+    <?php endif; ?>
+ 
     <?php if($lastPage > 0): ?>
         <?php $nextPage = ($currentPage + 1) <= $lastPage ? ($currentPage + 1) : $lastPage; ?>
         <li data-page='<?php echo $nextPage ?>' class="extremes next">

@@ -607,7 +607,7 @@ a.msgs_link:hover {
     border-color: #1e1e5d transparent transparent transparent;
 }
 
-.nav-dropdown:after {
+.nav-dropdown:before {
     border-style: inset;
      -webkit-transform:rotate(360deg);
     content: " ";
@@ -619,6 +619,7 @@ a.msgs_link:hover {
     border-style: solid;
     border-width:0 15px 15px;
     border-color: transparent transparent #fff transparent;
+    z-index: -9;
 }
 
 .nav-dropdown {

@@ -297,10 +297,9 @@ class payment_model extends CI_Model
                 break;
             case 'return_payment':
                 $this->email->subject($this->lang->line('notification_returntobuyer'));
-                $data['store_link'] = base_url() . $data['user_slug'];
+                $data['store_link'] = base_url() . "vendor/" . $data['user'];
                 $data['msg_link'] = base_url() . "messages/#" . $data['user'];
-                $data['home_link'] = base_url();
-                $msg = $this->parser->parse('emails/return_payment',$data,true);
+                $msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
                 break;
         }
         
@@ -440,14 +439,14 @@ class payment_model extends CI_Model
         $parseData = array_splice($row[0], 1, 10);
         $parseData['attr'] = array();
         
-        if($data['status'] === 1){ // if forward to seller
+        if($data['status'] === 1){ // if forward to seller (email to seller)
             $parseData['user'] = $row[0]['buyer'];
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
             $parseData['recipient'] = $row[0]['seller'];
         } 
-        else if($data['status'] === 2){ // if return to buyer
+        else if($data['status'] === 2 || $data['status'] === 3){ // if return to buyer or COD (email to buyer)
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
@@ -455,21 +454,18 @@ class payment_model extends CI_Model
             $parseData['recipient'] = $row[0]['buyer'];
         }
         
-        switch( $row[0]['payment_method_id'] ){
-            case "1":
+        switch( (int)$row[0]['payment_method_id'] ){
+            case 1:
                 $parseData['payment_method_name'] = "PayPal";
                 break;
-            case "2":
+            case 2:
                 $parseData['payment_method_name'] = "DragonPay";
                 break;
-            case "3":
+            case 3:
                 $parseData['payment_method_name'] = "Cash on Delivery";
                 break;
-            case "5":
+            case 5:
                 $parseData['payment_method_name'] = "Bank Deposit";
-                break;
-            default:
-                $parseData['payment_method_name'] = "Payment Method";
                 break;
         }
         

@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<map>
+    
+    <menu>
+         <newArrivals>
+            <arrival>
+                <text>Gadgets</text>
+                <target>/search/search.html?category=1&amp;q_str=gadgets</target>
+            </arrival>
+
+             <arrival>
+                <text>Bags</text>
+                <target>/search/search.html?category=1&amp;q_str=bags</target>
+            </arrival>
+        </newArrivals>
+
+        <topProducts>
+            <product>kj-star-wireless-mobile-phone-monopod</product>
+            <product>bavin-ipower-13800mah-pc228</product>
+            <product>n9-super-smart-watch-phone</product>
+        </topProducts>
+        
+        <topSellers>
+            <seller>easyshop</seller>
+        </topSellers>
+        
+    </menu>
+    
+    <categoryNavigation>
+        
+        <category>
+            <categorySlug>clothing-accessories</categorySlug>
+            <sub>
+                <categorySubSlug>babies-clothes</categorySubSlug>
+                <categorySubSlug>womens-shoes</categorySubSlug>
+                <categorySubSlug>mens-clothing</categorySubSlug>
+            </sub>
+        </category>
+
+        <category>
+            <categorySlug>jewellery-watches</categorySlug>
+            <sub>
+                <categorySubSlug>watches</categorySubSlug>
+                <categorySubSlug>diamonds-gems</categorySubSlug>
+            </sub>
+        </category>
+
+        <category>
+            <categorySlug>electronics-gadgets</categorySlug>
+            <sub>
+                <categorySubSlug>mobile-phones</categorySubSlug>
+                <categorySubSlug>computer-networking</categorySubSlug>
+                <categorySubSlug>cameras-imaging</categorySubSlug>
+            </sub>
+        </category>
+
+        <category>
+            <categorySlug>furniture-home-garden</categorySlug>
+            <sub>
+                <categorySubSlug>home-furniture</categorySubSlug>
+                <categorySubSlug>lamps-lighting-ceiling-fans</categorySubSlug>
+                <categorySubSlug>kitchen-dining-bar</categorySubSlug>
+            </sub>
+        </category>
+
+        <otherCategories>
+            <categorySlug>mens-accessories</categorySlug>
+            <categorySlug>womens-accessories</categorySlug>
+            <categorySlug>watch-parts-tools-guides</categorySlug>
+            <categorySlug>tv-video-home-audio</categorySlug>
+            <categorySlug>tablets</categorySlug>
+        </otherCategories>
+ 
+        
+    </categoryNavigation>
+    
+    
+    
+    <sliderSection>
+        <slide>
+            <template>B</template>
+            <image>
+                <path>/assets/images/homeslider/follow.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282248678651395</target>
+            </image>
+        </slide>
+
+       
+         <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/sellerspromo.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282474635295466</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/buyatzero.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>D</template>
+            <image>
+                <path>/assets/images/homeslider/actioncam.jpg</path>
+                <target>https://www.easyshop.ph/item/action-camcorder-hd-720p</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/sunnymp3.jpg</path>
+                <target>https://www.easyshop.ph/item/ultra-modern-2gb-mp3-player-sunglass-with-bluetooth</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/bavinbank.jpg</path>
+                <target>https://www.easyshop.ph/item/bavin-ipower-13800mah-pc228</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/mushroommic.jpg</path>
+                <target>https://www.easyshop.ph/item/cute-hip-mushroom-bluetooth-speaker-mic-with-suction-1</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/michaela.jpg</path>
+                <target>https://www.easyshop.ph/05272014</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/skk.jpg</path>
+                <target>https://www.easyshop.ph/skkmobileph</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/ckk.jpg</path>
+                <target>https://www.easyshop.ph/ckkmobile</target>
+            </image>
+        </slide>
+
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/zhk.jpg</path>
+                <target>https://www.easyshop.ph/zhk2014</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/bsmobile.jpg</path>
+                <target>https://www.easyshop.ph/bsmobileph</target>
+            </image>
+        </slide>
+
+    </sliderSection>
+    
+    
+    
+    <sellerSection>
+        
+        <sellerSlug>cheapdito</sellerSlug>
+        <sellerBanner>/assets/images/partner/banners/cheapdito.jpg</sellerBanner>
+        <sellerLogo></sellerLogo>
+        
+        <productPanel>
+            <slug>unicorn-quadcore-supreme-android-tabphone-3g</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>hybrid-v8-dualcore-android-44-tabpc-with-hdmi</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>worlds-smallest-hd-camcorder</slug>
+        </productPanel>
+        
+    </sellerSection>
+    
+    <adSection>
+        <ad>
+            <img>assets/images/ads/gadgetsgalore.jpg</img>
+            <target>/gadgetsgalore</target>
+        </ad>
+        
+        <ad>
+            <img>assets/images/ads/gemonline.jpg</img>
+            <target>/gemonlineshopping</target>
+        </ad>
+        
+        <ad>
+            <img>assets/images/ads/taughtmoney.jpg</img>
+            <target>/item/i-wish-they-taught-money-in-high-school-2-in-1-personal-finance-book</target>
+        </ad>
+    </adSection>
+    
+    <categorySection>
+        <categorySlug>furniture-home-garden</categorySlug>
+        
+        <sub>
+            <text>Decoration</text>
+            <target>/category/'Decoration'</target>
+        </sub>
+        
+        <sub>
+            <text>Home Furniture</text>
+            <target>/category/home-furniture</target>
+        </sub>
+        
+        <sub>
+            <text>Major Applicances</text>
+            <target>/category/major-appliances</target>
+        </sub>
+        
+        <sub>
+            <text>Kitchen and Dining</text>
+            <target>/category/kitchen-dining-bar</target>
+        </sub>
+        
+        <productPanel>
+            <slug>zodiac-sign-cup</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>charm-stripe-tumbler</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>stripes-feelings-mug-with-cover</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>fashionable-piano-inspired-clothing-hanger</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>portable-water-bottle-wringtoss-game</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+    <categorySection>
+        <categorySlug>health-beauty</categorySlug>
+        
+        <sub>
+            <text>Makeup</text>
+            <target>/category/makeup</target>
+        </sub>
+        
+        <sub>
+            <text>Fragrances</text>
+            <target>/category/fragrances</target>
+        </sub>
+        
+        <sub>
+            <text>Skin Care</text>
+            <target>/category/skin-care</target>
+        </sub>
+        
+        <productPanel>
+            <slug>glitz-and-bling-parfum-extreme</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>one-earth-organics-cellular-regeneration-underarm-therapy</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>aqua-de-gio</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>ck-be-jumbo-edt-perfume-unisex</slug>
+        </productPanel>
+        
+        <productPanel>
+            <slug>nova-2-in-1-hair-beauty-set</slug>
+        </productPanel>
+        
+    </categorySection>
+    
+
+    <brandSection>
+        <brandId>303</brandId>
+        <brandId>412</brandId>
+    </brandSection>
+    
+    
+    <sliderTemplate>
+        <template>A</template>
+        <template>B</template>
+        <template>C</template>
+        <template>D</template>
+    </sliderTemplate>    
+    
+</map>

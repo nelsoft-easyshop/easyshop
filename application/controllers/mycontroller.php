@@ -111,6 +111,35 @@ class Mycontroller extends MY_Controller
 		print_r($result);
 	}
 	
+	public function emailServiceTest()
+	{
+		$emailService = $this->serviceContainer['email_notification'];
+
+		$successCount = $emailService->setRecipient('stephenjanz@yahoo.com')
+									->setSubject("Test Email")
+									->setMessage("Test image file <img src='img_logo.png'>", "/assets/images/img_logo.png")
+									->sendMail();
+
+		print('successfully sent ' . $successCount . " emails");
+	}
+
+	public function emailQueueServiceTest()
+	{
+		$emailService = $this->serviceContainer['email_notification'];
+
+		$boolQueueStat = $emailService->setRecipient('stephenjanz@yahoo.com')
+									->setSubject("Test Email")
+									->setMessage("Test image file <img src='img_logo.png'>", "/assets/images/img_logo.png")
+									->queueMail();
+
+		if($boolQueueStat){
+			print("Email Queued");
+		}
+		else{
+			print("Failed to queue mail.");
+		}
+	}
+
 }
 
 ?>

@@ -89,10 +89,12 @@
                                         <div class="<?php echo $typeOfView; ?>"> 
                                             <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
                                                 <span class="prod_img_wrapper">
-                                                    <?php if(($isPromote == 1) && $isFreeShipping):?>
+                                                    <?php if(floatval($percentage) > 0):?>
+                                                    <div>
                                                         <span class="cd_slide_discount">
                                                             <span><?php echo number_format($percentage,0,'.',',');?>%<br>OFF</span>
                                                         </span>
+                                                    </div>
                                                     <?php endif; ?>
                                                 
                                                     <span class="prod_img_container">
@@ -110,7 +112,7 @@
                                                     <span>&#8369;</span> <?php echo $productPrice;?>
                                                 </div>
                                               
-                                                <?php if($percentage && $percentage > 0):?>
+                                                <?php if(floatval($percentage) > 0):?>
                                                 <div>
                                                     <span class="original_price">
                                                         &#8369; <?php echo $originalPrice; ?>
@@ -195,7 +197,7 @@
                                             <p class="p-item-price"> 
                                                 PHP <?php echo $productPrice;?>
                                             </p>
-                                            <?php if($percentage && $percentage > 0):?>
+                                            <?php if($percentage > 0):?>
                                                 <p class="p-item-discount">
                                                     <span class="original_price">
                                                         &#8369; <?php echo $originalPrice; ?>
@@ -214,7 +216,7 @@
                                             </p> 
                                         </td>
                                         <td width="30px" class=" v-align-top">
-                                            <?php if($isFreeShipping <= 0): ?>
+                                            <?php if($isFreeShipping): ?>
                                                 <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
                                             <?php endif; ?>
                                         </td>

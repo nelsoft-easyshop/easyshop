@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
 
 class product_model extends CI_Model
 {
+
     function __construct()
     {
         parent::__construct();
@@ -15,6 +16,20 @@ class product_model extends CI_Model
     }
 
     # the queries directory -- application/resources/sql/product.xml
+
+    /**
+     * Get all category available in database
+     * @return array
+     */
+    public function selectAllCategory()
+    {
+        $query = 'SELECT id_cat,parent_id,slug,name,description FROM es_cat where id_cat not in (1)';
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
 
     /**
      *  Get category details by using category ID
@@ -2167,9 +2182,14 @@ class product_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Get category details based on given slug
+     * @param  string $slug
+     * @return mixed
+     */
     public function getCategoryBySlug($slug)
     {
-    $query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
+        $query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug', $slug, PDO::PARAM_STR);
         $result = $sth->execute();
@@ -2177,7 +2197,8 @@ class product_model extends CI_Model
         $return  = array();
         if( count($rows) != 1 ){
             $return['id_cat'] = 0; $return['name'] = ''; $return['description'] = '';
-        }else{
+        }
+        else{
             $return = $rows[0];
         }
 
@@ -2208,7 +2229,7 @@ class product_model extends CI_Model
         if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
             $home_view_data['section'] = make_array($home_view_data['section']);
         }
-    if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
+        if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
             $home_view_data['mainSlide'] = make_array($home_view_data['mainSlide']);
         }
 
@@ -2222,68 +2243,71 @@ class product_model extends CI_Model
 
     private function createHomeElement($element, $key){
         $home_view_data = array();
-
-        if($element['type'] === 'product'){
-            $productdata = $this->getProductBySlug($element['value'], false);
-            if (!empty($productdata)){
-                $home_view_data = $productdata;
-            }
-            else{
-                $home_view_data = array();
-            }
-        }else if($element['type'] === 'date'){
-            $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
-        }else if($element['type'] === 'image'){
-            if(isset($element['imagemap'])){
-                $element['imagemap']['coordinate'] = count($element['imagemap']['coordinate'])>0?$element['imagemap']['coordinate']:'';
-                $element['imagemap']['target'] = count($element['imagemap']['target'])>0?$element['imagemap']['target']:'';
-                $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
-            }
-            else{
-                $home_view_data = array('src' => $element['value']);
-            }
-        }else if($element['type'] === 'image'){
-                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
-        }else if($element['type'] === 'image'){
-             $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
-        }else if($element['type'] === 'image'){
-             $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
-        }else if(($element['type'] === 'category') || ($element['type'] === 'custom')) {
-            if($element['type'] === 'category'){
-                $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
-                $home_view_data['category_detail']['url'] = 'category/'.$home_view_data['category_detail']['slug'];
-            }
-            else if($element['type'] === 'custom'){
-                $home_view_data['category_detail']['imagepath'] = '';
-                $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
-                $home_view_data['category_detail']['url'] = $element['value'];
-            }
-            $home_view_data['category_detail']['css_class'] = $element['css_class'];
-            $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
-            $home_view_data['category_detail']['layout'] = $element['layout'];
-
-            unset($element['value']);
-            unset($element['layout']);
-            unset($element['css_class']);
-            unset($element['type']);
-            unset($element['title']);
-
-            foreach($element as $key=>$cat_el){
-                if(!isset($cat_el['value']) && !isset($cat_el['type'])){
-                    foreach($cat_el as $inner_key => $cat_inner_el){
-                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);
-                    }
-                }else{
-                    $home_view_data[$key] = $this->createHomeElement($cat_el, $key);
+        if (isset($element['type'])) {
+            if ($element['type'] === 'product') {
+                $productdata = $this->getProductBySlug($element['value'], false);
+                if (!empty($productdata)) {
+                    $home_view_data = $productdata;
+                }
+                else {
+                    $home_view_data = array();
                 }
             }
+            else if ($element['type'] === 'date') {
+                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+            }
+            else if($element['type'] === 'image') {
+                if (isset($element['imagemap'])) {
+                    $element['imagemap']['coordinate'] = count($element['imagemap']['coordinate'])>0?$element['imagemap']['coordinate']:'';
+                    $element['imagemap']['target'] = count($element['imagemap']['target'])>0?$element['imagemap']['target']:'';
+                    $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
+                }
+                else {
+                    $home_view_data = array('src' => $element['value']);
+                }
+            }
+            else if ($element['type'] === 'image') {
+                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+            }
+            else if ($element['type'] === 'image') {
+                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+            }
+            else if ($element['type'] === 'image') {
+                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+            }
+            else if (($element['type'] === 'category') || ($element['type'] === 'custom')) {
+                if ($element['type'] === 'category') {
+                    $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
+                    $home_view_data['category_detail']['url'] = 'category/'.$home_view_data['category_detail']['slug'];
+                }
+                else if ($element['type'] === 'custom') {
+                    $home_view_data['category_detail']['imagepath'] = '';
+                    $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
+                    $home_view_data['category_detail']['url'] = $element['value'];
+                }
+                $home_view_data['category_detail']['css_class'] = $element['css_class'];
+                $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
+                $home_view_data['category_detail']['layout'] = $element['layout'];
 
+                unset($element['value']);
+                unset($element['layout']);
+                unset($element['css_class']);
+                unset($element['type']);
+                unset($element['title']);
 
-
-
-
-
-        }else{
+                foreach($element as $key=>$cat_el) {
+                    if (!isset($cat_el['value']) && !isset($cat_el['type'])) {
+                        foreach($cat_el as $inner_key => $cat_inner_el){
+                            $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);
+                        }
+                    }
+                    else {
+                        $home_view_data[$key] = $this->createHomeElement($cat_el, $key);
+                    }
+                }
+            }
+        }
+        else {
             $home_view_data = $element['value'];
         }
 

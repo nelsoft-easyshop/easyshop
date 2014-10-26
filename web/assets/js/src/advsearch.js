@@ -68,7 +68,7 @@
     }
 
     var checkIfUrlParamExist = function(field,url)
-    {
+    { 
         if(url.indexOf('?' + field + '=') != -1)
             return true;
         else if(url.indexOf('&' + field + '=') != -1)

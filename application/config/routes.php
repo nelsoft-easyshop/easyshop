@@ -108,6 +108,10 @@ else {
 
     # USER
     $route['(?i)me'] = 'memberpage'; # janz
+    $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
+    $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
+    $route['(?i)exportbuytransactions'] = 'memberpage/exportBuyTransactions'; # inon baguio
+    $route['(?i)exportsoldtransactions'] = 'memberpage/exportSellTransactions'; # inon baguio    
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
@@ -122,13 +126,21 @@ else {
 
     #PAYMENT CASH ON DELIVERY
     $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #UNIVERSAL PAYMENT
-    $route['(?i)pay/pay'] = 'payment/pay';  
+    $route['(?i)pay/pay'] = 'payment/pay';
+
+    #RETURN PAYMENT DRAGON PAY (GATEWAY)
+    $route['(?i)pay/returnDragonPay'] = 'payment/returnDragonPay';  # la roberto
+    $route['(?i)pay/postBackDragonPay'] = 'payment/postBackDragonPay';  # la roberto
+    
     #PAYMENT DIRECT BANK DEPOSIT
     $route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    
     #PAYMENT PAYPAL
     $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
     $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
+    $route['(?i)pay/postBackPayPal'] = 'payment/postBackPayPal';  # la roberto
 
     $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 
@@ -151,8 +163,10 @@ else {
 
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
+    $route['newhomewebservice'] = 'webservice/newhomewebservice';
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
+    $route['mobilewebservice'] = 'webservice/mobilewebservice';
 }
 
 /* End of file routes.php */
