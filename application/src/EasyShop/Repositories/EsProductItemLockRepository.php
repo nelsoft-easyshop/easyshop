@@ -92,7 +92,7 @@ class EsProductItemLockRepository extends EntityRepository
             $qb = $this->_em->createQueryBuilder();
             $this->_em->createQueryBuilder()
                         ->delete('EasyShop\Entities\EsProductItemLock', 'lck')
-                        ->where($qb->expr()->in("lck.productItem"), $itemIds)
+                        ->where($qb->expr()->in("lck.productItem", $itemIds))
                         ->andWhere('lck.order = :orderId')
                         ->setParameter('orderId', $orderId)
                         ->getQuery()
