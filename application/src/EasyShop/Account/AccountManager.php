@@ -146,18 +146,21 @@ class AccountManager
 
             if($member) {
                 if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
-                    if(!$this->oldAuthentication($validatedUsername, $validatedPassword, $asArray)) {
-                        $member = null;                        
+                    if(!$this->authenticateByReverseHashing($validatedUsername, $validatedPassword, $member)) {
+                        $member = NULL;                        
                         array_push($errors, ['login' => 'Invalid Username/Password']);  
                     }
                 }
             }
             else {
-                $member = null;
+                $member = NULL;
                 array_push($errors, ['login' => 'Invalid Username/Password']);
             }
 
-
+            if($member !== NULL) {
+                $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->getHydratedMember($validatedUsername, $asArray); 
+            }
         }
 
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
@@ -227,29 +230,23 @@ class AccountManager
      *
      * @param string $username
      * @param string $password
-     * @param bool $asArray
-     * @return Entity
+     * @param Entity $member
+     *
+     * @return bool
      */
-    public function oldAuthentication($username, $password, $asArray = false)
+    public function authenticateByReverseHashing($username, $password, $member)
     {
         $hashedPassword = $this->hashMemberPassword($username, $password);
-        $query =  $this->em->createQueryBuilder()
-                ->select('m')
-                ->from('EasyShop\Entities\EsMember', 'm')
-                ->where('m.username= :username')
-                ->andWhere('m.password= :password')
-                ->setParameter('username', $username)
-                ->setParameter('password', $hashedPassword)
-                ->setMaxResults(1)
-                ->getQuery();
-        $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
-        $member = $query->getResult($hydrator);
-        $member = isset($member[0]) ? $member[0] : $member;
-        if($member) {
+
+        if($member->getUsername() === $username && $member->getPassword() === $hashedPassword) {
             $this->migrateMemberPasswordToBcrypt($member->getIdMember(), $this->bcryptEncoder->encodePassword($password));
+            $isAuthenticated = true;
+        }
+        else {
+            $isAuthenticated = false;
         }
 
-        return $member;        
+        return $isAuthenticated;        
     }
 
     /**
