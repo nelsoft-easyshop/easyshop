@@ -36,16 +36,23 @@ class CMS
     
     
     /**
+     * Url Utility
+     *
+     * @var EasyShop\Utility\urlUtility
+     */
+    private $urlUtility;
+    
+    /**
      * Loads dependencies
      *
-     * @param EasyShop\XML\Resource
      */
-    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager, $urlUtility)
     {
         $this->xmlResourceGetter = $xmlResourceGetter;
         $this->em = $em;
         $this->productManager = $productManager;
         $this->userManager = $userManager;
+        $this->urlUtility = $urlUtility;
     }
 
     /**
@@ -751,12 +758,19 @@ $string = '<typeNode>
         foreach($homePageData['slider'] as $idx => $slide){
             $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
             $template = 'partials/homesliders/'.$template;
-            $homePageData['slider'][$idx]['template'] = $template;
+            $homePageData['slider'][$idx]['template'] = $template;            
             if(isset($homePageData['slider'][$idx]['image']['path'])){
                 $temporary = $homePageData['slider'][$idx]['image'];
                 $homePageData['slider'][$idx]['image'] = array();
                 array_push($homePageData['slider'][$idx]['image'], $temporary);
             }
+            
+            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
+                $target = $sliderImage['target'];
+                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
+            }
+            
+            
         }
         
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
@@ -767,6 +781,12 @@ $string = '<typeNode>
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $productSlug]);
             array_push($homePageData['menu']['topProducts'], $product);
+        }
+        
+        if(!is_array($xmlContent['menu']['topSellers']['seller'])){
+            $temp = $xmlContent['menu']['topSellers']['seller'] ;
+            $xmlContent['menu']['topSellers']['seller'] = array();
+            array_push( $xmlContent['menu']['topSellers']['seller'], $temp);
         }
         
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
@@ -798,6 +818,10 @@ $string = '<typeNode>
         //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['vendor_image'] = array();
+        if($featuredVendor['name']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
@@ -824,8 +848,9 @@ $string = '<typeNode>
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
                                             ->findOneBy(['idBrand' => $brandId]);
             $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] =
-                $popularCategory['popularBrand'][$key]['brand']->getImage() ?: EsBrand::IMAGE_UNAVAILABLE_FILE;
+            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
+                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
+                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
         }
         $homePageData['popularCategory'] = $popularCategory;
 

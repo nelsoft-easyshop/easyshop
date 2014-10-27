@@ -26,19 +26,44 @@
         });
     });
     
-    
-    $('.bxslider').bxSlider({
-        minslides : 1,
-        maxSlides: 1,
-        moveSlides: 1,
-        speed: 1000,
-        auto: true,
-        pause: 6000,
-        prevText : '',
-        nextText : '',
-        slideMargin : 10,
-        touchEnabled : true
+
+    var mainwindowsize = $(window).width();
+
+    $(window).on('load',function() {
+        mainwindowsize = $(window).width();
+        if (mainwindowsize > 565) {
+            //if the window is greater than 440px wide then turn on jScrollPane..
+            $('.bxslider').bxSlider({
+                minslides : 2,
+                maxSlides: 2,
+                moveSlides: 1,
+                speed: 1000,
+                auto: true,
+                pause: 6000,
+                prevText : '',
+                nextText : '',
+                slideMargin : 10,
+                touchEnabled : true,
+                infiniteLoop: true
+            });
+        }
+
+        else {
+            $('.bxslider').bxSlider({
+                moveSlides: 1,
+                speed: 1000,
+                auto: true,
+                pause: 6000,
+                prevText : '',
+                nextText : '',
+                slideMargin : 10,
+                touchEnabled : true,
+                infiniteLoop: true
+            });
+        }
     });
+    
+    
 
     $('#content .bx-wrapper').removeAttr("style");
     // $('#content .bx-wrapper ul li').removeAttr("style");

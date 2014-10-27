@@ -30,15 +30,30 @@
     $(function(){
         
         $('#feedback-select').on('change', function(){
-             $feedbackSelect.removeClass("input-error");
+             $(this).removeClass("input-error");
              $('#feedback-order-error-icon').hide();
+        });
+        
+        $('#feedback-message').on('keyup', function(){
+             $(this).removeClass("input-error");
         });
         
         $( "#feedback-form" ).submit(function( event ) {
             $feedbackSelect = $('#feedback-select');
+            $feedbackMessage = $('#feedback-message');
+            var hasError = false;
+            if($.trim($feedbackMessage.val()).length == 0){
+                $feedbackMessage.addClass("input-error");
+                hasError = true;
+            }
+            
             if($feedbackSelect.val() == 0){
                 $feedbackSelect.addClass("input-error");
                 $('#feedback-order-error-icon').show();
+                hasError = true;
+            }
+            
+            if(hasError){
                 event.preventDefault();
             }
  
