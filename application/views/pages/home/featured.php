@@ -10,15 +10,17 @@
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
                     <?php $productSlug = $product['product']->getSlug(); ?>
                     <div class="item">
-                            <a href="/item/<?php echo $productSlug ?>">
-                                <div class="div-rec-product-image">
-                                    <center>
-                                        <span class="span-me">
-                                            <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
-                                        </span>
-                                    </center>
-                                </div>
-                            </a>
+                            <center>
+                                <a href="/item/<?php echo $productSlug ?>">
+                                    <div class="div-rec-product-image">
+                                        <center>
+                                            <span class="span-me">
+                                                <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
+                                            </span>
+                                        </center>
+                                    </div>
+                                </a>
+                            </center>
                             <?php if ($product['product']->getIsNew()): ?>
                                 <span class="new-circle">NEW</span>
                             <?php endif; ?>
@@ -31,7 +33,7 @@
                         <div class="item-meta-container" align="left">
                             <h3 class="item-name">
                                 <a href="/item/<?=$productSlug?>">
-                                    <?=(strlen($product['product']->getName())>15)?substr_replace($product['product']->getName(), "...", 15):$product['product']->getName();?>
+                                    <?=(strlen($product['product']->getName())>20)?substr_replace($product['product']->getName(), "...", 20):$product['product']->getName();?>
                                 </a>
                             </h3>
                             <div class="item-meta-inner-container clearfix">
