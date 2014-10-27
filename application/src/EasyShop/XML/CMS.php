@@ -783,6 +783,12 @@ $string = '<typeNode>
             array_push($homePageData['menu']['topProducts'], $product);
         }
         
+        if(!is_array($xmlContent['menu']['topSellers']['seller'])){
+            $temp = $xmlContent['menu']['topSellers']['seller'] ;
+            $xmlContent['menu']['topSellers']['seller'] = array();
+            array_push( $xmlContent['menu']['topSellers']['seller'], $temp);
+        }
+        
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
             $seller['details'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                           ->findOneBy(['slug' => $sellerSlug]);
@@ -812,7 +818,10 @@ $string = '<typeNode>
         //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
-        $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        $featuredVendor['vendor_image'] = array();
+        if($featuredVendor['name']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
@@ -839,8 +848,9 @@ $string = '<typeNode>
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
                                             ->findOneBy(['idBrand' => $brandId]);
             $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] =
-                $popularCategory['popularBrand'][$key]['brand']->getImage() ?: EsBrand::IMAGE_UNAVAILABLE_FILE;
+            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
+                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
+                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
         }
         $homePageData['popularCategory'] = $popularCategory;
 

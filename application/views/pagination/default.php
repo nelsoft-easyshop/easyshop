@@ -46,7 +46,7 @@
     $start = $start < 1 ? 1 : $start;
     
     //$range = ($currentPage - $start);
-    $range = $lastPage - $currentPage;
+    $range = $lastPage - $currentPage -1;
     $range = $range > $maxPages ? $maxPages : $range;
 
     $end = $lastPage > $maxPages ? $currentPage+$range : $lastPage; 

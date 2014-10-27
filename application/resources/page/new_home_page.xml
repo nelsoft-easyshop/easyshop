@@ -2,29 +2,25 @@
 <map>
     
     <menu>
-        <newArrivals>
+         <newArrivals>
             <arrival>
-                <text>Male</text>
-                <target>/</target>
+                <text>Gadgets</text>
+                <target>/search/search.html?category=1&amp;q_str=gadgets</target>
             </arrival>
-           
+
              <arrival>
-                <text>Female</text>
-                <target>/</target>
+                <text>Bags</text>
+                <target>/search/search.html?category=1&amp;q_str=bags</target>
             </arrival>
         </newArrivals>
-        
+
         <topProducts>
-            <product>ubuntu-valid-gd</product>
-            <product>ubuntu-valid-gd</product>
-            <product>ubuntu-valid-gd</product>
-            <product>ubuntu-valid-gd</product>
+            <product>kj-star-wireless-mobile-phone-monopod</product>
+            <product>bavin-ipower-13800mah-pc228</product>
+            <product>n9-super-smart-watch-phone</product>
         </topProducts>
         
         <topSellers>
-            <seller>easyshop</seller>
-            <seller>easyshop</seller>
-            <seller>easyshop</seller>
             <seller>easyshop</seller>
         </topSellers>
         
@@ -33,49 +29,48 @@
     <categoryNavigation>
         
         <category>
-            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>clothing-accessories</categorySlug>
             <sub>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>babies-clothes</categorySubSlug>
+                <categorySubSlug>womens-shoes</categorySubSlug>
+                <categorySubSlug>mens-clothing</categorySubSlug>
             </sub>
         </category>
-        
+
         <category>
             <categorySlug>jewellery-watches</categorySlug>
             <sub>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>watches</categorySubSlug>
+                <categorySubSlug>diamonds-gems</categorySubSlug>
             </sub>
         </category>
-        
+
         <category>
-            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>electronics-gadgets</categorySlug>
             <sub>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>mobile-phones</categorySubSlug>
+                <categorySubSlug>computer-networking</categorySubSlug>
+                <categorySubSlug>cameras-imaging</categorySubSlug>
             </sub>
         </category>
-        
+
         <category>
-            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>furniture-home-garden</categorySlug>
             <sub>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
-                <categorySubSlug>jewellery-watches</categorySubSlug>
+                <categorySubSlug>home-furniture</categorySubSlug>
+                <categorySubSlug>lamps-lighting-ceiling-fans</categorySubSlug>
+                <categorySubSlug>kitchen-dining-bar</categorySubSlug>
             </sub>
         </category>
-        
+
         <otherCategories>
-            <categorySlug>jewellery-watches</categorySlug>
-            <categorySlug>jewellery-watches</categorySlug>
-            <categorySlug>jewellery-watches</categorySlug>
-            <categorySlug>jewellery-watches</categorySlug>
-            <categorySlug>jewellery-watches</categorySlug>
+            <categorySlug>mens-accessories</categorySlug>
+            <categorySlug>womens-accessories</categorySlug>
+            <categorySlug>watch-parts-tools-guides</categorySlug>
+            <categorySlug>tv-video-home-audio</categorySlug>
+            <categorySlug>tablets</categorySlug>
         </otherCategories>
-        
+ 
         
     </categoryNavigation>
     
@@ -83,233 +78,208 @@
     
     <sliderSection>
         <slide>
-            <template>A</template>
-            <image>
-                <path>/assets/images/homeslider/hs_0.jpg</path>
-                <target>/</target>
-            </image>
-        </slide>
-       
-        <slide>
             <template>B</template>
             <image>
-                <path>/assets/images/homeslider/hs_0_3.jpg</path>
-                <target>/</target>
+                <path>/assets/images/homeslider/follow.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282248678651395</target>
+            </image>
+        </slide>
+
+       
+         <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/sellerspromo.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282474635295466</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/buyatzero.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448</target>
+            </image>
+        </slide>
+        
+        <slide>
+            <template>D</template>
+            <image>
+                <path>/assets/images/homeslider/actioncam.jpg</path>
+                <target>https://www.easyshop.ph/item/action-camcorder-hd-720p</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/sunnymp3.jpg</path>
+                <target>https://www.easyshop.ph/item/ultra-modern-2gb-mp3-player-sunglass-with-bluetooth</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/bavinbank.jpg</path>
+                <target>https://www.easyshop.ph/item/bavin-ipower-13800mah-pc228</target>
             </image>
         </slide>
         
         <slide>
             <template>C</template>
             <image>
-                <path>/assets/images/homeslider/hs_0_2_1.jpg</path>
-                <target>/</target>
+                <path>/assets/images/homeslider/mushroommic.jpg</path>
+                <target>https://www.easyshop.ph/item/cute-hip-mushroom-bluetooth-speaker-mic-with-suction-1</target>
             </image>
             <image>
-                <path>/assets/images/homeslider/hs_0_2_2.jpg</path>
-                <target>/</target>
+                <path>/assets/images/homeslider/michaela.jpg</path>
+                <target>https://www.easyshop.ph/05272014</target>
             </image>
         </slide>
-       
         
         <slide>
-            <template>D</template>
+            <template>C</template>
             <image>
-                <path>/assets/images/homeslider/hs_6.jpg</path>
-                <target>/</target>
+                <path>/assets/images/homeslider/skk.jpg</path>
+                <target>https://www.easyshop.ph/skkmobileph</target>
             </image>
             <image>
-                <path>/assets/images/homeslider/hs_0_3.jpg</path>
-                <target>/</target>
-            </image>
-            <image>
-                <path>/assets/images/homeslider/hs_0_3.jpg</path>
-                <target>/</target>
+                <path>/assets/images/homeslider/ckk.jpg</path>
+                <target>https://www.easyshop.ph/ckkmobile</target>
             </image>
         </slide>
-        
-        
+
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/zhk.jpg</path>
+                <target>https://www.easyshop.ph/zhk2014</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/bsmobile.jpg</path>
+                <target>https://www.easyshop.ph/bsmobileph</target>
+            </image>
+        </slide>
+
     </sliderSection>
     
     
     
     <sellerSection>
         
-        <sellerSlug>patriots21</sellerSlug>
-        <sellerBanner>/assets/images/clothes-closet.jpg</sellerBanner>
-        <sellerLogo>/assets/images/products/uniqlo-logo-big.png</sellerLogo>
+        <sellerSlug>cheapdito</sellerSlug>
+        <sellerBanner>/assets/images/partner/banners/cheapdito.jpg</sellerBanner>
+        <sellerLogo></sellerLogo>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>unicorn-quadcore-supreme-android-tabphone-3g</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>hybrid-v8-dualcore-android-44-tabpc-with-hdmi</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>worlds-smallest-hd-camcorder</slug>
         </productPanel>
         
     </sellerSection>
     
     <adSection>
         <ad>
-            <img>assets/images/big-banner-1.png</img>
-            <target></target>
+            <img>assets/images/ads/gadgetsgalore.jpg</img>
+            <target>/gadgetsgalore</target>
         </ad>
         
         <ad>
-            <img>assets/images/big-banner-2.png</img>
-            <target></target>
+            <img>assets/images/ads/gemonline.jpg</img>
+            <target>/gemonlineshopping</target>
         </ad>
         
         <ad>
-            <img>assets/images/big-banner-3.png</img>
-            <target></target>
+            <img>assets/images/ads/taughtmoney.jpg</img>
+            <target>/item/i-wish-they-taught-money-in-high-school-2-in-1-personal-finance-book</target>
         </ad>
     </adSection>
     
     <categorySection>
-        <categorySlug>jewellery-watches</categorySlug>
+        <categorySlug>furniture-home-garden</categorySlug>
         
         <sub>
-            <text>New Arrival</text>
-            <target>/</target>
+            <text>Decoration</text>
+            <target>/category/'Decoration'</target>
         </sub>
         
         <sub>
-            <text>Popular Items</text>
-            <target>/</target>
+            <text>Home Furniture</text>
+            <target>/category/home-furniture</target>
         </sub>
         
         <sub>
-            <text>Women</text>
-            <target>/</target>
+            <text>Major Applicances</text>
+            <target>/category/major-appliances</target>
         </sub>
         
         <sub>
-            <text>Men</text>
-            <target>/</target>
+            <text>Kitchen and Dining</text>
+            <target>/category/kitchen-dining-bar</target>
         </sub>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>zodiac-sign-cup</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>charm-stripe-tumbler</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>stripes-feelings-mug-with-cover</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>fashionable-piano-inspired-clothing-hanger</slug>
         </productPanel>
         
         <productPanel>
-            <slug>hjh</slug>
+            <slug>portable-water-bottle-wringtoss-game</slug>
         </productPanel>
         
     </categorySection>
     
     <categorySection>
-        <categorySlug>jewellery-watches</categorySlug>
+        <categorySlug>health-beauty</categorySlug>
         
         <sub>
-            <text>New Arrival</text>
-            <target>/</target>
+            <text>Makeup</text>
+            <target>/category/makeup</target>
         </sub>
         
         <sub>
-            <text>Popular Items</text>
-            <target>/</target>
+            <text>Fragrances</text>
+            <target>/category/fragrances</target>
         </sub>
         
         <sub>
-            <text>Women</text>
-            <target>/</target>
-        </sub>
-        
-        <sub>
-            <text>Men</text>
-            <target>/</target>
+            <text>Skin Care</text>
+            <target>/category/skin-care</target>
         </sub>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>glitz-and-bling-parfum-extreme</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>one-earth-organics-cellular-regeneration-underarm-therapy</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>aqua-de-gio</slug>
         </productPanel>
         
         <productPanel>
-            <slug>testability</slug>
+            <slug>ck-be-jumbo-edt-perfume-unisex</slug>
         </productPanel>
         
         <productPanel>
-            <slug>hjh</slug>
+            <slug>nova-2-in-1-hair-beauty-set</slug>
         </productPanel>
         
     </categorySection>
     
-      
-    <categorySection>
-        <categorySlug>clothing-accessories</categorySlug>
-        
-        <sub>
-            <text>New Arrival</text>
-            <target>/</target>
-        </sub>
-        
-        <sub>
-            <text>Popular Items</text>
-            <target>/</target>
-        </sub>
-        
-        <sub>
-            <text>Women</text>
-            <target>/</target>
-        </sub>
-        
-        <sub>
-            <text>Men</text>
-            <target>/</target>
-        </sub>
-        
-        <productPanel>
-            <slug>hjh</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>testability</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>testability</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>testability</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>testability</slug>
-        </productPanel>
-        
-    </categorySection>
-    
+
     <brandSection>
-        <brandId>1</brandId>
-        <brandId>2</brandId>
-        <brandId>3</brandId>
-        <brandId>4</brandId>
+        <brandId>303</brandId>
+        <brandId>412</brandId>
     </brandSection>
     
     
