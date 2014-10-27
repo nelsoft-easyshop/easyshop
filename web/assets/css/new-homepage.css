@@ -2807,7 +2807,8 @@ font-size: 15px;
 }
 
 .span-store-logo > img, .span-store-big-logo > img {
-    width: 100% !important;
+    width: auto !important;
+    max-width: 100% !important;
     height: auto !important;
 }
 
@@ -2854,7 +2855,7 @@ font-size: 15px;
 }
 
 .img-rec-product{
-    width: inherit;
+    width: auto;
     max-width: 100%;
     height: auto;
     max-height: 228px !important;
