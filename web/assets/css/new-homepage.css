@@ -445,7 +445,7 @@ header {
     text-align: right;
 }
 
-.header-link-login img {
+.header-link img {
     margin-right: 3px;
 }
 
@@ -502,8 +502,8 @@ header {
 .header-cart-wrapper .header-cart-items-con {
     font-size: 0.85em;
     border-radius: 4px 0 0 4px;
-    height: 33px;
-    line-height: 33px;
+    height: 34px;
+    line-height: 34px;
     padding: 0 !important;
 }
 
@@ -616,6 +616,7 @@ header {
     vertical-align: middle;
     float: right;
     line-height: 42px;
+    padding-top: 2px;
     width: 72%;
 }
 
@@ -655,7 +656,7 @@ header {
 
 .sticky-nav-fixed .header-text-container {
     margin-left: 18px;
-    width: 23%;
+    width: 24%;
 }
 
 .sticky-nav-fixed .header-text-container .new-user-nav-dropdown {
@@ -1033,12 +1034,12 @@ header {
 
 .slider-template-3 .temp3-img-2 img  {
     max-width: 222px !important;
-    width: 100%;
+    width: 101%;
 }
 
 .slider-template-4 .temp4-img-2 div img {
     max-width: 222px !important;
-    width: 100%;   
+    width: 101%;   
 }
 
 /*.slider-template-1 {
@@ -3002,7 +3003,7 @@ font-size: 15px;
 
 @media only screen and (max-width: 767px) {
     .bx-wrapper .bx-pager, .bx-wrapper .bx-controls-auto {
-        bottom: 5%;
+        bottom: 10%;
     }
     .bx-wrapper .bx-next {
         right: 10px;
