@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
+<link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
 <div class="container">
     <div class="prod-detail-main">
         <div class="div-prod-lower">
@@ -158,7 +159,7 @@
                                                     <div class="row">
                                                         <div class="col-xs-2 col-user-image no-padding" align="center">
                                                             <a href="#"><div class="div-user-image">
-                                                                <img src="/assets/images/product/nikon-logo.png" class="img-user"/>
+                                                                <img src="/assets/images/img_main_product.png" class="img-user"/>
                                                             </div></a>
                                                             <div class="clear"></div>
                                                             <a href="#"><p class="p-username">UserName</p></a>
@@ -173,7 +174,7 @@
                                                                                 <td>
                                                                                     <a href="#">
                                                                                         <div class="div-user-image">
-                                                                                            <img src="/assets/images/products/nikon-logo.png" class="img-user"/>
+                                                                                            <img src="/assets/images/img_main_product.png" class="img-user"/>
                                                                                         </div>
                                                                                     </a>
                                                                                 </td>
@@ -333,4 +334,5 @@
      </div>
 </div>
 
+<script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
