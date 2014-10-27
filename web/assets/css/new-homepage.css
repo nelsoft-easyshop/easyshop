@@ -2689,9 +2689,9 @@ font-size: 15px;
 }
 
 .img-category{
-    width: 35px;
-    height: 35px;
-    margin: -8px 5px 5px 0px;
+    width: 29px;
+    height: 29px;
+    margin: -5px 5px 5px 0px;
 }
 
 .img-category-mobile{
@@ -2854,7 +2854,7 @@ font-size: 15px;
 }
 
 .img-rec-product{
-    width: inherit;
+    width: auto;
     max-width: 100%;
     height: auto;
     max-height: 228px !important;
@@ -3046,10 +3046,11 @@ font-size: 15px;
         width: 100%;
     }
     .purchased-items-slider-cat-1,
-.purchased-items-slider-cat-2,
-.purchased-items-slider-cat-3{
-    min-height: 0px;
-}
+    .purchased-items-slider-cat-2,
+    .purchased-items-slider-cat-3{
+        min-height: 0px;
+    }
+    
     .fa-prev-slide{
         margin-left: 6px !important;
     }
@@ -3213,6 +3214,9 @@ font-size: 15px;
     
     .item-name{
         font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
     
     .old-price, .item-price{
@@ -3247,6 +3251,7 @@ font-size: 15px;
     
     #cat-items .item, #featured-seller .item{
         padding: 10px 10px !important;
+        min-height: 228px;
     }
     
     .span-see-all{
@@ -3333,6 +3338,10 @@ font-size: 15px;
     
     .item-price-container{
         height: 30px;
+    }
+    
+    .td-logo-store{
+        display: none;
     }
 }
 
