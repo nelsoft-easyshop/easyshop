@@ -21,15 +21,17 @@
                 for($i=0; $i<=3; $i++){
             ?>
             <div class="item">
-                <a href="#">
-                    <div class="div-rec-product-image">
-                        <center>
-                            <span class="span-me">
-                                <img src="/assets/images/products/nikon-logo.png" class="img-rec-product">
-                            </span>
-                        </center>
-                    </div>
-                </a>
+                <center>
+                    <a href="#">
+                        <div class="div-rec-product-image">
+                            <center>
+                                <span class="span-me">
+                                    <img src="/assets/images/products/nikon-logo.png" class="img-rec-product">
+                                </span>
+                            </center>
+                        </div>
+                    </a>
+                </center>
                 <span class="span-circle-new">NEW</span>
                 <span class="span-circle-discount">100%</span>
                 <div class="clear"></div>
@@ -66,15 +68,17 @@
             </div>
             
             <div class="item">
-                <a href="#">
-                    <div class="div-rec-product-image">
-                        <center>
-                            <span class="span-me">
-                                <img src="/assets/images/img_main_product.png" class="img-rec-product">
-                            </span>
-                        </center>
-                    </div>
-                </a>
+                <center>
+                    <a href="#">
+                        <div class="div-rec-product-image">
+                            <center>
+                                <span class="span-me">
+                                    <img src="/assets/images/img_main_product.png" class="img-rec-product">
+                                </span>
+                            </center>
+                        </div>
+                    </a>
+                </center>
                 <span class="span-circle-new">NEW</span>
                 <span class="span-circle-discount">100%</span>
                 <div class="clear"></div>
@@ -111,15 +115,17 @@
             </div>
             
             <div class="item">
-                <a href="#">
-                    <div class="div-rec-product-image">
-                        <center>
-                            <span class="span-me">
-                                <img src="/assets/images/img_easy_treat_v1.jpg" class="img-rec-product">
-                            </span>
-                        </center>
-                    </div>
-                </a>
+                <center>
+                    <a href="#">
+                        <div class="div-rec-product-image">
+                            <center>
+                                <span class="span-me">
+                                    <img src="/assets/images/img_easy_treat_v1.jpg" class="img-rec-product">
+                                </span>
+                            </center>
+                        </div>
+                    </a>
+                </center>
                 <span class="span-circle-new">NEW</span>
                 <span class="span-circle-discount">100%</span>
                 <div class="clear"></div>
