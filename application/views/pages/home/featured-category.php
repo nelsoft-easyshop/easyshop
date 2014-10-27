@@ -6,8 +6,12 @@
             <div class="col-md-12">
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
+                        <span class="pull-left">
+                            <img src="/assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
+                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
+                        </span>
                         <p>
-                            <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
+                            <span><?php echo html_escape(strtoupper($categorySection['category']->getName())); ?></span>
                             <span class="pull-right sn-container">
                                 <span>
                                     <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-left fa-category-item-prev"></i></a>
@@ -41,16 +45,21 @@
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
-                                    <div class="item-image-container" style="background: url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover">
-                                        <a class="a-item-image" href="/item/<?php echo $productSlug ?>">
-                                            <?php if ($product->getIsNew()): ?>
-                                                <span class="new-circle">NEW</span>
-                                            <?php endif; ?>
-                                            <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
-                                                <span class="discount-circle"><?php echo $product->getDiscountPercentage() ?>%</span>
-                                            <?php endif; ?>
-                                        </a>
-                                    </div><!-- End .item-image -->
+                                    <a href="/item/<?php echo $productSlug ?>">
+                                        <div class="div-rec-product-image">
+                                            <center>
+                                                <span class="span-me">
+                                                    <img src="<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                                </span>
+                                            </center>
+                                        </div>
+                                    </a>
+                                    <?php if ($product->getIsNew()): ?>
+                                        <span class="new-circle-2">NEW</span>
+                                    <?php endif; ?>
+                                    <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                        <span class="discount-circle-2"><?php echo number_format($product->getDiscountPercentage(), 0); ?>%</span>
+                                    <?php endif; ?>
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
                                         <a href="/item/<?php echo $productSlug ?>">
@@ -70,7 +79,7 @@
                                         <table width="100%">
                                         <tr>
                                             <td>
-                                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?php echo $product->getSlug() ?>">
+                                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="javascript:void(0);" data-slug="<?php echo $product->getSlug(); ?>" data-productid="<?php echo $product->getIdProduct(); ?>">
                                                     <span class="icon-cart"></span> ADD TO CART
                                                 </a>
                                             </td>

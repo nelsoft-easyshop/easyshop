@@ -542,6 +542,11 @@ function processAttributes()
             get_discPrice();
         }
         else{
+            if(isNaN(price)){
+                price = 0; 
+                $("#discountedP").val('');
+                $("#slider_val").val("0%");
+            }
             $("#discounted_price_con").text(price.toFixed(2));
         }
     });
@@ -643,7 +648,11 @@ function processAttributes()
             $rangeSlider.ionRangeSlider("update", {
                 from: 0
             });
+            if(isNaN(basePrice)){
+                basePrice = 0;
+            }
             $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+
             return false;
         } 
 
@@ -651,6 +660,7 @@ function processAttributes()
             alert("Discounted price cannot be greater than base price.");
             $this.val("0.00");
             validateRedTextBox("#discountedP");
+
             return false;
         } 
  
@@ -662,6 +672,7 @@ function processAttributes()
                 from: 0
             }); 
             $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+            
             return false;
         }
 

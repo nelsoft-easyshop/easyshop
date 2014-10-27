@@ -1334,9 +1334,10 @@ input.cc_check {
     display: inline-block;
     margin-right: 14px;
     padding: 6px 12px;
-    width: 136px;
+    max-width: 136px;
     margin-left: 3%;
     border: 2px solid #565656;
+    width: 28%;
 }
 #div_cart_modal button {
     background-color: #00a388;
@@ -1348,6 +1349,7 @@ input.cc_check {
     height: auto;
     line-height: 23px;
     margin: 0;
-    width: 136px;
+    max-width: 136px;
     margin-left: 20%;
+    width: 28%;
 }

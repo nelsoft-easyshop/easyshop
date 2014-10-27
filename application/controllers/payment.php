@@ -111,7 +111,7 @@ class Payment extends MY_Controller{
             $product_array =  $this->product_model->getProductById($productId);
             $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
             $maxqty = $newQty[$itemId]['quantity'];
-            $itemArray[$key]['isAvailable'] = ($maxqty <= 0) ? "false" : "true";
+            $itemArray[$key]['isAvailable'] = ($maxqty <= 0 || strtolower($value['isAvailable']) == "false") ? "false" : "true";
         }
 
         // get all possible error message
@@ -330,7 +330,7 @@ class Payment extends MY_Controller{
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
-            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available" ? "true" : "false");
+            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available") ? "true" : "false";
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
@@ -1741,10 +1741,12 @@ class Payment extends MY_Controller{
         // Validate Cart Data and subtract points
         $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
-
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
         extract($response);
+
+        $this->removeItemFromCart();  
+        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
         echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }

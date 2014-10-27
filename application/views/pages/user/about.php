@@ -50,28 +50,21 @@
                     </p>
                     <div class="row">
                         <div class="col-xs-12">
-                            <table width="" class="table-rate-seller">
-                                <tr>
-                                    <?php $ratingCounter = 1; ?>
-                                    <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                        <td class="td-rater td-rate-seller td-<?php echo $ratingCounter;?>">
-                                            <p class="span-rate-c"><?php echo html_escape($ratingHeader)?>: </p>
-                                        </td>
-                                        <td class="td-rate-average v-align-middle tdr-<?php echo $ratingCounter;?>" width="170px">
-                                            <span class="span-rate">
-                                                <?php for($i = 0; $i < round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
-                                                    <i class="fa fa-star star-feed star-active"></i>
-                                                <?php endfor; ?>
-                                                
-                                                <?php for($i = 0; $i < 5 - round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
-                                                    <i class="fa fa-star star-feed"></i>
-                                                <?php endfor; ?>
-                                            </span>
-                                        </td>
-                                    <?php $ratingCounter++; ?>
-                                    <?php endforeach; ?>
-                                </tr>
-                            </table>
+                            <?php $ratingCounter = 1; ?>
+                            <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                <div class="col-xs-4">
+                                    <p class="span-rate-c"  style="display: inline;"><?php echo html_escape($ratingHeader)?>: </p>
+                                    <span class="span-rate" style="display: inline;">
+                                        <?php for($i = 0; $i < round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
+                                            <i class="fa fa-star star-feed star-active"></i>
+                                        <?php endfor; ?>
+                                        <?php for($i = 0; $i < 5 - round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
+                                            <i class="fa fa-star star-feed"></i>
+                                        <?php endfor; ?>
+                                    </span>
+                                 </div>
+                            <?php $ratingCounter++; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <hr/>
@@ -109,23 +102,18 @@
                         <div class="div-message-form">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <table width="100%" class="table-rate">
-                                        <tr>
-                                            <?php $count = 1; ?>
-                                            <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                                <td width="33%" class='rating-header' id='rating-header<?php echo $count?>'>
-                                                    <?php echo html_escape($ratingHeader); ?>
-                                                    <span class="span-rate feedback-ratings">
-                                                        <?php for($i = 1; $i <= 5; $i++): ?>
-                                                            <i class="fa fa-star fa-star-rate" data-number="<?php echo $i ?>"></i>
-                                                        <?php endfor; ?>
-
-                                                    </span>
-                                                </td>
-                                            <?php $count++; ?>
-                                            <?php endforeach;?>
-                                        </tr>
-                                    </table>
+                                    <?php $count = 1; ?>
+                                    <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                        <div class="col-xs-4" style="margin-bottom: 20px;">
+                                            <?php echo html_escape($ratingHeader); ?>
+                                            <span class="span-rate feedback-ratings">
+                                                <?php for($i = 1; $i <= 5; $i++): ?>
+                                                    <i class="fa fa-star fa-star-rate" data-number="<?php echo $i ?>"></i>
+                                                <?php endfor; ?>
+                                            </span>
+                                        </div>
+                                    <?php $count++; ?>
+                                    <?php endforeach;?>
                                 </div>
                             </div>
                                                             
@@ -154,7 +142,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message"></textarea>
+                                    <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message" id="feedback-message"></textarea>
                                 </div>
                             </div>
                             <div class="row">

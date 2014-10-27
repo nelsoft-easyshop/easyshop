@@ -449,12 +449,12 @@ class product extends MY_Controller
             $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
-            $this->load->view('templates/header_new', $data); 
+            $this->load->view('templates/header_primary', $data); 
             $this->load->view('pages/product/productpage_primary', $data);
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';
-            $this->load->view('templates/header', $data); 
+            $this->load->view('templates/header_primary', $data); 
             $this->load->view('pages/general_error', $data); 
         }
         $this->load->view('templates/footer_primary');

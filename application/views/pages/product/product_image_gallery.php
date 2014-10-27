@@ -82,6 +82,7 @@ $(document).ready(function() {
 
 });
 
-
-
+$(document).ready(function() {
+    $('.footer-primary').addClass('footer-secondary');
+});
 </script>

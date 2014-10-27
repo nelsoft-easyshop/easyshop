@@ -10,6 +10,7 @@ use EasyShop\Entities\EsAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsVendorSubscribe;
+use EasyShop\Entities\EsVendorSubscribeHistory as EsVendorSubscribeHistory;
 
 /**
  *  User Manager Class
@@ -550,6 +551,15 @@ class UserManager
         $this->em->persist($subscriptionEntity);
         $this->em->flush();
 
+        // Insert to history 
+        $subscribeHistory = new EsVendorSubscribeHistory();
+        $subscribeHistory->setMember($memberEntity); 
+        $subscribeHistory->setVendor($vendorEntity); 
+        $subscribeHistory->setAction("FOLLOW"); 
+        $subscribeHistory->setTimestamp(date_create(date("Y-m-d H:i:s"))); 
+        $this->em->persist($subscribeHistory);
+        $this->em->flush();
+
         return true;
     }
 
@@ -571,6 +581,15 @@ class UserManager
                                                 ));
         if(!empty($subscriptionEntity)){
             $this->em->remove($subscriptionEntity);
+            $this->em->flush();
+
+            // Insert to history 
+            $subscribeHistory = new EsVendorSubscribeHistory();
+            $subscribeHistory->setMember($memberEntity); 
+            $subscribeHistory->setVendor($vendorEntity); 
+            $subscribeHistory->setAction("UNFOLLOW"); 
+            $subscribeHistory->setTimestamp(date_create(date("Y-m-d H:i:s"))); 
+            $this->em->persist($subscribeHistory);
             $this->em->flush();
         }
 

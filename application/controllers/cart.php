@@ -19,12 +19,20 @@ class Cart extends MY_Controller
      * @var EasyShop\Cart\CartInterface
      */
     private $cartImplementation;
+    
+    /**
+     * Product Manager instance
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
 
     public function __construct()
     {
         parent::__construct();
         $this->load->library('session');
         $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->productManager = $this->serviceContainer['product_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
@@ -43,6 +51,13 @@ class Cart extends MY_Controller
             $data['cart_items'] = $cartContents;
             $cartSize = $this->cartImplementation->getSize(TRUE);
             $data['total'] = $cartSize ? $this->cartImplementation->getTotalPrice() : 0;
+            
+            $referer =  $this->serviceContainer['http_request']->headers->get('referer');
+            $continueUrl = $referer;
+            if(strpos($referer, '/item/') === false){
+                $continueUrl = '/product/categories_all';
+            }
+            $data['continue_url'] = $continueUrl;
 
             $this->load->view('templates/header', $data);
             #$this->load->view('templates/checkout_progressbar');
@@ -62,8 +77,18 @@ class Cart extends MY_Controller
     public function doAddItem()
     {
         $productId = $this->input->post('productId');
-        $options = $this->input->post('options');
-        $quantity = $this->input->post('quantity');
+        if($this->input->post('express')){
+            $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
+            $options = array();
+            foreach($defaultAttributes as $attribute){
+                $options[strtolower($attribute["attr_name"])] = $attribute["attr_value"]."~".$attribute["attr_price"];
+            }
+            $quantity = 1;
+        }
+        else{
+            $options = $this->input->post('options');
+            $quantity = $this->input->post('quantity');
+        }
         $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
         $isLoggedIn = $this->session->userdata('usersession') ? true : false;
 

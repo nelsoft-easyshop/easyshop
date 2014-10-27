@@ -1008,12 +1008,20 @@ div.vertical {
 	width: 110px;
 }
 
+.thumbnails-img-container .center #prev,
+.thumbnails-img-container .center #next {
+	-webkit-transition: none;
+    -moz-transition: 	none;
+    -o-transition:	    none;
+     transition: 		none;
+}
+
 .thumbnails-img-container .center #prev {
 	border-right:1px solid #e2e2e2;
 	background: url(../images/sprites/sprite.png) no-repeat 3px -418px;
 	display: inline-block;
 	text-indent: -99999px;
-	width: 54px;
+	width: 53px;
 }
 
 .thumbnails-img-container .center #prev:hover {
@@ -1285,6 +1293,42 @@ div.vertical {
 }
 
 /* =============================================
+-----------  product footer css ----------------
+==============================================*/
+.footer-secondary .footer-ac {
+	text-align: center;
+}
+
+.footer-secondary .footer-ac a {
+	color: #fff;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.footer-secondary .footer-ac a:first-child {
+	border-right: 1px solid #fff;
+	padding-right: 20px;
+	margin-right: 20px
+}
+
+.footer-primary .ui-form-control::-webkit-input-placeholder {
+	font-size: 16px;
+	font-weight: 900;
+}
+.footer-primary .ui-form-control:-moz-placeholder {
+	font-size: 16px;
+	font-weight: 900;
+}
+.footer-primary .ui-form-control::-moz-placeholder {
+	font-size: 16px;
+	font-weight: 900;
+}
+.footer-primary .ui-form-control:-ms-input-placeholder {
+	font-size: 16px;
+	font-weight: 900;
+}
+
+/* =============================================
 -------------  responsive css -----------------
 ==============================================*/
 @media (min-width: 320px) {
@@ -1327,6 +1371,10 @@ div.vertical {
 		background-position: 25% center;
 		padding: 10px 10px 10px 17%; 
 	}
+
+	.footer-secondary .footer-ac {
+		display: none;
+	}
 }
 
 @media screen and (max-width : 991px) {
@@ -1345,6 +1393,26 @@ div.vertical {
 	.prod-quantity-container .quantity-select {
 		margin-bottom: 25px;
 		width: 100%;
+	}
+
+	/**product footer **/
+	.footer-primary.footer-secondary {
+		padding: 43px 0 35px 0;
+	}
+
+	.footer-secondary .footer-ac {
+		margin-bottom: 26px;
+	}
+
+	.footer-secondary .social-media-wrapper {
+		margin-top: 29px;
+	}
+
+	.footer-secondary .footer-top-con,
+	.footer-secondary .footer-newsletter h1,
+	.footer-secondary .footer-newsletter p,
+	.footer-secondary + .footer-bottom-content  {
+		display: none;
 	}
 }
 

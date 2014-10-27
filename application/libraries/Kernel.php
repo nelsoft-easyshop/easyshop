@@ -91,7 +91,8 @@ class Kernel
             return new \EasyShop\XML\CMS($container['xml_resource'],
                                          $container['entity_manager'],
                                          $container['product_manager'],
-                                         $container['user_manager']);
+                                         $container['user_manager'],
+                                         $container['url_utility']);
         };
         
         //XML Resource Service
@@ -225,7 +226,7 @@ class Kernel
         $container['request'] = function ($c) use($container) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
-        
+
         //Cart Manager
         $container['cart_manager'] = function ($c) use ($container) {
             $productManager = $container['product_manager'];
@@ -275,7 +276,12 @@ class Kernel
         };
         $container['string_utility'] = function ($c) {
             return new \EasyShop\Utility\StringUtility();
-         };
+        };
+        $container['url_utility'] = function ($c) {
+            return new \EasyShop\Utility\UrlUtility();
+        };
+        
+        
         $socialMediaConfig = require APPPATH . 'config/oauth.php';
         $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
             $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
@@ -370,7 +376,13 @@ class Kernel
             }
             return new \nusoap_client($url,true);
         };
- 
+
+        // QR Code Generator
+        $container['qr_code_manager'] = function ($c) {
+            $qrCode = new \PHPQRCode\QRcode();
+            return  new \EasyShop\QrCode\QrCodeManager($qrCode);
+        };
+
         // API formatter 
         $container['api_formatter'] = function ($c) use($container) {
             $em = $container['entity_manager']; 

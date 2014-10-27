@@ -70,7 +70,7 @@
                         </tr>
                     </table>
                 <?php endif; ?>
-                <a class="btn btn-default btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Details</a> 
+                <a class="btn btn-default show-form-address btn-gray" style="text-decoration: none; margin-top:10px;" data-toggle="modal" data-target="#change_ship">Change Shipping Details</a> 
             </div>
         </div>
         <div class="col-md-6">
@@ -144,8 +144,8 @@
                             <b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
                         </td>
                     </tr>
-                    
-                    <tr id ="pointInput">
+                    <!--
+                    <tr id ="pointInput" style="display:none">
                         <td colspan="2">
                             Point Allocation:
                         </td>
@@ -154,7 +154,7 @@
                             <br/> <br/> Max points allowable: <?php echo $maxPoint; ?>
                         </td>
                     </tr> 
-                    
+                    -->
 
                 </table>
             </div>
