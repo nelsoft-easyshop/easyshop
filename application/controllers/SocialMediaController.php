@@ -55,18 +55,18 @@ class SocialMediaController extends MY_Controller
                 $username = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
                 $gender =  $facebookData->getProperty('gender') === 'male' ? 'M' : 'F';
                 $data = $this->encrypt->encode(
-                    $facebookType.
-                    '~'.
-                    $facebookData->getId().
-                    '~'.
-                    $username.
-                    '~'.
-                    $facebookData->getName().
-                    '~'.
-                    $gender.
-                    '~'.
-                    $facebookData->getProperty('email')
-                );
+                                            $facebookType.
+                                            '~'.
+                                            $facebookData->getId().
+                                            '~'.
+                                            $username.
+                                            '~'.
+                                            $facebookData->getName().
+                                            '~'.
+                                            $gender.
+                                            '~'.
+                                            $facebookData->getProperty('email')
+                                        );
                 redirect('SocialMediaController/register?h=' . $data, 'refresh');
             }
             else {
@@ -113,29 +113,29 @@ class SocialMediaController extends MY_Controller
             }
             else if ($esMember && !$doesAccountMerged) {
                 $data = $this->encrypt->encode(
-                    $esMember->getIdMember().
-                    '~'.
-                    $googleType.
-                    '~'.
-                    $googleData->getId()
-                );
+                                            $esMember->getIdMember().
+                                            '~'.
+                                            $googleType.
+                                            '~'.
+                                            $googleData->getId()
+                                        );
                 redirect('SocialMediaController/merge?h=' . $data, 'refresh');
             }
             else if (!$esMember) {
                 $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
                 $data = $this->encrypt->encode(
-                    $googleType.
-                    '~'.
-                    $googleData->getId().
-                    '~'.
-                    $username.
-                    '~'.
-                    $googleData->getName().
-                    '~'.
-                    ''.
-                    '~'.
-                    $googleData->getId()
-                );
+                                            $googleType.
+                                            '~'.
+                                            $googleData->getId().
+                                            '~'.
+                                            $username.
+                                            '~'.
+                                            $googleData->getName().
+                                            '~'.
+                                            ''.
+                                            '~'.
+                                            $googleData->getId()
+                                        );
                 redirect('SocialMediaController/register?h=' . $data, 'refresh');
             }
             else {
@@ -237,14 +237,14 @@ class SocialMediaController extends MY_Controller
                                 ->findOneBy([
                                     'idMember' => $getData[0]
                                 ]);
-        $socialMedaProvider = $this->entityManager
+        $socialMediaProvider = $this->entityManager
                                         ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
                                             ->find($getData[2]);
-        if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMedaProvider) {
+        if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider) {
             redirect('/login', 'refresh');
         }
 
-        $member = $this->socialMediaManager->mergeAccount($memberObj, $getData[1], $socialMedaProvider);
+        $member = $this->socialMediaManager->mergeAccount($memberObj, $getData[1], $socialMediaProvider);
         $this->login($member);
         redirect('/', 'refresh');
     }

@@ -204,6 +204,13 @@ class SocialMediaManager
         return $member;
     }
 
+    /**
+     * Merge account
+     * @param $member
+     * @param $oAuthId
+     * @param $oAuthProvider
+     * @return EsMemberMerge
+     */
     public function mergeAccount($member, $oAuthId, $oAuthProvider)
     {
         $socialAccount = new EsMemberMerge();
