@@ -96,15 +96,23 @@ class Payment extends MY_Controller{
         // check the availability of the product
         $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
         $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count'];
-        $codCount = $productAvailability['cod_count']; 
-
+        $successCount = $productAvailability['success_count']; 
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
+        $itemArray = $purchaseLimitPaymentType['itemArray'];
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
-        $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+        $soloRestriction = $purchaseLimitPaymentType['solo_restriction'];  
+
+        foreach ($itemArray as $key => $value) {
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
+            $product_array =  $this->product_model->getProductById($productId);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
+            $maxqty = $newQty[$itemId]['quantity'];
+            $itemArray[$key]['isAvailable'] = ($maxqty <= 0 || strtolower($value['isAvailable']) == "false") ? "false" : "true";
+        }
 
         // get all possible error message
         $errorMessage = [];
@@ -115,16 +123,11 @@ class Payment extends MY_Controller{
         }
 
         if($qtySuccess != count($itemArray)){
+
             $canContinue = false;
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
                                     Check the availability of your item and try again.');
-        }
-
-        if($codCount != count($itemArray)){
-            // $canContinue = false;
-            unset($paymentType['cod']);
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.'); 
         }
 
         if(!$purchaseLimit){
@@ -134,6 +137,9 @@ class Payment extends MY_Controller{
 
         if(!$soloRestriction){
             $canContinue = false;
+            foreach ($itemArray as $key => $value) {
+                $itemArray[$key]['isAvailable'] = "false";
+            }
             array_push($errorMessage, 'One of your items can only be purchased individually.');
         }
 
@@ -324,6 +330,7 @@ class Payment extends MY_Controller{
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available") ? "true" : "false";
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
@@ -362,6 +369,7 @@ class Payment extends MY_Controller{
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
                 $can_purchase = $this->product_model->is_purchase_allowed($memberId ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
+                    $itemArray[$key]['isAvailable'] = "false";
                     $purchaseLimit = false;
                     break;
                 }
@@ -375,6 +383,7 @@ class Payment extends MY_Controller{
             'payment_type' => $paymentType,
             'purchase_limit' => $purchaseLimit,
             'solo_restriction' => $soloRestriction,
+            'itemArray' => $itemArray,
         );
     }
     

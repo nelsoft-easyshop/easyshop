@@ -19,6 +19,13 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
+                                    <?php foreach( $customCatProd as $catId=>$arrCat ):?>
+                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories">
+                                            <li>
+                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                                            </li>
+                                        </a>
+                                    <?php endforeach;?>
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
                                             <li>
@@ -95,8 +102,27 @@
                     </select>
                     <div class="clear"></div>
                 </div>
+
+                <?php foreach($customCatProd as $catId => $arrCat):?>
+                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" id="cus-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" data-productcount="<?=$arrCat['non_categorized_count']?>">
+                    <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
+
+                    <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
+                        <span>No items available for this category.</span>
+                    <?php else:?>
+                        <?=$arrCat['product_html_data'];?>
+                        <div class="clear"></div>
+                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
+                            <center>
+                                <?php echo $arrCat['pagination']?>
+                            </center>
+                        </div>
+                   <?php endif;?>
+                </div>
+                <?php endforeach;?>
+
                 <?php foreach($defaultCatProd as $catId => $arrCat):?>
-                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" data-group="<?php echo $catId?>">
+                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" id="def-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' data-catType="<?php echo $arrCat['cat_type']?>" style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" data-group="<?php echo $catId?>" data-productcount="<?=$arrCat['non_categorized_count']?>">
                     <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
 
                     <?php if($arrCat['non_categorized_count'] === 0): ?>

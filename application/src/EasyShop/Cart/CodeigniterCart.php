@@ -43,7 +43,7 @@ class CodeigniterCart implements CartInterface
     {
         $this->CI =& get_instance();
         $this->CI->load->library('cart');
-        $this->cart = new $this->CI->cart();
+        $this->cart = $this->CI->cart;
         $this->em = $em;    
     }
     

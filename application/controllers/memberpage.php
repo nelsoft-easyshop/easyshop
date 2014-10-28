@@ -32,11 +32,17 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        
+        $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
     }
-    
+
+    public function sample()
+    {
+        $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
+        echo '<img src="/'.$this->qrManager->getImagePath('asd').'"/>';
+    }
+
     /**
      *  Class Index. Renders Memberpage
      */
@@ -874,6 +880,9 @@ class Memberpage extends MY_Controller
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
         
+        $em = $this->serviceContainer['entity_manager'];
+        $emailService = $this->serviceContainer['email_notification'];
+
         if( $this->form_validation->run('addShippingComment') ){
             $postData = array(
                 'comment' => $this->input->post('comment'),
@@ -886,12 +895,60 @@ class Memberpage extends MY_Controller
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
             );
 
-            $result = $this->payment_model->checkOrderProductBasic($postData);
-            
-            if( count($result) == 1 ){ // insert comment
-                $r = $this->payment_model->addShippingComment($postData);
-                $serverResponse['result'] = $r ? 'success' : 'fail';
-                $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
+            $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
+            $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
+            $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
+                                      ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                                 "seller" => $memberEntity,
+                                                 "order" => $orderEntity
+                                        ]);
+            $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                        ->findOneBy(["orderProduct" => $orderProductEntity,
+                                                    "member" => $memberEntity
+                                                    ]);
+
+            if( count($shippingCommentEntity) === 1 ){
+                $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                           ->getExactShippingComment($postData);
+            }
+
+            // If order product entry exists, insert/update comment
+            if( count($orderProductEntity) === 1 ){
+                $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
+                $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
+                $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
+
+                // If no previous entry of exact shipping detail && successful insert in database,
+                // queue email notification
+                if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
+                    $buyerEntity = $orderEntity->getBuyer();
+                    $buyerEmail = $buyerEntity->getEmail();
+                    $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
+                    $imageArray = array(
+                        "/assets/images/landingpage/templates/header-img.png",
+                        "/assets/images/landingpage/templates/facebook.png",
+                        "/assets/images/landingpage/templates/twitter.png"
+                    );
+
+                    $parseData = $postData;
+                    $parseData = array_merge($parseData, array(
+                            "seller" => $memberEntity->getUsername(),
+                            "store_link" => base_url() . $memberEntity->getSlug(),
+                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
+                            "buyer" => $buyerEntity->getUsername(),
+                            "invoice" => $orderEntity->getInvoiceNo(),
+                            "product_name" => $orderProductEntity->getProduct()->getName(),
+                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
+                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
+                        ));
+                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
+
+                    $emailService->setRecipient($buyerEmail)
+                                 ->setSubject($buyerEmailSubject)
+                                 ->setMessage($buyerEmailMsg, $imageArray)
+                                 ->queueMail();
+                }
+
             }
             else{
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
@@ -1667,18 +1724,18 @@ class Memberpage extends MY_Controller
                 $tempCountContainer = $searchProductService->getProductBySearch($parameter);
                 $productCount = count($tempCountContainer);
                 break;
-            case 1: // Custom - NOT YET USED
-                //$products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                //                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr, $condition, $lprice, $uprice);
-                //$productCount = 0;
+            case 1: // Custom Categories
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $products = $result['products'];
+                $productCount = $result['filtered_product_count'];
                 break;
             case 2: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
             default: // Default Categories
-                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;

@@ -46,10 +46,9 @@
  
     <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
     
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/header-css.css" media='screen'>
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/bootstrap.css" media='screen'>
-    <link type="text/css" href='<?=base_url()?>assets/css/new-homepage.css' rel="stylesheet" media='screen'/>
-    <link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/responsive_css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css" media='screen'>
 </head>
 <body>
 
@@ -84,7 +83,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="login-profile-con">
                                                     <img src="<?=$user_details->profileImage;?>">
                                                 </div>
-                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
+                                                    <?php echo html_escape($user_details->getUsername()); ?>
+                                                </a>
                                                 <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                 <ul class="default-nav-dropdown">
                                                     <li>
@@ -92,6 +93,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li>
                                                         <a href="/me?me=pending">On-going Transactions</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/?view=basic">Easyshop.ph</a>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a href="/me?me=settings">Settings</a>
@@ -105,9 +109,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <?php endif;?>
                                                     </li>
                                                     <li class="nav-dropdown-border">
-                                                        <a class="prevent" href="/sell/step1">Sell an item</a>
-                                                    </li>
-                                                    <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
                                                     </li>
                                                 </ul>
@@ -117,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-link-login">
                                                 <img src="assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
-                                                <a href="/register">create an account</a>
+                                                <a href="/register">register</a>
                                             </div>
                                         <?php endif; ?>                                           
                                     </div>
@@ -147,35 +148,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-cart-container">
                                                 <a href="/cart" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con ui-form-control">
-                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                                                 </a>
-                                                <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                                <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                                                 <?PHP else : ?>
                                                 <div class="header-cart-item-list">
-                                                    <p>Recently add item(s)</p>
-                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                    <p>Recently added item(s)</p>
+                                                    <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                                                    <?php for($i = 0 ; $i < 2; $i++): ?>
+                                                            <?php if(!isset($cartItemsReversed[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
-                                                        <?PHP endif; ?>
-                                                    <?PHP endfor; ?>
+                                                    <?php endfor; ?>
+            
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
-                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
                                                             <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -204,7 +206,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
                                                     <?php endforeach; ?>
                                                 </select> -->
-                                                <input type="text" name="q_str" class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -248,7 +250,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                     <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                     <ul class="cat-sub-list">
                                                                         <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
-                                                                            <li><a href="/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
+                                                                            <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
                                                                         <?PHP endforeach; ?>
                                                                     </ul>
                                                                 </div><!-- End .col-5 -->
@@ -259,7 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <h2>other categories</h2>
                                                         <ul class="other-cat-con">
                                                             <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
-                                                            <li><a href="/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
+                                                            <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
                                                             <?PHP endforeach; ?>
                                                         </ul>
                                                     </div>    
@@ -314,44 +316,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <div class="sticky-search-cart-wrapper">
                                             <div class="sticky-search-wrapper">
                                              <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                <input type="text" name="q_str" class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                                 <input type="submit" value="" class="span_bg">
                                             </form>
                                             </div>
                                             <div class="header-cart-container">
                                                 <a href="" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart ui-form-control">
-                                                        <span class="header-cart-item"><?=$cart_size?> item(s)</span> in your cart
+                                                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>
                                                     <span class="header-cart-icon-con span_bg cart-icon">
-                                                        <span class="cart-item-notif"><?=$cart_size?></span>
+                                                        <span class="cart-item-notif"><?=$cartSize?></span>
                                                     </span>
                                                 </a>
-                                            <?PHP if ((intval(sizeof($cart_items))) === 0 ) : ?>
+                                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
                                             <?PHP else : ?>
                                                 <div class="sticky-header-cart-item-list">
-                                                    <p>Recently add item(s)</p>
-                                                    <?PHP for($cnt = sizeof($cart_items) - 1; $cnt > -1 ;$cnt--) : ?>
-                                                        <?PHP if(sizeof($cart_items) - 1 === $cnt || sizeof($cart_items) - 1 === $cnt +1) : ?>
+                                                    <p>Recently added item(s)</p>
+                                                    <?php for($i = 0 ; $i < 2; $i++): ?>
+                                                            <?php if(!isset($cartItemsReversed[$i])) break; ?>
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>">
-                                                                        <span><img src="/<?=$cart_items[$cnt]['imagePath']; ?>thumbnail/<?=$cart_items[$cnt]['imageFile']; ?>" alt="<?=$cart_items[$cnt]['name']?>"></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cart_items[$cnt]['slug']?>"><span><?=$cart_items[$cnt]['name']?></span></a>
-                                                                    <span>x <?=$cart_items[$cnt]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cart_items[$cnt]['price']?></span>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                                    <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
-                                                        <?PHP endif; ?>
-                                                    <?PHP endfor; ?>
+                                                    <?php endfor; ?>
+            
                                                     <div class="header-cart-lower-content">
                                                         <div class="header-cart-shipping-total">
-                                                            <p>Item(s) in cart: <span><?=$cart_size?></span></p>
-                                                            <p>Total: <span>&#8369; <?=$total?></span></p>
+                                                            <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                                         </div>
                                                         <div class="header-cart-buttons">
                                                             <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -368,7 +370,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <div class="login-profile-con">
                                                         <img src="<?=$user_details->profileImage;?>">
                                                     </div>
-                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name"><?=$user_details->getUsername();?></a>
+                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
+                                                        <?php echo html_escape($user_details->getUsername()) ;?>
+                                                    </a>
                                                     <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                     <ul class="default-nav-dropdown">
                                                         <li>
@@ -377,19 +381,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <li>
                                                             <a href="/me?me=pending">On-going Transactions</a>
                                                         </li>
+                                                        <li>
+                                                            <a href="/?view=basic">Easyshop.ph</a>
+                                                        </li>
                                                         <li class="nav-dropdown-border">
                                                             <a href="/me?me=settings">Settings</a>
                                                         </li>
                                                         <li class="nav-dropdown-border pos-rel">
                                                             <a href="/messages">Messages</a>
                                                             <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                            <?=$msgs['unread_msgs'];?>
-                                                            </div>
+                                                                <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                                    <?php echo $msgs['unread_msgs'];?>
+                                                                </div>
                                                             <?php endif;?>
-                                                        </li>
-                                                        <li class="nav-dropdown-border">
-                                                            <a class="prevent" href="/sell/step1">Sell an item</a>
                                                         </li>
                                                         <li class="nav-dropdown-border">
                                                             <a class="prevent" href="/login/logout">Logout</a>
@@ -401,16 +405,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="header-link">
                                                     <img src="assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
+                                                    <a href="/register">register</a>
                                                 </div>
                                             <?php endif; ?>
-
-                                            <!--                                                
-                                                <div class="header-link">
-                                                    <span class="login-icon user-acct-icon"></span>
-                                                    <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>

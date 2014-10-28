@@ -3,7 +3,7 @@
 namespace EasyShop\Utility;
 
 /**
- * Url utility class
+ * String utility class
  *
  * @author czarpino
  */

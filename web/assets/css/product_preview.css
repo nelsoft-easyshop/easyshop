@@ -263,16 +263,18 @@ ul.slides_prod li a:hover {
 
 /*Janz CSS*/
 .seller-name {
-	background-color: #ebe9e9;
-	text-align: right;
-	cursor: pointer;
-	font-size: 12px;
-	font-weight: 200;
-	float: right;
-	min-height: 60px;
-	text-align: center;
-	padding:5px;
-	margin-bottom: 10px;
+    background-color: #ebe9e9;
+    text-align: right;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 200;
+    float: right;
+    min-height: 60px;
+    text-align: center;
+    padding:5px;
+    margin-bottom: 10px;
+    width: 165px;
+    border-radius: 5px;
 }
 
 /*.seller-name:after { 
@@ -319,15 +321,21 @@ span.seller-name span:hover {
     display: table;
 }
 
+
 .product_option_preview span {
-	width: 80px;
-	text-transform: lowercase;
-	vertical-align: middle;
-	display: table-cell;
+    width: 80px;
+    text-transform: lowercase;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.quantity-label{
+    text-transform: none !important;  
+    font-size: 12px;
 }
 
 .product_option_preview div {
-	display: inline-block;
+    display: inline-block;
 }
 
 .product_option_preview ul {
@@ -376,11 +384,12 @@ span.seller-name span:hover {
 }
 
 .product_quantity {
-	height: 25px;
-	width: 30px;
-	border:1px solid #DBD8D7;
-	padding-left: 5px;
+    height: 38px;
+    width: 43px;
+    border: 1px solid #DBD8D7;
+    padding-left: 5px;
 }
+
 
 /*.price_box {
 	width: 200px;

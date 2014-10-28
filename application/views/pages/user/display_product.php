@@ -34,7 +34,7 @@
                         <div class="div-item-info">
                             <p class="p-item-name">
                                 <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>" rel="tooltiplist" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
-                                    <?=$productName;?>
+                                    <?php echo $productName;?>
                                 </a>
                             </p>
                             <p class="p-category">

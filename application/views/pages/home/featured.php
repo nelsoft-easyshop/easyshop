@@ -24,7 +24,7 @@
                             <?php endif; ?>
 
                             <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                                <span class="discount-circle">-<?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
+                                <span class="discount-circle"><?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
                             <?PHP endif; ?>
                             <!-- End .item-image -->
                           
@@ -47,7 +47,7 @@
                                 <table width="100%">
                                 <tr>
                                     <td>
-                                        <a class="btn btn-default-1 btn-add-cart" href="javascript:void(0);" data-slug="<?php echo $product['product']->getSlug(); ?>" data-productid="<?php echo $product['product']->getIdProduct(); ?>>
+                                        <a class="btn btn-default-1 btn-add-cart" href="javascript:void(0);" data-slug="<?php echo $product['product']->getSlug(); ?>" data-productid="<?php echo $product['product']->getIdProduct(); ?>">
                                             <span class="icon-cart"></span> ADD TO CART
                                         </a>     
                                     </td>
@@ -56,7 +56,11 @@
                                             <div class="store-logo-container ">
                                                 <div class="span-store-logo">
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
-                                                        <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                        <?PHP if($homeContent['seller']['logo']) : ?>
+                                                            <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                        <?PHP else : ?>
+                                                            <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
+                                                        <?PHP endif; ?>
                                                     </a>
                                                 </div>
                                             </div>
@@ -76,7 +80,11 @@
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
-                            <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                            <?PHP if($homeContent['seller']['logo']) : ?>
+                                <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                            <?PHP else : ?>
+                                <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
+                            <?PHP endif; ?>
                         </a>
                     </div>
                 </div>

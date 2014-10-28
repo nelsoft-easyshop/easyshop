@@ -236,6 +236,7 @@ header {
 .header-seller-name {
     display: inline-block;
     height: 35px;
+    line-height: 33px;
     max-width: 125px;
     overflow: hidden;
     text-align: left;
@@ -388,6 +389,7 @@ header {
 
 .top-icon.top-icon-user {
     background-position: -14px -72px;
+    width: 16px;
     
 }
 
@@ -396,8 +398,8 @@ header {
 }
 
 .top-icon.top-icon-cart {
-    background-position: -28px -72px;
-    width: 16px;
+    background-position: -30px -72px;
+    width: 17px;
 }
 
 .top-icon.top-icon-account {
@@ -406,7 +408,7 @@ header {
 }
 
 #top-links li > a:hover .top-icon.top-icon-cart {
-    background-position: -28px -94px;
+    background-position: -30px -94px;
 }
 
 .top-icon.top-icon-check {
@@ -441,6 +443,10 @@ header {
 
 .header-link-login {
     text-align: right;
+}
+
+.header-link-login img {
+    margin-right: 3px;
 }
 
 .login-profile-con {
@@ -836,7 +842,7 @@ header {
 }*/
 
 #main-nav-container #main-nav .menu .drop-category:hover .drop-icon {
-    background-position: -326px -93px;
+    background-position: -328px -93px;
 }
 
 #main-nav .drop-category .category-icon{
@@ -851,7 +857,7 @@ header {
 }
 #main-nav .drop-category .drop-icon {
     background-image: url("../images/sprites/sprite.png");
-    background-position: -292px -93px;
+    background-position: -298px -93px;
     border-radius: 0 4px 4px 0;
     height: 36px;
 /*    height: 100%;*/
@@ -1030,7 +1036,7 @@ header {
     width: 100%;
 }
 
-.slider-template-4 .temp4-img-2 div > img {
+.slider-template-4 .temp4-img-2 div img {
     max-width: 222px !important;
     width: 100%;   
 }
@@ -1101,7 +1107,7 @@ header {
 ==============================================*/
 
 #content {
-    //padding-bottom:50px;
+    background-color: #fff;
 }
 
 #content img {
@@ -2830,13 +2836,15 @@ font-size: 15px;
 .div-rec-product-image{
     width: 100% !important;
     height: 228px;
+    position: static;
+    display: table-cell;
     vertical-align: middle;
     text-align: center;
     background: #fff;
 }
 
 .span-me{
-    width: inherit !important;
+    width: 100% !important;
     max-width: 100% !important;
     height: 228px;
     max-height: 228px;
@@ -2846,6 +2854,7 @@ font-size: 15px;
 }
 
 .img-rec-product{
+    width: inherit;
     max-width: 100%;
     height: auto;
     max-height: 228px !important;
@@ -3608,7 +3617,7 @@ font-size: 15px;
         width: 77.5%;
     }
     .sticky-search-wrapper input[type="text"] {
-        width: 64.5%;
+        width: 61.5%;
     }
     
 }

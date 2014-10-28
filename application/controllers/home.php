@@ -59,52 +59,51 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-        // Load services
-        $em = $this->serviceContainer["entity_manager"];
-        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
-        // Load repositories
-        $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
-
-        $sliderSection = $homeContent['slider']; 
-        $homeContent['slider'] = array();
-        foreach($sliderSection as $slide){
-            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
-            array_push($homeContent['slider'], $sliderView);
-        }
-        
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
-            'homeContent' => $homeContent,
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
 
         $data = array_merge($data, $this->fill_header());
-        $cart = array();
-        $cartSize = 0;
-        $isLoggedIn = false;
-        if ($this->session->userdata('usersession')) {
-            $memberId = $this->session->userdata('member_id');
-            $cart = array_values($this->cartManager->getValidatedCartContents($memberId));
-            $cartSize = $this->cartImplementation->getSize(TRUE);
-            $data['logged_in'] = true;
-            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                              ->find($memberId);
-            $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
-                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+        
+        if( $data['logged_in'] && $view !== 'basic'){
+            $this->load->view('templates/header', $data);
+            $data = array_merge($data, $this->getFeed());            
+            $data['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+            $this->load->view("templates/home_layout/layoutF",$data);
+            $this->load->view('templates/footer', array('minborder' => true));
         }
-        $data['cart_items'] = $cart;
-        $data['cart_size'] = $cartSize;
-        $data['total'] = $data['cart_size'] ? $this->cartImplementation->getTotalPrice() : 0;
+        else{
+            $em = $this->serviceContainer["entity_manager"];
+            $categoryManager = $this->serviceContainer['category_manager']; 
+            $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
+            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+            $sliderSection = $homeContent['slider']; 
+            $homeContent['slider'] = array();
+            foreach($sliderSection as $slide){
+                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+                array_push($homeContent['slider'], $sliderView);
+            }
+            $data['homeContent'] = $homeContent;
 
-        $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
-        $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+            if($data['logged_in']){
+                $memberId = $this->session->userdata('member_id');
+                $data['logged_in'] = true;
+                $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                                ->find($memberId);
+                $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
+                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                        : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            }
+            $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
+            $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/home/home_primary', $data);
-        $this->load->view('templates/footer_primary');
+            $this->load->view('templates/header_primary', $data);
+            $this->load->view('pages/home/home_primary', $data);
+            $this->load->view('templates/footer_primary');
+        }
+
     }
     
     
@@ -352,11 +351,14 @@ class Home extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 // Data for the view
+
                 $viewData = array(
-                      "defaultCatProd" => $productView['defaultCatProd']
-                    , "product_condition" => $this->lang->line('product_condition')
-                    , "isLoggedIn" => $headerData['logged_in']
-                    , "prodLimit" => $this->vendorProdPerPage
+                  //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
+                    "customCatProd" => array(), // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
+                    "defaultCatProd" => $productView['defaultCatProd'],
+                    "product_condition" => $this->lang->line('product_condition'),
+                    "isLoggedIn" => $headerData['logged_in'],
+                    "prodLimit" => $this->vendorProdPerPage
                 );
  
                 // count the followers 
@@ -366,7 +368,6 @@ class Home extends MY_Controller
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
                 //Determine active Div for first load
-                $showFirstDiv = TRUE;
                 foreach($viewData['defaultCatProd'] as $catId => $catDetails){
                     if( isset($productView['isSearching']) ){
                         $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
@@ -375,7 +376,7 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
-
+                
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$bannerData);
@@ -554,19 +555,33 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId)
+    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
         $pm = $this->serviceContainer['product_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+        switch($catType){
+            case "custom":
+                $parentCat = $pm->getAllUserProductCustomCategory($memberId);
+                break;
+            default:
+                $parentCat = $pm->getAllUserProductParentCategory($memberId);
+                break;
+        }
 
         $categoryProductCount = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat']);
+            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            
+            // Unset DEFAULT categories with no products fetched (due to being custom categorized)
+            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+                unset($parentCat[$idCat]);
+                break;
+            }
+
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);

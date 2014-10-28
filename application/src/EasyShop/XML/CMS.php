@@ -36,16 +36,23 @@ class CMS
     
     
     /**
+     * Url Utility
+     *
+     * @var EasyShop\Utility\urlUtility
+     */
+    private $urlUtility;
+    
+    /**
      * Loads dependencies
      *
-     * @param EasyShop\XML\Resource
      */
-    public function __construct($xmlResourceGetter, $em, $productManager, $userManager)
+    public function __construct($xmlResourceGetter, $em, $productManager, $userManager, $urlUtility)
     {
         $this->xmlResourceGetter = $xmlResourceGetter;
         $this->em = $em;
         $this->productManager = $productManager;
         $this->userManager = $userManager;
+        $this->urlUtility = $urlUtility;
     }
 
     /**
@@ -751,12 +758,19 @@ $string = '<typeNode>
         foreach($homePageData['slider'] as $idx => $slide){
             $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
             $template = 'partials/homesliders/'.$template;
-            $homePageData['slider'][$idx]['template'] = $template;
+            $homePageData['slider'][$idx]['template'] = $template;            
             if(isset($homePageData['slider'][$idx]['image']['path'])){
                 $temporary = $homePageData['slider'][$idx]['image'];
                 $homePageData['slider'][$idx]['image'] = array();
                 array_push($homePageData['slider'][$idx]['image'], $temporary);
             }
+            
+            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
+                $target = $sliderImage['target'];
+                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
+            }
+            
+            
         }
         
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
@@ -767,6 +781,12 @@ $string = '<typeNode>
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $productSlug]);
             array_push($homePageData['menu']['topProducts'], $product);
+        }
+        
+        if(!is_array($xmlContent['menu']['topSellers']['seller'])){
+            $temp = $xmlContent['menu']['topSellers']['seller'] ;
+            $xmlContent['menu']['topSellers']['seller'] = array();
+            array_push( $xmlContent['menu']['topSellers']['seller'], $temp);
         }
         
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
@@ -798,6 +818,10 @@ $string = '<typeNode>
         //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['vendor_image'] = array();
+        if($featuredVendor['name']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
@@ -824,15 +848,139 @@ $string = '<typeNode>
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
                                             ->findOneBy(['idBrand' => $brandId]);
             $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] =
-                $popularCategory['popularBrand'][$key]['brand']->getImage() ?: EsBrand::IMAGE_UNAVAILABLE_FILE;
+            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
+                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
+                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
         }
         $homePageData['popularCategory'] = $popularCategory;
 
         return $homePageData;
     }
     
-    
+    /**
+     * Returns the mobile home page data
+     * @return array
+     */
+    public function getMobileHomeData($baseUrl)
+    {
+        $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
+        $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
+
+        // banner images
+        $bannerImages = [];
+        foreach ($pageContent['mainSlide'] as $key => $value) {
+            $bannerImages[] = array(
+                            'name' => '0',
+                            'image' => $value['value'],
+                            'target' => $baseUrl.$value['imagemap']['target'],
+                            'actionType' => $value['actionType'],
+                        );
+        }
+        $sectionImages = array(
+                        'name' => '',
+                        'bgcolor' => '',
+                        'type' => 'promo',
+                        'data' => $bannerImages,
+                    ); 
+
+        $productSections[] = $sectionImages; 
+        // product sections 
+        foreach ($pageContent['section'] as $key => $value) {
+            $productArray = [];
+            // loop products
+        
+            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) {
+
+                $slug = (isset($valueLevel2['value'])) ? $valueLevel2['value'] : ""; 
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findOneBy(['slug' => $slug]);
+
+                $productName = "";
+                $productSlug = "";
+                $productBasePrice = 0;
+                $productFinalPrice = 0;
+                $productDiscount = 0;
+                $productImagePath = "";
+                $target = "";
+
+                if($product){
+                    $product = $this->productManager->getProductDetails($product->getIdProduct());
+
+                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                      ->getDefaultImage($product->getIdProduct());
+        
+                    $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+                    if($productImage != NULL){
+                        $directory = $productImage->getDirectory();
+                        $imageFileName = $productImage->getFilename();
+                    }
+
+                    $productName = $product->getName();
+                    $productSlug = $product->getSlug();
+                    $productDiscount = floatval($product->getDiscountPercentage());
+                    $productBasePrice = floatval($product->getPrice());
+                    $productFinalPrice = floatval($product->getFinalPrice());
+                    $productImagePath = $directory.$imageFileName;
+                    $target = $baseUrl.'mobile/product/item/'.$productSlug;
+                }
+
+                $productArray[] = array(
+                                    'name' => $productName,
+                                    'slug' => $productSlug,
+                                    'discount_percentage' => $productDiscount,
+                                    'base_price' => $productBasePrice,
+                                    'final_price' => $productFinalPrice,
+                                    'image' => $productImagePath,
+                                    'actionType' => $valueLevel2['actionType'],
+                                    'target' => $target,
+                                );
+            }
+
+            $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                ->findOneBy(['slug' => $value['name']]);
+
+            $categoryName = "";
+            $categoryIcon = $baseUrl.EsBrand::IMAGE_DIRECTORY.EsBrand::IMAGE_UNAVAILABLE_FILE;
+            if($categoryObject){
+                $categoryName = $categoryObject->getName();
+                $categorySlug = $categoryObject->getSlug();
+
+                $categoryIconObject = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                                ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
+
+                if($categoryIconObject){
+                    $categoryIcon = $baseUrl.'assets/'.$categoryIconObject->getPath();
+                }
+
+                $productArray[] = array(
+                                        'name' => "",
+                                        'slug' => "",
+                                        'discount_percentage' => 0,
+                                        'base_price' => 0,
+                                        'final_price' => 0,
+                                        'image' => "",
+                                        'actionType' => 'show product list',
+                                        'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                                    );
+            }
+
+            $productSections[] = array(
+                                'name' => $categoryName,
+                                'bgcolor' => $value['bgcolor'],
+                                'type' => $value['type'],
+                                'icon' => $categoryIcon,
+                                'data' => $productArray,
+                            );
+        }
+
+        $display = array( 
+                    'section' => $productSections,
+                );
+
+        return $display;
+    }
 }
 
 
