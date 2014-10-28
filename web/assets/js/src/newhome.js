@@ -32,7 +32,6 @@
     $(window).on('load',function() {
         mainwindowsize = $(window).width();
         if (mainwindowsize > 565) {
-            //if the window is greater than 440px wide then turn on jScrollPane..
             $('.bxslider').bxSlider({
                 minslides : 2,
                 maxSlides: 2,
