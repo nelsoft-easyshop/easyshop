@@ -1779,7 +1779,7 @@ class Payment extends MY_Controller{
         $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
-        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
+        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null, null);
     
         extract($response);
         $this->removeItemFromCart();
@@ -1805,6 +1805,10 @@ class Payment extends MY_Controller{
         $response = $paymentService->returnMethod($paymentMethods, $params);
         
         extract($response);
+
+        if($status === "s" || $status === "p"){
+            $this->removeItemFromCart();
+        }
         $this->generateFlash($txnId,$message,$status);
         redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
@@ -1821,8 +1825,7 @@ class Payment extends MY_Controller{
         $params['message'] = $this->input->post('message');
         $params['digest'] = $this->input->post('digest');
 
-        $response = $paymentService->postBack($paymentMethods, null, null, $params);
-
+        $response = $paymentService->postBack($paymentMethods, null, null, $this, $params);
         echo 'result=OK'; 
     }
 
