@@ -142,4 +142,3 @@ class Mycontroller extends MY_Controller
 
 }
 
-?>
