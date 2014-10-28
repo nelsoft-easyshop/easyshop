@@ -141,8 +141,6 @@ class productUpload extends MY_Controller
      */
     public function step2()
     { 
-        $assetsBaseUrl = $this->serviceContainer['config_loader']->getItem('assets', 'assetsBaseUrl');
-        
         $data = $this->fill_view();
         $data['$render_searchbar'] = false; 
         $this->load->view('templates/header', $data); 
@@ -205,7 +203,7 @@ class productUpload extends MY_Controller
 
             $date = date("Ymd");
 
-            $tempDirectory = $assetsBaseUrl.'temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
+            $tempDirectory =  'assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
             $response['tempdirectory'] = $tempDirectory;
             $this->session->set_userdata('tempId', $response['tempId']);
             $this->session->set_userdata('tempDirectory',  $tempDirectory);
@@ -231,7 +229,7 @@ class productUpload extends MY_Controller
      *  Display item details of the selected
      *  product to be modify
      */
-    public function step2edit2()
+    public function step2edit()
     {
         if($this->input->post('p_id')){
             $product_id = $response['p_id'] = $this->input->post('p_id');
@@ -379,8 +377,12 @@ class productUpload extends MY_Controller
         $this->session->set_userdata('tempDirectory',  $tempdirectory);
         $this->session->set_userdata('originalPath',  $path);
 
-        directory_copy($path, $tempdirectory,$tempId,$arrayNameOnly); 
-        
+        mkdir($tempdirectory, 0777, true);
+        mkdir($tempdirectory.'categoryview/', 0777, true);
+        mkdir($tempdirectory.'small/', 0777, true);
+        mkdir($tempdirectory.'thumbnail/', 0777, true);
+        mkdir($tempdirectory.'other/', 0777, true);
+
         $data = array('title'=>'Edit Product');
         $data = array_merge($data,$this->fill_view());
         $data['$render_searchbar'] = false; 
@@ -401,6 +403,7 @@ class productUpload extends MY_Controller
         $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
+        
         $afstartArray = json_decode($afstart); 
         $filenames_ar = array(); 
         $text = "";
@@ -441,26 +444,6 @@ class productUpload extends MY_Controller
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
         $filenames_ar = array_values($filenames_ar); 
-      
-        $awsS3Client = $this->serviceContainer['s3client'];
-        $bucket = $this->serviceContainer['config_loader']->getItem('assets')["bucket"];
-        foreach($filenames_ar as $idx => $file){
-            $result = $awsS3Client->putObject(array(
-                'Bucket' => $bucket,
-                'Key'    => $pathDirectory.'/'.$file,
-                'SourceFile'  => $_FILES['files']["tmp_name"][$idx],
-                'ContentType' => $_FILES['files']["type"][$idx],
-                'ACL'    => 'public-read',
-            ));
-        }   
-        exit();
-        
-        
-
-
-        if (!file_exists ($pathDirectory)){
-            mkdir($pathDirectory, 0777, true);;
-        }
 
         if(count($filenames_ar) <= 0){
             $return = array( 
@@ -471,7 +454,12 @@ class productUpload extends MY_Controller
 
             die(json_encode($return));
         }
-         
+        
+
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);;
+        }
+
         $this->upload->initialize(array( 
             "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
@@ -510,12 +498,13 @@ class productUpload extends MY_Controller
             }
             $error = 1;
         }
-          
+        
+
         $return = array( 
             'msg' => $text, 
             'fcnt' => $filescnttxt,
             'err' => $error
-            );
+        );
 
         die(json_encode($return));
     }
@@ -558,7 +547,7 @@ class productUpload extends MY_Controller
             "max_size" => $this->max_file_size_mb * 1024,
             "xss_clean" => FALSE
             )); 
- 
+
         if ($this->upload->do_multi_upload('attr-image-input')){ 
             $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
             $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
@@ -751,7 +740,12 @@ class productUpload extends MY_Controller
                 #end of other 
  
                 if(!count($arraynameoffiles) <= 0){ 
-                    directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
+                    if(strtolower(ENVIRONMENT) !== 'development'){
+                        directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
+                    }
+                    else{
+                        $this->serviceContainer["product_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
+                    } 
                 }
 
                 #saving combination
@@ -788,7 +782,7 @@ class productUpload extends MY_Controller
      *
      * @return JSON 
      */
-    public function step2edit2Submit()
+    public function step2editSubmit()
     {
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
@@ -983,7 +977,13 @@ class productUpload extends MY_Controller
                     $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
                 }
             }
-            directory_copy($tempDirectory, $originalPath,$product_id,$arrayNameOnly); 
+            
+            if(strtolower(ENVIRONMENT) !== 'development'){
+                directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
+            }
+            else{
+                $this->serviceContainer["product_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
+            }
 
             #saving combination
             if(count($combination) <= 0){
@@ -1177,7 +1177,17 @@ class productUpload extends MY_Controller
         echo json_encode($data);
     }
 
-    private function es_img_resize($filename,$path_directory,$added_path,$dimension){
+    /**
+     * Resizes an image and stores it in the specified location
+     *
+     * @param string $filename
+     * @param string $path_directory
+     * @param string $added_path
+     * @param integer[] $dimension
+     *
+     */
+    private function es_img_resize($filename,$path_directory,$added_path,$dimension)
+    {
         $filename = strtolower($filename);
         $path_to_result_directory = $path_directory.$added_path; 
         $path_to_image_directory = $path_directory;
