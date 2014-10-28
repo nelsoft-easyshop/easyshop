@@ -5,12 +5,36 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsMember as EsMember; 
+use Doctrine\ORM\Query as Query;
 
 /**
  *  es_member Repository
  */
 class EsMemberRepository extends EntityRepository
 {
+
+    /**
+     * Return member Entity based on Hydration option passed by asArray parameter
+     * @param bool $asArray
+     * @param string $username
+     * @return Entity
+     */    
+    public function getHydratedMember($username, $asArray) 
+    {
+        $this->em =  $this->_em;        
+        $query =  $this->em->createQueryBuilder()
+                ->select('em')
+                ->from('EasyShop\Entities\EsMember','em')
+                ->where('em.username= :username')
+                ->setParameter('username', $username)
+                ->setMaxResults(1)
+                ->getQuery();
+        $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
+        $member = $query->getResult($hydrator);
+        $member = isset($member[0]) ? $member[0] : $member;    
+
+        return $member;
+    }
     /**
      * Returns the count of a all users
      *
