@@ -157,7 +157,7 @@ class AccountManager
                 array_push($errors, ['login' => 'Invalid Username/Password']);
             }
 
-            if($member !== NULL) {
+            if($member !== NULL && $asArray) {
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->getHydratedMember($validatedUsername, $asArray); 
             }
