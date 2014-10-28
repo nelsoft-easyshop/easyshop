@@ -155,6 +155,34 @@ blockquote:before{
     background-position: 0 -150px;
 }
 
+/* =============================================
+-----------------  404 page css -------------
+==============================================*/
+
+.content-404 {
+    padding-bottom: 50px;
+}
+
+.img-404 {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.img-404 img {
+    max-width: 800px;
+    width: 100%;
+}
+
+.content-404 ul {
+    list-style: disc;
+    margin:20px 0 0 20px;
+}
+
+.content-404 ul li {
+    padding: 10px 0;
+}
+
+
 
 /* =============================================
 ---------------------  Header -----------------

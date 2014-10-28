@@ -133,9 +133,9 @@ class Home extends MY_Controller
         log_message('error', '404 Page Not Found --> '.$page);
         $data = array('title' => 'Page Not Found | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_full');
+        $this->load->view('templates/footer_primary');
     }
     
     
