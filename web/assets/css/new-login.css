@@ -1,0 +1,66 @@
+.section-login{
+    min-height: 500px;
+}
+#basic-modal-content {display:none;}
+
+/* Overlay */
+#simplemodal-overlay {background-color:#000;}
+
+/* Container */
+#simplemodal-container {
+    height:200px !important;
+    width:100%;
+    color:#bbb;
+    background-color:#fff;
+    border-radius: 5px;
+    padding:12px;
+}
+#simplemodal-container a.modalCloseImg {background:url(../img/basic/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+
+.div-title-page-container{
+    font-size: 25px;
+    color: #444645;
+    padding-bottom: 2px;
+    border-bottom: solid #4370cc 1px;
+    text-transform: uppercase;
+}
+
+.div-merge-container{
+    margin-top: 50px;
+}
+
+.div-merge-container > p{
+    margin: 0px;
+    font-size: 17px;
+    line-height: 40px;
+}
+
+.div-merge-container > p > a{
+    font-weight: bold;
+    color: #ff893a;
+}
+
+.div-btn-container{
+    margin-top: 20px;
+}
+
+.btn-orange-lg{
+    padding: 10px 100px;
+    background: #ff893a;
+    font-weight: bold;
+    color: #fff;
+}
+
+.btn-orange-lg:hover{
+    background: #FF4E2D;
+    color: #fff;
+}
+
+.div-link-login{
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.div-link-login > a:hover{
+    text-decoration: none;
+}
