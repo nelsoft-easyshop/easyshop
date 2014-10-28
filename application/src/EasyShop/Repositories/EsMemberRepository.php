@@ -186,8 +186,9 @@ class EsMemberRepository extends EntityRepository
      */
     public function updateUsername($member, $username)
     {
+        $em = $this->_em;
         $member->setUsername($username);
-        $this->em->flush();
+        $em->flush();
 
         return $member;
     }
@@ -200,8 +201,9 @@ class EsMemberRepository extends EntityRepository
      */
     public function updateOauthProvider($member, $oauthProvider)
     {
+        $em = $this->_em;
         $member->setOauthProvider($oauthProvider);
-        $this->em->flush();
+        $em->flush();
 
         return $member;
     }

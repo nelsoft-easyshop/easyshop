@@ -64,10 +64,10 @@ class EsCat extends \EasyShop\Entities\EsCat implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'idCat', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'sortOrder', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'isMain', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design1', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design2', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design3', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'parent');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'idCat', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'sortOrder', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'isMain', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design1', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design2', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design3', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'parent', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'image');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'idCat', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'sortOrder', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'isMain', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design1', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design2', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design3', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'parent');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'idCat', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'sortOrder', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'isMain', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design1', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design2', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'design3', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'parent', '' . "\0" . 'EasyShop\\Entities\\EsCat' . "\0" . 'image');
     }
 
     /**
@@ -406,6 +406,28 @@ class EsCat extends \EasyShop\Entities\EsCat implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getParent', array());
 
         return parent::getParent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setImage($image)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setImage', array($image));
+
+        return parent::setImage($image);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getImage()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getImage', array());
+
+        return parent::getImage();
     }
 
 }

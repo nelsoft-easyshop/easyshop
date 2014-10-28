@@ -4,6 +4,7 @@ namespace Easyshop\SocialMedia;
 
 use \DateTime;
 use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsMemberMerge;
 use Facebook\FacebookSession;
 
 class SocialMediaManager
@@ -144,19 +145,29 @@ class SocialMediaManager
      *
      * @param $oauthId
      * @param $oauthProvider
-     * @return false or EsMember
+     * @param $email
+     * @return array
      */
-    public function authenticateAccount($oauthId, $oauthProvider)
+    public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
-        $response = FALSE;
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                        ->findOneBy(array(
-                                'oauthId' => $oauthId,
-                                'oauthProvider' => $oauthProvider
-                            ));
-        if($member){
-            $response = $member;
+        $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy(array(
+                                            'email' => $email
+                                        ));
+        $socialMediaAccount = FALSE;
+        if ($doesEmailExists) {
+            $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
+                                ->findOneBy(array(
+                                    'socialMediaId' => $oauthId,
+                                    'socialMediaProvider' => $oauthProvider,
+                                    'member' => $doesEmailExists->getIdMember()
+                                ));
         }
+
+        $response = array(
+            'doesAccountExists' => $doesEmailExists,
+            'doesAccountMerged' => $socialMediaAccount
+        );
 
         return $response;
     }
@@ -169,18 +180,10 @@ class SocialMediaManager
      * @param $gender
      * @param $email
      * @param $emailVerify
-     * @param $oAuthId
-     * @param $oAuthProvider
      * @return EsMember
      */
-    public function registerAccount($username, $fullname, $gender, $email, $emailVerify, $oAuthId, $oAuthProvider)
+    public function registerAccount($username, $fullname, $gender, $email, $emailVerify)
     {
-        $existingUsername = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->findOneBy(['username' => $username]);
-        if ($existingUsername) {
-            $username = '';
-        }
-
         $member = new EsMember();
         $member->setUsername($username);
         $member->setFullname($fullname);
@@ -192,15 +195,26 @@ class SocialMediaManager
         $member->setLastLoginDatetime(new DateTime('now'));
         $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
         $member->setLastFailedLoginDatetime(new DateTime('now'));
-        $member->setOauthId($oAuthId);
-        $member->setOauthProvider($oAuthProvider);
         $member->setSlug('');
         $this->em->persist($member);
         $this->em->flush();
 
         $this->userManager->generateUserSlug($member->getIdMember());
-        
+
         return $member;
+    }
+
+    public function mergeAccount($member, $oAuthId, $oAuthProvider)
+    {
+        $socialAccount = new EsMemberMerge();
+        $socialAccount->setMember($member);
+        $socialAccount->setSocialMediaId($oAuthId);
+        $socialAccount->setSocialMediaProvider($oAuthProvider);
+        $socialAccount->setCreatedAt(new DateTime('now'));
+        $this->em->persist($socialAccount);
+        $this->em->flush();
+
+        return $socialAccount;
     }
 
     /**

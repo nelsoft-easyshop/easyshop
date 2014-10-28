@@ -8,7 +8,7 @@ class HashUtility
     /**
      * @param $encrypt
      */
-    public function __contruct($encrypt)
+    public function __construct($encrypt)
     {
         $this->encrypt = $encrypt;
     }
@@ -23,8 +23,8 @@ class HashUtility
         $hash = html_escape($data);
         $enc = str_replace(" ", "+", $hash);
         $decrypted = $this->encrypt->decode($enc);
-        $getdata = explode('~', $decrypted);
+        $getData = explode('~', $decrypted);
 
-        return $getdata;
+        return $getData;
     }
 }
