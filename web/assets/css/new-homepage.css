@@ -1486,6 +1486,9 @@ header {
 .item-name {
     font:700 19px/24px 'Helvetica', sans-serif;
     margin:0 0 5px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
 }
 
 /* title for list style items */
@@ -2402,7 +2405,7 @@ font-size: 15px;
     height: 44px;
     border: solid #fff 2px;
     border-radius: 50%;
-    top: 44%;
+    top: 47%;
     z-index: 998;
     color: #ffffff;
     -webkit-transition: all 0.3s ease;
@@ -2423,7 +2426,7 @@ font-size: 15px;
     height: 44px;
     border: solid #fff 2px;
     border-radius: 50%;
-    top:44%;
+    top:47%;
     z-index: 998;
     color: #ffffff;
     -webkit-transition: all 0.3s ease;
@@ -2861,6 +2864,10 @@ font-size: 15px;
     max-height: 228px !important;
 }
 
+.td-logo-store{
+        padding-left: 4px;
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
@@ -3241,7 +3248,6 @@ font-size: 15px;
     }
     
     .td-logo-store{
-        
         padding-left: 4px;
     }
     
