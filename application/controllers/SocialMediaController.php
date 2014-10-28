@@ -133,5 +133,15 @@ class SocialMediaController extends MY_Controller
         $em->flush();
     }
 
-
+    public function sendMergeAccountEmail()
+    {
+        // $data = array_merge($data, $this->fill_header());
+        // $this->load->view('templates/header_primary');
+        // $this->load->view('pages/user/send-merge-email');
+        // $this->load->view('templates/footer');
+        
+        $this->load->view('templates/header_new');
+       $this->load->view('pages/user/send-merge-email');
+        $this->load->view('templates/footer_primary');
+    }
 }
