@@ -103,10 +103,15 @@ class SocialMediaController extends MY_Controller
         if ($this->session->userdata('access_token')) {
             $google->setAccessToken($this->session->userdata('access_token'));
             $googleData = $this->socialMediaManager->getAccount($googleType);
-            $esMember = $this->entityManager
-                                ->getRepository('EasyShop\Entities\EsMember')
-                                    ->findOneBy(['email' => $googleData->getEmail()]);
-            if($esMember && !$esMember->getUsername() && !$esMember->getOauthProvider()) {
+            $data = $this->socialMediaManager
+                            ->authenticateAccount($googleData->getId(), $googleType, $googleData->getEmail());
+            $esMember = $data['doesAccountExists'];
+            $doesAccountMerged = $data['doesAccountMerged'];
+            if ($esMember && $doesAccountMerged) {
+                $this->login($esMember);
+                redirect('/', 'refresh');
+            }
+            else if ($esMember && !$doesAccountMerged) {
                 $data = $this->encrypt->encode(
                     $esMember->getIdMember().
                     '~'.
@@ -116,34 +121,27 @@ class SocialMediaController extends MY_Controller
                 );
                 redirect('SocialMediaController/merge?h=' . $data, 'refresh');
             }
-            else {
+            else if (!$esMember) {
                 $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
-                if (!$esMember) {
-                    $response = $this->socialMediaManager->registerAccount(
-                        $username,
-                        $googleData->getName(),
-                        '',
-                        $googleData->getEmail(),
-                        TRUE,
-                        $googleData->getId(),
-                        $googleType
-                    );
-                }
-
-                if (!$esMember->getUsername()) {
-                    $data = $this->encrypt->encode(
-                        $esMember->getIdMember().
-                        '~'.
-                        $username
-                    );
-                    redirect('SocialMediaController/register?h=' . $data, 'refresh');
-                }
+                $data = $this->encrypt->encode(
+                    $googleType.
+                    '~'.
+                    $googleData->getId().
+                    '~'.
+                    $username.
+                    '~'.
+                    $googleData->getName().
+                    '~'.
+                    ''.
+                    '~'.
+                    $googleData->getId()
+                );
+                redirect('SocialMediaController/register?h=' . $data, 'refresh');
             }
-
-            $this->login($response);
-            redirect('/', 'refresh');
+            else {
+                redirect('/login', 'refresh');
+            }
         }
-
         redirect('/login', 'refresh');
     }
 
