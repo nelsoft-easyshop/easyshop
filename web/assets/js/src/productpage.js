@@ -206,7 +206,7 @@
 
     $(function(){
         $('.jqzoom').jqzoom({
-                zoomType: 'innerzoom'
+                zoomType: 'standard',
         });
     });
 
