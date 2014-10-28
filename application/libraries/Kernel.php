@@ -397,13 +397,22 @@ class Kernel
         };
 
         $awsConfig = require_once(APPPATH . "config/param/aws.php");
-
-        $container["s3client"] = function($c) use ($awsConfig){
-            return \Aws\S3\S3Client::factory(array( 'key' => $awsConfig['s3']['key'],
-                                                    'secret' => $awsConfig['s3']['secret']
-                                            ));
+        $container["aws_uploader"] = function($c) use ($awsConfig, $container){
+            $awsClient =  \Aws\S3\S3Client::factory(array( 'key' => $awsConfig['s3']['key'],
+                                                        'secret' => $awsConfig['s3']['secret']
+                                                ));
+            return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
         };
-                                
+        
+        
+        $container['product_uploader'] = function($c) use ($container){
+            return new \EasyShop\Upload\ProductUpload($container["aws_uploader"]);
+        };
+        
+        $container["image_utility"] = function($c) use ($container){
+            $imageLibrary = new CI_Image_lib();
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };
         
         /* Register services END */
         $this->serviceContainer = $container;
