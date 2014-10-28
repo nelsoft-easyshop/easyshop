@@ -692,6 +692,18 @@ body{
 .col-text-area{
     margin-left: -10px;
 }
+
+.p-html-description{
+    height: auto !important;
+    width: 100% !important;
+    word-wrap: break-word !important;
+}
+
+.p-html-description img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
 @media only screen and (max-width: 1200px) {
 
     .div-detail-nav{
