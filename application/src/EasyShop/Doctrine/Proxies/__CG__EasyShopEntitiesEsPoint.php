@@ -64,10 +64,10 @@ class EsPoint extends \EasyShop\Entities\EsPoint implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'm');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'creditPoint');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'm');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsPoint' . "\0" . 'creditPoint');
     }
 
     /**
@@ -213,23 +213,45 @@ class EsPoint extends \EasyShop\Entities\EsPoint implements \Doctrine\ORM\Proxy\
     /**
      * {@inheritDoc}
      */
-    public function setM(\EasyShop\Entities\EsMember $m = NULL)
+    public function setMember(\EasyShop\Entities\EsMember $member = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setM', array($m));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMember', array($member));
 
-        return parent::setM($m);
+        return parent::setMember($member);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getM()
+    public function getMember()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getM', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMember', array());
 
-        return parent::getM();
+        return parent::getMember();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCreditPoint($creditPoint)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreditPoint', array($creditPoint));
+
+        return parent::setCreditPoint($creditPoint);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreditPoint()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreditPoint', array());
+
+        return parent::getCreditPoint();
     }
 
 }

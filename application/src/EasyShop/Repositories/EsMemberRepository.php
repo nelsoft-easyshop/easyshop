@@ -202,4 +202,33 @@ class EsMemberRepository extends EntityRepository
             return array();
         }
     }
+
+    /**
+     * @param $member
+     * @param $username
+     * @return EsMember
+     */
+    public function updateUsername($member, $username)
+    {
+        $em = $this->_em;
+        $member->setUsername($username);
+        $em->flush();
+
+        return $member;
+    }
+
+    /**
+     * Merge social media account to existing EasyShop Account
+     * @param $member
+     * @param $oauthProvider
+     * @return EsMember
+     */
+    public function updateOauthProvider($member, $oauthProvider)
+    {
+        $em = $this->_em;
+        $member->setOauthProvider($oauthProvider);
+        $em->flush();
+
+        return $member;
+    }
 }
