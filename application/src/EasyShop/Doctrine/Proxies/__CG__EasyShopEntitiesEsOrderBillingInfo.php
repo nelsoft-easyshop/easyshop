@@ -64,10 +64,10 @@ class EsOrderBillingInfo extends \EasyShop\Entities\EsOrderBillingInfo implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'idEsOrderBillingInfo', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'orderId', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'orderProductId', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'bankName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountNumber');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'idOrderBillingInfo', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'bankName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountNumber', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'createdAt', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'updatedAt');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'idEsOrderBillingInfo', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'orderId', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'orderProductId', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'bankName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountNumber');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'idOrderBillingInfo', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'bankName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountName', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'accountNumber', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'createdAt', '' . "\0" . 'EasyShop\\Entities\\EsOrderBillingInfo' . "\0" . 'updatedAt');
     }
 
     /**
@@ -176,60 +176,16 @@ class EsOrderBillingInfo extends \EasyShop\Entities\EsOrderBillingInfo implement
     /**
      * {@inheritDoc}
      */
-    public function getIdEsOrderBillingInfo()
+    public function getIdOrderBillingInfo()
     {
         if ($this->__isInitialized__ === false) {
-            return (int)  parent::getIdEsOrderBillingInfo();
+            return (int)  parent::getIdOrderBillingInfo();
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdEsOrderBillingInfo', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdOrderBillingInfo', array());
 
-        return parent::getIdEsOrderBillingInfo();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setOrderId($orderId)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrderId', array($orderId));
-
-        return parent::setOrderId($orderId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOrderId()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrderId', array());
-
-        return parent::getOrderId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setOrderProductId($orderProductId)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrderProductId', array($orderProductId));
-
-        return parent::setOrderProductId($orderProductId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOrderProductId()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrderProductId', array());
-
-        return parent::getOrderProductId();
+        return parent::getIdOrderBillingInfo();
     }
 
     /**
@@ -296,6 +252,50 @@ class EsOrderBillingInfo extends \EasyShop\Entities\EsOrderBillingInfo implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAccountNumber', array());
 
         return parent::getAccountNumber();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', array($createdAt));
+
+        return parent::setCreatedAt($createdAt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreatedAt', array());
+
+        return parent::getCreatedAt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', array($updatedAt));
+
+        return parent::setUpdatedAt($updatedAt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUpdatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', array());
+
+        return parent::getUpdatedAt();
     }
 
 }

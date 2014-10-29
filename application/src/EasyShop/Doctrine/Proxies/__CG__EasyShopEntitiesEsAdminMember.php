@@ -64,10 +64,10 @@ class EsAdminMember extends \EasyShop\Entities\EsAdminMember implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'idAdmin', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'fullname');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'idAdminMember', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'createdAt', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'updatedAt', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'rememberToken', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'roleId', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'isActive');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'idAdmin', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'fullname');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'idAdminMember', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'createdAt', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'updatedAt', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'rememberToken', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'roleId', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsAdminMember' . "\0" . 'isActive');
     }
 
     /**
@@ -176,16 +176,16 @@ class EsAdminMember extends \EasyShop\Entities\EsAdminMember implements \Doctrin
     /**
      * {@inheritDoc}
      */
-    public function getIdAdmin()
+    public function getIdAdminMember()
     {
         if ($this->__isInitialized__ === false) {
-            return (int)  parent::getIdAdmin();
+            return (int)  parent::getIdAdminMember();
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdAdmin', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdAdminMember', array());
 
-        return parent::getIdAdmin();
+        return parent::getIdAdminMember();
     }
 
     /**
@@ -252,6 +252,138 @@ class EsAdminMember extends \EasyShop\Entities\EsAdminMember implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFullname', array());
 
         return parent::getFullname();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', array($createdAt));
+
+        return parent::setCreatedAt($createdAt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreatedAt', array());
+
+        return parent::getCreatedAt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUpdatedAt', array($updatedAt));
+
+        return parent::setUpdatedAt($updatedAt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUpdatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUpdatedAt', array());
+
+        return parent::getUpdatedAt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRememberToken($rememberToken)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRememberToken', array($rememberToken));
+
+        return parent::setRememberToken($rememberToken);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRememberToken()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRememberToken', array());
+
+        return parent::getRememberToken();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRoleId($roleId)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRoleId', array($roleId));
+
+        return parent::setRoleId($roleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRoleId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoleId', array());
+
+        return parent::getRoleId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsPromoValid($isPromoValid)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsPromoValid', array($isPromoValid));
+
+        return parent::setIsPromoValid($isPromoValid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsPromoValid()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsPromoValid', array());
+
+        return parent::getIsPromoValid();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsActive($isActive)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsActive', array($isActive));
+
+        return parent::setIsActive($isActive);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsActive()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsActive', array());
+
+        return parent::getIsActive();
     }
 
 }
