@@ -226,6 +226,7 @@ blockquote:before{
 
 .link-404 a img {
     margin-right: 6px;
+    margin-top: -4px;
 }
 
 /* =============================================
