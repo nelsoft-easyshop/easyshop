@@ -119,13 +119,13 @@ class JbimagesUploader extends CI_Controller
                     $this->image_lib->resize();
                 }
 
-                $result['result']		= "file_uploaded";
-                $result['resultcode']	= 'ok';
-                $result['file_name']	= $conf['img_path'] . '/' . $result['file_name'];
+                $result['result']       = "file_uploaded";
+                $result['resultcode']   = 'ok';
+                $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
             }
             else {
-                $result['result']		= $this->upload->display_errors(' ', ' ');
-                $result['resultcode']	= 'failed';
+                $result['result']       = $this->upload->display_errors(' ', ' ');
+                $result['resultcode']   = 'failed';
             }
             if($filecount-1 === $fx){
                 $result['status'] = 'last';
