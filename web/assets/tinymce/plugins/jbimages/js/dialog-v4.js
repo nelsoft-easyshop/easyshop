@@ -141,7 +141,6 @@ var jbImagesDialog = {
         {
             var w = this.getWin();
             tinymce = w.tinymce;
-            console.log(result);
             var mybaseurl = result.base_url;
 
             tinymce.EditorManager.activeEditor.insertContent('<img src="' + mybaseurl + result.filename +'" data-mce-src="' + mybaseurl + result.filename +'">');
