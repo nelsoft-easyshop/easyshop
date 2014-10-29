@@ -13,7 +13,7 @@ else if(ENVIRONMENT == 'staging'){
     $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/easyshop-staging";
 }
 else{
-    $config['assetsBaseUrl'] = "assets/";
+    $config['assetsBaseUrl'] = "/";
 }
 
 
