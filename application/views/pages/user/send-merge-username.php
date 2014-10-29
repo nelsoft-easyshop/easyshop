@@ -151,4 +151,5 @@
          });
     });
 </script>
+
 <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
