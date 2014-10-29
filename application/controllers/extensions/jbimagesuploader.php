@@ -16,13 +16,13 @@
   * @author Sam Gavinio <samgavinio@easyshop.ph>
   *
   */
-class JbimagesUploader extends CI_Controller 
+class JbimagesUploader extends MY_Controller 
 {   
     /**
      * Flag if the upload is allowed or not
      *
      */
-    CONSTANT ALLOW_UPLOAD = true;
+    const ALLOW_UPLOAD = true;
     
     /**
      * Class Contructor
@@ -32,12 +32,13 @@ class JbimagesUploader extends CI_Controller
     {
         parent::__construct();
         
-        if(!ALLOW_UPLOAD){
+        if(!self::ALLOW_UPLOAD){
             return false;
         }
         
         $this->load->helper(array('language'));
         $this->config->load('jbimages', TRUE);
+        $this->config->load('assets', TRUE);
     }
     
     /**
@@ -66,29 +67,32 @@ class JbimagesUploader extends CI_Controller
      * Upload the files
      *
      * @param string $lang
+     * @param boolean $useAws
      */
-    public function upload ($lang='english')
+    public function upload ($lang='english', $useAws = false)
     {
         $this->_lang_set($lang);
-        $conf['img_path']           = $this->config->item('img_path',		'uploader_settings');
-        $conf['full_img_path']      = $this->config->item('full_img_path',	'uploader_settings');
-        $conf['allow_resize']       = $this->config->item('allow_resize',	'uploader_settings');
+        $awsUploader = $this->serviceContainer['aws_uploader'];
         
-        $config['allowed_types']    = $this->config->item('allowed_types',	'uploader_settings');
-        $config['max_size']         = $this->config->item('max_size',		'uploader_settings');
-        $config['encrypt_name']     = $this->config->item('encrypt_name',	'uploader_settings');
-        $config['overwrite']        = $this->config->item('overwrite',		'uploader_settings');
-        $config['upload_path']      = $this->config->item('upload_path',	'uploader_settings');
+        $conf['img_path']           = $this->config->item('img_path',       'jbimages');
+        $conf['full_img_path']      = $this->config->item('full_img_path',  'jbimages');
+        $conf['allow_resize']       = $this->config->item('allow_resize',   'jbimages');
+        
+        $config['allowed_types']    = $this->config->item('allowed_types',  'jbimages');
+        $config['max_size']         = $this->config->item('max_size',       'jbimages');
+        $config['encrypt_name']     = $this->config->item('encrypt_name',   'jbimages');
+        $config['overwrite']        = $this->config->item('overwrite',      'jbimages');
+        $config['upload_path']      = $this->config->item('upload_path',    'jbimages');
         
         if (!$conf['allow_resize'])
         {
-            $config['max_width']    = $this->config->item('max_width',		'uploader_settings');
-            $config['max_height']   = $this->config->item('max_height',		'uploader_settings');
+            $config['max_width']    = $this->config->item('max_width',      'jbimages');
+            $config['max_height']   = $this->config->item('max_height',     'jbimages');
         }
         else
         {
-            $conf['max_width']      = $this->config->item('max_width',		'uploader_settings');
-            $conf['max_height']     = $this->config->item('max_height',		'uploader_settings');
+            $conf['max_width']      = $this->config->item('max_width',      'jbimages');
+            $conf['max_height']     = $this->config->item('max_height',     'jbimages');
             
             if ($conf['max_width'] == 0 and $conf['max_height'] == 0)
             {
@@ -96,38 +100,60 @@ class JbimagesUploader extends CI_Controller
             }
         }
 
+        
         $this->load->library('upload', $config);
-        $filecount = count($_FILES['descriptionfile']['name']);
+        $this->upload->initialize($config);
+        $fileCount = count($_FILES['descriptionfile']['name']);
 
-        for($fx = 0; $fx < $filecount; $fx++){
+        for($i = 0; $i < $fileCount; $i++){
+        
             foreach($_FILES['descriptionfile'] as $fieldname=>$fieldvalue){
-                $_FILES['userfile'][$fieldname] = $fieldvalue[$fx];
+                $_FILES['userfile'][$fieldname] = $fieldvalue[$i];
             }
             
-            if ($this->upload->do_upload()) {
-                $result = $this->upload->data();
-                if ($conf['allow_resize'] and $conf['max_width'] > 0 and $conf['max_height'] > 0 and (($result['image_width'] > $conf['max_width']) or ($result['image_height'] > $conf['max_height']))){
-                    $resizeParams = array
-                    (
-                        'source_image'  => $result['full_path'],
-                        'new_image'     => $result['full_path'],
-                        'width'         => $conf['max_width'],
-                        'height'        => $conf['max_height']
-                    );
-                    
-                    $this->load->library('image_lib', $resizeParams);
-                    $this->image_lib->resize();
-                }
+            if($useAws){
+                $extension = image_type_to_extension(exif_imagetype($_FILES['userfile']['tmp_name']));
+                $resultImagePath = $conf['img_path'] . '/' . uniqid('description_').$extension;
 
-                $result['result']       = "file_uploaded";
-                $result['resultcode']   = 'ok';
-                $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
+                if($awsUploader->uploadFile($_FILES['userfile']['tmp_name'], $resultImagePath)){
+                    $result['result']       = "file_uploaded";
+                    $result['resultcode']   = 'ok';
+                    $result['file_name']    = $resultImagePath;
+                    $result['base_url'] =  $this->config->item('assetsBaseUrl', 'assets');
+                }
+                else{
+                    $result['result']       = "AWS Upload unsuccessful";
+                    $result['resultcode']   = 'failed';
+                }
+                
             }
-            else {
-                $result['result']       = $this->upload->display_errors(' ', ' ');
-                $result['resultcode']   = 'failed';
+            else{
+                if ($this->upload->do_upload()) {
+                    $result = $this->upload->data();
+                    if ($conf['allow_resize'] && $conf['max_width'] > 0 && $conf['max_height'] > 0 && 
+                        (($result['image_width'] > $conf['max_width']) || ($result['image_height'] > $conf['max_height']))
+                    ){
+                        $resizeParams = array(
+                            'source_image'  => $result['full_path'],
+                            'new_image'     => $result['full_path'],
+                            'width'         => $conf['max_width'],
+                            'height'        => $conf['max_height']
+                        );
+                        $this->load->library('image_lib', $resizeParams);
+                        $this->image_lib->resize();
+                    }
+                    $result['result']       = "file_uploaded";
+                    $result['resultcode']   = 'ok';
+                    $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
+                    $result['base_url'] =  base_url();
+                }
+                else {
+                    $result['result']       = $this->upload->display_errors(' ', ' ');
+                    $result['resultcode']   = 'failed';
+                }
             }
-            if($filecount-1 === $fx){
+
+            if($i === $fileCount - 1 ){
                 $result['status'] = 'last';
             }
             else{
@@ -152,4 +178,4 @@ class JbimagesUploader extends CI_Controller
 }
 
 /* End of file uploader.php */
-/* Location: ./application/controllers/uploader.php */
+/* Location: ./application/controllers/extensions/jbimagesuploader.php */
