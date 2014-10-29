@@ -18,8 +18,8 @@
             filename:'<?php echo $file_name; ?>',
             result: '<?php echo $result; ?>',
             resultCode: '<?php echo $resultcode; ?>',
-            <!--Added code-->
-            status: '<?php echo $status?>'
+            status: '<?php echo $status?>',
+            base_url: '<?php echo $base_url?>'
         });
     } 
     else{
@@ -27,8 +27,8 @@
             filename:'<?php echo $file_name; ?>',
             result: '<?php echo $result; ?>',
             resultCode: '<?php echo $resultcode; ?>',
-            <!--Added code-->
-            status: '<?php echo $status?>'
+            status: '<?php echo $status?>',
+            base_url: '<?php echo $base_url?>'
         });
     }
 </script>
