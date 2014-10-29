@@ -158,9 +158,19 @@ blockquote:before{
 /* =============================================
 -----------------  404 page css -------------
 ==============================================*/
+.btn.btn-no-br {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+}
+
+.content-404-bg {
+    background-color: #fff;
+}
 
 .content-404 {
     padding-bottom: 50px;
+    padding-top: 20px;
 }
 
 .img-404 {
@@ -173,16 +183,50 @@ blockquote:before{
     width: 100%;
 }
 
-.content-404 ul {
-    list-style: disc;
-    margin:20px 0 0 20px;
+.content-404 .col-md-6 h1 {
+    font-size: 5em;
+    font-weight: 900;
+    margin-top: 40px;
+    text-transform: uppercase;
 }
 
-.content-404 ul li {
-    padding: 10px 0;
+.content-404 .col-md-6 h2 {
+    margin-top: 20px;
 }
 
+.input-404,
+.submit-404 {
+    width: 100%;
+}
 
+.input-404 {
+    height: 40px;
+}
+
+.submit-404 {
+    font-size: 18px;
+}
+
+.form-container-404 {
+    margin: 40px 0;
+}
+
+.link-404 a {
+    color: #444645;
+    font-size: 20px;
+}
+
+.link-404 a:hover {
+    color: #FF4E2D;
+}
+
+.link-404 a strong {
+    font-weight: 900;
+}
+
+.link-404 a img {
+    margin-right: 6px;
+}
 
 /* =============================================
 ---------------------  Header -----------------
@@ -3035,6 +3079,26 @@ font-size: 15px;
     .bx-wrapper .bx-next {
         right: 10px;
     }
+
+    /*** ---- 404 responsive css --- ***/
+
+    .form-container-404 .form-404-input {
+        margin-bottom: 20px;
+    }
+
+    .form-container-404 .form-404-input .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .content-404 .col-md-6 h1,
+    .content-404 .col-md-6 h2 {
+        text-align: center;
+    }
+
+    .link-404 {
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 565px) {
@@ -3347,6 +3411,15 @@ font-size: 15px;
         height: auto;
         max-height: 100px !important;
     }
+
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 3.5em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.4em;
+    }
 }
 
 @media only screen and (max-width: 320px) {
@@ -3526,6 +3599,12 @@ font-size: 15px;
     .social-media-wrapper ul {
         width: 300px;
     }
+
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 2.5em;
+    }
+
 
 }
 
