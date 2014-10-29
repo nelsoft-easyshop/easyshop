@@ -65,7 +65,9 @@ class Kernel
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
-            return Doctrine\ORM\EntityManager::create($dbConfig, $config);
+            $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
+            $em->getConnection()->getConfiguration()->setSQLLogger(null);
+            return $em;
         };
 
         // ZeroMQ pusher
