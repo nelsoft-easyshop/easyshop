@@ -69,8 +69,13 @@ class JbimagesUploader extends MY_Controller
      * @param string $lang
      * @param boolean $useAws
      */
-    public function upload ($lang='english', $useAws = false)
+    public function upload ($lang='english')
     {
+        $useAws = false;
+        if(strtolower(ENVIRONMENT) !== 'development'){
+            $useAws = true;
+        } 
+    
         $this->_lang_set($lang);
         $awsUploader = $this->serviceContainer['aws_uploader'];
         
