@@ -9,9 +9,9 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-            <h1>oopppsss!</h1>
+            <h1>OOOOOOPPPSSS!!!</h1>
             <h2>
-                Looks like the page you were looking for doesn't exist...
+                The page that you were looking for has been abducted,... but have no fear, the search bar is here!
             </h2>
             <div class="row form-container-404">
                 <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">

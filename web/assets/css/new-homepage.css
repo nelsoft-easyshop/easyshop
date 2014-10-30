@@ -184,7 +184,7 @@ blockquote:before{
 }
 
 .content-404 .col-md-6 h1 {
-    font-size: 5em;
+    font-size: 3.8em;
     font-weight: 900;
     margin-top: 40px;
     text-transform: uppercase;
@@ -3091,15 +3091,6 @@ font-size: 15px;
         margin-left: 0;
         margin-right: 0;
     }
-
-    .content-404 .col-md-6 h1,
-    .content-404 .col-md-6 h2 {
-        text-align: center;
-    }
-
-    .link-404 {
-        text-align: center;
-    }
 }
 
 @media only screen and (max-width: 565px) {
@@ -3412,15 +3403,6 @@ font-size: 15px;
         height: auto;
         max-height: 100px !important;
     }
-
-    /*** --- 404 responsive css small devices --- ***/
-    .content-404 .col-md-6 h1  {
-        font-size: 3.5em;
-    }
-
-    .content-404 .col-md-6 h2 {
-        font-size: 1.4em;
-    }
 }
 
 @media only screen and (max-width: 320px) {
@@ -3603,10 +3585,17 @@ font-size: 15px;
 
     /*** --- 404 responsive css small devices --- ***/
     .content-404 .col-md-6 h1  {
-        font-size: 2.5em;
+        font-size: 4em;
+        text-align: center;
     }
 
+    .content-404 .col-md-6 h2 {
+        text-align: center;
+    }
 
+    .link-404 {
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 979px) {
@@ -3644,6 +3633,17 @@ font-size: 15px;
     .sticky-search-cart-wrapper .header-cart-items-con {
         font-size: 0.75em;
         width: 75%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 3em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.6em;
     }
 }
 
@@ -3696,6 +3696,15 @@ font-size: 15px;
         width: 83.5%;
     }
 
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 2.4em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.4em;
+    }
+
 }
 
 @media only screen and (max-width: 450px) {
@@ -3728,6 +3737,17 @@ font-size: 15px;
         width: 61.5%;
     }
     
+}
+
+@media only screen and (max-width: 360px) {
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 2em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.2em;
+    }
 }
 
 @media only screen and (max-width: 320px) {
