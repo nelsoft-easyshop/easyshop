@@ -1349,6 +1349,7 @@ class Payment extends MY_Controller{
      */
     function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
     {
+        returnn true;
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
 
