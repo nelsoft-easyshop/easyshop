@@ -49,9 +49,7 @@ class EsProductRepository extends EntityRepository
                             AND is_draft = 0
                             AND a.member_id = b.id_member
                             AND a.id_product in (:ids)
-                            AND MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE)
-                            AND MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE)
-                            AND MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                            AND MATCH (b.`store_name`,`name`,`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) 
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
