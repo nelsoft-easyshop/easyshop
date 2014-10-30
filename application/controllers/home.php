@@ -66,6 +66,7 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
+
         
         if( $data['logged_in'] && $view !== 'basic'){
             $this->load->view('templates/header', $data);
@@ -275,6 +276,7 @@ class Home extends MY_Controller
      */
     public function userprofile()
     {
+
         $em = $this->serviceContainer["entity_manager"];
         $pm = $this->serviceContainer['product_manager'];
         $um = $this->serviceContainer['user_manager'];
@@ -300,7 +302,11 @@ class Home extends MY_Controller
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $headerData = $this->fill_header();
+
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
+                $bannerData['cartSize'] = $headerData['cartSize'];
+                $bannerData['cartItems'] = $headerData["cartItems"];
+                $bannerData['cartTotal'] = $headerData['cartTotal'];                
 
                 if ($bannerData['hasNoItems']){
                     redirect($vendorSlug.'/about');
@@ -346,7 +352,7 @@ class Home extends MY_Controller
                 }
 
                 //HEADER DATA
-                $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+                $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
 
