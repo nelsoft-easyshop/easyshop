@@ -471,8 +471,15 @@ body{
     color: #565656;
     font-weight: 900;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 10px;
 }
 
+.p-rec-product-name:hover{
+    color: #ff893a;
+}
 .p-rec-product-name:hover{
     color:#fe893a;
 }
