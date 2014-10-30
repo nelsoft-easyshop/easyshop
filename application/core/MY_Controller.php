@@ -1,6 +1,6 @@
 <?php
 
-
+use EasyShop\Entities\EsMember; 
 /**
  * MY custom controller
  */
@@ -79,6 +79,23 @@ class MY_Controller extends CI_Controller
             'category_search' => $this->product_model->getFirstLevelNode(),
             );
         return $data;
+    }
+
+    public function fill_categoryNavigation()
+    {
+        return $this->serviceContainer['xml_cms']->getHomeData();
+    }
+
+    public function fill_userDetails()
+    {
+            $em = $this->serviceContainer["entity_manager"];
+            $memberId = $this->session->userdata('member_id');
+            $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                                            ->find($memberId);
+            $userDetails->profileImage = ($userDetails->getImgurl() == "") 
+                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            return $userDetails;
     }
     
     function check_cookie(){
