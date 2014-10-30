@@ -231,14 +231,19 @@ class user_model extends CI_Model {
         }
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
         foreach($row as $k=>$r){
-            if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
-                $row[$k]['imgurl'] = "assets/user/default/60x60.png?ver=".date("Ymdhis");
+            if($r['imgurl'] === ""){
+                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
             else{
-                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png?ver=".date("Ymdhis");
+                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
             }
+
+            if(!file_exists($row[$k]['imgurl'])){
+                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
+            }
+            $row[$k]['imgurl'] .= "?ver=".date("YmdHis");
+            
         }
         
         return $row;
