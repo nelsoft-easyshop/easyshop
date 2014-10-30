@@ -825,6 +825,7 @@ $string = '<typeNode>
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
+        shuffle($xmlContent['sellerSection']['productPanel']);    
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
                 ->findOneBy(['slug' => $product['slug']]);

@@ -118,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-link-login">
                                                 <img src="assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
-                                                <a href="/register">register</a>
+                                                <a href="/register">create an account</a>
                                             </div>
                                         <?php endif; ?>                                           
                                     </div>
@@ -405,7 +405,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="header-link">
                                                     <img src="assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">register</a>
+                                                    <a href="/register">create an account</a>
                                                 </div>
                                             <?php endif; ?>
                                             </div>

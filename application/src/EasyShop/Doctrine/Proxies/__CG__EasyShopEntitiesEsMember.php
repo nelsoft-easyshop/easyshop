@@ -64,10 +64,10 @@ class EsMember extends \EasyShop\Entities\EsMember implements \Doctrine\ORM\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'idMember', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'usersession', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'contactno', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isContactnoVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'email', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isEmailVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'gender', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'birthday', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'datecreated', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginIp', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'loginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'nickname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'imgurl', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'userdata', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'remarks', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isAdmin', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeDesc', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'session');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'idMember', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'usersession', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'contactno', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isContactnoVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'email', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isEmailVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'gender', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'birthday', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'datecreated', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginIp', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'loginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'nickname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'imgurl', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'userdata', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'remarks', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isAdmin', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeDesc', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeName', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'oauthId', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'oauthProvider', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'failedLoginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastFailedLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'supportEmail', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'website', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isHideAvatar', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isHideBanner', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'session');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'idMember', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'usersession', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'contactno', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isContactnoVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'email', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isEmailVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'gender', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'birthday', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'datecreated', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginIp', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'loginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'nickname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'imgurl', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'userdata', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'remarks', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isAdmin', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeDesc', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'session');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'idMember', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'username', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'usersession', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'password', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'contactno', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isContactnoVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'email', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isEmailVerify', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'gender', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'birthday', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'datecreated', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastLoginIp', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'loginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'fullname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'nickname', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'imgurl', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'userdata', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'remarks', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isAdmin', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeDesc', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isPromoValid', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'storeName', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'oauthId', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'oauthProvider', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'failedLoginCount', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'lastFailedLoginDatetime', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'supportEmail', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'website', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isHideAvatar', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'isHideBanner', '' . "\0" . 'EasyShop\\Entities\\EsMember' . "\0" . 'session');
     }
 
     /**
@@ -697,6 +697,116 @@ class EsMember extends \EasyShop\Entities\EsMember implements \Doctrine\ORM\Prox
     /**
      * {@inheritDoc}
      */
+    public function setStoreName($storeName)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStoreName', array($storeName));
+
+        return parent::setStoreName($storeName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStoreName()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStoreName', array());
+
+        return parent::getStoreName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOauthId($oauthId)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOauthId', array($oauthId));
+
+        return parent::setOauthId($oauthId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFailedLoginCount($failedLoginCount)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFailedLoginCount', array($failedLoginCount));
+
+        return parent::setFailedLoginCount($failedLoginCount);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOauthId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOauthId', array());
+
+        return parent::getOauthId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOauthProvider($oauthProvider)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOauthProvider', array($oauthProvider));
+
+        return parent::setOauthProvider($oauthProvider);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFailedLoginCount()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFailedLoginCount', array());
+
+        return parent::getFailedLoginCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLastFailedLoginDatetime', array($lastFailedLoginDatetime));
+
+        return parent::setLastFailedLoginDatetime($lastFailedLoginDatetime);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOauthProvider()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOauthProvider', array());
+
+        return parent::getOauthProvider();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLastFailedLoginDatetime()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLastFailedLoginDatetime', array());
+
+        return parent::getLastFailedLoginDatetime();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function addSession(\EasyShop\Entities\CiSessions $session)
     {
 
@@ -725,6 +835,94 @@ class EsMember extends \EasyShop\Entities\EsMember implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSession', array());
 
         return parent::getSession();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSupportEmail($supportEmail)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSupportEmail', array($supportEmail));
+
+        return parent::setSupportEmail($supportEmail);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSupportEmail()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSupportEmail', array());
+
+        return parent::getSupportEmail();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setWebsite($website)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWebsite', array($website));
+
+        return parent::setWebsite($website);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWebsite()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getWebsite', array());
+
+        return parent::getWebsite();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsHideAvatar($isHideAvatar)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsHideAvatar', array($isHideAvatar));
+
+        return parent::setIsHideAvatar($isHideAvatar);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsHideAvatar()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsHideAvatar', array());
+
+        return parent::getIsHideAvatar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsHideBanner($isHideBanner)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsHideBanner', array($isHideBanner));
+
+        return parent::setIsHideBanner($isHideBanner);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsHideBanner()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsHideBanner', array());
+
+        return parent::getIsHideBanner();
     }
 
 }

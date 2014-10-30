@@ -64,10 +64,10 @@ class EsProductImage extends \EasyShop\Entities\EsProductImage implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'idProductImage', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImagePath', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImageType', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'isPrimary', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'product');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'idProductImage', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImagePath', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImageType', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'isPrimary', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'product', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'directory', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'filename');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'idProductImage', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImagePath', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImageType', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'isPrimary', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'product');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'idProductImage', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImagePath', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'productImageType', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'isPrimary', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'product', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'directory', '' . "\0" . 'EasyShop\\Entities\\EsProductImage' . "\0" . 'filename');
     }
 
     /**
@@ -274,6 +274,28 @@ class EsProductImage extends \EasyShop\Entities\EsProductImage implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProduct', array());
 
         return parent::getProduct();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDirectory()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDirectory', array());
+
+        return parent::getDirectory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFilename()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFilename', array());
+
+        return parent::getFilename();
     }
 
 }
