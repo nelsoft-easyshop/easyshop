@@ -500,7 +500,7 @@ class EsProductRepository extends EntityRepository
             }
         }
 
-        $qbResult = $qbResult->getQuery();
+        $qbResult = $qbResult->setMaxResults(100)->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
         

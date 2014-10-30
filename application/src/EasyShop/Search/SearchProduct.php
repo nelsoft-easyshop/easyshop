@@ -212,7 +212,7 @@ class SearchProduct
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
         $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds); 
+                                        ->getProductByParameterFiltering($filteredArray,$productIds);
 
         return $productIds;
     }
@@ -279,7 +279,7 @@ class SearchProduct
 
         // Search for Product Query String
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
-        $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
+        $productIds = ($queryString && empty($productIds)) ? array() : $productIds;
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
 
         if($startPrice){
@@ -325,7 +325,7 @@ class SearchProduct
                 $value->imageFileName = $productImage->getFilename();
             }
         }
-        
+
         $returnArray = array(
                     'collection' => $collection,
                     'count' => $totalCount,
