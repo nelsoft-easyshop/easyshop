@@ -52,7 +52,7 @@
                                             <div class="div-rec-product-image">
                                                 <center>
                                                     <span class="span-me">
-                                                        <img src="<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                                        <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
                                                     </span>
                                                 </center>
                                             </div>

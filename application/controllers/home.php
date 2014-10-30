@@ -1116,16 +1116,6 @@ class Home extends MY_Controller
         $data['targetPage'] = $targetPage;
         $data['errors'] = [];
 
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                        ->setMethod('POST')
-                        ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
-                        ->add('contact_number', 'text', array('constraints' => $rules['contact_number']))
-                        ->add('street_address', 'text')
-                        ->add('city', 'text')
-                        ->add('region', 'text')
-                        ->add('website', 'text')
-                        ->getForm();
-
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                ->findOneBy(['slug' => $sellerslug]);
 
@@ -1150,6 +1140,18 @@ class Home extends MY_Controller
             $data['validatedCity'] = $data['city'] = $addr->getCity()->getLocation(). ", ";
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
+
+        $contactNumberConstraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+
+        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                        ->setMethod('POST')
+                        ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
+                        ->add('contact_number', 'text', $contactNumberConstraint)
+                        ->add('street_address', 'text')
+                        ->add('city', 'text')
+                        ->add('region', 'text')
+                        ->add('website', 'text')
+                        ->getForm();
 
         if($this->input->post('storeName') !== false || $this->input->post('contactNumber') !== false || $this->input->post('streetAddress') !== false || 
             $this->input->post('website') !== false || $this->input->post('citySelect') !== false || $this->input->post('regionSelect') !== false){
