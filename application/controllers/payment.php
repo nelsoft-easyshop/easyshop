@@ -1735,7 +1735,6 @@ class Payment extends MY_Controller{
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
         extract($response);
-
         $this->removeItemFromCart();  
         $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
@@ -1783,8 +1782,9 @@ class Payment extends MY_Controller{
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
     
         extract($response);
+        $this->removeItemFromCart();
+        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
-
         redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 

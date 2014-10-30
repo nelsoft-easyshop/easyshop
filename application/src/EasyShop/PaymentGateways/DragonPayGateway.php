@@ -157,7 +157,8 @@ class DragonPayGateway extends AbstractGateway
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $this->setParameter('paymentType', $paymentType);
-        // $remove = $this->payment_model->releaseAllLock($member_id);
+
+        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
 
         $productCount = count($validatedCart['itemArray']);
         $name = "";
@@ -203,7 +204,7 @@ class DragonPayGateway extends AbstractGateway
         }
         else{ 
             $orderId = $return['v_order_id'];
-            //$locked = $this->lockItem($toBeLocked,$orderId,'insert');  
+            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($toBeLocked,$orderId); 
 
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                             ->find($orderId);
@@ -282,20 +283,19 @@ class DragonPayGateway extends AbstractGateway
                     $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                     $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                 }
-                //$locked = $this->lockItem($toBeLocked,$orderId,'delete'); 
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked,$orderId); 
             }
             $orderStatus = (strtolower($status) == "s" ? 0 : 99); 
             $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
                             ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus,0);
 
             if(!$postBackCount){
-                //$remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
                 //$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
             }
 
         }
         elseif(strtolower($status) == "f"){
-            //$locked = $this->lockItem($toBeLocked,$orderId,'delete');
+            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked,$orderId);
             //$orderId = $this->payment_model->cancelTransaction($txnId,true);
             $orderHistory = array(
                 'order_id' => $orderId,
@@ -305,7 +305,6 @@ class DragonPayGateway extends AbstractGateway
             $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                     ->addOrderHistory($orderHistory);
         }
-
     }
 
     /**
