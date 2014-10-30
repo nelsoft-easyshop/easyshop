@@ -25,33 +25,11 @@ class EsProductRepository extends EntityRepository
     public function findByKeyword($stringCollection = array())
     {
         $this->em =  $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsProduct', 'u');
-        $rsm->addFieldResult('u', 'idProduct', 'idProduct');
-        $rsm->addFieldResult('u', 'name', 'name');
-        $rsm->addFieldResult('u', 'price', 'price'); 
-        $rsm->addFieldResult('u', 'brief', 'brief');
-        $rsm->addFieldResult('u', 'slug', 'slug');
-        $rsm->addFieldResult('u', 'condition', 'condition');
-        $rsm->addFieldResult('u', 'startdate', 'startdate');
-        $rsm->addFieldResult('u', 'enddate', 'enddate');
-        $rsm->addFieldResult('u', 'isPromote', 'isPromote');
-        $rsm->addFieldResult('u', 'promoType', 'promoType');
-        $rsm->addFieldResult('u', 'discount', 'discount');
-        $rsm->addFieldResult('u', 'isSoldOut', 'isSoldOut');
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult( 'idProduct', 'idProduct'); 
         $query = $this->em->createNativeQuery("
             SELECT `id_product` as idProduct
-                , `name`
-                , `price`
-                , `slug`
-                , `brief`
-                , `condition`
-                , `startdate`
-                , `enddate`
-                , `is_promote` as isPromote
-                , `promo_type` as promoType
-                , `discount`
-                , `is_sold_out` as isSoldOut
+                , `name` 
                 , `weight`
             FROM (
                     SELECT 
@@ -70,6 +48,7 @@ class EsProductRepository extends EntityRepository
                     WHERE is_delete = 0 
                             AND is_draft = 0
                             AND a.member_id = b.id_member
+                    LIMIT 100
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -97,11 +76,9 @@ class EsProductRepository extends EntityRepository
 
                 $sql = "
                     SELECT 
-                        p,m,c
+                        p
                     FROM 
-                        EasyShop\Entities\EsProduct p
-                        JOIN p.member m
-                        JOIN p.cat c
+                        EasyShop\Entities\EsProduct p 
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)

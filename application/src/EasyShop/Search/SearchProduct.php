@@ -85,17 +85,12 @@ class SearchProduct
             $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
             $stringCollection[2] = '"'.trim($clearString).'"'; 
 
-            if(trim($queryString) === ""){
-                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                ->findBy(['isDraft' => 0,'isDelete' => 0]);
-            }
-            else{
-                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                ->findByKeyword($stringCollection);
-            }
+
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findByKeyword($stringCollection);
 
             foreach ($products as $key => $value) {
-                array_push($ids, $value->getIdProduct());
+                $ids[] = $value['idProduct']; 
             }
         }
         
@@ -111,17 +106,20 @@ class SearchProduct
      */
     public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
     {
+        $productManager = $this->productManager;
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
-   
+
+        $productIdsReturn = [];
         foreach ($arrayItems as $key => $value) {
-            $price = round(floatval($value->getFinalPrice()),2); 
-            if($price < $minPrice || $price > $maxPrice){
-                unset($arrayItems[$key]);
-            }
+            $value = $productManager->getProductDetails($value->getIdProduct());
+            $price = round(floatval($value->getFinalPrice()),2);
+            if($price >= $minPrice && $price <= $maxPrice){ 
+                $productIdsReturn[] = $value->getIdProduct();
+            } 
         }
-    
-        return $arrayItems; 
+
+        return $productIdsReturn; 
     }
 
     /**
@@ -281,20 +279,21 @@ class SearchProduct
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
-        // Get product details
-        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,$perPage,FALSE);
+        if($startPrice){
+            // Get product object
+            $filteredProducts = $EsProductRepository->findBy(['idProduct' => $productIds]);
 
-        // apply actual price on each product with or without discount
-        $discountedProduct = (!empty($filteredProducts)) ? $productManager->discountProducts($filteredProducts) : array(); 
-        // filter object remove product without in the range of the price
-        $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
-
-        $finalizedProductIds = [];
-        foreach ($productsResult as $key => $value) {
-            array_push($finalizedProductIds, $value->getIdProduct());
+            // filter object remove product without in the range of the price
+            $finalizedProductIds = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$filteredProducts) : $discountedProduct;
+        }
+        else{
+            $finalizedProductIds = $productIds;
         }
 
-        $finalizedProductIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds; 
+        $finalizedProductIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
+
+        // total product count
+        $totalCount = count($finalizedProductIds);
 
         // Get product details
         $filteredProducts = $EsProductRepository->getProductDetailsByIds($finalizedProductIds,$pageNumber,$perPage);
@@ -321,10 +320,15 @@ class SearchProduct
             if($productImage != NULL){
                 $value->directory = $productImage->getDirectory();
                 $value->imageFileName = $productImage->getFilename();
-            } 
+            }
         }
-         
-        return $collection;
+        
+        $returnArray = array(
+                    'collection' => $collection,
+                    'count' => $totalCount,
+                );
+
+        return $returnArray;
     }
 
     /**

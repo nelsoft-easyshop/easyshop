@@ -198,21 +198,6 @@ class ProductManager
     }
 
     /**
-     * Apply discounted price to product
-     *
-     * @param  array  $products [description]
-     * @return mixed
-     */
-    public function discountProducts($products)
-    { 
-        foreach ($products as $key => $value) {  
-            $resultObject = $this->getProductDetails($value->getIdProduct());
-        } 
-
-        return $products;
-    }
-
-    /**
      * function that will get all possible keyword tied on selected product
      * @return boolean
      */
