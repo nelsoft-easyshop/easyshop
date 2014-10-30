@@ -17,6 +17,7 @@ class SocialMediaController extends MY_Controller
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
         $this->entityManager = $this->serviceContainer['entity_manager'];
         $this->stringUtility = $this->serviceContainer['string_utility'];
+        $this->userManager = $this->serviceContainer['user_manager'];
         $this->emailNotification = $this->serviceContainer['email_notification'];
     }
 
@@ -330,4 +331,24 @@ class SocialMediaController extends MY_Controller
         echo json_encode($result);
     }
 
+    /**
+     * Check if email exists
+     * @param email
+     * @return boolean
+     */
+    public function checkEmailAvailability()
+    {
+        $result = false;
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy(['email' => $this->input->post('email')]);
+        if ($member) {
+            $result = array(
+                'username' => $member->getUsername(),
+                'email' => $member->getEmail(),
+                'location' => '',
+                'image' =>  $this->userManager->getUserImage($member->getIdMember())
+            );
+        }
+        echo json_encode($result);
+    }
 }

@@ -51,7 +51,15 @@
                             <p class="label-merge">
                                 If you believe you own this account, type in your email address to send a verification request to the registered email of username to update your account.
                             </p>
-                            <input type="text" class="form-control input-merge input-merge-username" id="txt-email" placeholder="Type in your email account"/>
+                            <div class="row">
+                                <div class="col-md-7 col-check-1">
+                                    <input type="text" class="form-control input-merge input-merge-username" id="txt-email" placeholder="Type in your email account"/>
+                                </div>
+                                <div class="col-md-5 col-check-2">
+                                    <button class="btn btn-default-3 btn-block check-availability" id="check-availability">Check Availability</button>
+                                    <img src="/assets/images/orange_loader.gif" id="img-check-availability" style="display: none">
+                                </div>
+                            </div>
                             <div class="div-validation-container">
                                 <p class="span-validation-ok email-accepted" style="display: none">
                                     <i class="glyphicon glyphicon-ok-sign"></i>
@@ -62,7 +70,7 @@
                                      Email Address is not available
                                  </p>
                             </div>
-                            <div class="div-search-merge-account div-result">
+                            <div class="div-search-merge-account div-result" id="available-result" style="display: none">
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <center>
@@ -70,7 +78,7 @@
                                                 <div class="div-rec-product-image">
                                                     <center>
                                                         <span class="span-me">
-                                                            <img src="/assets/images/img_main_product.png" class="img-rec-product">
+                                                            <img src="/assets/images/img_main_product.png" id="available-image" class="img-rec-product">
                                                         </span>
                                                     </center>
                                                 </div>
@@ -83,7 +91,7 @@
                                                 <td class="td-merge-label">
                                                     Username:
                                                 </td>
-                                                <td class="td-merge-detail">
+                                                <td class="td-merge-detail" id="available-username">
                                                     sampleUser
                                                 </td>
                                             </tr>
@@ -91,7 +99,7 @@
                                                 <td class="td-merge-label">
                                                     Email:
                                                 </td>
-                                                <td class="td-merge-detail">
+                                                <td class="td-merge-detail" id="available-email">
                                                     sampleUser@yahoo.com
                                                 </td>
                                             </tr>
@@ -99,7 +107,7 @@
                                                 <td class="td-merge-label">
                                                     Location:
                                                 </td>
-                                                <td class="td-merge-detail">
+                                                <td class="td-merge-detail" id="available-location">
                                                     Makina City
                                                 </td>
                                             </tr>
@@ -110,7 +118,7 @@
                             <button class="btn btn-block btn-orange-lg send-request">
                                 SEND REQUEST
                             </button>
-                            <img src="/assets/images/orange_loader.gif" style="display: none">
+                            <img src="/assets/images/orange_loader.gif" id="img-send-request" style="display: none">
                         </div>
                     </div>
                 </div>
@@ -152,7 +160,7 @@
         var fname = $("#data-container").attr('data-fname');
         var gender = $("#data-container").attr('data-gender');
         var email = $("#data-container").attr('data-email');
-        $('.proceed').click(function (e) {
+        $('.proceed').on('click', function (e) {
             var username = $("#txt-username").val();
             if (username === "") {
                 $(".username-denied").show();
@@ -192,7 +200,7 @@
             });
         });
 
-        $('.send-request').click(function (e) {
+        $('.send-request').on('click', function (e) {
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var txtEmail = $("#txt-email").val();
             if (txtEmail == "") {
@@ -206,11 +214,11 @@
                 url : "/SocialMediaController/sendMergeNotification",
                 data : {csrfname : csrftoken, oauthId:id, oauthProvider:provider, email:txtEmail, error:'username'},
                 beforeSend : function () {
-                    $(".form-merge img").show();
+                    $("#img-send-request").show();
                     $(".send-request").hide();
                 },
                 success : function (data) {
-                    $(".form-merge img").hide();
+                    $("#img-send-request").hide();
                     $(".send-request").show();
                     if (data == false) {
                         $(".email-denied").show();
@@ -233,12 +241,41 @@
             });
         });
 
-        $( ".input-merge-username" ).keyup(function() {
-            $(".div-search-merge-account").css("display", "block");
-        });
-
-        $( ".div-search-merge-account" ).click(function() {
-            $(".div-search-merge-account").css("display", "none");
+        $('#check-availability').on('click', function() {
+            var txtEmail = $('#txt-email').val();
+            if (txtEmail == "") {
+                $(".email-denied").show();
+                $(".email-accepted").hide();
+                return false;
+            }
+            $.ajax({
+                dataType : "json",
+                type: "post",
+                url : "/SocialMediaController/checkEmailAvailability",
+                data : {csrfname : csrftoken, email:txtEmail},
+                beforeSend : function () {
+                    $("#img-check-availability").show();
+                    $("#check-availability").hide();
+                },
+                success : function (data) {
+                    $("#available-result").hide();
+                    $("#img-check-availability").hide();
+                    $("#check-availability").show();
+                    if (data == false) {
+                        $(".email-denied").show();
+                        $(".email-accepted").hide();
+                    }
+                    else {
+                        $(".email-denied").hide();
+                        $(".email-accepted").show();
+                        $("#available-result").show();
+                        $("#available-image").attr('src',data.image);
+                        $("#available-username").html(data.username);
+                        $("#available-email").html(data.email);
+                        $("#available-location").html(data.location);
+                    }
+                }
+            });
         });
     });
 </script>
