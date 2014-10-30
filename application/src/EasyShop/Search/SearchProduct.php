@@ -259,8 +259,7 @@ class SearchProduct
         $categoryManager = $this->categoryManager;
 
         // Prepare Repository
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
+        $esProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
 
         // Prepare variables
         $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
@@ -283,22 +282,22 @@ class SearchProduct
 
         if($startPrice){
             // Get product object
-            $filteredProducts = $EsProductRepository->findBy(['idProduct' => $productIds]);
+            $filteredProducts = $esProductRepository->findBy(['idProduct' => $productIds]);
 
             // filter object remove product without in the range of the price
-            $finalizedProductIds = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$filteredProducts) : $discountedProduct;
+            $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $filteredProducts) : $discountedProduct;
         }
         else{
             $finalizedProductIds = $productIds;
         }
 
-        $finalizedProductIds = (!empty($originalOrder)) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
+        $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
 
         // total product count
         $totalCount = count($finalizedProductIds);
 
         // Get product details
-        $filteredProducts = $EsProductRepository->getProductDetailsByIds($finalizedProductIds,$pageNumber,$perPage);
+        $filteredProducts = $esProductRepository->getProductDetailsByIds($finalizedProductIds,$pageNumber,$perPage);
         
         // Sort object by original order of product id to retain weight order
         $data = new ArrayCollection($filteredProducts);
