@@ -2883,8 +2883,9 @@ font-size: 15px;
     }
 
     .sticky-nav-logo {
-        background-color: #4370cc;    
-        height: 44px;    
+        background-color: #4370cc;
+        height: 50px;
+        padding-top: 5px;
         position: absolute;
         top: 0px;
         right: 0;
@@ -3517,7 +3518,13 @@ font-size: 15px;
     .social-media-wrapper ul {
         width: 300px;
     }
+}
 
+@media only screen and (max-width: 1184px) {
+    .sticky-nav-fixed .header-text-container {
+        margin-left: 0;
+        width: 27%;
+    }
 }
 
 @media only screen and (max-width: 979px) {
