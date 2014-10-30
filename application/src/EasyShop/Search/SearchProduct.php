@@ -115,7 +115,7 @@ class SearchProduct
             log_message("error", "You are attempting to hydrate more than ".$objectCountThreshold. " objects. This may lead to high CPU utilization");
         }
         foreach ($arrayItems as $key => $value) {
-            $value = $productManager->getProductDetails($value->getIdProduct());
+            $value = $productManager->getProductDetails($value);
             $price = round(floatval($value->getFinalPrice()),2);
             if($price >= $minPrice && $price <= $maxPrice){ 
                 $productIdsReturn[] = $value->getIdProduct();
@@ -316,7 +316,7 @@ class SearchProduct
         // assign each image and image path of the product
         foreach ($collection as $key => $value) {
             $productId = $value->getIdProduct();
-            $value = $productManager->getProductDetails($productId); 
+            $value = $productManager->getProductDetails($value); 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($productId);
             $value->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
