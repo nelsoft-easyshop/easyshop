@@ -916,6 +916,9 @@ body{
 /* =============================================
 -----------------  Breadcrumb -----------------
 ==============================================*/
+.breadcrumbs-bg {
+    background-color: #e2e2e2;
+}
 
 .default-breadcrumbs-container {
 	font-size: 12px;
