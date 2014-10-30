@@ -1491,13 +1491,16 @@ header {
     overflow:hidden;
 }
 
+.item-name:hover{
+    color: #ff893a
+}
+
 /* title for list style items */
 .item.item-list  .item-name {
     font-weight:700;
     font-size:20px;
     margin:5px 0 10px;
 }
-
 
 .item-name a {
     color:#565656;
@@ -2858,7 +2861,7 @@ font-size: 15px;
 }
 
 .img-rec-product{
-    width: auto;
+    width: inherit;
     max-width: 100%;
     height: auto;
     max-height: 228px !important;
