@@ -155,6 +155,79 @@ blockquote:before{
     background-position: 0 -150px;
 }
 
+/* =============================================
+-----------------  404 page css -------------
+==============================================*/
+.btn.btn-no-br {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+}
+
+.content-404-bg {
+    background-color: #fff;
+}
+
+.content-404 {
+    padding-bottom: 50px;
+    padding-top: 20px;
+}
+
+.img-404 {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.img-404 img {
+    max-width: 800px;
+    width: 100%;
+}
+
+.content-404 .col-md-6 h1 {
+    font-size: 3.8em;
+    font-weight: 900;
+    margin-top: 40px;
+    text-transform: uppercase;
+}
+
+.content-404 .col-md-6 h2 {
+    margin-top: 20px;
+}
+
+.input-404,
+.submit-404 {
+    width: 100%;
+}
+
+.input-404 {
+    height: 40px;
+}
+
+.submit-404 {
+    font-size: 18px;
+}
+
+.form-container-404 {
+    margin: 40px 0;
+}
+
+.link-404 a {
+    color: #444645;
+    font-size: 20px;
+}
+
+.link-404 a:hover {
+    color: #FF4E2D;
+}
+
+.link-404 a strong {
+    font-weight: 900;
+}
+
+.link-404 a img {
+    margin-right: 6px;
+    margin-top: -4px;
+}
 
 /* =============================================
 ---------------------  Header -----------------
@@ -3018,6 +3091,17 @@ font-size: 15px;
     .bx-wrapper .bx-next {
         right: 10px;
     }
+
+    /*** ---- 404 responsive css --- ***/
+
+    .form-container-404 .form-404-input {
+        margin-bottom: 20px;
+    }
+
+    .form-container-404 .form-404-input .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 @media only screen and (max-width: 565px) {
@@ -3518,6 +3602,19 @@ font-size: 15px;
         width: 300px;
     }
 
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 4em;
+        text-align: center;
+    }
+
+    .content-404 .col-md-6 h2 {
+        text-align: center;
+    }
+
+    .link-404 {
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 979px) {
@@ -3555,6 +3652,17 @@ font-size: 15px;
     .sticky-search-cart-wrapper .header-cart-items-con {
         font-size: 0.75em;
         width: 75%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 3em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.6em;
     }
 }
 
@@ -3607,6 +3715,15 @@ font-size: 15px;
         width: 83.5%;
     }
 
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 2.4em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.4em;
+    }
+
 }
 
 @media only screen and (max-width: 450px) {
@@ -3639,6 +3756,17 @@ font-size: 15px;
         width: 61.5%;
     }
     
+}
+
+@media only screen and (max-width: 360px) {
+    /*** --- 404 responsive css small devices --- ***/
+    .content-404 .col-md-6 h1  {
+        font-size: 2em;
+    }
+
+    .content-404 .col-md-6 h2 {
+        font-size: 1.2em;
+    }
 }
 
 @media only screen and (max-width: 320px) {
