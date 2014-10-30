@@ -227,7 +227,7 @@
                                 
                                 <div class="header-cart-lower-content">
                                     <div class="header-cart-shipping-total">
-                                        <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                                        <p>Item(s) in cart: <span><?=$cartSize?></span></p>
                                         <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                     </div>
                                     <div class="header-cart-buttons">
