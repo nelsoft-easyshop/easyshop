@@ -49,7 +49,6 @@ class EsProductRepository extends EntityRepository
                             AND is_draft = 0
                             AND a.member_id = b.id_member
                             AND a.id_product in (:ids)
-                    LIMIT 100
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -58,7 +57,7 @@ class EsProductRepository extends EntityRepository
         $query->setParameter('param1', $stringCollection[1]);
         $query->setParameter('param2', $stringCollection[2]);
         $query->setParameter('ids', $productIds);
-        $results = $query->execute();  
+        $results = $query->execute();
 
         return $results;
     }

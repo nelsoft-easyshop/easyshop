@@ -274,6 +274,7 @@ class SearchProduct
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
         // Search Filter
+        print_r($parameters);
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
