@@ -1125,12 +1125,12 @@ class Home extends MY_Controller
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
 
-        $constraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+        $contactNumberConstraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
 
         $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                         ->setMethod('POST')
                         ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
-                        ->add('contact_number', 'text', $constraint)
+                        ->add('contact_number', 'text', $contactNumberConstraint)
                         ->add('street_address', 'text')
                         ->add('city', 'text')
                         ->add('region', 'text')
