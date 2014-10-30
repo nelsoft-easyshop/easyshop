@@ -85,7 +85,6 @@ class SearchProduct
             $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
             $stringCollection[2] = '"'.trim($clearString).'"'; 
 
-
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->findByKeyword($stringCollection,$productIds);
 
@@ -273,8 +272,7 @@ class SearchProduct
         $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
-        // Search Filter
-        print_r($parameters);
+        // Search Filter 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
