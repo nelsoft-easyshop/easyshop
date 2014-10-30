@@ -272,10 +272,12 @@ class SearchProduct
         $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
-        // Search for Product
+        // Search for Product Query String
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
         $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
-        $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
+
+        // Apply Filter
+        $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds);
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
