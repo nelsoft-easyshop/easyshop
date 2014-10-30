@@ -458,7 +458,63 @@ class product extends MY_Controller
             $this->load->view('pages/general_error', $data); 
         }
         $this->load->view('templates/footer_primary');
-    } 
+    }
+
+    /**
+     * Renders product page view
+     *  
+     * @return View
+     */
+    public function newItem($itemSlug = '')
+    {
+        // Load Header
+        $headerData = $this->fill_header(); 
+        $headerData['title'] = " | Easyshop.ph";
+        $this->load->view('templates/header_new', $headerData);
+
+        // Load Services
+        $productManager = $this->serviceContainer['product_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
+
+        // Load Product Section
+        // check of slug exist
+        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->findOneBy(['slug' => $itemSlug]);
+
+        if($productEntity){
+
+            // variables
+            $productId = $productEntity->getIdProduct();
+            $categoryId = $productEntity->getCat()->getIdCat();
+
+            // get product details
+            $product = $productManager->getProductDetails($productId);
+
+            // generate bread crumbs category of product
+            $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                ->getParentCategoryRecursive($categoryId);
+
+            // get owner avatar image of the product
+            $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
+            
+            // get all images of the product
+            $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getProductImages($productId);
+        
+            $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],TRUE);
+
+            $viewData = array(
+                        'product' => $product,
+                        'breadCrumbs' => $breadcrumbs,
+                        'ownerAvatar' => $avatarImage,
+                        'imagesView' => $imagesView,
+                    );
+            $this->load->view('pages/product/productpage_primary', $viewData);
+        }
+        else{
+            $this->load->view('pages/general_error'); 
+        }
+    }
 
     /**
      * Renders view for the promo page

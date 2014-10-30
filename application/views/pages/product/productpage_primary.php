@@ -5,11 +5,15 @@
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
             <ul>
-                <li><a href="/">Home</a></li>
-                <?php foreach($breadcrumbs as $crumbs): ?>
-                    <li class="bc-arrow"> <a href="/category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
-                <?php endforeach;?>
-                <li class="bc-arrow"><?php echo html_escape($product['product_name']);?></li>
+                <li><a href="/">Home</a></li> 
+                <?php foreach ($breadCrumbs as $crumbs): ?>
+                <li class="bc-arrow"> 
+                    <a href="/category/<?php echo $crumbs['slug']?>">
+                        <?php echo html_escape($crumbs['name']);?>
+                    </a>
+                </li> 
+                <?php endforeach; ?>
+                <li class="bc-arrow"><?=html_escape($product->getName());?></li>
             </ul>
         </div>
     </div>
@@ -19,20 +23,18 @@
     <div class="container">
         <div class="row">
             <div class="product-name-seller col-md-12">
-                <h1 class="" id="<?php echo $product['id_product'];?>"> 
-                    <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
+                <h1 id="<?=$product->getIdProduct();?>"> 
+                    <span id="pname"> <?=html_escape($product->getName())?> </span>
                 </h1>
                 <div>
                     By:
-                        <span class="product-profile-photo"><img src="<?=$avatarImage?>"></span>
-                      
-                     <?php echo html_escape($product['storename']);?>
+                        <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
+                        <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
         </div>
         <div class="prod-border-bttm"></div>
     </div>
-
 </section>
 
 <section class="product-main-mid-content">
@@ -40,22 +42,20 @@
         <div class="row pd-top-40">
                 
             <div class="col-md-6">
-                <?php include("product_image_gallery.php") ?>
+                <?=$imagesView?>
             </div>
             
             <div class="col-md-6">
                 <div class="">
                     <div class="prod-price-container">
-                        <span class="discounted-price" data-baseprice="<?php echo $product['price']?>"> 
-                            P <?php echo number_format($product['price'],2,'.',',');?> 
+                        <span class="discounted-price" data-baseprice="<?=number_format($product->getFinalPrice(),2,'.',',');?>"> 
+                            P <?=number_format($product->getFinalPrice(),2,'.',',');?> 
                         </span>
-                        <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
-                                || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
-                            
-                                <span class="base-price"> P <?php echo number_format($product['original_price'],2,'.',','); ?></span> 
+                        <?php if(floatval($product->getDiscountPercentage()) > 0):?>
+                                <span class="base-price"> P <?php echo number_format($product->getOriginalPrice(),2,'.',','); ?></span> 
                             </div>
                             <div class="prod-dc-container text-right">
-                                <span class="prod-dc-badge"> -<?php echo number_format( $product['percentage'],0,'.',',');?>%</span>
+                                <span class="prod-dc-badge"> -<?=number_format( $product->getDiscountPercentage(),0,'.',',');?>%</span>
                             </div>
                         <?PHP endif;?>
                     

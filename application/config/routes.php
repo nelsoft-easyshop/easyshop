@@ -96,6 +96,7 @@ else {
 
     #ITEMS
     $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
+    $route['(?i)item2/(:any)'] = 'product/newItem/$1'; # sam gavinio
 
 
     #SELL ITEM
