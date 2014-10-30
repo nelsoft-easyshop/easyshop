@@ -209,25 +209,6 @@ class ProductManager
     }
 
     /**
-     * Apply discounted price to product
-     *
-     * @param  array  $products [description]
-     * @return mixed
-     */
-    public function discountProducts($products)
-    { 
-        $objectCountThreshold = $this->configLoader->getItem('doctrine', 'objectCountThreshold');
-        if(count($products) > $objectCountThreshold){
-            log_message("error", "You are attempting to hydrate more than ".$objectCountThreshold. " objects. This may lead to high CPU utilization");
-        }
-        foreach ($products as $key => $value) {  
-           $resultObject = $this->getProductDetails($value->getIdProduct());
-        } 
-
-        return $products;
-    }
-
-    /**
      * function that will get all possible keyword tied on selected product
      * @return boolean
      */
@@ -471,7 +452,7 @@ class ProductManager
         $products = $queryBuilder->getResult();
         
         foreach($products as $key => $product){
-            $products[$key] = $this->getProductDetails($product->getIdProduct());
+            $products[$key] = $this->getProductDetails($product);
         }
         
         return $products;

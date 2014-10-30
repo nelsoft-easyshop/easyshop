@@ -77,13 +77,13 @@ class product_search extends MY_Controller {
             $parameter = $this->input->get();
 
             // getting all products
-            $response['products'] = $searchProductService->getProductBySearch($parameter);
+            $search = $searchProductService->getProductBySearch($parameter);
+            $response['products'] = $search['collection']; 
             // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
-        
+ 
             // get total product Count
-            $parameter['limit'] = PHP_INT_MAX;
-            $response['productCount'] = count($searchProductService->getProductBySearch($parameter));
+            $response['productCount'] = $search['count']; 
         }
 
         // Load sub category to display
@@ -126,7 +126,8 @@ class product_search extends MY_Controller {
         $memberId = $this->session->userdata('member_id');
 
         // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($this->input->get()); 
+        $search = $searchProductService->getProductBySearch($this->input->get());
+        $response['products'] = $search['collection']; 
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
         $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
@@ -159,12 +160,12 @@ class product_search extends MY_Controller {
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
         $parameter = $this->input->get();
 
-        // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($parameter); 
+        // getting all products 
+        $search = $searchProductService->getProductBySearch($parameter);
+        $response['products'] = $search['collection']; 
  
-        // get total product Count
-        $parameter['limit'] = PHP_INT_MAX;
-        $response['productCount'] = count($searchProductService->getProductBySearch($parameter));
+        // get total product Count 
+        $response['productCount'] = $search['count']; 
 
         // get all attributes to by products
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
