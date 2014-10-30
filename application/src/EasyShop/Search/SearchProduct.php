@@ -207,11 +207,11 @@ class SearchProduct
                                 ,'sortby'
                                 ,'sorttype'
                             );
-
+        $boolean = (strlen($filterParameter['q_str'])<= 1) ? TRUE : FALSE;
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
         $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds);
+                                        ->getProductByParameterFiltering($filteredArray,$productIds,$boolean);
 
         return $productIds;
     }

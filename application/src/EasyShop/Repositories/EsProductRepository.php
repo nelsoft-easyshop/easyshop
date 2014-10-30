@@ -425,7 +425,7 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productIds
      * @return array
      */
-    public function getProductByParameterFiltering($filterArray,$productIds = array())
+    public function getProductByParameterFiltering($filterArray,$productIds = array(),$restrict = false)
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -504,7 +504,12 @@ class EsProductRepository extends EntityRepository
             }
         }
 
-        $qbResult = $qbResult->getQuery();
+        if($restrict){ 
+            $qbResult = $qbResult->setMaxResults(500)->getQuery();
+        }
+        else{
+            $qbResult = $qbResult->getQuery();
+        }
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
         
