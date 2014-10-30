@@ -94,7 +94,7 @@ class MY_Controller extends CI_Controller
                                             ->find($memberId);
             $userDetails->profileImage = ($userDetails->getImgurl() == "") 
                                     ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
             return $userDetails;
     }
     
