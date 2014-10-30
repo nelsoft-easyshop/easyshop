@@ -84,9 +84,9 @@ class SearchProduct
             $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
             $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
             $stringCollection[2] = '"'.trim($clearString).'"'; 
-
+            $boolean = (strlen($clearString) > 1) ? FALSE : TRUE;
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection,$productIds);
+                                            ->findByKeyword($stringCollection,$productIds,$boolean);
 
             $ids = [];
             foreach ($products as $key => $value) {
@@ -207,11 +207,11 @@ class SearchProduct
                                 ,'sortby'
                                 ,'sorttype'
                             );
-        $boolean = (strlen($filterParameter['q_str'])<= 1) ? TRUE : FALSE;
+
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
         $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds,$boolean);
+                                        ->getProductByParameterFiltering($filteredArray,$productIds);
 
         return $productIds;
     }

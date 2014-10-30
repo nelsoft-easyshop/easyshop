@@ -22,11 +22,12 @@ class EsProductRepository extends EntityRepository
      * @param  array  $stringCollection 
      * @return object
      */
-    public function findByKeyword($stringCollection = array(),$productIds = array())
+    public function findByKeyword($stringCollection = array(),$productIds = array(),$booleanLimit = false)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult( 'idProduct', 'idProduct'); 
+        $rsm->addScalarResult( 'idProduct', 'idProduct');
+        $limitString = ($booleanLimit) ? "LIMIT 500" : "";
         $query = $this->em->createNativeQuery("
             SELECT `id_product` as idProduct
                 , `name` 
@@ -54,6 +55,7 @@ class EsProductRepository extends EntityRepository
                             OR MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE)
                             OR MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
                             )
+                    $limitString
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -425,7 +427,7 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productIds
      * @return array
      */
-    public function getProductByParameterFiltering($filterArray,$productIds = array(),$restrict = false)
+    public function getProductByParameterFiltering($filterArray,$productIds = array())
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -504,12 +506,7 @@ class EsProductRepository extends EntityRepository
             }
         }
 
-        if($restrict){ 
-            $qbResult = $qbResult->setMaxResults(500)->getQuery();
-        }
-        else{
-            $qbResult = $qbResult->getQuery();
-        }
+        $qbResult = $qbResult->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
         
