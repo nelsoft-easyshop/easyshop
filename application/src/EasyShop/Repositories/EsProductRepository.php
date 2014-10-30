@@ -22,36 +22,15 @@ class EsProductRepository extends EntityRepository
      * @param  array  $stringCollection 
      * @return object
      */
-    public function findByKeyword($stringCollection = array())
+    public function findByKeyword($stringCollection = array(),$productIds = array(),$booleanLimit = false)
     {
         $this->em =  $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsProduct', 'u');
-        $rsm->addFieldResult('u', 'idProduct', 'idProduct');
-        $rsm->addFieldResult('u', 'name', 'name');
-        $rsm->addFieldResult('u', 'price', 'price'); 
-        $rsm->addFieldResult('u', 'brief', 'brief');
-        $rsm->addFieldResult('u', 'slug', 'slug');
-        $rsm->addFieldResult('u', 'condition', 'condition');
-        $rsm->addFieldResult('u', 'startdate', 'startdate');
-        $rsm->addFieldResult('u', 'enddate', 'enddate');
-        $rsm->addFieldResult('u', 'isPromote', 'isPromote');
-        $rsm->addFieldResult('u', 'promoType', 'promoType');
-        $rsm->addFieldResult('u', 'discount', 'discount');
-        $rsm->addFieldResult('u', 'isSoldOut', 'isSoldOut');
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult( 'idProduct', 'idProduct');
+        $limitString = ($booleanLimit) ? "LIMIT 500" : "";
         $query = $this->em->createNativeQuery("
             SELECT `id_product` as idProduct
-                , `name`
-                , `price`
-                , `slug`
-                , `brief`
-                , `condition`
-                , `startdate`
-                , `enddate`
-                , `is_promote` as isPromote
-                , `promo_type` as promoType
-                , `discount`
-                , `is_sold_out` as isSoldOut
+                , `name` 
                 , `weight`
             FROM (
                     SELECT 
@@ -70,6 +49,13 @@ class EsProductRepository extends EntityRepository
                     WHERE is_delete = 0 
                             AND is_draft = 0
                             AND a.member_id = b.id_member
+                            AND a.id_product in (:ids)
+                            AND (
+                            MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE)
+                            OR MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE)
+                            OR MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                            )
+                    $limitString
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -77,7 +63,8 @@ class EsProductRepository extends EntityRepository
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]);
         $query->setParameter('param2', $stringCollection[2]);
-        $results = $query->execute();  
+        $query->setParameter('ids', $productIds);
+        $results = $query->execute();
 
         return $results;
     }
@@ -97,11 +84,9 @@ class EsProductRepository extends EntityRepository
 
                 $sql = "
                     SELECT 
-                        p,m,c
+                        p
                     FROM 
-                        EasyShop\Entities\EsProduct p
-                        JOIN p.member m
-                        JOIN p.cat c
+                        EasyShop\Entities\EsProduct p 
                     WHERE p.idProduct IN (:ids)
                 ";
                 $query = $this->em->createQuery($sql)

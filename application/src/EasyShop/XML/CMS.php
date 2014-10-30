@@ -745,7 +745,7 @@ $string = '<typeNode>
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $product['slug']]);
                 if($product){
-                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product->getIdProduct());
+                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
                     $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
                 }
             }
@@ -830,7 +830,7 @@ $string = '<typeNode>
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
                 ->findOneBy(['slug' => $product['slug']]);
             if($productData){
-                $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData->getIdProduct());
+                $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                     ->getDefaultImage($productData->getIdProduct());
                 $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
