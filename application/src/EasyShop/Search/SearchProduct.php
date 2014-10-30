@@ -111,6 +111,9 @@ class SearchProduct
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
 
         $productIdsReturn = [];
+        if(count($arrayItems) > $objectCountThreshold){
+            log_message("error", "You are attempting to hydrate more than ".$objectCountThreshold. " objects. This may lead to high CPU utilization");
+        }
         foreach ($arrayItems as $key => $value) {
             $value = $productManager->getProductDetails($value->getIdProduct());
             $price = round(floatval($value->getFinalPrice()),2);
