@@ -50,7 +50,7 @@ class EsMemberMerge
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsSocialMediaProvider")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="social_media_provider_id", referencedColumnName="id_socialmedia_provider")
+     *   @ORM\JoinColumn(name="social_media_provider_id", referencedColumnName="id_social_media_provider")
      * })
      */
     private $socialMediaProvider;
