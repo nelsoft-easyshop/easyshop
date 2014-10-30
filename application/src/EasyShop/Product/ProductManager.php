@@ -205,6 +205,10 @@ class ProductManager
      */
     public function discountProducts($products)
     { 
+        $objectCountThreshold = $this->configLoader->getItem('doctrine', 'objectCountThreshold');
+        if(count($products) > $objectCountThreshold){
+            log_message("error", "You are attempting to hydrate more than ".$objectCountThreshold. " objects. This may lead to high CPU utilization");
+        }
         foreach ($products as $key => $value) {  
             $resultObject = $this->getProductDetails($value->getIdProduct());
         } 
