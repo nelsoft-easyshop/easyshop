@@ -50,17 +50,6 @@
 </script>
 
 <script>
-    
-    var $window = $(window);
-    $window.on('load resize', function() {
-        $('.owl-item div').each(function () {
-            var parentWidth = $(this).width();
-            if ($(this).find('img').length) {
-                $(this).find('img').css( 'maxWidth', parentWidth)
-            }
-        });
-        
-    });
 
 $(document).ready(function() {
  
@@ -79,6 +68,27 @@ $(document).ready(function() {
         touchDrag : true,
         navigation : true,
     });
+
+    var delay = (function(){
+      var timer = 0;
+      return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+
+    var $window = $(window);
+    $window.on('load resize', function() {
+         delay(function(){
+            $('.owl-item div').each(function () {
+                var parentWidth = $(this).width();
+                if ($(this).find('img').length) {
+                    $(this).find('img').css( 'maxWidth', parentWidth)
+                }
+            });
+        }, 500);
+    });
+
 
 });
 
