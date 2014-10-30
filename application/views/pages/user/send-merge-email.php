@@ -9,9 +9,7 @@
             </div>
             <div class="panel-body div-merge-container" align="center">
                 <p>
-                    Your username <a href="#">kurt</a> has the same registered email address of <a href="#">kurt-wilkinson</a>
-                    <br/>
-                    Would you like to merge both accounts?
+                    The <a href="#">email@domain.com email</a> account is already registered to an existing user. <br/>If you own this account would you like to merge this into a single account?
                 </p>
                 <div class="div-btn-container">
                     <button class="btn  btn-orange-lg proceed">
