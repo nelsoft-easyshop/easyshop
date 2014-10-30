@@ -64,7 +64,7 @@ class SearchProduct
      * @param  string $string
      * @return array
      */
-    public function filterBySearchString($queryString = "",$storeKeyword = TRUE)
+    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = TRUE)
     {
         if($storeKeyword){
             // Insert into search keyword temp 
@@ -76,7 +76,7 @@ class SearchProduct
 
         $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
         $stringCollection = array();
-        $ids = array(); 
+        $ids = $productIds; 
 
         if(trim($clearString) != ""){
             $explodedString = explode(' ', trim($clearString)); 
@@ -87,8 +87,9 @@ class SearchProduct
 
 
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection);
+                                            ->findByKeyword($stringCollection,$productIds);
 
+            $ids = [];
             foreach ($products as $key => $value) {
                 $ids[] = $value['idProduct']; 
             }
@@ -272,14 +273,17 @@ class SearchProduct
         $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = ($pageNumber) ? FALSE:TRUE;
 
+        $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
+        $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+
         // Search for Product Query String
-        $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
+        $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
         $productIds = ($queryString && empty($productIds)) ? array('0') : $productIds;
 
         // Apply Filter
-        $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds);
+        // $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds);
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
-        $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+        // $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
         if($startPrice){
             // Get product object
