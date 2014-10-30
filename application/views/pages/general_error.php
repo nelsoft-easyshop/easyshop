@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/new-homepage.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="./assets/css/new-homepage.css" media='screen'>
 
 <section class="content-404-bg">
 <div class="container content-404">
