@@ -290,15 +290,27 @@ class SocialMediaController extends MY_Controller
     
      public function sendMergeAccountEmail()
     {
-        $this->load->view('templates/header_new'); //must be templates/header_primary
-       $this->load->view('pages/user/send-merge-email');
+        $data = array(
+            'title' => ' Shopping made easy | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+        );
+        $data = array_merge($data, $this->fill_header());
+
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('pages/user/send-merge-email');
         $this->load->view('templates/footer_primary');
     }
 
     public function sendMergeAccountUsername()
     {
-        $this->load->view('templates/header_new'); //must be templates/header_primary
-       $this->load->view('pages/user/send-merge-username');
+        $data = array(
+            'title' => ' Shopping made easy | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+        );
+        $data = array_merge($data, $this->fill_header());
+
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('pages/user/send-merge-username');
         $this->load->view('templates/footer_primary');
     }
 }
