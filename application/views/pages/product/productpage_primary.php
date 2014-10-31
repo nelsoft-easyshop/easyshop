@@ -62,7 +62,7 @@
 
                 <div class="clear"></div>
 
-                <div class="row pd-top-15">
+                <div class="row pad-top-23">
                     <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
                     <div class="col-sm-12 col-md-6 attr-select">
                         <div class="prod-select-con ui-form-control">
@@ -86,18 +86,18 @@
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="col-md-12 prod-border-bttm pd-top-20"></div>
+                <div class="col-md-12 prod-border-bttm pad-top-23"></div>
 
                 <div class="clear"></div>
 
-                <div class="row pd-top-15">
+                <div class="row pad-top-23">
                     <div class="col-xs-12 col-sm-5 col-md-5">
                         <div class="prod-availability-container prod-border-right">
                             <p>Availability: <span class="in-stock">In Stock</span></p>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
-                        <p class="attr-title">Shipment Fee:</p>
+                        <p class="attr-title txt-shipment">Shipment Fee:</p>
                         <div class="prod-select-con ui-form-control shipment-select">
                             <select>
                                 <option selected=selected>NCR - P 15.00</option>
@@ -110,10 +110,10 @@
                     <div class="clear"></div>
                 </div>
 
-                <div class="col-md-12 prod-border-bttm pd-top-20"></div>
+                <div class="col-md-12 prod-border-bttm pad-top-23"></div>
                 <div class="clear"></div>
 
-                <div class="row pd-top-15">
+                <div class="row pad-top-23">
                     <div class="col-sm-12 col-md-5 prod-quantity-container">
                         <p class="attr-title">Quantity:</p>
                         <div class="prod-select-con ui-form-control quantity-select">
@@ -131,11 +131,11 @@
                 </div>
                 <div class="clear"></div>
 
-                <div class="col-md-12 prod-border-bttm pd-top-20"></div>
+                <div class="col-md-12 prod-border-bttm pad-top-23"></div>
 
                 <div class="clear"></div>
 
-                <div class="row pd-top-15">
+                <div class="row pad-top-23">
                     <div class="col-md-12 prod-payment-img-container">
                         <p class="attr-title">Payment:</p>
                         <img src="/assets/images/img-visa-black.png" alt="Visa">
@@ -147,11 +147,11 @@
                 </div>
                 <div class="clear"></div>
 
-                <div class="col-md-12 prod-border-bttm pd-top-20"></div>
+                <div class="col-md-12 prod-border-bttm pad-top-23"></div>
 
                 <div class="clear"></div>
 
-                <div class="row pd-top-15">
+                <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
                         <p class="attr-title">Share with:</p>
                         <a href="">
@@ -189,3 +189,13 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script type="text/javascript" src="/assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" ></script>
 <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
+
+<script type="text/javascript">
+var $productprice= $('.prod-price-container').find('.base-price');
+
+if( $productprice.hasClass('base-price') ){
+
+  $('.discounted-price').addClass('line-through');
+
+}
+</script>

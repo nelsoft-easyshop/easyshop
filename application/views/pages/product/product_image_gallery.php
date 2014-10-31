@@ -2,9 +2,11 @@
 
 
 <div class="display-when-desktop" style="position: relative; z-index: 2;">
+
     <div class="col-md-3 thumbnails_container">
         <div class="thumbnails-img-container">
-            <div class="slideshow vertical" data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-visible=2 data-cycle-carousel-vertical=true>
+            <div class="slideshow vertical" data-cycle-allow-wrap='false' data-cycle-fx="carousel" data-cycle-timeout="0" data-cycle-carousel-visible="4" data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-vertical=true>
+
                 <?php foreach($product_images as $image): ?>
                     <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/<?php echo $image['path']; ?>small/<?php echo $image['file']; ?>',largeimage: '/<?php echo $image['path']; ?><?php echo $image['file']; ?>'}"> <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> 
                 <?php endforeach;?>
@@ -18,6 +20,7 @@
         </div>
 
     </div>
+
     <div class="col-md-9">
         <div class="prod-gallery-container">
         <div class="prod_con_gal"> 

@@ -13,6 +13,14 @@ body{
     clear: both;
 }
 
+.pad-top-23 {
+    padding-top: 23px;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
 .prod-detail-main{
     padding: 10px 10px;
     margin-left: -36px;
@@ -1115,7 +1123,6 @@ div.vertical {
 
 .discounted-price {
 	color: #989898;
-	text-decoration: line-through;
 	margin-right: 5%;
 }
 
@@ -1141,7 +1148,7 @@ div.vertical {
 }
 
 .prod-select-con {
-	background: url(../images/sprites/select-dropdown.png) no-repeat right -6px;
+	background: url(../images/sprites/select-dropdown.png) no-repeat right -2px;
 	overflow: hidden;
 	padding: 0 !important;
 	width: 100%;
@@ -1159,14 +1166,18 @@ div.vertical {
 	border: none;
 	cursor: pointer;
 	padding: 7px 12px;
-	width: 106%;
+	width: 108%;
 }
 
 .prod-availability-container {
 	font-weight: 900;
-	height: 77px;
-	padding-top: 26px;
+	height: 35px;
 	text-transform: uppercase;
+}
+
+.prod-availability-container p {
+    margin: 0;
+    line-height: 34px;
 }
 
 .prod-availability-container span {
@@ -1175,6 +1186,18 @@ div.vertical {
 
 .in-stock {
 	color: #24df5a;
+    font-size: 18px;
+    margin-left: 6px;
+}
+
+.txt-shipment {
+    float: left;
+    line-height: 35px;
+    margin: 0 10px 0 0;
+}
+
+.shipment-select select {
+    width: 111%;
 }
 
 .prod-quantity-container {
@@ -1407,7 +1430,7 @@ div.vertical {
 
 	.prod-select-con.shipment-select {
 		padding: 0 !important;
-		width: 70%;
+		width: 50%;
 	}
 
 	.prod-add-to-cart-btn {
