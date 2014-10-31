@@ -8,11 +8,9 @@
                 <?php foreach($images as $image): ?>
                 <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
                     <img src='/<?=$image->getDirectory(); ?>thumbnail/<?=$image->getFilename(); ?>'> 
-                 </a> 
+                </a>
                 <?php endforeach;?>
-
             </div>
-
             <div class="center">
                 <a href="#" id="prev">&lt;&lt; Prev </a>
                 <a href="#" id="next"> Next &gt;&gt; </a>
@@ -46,12 +44,11 @@
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.carousel.js "></script>
 
-<script>
+<script type="text/javascript">
      $.fn.cycle.defaults.autoSelector = '.slideshow';
-
 </script>
 
-<script>
+<script type="text/javascript">
     
     var $window = $(window);
     $window.on('load resize', function() {
