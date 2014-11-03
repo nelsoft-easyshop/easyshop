@@ -1120,7 +1120,8 @@ class Home extends MY_Controller
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+
+            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
             $data['validatedCity'] = $data['city'] = $addr->getCity()->getLocation(). ", ";
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1190,7 +1191,7 @@ class Home extends MY_Controller
 
                         $this->serviceContainer['entity_manager']->persist($addr);
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
                         $data['validatedCity'] = $city->getLocation(). ", ";
                         $data['validatedRegion'] = $region->getLocation();
                     }
@@ -1209,7 +1210,7 @@ class Home extends MY_Controller
                         $addr->setStateregion($region);
                         $addr->setMobile($member->getContactno());
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
                         $data['validatedCity'] = $addr->getCity()->getLocation(). ", ";
                         $data['validatedRegion'] = $addr->getStateregion()->getLocation();
                     }
