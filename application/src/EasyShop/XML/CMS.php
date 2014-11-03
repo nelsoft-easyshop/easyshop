@@ -723,7 +723,7 @@ $string = '<typeNode>
      *
      * 
      */
-    public function getHomeData()
+    public function getHomeData($isCategoryNavigationOnly = false)
     {
         $homeXmlFile = $this->xmlResourceGetter->getHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
@@ -772,7 +772,7 @@ $string = '<typeNode>
             
             
         }
-        
+
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
         $homePageData['menu']['topProducts']  = array();
         $homePageData['menu']['topSellers']  = array();
@@ -814,6 +814,9 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+        if($isCategoryNavigationOnly) {
+            return $homePageData;
+        }
 
         //Get feature vendor details
         $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
