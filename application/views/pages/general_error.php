@@ -26,7 +26,7 @@
                 </form>
             </div>
             <div class="link-404">
-                <a href="/home">
+                <a href="/">
                     <img src="/assets/images/img-arrow-left.png" alt="return to homepage">Return to <strong>HOMEPAGE</strong>
                 </a>
             </div>
