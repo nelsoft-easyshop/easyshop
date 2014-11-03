@@ -36,7 +36,8 @@
 
 html, body {
     font-family: 'Helvetica', Arial, Calibri;
-    font-size: 15px;
+    font-size: 12px;
+    letter-spacing: 1px;
     color: #7c807e;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -670,7 +671,7 @@ header {
 
 #main-nav-container #main-nav .menu li {
     float:left;
-    font-size:17px;
+    font-size:14px;
     text-transform:uppercase;
     position: relative;
     text-align: center;
@@ -1334,9 +1335,10 @@ header {
 
 .item-price-container {
     display:inline-block;
-    font:700 20px/1 "Helvetica", Arial, sans-serif;
+    font:700 16px "Helvetica", Arial, sans-serif;
     color:#adadad;
     margin-bottom: 5px;
+    letter-spacing: 0px !important;
 }
 
 .item-price-special {
@@ -1388,17 +1390,18 @@ header {
 .new-circle,
 .discount-circle {
     display:block;
-    font:700 16px/20px "Gudea", sans-serif;
+    font:700 14px "Gudea", sans-serif;
     color:#fff;
-    padding:22.5px 0;
+    padding:18.5px 0;
     position: absolute;
     top:10px;
     text-transform:uppercase;
     z-index:800;
-    width:65px;
-    height:65px;
+    width:55px;
+    height:55px;
     text-align:center;
     border-radius:500px;
+    letter-spacing: 0px !important;
 }
 
 .new-circle {
@@ -1414,17 +1417,18 @@ header {
 .new-circle-2,
 .discount-circle-2 {
     display:block;
-    font:700 16px/20px "Gudea", sans-serif;
+    font:700 14px "Gudea", sans-serif;
     color:#fff;
-    padding:22.5px 0;
+    padding:18.5px 0;
     position: absolute;
     top:10px;
     text-transform:uppercase;
     z-index:800;
-    width:65px;
-    height:65px;
+    width:55px;
+    height:55px;
     text-align:center;
     border-radius:500px;
+    letter-spacing: 0px !important;
 }
 
 .new-circle-2 {
@@ -1484,11 +1488,12 @@ header {
 
 /* title for all items */
 .item-name {
-    font:700 19px/24px 'Helvetica', sans-serif;
+    font:700 16px 'Helvetica', sans-serif;
     margin:0 0 5px;
     text-overflow: ellipsis;
     white-space:nowrap;
     overflow:hidden;
+    letter-spacing: 0px !important;
 }
 
 .item-name:hover{
@@ -2379,7 +2384,7 @@ width: 100% !important;
     padding: 8px 15px;
     font-weight: 900;
     border-radius: 4px;
-    
+    font-size: 13px;
 }
 
 .btn-add-cart{
@@ -2552,7 +2557,7 @@ font-size: 15px;
 
 .category-title-container > p{
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 5px;
     color: #444645;
     font-weight: bold;
@@ -2683,6 +2688,10 @@ font-size: 15px;
 }
 
 .row-category{
+    margin-top: 0px;
+}
+
+.row-category-brand{
     margin-top: 30px;
 }
 
@@ -2869,6 +2878,10 @@ font-size: 15px;
 
 .td-logo-store{
         padding-left: 4px;
+}
+
+h3 > b{
+    font-size: 20px;
 }
 
 @media (min-width: 1380px) {
