@@ -1,6 +1,6 @@
 <?php
 
-
+use EasyShop\Entities\EsMember; 
 /**
  * MY custom controller
  */
