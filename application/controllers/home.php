@@ -1098,15 +1098,15 @@ class Home extends MY_Controller
         $data['isValid'] = false;
         $data['targetPage'] = $targetPage;
         $data['errors'] = [];
-        $memberId = $this->session->userdata('member_id');
+        $viewerId = intval($this->session->userdata('member_id'));
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['idMember' => $memberId]);
+                                               ->findOneBy(['slug' => $sellerslug]);
 
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
-        $data['isEditable'] = trim($sellerslug) === trim($member->getSlug());
+        $data['isEditable'] = $viewerId === intval($member->getIdMember());
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
@@ -1155,7 +1155,7 @@ class Home extends MY_Controller
             $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') 
                                 || ($this->input->post('regionSelect') === '' && $streetAddressTrimmed === ''));
 
-            if($form->isValid() && $isAddressValid){
+            if($form->isValid() && $isAddressValid && $data['isEditable']){
                 $formData = $form->getData();
 
                 $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
