@@ -508,23 +508,43 @@ class product extends MY_Controller
             // getting attributes
             $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                           ->getProductAttributeDetailByName($productId);
+            $productAttributes = $collectionHelper->organizeArray($productAttributes,true,true);
 
-            $productAttributesPrice = [];
-            foreach ($productAttributes as $key => $value) {
-                $productAttributesPrice[$value['attr_id']] = $value['attr_price'];
+            // get combination quantity
+            $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                    ->getProductInventoryDetail($productId);
+
+            $finalCombinationQuantity = [];
+            foreach ($productQuantityObject as $key => $value) {
+                if(!array_key_exists($value['id_product_item'],$finalCombinationQuantity)){
+                    $finalCombinationQuantity[$value['id_product_item']] = array(
+                        'quantity' => $value['quantity'],
+                        'product_attribute_ids' => [$value['product_attr_id']],
+                    );
+                }
+                else{
+                    $finalCombinationQuantity[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
+                }
             }
 
-            echo '<pre>';
-            $productAttributes = $collectionHelper->organizeArray($productAttributes,true);
+            // get product shipping location
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                ->getShippingDetailsByProductId($product->getIdProduct());
 
-            print_r($productAttributes);exit();
+            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->getLocation();
 
             $viewData = array(
                         'product' => $product,
                         'breadCrumbs' => $breadcrumbs,
                         'ownerAvatar' => $avatarImage,
                         'imagesView' => $imagesView,
+                        'productAttributes' => $productAttributes,
+                        'productCombinationQuantity' => json_encode($finalCombinationQuantity),
+                        'shippingInfo' => $shippingDetails,
+                        'shiploc' => $shippingLocation,
                     );
+
             $this->load->view('pages/product/productpage_primary', $viewData);
         }
         else{

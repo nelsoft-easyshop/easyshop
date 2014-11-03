@@ -12,10 +12,12 @@ class CollectionHelper
 
     /**
      * Group the array by its head
-     * @param  array  $array [description]
+     * @param  array    $array
+     * @param  boolean  $all
+     * @param  boolean  $noQuote
      * @return array
      */
-    public function organizeArray($array = array(),$all = false)
+    public function organizeArray($array = array(),$all = false,$noQuote = false)
     {
         $organizeArray = array();
 
@@ -32,8 +34,13 @@ class CollectionHelper
         }
         else{ 
             foreach($array as $key=>$row){ 
-                $arrayKey = array_keys($row); 
-                $head = "'".strtolower($row[$arrayKey[0]])."'";
+                $arrayKey = array_keys($row);
+                if(!$noQuote){ 
+                    $head = "'".strtolower($row[$arrayKey[0]])."'";
+                }
+                else{
+                    $head = strtolower($row[$arrayKey[0]]);
+                }
                 if(!array_key_exists($head, $organizeArray)){
                     $organizeArray[$head] = array();
                 } 
