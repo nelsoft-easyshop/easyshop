@@ -1,6 +1,6 @@
 <div class="row-fluid row-category row-brand">   
     <div class="container">
-        <div class="row row-category">        
+        <div class="row row-category row-category-brand">        
             <div class="col-md-12">
                <div class="popular-brands carousel-wrapper">
                     <header class="content-title">
