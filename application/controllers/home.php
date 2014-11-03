@@ -134,9 +134,9 @@ class Home extends MY_Controller
         $data = array('title' => 'Page Not Found | Easyshop.ph',);
 
         if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fill_userDetails();
+            $data['user_details'] = $this->fillUserDetails();
         }
-        $data['homeContent'] = $this->fill_categoryNavigation();  
+        $data['homeContent'] = $this->fillCategoryNavigation();  
 
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_primary', $data);
