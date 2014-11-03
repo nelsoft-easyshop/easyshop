@@ -1718,11 +1718,9 @@ class Memberpage extends MY_Controller
                 $parameter['seller'] = "seller:".$vendorName;
                 $parameter['limit'] = $prodLimit;
                 $parameter['page'] = $page - 1;
-                $products = $searchProductService->getProductBySearch($parameter);
-                $parameter['limit'] = PHP_INT_MAX;
-                $parameter['page'] = 0;
-                $tempCountContainer = $searchProductService->getProductBySearch($parameter);
-                $productCount = count($tempCountContainer);
+                $search = $searchProductService->getProductBySearch($parameter);
+                $products = $search['collection']; 
+                $productCount = $search['count'];;
                 break;
             case 1: // Custom Categories
                 $result = $pm->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);

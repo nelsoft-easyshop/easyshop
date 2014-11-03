@@ -93,13 +93,24 @@ class ProductManager
     /**
      * Returns the product object with hydrated virtual fields
      *
-     * @param integer $productId
+     * @param integer or EasyShop/Entities/EsProduct $productArgument
      * @return Product
      */
-    public function getProductDetails($productId)
+    public function getProductDetails($productArgument)
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
+        if(is_numeric($productArgument)){
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->find($productArgument);
+            $productId = $productArgument;
+        }
+        else if(is_object($productArgument)){
+            $product = $productArgument;
+            $productId = $productArgument->getIdProduct();
+        }
+        else{
+            return false;
+        }
+        
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                               ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
@@ -195,21 +206,6 @@ class ProductManager
         }
         
         return $productItemLocks;
-    }
-
-    /**
-     * Apply discounted price to product
-     *
-     * @param  array  $products [description]
-     * @return mixed
-     */
-    public function discountProducts($products)
-    { 
-        foreach ($products as $key => $value) {  
-            $resultObject = $this->getProductDetails($value->getIdProduct());
-        } 
-
-        return $products;
     }
 
     /**
@@ -486,7 +482,7 @@ class ProductManager
         $products = $queryBuilder->getResult();
         
         foreach($products as $key => $product){
-            $products[$key] = $this->getProductDetails($product->getIdProduct());
+            $products[$key] = $this->getProductDetails($product);
         }
         
         return $products;
