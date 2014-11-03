@@ -1,24 +1,36 @@
+<link rel="stylesheet" type="text/css" href="./assets/css/new-homepage.css" media='screen'>
 
-<div class="clear"></div>
-<div class="wrapper alert_content">
-	            <div>
-	            	<img src="<?=base_url()?>assets/images/img_alert.png">
-	            	<h2>Sorry, the page you are trying to access cannot be found. You may try any of the following:</h2></div>
-	            <ul>
-	              <li>
-	                Ensure that the web address you are accessing is correct.
-	              </li>
-	              <li>
-                    Try locating the actual page again if you are accessing it through a bookmark.
-                    It is possible that the page you are looking for may have been moved.
-	              </li>
-	              <li>
-	                You can always make use of the search box available in most pages to find items you
-                    want to check out.
-	              </li>
-                  <li>
-                     Visit our sitemap to find easy navigation links throughout the site.
-                  </li>
-
-	            </ul>
-       	 </div>	
+<section class="content-404-bg">
+<div class="container content-404">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="img-404">
+                <img src="/assets/images/404page.png" alt="404 error">
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h1>OOOOOOPPPSSS!!!</h1>
+            <h2>
+                The page that you were looking for has been abducted,... but have no fear, the search bar is here!
+            </h2>
+            <div class="row form-container-404">
+                <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                    <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
+                        <div class="row">
+                            <input type="text" name="q_str" placeholder="" class="ui-form-control input-404">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3">
+                        <input type="submit" value="search" class="btn btn-default-4 btn-no-br submit-404" >
+                    </div>
+                </form>
+            </div>
+            <div class="link-404">
+                <a href="/home">
+                    <img src="/assets/images/img-arrow-left.png" alt="return to homepage">Return to <strong>HOMEPAGE</strong>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
