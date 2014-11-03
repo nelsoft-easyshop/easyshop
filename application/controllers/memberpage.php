@@ -57,12 +57,15 @@ class Memberpage extends MY_Controller
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
         
-        $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
-        $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/user/memberpage_view', $data);
-        $this->load->view('templates/footer');
+        if($this->session->userdata('member_id')) {
+            $data['user_details'] = $this->fill_userDetails();
+        }
+        $data['homeContent'] = $this->fill_categoryNavigation();
+        $data = array_merge($data, $this->fill_header());
+        
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/user/dashboard/dashboard-home', $data);
+        $this->load->view('templates/footer_primary');
     }
 
     /**
