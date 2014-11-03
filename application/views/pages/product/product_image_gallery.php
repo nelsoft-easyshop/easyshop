@@ -2,13 +2,15 @@
 
 
 <div class="display-when-desktop" style="position: relative; z-index: 2;">
+
     <div class="col-md-3 thumbnails_container">
         <div class="thumbnails-img-container">
-            <div class="slideshow vertical" data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-visible=2 data-cycle-carousel-vertical=true>
+
+            <div class="slideshow vertical" data-cycle-allow-wrap='false' data-cycle-fx="carousel" data-cycle-timeout="0" data-cycle-carousel-visible="4" data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-vertical=true>
                 <?php foreach($images as $image): ?>
-                <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
-                    <img src='/<?=$image->getDirectory(); ?>thumbnail/<?=$image->getFilename(); ?>'> 
-                </a>
+                    <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
+                        <img src='/<?=$image->getDirectory(); ?>thumbnail/<?=$image->getFilename(); ?>'> 
+                    </a>
                 <?php endforeach;?>
             </div>
             <div class="center">
@@ -18,6 +20,7 @@
         </div>
 
     </div>
+
     <div class="col-md-9">
         <div class="prod-gallery-container">
         <div class="prod_con_gal"> 
@@ -28,7 +31,6 @@
         </div>
     </div>
     <br/>
-    
 </div>
 
 <div class="mobile-product-gallery">
@@ -88,8 +90,9 @@
 
 
     });
-
+ 
     $(document).ready(function() {
         $('.footer-primary').addClass('footer-secondary');
     });
 </script>
+ 
