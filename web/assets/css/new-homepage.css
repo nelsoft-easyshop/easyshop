@@ -2688,7 +2688,7 @@ font-size: 15px;
 }
 
 .row-category{
-    margin-top: 0px;
+    margin-top: 15px;
 }
 
 .row-category-brand{
@@ -3155,7 +3155,7 @@ h3 > b{
     }
     
     .row-featured-category{
-        margin-top: -20px;
+        margin-top: 15px;
     }
     
     .promo-3{
