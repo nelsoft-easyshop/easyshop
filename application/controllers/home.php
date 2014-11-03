@@ -380,10 +380,8 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
-
-                // Load View
-                // $this->load->view('templates/header_alt', $headerData);
-                $this->load->view('templates/header_alt', $bannerData);
+                $headerData = array_merge($headerData, $bannerData);
+                $this->load->view('templates/header_alt', $headerData);
                 $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
