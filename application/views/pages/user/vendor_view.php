@@ -1,5 +1,5 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-
+<link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <!-- Load body -->
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
@@ -76,7 +76,7 @@
                     <table class="p-view color-default pull-left">
                         <tr>
                             <td class="td-view p-view2 color-default">VIEW STYLE:</td>
-                            <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-th-large fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-th-list fa-2x icon-view icon-list"></span></td>
+                            <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-icon-view-grid fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-icon-view-list fa-2x icon-view icon-list"></span></td>
                         </tr>
                     </table>
                 </div>
