@@ -47,19 +47,18 @@
             
             <div class="col-md-6">
                 <div class="prod-price-container">
-                    <span class="discounted-price" data-baseprice="<?php echo $product['price']?>"> 
-                        P <?php echo number_format($product['price'],2,'.',',');?> 
+                    <span class="discounted-price" data-baseprice="<?=number_format($product->getOriginalPrice(),2,'.',','); ?>"> 
+                        P <?=number_format($product->getFinalPrice(),2,'.',',');?> 
                     </span>
-                    <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
-                            || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
-                        
-                            <span class="base-price"> P <?php echo number_format($product['original_price'],2,'.',','); ?></span> 
- 
-                        </div>
-                        <div class="prod-dc-container text-right">
-                            <span class="prod-dc-badge"> -<?php echo number_format( $product['percentage'],0,'.',',');?>%</span>
-                    <?PHP endif;?>
-                 </div>
+
+                <?php if(floatval($product->getDiscountPercentage()) > 0):?>
+                    <span class="base-price"> P <?=number_format($product->getOriginalPrice(),2,'.',','); ?></span> 
+                </div>
+                <div class="prod-dc-container text-right">
+                    <span class="prod-dc-badge"> -<?=number_format($product->getDiscountPercentage(),0,'.',',');?>%</span>
+                <?PHP endif;?>
+
+                </div>
                 <div class="clear"></div>
                 <div class="col-md-12 prod-border-bttm"></div>
 
@@ -67,6 +66,8 @@
 
                 <div class="row pad-top-23">
                     <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
+
+                    <!-- Product attributes here -->
                     <div class="col-sm-12 col-md-6 attr-select">
                         <div class="prod-select-con ui-form-control">
                             <select>
@@ -87,6 +88,7 @@
                             </select>
                         </div>
                     </div>
+                    <!-- end of Product attributes -->
                     <div class="clear"></div>
                 </div>
                 <div class="col-md-12 prod-border-bttm pad-top-23"></div>

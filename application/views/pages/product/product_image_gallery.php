@@ -50,7 +50,7 @@
      $.fn.cycle.defaults.autoSelector = '.slideshow';
 </script>
  
-<script> 
+<script type="text/javascript">
     $(document).ready(function() {
         $("#mobile-product-gallery").owlCarousel({
             itemsTablet: [768,2],
@@ -88,10 +88,6 @@
             }, 500);
         });
 
-
-    });
- 
-    $(document).ready(function() {
         $('.footer-primary').addClass('footer-secondary');
     });
 </script>

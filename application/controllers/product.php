@@ -477,6 +477,7 @@ class product extends MY_Controller
         // Load Services
         $productManager = $this->serviceContainer['product_manager'];
         $userManager = $this->serviceContainer['user_manager'];
+        $collectionHelper = $this->serviceContainer['collection_helper'];
 
         // Load Product Section
         // check of slug exist
@@ -502,8 +503,21 @@ class product extends MY_Controller
             // get all images of the product
             $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                         ->getProductImages($productId);
-        
             $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],TRUE);
+
+            // getting attributes
+            $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                          ->getProductAttributeDetailByName($productId);
+
+            $productAttributesPrice = [];
+            foreach ($productAttributes as $key => $value) {
+                $productAttributesPrice[$value['attr_id']] = $value['attr_price'];
+            }
+
+            echo '<pre>';
+            $productAttributes = $collectionHelper->organizeArray($productAttributes,true);
+
+            print_r($productAttributes);exit();
 
             $viewData = array(
                         'product' => $product,
