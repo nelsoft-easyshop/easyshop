@@ -1098,9 +1098,10 @@ class Home extends MY_Controller
         $data['isValid'] = false;
         $data['targetPage'] = $targetPage;
         $data['errors'] = [];
+        $memberId = $this->session->userdata('member_id');
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug]);
+                                               ->findOneBy(['idMember' => $memberId]);
 
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
