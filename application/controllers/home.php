@@ -1106,7 +1106,7 @@ class Home extends MY_Controller
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
-        $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
+        $data['isEditable'] = trim($sellerslug) === trim($member->getSlug());
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
