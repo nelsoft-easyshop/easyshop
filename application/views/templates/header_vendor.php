@@ -21,7 +21,7 @@
                 </div>
                 <div> 
                     <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name'])?></h4>
-                    <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A" ?></span></p>
+                    <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
                     <p>
                         <img src="/assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="pd-lr-20">
                     <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Seller Name">
-                    <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "" ?>" data-origval="<?=strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : '' ?>">
+                    <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ""); ?>" data-origval="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ''); ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
                         <input type="hidden" id="json_city" value='<?php echo json_encode($cityLookup, JSON_HEX_APOS)?>'>
