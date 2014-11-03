@@ -318,10 +318,9 @@ class Home extends MY_Controller
                     $parameter['limit'] = 12;
                     
                     // getting all products
-                    $searchProduct = $searchProductService->getProductBySearch($parameter);
-
-                    $parameter['limit'] = PHP_INT_MAX;
-                    $count = count($searchProductService->getProductBySearch($parameter));
+                    $search = $searchProductService->getProductBySearch($parameter);
+                    $searchProduct = $search['collection'];
+                    $count = $search['count'];
 
                     $productView['defaultCatProd'][0]['name'] ='Search Result';
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 

@@ -35,7 +35,9 @@ class search extends MY_Controller
         if($parameter){ 
 
             // Get all product
-            $response['products'] = $searchProductService->getProductBySearch($parameter);
+            // 
+            $search = $searchProductService->getProductBySearch($parameter); 
+            $response['products'] = $search['collection'];
 
             // product display
             $productArray = array();
