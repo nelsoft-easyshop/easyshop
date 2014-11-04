@@ -64,7 +64,7 @@ class Memberpage extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         
         $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/dashboard/dashboard-home', $data);
+        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
         $this->load->view('templates/footer_primary');
     }
 
