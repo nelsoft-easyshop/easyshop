@@ -151,17 +151,17 @@ class SocialMediaManager
     public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
         $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->findOneBy(array(
-                                            'email' => $email
-                                        ));
+                                ->findOneBy(array(
+                                    'email' => $email
+                                ));
         $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
-                            ->findOneBy(array(
-                                'socialMediaId' => $oauthId,
-                                'socialMediaProvider' => $oauthProvider
-                            ));
+                                    ->findOneBy(array(
+                                        'socialMediaId' => $oauthId,
+                                        'socialMediaProvider' => $oauthProvider
+                                    ));
         if ($socialMediaAccount) {
             $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                            ->find($socialMediaAccount->getMember());
+                                    ->find($socialMediaAccount->getMember());
         }
         $response = array(
             'doesAccountExists' => $doesEmailExists,
@@ -216,11 +216,11 @@ class SocialMediaManager
     public function mergeAccount($member, $oAuthId, $oAuthProvider)
     {
         $doesAccountMerged = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
-            ->findBy([
-                'member' => $member->getidMember(),
-                'socialMediaId' => $oAuthId,
-                'socialMediaProvider' => $oAuthProvider->getIdSocialMediaProvider()
-            ]);
+                                ->findBy([
+                                    'member' => $member->getidMember(),
+                                    'socialMediaId' => $oAuthId,
+                                    'socialMediaProvider' => $oAuthProvider->getIdSocialMediaProvider()
+                                ]);
         if (!$doesAccountMerged) {
             $socialAccount = new EsMemberMerge();
             $socialAccount->setMember($member);
