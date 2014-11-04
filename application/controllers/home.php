@@ -120,7 +120,7 @@ class Home extends MY_Controller
       $this->load->view('pages/underconstruction_view');
       $this->load->view('templates/footer_full');
     }
-    
+
     /**
      * Renders 404 page
      *
@@ -132,12 +132,17 @@ class Home extends MY_Controller
         $page = $_SERVER['REQUEST_URI'];
         log_message('error', '404 Page Not Found --> '.$page);
         $data = array('title' => 'Page Not Found | Easyshop.ph',);
+
+        if($this->session->userdata('member_id')) {
+            $data['user_details'] = $this->fillUserDetails();
+        }
+        $data['homeContent'] = $this->fillCategoryNavigation();  
+
         $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_full');
+        $this->load->view('templates/footer_primary');
     }
-    
     
     /**
      * Renders splash page
@@ -318,10 +323,9 @@ class Home extends MY_Controller
                     $parameter['limit'] = 12;
                     
                     // getting all products
-                    $searchProduct = $searchProductService->getProductBySearch($parameter);
-
-                    $parameter['limit'] = PHP_INT_MAX;
-                    $count = count($searchProductService->getProductBySearch($parameter));
+                    $search = $searchProductService->getProductBySearch($parameter);
+                    $searchProduct = $search['collection'];
+                    $count = $search['count'];
 
                     $productView['defaultCatProd'][0]['name'] ='Search Result';
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
@@ -1099,6 +1103,7 @@ class Home extends MY_Controller
         $data['isValid'] = false;
         $data['targetPage'] = $targetPage;
         $data['errors'] = [];
+        $viewerId = intval($this->session->userdata('member_id'));
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                ->findOneBy(['slug' => $sellerslug]);
@@ -1106,7 +1111,7 @@ class Home extends MY_Controller
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
-        $data['isEditable'] = intval($this->session->userdata('member_id')) === $member->getIdMember() ? true : false;
+        $data['isEditable'] = $viewerId === intval($member->getIdMember());
 
         $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
@@ -1120,7 +1125,8 @@ class Home extends MY_Controller
         else{
             $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->getCities($addr->getStateregion()->getLocation());
-            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+
+            $data['validatedStreetAddr'] = $data['streetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
             $data['validatedCity'] = $data['city'] = $addr->getCity()->getLocation(). ", ";
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
@@ -1155,7 +1161,7 @@ class Home extends MY_Controller
             $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') 
                                 || ($this->input->post('regionSelect') === '' && $streetAddressTrimmed === ''));
 
-            if($form->isValid() && $isAddressValid){
+            if($form->isValid() && $isAddressValid && $data['isEditable']){
                 $formData = $form->getData();
 
                 $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
@@ -1190,7 +1196,7 @@ class Home extends MY_Controller
 
                         $this->serviceContainer['entity_manager']->persist($addr);
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
                         $data['validatedCity'] = $city->getLocation(). ", ";
                         $data['validatedRegion'] = $region->getLocation();
                     }
@@ -1209,7 +1215,7 @@ class Home extends MY_Controller
                         $addr->setStateregion($region);
                         $addr->setMobile($member->getContactno());
 
-                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "Location not set ";
+                        $data['validatedStreetAddr'] = strlen(trim($addr->getAddress())) > 0 ? $addr->getAddress() . ", " : "";
                         $data['validatedCity'] = $addr->getCity()->getLocation(). ", ";
                         $data['validatedRegion'] = $addr->getStateregion()->getLocation();
                     }

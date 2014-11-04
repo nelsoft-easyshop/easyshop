@@ -28,7 +28,9 @@ class search extends MY_Controller
         $parameter = $this->input->get();
 
         // Get all product
-        $response['products'] = $searchProductService->getProductBySearch($parameter);
+        // 
+        $search = $searchProductService->getProductBySearch($parameter); 
+        $response['products'] = $search['collection'];
 
         // product display
         $productArray = array();
