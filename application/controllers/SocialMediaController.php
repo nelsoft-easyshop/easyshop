@@ -17,6 +17,7 @@ class SocialMediaController extends MY_Controller
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
         $this->entityManager = $this->serviceContainer['entity_manager'];
         $this->stringUtility = $this->serviceContainer['string_utility'];
+        $this->userManager = $this->serviceContainer['user_manager'];
         $this->emailNotification = $this->serviceContainer['email_notification'];
     }
 
@@ -34,7 +35,7 @@ class SocialMediaController extends MY_Controller
         $facebookData = $this->socialMediaManager->getAccount($facebookType);
         if ($facebookData->getProperty('email')) {
             $data = $this->socialMediaManager
-                            ->authenticateAccount($facebookData->getId(), $facebookType, $facebookData->getProperty('email'));
+                        ->authenticateAccount($facebookData->getId(), $facebookType, $facebookData->getProperty('email'));
             $esMember = $data['doesAccountExists'];
             $doesAccountMerged = $data['doesAccountMerged'];
             if ($esMember && $doesAccountMerged) {
@@ -43,30 +44,30 @@ class SocialMediaController extends MY_Controller
             }
             else if ($esMember && !$doesAccountMerged) {
                 $data = $this->encrypt->encode(
-                                            $esMember->getIdMember().
-                                            '~'.
-                                            $facebookType.
-                                            '~'.
-                                            $facebookData->getId()
-                                        );
-                redirect('SocialMediaController/merge?h=' . $data, 'refresh');
+                    $esMember->getIdMember().
+                    '~'.
+                    $facebookType.
+                    '~'.
+                    $facebookData->getId()
+                );
+                redirect('SocialMediaController/mergeEmail?h=' . $data, 'refresh');
             }
-            else if (!$esMember) {
+            else if (!$esMember && !$doesAccountMerged) {
                 $username = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
                 $gender =  $facebookData->getProperty('gender') === 'male' ? 'M' : 'F';
                 $data = $this->encrypt->encode(
-                                            $facebookType.
-                                            '~'.
-                                            $facebookData->getId().
-                                            '~'.
-                                            $username.
-                                            '~'.
-                                            $facebookData->getName().
-                                            '~'.
-                                            $gender.
-                                            '~'.
-                                            $facebookData->getProperty('email')
-                                        );
+                    $facebookType.
+                    '~'.
+                    $facebookData->getId().
+                    '~'.
+                    $username.
+                    '~'.
+                    $facebookData->getName().
+                    '~'.
+                    $gender.
+                    '~'.
+                    $facebookData->getProperty('email')
+                );
                 redirect('SocialMediaController/register?h=' . $data, 'refresh');
             }
             else {
@@ -119,7 +120,7 @@ class SocialMediaController extends MY_Controller
                                             '~'.
                                             $googleData->getId()
                                         );
-                redirect('SocialMediaController/merge?h=' . $data, 'refresh');
+                redirect('SocialMediaController/mergeEmail?h=' . $data, 'refresh');
             }
             else if (!$esMember) {
                 $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
@@ -168,7 +169,7 @@ class SocialMediaController extends MY_Controller
         $session = $this->entityManager->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
         $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
         $authenticatedSession->setMember($user)
-                             ->setSession($session);
+            ->setSession($session);
         $this->entityManager->persist($authenticatedSession);
         $this->entityManager->flush();
     }
@@ -176,7 +177,7 @@ class SocialMediaController extends MY_Controller
     /**
      * Show merge page
      */
-    public function merge()
+    public function mergeEmail()
     {
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
@@ -185,44 +186,60 @@ class SocialMediaController extends MY_Controller
             redirect('/login', 'refresh');
         }
 
+        $data = array(
+            'title' => ' Shopping made easy | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+        );
+        $data = array_merge($data, $this->fill_header());
         $data['member'] = $this->entityManager
-                                    ->getRepository('EasyShop\Entities\EsMember')
-                                        ->findOneBy([
-                                            'idMember' => $getData[0]
-                                        ]);
+                            ->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy([
+                                'idMember' => $getData[0]
+                            ]);
         $data['oauthProvider'] = $getData[1];
         $data['oauthId'] = $getData[2];
 
+        $this->load->view('templates/header_new', $data);
         $this->load->view('pages/user/SocialMediaMerge', $data);
+        $this->load->view('templates/footer_primary');
     }
 
     /**
      * Send email message
-     * @param receiver
+     * @param email
      * @param memberId
-     * @param username
      * @param oauthId
      * @param oauthProvider
+     * @return boolean
      */
     public function sendMergeNotification()
     {
-        $this->load->library('parser');
-        $parseData = array(
-            'username' => $this->input->post('username'),
-            'hash' => $this->encrypt->encode(
-                                            $this->input->post('memberId') .
-                                            '~' .
-                                            $this->input->post('oauthId') .
-                                            '~' .
-                                            $this->input->post('oauthProvider')
-                                        ),
-            'site_url' => site_url('SocialMediaController/mergeAccount')
-        );
-        $message = $this->parser->parse('templates/email_merge_account', $parseData, true);
-        $this->emailNotification->setRecipient($this->input->post('receiver'));
-        $this->emailNotification->setSubject($this->lang->line('merge_subject'));
-        $this->emailNotification->setMessage($message);
-        $this->emailNotification->sendMail();
+        $result = false;
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                    ->findOneBy(['email' => $this->input->post('email')]);
+        if ($member) {
+            $result = true;
+            $this->load->library('parser');
+            $parseData = array(
+                'username' => $member->getUsername(),
+                'hash' => $this->encrypt->encode(
+                    $member->getIdMember() .
+                    '~' .
+                    $this->input->post('oauthId') .
+                    '~' .
+                    $this->input->post('oauthProvider')
+                ),
+                'site_url' => site_url('SocialMediaController/mergeAccount'),
+                'error_in' => $this->input->post('error')
+            );
+            $message = $this->parser->parse('emails/merge-account', $parseData, true);
+            $this->emailNotification->setRecipient($member->getEmail());
+            $this->emailNotification->setSubject($this->lang->line('merge_subject'));
+            $this->emailNotification->setMessage($message);
+            $this->emailNotification->sendMail();
+        }
+
+        echo json_encode($result);
     }
 
     /**
@@ -233,14 +250,20 @@ class SocialMediaController extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
         $memberObj = $this->entityManager
-                            ->getRepository('EasyShop\Entities\EsMember')
-                                ->findOneBy([
-                                    'idMember' => $getData[0]
-                                ]);
+                        ->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy([
+                                'idMember' => $getData[0]
+                            ]);
         $socialMediaProvider = $this->entityManager
-                                        ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
-                                            ->find($getData[2]);
-        if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider) {
+                                ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
+                                    ->find($getData[2]);
+        $doesSocialMediaAccountExists = $this->entityManager
+                                            ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                                ->findOneBy([
+                                                    'socialMediaId' => $getData[1],
+                                                    'socialMediaProvider' => $getData[2]
+                                                ]);
+        if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider || $doesSocialMediaAccountExists) {
             redirect('/login', 'refresh');
         }
 
@@ -259,7 +282,12 @@ class SocialMediaController extends MY_Controller
         if (intval($getData[0]) === 0 || !isset($getData[1]) || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
-        $data = array (
+        $data = array(
+            'title' => ' Shopping made easy | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+        );
+        $data = array_merge($data, $this->fill_header());
+        $userData = array (
             'social_media_type'=> $getData[0],
             'social_media_id'=> $getData[1],
             'username'=> $getData[2],
@@ -268,37 +296,58 @@ class SocialMediaController extends MY_Controller
             'email'=> $getData[5]
         );
 
-        $this->load->view('pages/user/SocialMediaRegistration', $data);
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('pages/user/SocialMediaRegistration', $userData);
+        $this->load->view('templates/footer_primary');
     }
 
     /**
-     * Update username
-     * @return bool
+     * Register Social Media Account
+     * @return mixed
      */
-    public function updateUsername()
+    public function registerSocialMediaAccount()
     {
         $result = false;
-        $username = $this->stringUtility->cleanString(strtolower($this->input->get('username')));
-        $esMember = $this->entityManager('EasyShop\Entities\EsMember')
+        $username = $this->stringUtility->cleanString(strtolower($this->input->post('username')));
+        $esMember = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
                         ->findOneBy(['username' => $username]);
-        if (!$esMember) {
-            $result = $this->entityManager('EasyShop\Entities\EsMember')->updateUsername($esMember, $username);
+        $socialMediaProvider = $this->entityManager
+                                ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
+                                    ->find($this->input->post('provider'));
+        if (!$esMember && $socialMediaProvider) {
+            $result = $this->socialMediaManager->registerAccount(
+                $username,
+                $this->input->post('fname'),
+                $this->input->post('gender'),
+                $this->input->post('email'),
+                true,
+                $this->input->post('id'),
+                $socialMediaProvider
+            );
+            $this->login($result);
         }
 
-        return $result;
-    }
-    
-     public function sendMergeAccountEmail()
-    {
-        $this->load->view('templates/header_new'); //must be templates/header_primary
-       $this->load->view('pages/user/send-merge-email');
-        $this->load->view('templates/footer_primary');
+        echo json_encode($result);
     }
 
-    public function sendMergeAccountUsername()
+    /**
+     * Check if email exists
+     * @param email
+     * @return boolean
+     */
+    public function checkEmailAvailability()
     {
-        $this->load->view('templates/header_new'); //must be templates/header_primary
-       $this->load->view('pages/user/send-merge-username');
-        $this->load->view('templates/footer_primary');
+        $result = false;
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                    ->findOneBy(['email' => $this->input->post('email')]);
+        if ($member) {
+            $result = array(
+                'username' => $member->getUsername(),
+                'email' => $member->getEmail(),
+                'location' => '',
+                'image' =>  $this->userManager->getUserImage($member->getIdMember())
+            );
+        }
+        echo json_encode($result);
     }
 }

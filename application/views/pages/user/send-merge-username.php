@@ -51,7 +51,14 @@
                             <p class="label-merge">
                                 If you believe you own this account, type in your email address to send a verification request to the registered email of username to update your account.
                             </p>
-                            <input type="text" class="form-control input-merge input-merge-username" placeholder="Type in your email account"/>
+                            <div class="row">
+                                <div class="col-md-7 col-check-1">
+                                    <input type="text" class="form-control input-merge input-merge-username" placeholder="Type in your email account"/>
+                                </div>
+                                <div class="col-md-5 col-check-2">
+                                    <button class="btn btn-default-3 btn-block check-availability">Check Availability</button>
+                                </div>
+                            </div>
                             <div class="div-validation-container">
                                 <p class="span-validation-ok">
                                     <i class="glyphicon glyphicon-ok-sign"></i>
@@ -108,9 +115,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                            <div class="col-md-12">
                             <button class="btn btn-block btn-orange-lg proceed">
                                 SEND REQUEST
                             </button>
+                            </div>
+                            </div>
                         </div>
                     </div>
                </div>
@@ -141,14 +152,6 @@
             $('.modal-message').modal();
             return false;
         });
-
-        $( ".input-merge-username" ).keyup(function() {
-            $(".div-search-merge-account").css("display", "block");
-        });
-
-         $( ".div-search-merge-account" ).click(function() {
-            $(".div-search-merge-account").css("display", "none");
-         });
     });
 </script>
 
