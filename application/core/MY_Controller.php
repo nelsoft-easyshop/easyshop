@@ -89,7 +89,7 @@ class MY_Controller extends CI_Controller
      */
     public function fillCategoryNavigation()
     {
-        return $this->serviceContainer['xml_cms']->getHomeData();
+        return $this->serviceContainer['xml_cms']->getHomeData(true);
     }
 
     /**
