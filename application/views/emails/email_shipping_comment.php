@@ -61,7 +61,7 @@
                                                     </tr>
                                                     <tr style="border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;">
                                                         <td style="font-weight:bold; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted; padding-top:10px;">
-                                                            Delivery Date:
+                                                            Delivery Dateasdasdasdasdasd:
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px; padding-right:7px;" align="right">
                                                             {delivery_date}
@@ -99,12 +99,12 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <a href="https://www.facebook.com/EasyShopPhilippines">
+                                    <a href="{social_media_links}{facebook}/EasyShopPhilippines">
                                         <img src="facebook.png" style="float: right; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="https://twitter.com/EasyShopPH">
+                                    <a href="{social_media_links}{twitter}/EasyShopPH">
                                         <img src="twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>

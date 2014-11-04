@@ -3,8 +3,8 @@
         <div class="social_media col-xs-12 col-sm-4 col-md-4 pd-bttm-10">
           
             <h5>Stay in Touch</h5>
-            <a href="https://www.facebook.com/EasyShopPhilippines"> <span class="span_bg facebook"></span></a>
-            <a href="https://twitter.com/EasyShopPH"><span class="span_bg twitter"></span></a>
+            <a href="<?php echo $facebook; ?>/EasyShopPhilippines"> <span class="span_bg facebook"></span></a>
+            <a href="<?php echo $twitter; ?>/EasyShopPH"><span class="span_bg twitter"></span></a>
          
             <div class="signup">
                     <h5>Signup for Newsletter</h5>
