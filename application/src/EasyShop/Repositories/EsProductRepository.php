@@ -240,6 +240,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('attr_value', 'attr_value');
         $rsm->addScalarResult('attr_price', 'attr_price');
         $rsm->addScalarResult('attr_id', 'attr_id');
+        $rsm->addScalarResult('image_id', 'image_id');
         $rsm->addScalarResult('image_path', 'image_path');
         $rsm->addScalarResult('is_other', 'is_other');
         $rsm->addScalarResult('type', 'type');
@@ -251,6 +252,7 @@ class EsProductRepository extends EntityRepository
                 d.value_name AS attr_value, 
                 d.value_price AS attr_price,
                 d.id_optional_attrdetail as attr_id, 
+                d.product_img_id as image_id, 
                 COALESCE(i.product_image_path,'') AS image_path, 
                 '1' as is_other,
                 'option' as 'type',
@@ -267,6 +269,7 @@ class EsProductRepository extends EntityRepository
                 a.attr_value, 
                 a.attr_price,
                 a.id_product_attr, 
+                '0', 
                 '', 
                 '0',
                 'specific' as 'type',

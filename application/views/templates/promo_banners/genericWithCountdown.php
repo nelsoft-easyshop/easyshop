@@ -5,7 +5,7 @@
             <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448/?type=1">Facebook page</a></strong>
         </center>
     </div>
-    <?php if($start_promo): ?>
+    <?php if($product->getStartPromo()): ?>
     <div class="panel-body no-padding">
         <div class="row">
             <div class="col-md-5 no-padding">
@@ -17,7 +17,7 @@
             </div>
             
             <div class="col-md-7 no-padding">
-                    <div class="cd_timer_container product_view <?php echo ($start_promo)?'':'float';?>">
+                    <div class="cd_timer_container product_view <?php echo ($product->getStartPromo())?'':'float';?>">
                         <div class="cd_timer_days">
                             <span id='countdown_days'>00</span>
                             <span class="cnt_lgnd">DAYS</span>
@@ -45,7 +45,7 @@
 
 <script type='text/javascript'>
     $(document).ready(function(){
-        var endDate = new Date(<?php echo json_encode(date('M d,Y H:i:s',strtotime(($start_promo == "1" ? $enddate: $startdate)))); ?>);
+        var endDate = new Date(<?php echo json_encode(date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate(): $product->getStartdate())))); ?>);
         $('.cd_timer_container').countdown({
             until : endDate,
             serverSync: serverTime,

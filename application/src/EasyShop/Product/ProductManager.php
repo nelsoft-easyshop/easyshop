@@ -746,5 +746,58 @@ class ProductManager
         return $isListingOnly;
     }
     
+    /**
+     * Return product review of the given product
+     *
+     * @param $productId
+     * @return mixed
+     */
+    public function getProductReview($productId)
+    {
+        $recentReview = []; 
+        $productReviewObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
+                                    ->getProductReview($productId);
+        if($productReviewObject){
+            $retrieve = array();
+            foreach ($productReviewObject as $key => $value) {
+                $retrieve[] = $value->getIdReview();
+            }
+
+            $productRepliesObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
+                                                ->getReviewReplies($productId,$retrieve);
+
+            foreach($productRepliesObject as $key=>$temp){
+                $temp->setReview(html_escape($temp->getReview()));
+            }
+
+            $i = 0;
+            foreach ($productReviewObject as $key => $value) { 
+                $recentReview[$i]['id_review'] = $value->getIdReview();
+                $recentReview[$i]['title'] = $value->getTitle();
+                $recentReview[$i]['review'] = $value->getReview();
+                $recentReview[$i]['rating'] = $value->getRating();
+                $recentReview[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
+                $recentReview[$i]['reviewer'] = $value->getMember()->getUsername();
+                $recentReview[$i]['replies'] = array();
+                $recentReview[$i]['reply_count'] = 0;
+
+                foreach($productRepliesObject as $reply){ 
+                    if($value->getIdReview() == $reply->getPReviewid()){  
+                        $recentReview[$i]['replies'][] = array(
+                                                    'id_review' => $reply->getIdReview(),
+                                                    'review' => $reply->getReview(),
+                                                    'rating' => $reply->getRating(),
+                                                    'datesubmitted' => $reply->getDatesubmitted()->format('Y-m-d H:i:s'),
+                                                    'reviewer' => $reply->getMember()->getUsername(),
+                                                );
+                        $recentReview[$i]['reply_count']++;
+                    }
+                }
+                $i++;
+            } 
+        }
+
+        return $recentReview;
+    }
 }
 

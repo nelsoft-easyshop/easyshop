@@ -472,10 +472,10 @@ class product extends MY_Controller
         // Load Header
         $headerData = $this->fill_header(); 
         $headerData['title'] = " | Easyshop.ph";
-        $this->load->view('templates/header_new', $headerData);
-
+        $this->load->view('templates/header_new', $headerData); 
         // Load Services
         $productManager = $this->serviceContainer['product_manager'];
+        $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
 
@@ -483,6 +483,9 @@ class product extends MY_Controller
         // check of slug exist
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $itemSlug]);
+
+        // user id of the viewer
+        $viewerId =  $this->session->userdata('member_id');
 
         if($productEntity){
 
@@ -514,12 +517,31 @@ class product extends MY_Controller
             $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                     ->getProductInventoryDetail($productId);
 
+            // get product shipping location
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                ->getShippingDetailsByProductId($product->getIdProduct());
+
+            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                            ->getLocation();
+
             $finalCombinationQuantity = [];
             foreach ($productQuantityObject as $key => $value) {
                 if(!array_key_exists($value['id_product_item'],$finalCombinationQuantity)){
+
+                    $locationArray = [];
+                    foreach ($shippingDetails as $shipKey => $shipValue) {
+                        if(intval($shipValue['product_item_id']) === intval($value['id_product_item'])){
+                            $locationArray[] = array(
+                                    'location_id' => $shipValue['location_id'],
+                                    'price' => $shipValue['price'],
+                                );
+                        }
+                    }
+
                     $finalCombinationQuantity[$value['id_product_item']] = array(
                         'quantity' => $value['quantity'],
                         'product_attribute_ids' => [$value['product_attr_id']],
+                        'location' => $locationArray,
                     );
                 }
                 else{
@@ -527,12 +549,45 @@ class product extends MY_Controller
                 }
             }
 
-            // get product shipping location
-            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                                ->getShippingDetailsByProductId($product->getIdProduct());
+            // get payment type available and if button is viewable
+            $bannerView = "";
+            $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
+            $isBuyButtonViewable = true;
 
-            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                            ->getLocation();
+            if(intval($product->getIsPromote()) === 1 && (!$product->getEndPromo()) ){
+                $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
+                if(strlen(trim($bannerfile)) > 0){
+                    $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], TRUE); 
+                }
+                $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
+                $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
+            }
+
+            // check if the item can be purchase
+            $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
+
+            // product details
+            // clean product details
+            $clean_desc = html_purify($product->getDescription());
+            $us_ascii = mb_convert_encoding($clean_desc, 'HTML-ENTITIES', 'UTF-8');
+            $doc = new DOMDocument();
+            //@ = error message suppressor, just to be safe
+            @$doc->loadHTML($us_ascii);
+            $tags = $doc->getElementsByTagName('a');
+            foreach($tags as $a){
+                $a->setAttribute('rel', 'nofollow');
+            }
+            $productDescription = @$doc->saveHTML($doc);
+
+            // get reviews
+            $productReviews = $productManager->getProductReview($productId); 
+
+            $reviewDetailsData = array(
+                        'productDetails' => $productDescription,
+                        'productReview' => $productReviews,
+                    );
+
+            $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
 
             $viewData = array(
                         'product' => $product,
@@ -543,8 +598,16 @@ class product extends MY_Controller
                         'productCombinationQuantity' => json_encode($finalCombinationQuantity),
                         'shippingInfo' => $shippingDetails,
                         'shiploc' => $shippingLocation,
-                    );
+                        'paymentMethod' => $paymentMethod,
+                        'isBuyButtonViewable' => $isBuyButtonViewable,
+                        'isLoggedIn' => $headerData['logged_in'],
+                        'viewerId' => $viewerId,
+                        'canPurchase' => $canPurchase,
+                        'userData' => $headerData['user'],
+                        'bannerView' => $bannerView, 
+                        'reviewDetailsView' => $reviewDetailsView,
 
+                    );
             $this->load->view('pages/product/productpage_primary', $viewData);
         }
         else{

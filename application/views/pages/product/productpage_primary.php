@@ -31,6 +31,9 @@
                         <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
+                <div>
+                    <?=$bannerView; ?>
+                </div>
             </div>
         </div>
         <div class="prod-border-bttm"></div>
@@ -74,7 +77,7 @@
                                 <select class="attribute-control">
                                     <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
                                     <?php foreach ($headValue as $key => $value):?>
-                                        <option value="<?=$value['attr_id']; ?>" data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                        <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -91,7 +94,7 @@
                 <div class="row pad-top-23">
                     <div class="col-xs-12 col-sm-5 col-md-5">
                         <div class="prod-availability-container prod-border-right">
-                            <p>Availability: <span class="in-stock">In Stock</span></p>
+                            <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
@@ -100,11 +103,11 @@
                             <select class="shiploc" id="shipment_locations">
                                 <option class="default" selected="" value="0">Select Location</option>
                                 <?php foreach($shiploc['area'] as $island=>$loc):?>
-                                    <option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
+                                    <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
                                     <?php foreach($loc as $region=>$subloc):?>
-                                        <option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                        <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
                                         <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                            <option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                            <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
                                         <?php endforeach;?>
                                     <?php endforeach;?>
                                 <?php endforeach;?>
@@ -123,12 +126,29 @@
                         <p class="attr-title">Quantity:</p>
                         <div class="prod-select-con ui-form-control quantity-select">
                             <select id="control-quantity">
-                                <option selected=selected>0</option> 
+                                <option value="0" selected=selected>0</option> 
                             </select>
                         </div>
                     </div>
                     <div class="col-md-7">
-                        <input type="submit" value="Add to Cart" class="prod-add-to-cart-btn">
+                        <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
+                            <p class="buy_btn_sub"> Verify your email </p>
+                        <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
+                            <p class="buy_btn_sub"> This is your own listing </p>
+                        <?php else: ?>
+                            <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
+                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" >Contact Seller</a> <br/>
+                                <span class="font-10" width="100%">Item is listed as an ad only. *</span>
+                            <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
+                                <a href="javascript:void(0)" id='<?=$canPurchase?'send':'' ?>_registration' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
+                                <span class="font-10" width="100%">Click buy to qualify for the promo*</span>
+                            <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
+                                <p class="buy_btn_sub"> This product is for promo use only. </p>
+                            <?php else: ?>
+                                <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled">
+                                <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
+                            <?php endif; ?>
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -140,11 +160,24 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-payment-img-container">
                         <p class="attr-title">Payment:</p>
-                        <img src="/assets/images/img-visa-black.png" alt="Visa">
-                        <img src="/assets/images/img-paypal-black.png" alt="Paypal">
-                        <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
-                        <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
-                        <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+
+                        <?php if(isset($paymentMethod['cdb'])): ?>
+                            <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
+                            <img src="/assets/images/img-visa-black.png" alt="Visa">
+                        <?php endif; ?> 
+
+                        <?php if(isset($paymentMethod['dragonpay'])) : ?>
+                            <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                        <?php endif; ?> 
+
+                        <?php if(isset($paymentMethod['paypal'])) : ?>
+                            <img src="/assets/images/img-paypal-black.png" alt="Paypal">
+                        <?php endif; ?>
+
+                        <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?>
+                            <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+                        <?php endif; ?>
+
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -185,10 +218,11 @@
     <input id="productCombQuantity" type="hidden" value='<?=$productCombinationQuantity; ?>' />
     <input id="finalBasePrice" type="hidden" value="<?=$product->getFinalPrice();?>" />
     <input id='p_shipment' type='hidden' value='<?=json_encode($shippingInfo);?>'>
+    <input id='productId' type='hidden' value='<?=$product->getIdProduct();?>'>
 </div>
 
-<?php
-    include("productpage_view_review.php");
+<?=$reviewDetailsView;?>
+<?php 
     include("productpage_view_recommend.php");
 ?>
 
@@ -236,6 +270,11 @@ function commaSeparateNumber(val){
         var $this = $(this);
         var $arraySelected = [];
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+        var $imageid = $this.children('option:selected').data('imageid');
+
+        if($imageid > 0){
+            $("#image"+$imageid).trigger('click'); 
+        }
 
         // get selected attributes
         $(".attribute-control").each(function() {
@@ -258,62 +297,75 @@ function commaSeparateNumber(val){
             $arrayCombination.sort(sortArrayNumber);
             $booleanCheck = arraysEqual($arrayCombination,$arraySelected);
             $combinationQuantity = val.quantity;
+            $combinationLocation = val.location;
             $("#control-quantity").empty();
-            // if found atleast one combination
-            if($booleanCheck){ 
-                for (var i = 1 ; i <= $combinationQuantity; i++) { 
-                    $("#control-quantity").append('<option>'+ i +'</option>');
-                };
-                return false;
-            }
-            $("#control-quantity").append('<option>0</option>');
-        });
-    });
+            $('#shipment_locations > option').show().prop('disabled', true);
+            $('#shipment_locations > .default').prop('disabled', false);
 
-    // location
-        $("body").on('change','#shipment_locations', function(){
-            var selected = $('#shipment_locations :selected');
-            if(selected.val() == 0){
-                $('.shipping_fee').html("<span class='loc_invalid'>Select location*</span>");
-            }
-            else{
-                var fee = parseFloat(selected.data('price'));
-                if(fee > 0){
-                    $('.shipping_fee').html("<span class='shipping_fee_php'>PHP <span><span class='shipping_fee_price'>"+fee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"</span>");
+            // if found atleast one combination
+            if($booleanCheck){
+
+                if($combinationQuantity <= 0){
+                    $("#control-quantity").append('<option value="0">0</option>');
+                    $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 }
                 else{
-                    //$('.shipping_fee').html("<span class='free_shipping_logo'></span>");
-                    $('.shipping_fee').html("<span class='free_shipping_logo'><span class='shipping_fee_php' style='font-weight:bold; font-size:10px; color:#F18200;'>Free shipping</span></span>");
+                    for (var i = 1 ; i <= $combinationQuantity; i++) { 
+                        $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
+                    };
+                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
                 }
-            }
-        });
 
-        //Loads the default shipment locations
-        $.each(shipment, function(index, value){
-            
-            if(value.location_id == 1 && value.location_type == 0){
-                var firstOption = $('.shiploc option:not(.default)').first();
-                firstOption.data('price',value.price);
-                firstOption.prop('disabled', false);
-                $.each(firstOption.nextAll(), function(){
-                    $(this).prop('disabled', false);
-                    $(this).data('price',value.price);
+                $.each($combinationLocation,function(i, val){ 
+                    var $text = $("#locationID_"+val.location_id).data('text');
+                    $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
                 });
+
+                $('#shipment_locations > option:disabled').hide();
+                
                 return false;
             }
-
-            var option =  $('#locationID_' + value.location_id);
-            option.data('price',value.price);
-            option.prop('disabled', false);
-            $.each(option.nextAll(), function(){
-                if($(this).data('type') === option.data('type')){
-                return false;
-                }
-                $(this).prop('disabled', false);
-                $(this).data('price',value.price);
-            }); 
+            $("#control-quantity").append('<option value="0">0</option>');
         });
-        
+    });
+    
+    // add to cart
+    $(document).on('click', '#send.enabled', function(){
+        var $productId = $("#productId").val();
+        var $quantity = $("#control-quantity").val();
+        var $csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var $optionsObject = {};
+ 
+        $(".attribute-control").each(function() {
+            $thisSelect = $(this); 
+            var $attrParent = $thisSelect.children('option:selected').data('headvalue'); 
+            var $attrName = $thisSelect.children('option:selected').data('textvalue');
+            var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
 
+            $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
+        });
+     
+        var $request = $.ajax({
+                            url: "/cart/doAddItem",
+                            type:"POST",
+                            dataType:"JSON",
+                            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
+                            success:function(data){
+
+                                if(!data.isLoggedIn){
+                                    window.location.replace("/login");
+                                }
+                                
+                                if(data.isSuccessful){
+                                    window.location.replace("/cart");
+                                }
+                                else{
+                                    alert("We cannot process your request at this time. Please try again in a few moment");
+                                }
+                            }
+                        });
+
+    });
 })(jQuery);
 </script>

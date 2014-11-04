@@ -1,4 +1,4 @@
-<?php if($start_promo): ?>
+<?php if($product->getStartPromo()): ?>
     <div class="alert alert-danger alert-promo">
         <center>
             <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our 
