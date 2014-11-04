@@ -53,7 +53,12 @@ class messages extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
             $this->load->view('pages/messages/inbox_view');
-            $this->load->view('templates/footer_full');
+
+            $xocialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/footer_full', $viewData);
         }
         else {
             redirect(base_url() . 'home', 'refresh');
@@ -114,14 +119,19 @@ class messages extends MY_Controller
                     , "/assets/images/landingpage/templates/facebook.png"
                     , "/assets/images/landingpage/templates/twitter.png"
                 );
+
+
                 $parseData = array(
                     'user' => $memberEntity->getUsername()
                     , 'recipient' => $qResult['username']
                     , 'home_link' => base_url()
                     , 'store_link' => base_url() . $memberEntity->getSlug()
                     , 'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername()
-                    , 'msg' => $msg
+                    , 'msg' => $msgz
                 );
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $parseData['facebook'] = $socialMediaLinks["facebook"];
+                $parseData['twitter'] = $socialMediaLinks["twitter"];                
                 $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, TRUE);
 
                 $emailService->setRecipient($emailRecipient)

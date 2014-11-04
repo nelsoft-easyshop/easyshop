@@ -99,9 +99,13 @@ class Home extends MY_Controller
             $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
             $this->load->view('templates/header_primary', $data);
             $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary');
+            $this->load->view('templates/footer_primary', $viewData);
         }
 
     }
@@ -118,7 +122,12 @@ class Home extends MY_Controller
       $data = array_merge($data, $this->fill_header());
       $this->load->view('templates/header', $data);
       $this->load->view('pages/underconstruction_view');
-      $this->load->view('templates/footer_full');
+
+      $socialMediaLinks = $this->getSocialMediaLinks();
+      $viewData['facebook'] = $socialMediaLinks["facebook"];
+      $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+      $this->load->view('templates/footer_full', $viewData);
     }
     
     /**
@@ -138,10 +147,14 @@ class Home extends MY_Controller
         }
         $data['homeContent'] = $this->fill_categoryNavigation();  
 
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_primary');
+        $this->load->view('templates/footer_primary', $viewData);
     }
     
     
@@ -152,7 +165,10 @@ class Home extends MY_Controller
      */
     public function splash()
     {
-        $this->load->view('pages/undermaintenance.php');
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];      
+        $this->load->view('pages/undermaintenance.php', $viewData);
     }
 
     /** 
@@ -181,7 +197,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/policy');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
   
     /**
@@ -198,7 +219,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/terms');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -216,7 +242,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/faq');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -250,6 +281,10 @@ class Home extends MY_Controller
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-buy');
@@ -267,6 +302,10 @@ class Home extends MY_Controller
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];  
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-sell');
@@ -1103,7 +1142,11 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header()); 
         $this->load->view('templates/header', $data);
         $this->output->append_output($formData); 
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];        
+        $this->load->view('templates/footer_full', $viewData);
     }
 
     /**

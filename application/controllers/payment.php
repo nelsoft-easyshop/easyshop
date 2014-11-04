@@ -1316,7 +1316,12 @@ class Payment extends MY_Controller{
         $this->load->view('templates/header', $data);
         // $this->load->view('pages/payment/payment_response' ,$response);  
         $this->load->view('pages/payment/payment_response_responsive' ,$response);  
-        $this->load->view('templates/footer_full'); 
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData); 
  
    }
 
@@ -1400,6 +1405,9 @@ class Payment extends MY_Controller{
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $buyerData['facebook'] = $socialMediaLinks["facebook"];
+            $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
             unset($buyerData['buyer_email']);
 
@@ -1427,6 +1435,9 @@ class Payment extends MY_Controller{
 
         // Send email to seller of each product - once per seller
         if($sellerFlag){
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $sellerData['facebook'] = $socialMediaLinks["facebook"];
+            $sellerData['twitter'] = $socialMediaLinks["twitter"];             
             $sellerData = array(
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
