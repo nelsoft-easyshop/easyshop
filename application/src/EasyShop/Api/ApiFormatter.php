@@ -47,7 +47,7 @@ class ApiFormatter
         $this->cartImplementation = $cartManager->getCartObject();
     }
 
-    public function formatItem($productId)
+    public function formatItem($productId,$isItemView = false)
     {
       
 
@@ -61,7 +61,7 @@ class ApiFormatter
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
                 'price' => floatval($product->getFinalPrice()),
-                'original_price' => floatval($product->getFinalPrice()),
+                'original_price' => floatval($product->getOriginalPrice()),
             );
 
         // get product images
@@ -69,9 +69,15 @@ class ApiFormatter
         $prodImgObj = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                     ->findBy(['product' => $productId]);
 
+
+        $imageType = 'categoryview/';
+        if($isItemView){ 
+            $imageType = '';
+        }
+        
         foreach ($prodImgObj as $key => $value) {
             $productImages[] = array(
-                                'product_image_path' => $value->getProductImagePath(),
+                                'product_image_path' => $value->getDirectory().$imageType.$value->getFilename(),
                                 'id' => $value->getIdProductImage(),
                             );
         }
