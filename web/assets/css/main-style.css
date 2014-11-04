@@ -864,7 +864,7 @@ textarea {
 .sticky-nav li:nth-child(3) input,
 .search-container input {
     border-radius: 0 4px 4px 0;
-    font-size: 12px;
+    font-size: 14px;
     height: 34px;
     padding: 4px 12px;
     vertical-align: middle;
