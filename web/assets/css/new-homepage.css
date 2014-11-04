@@ -2,6 +2,7 @@
 /* =============================================
 -----------------  General -------------
 ==============================================*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
 @font-face {
     font-family: Helvetica;
@@ -35,9 +36,9 @@
 }
 
 html, body {
-    font-family: 'Helvetica', Arial, Calibri;
+    font-family: 'Helvetica', 'Open Sans', sans-serif , Arial, Calibri;
     font-size: 12px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #7c807e;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1411,7 +1412,6 @@ header {
     font:700 16px "Helvetica", Arial, sans-serif;
     color:#adadad;
     margin-bottom: 5px;
-    letter-spacing: 0px !important;
 }
 
 .item-price-special {
@@ -1474,7 +1474,6 @@ header {
     height:55px;
     text-align:center;
     border-radius:500px;
-    letter-spacing: 0px !important;
 }
 
 .new-circle {
@@ -1501,7 +1500,6 @@ header {
     height:55px;
     text-align:center;
     border-radius:500px;
-    letter-spacing: 0px !important;
 }
 
 .new-circle-2 {
@@ -1561,12 +1559,11 @@ header {
 
 /* title for all items */
 .item-name {
-    font:700 16px 'Helvetica', sans-serif;
+    font:700 16px 'Helvetica', 'Open Sans', sans-serif;
     margin:0 0 5px;
     text-overflow: ellipsis;
     white-space:nowrap;
     overflow:hidden;
-    letter-spacing: 0px !important;
 }
 
 .item-name:hover{
@@ -2418,12 +2415,12 @@ html[xmlns] .slides {display: block;}
 
 /*** global style ***/
 html, body{
-    font-family: 'Helvetica', Arial, Calibri !important;
+    font-family: 'Helvetica', 'Open Sans', Arial, Calibri !important;
     background: #ebedf0;
 }
 
 .item-featured{
-font-family: 'Helvetica', Arial, Calibri !important;
+    font-family: 'Helvetica', 'Open Sans', Arial, Calibri !important;
     padding: 10px;
     border: solid red 1px !important;
 }
@@ -2761,7 +2758,7 @@ font-size: 15px;
 }
 
 .row-category{
-    margin-top: 0px;
+    margin-top: 15px;
 }
 
 .row-category-brand{
@@ -2842,18 +2839,18 @@ font-size: 15px;
     width: 80%;
     height: auto;
     max-height: 120px;
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-    filter: grayscale(100%);
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(100%); 
+    transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
-}
+    }
 
 .brand-img:hover{
-    -webkit-filter: grayscale(0%) !important;
-    -moz-filter: grayscale(0%) !important;
-    filter: grayscale(0%) !important;
+    filter: none;
+    -webkit-filter: grayscale(0%);
 }
 
 .fa-brand-prev{
@@ -3239,7 +3236,7 @@ h3 > b{
     }
     
     .row-featured-category{
-        margin-top: -20px;
+        margin-top: 15px;
     }
     
     .promo-3{
@@ -3284,6 +3281,9 @@ h3 > b{
         display: inline !important;
     }
 
+    .row-category{
+        margin-top: 30px;
+    }
 }
 
 @media only screen and (max-width: 479px) {
@@ -3326,28 +3326,29 @@ h3 > b{
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        margin-top: 5px;
     }
     
     .old-price, .item-price{
         font-size: 12px;
     }
-    
+
     .new-circle, .discount-circle{
         font-size:10px;
         width: 30px;
         height: 30px;
         padding: 0px !important; 
-        padding-top: 7px !important;
+        padding-top: 10px !important;
     }
-    
+
     .new-circle-2, .discount-circle-2{
         font-size:10px;
         width: 30px;
         height: 30px;
         padding: 0px !important; 
-        padding-top: 7px !important;
+        padding-top: 10px !important;
     }
-    
+
     .td-logo-store{
         padding-left: 4px;
     }
@@ -3359,7 +3360,7 @@ h3 > b{
     
     #cat-items .item, #featured-seller .item{
         padding: 10px 10px !important;
-        min-height: 228px;
+        min-height: 209px;
     }
     
     .span-see-all{
@@ -3432,13 +3433,20 @@ h3 > b{
         height: auto;
         max-height: 100px !important;
     }
-}
-
-@media only screen and (max-width: 320px) {
-    .sticky-search-cart-wrapper {
-        width: 87%;
+    
+    html, body{
+        letter-spacing: 0px;
     }
-
+    
+    .btn-add-cart > .icon-cart{
+        padding-right: 0px;
+    }
+    
+    .btn.btn-default-1{
+        font-size: 10px;
+        border-width: 2px;
+    }
+    
     .item-price {
         display: block;
         margin-top: 4px;
@@ -3450,6 +3458,16 @@ h3 > b{
     
     .td-logo-store{
         display: none;
+    }
+    
+    .footer-primary{
+        padding-bottom: 18px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .sticky-search-cart-wrapper {
+        width: 87%;
     }
 }
 
