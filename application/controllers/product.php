@@ -478,6 +478,7 @@ class product extends MY_Controller
         $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
+        $reviewProductService = $this->serviceContainer['review_product_service'];
 
         // Load Product Section
         // check of slug exist
@@ -580,11 +581,15 @@ class product extends MY_Controller
             $productDescription = @$doc->saveHTML($doc);
 
             // get reviews
-            $productReviews = $productManager->getProductReview($productId); 
+            $productReviews = $reviewProductService->getProductReview($productId);
+
+            // check user if allowed to review
+            $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
 
             $reviewDetailsData = array(
                         'productDetails' => $productDescription,
                         'productReview' => $productReviews,
+                        'canReview' => $canReview,
                     );
 
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
@@ -614,6 +619,20 @@ class product extends MY_Controller
             $this->load->view('pages/general_error'); 
         }
     }
+
+    /**
+     * Submit reply for review
+     *  
+     * @return mixed
+     */
+    public function submitReply()
+    {
+        $reviewProductService = $this->serviceContainer['review_product_service'];
+        $response = $reviewProductService->submitReview($reviewerId,$this->input->post());
+        
+        echo json_encode($response);
+    }
+ 
 
     /**
      * Renders view for the promo page

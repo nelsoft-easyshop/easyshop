@@ -1,7 +1,7 @@
 (function ($){
     $( ".p-reply-text" ).click(function() {
-        $( ".div-reply-container" ).toggle("slow");
-        $( ".text-cancel" ).toggle("fade");
+        $(this).parent().next( ".div-reply-container" ).toggle("slow");
+        $(this).find( ".text-cancel" ).toggle("fade");
     });
 
     $( ".p-reply-text-replied-item" ).click(function() {
@@ -19,20 +19,20 @@
         $( "#tdReviews" ).addClass("active");
     });
 
-    $(".span-star-container .fa-star-rate").mouseover(function(){
-        $(this).css("color","#fbd022");
-        $( this ).prevAll().css("color","#fbd022");
-    });
+    // $(".span-star-container .fa-star-rate").mouseover(function(){
+    //     $(this).css("color","#fbd022");
+    //     $( this ).prevAll().css("color","#fbd022");
+    // });
 
-    $( ".span-star-container .fa-star-rate" ).mouseout(function() {
-        $(this).css("color","#d4d4d4");
-        $( this ).prevAll().css("color","#d4d4d4");
-    });
+    // $( ".span-star-container .fa-star-rate" ).mouseout(function() {
+    //     $(this).css("color","#d4d4d4");
+    //     $( this ).prevAll().css("color","#d4d4d4");
+    // });
 
     $( ".span-star-container .fa-star-rate" ).click(function() {
-        $(this).addClass("star-active");
-        $(this).prevAll().addClass("star-active");
-        $(this).nextAll().removeClass("star-active");
+        $(this).css("color","#fbd022");
+        $(this).prevAll().css("color","#fbd022");
+        $(this).nextAll().css("color","#d4d4d4");
     });
 
     $(document).ready(function() {

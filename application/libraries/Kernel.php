@@ -261,12 +261,14 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
+            $userManager = $container['user_manager'];
             $imageLibrary = new \CI_Image_lib();
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
                                                         $configLoader,
-                                                        $imageLibrary);
+                                                        $imageLibrary,
+                                                        $userManager);
         };
 
 
@@ -400,6 +402,14 @@ class Kernel
         };
         $container['mobile_notification'] = function($c) use ($smsConfig){
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        };
+
+        // Review product
+        $container['review_product_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\ReviewProductService(
+                            $container['entity_manager'],
+                            $container['user_manager']
+                            );
         };
 
         /* Register services END */

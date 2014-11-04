@@ -257,6 +257,10 @@ function commaSeparateNumber(val){
 
 (function($) {
 
+    // token
+    var $csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
 
@@ -333,8 +337,6 @@ function commaSeparateNumber(val){
     $(document).on('click', '#send.enabled', function(){
         var $productId = $("#productId").val();
         var $quantity = $("#control-quantity").val();
-        var $csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
         var $optionsObject = {};
  
         $(".attribute-control").each(function() {
@@ -367,5 +369,74 @@ function commaSeparateNumber(val){
                         });
 
     });
+
+    // review product
+    $(document).on('click', '.btn-reply', function(){
+        var $this = $(this);
+        var $parent = $this.data('parent'); 
+        var $productId = $("#productId").val();
+        var $review = $("#textareaReview"+$parent).val();
+        console.log($review);
+
+        if($review.trim() == "" || $review.length <= 0){
+            return false;
+        }
+        else{
+            $.ajax({
+                url: "/product/submit-reply",
+                type:"POST",
+                dataType:"JSON",
+                data:{product_id:$productId,parent_review:$parent,review:$review,csrfname:$csrftoken},
+                success:function(data){
+                    if(data.isSuccess){
+                        
+                        var $appendString = '<div class="row">\
+                                                <div class="col-xs-2 col-user-image no-padding" align="center">\
+                                                    <a href="#"><div class="div-user-image">\
+                                                        <img src="'+data.userPic+'" class="img-user"/>\
+                                                    </div></a>\
+                                                    <div class="clear"></div>\
+                                                    <a href="#"><p class="p-username">'+data.reviewUsername+'</p></a>\
+                                                    <p class="p-date-review-replied-item">'+data.datesubmitted+'</p>\
+                                                </div>\
+                                                <div class="col-sm-10 col-xs-12">\
+                                                    <div class="div-review-content-container div-reply-content-container">\
+                                                        <div class="row div-row-user">\
+                                                            <div class="me">\
+                                                                <table>\
+                                                                    <tr>\
+                                                                        <td>\
+                                                                            <a href="#">\
+                                                                                <div class="div-user-image">\
+                                                                                    <img src="'+data.userPic+'" class="img-user"/>\
+                                                                                </div>\
+                                                                            </a>\
+                                                                        </td>\
+                                                                        <td class="td-user-info">\
+                                                                            <a href="#"><p class="p-username">'+data.reviewUsername+'</p></a>\
+                                                                            <p class="p-date-review">'+data.datesubmitted+'</p>\
+                                                                        </td>\
+                                                                    </tr>\
+                                                                </table>\
+                                                            </div>\
+                                                        </div>\
+                                                        <div class="clear"></div>\
+                                                        <p class="p-review-content">'+data.review+'</p>\
+                                                    </div>\
+                                                </div>\
+                                            </div>';
+                        $(".review-container-"+$parent).append($appendString);
+                        $(".review-container-"+$parent).prev().prev('.div-reply-container').toggle("slow");
+                        $(".review-container-"+$parent).prev().prev('.div-reply-container').prev().children('.p-reply-text').find('.text-cancel').toggle("fade");
+                        $("#textareaReview"+$parent).val("");
+                    }
+                    else{
+                        alert(data.error);
+                    }
+                }
+            });
+        }
+    });
+
 })(jQuery);
 </script>
