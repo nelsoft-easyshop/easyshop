@@ -1133,18 +1133,19 @@ class Home extends MY_Controller
 
         $contactNumberConstraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
 
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                        ->setMethod('POST')
-                        ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
-                        ->add('contact_number', 'text', $contactNumberConstraint)
-                        ->add('street_address', 'text')
-                        ->add('city', 'text')
-                        ->add('region', 'text')
-                        ->add('website', 'text')
-                        ->getForm();
-
         if($this->input->post('storeName') !== false || $this->input->post('contactNumber') !== false || $this->input->post('streetAddress') !== false || 
             $this->input->post('website') !== false || $this->input->post('citySelect') !== false || $this->input->post('regionSelect') !== false){
+
+            
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                ->setMethod('POST')
+                                ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
+                                ->add('contact_number', 'text', $contactNumberConstraint)
+                                ->add('street_address', 'text')
+                                ->add('city', 'text')
+                                ->add('region', 'text')
+                                ->add('website', 'text')
+                                ->getForm();
 
             $form->submit([ 
               'shop_name' => $this->input->post('storeName'),
