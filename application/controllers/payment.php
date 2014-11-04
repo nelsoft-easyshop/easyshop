@@ -1347,9 +1347,8 @@ class Payment extends MY_Controller{
      *   'order_id' => Transaction Number
      *   'invoice_no' => Invoice number)
      */
-    function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
+    public function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
     {
-        return true;
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
 

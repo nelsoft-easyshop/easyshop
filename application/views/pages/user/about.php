@@ -48,7 +48,7 @@
                     <p class="panel-title-feedback">
                         Feedback Ratings
                     </p>
-                    <div class="row">
+                    <div class="row row-ratings">
                         <div class="col-xs-12">
                             <?php $ratingCounter = 1; ?>
                             <?php foreach($ratingHeaders as $ratingHeader): ?>
