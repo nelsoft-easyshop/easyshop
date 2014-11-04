@@ -82,7 +82,7 @@ class Resource
     {
         $xmlfile = 'page/mobile_home_files';
         if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){
-            $xmlfile = $this->configurationService->getConfigValue('XML_mobile_home');
+            $xmlfile = $this->configurationService->getConfigValue('XML_home');
         }
         
         return $xmlfile;

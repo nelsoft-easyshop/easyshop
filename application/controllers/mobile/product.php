@@ -34,7 +34,7 @@ class Product extends MY_Controller {
         $id = $productRow['id_product'];
         $productCategoryId = $productRow['cat_id'];
 
-        $format = $this->serviceContainer['api_formatter']->formatItem($id,true);
+        $format = $this->serviceContainer['api_formatter']->formatItem($id);
 
         $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
         $formattedRelatedItems = array();
