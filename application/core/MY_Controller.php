@@ -37,6 +37,10 @@ class MY_Controller extends CI_Controller
         $this->load->helper('common_helper');
     }
 
+    /**
+     *  Return social media links
+     *  @return ARRAY
+     */
     public function getSocialMediaLinks()
     {
         $this->config->load('social_media_links', TRUE);
