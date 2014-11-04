@@ -1147,12 +1147,12 @@ class Home extends MY_Controller
                                 ->getForm();
 
             $form->submit([ 
-              'shop_name' => $this->input->post('storeName'),
-              'contact_number' => $this->input->post('contactNumber'),
-              'street_address' => $this->input->post('streetAddress'),
-              'city' => $this->input->post('citySelect'),
-              'region' => $this->input->post('regionSelect'),
-              'website' => $this->input->post('website')
+                'shop_name' => $this->input->post('storeName'),
+                'contact_number' => $this->input->post('contactNumber'),
+                'street_address' => $this->input->post('streetAddress'),
+                'city' => $this->input->post('citySelect'),
+                'region' => $this->input->post('regionSelect'),
+                'website' => $this->input->post('website')
             ]);
 
             // Do not allow whitespaces as streetAddress
