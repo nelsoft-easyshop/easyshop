@@ -83,7 +83,7 @@ class MY_Controller extends CI_Controller
 
     public function fill_categoryNavigation()
     {
-        return $this->serviceContainer['xml_cms']->getHomeData();
+        return $this->serviceContainer['xml_cms']->getHomeData(TRUE);
     }
 
     public function fill_userDetails()
