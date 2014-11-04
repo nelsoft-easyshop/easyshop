@@ -613,8 +613,6 @@ class Home extends MY_Controller
      */
     private function aboutUser($sellerslug)
     {
-        $userDetails = $this->doUpdateUserDetails($sellerslug,'about');
-        
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
@@ -696,7 +694,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        
+        $userDetails = $this->doUpdateUserDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']););
+
         $this->load->view('templates/header_new', $headerData);
         $this->load->view('templates/header_vendor', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
@@ -853,7 +852,7 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);        
-        $userDetails = $this->doUpdateUserDetails($sellerslug,'contact');
+        $userDetails = $this->doUpdateUserDetails($sellerslug, 'contact', $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
@@ -893,7 +892,6 @@ class Home extends MY_Controller
                 , "followerCount" => $followers['count']
             ); 
         $bannerData = array_merge($bannerData, $EsLocationLookupRepository->getLocationLookup());
-
         return $bannerData;
     }
     
@@ -1093,9 +1091,11 @@ class Home extends MY_Controller
      *  Handles Vendor Contact Detail View
      *
      *  @param string $sellerslug
-     *
+     *  @param string $targetPage
+     *  @param string[] $regionList
+     *  @param string[] $cityPerRegionList
      */
-    public function doUpdateUserDetails($sellerslug, $targetPage)
+    public function doUpdateUserDetails($sellerslug, $targetPage, $regionList = NULL, $cityPerRegionList = NULL)
     {
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
@@ -1258,18 +1258,26 @@ class Home extends MY_Controller
 
             if($data['region'] !== ''){
                 $data['cities'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                            ->getCities($data['region']);
+                                                                           ->getCities($data['region']);
             }
             else{
                 $data['cities'];
             }
         }
 
-        $data['regions'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getAllLocationType(3);
-
-        $data['cityList'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getAllLocationType(3,true);
+        
+        if($regionList === NULL || $cityPerRegionList === NULL){
+            $locationData = $EsLocationLookupRepository->getLocationLookup();
+            if($regionList === NULL){
+                $regionList = $locationData['stateRegionLookup'];
+            }
+            if($cityPerRegionList === NULL){
+                $regionList = $locationData['cityLookup'];
+            }
+        }
+        
+        $data['regions'] = $regionList;
+        $data['cityList'] = $cityPerRegionList;
 
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
