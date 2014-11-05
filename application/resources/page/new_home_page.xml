@@ -284,10 +284,22 @@
     
     
     <sliderTemplate>
-        <template>A</template>
-        <template>B</template>
-        <template>C</template>
-        <template>D</template>
+        <template>
+            <templateName>A</templateName>
+            <imageCount>1</imageCount>
+        </template>
+        <template>
+            <templateName>B</templateName>
+            <imageCount>1</imageCount>            
+        </template>
+        <template>
+            <templateName>C</templateName>
+            <imageCount>1</imageCount>            
+        </template>
+        <template>
+            <templateName>D</templateName>
+            <imageCount>1</imageCount>            
+        </template>                
     </sliderTemplate>    
     
 </map>
