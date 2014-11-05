@@ -62,7 +62,12 @@ class Cart extends MY_Controller
             $this->load->view('templates/header', $data);
             #$this->load->view('templates/checkout_progressbar');
             $this->load->view('pages/cart/cart-responsive', $data);
-            $this->load->view('templates/footer_full');
+            
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/footer_full', $viewData);
         } 
         else {
             redirect('/login', 'refresh');

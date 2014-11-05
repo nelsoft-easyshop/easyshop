@@ -139,12 +139,12 @@
                         <table width="100%">
                             <tr>
                                 <td align="right">
-                                    <a href="https://www.facebook.com/EasyShopPhilippines">
+                                    <a href="{facebook}">
                                         <img src="facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="https://twitter.com/EasyShopPH">
+                                    <a href="{twitter}">
                                         <img src="twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
