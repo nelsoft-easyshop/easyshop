@@ -88,10 +88,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                 </a>
+                <?PHP if ((intval(sizeof($cartItems))) !== 0 ) : ?>
                 <div class="header-cart-item-list">
-                    <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
-                        <p>You have no item in your cart</p>
-                    <?PHP else : ?>
                         <p>Recently added item(s)</p>
                         <?php $cartItemsReversed = array_reverse($cartItems); ?>
                         <?php for($i = 0 ; $i < 2; $i++): ?>
@@ -113,7 +111,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
          
                         <div class="header-cart-lower-content">
                             <div class="header-cart-shipping-total">
-                                <p>Items(s) in cart: <span><?=$cartSize?></span></p>
+                                <p>Item(s) in cart: <span><?=$cartSize?></span></p>
                                 <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                             </div>
                             <div class="header-cart-buttons">
@@ -122,8 +120,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                             <div class="clear"></div>
                         </div>
-                    <?PHP endif;?>
                 </div>
+                <?PHP endif;?>
             </div>
         </div>
         

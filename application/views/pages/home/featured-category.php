@@ -11,7 +11,9 @@
                             <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
                         </span>
                         <p>
-                            <span><?php echo html_escape(strtoupper($categorySection['category']->getName())); ?></span>
+                            <span>
+                                <?php echo html_escape(strtoupper($categorySection['category']->getName())); ?>
+                            </span>
                             <span class="pull-right sn-container">
                                 <span>
                                     <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-left fa-category-item-prev"></i></a>
@@ -45,15 +47,17 @@
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
-                                    <a href="/item/<?php echo $productSlug ?>">
-                                        <div class="div-rec-product-image">
-                                            <center>
-                                                <span class="span-me">
-                                                    <img src="<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                                </span>
-                                            </center>
-                                        </div>
-                                    </a>
+                                    <center>
+                                        <a href="/item/<?php echo $productSlug ?>">
+                                            <div class="div-rec-product-image">
+                                                <center>
+                                                    <span class="span-me">
+                                                        <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                                    </span>
+                                                </center>
+                                            </div>
+                                        </a>
+                                    </center>
                                     <?php if ($product->getIsNew()): ?>
                                         <span class="new-circle-2">NEW</span>
                                     <?php endif; ?>
@@ -63,7 +67,7 @@
                                 <div class="item-meta-container" align="left">
                                     <h3 class="item-name">
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <?php echo html_escape((strlen($product->getName())> 15)?substr_replace($product->getName(), "...", 15):$product->getName());?>
+                                            <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
                                         </a>
                                     </h3>
                                     <div class="item-meta-inner-container clearfix">

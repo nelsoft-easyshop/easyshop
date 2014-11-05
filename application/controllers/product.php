@@ -35,7 +35,8 @@ class product extends MY_Controller
         $categoryId = $categoryDetails->getIdCat(); 
         $getParameter = $this->input->get() ? $this->input->get() : array();
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
-        $response['products'] = $searchProductService->getProductBySearch($getParameter);
+        $search = $searchProductService->getProductBySearch($getParameter); 
+        $response['products'] = $search['collection'];
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
         $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
@@ -71,7 +72,8 @@ class product extends MY_Controller
             $subCategoryList = $searchProductService->getPopularProductOfCategory($subCategory);
 
             // get all product available
-            $response['products'] = $searchProductService->getProductBySearch($getParameter);
+            $search = $searchProductService->getProductBySearch($getParameter);
+            $response['products'] = $search['collection'];
             
             // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);

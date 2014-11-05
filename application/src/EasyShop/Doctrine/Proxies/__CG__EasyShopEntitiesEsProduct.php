@@ -64,10 +64,10 @@ class EsProduct extends \EasyShop\Entities\EsProduct implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'idProduct', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'sku', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brief', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'condition', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'searchKeyword', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'price', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isReal', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDelete', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isNew', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isHot', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isPromote', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'memberMemo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'clickcount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'catOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brandOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDraft', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'billingInfoId', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isCod', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startdate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'enddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'promoType', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isSoldOut', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isMeetup', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brand', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'cat', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'style');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'idProduct', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'sku', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brief', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'condition', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'searchKeyword', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'price', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isReal', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDelete', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isNew', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isHot', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isPromote', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'memberMemo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'clickcount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'catOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brandOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDraft', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'billingInfoId', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isCod', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startdate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'enddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'promoType', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isSoldOut', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isMeetup', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brand', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'cat', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'style', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startPromo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'endPromo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'originalPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'finalPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discountPercentage', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isFreeShipping', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'soldPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'defaultImage', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'images', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'maxAllowablePoint');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'idProduct', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'sku', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brief', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'condition', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'searchKeyword', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'price', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isReal', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDelete', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isNew', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isHot', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isPromote', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'memberMemo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'clickcount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'catOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brandOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDraft', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'billingInfoId', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isCod', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startdate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'enddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'promoType', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isSoldOut', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isMeetup', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brand', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'cat', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'style');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'idProduct', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'name', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'sku', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brief', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'description', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'condition', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'keywords', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'searchKeyword', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'price', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isReal', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDelete', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isNew', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isHot', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isPromote', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'memberMemo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'createddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'lastmodifieddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'clickcount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'catOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brandOtherName', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isDraft', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'billingInfoId', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isCod', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'slug', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discount', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startdate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'enddate', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'promoType', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isSoldOut', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isMeetup', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'brand', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'cat', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'member', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'style', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'startPromo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'endPromo', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'originalPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'finalPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'discountPercentage', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'isFreeShipping', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'soldPrice', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'defaultImage', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'images', '' . "\0" . 'EasyShop\\Entities\\EsProduct' . "\0" . 'maxAllowablePoint');
     }
 
     /**
@@ -912,6 +912,215 @@ class EsProduct extends \EasyShop\Entities\EsProduct implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStyle', array());
 
         return parent::getStyle();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStartPromo($isStart)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStartPromo', array($isStart));
+
+        return parent::setStartPromo($isStart);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStartPromo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStartPromo', array());
+
+        return parent::getStartPromo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEndPromo($isEnd)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEndPromo', array($isEnd));
+
+        return parent::setEndPromo($isEnd);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEndPromo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEndPromo', array());
+
+        return parent::getEndPromo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOriginalPrice($originalPrice)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOriginalPrice', array($originalPrice));
+
+        return parent::setOriginalPrice($originalPrice);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOriginalPrice()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOriginalPrice', array());
+
+        return parent::getOriginalPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFinalPrice($finalPrice)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFinalPrice', array($finalPrice));
+
+        return parent::setFinalPrice($finalPrice);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFinalPrice()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFinalPrice', array());
+
+        return parent::getFinalPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDiscountPercentage', array($discountPercentage));
+
+        return parent::setDiscountPercentage($discountPercentage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDiscountPercentage()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDiscountPercentage', array());
+
+        return parent::getDiscountPercentage();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsFreeShipping($isFreeShipping)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsFreeShipping', array($isFreeShipping));
+
+        return parent::setIsFreeShipping($isFreeShipping);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsFreeShipping()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsFreeShipping', array());
+
+        return parent::getIsFreeShipping();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSoldPrice($soldPrice)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSoldPrice', array($soldPrice));
+
+        return parent::setSoldPrice($soldPrice);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSoldPrice()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSoldPrice', array());
+
+        return parent::getSoldPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMaxAllowablePoint($maxAllowablePoint)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMaxAllowablePoint', array($maxAllowablePoint));
+
+        return parent::setMaxAllowablePoint($maxAllowablePoint);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMaxAllowablePoint()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMaxAllowablePoint', array());
+
+        return parent::getMaxAllowablePoint();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultImage($defaultImage)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDefaultImage', array($defaultImage));
+
+        return parent::setDefaultImage($defaultImage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDefaultImage()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDefaultImage', array());
+
+        return parent::getDefaultImage();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getImages()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getImages', array());
+
+        return parent::getImages();
     }
 
 }
