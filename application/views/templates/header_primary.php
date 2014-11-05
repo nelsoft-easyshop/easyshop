@@ -81,7 +81,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="<?=$user_details->profileImage;?>">
+                                                    <img src="/<?=$user_details->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user_details->getUsername()); ?>
@@ -116,7 +116,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
-                                                <img src="assets/images/img-login-icon.png" alt="login">
+                                                <img src="/assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
@@ -321,7 +321,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </form>
                                             </div>
                                             <div class="header-cart-container">
-                                                <a href="" class="header-cart-wrapper">
+                                                <a href="/cart" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart ui-form-control">
                                                         <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>
@@ -368,7 +368,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <?php if(isset($logged_in) && $logged_in): ?>
                                                 <div class="new-user-nav-dropdown">
                                                     <div class="login-profile-con">
-                                                        <img src="<?=$user_details->profileImage;?>">
+                                                        <img src="/<?=$user_details->profileImage;?>">
                                                     </div>
                                                     <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
                                                         <?php echo html_escape($user_details->getUsername()) ;?>
@@ -403,7 +403,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </div>
                                             <?php else: ?> 
                                                 <div class="header-link">
-                                                    <img src="assets/images/img-login-icon.png" alt="login">
+                                                    <img src="/assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
                                                     <a href="/register">create an account</a>
                                                 </div>
