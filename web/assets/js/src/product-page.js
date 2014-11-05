@@ -206,17 +206,16 @@
 
         $(document).on('click', '#send_registration', function() {
             $('#send_registration').html('Please wait');
-            var i_id = $(".id-class").attr("id");
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var isLoggedIn = ($(".es-data[name='is-logged-in']").val() == 'true');
+            var $productId = $("#productId").val();
+            var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
             var msg = 'Kindly login to qualify for this promo.';
             $.ajax({
                 url : '/promo/BuyAtZero/buyAtZeroRegistration',
                 type : 'post',
                 dataType : 'JSON',
                 data : {
-                    csrfname:csrftoken,
-                    id:i_id
+                    csrfname:$csrftoken,
+                    id:$productId
                 },
                 success : function(data){
                     $('#send_registration').html('Buy Now');
