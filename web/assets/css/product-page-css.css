@@ -23,7 +23,7 @@ body{
 
 .prod-detail-main{
     padding: 10px 10px;
-    margin-left: -36px;
+    margin-left: 0px;
     margin-top: 20px;
 }
 
@@ -812,6 +812,24 @@ body{
     font-size: 20px;
 }
 
+.share-facebook:hover{
+    background: #4a6eaa;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.share-twitter:hover{
+    background: #2fdef1;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.share-googleplus:hover{
+    background: #e36044;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
 @media only screen and (max-width: 1200px) {
 
     .div-detail-nav{
@@ -1339,6 +1357,7 @@ div.vertical {
 	text-transform: uppercase;
 	text-shadow: 0px 1px 2px rgba(0,0,0,0.3);
 	width: 100%;
+    transition: all 0.3s ease;
 }
 
 .prod-add-to-cart-btn:hover {
@@ -1355,6 +1374,79 @@ div.vertical {
 	border-left-color: #fd771e;
 	border-width: 0px 0px 2px 0px;
 	border-style: solid;
+}
+
+.disabled{
+   background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
+	background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
+	border-bottom-color: #606060;
+	opacity: 0.5;
+}
+
+.disabled:hover{
+	background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
+	background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
+	background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
+	border-bottom-color: #606060;
+}
+
+.btn-text{
+    -webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+    height: 58px;
+    width: 100%;
+    background: #ececec;
+    font-size: 18px;
+    font-weight: 900;
+    padding-top: 16px;
+    color: #575757;
+}
+
+.btn-contact-seller{
+    -webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+    height: 58px;
+    width: 100%;
+    background: #ffffff;
+    font-size: 20px;
+    font-weight: 900;
+    padding-top: 14px;
+    color: #575757;
+    border: solid #585a59 3px;
+    transition: all 0.3s ease;
+}
+
+.btn-buy-now{
+    padding-left: 35px !important;
+}
+
+.btn-contact-seller > .icon-message{
+    font-size: 17px;
+    margin-right: 5px;
+}
+
+.btn-contact-seller:hover{
+    color: #ff893a;
+    border: solid #ff893a 3px;
+}
+
+.btn-text > .fa {
+    margin-right: 5px;
+}
+
+.span-after-btn{
+    font-size: 12px;
+    text-align: center;
+    margin-top: 6px;
+    color: #575757;
+    display: block;
 }
 
 .prod-payment-img-container img {
