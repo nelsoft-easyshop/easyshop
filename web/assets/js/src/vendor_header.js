@@ -56,6 +56,12 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     $(document).on('click','#edit-profile-btn',function() {
         $('#display-banner-view').hide();
         $('#edit-banner-view').show();
+
+        var stateRegionSelect = $('.stateregionselect');
+        var citySelect = $('.cityselect');
+        stateRegionSelect.val(stateRegionSelect.attr('data-origval')).trigger("chosen:updated");
+        cityFilter(stateRegionSelect, citySelect);
+        citySelect.val(citySelect.attr('data-origval')).trigger("chosen:updated");
     });
 
     $(document).on('click','#banner-cancel-changes',function() {
