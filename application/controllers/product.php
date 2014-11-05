@@ -597,8 +597,28 @@ class product extends MY_Controller
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
 
             // get recommended products
+            $subCategoryIds = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->getChildCategoryRecursive($product->getCat()->getIdCat());
+            $popularProductId = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getPopularItem(12,0,0,$subCategoryIds); 
             $recommendProducts = [];
-            $recommendedView = $this->load->view('pages/product/productpage_view_recommend', $recommendProducts, TRUE); 
+            foreach ($popularProductId as $key) {
+                $productRecommend = $productManager->getProductDetails($key);
+                $productRecommend->ownerAvatar = $userManager->getUserImage($productRecommend->getMember()->getIdMember());
+                $recommendProducts[] = $productRecommend;
+                
+                if(!$productRecommend->getDefaultImage()){
+                    $productRecommend->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $productRecommend->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+                }
+                else{
+                    $productRecommend->directory = $productRecommend->getDefaultImage()->getDirectory();
+                    $productRecommend->imageFileName = $productRecommend->getDefaultImage()->getFilename();
+                }
+
+            }
+
+            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',['recommended'=> $recommendProducts],TRUE);
 
             $viewData = array(
                         'product' => $product,
@@ -617,6 +637,7 @@ class product extends MY_Controller
                         'userData' => $headerData['user'],
                         'bannerView' => $bannerView, 
                         'reviewDetailsView' => $reviewDetailsView,
+                        'recommendedView' => $recommendedView
 
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);

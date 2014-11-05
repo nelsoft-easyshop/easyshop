@@ -688,36 +688,52 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
-    public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
+    public function getPopularItem($perPage,$offset,$sellerId=0,$categoryId=array())
     {
-        $this->em =  $this->_em;
-        $qb = $this->em->createQueryBuilder();
-        $query = $qb->select('p.idProduct')
-                    ->from('EasyShop\Entities\EsProduct','p') 
-                    ->where('p.isDraft = 0')
-                    ->andWhere('p.isDelete = 0');
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id_product', 'id_product');
 
-        if(intval($sellerId) !== 0){
-            $query = $query->andWhere('p.member = :member')
-                            ->setParameter('member', $sellerId);
+        if(!empty($categoryId)){
+            $query = $em->createNativeQuery("
+                SELECT `id_product` from es_product 
+                WHERE cat_id IN (:categoryId)
+                AND is_delete = 0 AND is_draft = 0
+                ORDER BY clickcount desc
+                LIMIT :offset , :perpage
+            ", $rsm);
+            $query->setParameter('categoryId', $categoryId); 
+        }
+        elseif(intval($sellerId) !== 0){ 
+            $query = $em->createNativeQuery("
+                SELECT `id_product` from es_product 
+                WHERE member_id = :member_id
+                AND is_delete = 0 AND is_draft = 0
+                ORDER BY clickcount desc
+                LIMIT :offset , :perpage
+            ", $rsm);
+            $query->setParameter('member_id', $sellerId);
+        }
+        else{ 
+            $query = $em->createNativeQuery("
+                SELECT `id_product` from es_product 
+                WHERE member_id = :member_id
+                AND cat_id IN (:categoryId)
+                AND is_delete = 0 AND is_draft = 0
+                ORDER BY clickcount desc
+                LIMIT :offset , :perpage
+            ", $rsm);
+            $query->setParameter('categoryId', $categoryId); 
+            $query->setParameter('member_id', $sellerId); 
         }
 
-        if (!empty($categoryId)) { 
-            $query = $query->andWhere(
-                                    $qb->expr()->in('p.cat', $categoryId)
-                                );
-        }
+        $query->setParameter('offset', $offset);
+        $query->setParameter('perpage', $perPage);
+        $result = $query->execute();
+        $resultNeeded = array_map(function($value) { return $value['id_product']; }, $result);
 
-        $qbResult = $query->orderBy('p.clickcount', 'DESC')
-                            ->getQuery()
-                            ->setMaxResults($offset)
-                            ->setFirstResult($perPage);
- 
-        $result = $qbResult->getResult(); 
-        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
-        return $resultNeeded; 
-    }  
+        return $resultNeeded;
+    }
 
     /**
      * Delete products that do not have images inside admin folder

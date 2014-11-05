@@ -370,23 +370,25 @@ class SearchProduct
            
         foreach ($subCategory as $key => $value) { 
             $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
-            $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
-            $popularProduct = $EsProductRepository->getProductDetailsByIds($popularProductId,0,1);
-            foreach ($popularProduct as $keyProduct => $valueProduct) {
-                $productId = $valueProduct->getIdProduct();
-                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getDefaultImage($productId);
-                $valueProduct->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $valueProduct->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            $popularProductId = $EsProductRepository->getPopularItem(1,0,0,$subCategoryIds);
+            $popularProduct = array();
+            if(isset($popularProductId[0])){
+                $popularProduct = $EsProductRepository->find($popularProductId[0]);
+                foreach ($popularProduct as $keyProduct => $valueProduct) {
+                    $productId = $valueProduct->getIdProduct();
+                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                    ->getDefaultImage($productId);
+                    $valueProduct->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $valueProduct->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
-                if($productImage != NULL){
-                    $valueProduct->directory = $productImage->getDirectory();
-                    $valueProduct->imageFileName = $productImage->getFilename();
+                    if($productImage != NULL){
+                        $valueProduct->directory = $productImage->getDirectory();
+                        $valueProduct->imageFileName = $productImage->getFilename();
+                    }
                 }
-
             }
-            $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
-            $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
+            $subCategoryList[$value->getName()]['item'] = $popularProduct;
+            $subCategoryList[$value->getName()]['slug'] = $value->getSlug();
         }
 
         return $subCategoryList;
