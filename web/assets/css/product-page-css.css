@@ -719,6 +719,99 @@ body{
     height: auto;
     display: block;
 }
+
+.div-banner-container{
+    margin-top: 20px;
+    width: 100%;
+    min-height: 100px;
+    background: #fd6236;
+    border-radius: 4px;
+    color: #ffffff;
+    padding-top: 6px;
+}
+
+.time-container{
+    height: 70px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    padding: 0px 20px;
+}
+
+.circle-promo{
+    width: 74px;
+    height: 74px;
+    background: #fff;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #fd6236;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 17px;
+}
+
+.main-promo-title{
+    display: block;
+    margin-top: 5px;
+}
+
+.sub-promo-title{
+    display: block;
+    margin-top: -5px;
+}
+
+.div-inline{
+    display: inline-block;
+    margin: 5px;
+}
+
+.p-time-left{
+    font-weight: 900;
+    margin: 0px;
+}
+
+.td-time-num{
+    padding: 0px 10px;
+}
+
+.span-time-num{
+    font-weight: 900;
+    font-size: 20px;
+    padding: 0px;
+    display: block;
+}
+
+.span-time-label{
+    font-weight: normal;
+    font-size: 10px;
+    display: block;
+    margin-top: -5px;
+}
+
+.span-per-hour-rate{
+    font-weight: normal;
+}
+
+.small-countdown{
+    font-size: 10px;
+    margin-top: 5px;
+    display: block;
+}
+
+.p-time-left > a{
+    color: #fff;
+    text-decoration: underline;
+}
+
+.circle-promo > a{
+    color: #fd6236;
+}
+
+.p-time-left > .fa-info-circle{
+    font-size: 20px;
+}
+
 @media only screen and (max-width: 1200px) {
 
     .div-detail-nav{
@@ -964,7 +1057,7 @@ body{
 
 .product-main-top-content {
 	background-color: #fff;
-	padding-top: 30px;
+	padding-top: 0px;
 }
 
 .product-main-top-content .row {
@@ -1152,6 +1245,7 @@ div.vertical {
 	overflow: hidden;
 	padding: 0 !important;
 	width: 100%;
+    margin-bottom: 7px;
 }
 
 .prod-select-con select:focus {
