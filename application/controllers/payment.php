@@ -1436,15 +1436,15 @@ class Payment extends MY_Controller{
         // Send email to seller of each product - once per seller
         if($sellerFlag){
             $socialMediaLinks = $this->getSocialMediaLinks();
-            $sellerData['facebook'] = $socialMediaLinks["facebook"];
-            $sellerData['twitter'] = $socialMediaLinks["twitter"];             
             $sellerData = array(
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
                 'invoice_no' => $transactionData['invoice_no'],
                 'payment_msg_seller' => $transactionData['payment_msg_seller'],
-                'payment_method_name' => $transactionData['payment_method_name']
+                'payment_method_name' => $transactionData['payment_method_name'],
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"]
             );
 
             foreach($transactionData['seller'] as $seller_id => $seller){
