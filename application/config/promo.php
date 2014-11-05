@@ -141,7 +141,7 @@ $config = array(
     )
 );
 
-
+return $config['Promo'];
 /* End of file old_promo.php */
 /* Location: ./application/config/old_promo.php */
 

@@ -2,6 +2,8 @@
 
 namespace EasyShop\Promo;
 
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class CountDownSalePromo extends AbstractPromo
 {
 
@@ -10,14 +12,14 @@ class CountDownSalePromo extends AbstractPromo
      * @var float
      *
      */
-    private $maxHourDifferential = 49.5;
+    private static $maxHourDifferential = 49.5;
 
     /**
      * The percentage discount per hour
      * @var float
      *
      */
-    private $percentagePerHour = 2.00;
+    private static $percentagePerHour = 2.00;
     
     /**
      * Applies the count down sale calculations
@@ -55,6 +57,34 @@ class CountDownSalePromo extends AbstractPromo
         return $this->product;
     }
 
-    
-}
+    /**
+     * Calculates Promo Price
+     * @param $price
+     * @param $startDate
+     * @param $endDate
+     * @param $discount
+     * @return float
+     */
+    public static function getPrice($price, $startDate, $endDate, $discount)
+    {
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
 
+        if (($dateToday < $startDateTime) || ($endDateTime < $dateToday)) {
+            $diffHours = 0;
+        }
+        else if ($dateToday > $endDateTime) {
+            $diffHours = self::$maxHourDifferential;
+        }
+        else {
+            $diffHours = floor(($dateToday - $startDateTime) / 3600.0);
+        }
+
+        $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
+        $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
+
+        return $promoPrice;
+    }
+}

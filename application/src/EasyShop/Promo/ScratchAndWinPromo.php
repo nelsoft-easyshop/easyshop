@@ -36,6 +36,17 @@ class ScratchAndWinPromo extends AbstractPromo
         return $this->product;
     }
 
-
+    /**
+     * Calculates Promo Price
+     *
+     * @param $price
+     * @param $startDate
+     * @param $endDate
+     * @param $discount
+     * @return float
+     */
+    public static function getPrice($price, $startDate, $endDate, $discount)
+    {
+        return $price;
+    }
 }
-

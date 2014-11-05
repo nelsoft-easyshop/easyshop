@@ -37,6 +37,30 @@ class FixedDiscountPromo extends AbstractPromo
         return $this->product;
     }
 
-    
-}
+    /**
+     * Calculates Promo Price
+     *
+     * @param $price
+     * @param $startDate
+     * @param $endDate
+     * @param $discount
+     * @return float
+     */
+    public static function getPrice($price, $startDate, $endDate, $discount)
+    {
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        if (($dateToday < $startDateTime) ||
+            ($endDateTime < $startDateTime) ||
+            ($dateToday > $endDateTime)) {
+            $promoPrice = $price;
+        }
+        else {
+            $promoPrice = $price - ($price*$discount/100.0);
+        }
 
+        return $promoPrice;
+    }
+}
