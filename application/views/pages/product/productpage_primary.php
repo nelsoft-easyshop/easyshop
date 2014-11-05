@@ -133,25 +133,26 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7" align="center">
                         <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
-                            <p class="buy_btn_sub"> Verify your email </p>
+                            <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
-                            <p class="buy_btn_sub"> This is your own listing </p>
+                            <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
                         <?php else: ?>
-                            <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
-                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" >Contact Seller</a> <br/>
-                                <span class="font-10" width="100%">Item is listed as an ad only. *</span>
-                            <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
-                                <a href="javascript:void(0)" id='<?=$canPurchase?'send':'' ?>_registration' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
-                                <span class="font-10" width="100%">Click buy to qualify for the promo*</span>
-                            <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
-                                <p class="buy_btn_sub"> This product is for promo use only. </p>
-                            <?php else: ?>
-                                <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled">
-                                <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
-                            <?php endif; ?>
-                        <?php endif;?>
+                        <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
+                           <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
+                            <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
+                        <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
+                            <!--Changed button tag-->
+                            <input type="button" id="" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
+                            <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
+                        <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
+                            <p class="buy_btn_sub"> This product is for promo use only. </p>
+                        <?php else: ?>
+                            <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                            <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
+                        <?php endif; ?>
+                    <?php endif;?>
                     </div>
                 </div>
                 <div class="clear"></div>
