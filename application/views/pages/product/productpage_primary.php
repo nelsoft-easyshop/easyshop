@@ -31,16 +31,19 @@
                         <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
-                <div>
-                    <?=$bannerView; ?>
-                </div>
             </div>
         </div>
         <div class="prod-border-bttm"></div>
+        
+       
     </div>
+    
 </section>
 
 <section class="product-main-mid-content">
+ <?php
+            include("promo_banners.php");
+        ?>
     <div class="container">
         <div class="row pd-top-40">
                 
