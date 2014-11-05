@@ -167,7 +167,7 @@ class Home extends MY_Controller
         $socialMediaLinks = $this->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];      
-        $this->load->view('pages/undermaintenance.php', $viewData);
+        $this->load->view('pages/undermaintenance', $viewData);
     }
 
     /** 
