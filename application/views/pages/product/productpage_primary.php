@@ -41,9 +41,7 @@
 </section>
 
 <section class="product-main-mid-content">
- <?php
-            include("promo_banners.php");
-        ?>
+    <?=$bannerView; ?>
     <div class="container">
         <div class="row pd-top-40">
                 
