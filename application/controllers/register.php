@@ -190,13 +190,14 @@ class Register extends MY_Controller
     {
         $data['title'] = 'Easyshop.ph - Thank You';
         $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
+        $socialMediaLinks = $this->getSocialMediaLinks();        
         if(!($referrer)){
             $data['title'] = 'Page not found';
             $data = array_merge($data,$this->fill_header());
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/general_error');
 
-            $socialMediaLinks = $this->getSocialMediaLinks();
+
             $viewData['facebook'] = $socialMediaLinks["facebook"];
             $viewData['twitter'] = $socialMediaLinks["twitter"];
 
@@ -207,7 +208,6 @@ class Register extends MY_Controller
                 $data['content'] = 'You have successfully registered!';
                 $data['sub_content'] = 'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
 
-                $socialMediaLinks = $this->getSocialMediaLinks();
                 $data['facebook'] = $socialMediaLinks["facebook"];
                 $data['twitter'] = $socialMediaLinks["twitter"];    
                             
@@ -343,9 +343,7 @@ class Register extends MY_Controller
             'member_username' => $username,
             'email' => $email,
             'render_logo' => false,
-            'render_searchbar' => false,
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"],
+            'render_searchbar' => false
         );
         $data = array_merge($data, $this->fill_header());
 
