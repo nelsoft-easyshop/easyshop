@@ -874,7 +874,6 @@ class NewHomeWebService extends MY_Controller
      */
     public function setPositionParentSlider()
     {
-        print_r($this->input->get());
         $template = [];
         $image = [];
         $map = simplexml_load_file($this->file);        
@@ -883,16 +882,25 @@ class NewHomeWebService extends MY_Controller
         $nodename = (int)  $this->input->get("nodename");  
         $action = $this->input->get("action");        
         if($action == "up" && ($index !== $order)) {
-            $template = $map->sliderSection->slide[$order]->template;
-
-            foreach($map->sliderSection->slide[$order]->image as $images) {
-                $image[] = $images;
-            }
-            $this->xmlCmsService->removeXmlNode($this->file,$nodename,$order + 1);            
-            print_r($template);
-            print_r($image);            
+            $sliderOrder = $order;
+            $sliderIndex = $index;
+        }
+        else if($action == "down" && ($index + 1) != count($map->sliderSection->slide)){
+            $sliderOrder = $index;
+            $sliderIndex = $order;
         }
 
+        $template = $map->sliderSection->slide[$sliderOrder]->template;
+        foreach($map->sliderSection->slide[$sliderOrder]->image as $images) {
+                $image[] = $images;
+        }
+        $this->xmlCmsService->removeXmlNode($this->file,$nodename,$sliderOrder + 1); 
+        $string = $this->xmlCmsService->getString("sliderSection", $template, "", "", "");      
+        $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
+        $this->xmlCmsService->syncSliderValues($this->file,$image,$template,$sliderIndex,$sliderOrder);
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);            
     }
 
     /**
