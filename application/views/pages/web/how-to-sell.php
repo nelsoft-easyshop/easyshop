@@ -8,10 +8,10 @@
         <a href="mailto:info@easyshop.ph" class="mrginrght-20">
             <img src="/assets/images/img_email_lnk.png?ver=<?=ES_FILE_VERSION?>" alt="eMail" class="img-sc-email">
         </a>
-        <a href="<?php echo $facebook; ?>/easyshopphilippines" class="mrginrght-20">
+        <a href="<?php echo $facebook; ?>" class="mrginrght-20">
             <img src="/assets/images/img_fb_lnk.png?ver=<?=ES_FILE_VERSION?>" alt="Facebook - easyshopphilippines" class="img-sc-fb">
         </a> 
-        <a href="<?php echo $twitter; ?>/EasyShopPH">
+        <a href="<?php echo $twitter; ?>">
             <img src="/assets/images/img_twitter_lnk.png?ver=<?=ES_FILE_VERSION?>" alt="Twitter - EasyShopPH" class="img-sc-tw">
         </a>
     </div>

@@ -40,10 +40,10 @@
 
                         <h1>Follow Us</h1>
                         <div class="social-media-wrapper">
-                            <a href="<?php echo $facebook; ?>/EasyShopPhilippines">
+                            <a href="<?php echo $facebook; ?>">
                                 <img src="/assets/images/img-facebook-new.png" alt="easyshop facebook">
                             </a>
-                            <a href="<?php echo $twitter; ?>/EasyShopPH">
+                            <a href="<?php echo $twitter; ?>">
                                 <img src="/assets/images/img-twitter-new.png" alt="easyshop twitter">
                             </a>
                             <div class="clear"></div>

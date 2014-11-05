@@ -171,12 +171,12 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <a href="{facebook}/EasyShopPhilippines">
+                                    <a href="{facebook}">
                                         <img src="facebook.png" style="float: right; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{twitter}/EasyShopPH">
+                                    <a href="{twitter}">
                                         <img src="twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>

@@ -49,7 +49,7 @@
             <ul>
                 <li>
                     Like us on 
-                    <a href="<?php echo $facebook; ?>/easyshopphilippines" class="blue">Facebook</a>
+                    <a href="<?php echo $facebook; ?>" class="blue">Facebook</a>
                 </li>
                 <li>Upload three items at <a href="<?=base_url()?>" class="blue">EasyShop.ph</a></li>
                 <li>Leave your EasyShop.ph username in the comment box</li>
