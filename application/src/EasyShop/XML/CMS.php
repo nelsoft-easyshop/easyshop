@@ -720,8 +720,9 @@ $string = '<typeNode>
     
     /**
      * Returns the home page data
-     *
      * 
+     * @param boolean $isCategoryNavigationOnly
+     * @return mixed
      */
     public function getHomeData($isCategoryNavigationOnly = false)
     {
@@ -770,7 +771,7 @@ $string = '<typeNode>
         }
 
         foreach ($xmlContent['categoryNavigation']['otherCategories']['categorySlug'] as $key => $category) {
-        $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
+            $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
@@ -864,6 +865,7 @@ $string = '<typeNode>
         return $homePageData;
     }
     
+
     /**
      * Returns the mobile home page data
      * @return array
@@ -988,6 +990,7 @@ $string = '<typeNode>
 
         return $display;
     }
+
 }
 
 

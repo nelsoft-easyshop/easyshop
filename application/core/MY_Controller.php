@@ -108,7 +108,42 @@ class MY_Controller extends CI_Controller
             return $userDetails;
     }
     
-    function check_cookie(){
+    
+    /**
+     * Generates the category navigation
+     * 
+     * @return mixed
+     */
+    public function fillCategoryNavigation()
+    {
+        return $this->serviceContainer['xml_cms']->getHomeData(true);
+    }
+
+    /**
+     * Generates the user data for the header
+     * 
+     * @return mixed
+     */
+    public function fillUserDetails()
+    {
+            $em = $this->serviceContainer["entity_manager"];
+            $memberId = $this->session->userdata('member_id');
+            $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                                            ->find($memberId);
+            $userDetails->profileImage = ($userDetails->getImgurl() == "") 
+                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            return $userDetails;
+    }
+    
+    
+    /**
+     * Authenticates the user based on the remember-me cookie
+     *
+     * @return boolean
+     */
+    public function check_cookie()
+    {
         $this->load->model("cart_model");
         $this->load->model("user_model");
         $cookieval = get_cookie('es_usr');
@@ -135,10 +170,12 @@ class MY_Controller extends CI_Controller
     }
     
 
-    /*
+    /**
      *  Displays navigation categories
+     *
      */
-    function getcat(){
+    public function getcat()
+    {
         $this->load->model("product_model");
         $rows = $this->product_model->getCategoriesNavigation();
         $data = array();
@@ -212,9 +249,9 @@ class MY_Controller extends CI_Controller
             if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
                  continue;               
             }
-
-            else
+            else{
                 $evaluate .= $value;
+            }
         }
         $this->load->model("user_model");
         $password = $this->user_model->getAdminUser($postedData["userid"]);
@@ -223,7 +260,7 @@ class MY_Controller extends CI_Controller
 
         if(sha1($hash) != $postedHash){
             $error = json_encode("error");
-                    exit($error);
+            exit($error);
         }   
     }
 
