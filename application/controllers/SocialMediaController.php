@@ -217,6 +217,7 @@ class SocialMediaController extends MY_Controller
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
                     ->findOneBy(['email' => $this->input->post('email')]);
+        $socialMediaLinks = $this->getSocialMediaLinks();
         if ($member) {
             $result = true;
             $this->load->library('parser');
@@ -230,7 +231,10 @@ class SocialMediaController extends MY_Controller
                     $this->input->post('oauthProvider')
                 ),
                 'site_url' => site_url('SocialMediaController/mergeAccount'),
-                'error_in' => $this->input->post('error')
+                'error_in' => $this->input->post('error'),
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"]
+
             );
             $message = $this->parser->parse('emails/merge-account', $parseData, true);
             $this->emailNotification->setRecipient($member->getEmail());
