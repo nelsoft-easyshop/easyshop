@@ -56,6 +56,52 @@ class CMS
     }
 
     /**
+     *  First part of re-ordering the slide parent node
+     *  @param string $image
+     *  @param string $template
+     *  @param int $index
+     *  @param int $order
+     */
+    public function syncSliderValues($file,$image, $template, $index, $order)
+    {
+        $map = simplexml_load_file($file);
+
+        foreach($image as $key => $insertImages) {
+           
+            if(count($image) == 1) {
+                $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
+                $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+                $map->asXML($file);                
+            }
+            else {
+                if($key == 0 ) {
+                    $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
+                    $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+                    $map->asXML($file);                                        
+                }
+                else {
+                    $this->addStoredValuesForSliderNode($file, $insertImages->path, $insertImages->target, $index);
+                } 
+            }
+
+        }        
+    }
+
+    /**
+     *  Second part of re-ordering the slide parent node, needed to separate this method for the reason it produces
+     *  conflicts for simple setting of the values in reOrderParentSlider()
+     *
+     *  @param string $path
+     *  @param string $target
+     *  @param int $index
+     */
+    public function addStoredValuesForSliderNode($file, $path, $target, $index)
+    {
+        $string = $this->getString("subSliderSection", $path, "", "", $target);      
+        $this->addXmlFormatted($file,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n");        
+    }        
+
+    /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
      *
      *  @param string $nodeName
@@ -66,7 +112,7 @@ class CMS
      *
      *  @return string
      */
-    public function getString($nodeName, $value, $type, $coordinate, $target) 
+    public function getString($nodeName, $value = null, $type = null, $coordinate = null, $target = null) 
     {
         if($nodeName == "addBrands") {
              $string = '
@@ -137,6 +183,11 @@ class CMS
 
         </slide>'; 
         }
+        if($nodeName == "partialSliderSection") {
+    $string = '<slide>
+            <template>'.$value.'</template>
+        </slide>'; 
+        }        
         if($nodeName == "categorySubSlug") {
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
