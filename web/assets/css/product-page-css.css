@@ -1233,12 +1233,12 @@ div.vertical {
 }
 
 .discounted-price {
-	color: #989898;
+	color: #ff6036;
 	margin-right: 5%;
 }
 
 .base-price {
-	color: #ff6036;
+	color: #989898;
 }
 
 .prod-dc-badge {
