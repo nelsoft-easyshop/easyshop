@@ -659,8 +659,9 @@ class product extends MY_Controller
                         'bannerView' => $bannerView, 
                         'reviewDetailsView' => $reviewDetailsView,
                         'recommendedView' => $recommendedView,
-                        'noMoreSelection' => $noMoreSelection,
-                        'totallyFreeShipping' => $totallyFreeShipping,
+                        'noMoreSelection' => $noMoreSelection, 
+                        'totallyFreeShipping' => $totallyFreeShipping, 
+                        'url' => '/item/' . $product->getSlug() 
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);
         }

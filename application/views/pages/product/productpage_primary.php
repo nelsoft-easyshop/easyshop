@@ -141,23 +141,24 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7" align="center">
                         <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
-                            <p class="buy_btn_sub"> Verify your email </p>
+                            <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
-                            <p class="buy_btn_sub"> This is your own listing </p>
+                            <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
                         <?php else: ?>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
-                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-14" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" >Contact Seller</a> <br/>
-                                <span class="font-10" width="100%">Item is listed as an ad only. *</span>
+                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
+                                <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                             <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
-                                <a href="javascript:void(0)" id='<?=$canPurchase?'send':'' ?>_registration' class="fm1 orange_btn3 disabled font-14">Buy Now</a> <br/>
-                                <span class="font-10" width="100%">Click buy to qualify for the promo*</span>
+                                <!--Changed button tag-->
+                                <input type="button" id='<?=$canPurchase?'send':'' ?>_registration' value="Buy Now" class="prod-add-to-cart-btn btn-buy-now" >
+                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>
-                                <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled">
-                                <span class="font-10" width="100%">Delivers upon seller confirmation*</span>
+                                <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                                <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                             <?php endif; ?>
                         <?php endif;?>
                     </div>
@@ -200,19 +201,20 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
                         <p class="attr-title">Share with:</p>
-                        <a href="">
-                            <div class="ui-form-control share-facebook">
-                                <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
-                                <span>Facebook</span>
-                            </div>
-                        </a>
-                        <a href="">
+                        <div id="fb-root"></div>
+                        <div class="fb-share-button" data-href="<?=$url?>" data-width="150">
+                        </div>
+                        <a class="twitter-share-button"
+                           data-url="<?=$url?>"
+                           data-related="twitterdev"
+                           data-size="large"
+                           data-count="none">
                             <div class="ui-form-control share-twitter">
                                 <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
                             </div>
                         </a>
-                        <a href="">
+                        <a href="https://plus.google.com/share?url=<?=$url?>">
                             <div class="ui-form-control share-googleplus">
                                 <img src="/assets/images/img-googleplus-prod.png" alt="Google+"> 
                                 <span>Google+</span>
@@ -241,6 +243,19 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=711804058875446&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];
+        if(d.getElementById(id)){return}js=d.createElement(s);
+        js.id=id;js.src="https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+</script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
