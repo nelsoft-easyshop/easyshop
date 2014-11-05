@@ -41,7 +41,7 @@
                 <div class="clear"></div>
                 <a href="#">
                     <p class="p-rec-product-name">
-                        <?=html_escape($value->getName())?>
+                        <?=htmlspecialchars($value->getName(),ENT_QUOTES,'ISO-8859-1');?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">

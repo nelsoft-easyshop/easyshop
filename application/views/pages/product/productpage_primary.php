@@ -24,7 +24,7 @@
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1 id="<?=$product->getIdProduct();?>"> 
-                    <span id="pname"> <?=html_escape($product->getName())?> </span>
+                    <span id="pname"> <?=htmlspecialchars($product->getName(),ENT_QUOTES,'ISO-8859-1');?> </span>
                 </h1>
                 <div>
                     By:
@@ -106,20 +106,24 @@
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
-                        <div class="prod-select-con ui-form-control shipment-select">
-                            <select class="shiploc" id="shipment_locations">
-                                <option class="default" selected="" value="0">Select Location</option>
-                                <?php foreach($shiploc['area'] as $island=>$loc):?>
-                                    <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
-                                    <?php foreach($loc as $region=>$subloc):?>
-                                        <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
-                                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                            <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                            <?php if(!$totallyFreeShipping): ?>
+                                <div class="prod-select-con ui-form-control shipment-select">
+                                    <select class="shiploc" id="shipment_locations">
+                                        <option class="default" selected="" value="0">Select Location</option>
+                                        <?php foreach($shiploc['area'] as $island=>$loc):?>
+                                            <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
+                                            <?php foreach($loc as $region=>$subloc):?>
+                                                <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
+                                                <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                    <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                                                <?php endforeach;?>
+                                            <?php endforeach;?>
                                         <?php endforeach;?>
-                                    <?php endforeach;?>
-                                <?php endforeach;?>
-                            </select>
-                        </div>
+                                    </select>
+                                </div>
+                            <?php else: ?>
+                                <option class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</option>
+                            <?php endif; ?>
                         <div class="shipping_fee"></div>
                     </div>
                     <div class="clear"></div>
@@ -228,6 +232,7 @@
     <input id='productId' type='hidden' value='<?=$product->getIdProduct();?>'>
     <input id='review-count' type='hidden' value='<?=count($productReview);?>'>
     <input id="noMoreSelection" type="hidden" value="<?=$noMoreSelection;?>">
+    <input id="totallyFreeShipping" type="hidden" value="<?=$totallyFreeShipping;?>">
 </div>
 
 <!-- display view for product details and review -->

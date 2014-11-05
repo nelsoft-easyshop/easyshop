@@ -471,6 +471,7 @@ class product extends MY_Controller
      */
     public function newItem($itemSlug = '')
     {
+        header ('Content-type: text/html; charset=ISO-8859-1');
         // Load Header
         $headerData = $this->fill_header(); 
         $headerData['title'] = " | Easyshop.ph";
@@ -497,7 +498,7 @@ class product extends MY_Controller
             $categoryId = $productEntity->getCat()->getIdCat();
 
             // get product details
-            $product = $productManager->getProductDetails($productId);
+            $product = $productManager->getProductDetails($productEntity);
 
             // generate bread crumbs category of product
             $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
@@ -550,6 +551,16 @@ class product extends MY_Controller
                 else{
                     $finalCombinationQuantity[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
                 }
+            }
+
+            $totallyFreeShipping = FALSE;
+            // check if totally free shipping
+            if(count($finalCombinationQuantity) === 1 
+            && count(array_values($finalCombinationQuantity)[0]['location']) === 1 
+            && intval(array_values($finalCombinationQuantity)[0]['location'][0]['location_id']) === 1 
+            && floatval(array_values($finalCombinationQuantity)[0]['location'][0]['price']) === floatval(0))
+            {
+                $totallyFreeShipping = TRUE; 
             }
 
             // check if combination available
@@ -649,7 +660,7 @@ class product extends MY_Controller
                         'reviewDetailsView' => $reviewDetailsView,
                         'recommendedView' => $recommendedView,
                         'noMoreSelection' => $noMoreSelection,
-
+                        'totallyFreeShipping' => $totallyFreeShipping,
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);
         }

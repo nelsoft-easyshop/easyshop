@@ -116,7 +116,7 @@ class ProductManager
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping($totalShippingFee === 0);        
+        $product->setIsFreeShipping(floatval($totalShippingFee) === floatval(0));
         $product->setIsNew($this->isProductNew($product));
         $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
                                            ->getDefaultImage($product->getIdProduct()));

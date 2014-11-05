@@ -97,11 +97,15 @@
                     };
                     $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
                 }
-
-                $.each($combinationLocation,function(i, val){
-                    var $text = $("#locationID_"+val.location_id).data('text');
-                    $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
-                });
+                if($("#totallyFreeShipping").val() != ""){
+                    $("#control-quantity").append('<option value="0">FREE SHIPPING NATIONWIDE</option>');
+                }
+                else{
+                    $.each($combinationLocation,function(i, val){
+                        var $text = $("#locationID_"+val.location_id).data('text');
+                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
+                    });
+                }
 
                 $('#shipment_locations > option:disabled').hide();
                 
