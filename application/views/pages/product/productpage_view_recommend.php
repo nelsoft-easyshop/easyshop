@@ -17,31 +17,40 @@
         </div>
          
         <div id="recommended" class="owl-carousel owl-theme">
-            <?php
-                for($i=0; $i<=3; $i++){
-            ?>
+            <?php foreach ($recommended as $key => $value): ?>
             <div class="item">
                 <center>
                     <a href="#">
                         <div class="div-rec-product-image">
                             <center>
                                 <span class="span-me">
-                                    <img src="/assets/images/img_easy_treat_v1.jpg" class="img-rec-product">
+                                    <img src="/<?=$value->directory.'categoryview/'.$value->imageFileName; ?>" class="img-rec-product">
                                 </span>
                             </center>
                         </div>
                     </a>
                 </center>
+                <?php if($value->getIsNew()): ?>
                 <span class="span-circle-new">NEW</span>
-                <span class="span-circle-discount">100%</span>
+                <?php endif; ?>
+
+                <?php if(floatval($value->getDiscountPercentage()) > 0):?>
+                <span class="span-circle-discount"><?=$value->getDiscountPercentage();?>%</span>
+                <?php endif;?>
+
                 <div class="clear"></div>
                 <a href="#">
                     <p class="p-rec-product-name">
-                        Easy Clothes
+                        <?=html_escape($value->getName())?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">
-                    <s>P200.00</s> <span>P150.00</span>
+                    <?php if(floatval($value->getDiscountPercentage()) > 0):?>
+                        <s>P <?=number_format($value->getOriginalPrice(),2,'.',','); ?> </s>
+                        <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
+                    <?php else: ?>
+                        <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
+                    <?php endif; ?>
                 </p>
                 <table width="100%">
                     <tbody>
@@ -56,7 +65,7 @@
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                                    <img src="/assets/images/img_easy_treat_v1.jpg" class="store-logo">
+                                                    <img src="<?=$value->ownerAvatar; ?>" class="store-logo">
                                             </div>
                                         </div>
                                     </span>
@@ -66,10 +75,7 @@
                     </tbody>
                 </table>
             </div>
-            
-            <?php
-                }
-            ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

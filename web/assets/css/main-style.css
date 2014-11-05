@@ -1,5 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,700,300);
 @font-face
 {
 font-family: Helvetica;
@@ -24,8 +24,9 @@ font-weight: 600;
 
 /*** global style ***/
 html, body{
-    font-family: 'Helvetica', Arial, Calibri;
+    font-family: 'Helvetica', 'Open Sans', Arial, Calibri;
     background: #ebedf0;
+    letter-spacing: 0.5px;
 }
 
 section {
@@ -205,8 +206,8 @@ textarea {
     display: table;
     color: #fff;
     font-size: 12px;
-    height: 34px;
-    line-height: 34px;
+    height: 33px;
+    line-height: 33px;
     margin: 0 auto;
     max-width: 200px;
     min-width: 125px;
@@ -217,8 +218,9 @@ textarea {
 }
 
 .vendor-login-con.vendor-out-con {
-    max-width: 230px;
-   width: 100%; 
+    max-width: 245px;
+    margin-top: 1px;
+    width: 100%; 
 }
 
 .vendor-out-con img {
@@ -852,7 +854,7 @@ textarea {
 .search-container select {
     border-radius: 4px 0 0 4px;
     font-size: 0.75em;
-    height: 33px;
+    height: 34px;
     line-height: 27px;
     margin-right: -5px;
     padding: 7px 12px;
@@ -863,8 +865,8 @@ textarea {
 .sticky-nav li:nth-child(3) input,
 .search-container input {
     border-radius: 0 4px 4px 0;
-    font-size: 12px;
-    height: 33px;
+    font-size: 14px;
+    height: 34px;
     padding: 4px 12px;
     vertical-align: middle;
     width: 328px;
@@ -902,8 +904,8 @@ textarea {
     display: inline-block;
     color: #868487;
     font-size: 0.75em;
-    height: 33px;
-    line-height: 33px;
+    height: 34px;
+    line-height: 34px;
     margin-right: -5px;
     padding: 0px 12px !important;
     vertical-align: middle;
@@ -918,8 +920,8 @@ textarea {
 .header-cart-icon-con {
     background-color: #ff893b;
     color: #fff;
-    height: 33px;
-    line-height: 33px !important;
+    height: 34px;
+    line-height: 34px !important;
     text-align: center;
     top: 0px !important;
     vertical-align: middle;
@@ -1245,7 +1247,7 @@ td.td-view.p-view2.color-default{
 }
 
 .input-filter-price{
-    width: 108px;
+    width: 105px;
     padding: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -1721,7 +1723,7 @@ td.td-view.p-view2.color-default{
 .footer-primary p,
 .footer-primary a {
     color: #9b9b9b;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .footer-primary a:hover {

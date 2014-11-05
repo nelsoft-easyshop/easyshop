@@ -47,7 +47,7 @@ class MY_Session extends CI_Session
 		// Does the md5 hash match?  This is to prevent manipulation of session data in userspace
 		if ($hash !==  md5($session.$this->encryption_key))
 		{
-		  log_message('error', 'The session cookie data did not match what was expected. This could be a possible hacking attempt.');
+		  #log_message('error', 'The session cookie data did not match what was expected. This could be a possible hacking attempt.');
 		  $this->sess_destroy();
 		  return FALSE;
 		}

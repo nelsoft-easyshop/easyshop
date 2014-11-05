@@ -40,7 +40,7 @@
                 </tr>
                 <?php endif; ?>
 
-                <?php echo form_open('/' . html_escape($member->getUsername()) . '/' . $targetPage); ?>
+                <?php echo form_open('/' . html_escape($member->getSlug()) . '/' . $targetPage); ?>
                 <tr id="storeNameRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
@@ -86,9 +86,6 @@
                             <?php endforeach; ?>
                         </select>
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
-                            <?php foreach($cities as $key => $value): ?>
-                                <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $city? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
-                            <?php endforeach; ?>
                         </select>
                     </td>
                 </tr>

@@ -460,7 +460,7 @@ class PaymentService
      */
     public function computeFeeAndParseData($itemList, $address)
     {
-        $city = ($address > 0 ? $address :  0);
+        $city = ($address > 0 ? $address : 0);
         $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
         $majorIsland = $region->getParent();
 
@@ -539,8 +539,7 @@ class PaymentService
         $totalPointsAllowable = "0.00";
 
         foreach ($itemArray as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->find(intval($value['id']));
+            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')->find(intval($value['id']));
             $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
         }
 

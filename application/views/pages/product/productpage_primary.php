@@ -225,10 +225,11 @@
     <input id='review-count' type='hidden' value='<?=count($productReview);?>'>
 </div>
 
+<!-- display view for product details and review -->
 <?=$reviewDetailsView;?>
-<?php 
-    include("productpage_view_recommend.php");
-?>
+
+<!-- display recommended products view -->
+<?=$recommendedView;?>
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>

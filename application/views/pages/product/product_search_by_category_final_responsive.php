@@ -79,9 +79,9 @@
                         <h2 class="margin-0">Categories:</h2>    
                         <div class="jcarousel category_carousel cc2_wrapper">
                             <div class="cc2">
-                                <?php foreach ($subCategoryList as $subCatKey => $subCatValue): 
-                                    foreach ($subCatValue['item'] as $key => $value) {
-                                        $productEntity = $value;
+                                <?php foreach ($subCategoryList as $subCatKey => $subCatValue):
+                                    if(!empty($subCatValue['item'])){
+                                        $productEntity = $subCatValue['item'];
                                         $popularProductName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
                                         $popularProductSlug = html_escape($productEntity->getSlug());
                                         $popularProductImage = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
@@ -92,7 +92,7 @@
                                     <a class="cc2_title color-gray" href="/category/<?=$subCatValue['slug'];?>">
                                         <span><?php echo html_escape($subCatKey);?></span>
                                     </a>
-                                    <?php if(count($subCatValue['item'])>0): ?>
+                                    <?php if(!empty($subCatValue['item'])): ?>
                                     <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="/<?=$popularProductImage; ?>"></span></span><br />
                                     <div class="cc2_prod_name">
                                         <a href="/item/<?=$popularProductSlug; ?>" title="<?PHP echo $popularProductName; ?>">
