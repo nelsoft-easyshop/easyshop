@@ -1,3 +1,4 @@
+
 <?php if($product->getStartPromo()): ?>
 <div class="container">
     <div class="row">
@@ -16,4 +17,4 @@
         </div>
     </div>
 </div>
-<?php endif; ?>
+<?php endif; ?> 

@@ -322,7 +322,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </form>
                                             </div>
                                             <div class="header-cart-container">
-                                                <a href="" class="header-cart-wrapper">
+                                                <a href="/cart" class="header-cart-wrapper">
                                                     <span class="header-cart-items-con sticky-cart ui-form-control">
                                                         <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                                                     </span>

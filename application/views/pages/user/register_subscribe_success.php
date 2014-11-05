@@ -62,7 +62,7 @@
                         <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=http://easyshop.ph&amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png&amp;p[title]=EasyShop.ph" target="_blank">
                             <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
                         </a>
-                        <a class="img_sc_2" href='https://twitter.com/EasyShopPH' target="_blank">
+                        <a class="img_sc_2" href='<?php echo $twitter; ?>' target="_blank">
                             <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
                         </a>
                     </p>

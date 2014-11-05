@@ -194,7 +194,12 @@ class product extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/all_categories_view', $data); 
-        $this->load->view('templates/footer_full');     
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);     
     }
 
     /**
@@ -317,15 +322,6 @@ class product extends MY_Controller
             $totallyFreeShipping = FALSE;
             if($freeShippingCount === count($shippingDetails)){
                 $totallyFreeShipping = TRUE;
-            }
-
-            // check if totally free shipping
-            if(count($finalCombinationQuantity) === 1 
-            && count(array_values($finalCombinationQuantity)[0]['location']) === 1 
-            && intval(array_values($finalCombinationQuantity)[0]['location'][0]['location_id']) === 1 
-            && floatval(array_values($finalCombinationQuantity)[0]['location'][0]['price']) === floatval(0))
-            {
-                $totallyFreeShipping = TRUE; 
             }
 
             // check if combination available
@@ -500,8 +496,13 @@ class product extends MY_Controller
     {
         $data = $this->fill_header();
         $data['title'] = 'Post and Win | Easyshop.ph';
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialData['facebook'] = $socialMediaLinks["facebook"];
+        $socialData['twitter'] = $socialMediaLinks["twitter"];
+
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/post_and_win_view');
+        $this->load->view('pages/promo/post_and_win_view', $socialData);
         $this->load->view('templates/footer');
     }
 
