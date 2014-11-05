@@ -65,7 +65,7 @@
                 <?php else: ?>
                 <div class="prod-price-container">
                     <span class="discounted-price" data-baseprice="<?=number_format($product->getOriginalPrice(),2,'.',','); ?>"> 
-                        P <?=number_format($product->getFinalPrice(),2,'.',',');?> 
+                        P<?=number_format($product->getFinalPrice(),2,'.',',');?> 
                     </span>
                 </div>
                 <?php endif;?>

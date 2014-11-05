@@ -306,7 +306,19 @@ class product extends MY_Controller
                 }
             }
 
+            // check if totally free shipping
+            $freeShippingCount = 0;
+            foreach ($shippingDetails as $key => $value) {
+                if(intval($value['location_id']) === 1 && floatval($value['price']) === floatval(0)){
+                    $freeShippingCount++;
+                }
+            }
+
             $totallyFreeShipping = FALSE;
+            if($freeShippingCount === count($shippingDetails)){
+                $totallyFreeShipping = TRUE;
+            }
+
             // check if totally free shipping
             if(count($finalCombinationQuantity) === 1 
             && count(array_values($finalCombinationQuantity)[0]['location']) === 1 
