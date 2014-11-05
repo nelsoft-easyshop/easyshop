@@ -80,4 +80,3 @@
     </div>
 </div>
 
-<script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
