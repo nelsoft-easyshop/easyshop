@@ -866,9 +866,36 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }    
-    }         
+    }    
 
-   /**
+    /**
+     *  Sets position of sliderSection->slide node
+     *  @return JSON
+     */
+    public function setPositionParentSlider()
+    {
+        print_r($this->input->get());
+        $template = [];
+        $image = [];
+        $map = simplexml_load_file($this->file);        
+        $order = (int) $this->input->get("order");  
+        $index = (int)  $this->input->get("index");  
+        $nodename = (int)  $this->input->get("nodename");  
+        $action = $this->input->get("action");        
+        if($action == "up" && ($index !== $order)) {
+            $template = $map->sliderSection->slide[$order]->template;
+
+            foreach($map->sliderSection->slide[$order]->image as $images) {
+                $image[] = $images;
+            }
+            $this->xmlCmsService->removeXmlNode($this->file,$nodename,$order + 1);            
+            print_r($template);
+            print_r($image);            
+        }
+
+    }
+
+    /**
      *  Sets position of slide nodes under sliderSection parent node
      *  @return JSON
      */

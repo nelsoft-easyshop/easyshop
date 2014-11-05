@@ -286,7 +286,7 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index, $subIndex) 
+    public function removeXmlNode($file,$nodeName,$index, $subIndex = null) 
     {
 
         if($nodeName == "mainSliderSection"){
