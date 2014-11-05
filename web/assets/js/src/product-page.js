@@ -321,5 +321,11 @@
             })
         });
 
+        $(function(){
+            $('.jqzoom').jqzoom({
+                    zoomType: 'standard',
+            });
+        });
+
     })(jQuery);
 

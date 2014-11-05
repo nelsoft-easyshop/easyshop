@@ -1312,6 +1312,11 @@ div.vertical {
     width: 111%;
 }
 
+.txt-shipment + .default {
+    font-size: 12px;
+    line-height: 35px;
+}
+
 .prod-quantity-container {
 	padding-top: 12px;
 }

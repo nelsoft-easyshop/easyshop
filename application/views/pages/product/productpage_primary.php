@@ -122,7 +122,7 @@
                                     </select>
                                 </div>
                             <?php else: ?>
-                                <option class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</option>
+                                <span class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</span>
                             <?php endif; ?>
                         <div class="shipping_fee"></div>
                     </div>
@@ -190,6 +190,11 @@
                             <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
                         <?php endif; ?>
 
+                        <img src="/assets/images/img-mastercard-colored.png" alt="Mastercard">
+                        <img src="/assets/images/img-visa-colored.png" alt="Visa">
+                        <img src="/assets/images/img-dragonpay-colored.png" alt="Dragon Pay">
+                        <img src="/assets/images/img-paypal-colored.png" alt="Paypal">
+                        <img src="/assets/images/img-cod-colored.png" alt="Cash on Delivery">
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -201,9 +206,9 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
                         <p class="attr-title">Share with:</p>
-                        <div id="fb-root"></div>
-                        <div class="fb-share-button" data-href="<?=$url?>" data-width="150">
-                        </div>
+                            <div id="fb-root"></div>
+                            <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
+                        
                         <a class="twitter-share-button"
                            data-url="<?=$url?>"
                            data-related="twitterdev"
