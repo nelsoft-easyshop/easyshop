@@ -35,17 +35,16 @@
 
     $( "#regionSelect" ).change(function() {
         var regionValue = $( "#regionSelect" ).val();
-
         var list = "<option value='' selected>Select City</option>";
         $("#citySelect").empty();
 
         if(regionValue != ''){
             var list = "<option value=''>Select City</option>";
-            var data = window.cities[regionValue];
+            var data = window.cities[parseInt(regionValue)];
             var city = $("#postCity" ).val();
 
-            for (var i=0; i < data.length; i++) {
-                list += "<option value='" + data[i] + "' " + (data[i] == city.substring(0, city.length - 2)? "selected>" : ">") + data[i] + "</option>";
+            for(var key in data){
+                list += "<option value='" + data[key] + "' " + (data[key] == city.substring(0, city.length - 2) ? "selected>" : ">") + data[key] + "</option>";
             }
         }
 

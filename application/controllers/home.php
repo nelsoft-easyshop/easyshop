@@ -613,8 +613,6 @@ class Home extends MY_Controller
      */
     private function aboutUser($sellerslug)
     {
-        $userDetails = $this->userDetails($sellerslug,'about');
-        
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
@@ -696,7 +694,7 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        $userDetails = $this->doUpdateUserDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']););
+        $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
         $this->load->view('templates/header_vendor', $bannerData);
@@ -854,10 +852,11 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);        
-        $userDetails = $this->userDetails($sellerslug,'contact');
+        
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
+        $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
         $this->load->view('templates/header_vendor',$bannerData);
@@ -1130,7 +1129,19 @@ class Home extends MY_Controller
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
 
-      
+        if($regionList === NULL || $cityPerRegionList === NULL){
+            $locationData = $EsLocationLookupRepository->getLocationLookup();
+            if($regionList === NULL){
+                $regionList = $locationData['stateRegionLookup'];
+            }
+            if($cityPerRegionList === NULL){
+                $regionList = $locationData['cityLookup'];
+            }
+        }
+        
+        // Check if blank string or string submitted can be converted to an int and if that int is a valid region id
+        $isRegionValid = $this->input->post('regionSelect') === '' || (intval($this->input->post('regionSelect')) !== 0 && array_key_exists(intval($this->input->post('regionSelect')), $regionList));
+
         if($this->input->post('storeName') !== false || $this->input->post('contactNumber') !== false || $this->input->post('streetAddress') !== false || 
             $this->input->post('website') !== false || $this->input->post('citySelect') !== false || $this->input->post('regionSelect') !== false){
 
@@ -1157,12 +1168,15 @@ class Home extends MY_Controller
             // Do not allow whitespaces as streetAddress
             $streetAddressTrimmed = trim($this->input->post('streetAddress'));
 
-            $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') 
-                                || ($this->input->post('regionSelect') === '' && $this->input->post('citySelect') === '' && $streetAddressTrimmed === ''));
-
+            $isAddressValid = (
+                ($isRegionValid && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') || 
+                ($this->input->post('regionSelect') === '' && $this->input->post('citySelect') === '' && $streetAddressTrimmed === '')
+            );
+            
             if($form->isValid() && $isAddressValid && $data['isEditable']){
                 $formData = $form->getData();
-
+                $formData['region'] = $formData['region'] === null ? $formData['region'] : $regionList[intval($formData['region'])];
+                
                 $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy(['slug' => $sellerslug]);
 
@@ -1238,10 +1252,11 @@ class Home extends MY_Controller
                     $data['errors']['location'] = ["address must be complete"];
                 }
             }
+
             $data['storeName'] = $this->input->post('storeName');
             $data['contactNo'] = $this->input->post('contactNumber');
             $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
-            $data['region'] = $this->input->post('regionSelect');
+            $data['region'] = $isRegionValid ?  ($this->input->post('regionSelect') === '' ? '' : $regionList[intval($this->input->post('regionSelect'))]) : '';
             $data['city'] = $this->input->post('citySelect') == '' ? '' : $this->input->post('citySelect') . ", ";
             $data['website'] = $this->input->post('website');
 
@@ -1256,23 +1271,10 @@ class Home extends MY_Controller
             }
         }
 
-        
-        if($regionList === NULL || $cityPerRegionList === NULL){
-            $locationData = $EsLocationLookupRepository->getLocationLookup();
-            if($regionList === NULL){
-                $regionList = $locationData['stateRegionLookup'];
-            }
-            if($cityPerRegionList === NULL){
-                $regionList = $locationData['cityLookup'];
-            }
-        }
-        
         $data['regions'] = $regionList;
         $data['cityList'] = $cityPerRegionList;
-
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
-
 }
 
 /* End of file home.php */
