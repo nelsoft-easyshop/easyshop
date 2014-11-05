@@ -594,6 +594,10 @@ class product extends MY_Controller
 
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
 
+            // get recommended products
+            $recommendProducts = [];
+            $recommendedView = $this->load->view('pages/product/productpage_view_recommend', $recommendProducts, TRUE); 
+
             $viewData = array(
                         'product' => $product,
                         'breadCrumbs' => $breadcrumbs,
