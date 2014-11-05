@@ -1177,12 +1177,10 @@ class Home extends MY_Controller
                 $formData = $form->getData();
                 $formData['region'] = $formData['region'] === null ? $formData['region'] : $regionList[intval($formData['region'])];
                 
-                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                ->findOneBy(['slug' => $sellerslug]);
-
                 $member->setStoreName($formData['shop_name']);
                 $member->setContactno(substr($formData['contact_number'], 1));
                 $member->setWebsite($formData['website']);
+                $member->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
 
                 $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
