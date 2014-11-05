@@ -1,12 +1,7 @@
 (function ($){
-    $( ".p-reply-text" ).click(function() {
+    $(document).on('click', '.p-reply-text', function(){ 
         $(this).parent().next( ".div-reply-container" ).toggle("slow");
         $(this).find( ".text-cancel" ).toggle("fade");
-    });
-
-    $( ".p-reply-text-replied-item" ).click(function() {
-        $( ".div-reply-container-replied-item" ).toggle("slow");
-        $( ".text-cancel-replied-item" ).toggle("fade");
     });
 
     $( "#prodDetails" ).click(function() {

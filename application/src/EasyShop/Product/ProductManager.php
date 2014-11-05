@@ -78,24 +78,16 @@ class ProductManager
     private $imageLibrary;
 
     /**
-     * User manager instance
-     *
-     * @var EasyShop\User\UserManager
-     */
-    private $userManager;
-
-    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary,$userManager)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
         $this->imageLibrary = $imageLibrary;
-        $this->userManager = $userManager;
     }
 
     /**

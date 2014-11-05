@@ -628,11 +628,26 @@ class product extends MY_Controller
     public function submitReply()
     {
         $reviewProductService = $this->serviceContainer['review_product_service'];
-        $response = $reviewProductService->submitReview($reviewerId,$this->input->post());
-        
+        $reviewerId =  $this->session->userdata('member_id');
+        $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+        $response['html'] = $this->load->view('partials/review_reply', $reply, true);
+        $response['isSuccess'] = $reply['isSuccess'];
+        $response['error'] = $reply['error'];
+
         echo json_encode($response);
     }
- 
+
+    public function submitReview()
+    {
+        $reviewProductService = $this->serviceContainer['review_product_service'];
+        $reviewerId =  $this->session->userdata('member_id');
+        $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+        $response['html'] = $this->load->view('partials/review_review', $reply, true);
+        $response['isSuccess'] = $reply['isSuccess'];
+        $response['error'] = $reply['error'];
+
+        echo json_encode($response);
+    }
 
     /**
      * Renders view for the promo page

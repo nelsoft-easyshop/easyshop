@@ -21,6 +21,7 @@ class EsProductReviewRepository extends EntityRepository
                     ->andWhere('r.pReviewid = 0')
                     ->andWhere('r.product = :productId')
                     ->setParameter('productId', $productId)
+                    ->orderBy('r.idReview', 'DESC')
                     ->getQuery()
                     ->setMaxResults(5);
  

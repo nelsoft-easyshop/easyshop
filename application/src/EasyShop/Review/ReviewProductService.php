@@ -111,10 +111,11 @@ class ReviewProductService
     {
 
         // get user inputs
-        $review = $inputData['review'];
-        $parentReviewId = $inputData['parent_review'];
-        $productId = $inputData['product_id']; 
-        $title = (isset($inputData['title'])) ? $inputData['title'] : ""; 
+        $review = trim($inputData['review']);
+        $parentReviewId = (isset($inputData['parent_review'])) ? intval($inputData['parent_review']) : 0;
+        $productId = intval($inputData['product_id']); 
+        $title = (isset($inputData['title'])) ? trim($inputData['title']) : ""; 
+        $rating = (isset($inputData['rating'])) ? intval($inputData['rating']) : 0; 
         $booleanSuccess = FALSE;
         $error = "";
 
@@ -138,6 +139,7 @@ class ReviewProductService
                 $reviewObj->setDatehidden($dateSubmitted);  
                 $reviewObj->setReview($review); 
                 $reviewObj->setTitle($title); 
+                $reviewObj->setRating($rating); 
                 $reviewObj->setProduct($productEntity);
 
                 $this->em->persist($reviewObj);
@@ -151,7 +153,11 @@ class ReviewProductService
                             'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
                             'reviewUsername' => html_escape($memberEntity->getUsername()),
                             'review' => html_escape($review),
-                            'userPic' => $this->userManager->getUserImage($memberId)
+                            'userPic' => $this->userManager->getUserImage($memberId),
+                            'title' => $title,
+                            'rating' => $rating,
+                            'idReview' => $reviewObj->getIdReview(),
+                            'canReview' => $this->checkIfCanReview($memberId,$productId),
                         );
             }
             else{
