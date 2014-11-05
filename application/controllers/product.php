@@ -649,7 +649,7 @@ class product extends MY_Controller
                         'reviewDetailsView' => $reviewDetailsView,
                         'recommendedView' => $recommendedView,
                         'noMoreSelection' => $noMoreSelection,
-
+                        'url' => '/item2/' . $product->getSlug()
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);
         }

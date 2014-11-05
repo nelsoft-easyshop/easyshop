@@ -196,19 +196,20 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
                         <p class="attr-title">Share with:</p>
-                        <a href="">
-                            <div class="ui-form-control share-facebook">
-                                <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
-                                <span>Facebook</span>
-                            </div>
-                        </a>
-                        <a href="">
+                        <div id="fb-root"></div>
+                        <div class="fb-share-button" data-href="<?=$url?>" data-width="150">
+                        </div>
+                        <a class="twitter-share-button"
+                           data-url="<?=$url?>"
+                           data-related="twitterdev"
+                           data-size="large"
+                           data-count="none">
                             <div class="ui-form-control share-twitter">
                                 <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
                             </div>
                         </a>
-                        <a href="">
+                        <a href="https://plus.google.com/share?url=<?=$url?>">
                             <div class="ui-form-control share-googleplus">
                                 <img src="/assets/images/img-googleplus-prod.png" alt="Google+"> 
                                 <span>Google+</span>
@@ -236,6 +237,19 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=711804058875446&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];
+        if(d.getElementById(id)){return}js=d.createElement(s);
+        js.id=id;js.src="https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+</script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
