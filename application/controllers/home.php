@@ -1139,13 +1139,19 @@ class Home extends MY_Controller
             }
         }
         
+        $storeName = $this->input->post('storeName');
+        $contactNumber = $this->input->post('contactNumber');
+        $streetAddress = $this->input->post('streetAddress');
+        $website = $this->input->post('website');
+        $citySelect = $this->input->post('citySelect');
+        $regionSelect = $this->input->post('regionSelect');
+
         // Check if blank string or string submitted can be converted to an int and if that int is a valid region id
-        $isRegionValid = $this->input->post('regionSelect') === '' || (intval($this->input->post('regionSelect')) !== 0 && array_key_exists(intval($this->input->post('regionSelect')), $regionList));
+        $isRegionValid = $regionSelect === '' || (intval($regionSelect) !== 0 && array_key_exists(intval($regionSelect), $regionList));
 
-        if($this->input->post('storeName') !== false || $this->input->post('contactNumber') !== false || $this->input->post('streetAddress') !== false || 
-            $this->input->post('website') !== false || $this->input->post('citySelect') !== false || $this->input->post('regionSelect') !== false){
+        if($storeName !== false || $contactNumber !== false || $streetAddress !== false || $website !== false || $citySelect !== false || $regionSelect !== false){
 
-            $contactNumberConstraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+            $contactNumberConstraint = $contactNumber === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
                                 ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
@@ -1157,20 +1163,20 @@ class Home extends MY_Controller
                                 ->getForm();
 
             $form->submit([ 
-                'shop_name' => $this->input->post('storeName'),
-                'contact_number' => $this->input->post('contactNumber'),
-                'street_address' => $this->input->post('streetAddress'),
-                'city' => $this->input->post('citySelect'),
-                'region' => $this->input->post('regionSelect'),
-                'website' => $this->input->post('website')
+                'shop_name' => $storeName,
+                'contact_number' => $contactNumber,
+                'street_address' => $streetAddress,
+                'city' => $citySelect,
+                'region' => $regionSelect,
+                'website' => $website
             ]);
 
             // Do not allow whitespaces as streetAddress
-            $streetAddressTrimmed = trim($this->input->post('streetAddress'));
+            $streetAddressTrimmed = trim($streetAddress);
 
             $isAddressValid = (
-                ($isRegionValid && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') || 
-                ($this->input->post('regionSelect') === '' && $this->input->post('citySelect') === '' && $streetAddressTrimmed === '')
+                ($isRegionValid && $citySelect !== '' && $streetAddressTrimmed !== '') || 
+                ($regionSelect === '' && $citySelect === '' && $streetAddressTrimmed === '')
             );
             
             if($form->isValid() && $isAddressValid && $data['isEditable']){
@@ -1251,12 +1257,23 @@ class Home extends MY_Controller
                 }
             }
 
-            $data['storeName'] = $this->input->post('storeName');
-            $data['contactNo'] = $this->input->post('contactNumber');
-            $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
-            $data['region'] = $isRegionValid ?  ($this->input->post('regionSelect') === '' ? '' : $regionList[intval($this->input->post('regionSelect'))]) : '';
-            $data['city'] = $this->input->post('citySelect') == '' ? '' : $this->input->post('citySelect') . ", ";
-            $data['website'] = $this->input->post('website');
+            $data['storeName'] = $storeName;
+            $data['contactNo'] = $contactNumber;
+            $data['streetAddr'] = strlen(trim($streetAddress)) > 0 ? $streetAddress . ", " : "";
+            $data['city'] = $citySelect == '' ? '' : $citySelect . ", ";
+            $data['website'] = $website;
+            
+            if($isRegionValid){
+                if($regionSelect === ''){
+                    $data['region'] = '';
+                }
+                else{
+                    $data['region'] = $regionList[intval($regionSelect)];
+                }
+            }
+            else{
+                $data['region'] = '';
+            }
 
             if(array_key_exists('shop_name', $data['errors'])){
                 $data['storeName'] = '';
