@@ -934,6 +934,7 @@ class Memberpage extends MY_Controller
                     );
 
                     $parseData = $postData;
+                    $socialMediaLinks = $this->getSocialMediaLinks();
                     $parseData = array_merge($parseData, array(
                             "seller" => $memberEntity->getUsername(),
                             "store_link" => base_url() . $memberEntity->getSlug(),
@@ -943,7 +944,8 @@ class Memberpage extends MY_Controller
                             "product_name" => $orderProductEntity->getProduct()->getName(),
                             "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
                             "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
-                            "social_media_links" => $this->getSocialMediaLinks()
+                            "facebook" => $socialMediaLinks["facebook"],
+                            "twitter" => $socialMediaLinks["twitter"]
                         ));
                     $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
 
