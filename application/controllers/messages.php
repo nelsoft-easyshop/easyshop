@@ -54,7 +54,7 @@ class messages extends MY_Controller
             $this->load->view('templates/header', $data);
             $this->load->view('pages/messages/inbox_view');
 
-            $xocialMediaLinks = $this->getSocialMediaLinks();
+            $socialMediaLinks = $this->getSocialMediaLinks();
             $viewData['facebook'] = $socialMediaLinks["facebook"];
             $viewData['twitter'] = $socialMediaLinks["twitter"];
 
@@ -120,18 +120,18 @@ class messages extends MY_Controller
                     , "/assets/images/landingpage/templates/twitter.png"
                 );
 
-
+                $socialMediaLinks = $this->getSocialMediaLinks();
                 $parseData = array(
                     'user' => $memberEntity->getUsername()
                     , 'recipient' => $qResult['username']
                     , 'home_link' => base_url()
                     , 'store_link' => base_url() . $memberEntity->getSlug()
                     , 'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername()
-                    , 'msg' => $msgz
+                    , 'msg' => $msg
+                    , 'facebook' => $socialMediaLinks["facebook"]
+                    , 'twitter' => $socialMediaLinks["twitter"]
                 );
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $parseData['facebook'] = $socialMediaLinks["facebook"];
-                $parseData['twitter'] = $socialMediaLinks["twitter"];                
+               
                 $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, TRUE);
 
                 $emailService->setRecipient($emailRecipient)
