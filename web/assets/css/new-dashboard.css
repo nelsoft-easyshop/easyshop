@@ -64,7 +64,7 @@ body{
     left: 0;
 }
 
-.sidebar-submenu > li{
+.sidebar-submenu > a > li{
     text-transform: uppercase;
     font-size: 13px;
     padding: 15px 35px;
@@ -74,32 +74,33 @@ body{
     font-weight: 600;
     transition: all 0.3s ease;
     width: 100%;
+    color: #565656;
 }
 
-.sidebar-submenu > li:hover{
+.sidebar-submenu > a > li:hover{
     background: #ff893a;
     color: #fff !important;
 }
 
-.sidebar-submenu > li.active{
+.sidebar-submenu > a > li.active{
     background: #ff893a;
     color: #fff;
 }
 
-.sidebar-submenu > li > a{
+.sidebar-submenu > a{
     color: #565656;
 }
 
-.sidebar-submenu > li.active > a, .sidebar-submenu > li > a:hover{
+.sidebar-submenu > a, .sidebar-submenu > a:hover{
     color: #fff;
 }
 
-.sidebar-submenu > li:first-child{
-    border: none;
+.f-li{
+    border: none !important;
 }
 
-.sidebar-submenu > li:last-child{
-    border: none;
+.l-li{
+    border: none !important;
 }
 
 .toggle-down{
