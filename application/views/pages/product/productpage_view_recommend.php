@@ -5,7 +5,7 @@
             <p class="p-rec-title">Recommended</p>
             <span class="span-rec-nav">
                 <span class="span-see-all">
-                    <a href="#">see all</a>
+                    <a href="/category/<?=$productCategorySlug; ?>">see all</a>
                 </span>
                 <a class="prev">
                     <i class="fa fa-angle-left span-nav-prev"></i>
@@ -20,7 +20,7 @@
             <?php foreach ($recommended as $key => $value): ?>
             <div class="item">
                 <center>
-                    <a href="#">
+                    <a href="/item/<?=$value->getSlug(); ?>">
                         <div class="div-rec-product-image">
                             <center>
                                 <span class="span-me">
@@ -56,7 +56,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/boom">
+                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$value->getSlug(); ?>">
                                     <span class="icon-cart"></span> ADD TO CART
                                 </a>
                             </td>
@@ -65,7 +65,7 @@
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                                    <img src="<?=$value->ownerAvatar; ?>" class="store-logo">
+                                                <img src="<?=$value->ownerAvatar; ?>" class="store-logo">
                                             </div>
                                         </div>
                                     </span>

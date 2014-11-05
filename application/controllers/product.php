@@ -552,6 +552,12 @@ class product extends MY_Controller
                 }
             }
 
+            // check if combination available
+            $noMoreSelection = "";
+            if(count($productQuantityObject) <= 1 && intval($productQuantityObject[0]['product_attr_id']) === 0){
+                $noMoreSelection = $productQuantityObject[0]['id_product_item'];
+            }
+
             // get payment type available and if button is viewable
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
@@ -600,7 +606,7 @@ class product extends MY_Controller
             $subCategoryIds = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getChildCategoryRecursive($product->getCat()->getIdCat());
             $popularProductId = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getPopularItem(12,0,0,$subCategoryIds); 
+                                            ->getPopularItem(15,0,0,$subCategoryIds);
             $recommendProducts = [];
             foreach ($popularProductId as $key) {
                 $productRecommend = $productManager->getProductDetails($key);
@@ -615,10 +621,14 @@ class product extends MY_Controller
                     $productRecommend->directory = $productRecommend->getDefaultImage()->getDirectory();
                     $productRecommend->imageFileName = $productRecommend->getDefaultImage()->getFilename();
                 }
-
             }
 
-            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',['recommended'=> $recommendProducts],TRUE);
+            $recommendViewArray = [
+                                'recommended'=> $recommendProducts,
+                                'productCategorySlug' => $product->getCat()->getSlug(),
+                            ];
+
+            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,TRUE);
 
             $viewData = array(
                         'product' => $product,
@@ -637,7 +647,8 @@ class product extends MY_Controller
                         'userData' => $headerData['user'],
                         'bannerView' => $bannerView, 
                         'reviewDetailsView' => $reviewDetailsView,
-                        'recommendedView' => $recommendedView
+                        'recommendedView' => $recommendedView,
+                        'noMoreSelection' => $noMoreSelection,
 
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);

@@ -66,10 +66,10 @@
                 <div class="col-md-12 prod-border-bttm"></div>
 
                 <div class="clear"></div>
-
+                <?php if(count($productAttributes) > 0): ?>
                 <div class="row pad-top-23">
+                    
                     <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
-
                     <!-- Product attributes here -->
                     <?php foreach ($productAttributes as $head => $headValue): ?>
                         <div class="col-sm-12 col-md-6 attr-select">
@@ -84,12 +84,12 @@
                         </div>
                     <?php endforeach; ?> 
                     <!-- end of Product attributes -->
-
+                   
                     <div class="clear"></div>
                 </div>
                 <div class="col-md-12 prod-border-bttm pad-top-23"></div>
-
                 <div class="clear"></div>
+                <?php endif; ?>
 
                 <div class="row pad-top-23">
                     <div class="col-xs-12 col-sm-5 col-md-5">
@@ -220,6 +220,7 @@
     <input id='p_shipment' type='hidden' value='<?=json_encode($shippingInfo);?>'>
     <input id='productId' type='hidden' value='<?=$product->getIdProduct();?>'>
     <input id='review-count' type='hidden' value='<?=count($productReview);?>'>
+    <input id="noMoreSelection" type="hidden" value="<?=$noMoreSelection;?>">
 </div>
 
 <!-- display view for product details and review -->
@@ -306,10 +307,58 @@
         });
     }
 
+    function checkCombination($arraySelected)
+    {
+        // check possible combination
+        $.each($productCombQuantity, function(i, val) {
+            $arrayCombination = val.product_attribute_ids;
+            $arrayCombination.sort(sortArrayNumber);
+            $booleanCheck = arraysEqual($arrayCombination,$arraySelected);
+            $combinationQuantity = val.quantity;
+            $combinationLocation = val.location;
+            $("#control-quantity").empty();
+            $('#shipment_locations > option').show().prop('disabled', true);
+            $('#shipment_locations > .default').prop('disabled', false);
+
+            // if found atleast one combination
+            if($booleanCheck){
+
+                if($combinationQuantity <= 0){
+                    $("#control-quantity").append('<option value="0">0</option>');
+                    $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+                }
+                else{
+                    for (var i = 1 ; i <= $combinationQuantity; i++) { 
+                        $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
+                    };
+                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                }
+
+                $.each($combinationLocation,function(i, val){ 
+                    var $text = $("#locationID_"+val.location_id).data('text');
+                    $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
+                });
+
+                $('#shipment_locations > option:disabled').hide();
+                
+                return false;
+            }
+            $("#control-quantity").append('<option value="0">0</option>');
+        });
+    }
+
     (function($) {
 
         // hiden values variables
         $productCombQuantity = JSON.parse($("#productCombQuantity").val());
+
+        if($("#noMoreSelection").val() != ""){
+            var $arraySelected = [];
+            $arraySelected.push("0");
+            console.log($arraySelected);
+            console.log($productCombQuantity);
+            checkCombination($arraySelected);
+        }
 
         // js code for base price line through
         var $productprice= $('.prod-price-container').find('.base-price');
@@ -341,43 +390,7 @@
 
             // sort array
             $arraySelected.sort(sortArrayNumber);
-            
-            // check possible combination
-            $.each($productCombQuantity, function(i, val) {
-                $arrayCombination = val.product_attribute_ids;
-                $arrayCombination.sort(sortArrayNumber);
-                $booleanCheck = arraysEqual($arrayCombination,$arraySelected);
-                $combinationQuantity = val.quantity;
-                $combinationLocation = val.location;
-                $("#control-quantity").empty();
-                $('#shipment_locations > option').show().prop('disabled', true);
-                $('#shipment_locations > .default').prop('disabled', false);
-
-                // if found atleast one combination
-                if($booleanCheck){
-
-                    if($combinationQuantity <= 0){
-                        $("#control-quantity").append('<option value="0">0</option>');
-                        $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                    }
-                    else{
-                        for (var i = 1 ; i <= $combinationQuantity; i++) { 
-                            $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
-                        };
-                        $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    }
-
-                    $.each($combinationLocation,function(i, val){ 
-                        var $text = $("#locationID_"+val.location_id).data('text');
-                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
-                    });
-
-                    $('#shipment_locations > option:disabled').hide();
-                    
-                    return false;
-                }
-                $("#control-quantity").append('<option value="0">0</option>');
-            });
+            checkCombination($arraySelected);
         });
         
         // add to cart
