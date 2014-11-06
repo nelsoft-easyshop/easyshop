@@ -77,29 +77,16 @@ class CMS
                 if($key == 0 ) {
                     $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
                     $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
-                    $map->asXML($file);                                        
                 }
                 else {
-                    $this->addStoredValuesForSliderNode($file, $insertImages->path, $insertImages->target, $index);
+                    $string = $this->getString("subSliderSection", $insertImages->path, "", "", $insertImages->target);      
+                    $this->addXmlFormatted($map,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n", true, true);           
                 } 
             }
+        $map->asXML($file);  
 
         }        
-    }
-
-    /**
-     *  Second part of re-ordering the slide parent node, needed to separate this method for the reason it produces
-     *  conflicts for simple setting of the values in reOrderParentSlider()
-     *
-     *  @param string $path
-     *  @param string $target
-     *  @param int $index
-     */
-    public function addStoredValuesForSliderNode($file, $path, $target, $index)
-    {
-        $string = $this->getString("subSliderSection", $path, "", "", $target);      
-        $this->addXmlFormatted($file,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n");        
-    }        
+    }      
 
     /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
@@ -182,12 +169,7 @@ class CMS
             </image>
 
         </slide>'; 
-        }
-        if($nodeName == "partialSliderSection") {
-    $string = '<slide>
-            <template>'.$value.'</template>
-        </slide>'; 
-        }        
+        }       
         if($nodeName == "categorySubSlug") {
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
@@ -627,17 +609,20 @@ $string = '<typeNode>
      *
      *  @return boolean
      */
-    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true) 
+    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true, $isSimpleXmlLoaded = false) 
     {        
-        $sxe = new \SimpleXMLElement(file_get_contents($file));
+        $sxe = (!$isSimpleXmlLoaded) ? new \SimpleXMLElement(file_get_contents($file)) : $file;
         $insert = new \SimpleXMLElement($xml_string);
         $target = current($sxe->xpath($target_node));
 
         $this->simplexml_insert_formatted($insert, $target,$tabs,$newLines,$move);
-        if($sxe->asXml($file)) {
-            return true;
 
+        if(!$isSimpleXmlLoaded) {
+            if($sxe->asXml($file)) {
+                return true;
+            }        
         }
+
     }
 
     /**
