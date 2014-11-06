@@ -28,6 +28,20 @@ class EsKeywordsTemp
      */
     private $keywords;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ip_address", type="string", length=20, nullable=false)
+     */
+    private $ipAddress = '';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestamp", type="datetime", nullable=true)
+     */
+    private $timestamp = 'CURRENT_TIMESTAMP';
+
 
 
     /**
@@ -61,5 +75,51 @@ class EsKeywordsTemp
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * set ipAddress
+     *
+     * @param string $ipAddress
+     * @return EsKeywordsTemp
+     */
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get ipAddress
+     *
+     * @return string 
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * Set timestamp
+     *
+     * @param \DateTime $timestamp
+     * @return EsKeywordsTemp
+     */
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get timestamp
+     *
+     * @return \DateTime 
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
     }
 }

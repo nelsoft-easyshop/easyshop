@@ -7,7 +7,7 @@
             <div style="background-color: #013f94;">
                 <center>
                     <a href="https://www.easyshop.ph">
-                        <img src="header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
+                        <img src="https://local.easyshop/assets/images/landingpage/templates/header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
                     </a>
                 </center>
              </div>
@@ -29,16 +29,16 @@
             </div>
             <div style="margin-top: 20px; font-size: 15px; min-height: 350px;">
                 <p>
-                    Dear {recipient},
+                    Dear {username},
                 </p>
                  <p style="padding: 10px 30px;">
-                    This is a verification request to merge with an EasyShop.ph account that uses this registered email.
+                    This is a verification request to merge with an EasyShop.ph account that uses this registered {error_in}.
                     <br/>
                     <br/>
                     Please click the link below to proceed with this request, where you will be required to login to your account to complete the process.
                     <br/>
                     <br/>
-                    <a href="#" style=" border-bottom: 2px solid #ac6a40; text-decoration: none; background: #ff893a; padding: 10px 20px; color: #fff; border-radius:4px;">
+                    <a href="{site_url}?h={hash}" style=" border-bottom: 2px solid #ac6a40; text-decoration: none; background: #ff893a; padding: 10px 20px; color: #fff; border-radius:4px;">
                         Merge account
                     </a>
                     <br/>
@@ -52,13 +52,13 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
+                                    <a href="{facebook}">
+                                        <img src="https://local.easyshop/assets/images/landingpage/templates/facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="https://twitter.com/EasyShopPH">
-                                        <img src="twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
+                                    <a href="{twitter}">
+                                        <img src="https://local.easyshop/assets/images/landingpage/templates/twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>

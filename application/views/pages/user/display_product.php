@@ -50,7 +50,7 @@
                                 </p>
                                 <center>
                                     <a class="btn btn-default-cart" target="_blank" href="/item/<?=$productSlug; ?>">
-                                        <span class="fa fa-shopping-cart"></span> BUY NOW
+                                        <span class="fa icon-cart"></span> BUY NOW
                                     </a>
                                 </center>
 
@@ -97,7 +97,7 @@
                                     <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                                 </p>
                                 <a class="btn btn-default-1" target="_blank" href="/item/<?=$productSlug; ?>" >
-                                    <span class="fa fa-shopping-cart"></span> BUY NOW
+                                    <span class="fa icon-cart"></span> BUY NOW
                                 </a>
                             </td>
                         </tr>
