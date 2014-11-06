@@ -20,6 +20,9 @@ class UrlUtility
      */
     public function parseExternalUrl($url, $internalClass = "", $externalClass = "")
     {
+        if(!is_string($url)){
+            $url = "/";
+        }
         $formattedUrl = trim($url);
         $serverBaseUrl = $_SERVER['HTTP_HOST'];
         if(strpos($formattedUrl, '://') === false){
