@@ -48,7 +48,16 @@ class PeakHourSalePromo extends AbstractPromo
      */
     public static function getPrice($price, $startDate, $endDate, $discount)
     {
-        return $price - ($price * $discount/100.0);
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        $promoPrice = $price;
+        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
+            $promoPrice = $price - ($price * $discount/100.0);
+        }
+
+        return $promoPrice;
     }
 
     /**
