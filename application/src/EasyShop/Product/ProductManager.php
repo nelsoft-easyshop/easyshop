@@ -741,6 +741,52 @@ class ProductManager
         }
         return $isListingOnly;
     }
+
+    /**
+     *  Bulk Restore products in memberpage
+     *
+     *  @param array $arrProductId - product Ids
+     *  @param integer $memberId
+     *
+     *  @return boolean
+     */
+    public function editBulkIsDelete($arrProductId, $memberId, $selector = "restore")
+    {
+        $arrayProductId = is_array($arrProductId) ? $arrProductId : array($arrProductId);
+        $objMember = $this->em->find("EasyShop\Entities\EsMember", $memberId);
+
+        switch( $selector ){
+            case "restore":
+                $isDeleteVal = EsProduct::CUSTOM_ACTIVE;
+                break;
+            case "delete":
+                $isDeleteVal = EsProduct::CUSTOM_DELETE;
+                break;
+            case "full_delete":
+                $isDeleteVal = EsProduct::CUSTOM_FULL_DELETE;
+                break;
+            default:
+                $isDeleteVal = EsProduct::CUSTOM_ACTIVE;
+                break;
+        }
+
+        foreach($arrayProductId as $productId){
+            $objProduct = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                   ->findOneBy(array(
+                                        "idProduct" => $productId,
+                                        "member" => $objMember
+                                    ));
+
+            $objProduct->setIsDelete($isDeleteVal)
+                       ->setLastmodifieddate(date_create());
+
+            $this->em->persist($objProduct);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
     
 }
 

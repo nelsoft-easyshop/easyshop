@@ -335,6 +335,27 @@ class EsProduct
      */
     private $maxAllowablePoint = '0.0000';
 
+    /**
+     *  @var integer
+     *
+     *  isDelete value for active items
+     */
+    const CUSTOM_ACTIVE = 0;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for deleted items ( item can be restored )
+     */
+    const CUSTOM_DELETE = 1;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for fully deleted items ( item cannot be restored )
+     */
+    const CUSTOM_FULL_DELETE = 2;
+
     public function __construct() 
     {
         $this->images = new ArrayCollection();

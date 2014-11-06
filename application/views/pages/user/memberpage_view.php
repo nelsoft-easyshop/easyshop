@@ -211,7 +211,23 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+
+        <div class="bulk_options head">
+            <div class="bulk_options menu">
+                <span class="menu_option" data-cont="#bulk_delete_option">Bulk Delete</span>
+            </div>
+
+            <div id="bulk_delete_option" class="bulk_options options" style="display:none;">
+                <span class="main_option">Delete</span> | 
+                <span class="bulk_cancel">Cancel</span>
+
+                <?php echo form_open('product/bulkProductOptions');?>
+                    <input type="hidden" name="bulk_p_id" value=''>
+                    <input type="hidden" name="bulk_action" value="delete">
+                <?php echo form_close();?>
+            </div>
+        </div>
+
     </div>
     
     
@@ -228,6 +244,11 @@
         <?php $product_counter = 0; 
         foreach($active_products as $active_product): ?>
         <div class="post_items_content content-paging">
+
+            <div class="bulk_options selection" style="display:none;">
+                <input class="bulk_checkbox_selection" type="checkbox" value="<?php echo $active_product['id_product'];?>"> Include in bulk command
+            </div>
+
             <div class="post_item_content_left">
                 <div class="post_item_img_table">
                                                                               
@@ -369,7 +390,33 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        
+        <div class="bulk_options head">
+            <div class="bulk_options menu">
+                <span class="menu_option" data-cont="#bulk_restore_option">Bulk Restore</span> | 
+                <span class="menu_option" data-cont="#bulk_remove_option">Bulk Remove</span>
+            </div>
+
+            <div id="bulk_restore_option" class="bulk_options options" style="display:none;">
+                <span class="main_option">Restore</span> | 
+                <span class="bulk_cancel">Cancel</span>
+
+                <?php echo form_open('product/bulkProductOptions');?>
+                    <input type="hidden" name="bulk_p_id" value=''>
+                    <input type="hidden" name="bulk_action" value="restore">
+                <?php echo form_close();?>
+            </div>
+
+            <div id="bulk_remove_option" class="bulk_options options" style="display:none;">
+                <span class="main_option">Remove</span> | 
+                <span class="bulk_cancel">Cancel</span>
+
+                <?php echo form_open('product/bulkProductOptions');?>
+                    <input type="hidden" name="bulk_p_id" value=''>
+                    <input type="hidden" name="bulk_action" value="full_delete">
+                <?php echo form_close();?>
+            </div>
+        </div>
     </div>
     
     <?php if($deleted_count == 0):?>
@@ -385,6 +432,11 @@
         <?php $product_counter =0; $mycounter = 0;?>
         <?php foreach($deleted_products as $deleted_product):?>
         <div class="post_items_content content-paging">
+
+        <div class="bulk_options selection" style="display:none;">
+            <input class="bulk_checkbox_selection" type="checkbox" value="<?php echo $deleted_product['id_product'];?>"> Include in bulk command
+        </div>
+
         <div class="post_item_content_left">
                 <div class="post_item_img_table">
 
