@@ -346,7 +346,12 @@ class product extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/all_categories_view', $data); 
-        $this->load->view('templates/footer_full');     
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);     
     }
 
     /**
@@ -400,6 +405,11 @@ class product extends MY_Controller
             if(intval($product_row['is_promote']) === 1 && (!$product_row['end_promo']) ){
                 $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
                 if(strlen(trim($bannerfile)) > 0){
+
+                    $socialMediaLinks = $this->getSocialMediaLinks();
+                    $product_row['facebook'] = $socialMediaLinks["facebook"];
+                    $product_row['twitter'] = $socialMediaLinks["twitter"];
+
                     $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
                 }
                 $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
@@ -498,8 +508,13 @@ class product extends MY_Controller
     {
         $data = $this->fill_header();
         $data['title'] = 'Post and Win | Easyshop.ph';
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialData['facebook'] = $socialMediaLinks["facebook"];
+        $socialData['twitter'] = $socialMediaLinks["twitter"];
+
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/post_and_win_view');
+        $this->load->view('pages/promo/post_and_win_view', $socialData);
         $this->load->view('templates/footer');
     }
 

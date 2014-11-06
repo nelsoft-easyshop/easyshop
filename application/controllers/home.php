@@ -99,9 +99,13 @@ class Home extends MY_Controller
             $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
             $this->load->view('templates/header_primary', $data);
             $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary');
+            $this->load->view('templates/footer_primary', $viewData);
         }
 
     }
@@ -118,7 +122,12 @@ class Home extends MY_Controller
       $data = array_merge($data, $this->fill_header());
       $this->load->view('templates/header', $data);
       $this->load->view('pages/underconstruction_view');
-      $this->load->view('templates/footer_full');
+
+      $socialMediaLinks = $this->getSocialMediaLinks();
+      $viewData['facebook'] = $socialMediaLinks["facebook"];
+      $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+      $this->load->view('templates/footer_full', $viewData);
     }
 
     /**
@@ -138,10 +147,14 @@ class Home extends MY_Controller
         }
         $data['homeContent'] = $this->fillCategoryNavigation();  
 
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_primary');
+        $this->load->view('templates/footer_primary', $viewData);
     }
     
     /**
@@ -151,7 +164,10 @@ class Home extends MY_Controller
      */
     public function splash()
     {
-        $this->load->view('pages/undermaintenance.php');
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];      
+        $this->load->view('pages/undermaintenance', $viewData);
     }
 
     /** 
@@ -180,7 +196,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/policy');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
   
     /**
@@ -197,7 +218,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/terms');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -215,7 +241,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/faq');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -249,6 +280,10 @@ class Home extends MY_Controller
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-buy');
@@ -266,6 +301,10 @@ class Home extends MY_Controller
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];  
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-sell');
@@ -355,11 +394,14 @@ class Home extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 // Data for the view
+
                 $viewData = array(
-                      "defaultCatProd" => $productView['defaultCatProd']
-                    , "product_condition" => $this->lang->line('product_condition')
-                    , "isLoggedIn" => $headerData['logged_in']
-                    , "prodLimit" => $this->vendorProdPerPage
+                  //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
+                    "customCatProd" => array(), // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
+                    "defaultCatProd" => $productView['defaultCatProd'],
+                    "product_condition" => $this->lang->line('product_condition'),
+                    "isLoggedIn" => $headerData['logged_in'],
+                    "prodLimit" => $this->vendorProdPerPage
                 );
  
                 // count the followers 
@@ -369,7 +411,6 @@ class Home extends MY_Controller
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
                 //Determine active Div for first load
-                $showFirstDiv = TRUE;
                 foreach($viewData['defaultCatProd'] as $catId => $catDetails){
                     if( isset($productView['isSearching']) ){
                         $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
@@ -378,7 +419,7 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
-
+                
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$bannerData);
@@ -557,19 +598,33 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId)
+    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
         $pm = $this->serviceContainer['product_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+        switch($catType){
+            case "custom":
+                $parentCat = $pm->getAllUserProductCustomCategory($memberId);
+                break;
+            default:
+                $parentCat = $pm->getAllUserProductParentCategory($memberId);
+                break;
+        }
 
         $categoryProductCount = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat']);
+            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            
+            // Unset DEFAULT categories with no products fetched (due to being custom categorized)
+            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+                unset($parentCat[$idCat]);
+                break;
+            }
+
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
@@ -613,8 +668,6 @@ class Home extends MY_Controller
      */
     private function aboutUser($sellerslug)
     {
-        $userDetails = $this->userDetails($sellerslug,'about');
-        
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
@@ -696,7 +749,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        
+        $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
+
         $this->load->view('templates/header_new', $headerData);
         $this->load->view('templates/header_vendor', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
@@ -853,10 +907,11 @@ class Home extends MY_Controller
         $arrVendorDetails = $this->serviceContainer['entity_manager']
                                  ->getRepository("EasyShop\Entities\EsMember")
                                  ->getVendorDetails($sellerslug);        
-        $userDetails = $this->userDetails($sellerslug,'contact');
+        
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
+        $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
         $this->load->view('templates/header_vendor',$bannerData);
@@ -1086,16 +1141,22 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header()); 
         $this->load->view('templates/header', $data);
         $this->output->append_output($formData); 
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];        
+        $this->load->view('templates/footer_full', $viewData);
     }
 
     /**
      *  Handles Vendor Contact Detail View
      *
      *  @param string $sellerslug
-     *
+     *  @param string $targetPage
+     *  @param string[] $regionList
+     *  @param string[] $cityPerRegionList
      */
-    public function userDetails($sellerslug, $targetPage)
+    public function userDetails($sellerslug, $targetPage, $regionList = NULL, $cityPerRegionList = NULL)
     {
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
@@ -1127,45 +1188,64 @@ class Home extends MY_Controller
             $data['validatedRegion'] = $data['region'] = $addr->getStateregion()->getLocation();
         }
 
-        $contactNumberConstraint = $this->input->post('contactNumber') === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+        if($regionList === NULL || $cityPerRegionList === NULL){
+            $locationData = $EsLocationLookupRepository->getLocationLookup();
+            if($regionList === NULL){
+                $regionList = $locationData['stateRegionLookup'];
+            }
+            if($cityPerRegionList === NULL){
+                $regionList = $locationData['cityLookup'];
+            }
+        }
+        
+        $storeName = $this->input->post('storeName');
+        $contactNumber = $this->input->post('contactNumber');
+        $streetAddress = $this->input->post('streetAddress');
+        $website = $this->input->post('website');
+        $citySelect = $this->input->post('citySelect');
+        $regionSelect = $this->input->post('regionSelect');
 
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                        ->setMethod('POST')
-                        ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
-                        ->add('contact_number', 'text', $contactNumberConstraint)
-                        ->add('street_address', 'text')
-                        ->add('city', 'text')
-                        ->add('region', 'text')
-                        ->add('website', 'text')
-                        ->getForm();
+        // Check if blank string or string submitted can be converted to an int and if that int is a valid region id
+        $isRegionValid = $regionSelect === '' || (intval($regionSelect) !== 0 && array_key_exists(intval($regionSelect), $regionList));
 
-        if($this->input->post('storeName') !== false || $this->input->post('contactNumber') !== false || $this->input->post('streetAddress') !== false || 
-            $this->input->post('website') !== false || $this->input->post('citySelect') !== false || $this->input->post('regionSelect') !== false){
+        if($storeName !== false || $contactNumber !== false || $streetAddress !== false || $website !== false || $citySelect !== false || $regionSelect !== false){
+
+            $contactNumberConstraint = $contactNumber === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                ->setMethod('POST')
+                                ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
+                                ->add('contact_number', 'text', $contactNumberConstraint)
+                                ->add('street_address', 'text')
+                                ->add('city', 'text')
+                                ->add('region', 'text')
+                                ->add('website', 'text')
+                                ->getForm();
 
             $form->submit([ 
-              'shop_name' => $this->input->post('storeName'),
-              'contact_number' => $this->input->post('contactNumber'),
-              'street_address' => $this->input->post('streetAddress'),
-              'city' => $this->input->post('citySelect'),
-              'region' => $this->input->post('regionSelect'),
-              'website' => $this->input->post('website')
+                'shop_name' => $storeName,
+                'contact_number' => $contactNumber,
+                'street_address' => $streetAddress,
+                'city' => $citySelect,
+                'region' => $regionSelect,
+                'website' => $website
             ]);
 
             // Do not allow whitespaces as streetAddress
-            $streetAddressTrimmed = trim($this->input->post('streetAddress'));
+            $streetAddressTrimmed = trim($streetAddress);
 
-            $isAddressValid = (($this->input->post('regionSelect') !== '' && $this->input->post('citySelect') !== '' && $streetAddressTrimmed !== '') 
-                                || ($this->input->post('regionSelect') === '' && $this->input->post('citySelect') === '' && $streetAddressTrimmed === ''));
-
+            $isAddressValid = (
+                ($isRegionValid && $citySelect !== '' && $streetAddressTrimmed !== '') || 
+                ($regionSelect === '' && $citySelect === '' && $streetAddressTrimmed === '')
+            );
+            
             if($form->isValid() && $isAddressValid && $data['isEditable']){
                 $formData = $form->getData();
-
-                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                ->findOneBy(['slug' => $sellerslug]);
-
+                $formData['region'] = $formData['region'] === null ? $formData['region'] : $regionList[intval($formData['region'])];
+                
                 $member->setStoreName($formData['shop_name']);
                 $member->setContactno(substr($formData['contact_number'], 1));
                 $member->setWebsite($formData['website']);
+                $member->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
 
                 $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
@@ -1235,12 +1315,24 @@ class Home extends MY_Controller
                     $data['errors']['location'] = ["address must be complete"];
                 }
             }
-            $data['storeName'] = $this->input->post('storeName');
-            $data['contactNo'] = $this->input->post('contactNumber');
-            $data['streetAddr'] = strlen(trim($this->input->post('streetAddress'))) > 0 ? $this->input->post('streetAddress') . ", " : "";
-            $data['region'] = $this->input->post('regionSelect');
-            $data['city'] = $this->input->post('citySelect') == '' ? '' : $this->input->post('citySelect') . ", ";
-            $data['website'] = $this->input->post('website');
+
+            $data['storeName'] = $storeName;
+            $data['contactNo'] = $contactNumber;
+            $data['streetAddr'] = strlen(trim($streetAddress)) > 0 ? $streetAddress . ", " : "";
+            $data['city'] = $citySelect == '' ? '' : $citySelect . ", ";
+            $data['website'] = $website;
+            
+            if($isRegionValid){
+                if($regionSelect === ''){
+                    $data['region'] = '';
+                }
+                else{
+                    $data['region'] = $regionList[intval($regionSelect)];
+                }
+            }
+            else{
+                $data['region'] = '';
+            }
 
             if(array_key_exists('shop_name', $data['errors'])){
                 $data['storeName'] = '';
@@ -1253,15 +1345,10 @@ class Home extends MY_Controller
             }
         }
 
-        $data['regions'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getAllLocationType(3);
-
-        $data['cityList'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->getAllLocationType(3,true);
-
+        $data['regions'] = $regionList;
+        $data['cityList'] = $cityPerRegionList;
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
-
 }
 
 /* End of file home.php */

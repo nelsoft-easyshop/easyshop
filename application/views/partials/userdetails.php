@@ -82,7 +82,7 @@
                         <select class="input-detail input-detail-select" name="regionSelect" id="regionSelect">
                             <option value='' selected>Select State/Region</option>
                             <?php foreach($regions as $key => $value): ?>
-                                <?php echo "<option value='" . html_escape($value['location']) . "' " . ($value['location'] === $region? "selected>" : ">") . html_escape($value['location']) . "</option>"; ?> 
+                                <?php echo "<option value='" . html_escape($key) . "' " . ($value === $region ? "selected>" : ">") . html_escape($value) . "</option>"; ?> 
                             <?php endforeach; ?>
                         </select>
                         <select class="input-detail input-detail-select" name="citySelect" id="citySelect">
@@ -170,6 +170,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/assets/js/src/usercontact.js?ver="<?=ES_FILE_VERSION?>></script>
+<script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
 
