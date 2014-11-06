@@ -47,7 +47,16 @@ class ScratchAndWinPromo extends AbstractPromo
      */
     public static function getPrice($price, $startDate, $endDate, $discount)
     {
-        return $price;
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        $promoPrice = $price;
+        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
+            $promoPrice = 0;
+        }
+
+        return $promoPrice;
     }
 
     /**
@@ -68,7 +77,7 @@ class ScratchAndWinPromo extends AbstractPromo
             'isEndPromo' => false,
         );
 
-        if($dateToday >= $startDateTime && $dateToday <= $startDateTime) {
+        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
             $isAvailable['isStartPromo'] = true;
         }
 

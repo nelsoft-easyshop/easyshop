@@ -106,7 +106,7 @@ class CountDownSalePromo extends AbstractPromo
             'isEndPromo' => false,
         );
 
-        if($dateToday >= $startDateTime && $dateToday <= $startDateTime) {
+        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
             $isAvailable['isStartPromo'] = true;
         }
 
