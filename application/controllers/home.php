@@ -99,9 +99,13 @@ class Home extends MY_Controller
             $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
             $this->load->view('templates/header_primary', $data);
             $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary');
+            $this->load->view('templates/footer_primary', $viewData);
         }
 
     }
@@ -118,7 +122,12 @@ class Home extends MY_Controller
       $data = array_merge($data, $this->fill_header());
       $this->load->view('templates/header', $data);
       $this->load->view('pages/underconstruction_view');
-      $this->load->view('templates/footer_full');
+
+      $socialMediaLinks = $this->getSocialMediaLinks();
+      $viewData['facebook'] = $socialMediaLinks["facebook"];
+      $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+      $this->load->view('templates/footer_full', $viewData);
     }
 
     /**
@@ -138,10 +147,14 @@ class Home extends MY_Controller
         }
         $data['homeContent'] = $this->fillCategoryNavigation();  
 
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_primary');
+        $this->load->view('templates/footer_primary', $viewData);
     }
     
     /**
@@ -151,7 +164,10 @@ class Home extends MY_Controller
      */
     public function splash()
     {
-        $this->load->view('pages/undermaintenance.php');
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];      
+        $this->load->view('pages/undermaintenance', $viewData);
     }
 
     /** 
@@ -180,7 +196,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/policy');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
   
     /**
@@ -197,7 +218,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/terms');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -215,7 +241,12 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/faq');
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);
     }
     
     
@@ -249,6 +280,10 @@ class Home extends MY_Controller
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-buy');
@@ -266,6 +301,10 @@ class Home extends MY_Controller
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
         );
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $data['facebook'] = $socialMediaLinks["facebook"];
+        $data['twitter'] = $socialMediaLinks["twitter"];  
+
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-sell');
@@ -355,11 +394,14 @@ class Home extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 // Data for the view
+
                 $viewData = array(
-                      "defaultCatProd" => $productView['defaultCatProd']
-                    , "product_condition" => $this->lang->line('product_condition')
-                    , "isLoggedIn" => $headerData['logged_in']
-                    , "prodLimit" => $this->vendorProdPerPage
+                  //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
+                    "customCatProd" => array(), // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
+                    "defaultCatProd" => $productView['defaultCatProd'],
+                    "product_condition" => $this->lang->line('product_condition'),
+                    "isLoggedIn" => $headerData['logged_in'],
+                    "prodLimit" => $this->vendorProdPerPage
                 );
  
                 // count the followers 
@@ -369,7 +411,6 @@ class Home extends MY_Controller
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
                 //Determine active Div for first load
-                $showFirstDiv = TRUE;
                 foreach($viewData['defaultCatProd'] as $catId => $catDetails){
                     if( isset($productView['isSearching']) ){
                         $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
@@ -378,7 +419,7 @@ class Home extends MY_Controller
                         $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
                     }
                 }
-
+                
                 // Load View
                 $this->load->view('templates/header_new', $headerData);
                 $this->load->view('templates/header_vendor',$bannerData);
@@ -557,19 +598,33 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId)
+    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
         $pm = $this->serviceContainer['product_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+        switch($catType){
+            case "custom":
+                $parentCat = $pm->getAllUserProductCustomCategory($memberId);
+                break;
+            default:
+                $parentCat = $pm->getAllUserProductParentCategory($memberId);
+                break;
+        }
 
         $categoryProductCount = array();
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat']);
+            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            
+            // Unset DEFAULT categories with no products fetched (due to being custom categorized)
+            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+                unset($parentCat[$idCat]);
+                break;
+            }
+
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
@@ -1086,7 +1141,11 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header()); 
         $this->load->view('templates/header', $data);
         $this->output->append_output($formData); 
-        $this->load->view('templates/footer_full');
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];        
+        $this->load->view('templates/footer_full', $viewData);
     }
 
     /**

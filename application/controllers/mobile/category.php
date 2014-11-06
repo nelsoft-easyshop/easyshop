@@ -17,6 +17,9 @@ class Category extends MY_Controller {
         //Loading Models
         $this->load->model('product_model'); 
 
+        // Load entity manager
+        $this->em = $this->serviceContainer['entity_manager']; 
+
         //Making response json type
         header('Content-type: application/json');
     }
@@ -75,18 +78,21 @@ class Category extends MY_Controller {
         $categorySlug = $this->input->get('slug');
         $start = $this->input->get('start');
         $category_array = $this->product_model->getCategoryBySlug($categorySlug);
-        $categoryId = $category_array['id_cat']; 
-        $downCategory = $this->product_model->selectChild($categoryId);
+        $categoryId = $category_array['id_cat'];  
+    
 
-        if(empty($downCategory)){
-            $downCategory = array();
-        }
-        
-        array_push($downCategory, $categoryId);
-        $categories = implode(",", $downCategory);
-        $items = $this->product_model->getProductsByCategory($categories,array(),0,"<",$start * $perPage,$perPage,"");
+        $searchProductService = $this->serviceContainer['search_product'];
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        print(json_encode($items,JSON_PRETTY_PRINT));
+        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE); 
+        $products = $searchProductService->getProductBySearch($getParameter);
+
+        foreach ($products as $key => $value) {
+            $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
+                                                ->formatDisplayItem($value->getIdProduct());
+        }  
+
+        print(json_encode($formattedRelatedItems,JSON_PRETTY_PRINT));
     }
 
     /**

@@ -3,25 +3,30 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
+
 class Home extends MY_Controller {
 
     public $per_page;
 
     function __construct() {
         parent::__construct(); 
-        $this->load->library("xmlmap");
-        $this->load->model("product_model");  
+        $this->load->library("xmlmap"); 
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->pm = $this->serviceContainer['product_manager'];
 
         //Making response json type
         header('Content-type: application/json'); 
     }
 
     public function index()
-    {
-        $pageContent = $this->xmlmap->getFilename("page/mobile_home_files"); 
-        echo json_encode($pageContent,JSON_PRETTY_PRINT);
-    }
+    { 
+        $baseUrl = base_url();
+        $mobileHomeContent = $this->serviceContainer['xml_cms']->getMobileHomeData($baseUrl);
+        
 
+        echo json_encode($mobileHomeContent,JSON_PRETTY_PRINT);
+    }
 }
 
 /* End of file home.php */
