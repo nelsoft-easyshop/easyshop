@@ -48,4 +48,31 @@ class ListingPromo extends AbstractPromo
     {
         return $price;
     }
+
+    /**
+     * Checks if promo has started and if promo promo has ended.
+     * @param $startDate
+     * @param $endDate
+     * @param $option
+     * @return array
+     */
+    public static function getAvailability($startDate, $endDate, $option = array())
+    {
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        $isAvailable = array(
+            'isStartPromo' => false,
+            'isEndPromo' => false,
+        );
+
+        if($dateToday >= $startDateTime && $dateToday <= $startDateTime) {
+            $isAvailable['isStartPromo'] = true;
+        }
+
+        $isAvailable['isEndPromo'] = ($startDateTime > $endDateTime) ? true : false;
+
+        return $isAvailable;
+    }
 }
