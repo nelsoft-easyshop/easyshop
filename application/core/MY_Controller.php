@@ -35,7 +35,6 @@ class MY_Controller extends CI_Controller
         }
         /*  Load custom common functions */
         $this->load->helper('common_helper');
-        $this->load->vars(array('assetsBaseUrl' =>  $this->config->item('assetsBaseUrl')));
     }
     
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it

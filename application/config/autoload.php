@@ -79,7 +79,7 @@ $autoload['helper'] = array('url', 'captcha', 'file', 'html','form', 'cookie','d
 |
 */
 
-$autoload['config'] = array('form_validation', 'email', 'assets');
+$autoload['config'] = array('form_validation', 'email');
 
 
 /*
