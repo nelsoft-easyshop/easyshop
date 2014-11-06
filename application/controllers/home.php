@@ -121,28 +121,6 @@ class Home extends MY_Controller
       $this->load->view('templates/footer_full');
     }
 
-    /**
-     * Renders 404 page
-     *
-     * @return View
-     */
-    public function pagenotfound()
-    {
-        $this->output->set_status_header('404'); 
-        $page = $_SERVER['REQUEST_URI'];
-        log_message('error', '404 Page Not Found --> '.$page);
-        $data = array('title' => 'Page Not Found | Easyshop.ph',);
-
-        if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fillUserDetails();
-        }
-        $data['homeContent'] = $this->fillCategoryNavigation();  
-
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_primary');
-    }
     
     /**
      * Renders splash page
@@ -388,7 +366,7 @@ class Home extends MY_Controller
         }
         // Load invalid link error page
         else{
-            $this->pagenotfound();
+            show_404();
         }
 
     }
