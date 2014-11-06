@@ -211,19 +211,24 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
                         <p class="attr-title">Share with:</p>
-                            <div id="fb-root"></div>
-                            <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
-                        
-                        <a class="twitter-share-button"
-                           data-url="<?=$url?>"
-                           data-related="twitterdev"
-                           data-size="large"
-                           data-count="none">
+                        <a href="javascript:void(0)" class="facebook-lnk">
+                            <div class="ui-form-control share-facebook">
+                                <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
+                                <span>Facebook</span>
+                                <div id="fb-root"></div>
+                                <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
+                            </div>
+                        </a>
+                        <span class="twitter-lnk">
                             <div class="ui-form-control share-twitter">
                                 <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
+                                <a class="twitter-share-button" data-url="<?=$url?>" data-related="twitterdev" data-size="large"
+                                    data-count="none">
+                                    
+                                </a>
                             </div>
-                        </a>
+                        </span>
                         <a href="https://plus.google.com/share?url=<?=$url?>">
                             <div class="ui-form-control share-googleplus">
                                 <img src="/assets/images/img-googleplus-prod.png" alt="Google+"> 

@@ -1477,6 +1477,38 @@ div.vertical {
 	width: 68%;
 }
 
+.prod-share-container .twitter-lnk,
+.prod-share-container .facebook-lnk {
+    position: relative;
+    overflow: hidden;
+}
+
+.facebook-lnk .fb_iframe_widget {
+    position: absolute;
+    left: 15px;
+    top: 9px;
+    opacity: 0;
+}
+
+.facebook-lnk iframe {
+    transform: scale(3.70);
+}
+
+.twitter-lnk iframe {
+    height: 36px !important;
+    left: 0;
+    min-width: 160px !important;
+    width: 200px !important;
+    opacity: 0; 
+    padding: 3px 45px;
+    position: absolute;
+    transform: scale(1.70);
+}
+
+.twitter-lnk iframe .xl .btn .label {
+    padding: 0 7px 0 86px !important;
+}
+
 .mobile-product-gallery {
 	margin-bottom: 20px;
 }
@@ -1599,11 +1631,15 @@ div.vertical {
 /* =============================================
 -------------  responsive css -----------------
 ==============================================*/
-@media (min-width: 320px) {
+@media (min-width: 300px) {
 	.prod-add-to-cart-btn {
 		background-position: 25% center;
 		padding: 10px 10px 10px 17%; 
 	}
+
+    .facebook-lnk .fb_iframe_widget {
+        left: 34px;
+    }
 }
 
 
@@ -1685,7 +1721,8 @@ div.vertical {
 }
 
 @media (min-width : 410px) {
-	.prod-share-container a {
+	.prod-share-container a,
+    .prod-share-container .twitter-lnk {
 		display: inline-block;
 		margin-left: 2%;
 		vertical-align: middle;
@@ -1704,7 +1741,8 @@ div.vertical {
 		vertical-align: middle;
 		width: 20%;
 	}
-	.prod-share-container a {
+	.prod-share-container a,
+    .prod-share-container .twitter-lnk {
 		width: 23.8%;
 	}
 }
@@ -1731,6 +1769,16 @@ div.vertical {
 		position: relative;
 		width: 45px;
 	}
+
+    .facebook-lnk .fb_iframe_widget {
+        height: 40px;
+        left: 0;
+        top: 14px;
+    }
+
+    .prod-share-container .facebook-lnk .fb_iframe_widget span {
+        display: block ;
+    }
 
 	.prod-share-container .ui-form-control span {
 		display: none;
