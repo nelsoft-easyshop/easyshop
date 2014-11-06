@@ -119,10 +119,10 @@
                 For updates, please check our facebook and twitter pages. <br/><br/>
                 <p class="img_social_media">
                     <a style='margin-right:50px;' href="https://www.facebook.com/EasyShopPhilippines" target="_blank">
-                        <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
+                        <img src="/assets/images/img_social_media_facebook.png" alt="facebook">
                     </a>
                     <a class="" href='https://twitter.com/EasyShopPH' target="_blank">
-                        <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
+                        <img src="/assets/images/img_social_media_twitter.png" alt="Twitter">
                     </a>
                 </p>
                 <br>
