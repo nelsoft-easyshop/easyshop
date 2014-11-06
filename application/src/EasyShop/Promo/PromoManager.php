@@ -97,16 +97,15 @@ class PromoManager
      * @param $endDate
      * @return float
      */
-    public static function getPromoPrice($price, $discount, $isPromote, $promoType, $startDate, $endDate)
+    public function getPromoPrice($price, $discount, $isPromote, $promoType, $startDate, $endDate)
     {
         $promoPrice = $price;
-        $promoConfig = require APPPATH . 'config/promo.php';
         if (intval($isPromote) === 1) {
-            if (isset($promoConfig[$promoType])) {
-                if (isset($promoConfig[$promoType]['implementation']) &&
-                    trim($promoConfig[$promoType]['implementation']) !== ''
+            if (isset($this->promoConfig[$promoType])) {
+                if (isset($this->promoConfig[$promoType]['implementation']) &&
+                    trim($this->promoConfig[$promoType]['implementation']) !== ''
                 ) {
-                    $promoImplementation = $promoConfig[$promoType]['implementation'];
+                    $promoImplementation = $this->promoConfig[$promoType]['implementation'];
                     $promoPrice = $promoImplementation::getPrice($price, $startDate, $endDate, $discount);
                 }
             }
