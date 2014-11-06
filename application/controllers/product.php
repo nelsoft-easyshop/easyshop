@@ -453,13 +453,12 @@ class product extends MY_Controller
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/productpage_view_responsive', $data);
+            $this->load->view('templates/footer_full');
         }
         else{
-            $data['title'] =  'Easyshop.ph | Page Not Found';
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/general_error', $data); 
+           show_404();
         }
-        $this->load->view('templates/footer_full');
+        
     } 
 
     /**
