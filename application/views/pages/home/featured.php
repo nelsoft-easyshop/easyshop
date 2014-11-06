@@ -78,7 +78,6 @@
         </div>
         <div class="col-lg-3">
             <div class="col-store-logo">
-                <center>
                 <div class="store-big-logo-container ">
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
@@ -90,7 +89,6 @@
                         </a>
                     </div>
                 </div>
-                </center>
             </div>
         </div>
         
