@@ -56,6 +56,39 @@ class CMS
     }
 
     /**
+     *  First part of re-ordering the slide parent node
+     *  @param string $image
+     *  @param string $template
+     *  @param int $index
+     *  @param int $order
+     */
+    public function syncSliderValues($file,$image, $template, $index, $order)
+    {
+        $map = simplexml_load_file($file);
+
+        foreach($image as $key => $insertImages) {
+           
+            if(count($image) == 1) {
+                $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
+                $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+                $map->asXML($file);                
+            }
+            else {
+                if($key == 0 ) {
+                    $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
+                    $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+                }
+                else {
+                    $string = $this->getString("subSliderSection", $insertImages->path, "", "", $insertImages->target);      
+                    $this->addXmlFormatted($map,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n", true, true);           
+                } 
+            }
+        $map->asXML($file);  
+
+        }        
+    }      
+
+    /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
      *
      *  @param string $nodeName
@@ -66,7 +99,7 @@ class CMS
      *
      *  @return string
      */
-    public function getString($nodeName, $value, $type, $coordinate, $target) 
+    public function getString($nodeName, $value = null, $type = null, $coordinate = null, $target = null) 
     {
         if($nodeName == "addBrands") {
              $string = '
@@ -136,7 +169,7 @@ class CMS
             </image>
 
         </slide>'; 
-        }
+        }       
         if($nodeName == "categorySubSlug") {
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
@@ -286,7 +319,7 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index, $subIndex) 
+    public function removeXmlNode($file,$nodeName,$index, $subIndex = null) 
     {
 
         if($nodeName == "mainSliderSection"){
@@ -576,17 +609,20 @@ $string = '<typeNode>
      *
      *  @return boolean
      */
-    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true) 
+    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true, $isSimpleXmlLoaded = false) 
     {        
-        $sxe = new \SimpleXMLElement(file_get_contents($file));
+        $sxe = (!$isSimpleXmlLoaded) ? new \SimpleXMLElement(file_get_contents($file)) : $file;
         $insert = new \SimpleXMLElement($xml_string);
         $target = current($sxe->xpath($target_node));
 
         $this->simplexml_insert_formatted($insert, $target,$tabs,$newLines,$move);
-        if($sxe->asXml($file)) {
-            return true;
 
+        if(!$isSimpleXmlLoaded) {
+            if($sxe->asXml($file)) {
+                return true;
+            }        
         }
+
     }
 
     /**
@@ -865,8 +901,132 @@ $string = '<typeNode>
         return $homePageData;
     }
     
-    
-    
+
+    /**
+     * Returns the mobile home page data
+     * @return array
+     */
+    public function getMobileHomeData($baseUrl)
+    {
+        $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
+        $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
+
+        // banner images
+        $bannerImages = [];
+        foreach ($pageContent['mainSlide'] as $key => $value) {
+            $bannerImages[] = array(
+                            'name' => '0',
+                            'image' => $value['value'],
+                            'target' => $baseUrl.$value['imagemap']['target'],
+                            'actionType' => $value['actionType'],
+                        );
+        }
+        $sectionImages = array(
+                        'name' => '',
+                        'bgcolor' => '',
+                        'type' => 'promo',
+                        'data' => $bannerImages,
+                    ); 
+
+        $productSections[] = $sectionImages; 
+        // product sections 
+        foreach ($pageContent['section'] as $key => $value) {
+            $productArray = [];
+            // loop products
+        
+            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) {
+
+                $slug = (isset($valueLevel2['value'])) ? $valueLevel2['value'] : ""; 
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findOneBy(['slug' => $slug]);
+
+                $productName = "";
+                $productSlug = "";
+                $productBasePrice = 0;
+                $productFinalPrice = 0;
+                $productDiscount = 0;
+                $productImagePath = "";
+                $target = "";
+
+                if($product){
+                    $product = $this->productManager->getProductDetails($product->getIdProduct());
+
+                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                      ->getDefaultImage($product->getIdProduct());
+        
+                    $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                    $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+                    if($productImage != NULL){
+                        $directory = $productImage->getDirectory();
+                        $imageFileName = $productImage->getFilename();
+                    }
+
+                    $productName = $product->getName();
+                    $productSlug = $product->getSlug();
+                    $productDiscount = floatval($product->getDiscountPercentage());
+                    $productBasePrice = floatval($product->getPrice());
+                    $productFinalPrice = floatval($product->getFinalPrice());
+                    $productImagePath = $directory.$imageFileName;
+                    $target = $baseUrl.'mobile/product/item/'.$productSlug;
+                }
+
+                $productArray[] = array(
+                                    'name' => $productName,
+                                    'slug' => $productSlug,
+                                    'discount_percentage' => $productDiscount,
+                                    'base_price' => $productBasePrice,
+                                    'final_price' => $productFinalPrice,
+                                    'image' => $productImagePath,
+                                    'actionType' => $valueLevel2['actionType'],
+                                    'target' => $target,
+                                );
+            }
+
+            $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                ->findOneBy(['slug' => $value['name']]);
+
+            $categoryName = "";
+            $categoryIcon = $baseUrl.EsBrand::IMAGE_DIRECTORY.EsBrand::IMAGE_UNAVAILABLE_FILE;
+            if($categoryObject){
+                $categoryName = $categoryObject->getName();
+                $categorySlug = $categoryObject->getSlug();
+
+                $categoryIconObject = $this->em->getRepository('EasyShop\Entities\EsCatImg')
+                                ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
+
+                if($categoryIconObject){
+                    $categoryIcon = $baseUrl.'assets/'.$categoryIconObject->getPath();
+                }
+
+                $productArray[] = array(
+                                        'name' => "",
+                                        'slug' => "",
+                                        'discount_percentage' => 0,
+                                        'base_price' => 0,
+                                        'final_price' => 0,
+                                        'image' => "",
+                                        'actionType' => 'show product list',
+                                        'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                                    );
+            }
+
+            $productSections[] = array(
+                                'name' => $categoryName,
+                                'bgcolor' => $value['bgcolor'],
+                                'type' => $value['type'],
+                                'icon' => $categoryIcon,
+                                'data' => $productArray,
+                            );
+        }
+
+        $display = array( 
+                    'section' => $productSections,
+                );
+
+        return $display;
+    }
+
 }
 
 
