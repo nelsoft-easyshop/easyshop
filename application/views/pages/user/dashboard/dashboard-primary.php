@@ -4,10 +4,10 @@
 <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
- <style>
-      
-    </style>
-<section class="section-dashboard idTabs" >
+
+<link type="text/css" href='/assets/css/new-dashboard-transaction.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
+<section class="section-dashboard idTabs">
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sidebar">
@@ -30,7 +30,9 @@
                     <div class="tab-pane" id="dashboard">
                         <?php include("dashboard-home.php");?>
                     </div>
-                    <div class="" id="transactions">transactions</div>
+                    <div class="" id="transactions">
+                        <?php include("dashboard-transactions.php");?>
+                    </div>
                     <div class="" id="promo">promo</div>
                     <div class="" id="setup">setup</div>
                 </div>
@@ -44,6 +46,8 @@
 <br/>
 <br/>
 <br/>
+
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
+

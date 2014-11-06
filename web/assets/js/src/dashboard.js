@@ -10,4 +10,9 @@
         }
         });
     });
+
+function triggerTab(x){
+    $('.idTabs a[href="#'+x+'"]').trigger('click');
+};
+
 }(jQuery));
