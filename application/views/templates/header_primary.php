@@ -200,12 +200,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                           <div class="search-container">
-                                                <!-- <select name="category" class="ui-form-control">
-                                                    <option value="1">- All -</option>
-                                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                                        <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
-                                                    <?php endforeach; ?>
-                                                </select> -->
                                                 <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                             </div>
                                         </div>
