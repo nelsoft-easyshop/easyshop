@@ -16,23 +16,22 @@ body{
     margin-top: 10px;
 }
 
-.sidebar-dashboard > li{
+.sidebar-dashboard > a > li{
     text-transform: uppercase;
     font-size: 14px;
     padding: 15px 20px;
     background: #f4f4f4;
     border-top: solid #e2e2e2 2px;
     border-bottom: solid #e2e2e2 2px;
-    font-weight: 600;
+    font-weight: bold;
     transition: all 0.3s ease;
 }
 
-.sidebar-dashboard > li:hover{
-    background: #ff893a;
-    color: #fff;
+.sidebar-dashboard > a{
+    color: #565656;
 }
 
-.sidebar-dashboard > li.active{
+.sidebar-dashboard > a > li:hover{
     background: #ff893a;
     color: #fff;
 }
@@ -41,14 +40,14 @@ body{
     color: #fff;
 }
 
-.sidebar-dashboard > li:first-child{
+.mf-li{
     border-radius: 7px 7px 0px 0px;
-    border: none;
+    border: none !important;
 }
 
-.sidebar-dashboard > li:last-child{
+.ml-li{
     border-radius: 0px 0px 7px 7px;
-    border: none;
+    border: none !important;
 }
 
 #my-store-menu{
@@ -101,6 +100,11 @@ body{
 
 .l-li{
     border: none !important;
+}
+
+a.selected > li{
+    background: #ff893a;
+    color: #fff;
 }
 
 .toggle-down{

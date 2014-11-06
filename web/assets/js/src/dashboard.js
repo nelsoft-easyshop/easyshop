@@ -10,4 +10,10 @@
         }
         });
     });
+    
+     $( "#dash" ).click(function() {
+        alert("asdasd");
+     });
+     
+     $("#homeTabs ul").idTabs("one"); 
 }(jQuery));

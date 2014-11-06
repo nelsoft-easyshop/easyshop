@@ -126,5 +126,20 @@
             </div>
         </div>
     </div>
-    
+    <div class="sidebarTabs">
+      <ul>
+        <li><a href="#one" class="a-1">1</a></li>
+        <li><a href="#two">2</a></li>
+        <!-- Try adding this <br/> tag here -->
+        <li><a href="#three">3</a></li>
+        <li><a href="#four">4</a></li>
+      </ul>
+      <div class="items">
+        <div id="one" style="display:block;">Welcome to <b>idTabs</b>!</div>
+        <div id="two">You can do anything with <b>idTabs</b>.</div>
+        <div id="three">Anything at all.</div>
+        <div class="four">The only limit,</div>
+        <div class="four">is your imagination.</div>
+      </div>
+    </div>
 </div>
