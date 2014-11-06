@@ -740,12 +740,7 @@ class productUpload extends MY_Controller
                 #end of other 
  
                 if(!count($arraynameoffiles) <= 0){ 
-                    if(strtolower(ENVIRONMENT) !== 'development'){
-                        directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
-                    }
-                    else{
-                        $this->serviceContainer["product_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
-                    } 
+                    $this->serviceContainer["product_uploader"]->uploadImageDirectory(ENVIRONMENT, $tempDirectory, $path_directory, $product_id, $arrayNameOnly);
                 }
 
                 #saving combination
@@ -978,12 +973,7 @@ class productUpload extends MY_Controller
                 }
             }
             
-            if(strtolower(ENVIRONMENT) !== 'development'){
-                directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
-            }
-            else{
-                $this->serviceContainer["product_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
-            }
+            $this->serviceContainer["product_uploader"]->uploadImageDirectory(ENVIRONMENT, $tempDirectory, $path_directory, $product_id, $arrayNameOnly);
 
             #saving combination
             if(count($combination) <= 0){

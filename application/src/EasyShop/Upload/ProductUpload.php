@@ -28,21 +28,31 @@ class ProductUpload
     
      
     /**
-     * Uploads the temporary image directory structure into the S3 bucket 
+     * Uploads the temporary image directory structure into the appropriate location
      *
      * @param string $sourceDirectory
      * @param string $destinationDirectory
      * @param integer $productId
      * @param string[] $fileNames
      */
-    public function uploadImageDirectory($sourceDirectory, $destinationDirectory, $productId, $fileNames = NULL)
-    {
+    public function uploadImageDirectory($environment, $sourceDirectory, $destinationDirectory, $productId, $fileNames = NULL)
+    {    
         $sourceDirectory = rtrim($sourceDirectory,'/');
         $destinationDirectory = rtrim($destinationDirectory,'/');
-        $sourceDirectory = ltrim($sourceDirectory,'.');
-        $destinationDirectory = ltrim($destinationDirectory,'.');
+        
+        
+        if(strtolower($environment) !== 'development'){
+            $sourceDirectory = ltrim($sourceDirectory,'.');
+            $destinationDirectory = ltrim($destinationDirectory,'.');
+        }
+        else{
+            //creating the destination directory
+            if(!is_dir($destinationDirectory)){
+                mkdir($destinationDirectory, 0777, true);
+            }
+        } 
+        
         $directoryMap = directory_map($sourceDirectory);
-
         foreach($directoryMap as $key => $file)
         {
             if(is_numeric($key)){
@@ -50,7 +60,13 @@ class ProductUpload
                     $explodedFilename = explode('_', $file);
                     $explodedFilename[0] = $productId;
                     $newFileName = implode('_', $explodedFilename);
-                    $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
+                    if(strtolower($environment) !== 'development'){
+                        $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
+                    }
+                    else{
+                        copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
+                        rename($destinationDirectory.'/'.$object_value, $destinationDirectory.'/'.$newFileName);
+                    }
                 }
             }
             else{
