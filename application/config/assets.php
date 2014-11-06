@@ -7,10 +7,10 @@ $config = array(
 );
 
 if(ENVIRONMENT == 'production'){
-    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/easyshop-production";
+    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/easyshop-production/";
 }
 else if(ENVIRONMENT == 'staging'){
-    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/easyshop-staging";
+    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/easyshop-staging/";
 }
 else{
     $config['assetsBaseUrl'] = "/";
