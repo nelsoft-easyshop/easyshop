@@ -34,6 +34,12 @@ class ProductManager
     const NEWNESS_LIMIT = 14;
 
     /**
+     * Default Number of recommended products
+     *
+     */
+    const RECOMMENDED_PRODUCT_COUNT = 15;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -78,16 +84,24 @@ class ProductManager
     private $imageLibrary;
 
     /**
+     * User Manager Instance
+     *
+     * @var CI_Image_lib
+     */
+    private $userManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary, $userManager)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
         $this->imageLibrary = $imageLibrary;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -481,8 +495,20 @@ class ProductManager
 
         $products = $queryBuilder->getResult();
         
-        foreach($products as $key => $product){
-            $products[$key] = $this->getProductDetails($product);
+        foreach($products as $key => $product){ 
+            $eachProduct = $this->getProductDetails($product->getIdProduct());
+            $eachProduct->ownerAvatar = $this->userManager
+                                             ->getUserImage($product->getMember()->getIdMember());
+
+            $eachProduct->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $eachProduct->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($eachProduct->getDefaultImage()){
+                $eachProduct->directory = $eachProduct->getDefaultImage()->getDirectory();
+                $eachProduct->imageFileName = $eachProduct->getDefaultImage()->getFilename();
+            }
+
+            $products[$key] = $eachProduct;
         }
         
         return $products;

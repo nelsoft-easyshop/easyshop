@@ -97,7 +97,7 @@
                     };
                     $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
                 }
-                if($("#totallyFreeShipping").val() != ""){
+                if($("#isFreeShippingNationwide").val() != ""){
                     $("#control-quantity").append('<option value="0">FREE SHIPPING NATIONWIDE</option>');
                 }
                 else{
@@ -111,6 +111,8 @@
                 
                 return false;
             }
+            
+            $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
         });
     }

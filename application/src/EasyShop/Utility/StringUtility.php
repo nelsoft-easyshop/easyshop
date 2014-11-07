@@ -2,6 +2,8 @@
 
 namespace EasyShop\Utility;
 
+use HTMLPurifier as HTMLPurifier;
+
 /**
  * String utility class
  *
@@ -44,5 +46,13 @@ class StringUtility
         $string = str_replace('--', '-', $string);
 
         return preg_replace('/\s+/','-', $string);
+    }
+
+    public function purifyString($string)
+    {
+
+        $HTMLPurifier = new HTMLPurifier();
+
+        return  $HTMLPurifier->purify($string);
     }
 }

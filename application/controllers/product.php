@@ -240,6 +240,7 @@ class product extends MY_Controller
         $userManager = $this->serviceContainer['user_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
         $reviewProductService = $this->serviceContainer['review_product_service'];
+        $stringUtility = $this->serviceContainer['string_utility'];
 
         // Load Product Section
         // check of slug exist
@@ -267,7 +268,7 @@ class product extends MY_Controller
             
             // get all images of the product
             $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                        ->getProductImages($productId);
+                                      ->getProductImages($productId);
             $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],TRUE);
 
             // getting attributes
@@ -277,14 +278,14 @@ class product extends MY_Controller
 
             // get combination quantity
             $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                    ->getProductInventoryDetail($productId);
+                                              ->getProductInventoryDetail($productId);
 
             // get product shipping location
             $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                                ->getShippingDetailsByProductId($product->getIdProduct());
+                                        ->getShippingDetailsByProductId($product->getIdProduct());
 
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                            ->getLocation();
+                                         ->getLocation();
 
             $finalCombinationQuantity = [];
             foreach ($productQuantityObject as $key => $value) {
@@ -311,17 +312,14 @@ class product extends MY_Controller
                 }
             }
 
-            // check if totally free shipping
-            $freeShippingCount = 0;
+            // check if totally free shipping 
+            $isFreeShippingNationwide = TRUE;
             foreach ($shippingDetails as $key => $value) {
-                if(intval($value['location_id']) === 1 && floatval($value['price']) === floatval(0)){
-                    $freeShippingCount++;
+                if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
+                    || floatval($value['price']) !== floatval(0)){
+                    $isFreeShippingNationwide = FALSE;
+                    break;
                 }
-            }
-
-            $totallyFreeShipping = FALSE;
-            if($freeShippingCount === count($shippingDetails)){
-                $totallyFreeShipping = TRUE;
             }
 
             // check if combination available
@@ -335,7 +333,8 @@ class product extends MY_Controller
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if(intval($product->getIsPromote()) === 1 && (!$product->getEndPromo()) ){
+            if( intval($product->getIsPromote()) === 1 && (!$product->getEndPromo()) ){
+
                 $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                 if(strlen(trim($bannerfile)) > 0){
                     $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], TRUE); 
@@ -349,16 +348,7 @@ class product extends MY_Controller
 
             // product details
             // clean product details
-            $clean_desc = html_purify($product->getDescription());
-            $us_ascii = mb_convert_encoding($clean_desc, 'HTML-ENTITIES', 'UTF-8');
-            $doc = new DOMDocument();
-            //@ = error message suppressor, just to be safe
-            @$doc->loadHTML($us_ascii);
-            $tags = $doc->getElementsByTagName('a');
-            foreach($tags as $a){
-                $a->setAttribute('rel', 'nofollow');
-            }
-            $productDescription = @$doc->saveHTML($doc);
+            $productDescription = $stringUtility->purifyString($product->getDescription());
 
             // get reviews
             $productReviews = $reviewProductService->getProductReview($productId);
@@ -375,25 +365,7 @@ class product extends MY_Controller
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
 
             // get recommended products
-            $subCategoryIds = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                            ->getChildCategoryRecursive($product->getCat()->getIdCat());
-            $popularProductId = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getPopularItem(15,0,0,$subCategoryIds);
-            $recommendProducts = [];
-            foreach ($popularProductId as $key) {
-                $productRecommend = $productManager->getProductDetails($key);
-                $productRecommend->ownerAvatar = $userManager->getUserImage($productRecommend->getMember()->getIdMember());
-                $recommendProducts[] = $productRecommend;
-                
-                if(!$productRecommend->getDefaultImage()){
-                    $productRecommend->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                    $productRecommend->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
-                }
-                else{
-                    $productRecommend->directory = $productRecommend->getDefaultImage()->getDirectory();
-                    $productRecommend->imageFileName = $productRecommend->getDefaultImage()->getFilename();
-                }
-            }
+            $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
 
             $recommendViewArray = [
                                 'recommended'=> $recommendProducts,
@@ -421,13 +393,13 @@ class product extends MY_Controller
                         'reviewDetailsView' => $reviewDetailsView,
                         'recommendedView' => $recommendedView,
                         'noMoreSelection' => $noMoreSelection, 
-                        'totallyFreeShipping' => $totallyFreeShipping, 
+                        'isFreeShippingNationwide' => $isFreeShippingNationwide, 
                         'url' => '/item/' . $product->getSlug() 
                     );
             $this->load->view('pages/product/productpage_primary', $viewData);
         }
         else{
-            $this->load->view('pages/general_error'); 
+            show_404();
         }
     }
 

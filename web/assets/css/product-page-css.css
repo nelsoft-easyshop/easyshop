@@ -232,6 +232,10 @@ body{
     padding: 15px;
 }
 
+.element-hide{
+    display: none !important;
+}
+
 .input-textarea{
     display: block;
     width: 100%;

@@ -79,10 +79,12 @@
                     <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
                     <!-- Product attributes here -->
                     <?php foreach ($productAttributes as $head => $headValue): ?>
-                        <div class="col-sm-12 col-md-6 attr-select">
+                        <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
                             <div class="prod-select-con ui-form-control">
                                 <select class="attribute-control">
+                                    <?php if(count($headValue) > 1): ?>
                                     <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
+                                    <?php endif; ?>
                                     <?php foreach ($headValue as $key => $value):?>
                                         <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
                                     <?php endforeach; ?>
@@ -106,7 +108,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
-                            <?php if(!$totallyFreeShipping): ?>
+                            <?php if(!$isFreeShippingNationwide): ?>
                                 <div class="prod-select-con ui-form-control shipment-select">
                                     <select class="shiploc" id="shipment_locations">
                                         <option class="default" selected="" value="0">Select Location</option>
@@ -249,7 +251,7 @@
     <input id='productId' type='hidden' value='<?=$product->getIdProduct();?>'>
     <input id='review-count' type='hidden' value='<?=count($productReview);?>'>
     <input id="noMoreSelection" type="hidden" value="<?=$noMoreSelection;?>">
-    <input id="totallyFreeShipping" type="hidden" value="<?=$totallyFreeShipping;?>">
+    <input id="isFreeShippingNationwide" type="hidden" value="<?=$isFreeShippingNationwide;?>">
 </div>
 
 <!-- display view for product details and review -->
