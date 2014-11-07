@@ -79,14 +79,46 @@ class PromoManager
             if(intval($product->getDiscount('discount')) > 0){
                 $regularDiscountPrice = $product->getPrice() * (1.0-($product->getDiscount()/100.0));
                 $product->setFinalPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
-            }  
+            }
         }
  
         $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
         $product->setDiscountPercentage($percentage); 
     }
-    
-    
+
+    /**
+     * get the promo price.
+     *
+     * @param $price
+     * @param $discount
+     * @param $isPromote
+     * @param $promoType
+     * @param $startDate
+     * @param $endDate
+     * @return float
+     */
+    public function hydratePromoDataExpress($price, $discount, $isPromote, $promoType, $startDate, $endDate)
+    {
+        $promoPrice = $price;
+        if (intval($isPromote) === 1) {
+            if (isset($this->promoConfig[$promoType])) {
+                if (isset($this->promoConfig[$promoType]['implementation']) &&
+                    trim($this->promoConfig[$promoType]['implementation']) !== ''
+                ) {
+                    $promoImplementation = $this->promoConfig[$promoType]['implementation'];
+                    $promoPrice = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount,$this->promoConfig[$promoType]['option']);
+                }
+            }
+        }
+        else {
+            if (intval($discount) > 0) {
+                $regularDiscountPrice = $price * (1.0-($discount/100.0));
+                $promoPrice = (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01;
+            }
+        }
+        return $promoPrice;
+    }
+
     /**
      * Returns the product checkout limit based on a promo.
      * This method does not take into consideration which user will buy the

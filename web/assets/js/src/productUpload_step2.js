@@ -88,49 +88,40 @@ function askDraft(location)
     if(isEdit == 0){ 
         $("#question").dialog({
             resizable: false,
-            height: 100,
+            height: 200,
             width: 530,
             modal: true, 
             open: function() {
             },
             buttons: {
-                "Save as draft": function() {
-                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                "Yes, please.": function() {
                     $(".ui-dialog-buttonset").hide();
                     saveAsDraftProceed();
                     window.location = location;
                 },
-                "Don't save as draft": function() {
-                    $(".ui-dialog-title").text('Please wait...'); 
+                "No, thanks": function() {
                     $(".ui-dialog-buttonset").hide();
                     window.location = location;
                 },
-                "Cancel": function() { 
+                "Stay in this page": function() {
                     $(this).dialog("close");
                 }
             },
-            "title": "You are about to leave the page without completing the process. Save this listing in your drafts?"
+            open: function() {
+                var draftmessage = '<p style="font-size:14px;padding-top:18px;padding-left:18px">You are about to close an incomplete upload. Would you like us to save this for you?</p>';
+                $(this).html(draftmessage);
+            },
+            "title": "Save as Draft"
+            
         });   
     }
     else{ 
-        $("#question").dialog({
-            resizable: false,
-            height: 100,
-            width: 530,
-            modal: true, 
-            open: function() {
-            },
-            buttons: {
-                "Proceed": function() {
-                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
-                    $(".ui-dialog-buttonset").hide();
-                    saveAsDraftProceed();
-                    window.location = location;
-                }
-            },
-            "title": "This listing is about to be saved in your drafts."
-        });
+        saveAsDraftProceed();
+        window.location = location;
     }
+    
+    $(".ui-dialog-buttonset").children("button:eq(0)").addClass("btn btn-default-3");
+    $(".ui-dialog-buttonset").children("button:eq(2)").addClass("btn btn-default-1").removeClass("btn-default-3");
 }
 
 function removeDuplicateCombination()
