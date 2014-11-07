@@ -16,66 +16,41 @@ class PeakHourSalePromo extends AbstractPromo
         if(!isset($this->product)){
             return null;
         }
+        $promoData = $this->getPromoData(
+            $this->product->getPrice(),
+            $this->dateToday,
+            $this->endDateTime,
+            $this->getDiscount(),
+            $this->option
+        );
 
-        $Ymd = strtotime(date('Y-m-d', $this->dateToday->getTimeStamp()));
-        $His = strtotime(date('H:i:s', $this->dateToday->getTimeStamp()));
-        $this->promoPrice = $this->product->getPrice();
-        
-        if($Ymd === strtotime(date('Y-m-d',$this->startDate->getTimeStamp()))){
-            foreach ($this->option as $promoPeriod) {
-                if ((strtotime($promoPeriod['start']) <= $His) && (strtotime($promoPeriod['end']) > $His)) {
-                    $this->isStartPromo = true;
-                    $this->promoPrice = $this->product->getPrice() - ($this->product->getPrice() * $this->product->getDiscount()/100.0);
-                    break;
-                }
-            }
-        }
-
-        $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
+        $this->promoPrice = $promoData['promoPrice'];
+        $this->isStartPromo = $promoData['isStartPromo'];
+        $this->isEndPromo = $promoData['isEndPromo'];
         $this->persist();
-        
+
         return $this->product;
     }
 
     /**
-     * Calculates Promo Price
-     *
+     * Calculates Promo Price and Checks if promo has started and if promo promo has ended.
      * @param $price
      * @param $startDate
      * @param $endDate
      * @param $discount
-     * @return float
-     */
-    public static function getPrice($price, $startDate, $endDate, $discount)
-    {
-        $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
-        $startDateTime = $startDate->getTimestamp();
-        $endDateTime = $endDate->getTimestamp();
-        $promoPrice = $price;
-        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
-            $promoPrice = $price - ($price * $discount/100.0);
-        }
-
-        return $promoPrice;
-    }
-
-    /**
-     * Checks if promo has started and if promo promo has ended.
-     * @param $startDate
-     * @param $endDate
      * @param $option
      * @return array
      */
-    public static function getAvailability($startDate, $endDate, $option = array())
+    public static function getPromoData($price, $startDate, $endDate, $discount, $option = array())
     {
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
         $startDateTime = $startDate->getTimestamp();
         $endDateTime = $endDate->getTimestamp();
-        $isAvailable = array(
+        $promoDetails = array(
+            'promoPrice' => $price,
             'isStartPromo' => false,
-            'isEndPromo' => false,
+            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
         );
 
         $Ymd = strtotime(date('Y-m-d', $dateToday));
@@ -84,14 +59,14 @@ class PeakHourSalePromo extends AbstractPromo
         if($Ymd === strtotime(date('Y-m-d',$startDateTime))) {
             foreach ($option as $promoPeriod) {
                 if ((strtotime($promoPeriod['start']) <= $His) && (strtotime($promoPeriod['end']) > $His)) {
-                    $isAvailable['isStartPromo'] = true;
+                    $promoDetails['isStartPromo'] = true;
+                    $promoDetails['promoPrice'] = $price - ($price * $discount/100.0);
                     break;
                 }
             }
         }
 
-        $isAvailable['isEndPromo'] = ($startDateTime > $endDateTime) ? true : false;
-
-        return $isAvailable;
+        return $promoDetails;
     }
+
 }

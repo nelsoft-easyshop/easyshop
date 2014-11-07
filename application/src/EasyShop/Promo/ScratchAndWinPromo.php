@@ -16,73 +16,48 @@ class ScratchAndWinPromo extends AbstractPromo
         if(!isset($this->product)){
             return null;
         }
-        
-        $this->dateToday = $this->dateToday->getTimestamp();
-        $this->startDateTime = $this->startDateTime->getTimestamp();
-        $this->endDateTime = $this->endDateTime->getTimestamp();
-        
-        $this->promoPrice = $this->product->getPrice();
-        if(!($this->dateToday < $this->startDateTime) ||
-            ($this->endDateTime < $this->startDateTime) ||
-            ($this->dateToday > $this->endDateTime))
-        {   
-            $this->promoPrice = 0;
-            $this->isStartPromo = true;
-        }
-          
-        $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
-        $this->persist();        
-        
+        $promoData = $this->getPromoData(
+            $this->product->getPrice(),
+            $this->dateToday,
+            $this->endDateTime,
+            $this->getDiscount()
+        );
+
+        $this->promoPrice = $promoData['promoPrice'];
+        $this->isStartPromo = $promoData['isStartPromo'];
+        $this->isEndPromo = $promoData['isEndPromo'];
+        $this->persist();
+
         return $this->product;
     }
 
     /**
-     * Calculates Promo Price
-     *
+     * Calculates Promo Price and Checks if promo has started and if promo promo has ended.
      * @param $price
      * @param $startDate
      * @param $endDate
      * @param $discount
-     * @return float
-     */
-    public static function getPrice($price, $startDate, $endDate, $discount)
-    {
-        $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
-        $startDateTime = $startDate->getTimestamp();
-        $endDateTime = $endDate->getTimestamp();
-        $promoPrice = $price;
-        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
-            $promoPrice = 0;
-        }
-
-        return $promoPrice;
-    }
-
-    /**
-     * Checks if promo has started and if promo promo has ended.
-     * @param $startDate
-     * @param $endDate
      * @param $option
      * @return array
      */
-    public static function getAvailability($startDate, $endDate, $option = array())
+    public static function getPromoData($price, $startDate, $endDate, $discount, $option = array())
     {
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
         $startDateTime = $startDate->getTimestamp();
         $endDateTime = $endDate->getTimestamp();
-        $isAvailable = array(
+        $promoDetails = array(
+            'promoPrice' => $price,
             'isStartPromo' => false,
-            'isEndPromo' => false,
+            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
         );
 
         if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
-            $isAvailable['isStartPromo'] = true;
+            $promoDetails['promoPrice'] = 0;
+            $promoDetails['isStartPromo'] = true;
         }
 
-        $isAvailable['isEndPromo'] = ($startDateTime > $endDateTime) ? true : false;
-
-        return $isAvailable;
+        return $promoDetails;
     }
+
 }

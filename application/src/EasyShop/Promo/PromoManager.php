@@ -97,7 +97,7 @@ class PromoManager
      * @param $endDate
      * @return float
      */
-    public function getPromoPrice($price, $discount, $isPromote, $promoType, $startDate, $endDate)
+    public function hydratePromoDataExpress($price, $discount, $isPromote, $promoType, $startDate, $endDate)
     {
         $promoPrice = $price;
         if (intval($isPromote) === 1) {
@@ -106,7 +106,7 @@ class PromoManager
                     trim($this->promoConfig[$promoType]['implementation']) !== ''
                 ) {
                     $promoImplementation = $this->promoConfig[$promoType]['implementation'];
-                    $promoPrice = $promoImplementation::getPrice($price, $startDate, $endDate, $discount);
+                    $promoPrice = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount);
                 }
             }
         }
