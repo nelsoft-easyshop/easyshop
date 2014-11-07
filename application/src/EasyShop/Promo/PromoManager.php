@@ -23,15 +23,24 @@ class PromoManager
      * @var mixed
      */
     private $promoConfig = array();
+    
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
 
     /**
      * Constructor
      *
-     * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
+     * @param EasyShop\ConfigLoader\ConfigLoader $configLoader
+     * @param Doctrine\ORM\EntityManager $em
      */
-    public function __construct(ConfigLoader $configLoader)
+    public function __construct(ConfigLoader $configLoader, \Doctrine\ORM\EntityManager $em)
     {
         $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $this->em = $em;
     }
     
     /**
@@ -87,18 +96,25 @@ class PromoManager
     }
 
     /**
-     * get the promo price.
+     * Function to calculate the promo price quickly. This is designed for bulk operations within large loops
      *
-     * @param $price
-     * @param $discount
-     * @param $isPromote
-     * @param $promoType
-     * @param $startDate
-     * @param $endDate
+     * @param integer $productId
      * @return float
      */
-    public function hydratePromoDataExpress($price, $discount, $isPromote, $promoType, $startDate, $endDate)
+    public function hydratePromoDataExpress($productId)
     {
+        
+        $productDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')->getRawProductPromoDetails($productId);
+        if($productDetails){
+            return 0;
+        }
+        
+        $price = $productDetails['price'];
+        $discount = $productDetails['discount'];
+        $isPromote = $productDetails['is_promote'];
+        $startDate = $productDetails['startdate'];
+        $endDate = $productDetails['enddate'];
+    
         $promoPrice = $price;
         if (intval($isPromote) === 1) {
             if (isset($this->promoConfig[$promoType])) {
