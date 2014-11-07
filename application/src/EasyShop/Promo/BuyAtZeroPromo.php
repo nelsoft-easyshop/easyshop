@@ -19,13 +19,13 @@ class BuyAtZeroPromo extends AbstractPromo
             $this->product->getPrice(),
             $this->dateToday,
             $this->endDateTime,
-            $this->getDiscount()
+            $this->product->getDiscount()
         );
 
         $this->promoPrice = $promoData['promoPrice'];
         $this->isStartPromo = $promoData['isStartPromo'];
         $this->isEndPromo = $promoData['isEndPromo'];
-        $this->persist();        
+        $this->persist();
         
         return $this->product;
     }
