@@ -103,7 +103,7 @@ function askDraft(location)
                     $(".ui-dialog-buttonset").hide();
                     window.location = location;
                 },
-                "Stay in this page": function() {
+                "Stay on this page": function() {
                     $(this).dialog("close");
                 }
             },
