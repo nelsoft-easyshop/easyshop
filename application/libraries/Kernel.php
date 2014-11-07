@@ -256,7 +256,7 @@ class Kernel
 
         //Promo Manager
         $container['promo_manager'] = function ($c) use ($container){
-            return new \EasyShop\Promo\PromoManager($container['config_loader']);
+            return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
 
         // Product Manager
