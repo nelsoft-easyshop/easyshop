@@ -143,36 +143,45 @@ class ReviewProductService
 
         if(strlen(trim($review)) > 0){
             if($memberEntity && $productEntity){
+                $canReview = $this->checkIfCanReview($memberId,$productId);
+                if(!$canReview){
+                    $dateSubmitted = date_create(date("Y-m-d H:i:s"));
 
-                $dateSubmitted = date_create(date("Y-m-d H:i:s"));
+                    $reviewObj = new EsProductReview();
+                    $reviewObj->setPReviewid($parentReviewId);
+                    $reviewObj->setMember($memberEntity);
+                    $reviewObj->setDatesubmitted($dateSubmitted);  
+                    $reviewObj->setDatehidden($dateSubmitted);  
+                    $reviewObj->setReview($review); 
+                    $reviewObj->setTitle($title); 
+                    $reviewObj->setRating($rating); 
+                    $reviewObj->setProduct($productEntity);
 
-                $reviewObj = new EsProductReview();
-                $reviewObj->setPReviewid($parentReviewId);
-                $reviewObj->setMember($memberEntity);
-                $reviewObj->setDatesubmitted($dateSubmitted);  
-                $reviewObj->setDatehidden($dateSubmitted);  
-                $reviewObj->setReview($review); 
-                $reviewObj->setTitle($title); 
-                $reviewObj->setRating($rating); 
-                $reviewObj->setProduct($productEntity);
+                    $this->em->persist($reviewObj);
+                    $this->em->flush();
 
-                $this->em->persist($reviewObj);
-                $this->em->flush();
+                    $booleanSuccess = TRUE;
 
-                $booleanSuccess = TRUE;
-
-                $returnArray = array(
-                            'isSuccess'=>$booleanSuccess,
-                            'error' => $error,
-                            'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
-                            'reviewUsername' => html_escape($memberEntity->getUsername()),
-                            'review' => html_escape($review),
-                            'userPic' => $this->userManager->getUserImage($memberId),
-                            'title' => $title,
-                            'rating' => $rating,
-                            'idReview' => $reviewObj->getIdReview(),
-                            'canReview' => $this->checkIfCanReview($memberId,$productId),
-                        );
+                    $returnArray = array(
+                                'isSuccess'=>$booleanSuccess,
+                                'error' => $error,
+                                'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
+                                'reviewUsername' => html_escape($memberEntity->getUsername()),
+                                'review' => html_escape($review),
+                                'userPic' => $this->userManager->getUserImage($memberId),
+                                'title' => $title,
+                                'rating' => $rating,
+                                'idReview' => $reviewObj->getIdReview(),
+                                'canReview' => $this->checkIfCanReview($memberId,$productId),
+                            );
+                }
+                else{
+                    $error = "You can't submit review on this product.";
+                    $returnArray = array(
+                                'isSuccess'=>$booleanSuccess,
+                                'error' => $error,
+                            );
+                }
             }
             else{
                 $error = "Something went wrong. Please try again later.";
