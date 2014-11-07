@@ -227,7 +227,7 @@ class product extends MY_Controller
      *  
      * @return View
      */
-    public function newItem($itemSlug = '')
+    public function item($itemSlug = '')
     {
         header ('Content-type: text/html; charset=ISO-8859-1');
         // Load Header
