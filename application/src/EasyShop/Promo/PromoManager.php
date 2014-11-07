@@ -106,7 +106,7 @@ class PromoManager
                     trim($this->promoConfig[$promoType]['implementation']) !== ''
                 ) {
                     $promoImplementation = $this->promoConfig[$promoType]['implementation'];
-                    $promoPrice = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount);
+                    $promoPrice = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount,$this->promoConfig[$promoType]['option']);
                 }
             }
         }
