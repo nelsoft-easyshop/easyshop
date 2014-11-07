@@ -19,7 +19,7 @@ class FixedDiscountPromo extends AbstractPromo
             $this->product->getPrice(),
             $this->dateToday,
             $this->endDateTime,
-            $this->getDiscount()
+            $this->product->getDiscount()
         );
 
         $this->promoPrice = $promoData['promoPrice'];
