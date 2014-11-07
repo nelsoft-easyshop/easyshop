@@ -105,6 +105,11 @@
                         <div class="prod-availability-container prod-border-right">
                             <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
                         </div>
+                        <?php if(trim($product->getShippedWithinCount()) !== ""): ?>
+                            <div>
+                                Shipped within <?=$product->getShippedWithinCount(); ?> days
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>

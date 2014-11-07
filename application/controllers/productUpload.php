@@ -1246,7 +1246,8 @@ class productUpload extends MY_Controller
         $this->load->model('memberpage_model');
         $memberID =  $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        
+        $shipWithinDays = trim($this->input->post('ship_within'));
+
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
@@ -1351,7 +1352,8 @@ class productUpload extends MY_Controller
             }
             // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
             if($myProceedVar){
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup);
+                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
+                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
                 $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
                 $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
             }

@@ -91,6 +91,21 @@ $(function(){
             $(this).val('');
         }
     });
+
+    $(document).on('change',"#ship-within",function () {
+        var qty = this.value;
+        var v = parseInt(qty);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '';
+        } else {
+            if(v > 127){
+                v = 127
+            }
+            tempval = Math.abs(v);
+            this.value = tempval;
+        }
+    });
     
     $('#shipping_div').on('click', 'input.shipprice,div.chosen-container', function(){
         if( $(this).hasClass('my_err') ){
@@ -1054,3 +1069,16 @@ function validateWhiteTextBox(idclass)
         "-moz-box-shadow": "none",
         "box-shadow": "none"}).removeClass('my_err');
 };
+
+// NUMBER ONLY IN SPECIFIC FIELDS
+function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    if (charCode != 46 && charCode > 31 
+        && (charCode < 48 || charCode > 57)){
+        return false;
+    }
+
+    return true;
+}
+
