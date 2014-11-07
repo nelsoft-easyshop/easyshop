@@ -494,7 +494,7 @@ class EsProductRepository extends EntityRepository
 
             switch(strtoupper($filterArray['sortby'])){
                 case "NEW":
-                    $qbResult = $qbResult->orderBy('p.createddate', $order);
+                    $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
                 case "HOT":
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
