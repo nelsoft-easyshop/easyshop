@@ -1696,7 +1696,7 @@ class Memberpage extends MY_Controller
                 break;
             case 2:
                 $orderSearch = "NEW";
-                $orderBy = array("createddate" => $order);
+                $orderBy = array("lastmodifieddate" => $order);
                 break;
             case 3:
                 $orderSearch = "HOT";
@@ -1704,7 +1704,7 @@ class Memberpage extends MY_Controller
                 break;
             default:
                 $orderSearch = "NULL";
-                $orderBy = array("clickcount"=>$order);
+                $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }
 
