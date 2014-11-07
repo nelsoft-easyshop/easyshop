@@ -61,7 +61,7 @@ class Home extends MY_Controller
     {
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
-            'title' => ' Shopping made easy | Easyshop.ph',
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         );
 
