@@ -88,7 +88,7 @@ function askDraft(location)
     if(isEdit == 0){ 
         $("#question").dialog({
             resizable: false,
-            height: 100,
+            height: 200,
             width: 530,
             modal: true, 
             open: function() {
@@ -105,11 +105,16 @@ function askDraft(location)
                     $(".ui-dialog-buttonset").hide();
                     window.location = location;
                 },
-                "Cancel": function() { 
+                "Cancel": function() {
                     $(this).dialog("close");
                 }
             },
-            "title": "You are about to leave the page without completing the process. Save this listing in your drafts?"
+            open: function() {
+            var draftmessage = '<p style="font-size:16px;padding-top: 20px;">You are about to leave the page without completing the process. Save this listing in your drafts?</p>';
+            $(this).html(draftmessage);
+            },
+            "title": "Confirm Close"
+            
         });   
     }
     else{ 
@@ -131,6 +136,8 @@ function askDraft(location)
             "title": "This listing is about to be saved in your drafts."
         });
     }
+                $(".ui-dialog-buttonset").children("button:eq(0)").addClass("btn btn-default-3");
+            $(".ui-dialog-buttonset").children("button:eq(2)").addClass("btn btn-default-1").removeClass("btn-default-3");
 }
 
 function removeDuplicateCombination()
