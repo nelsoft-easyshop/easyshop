@@ -76,13 +76,14 @@ class Category extends MY_Controller {
     {
         $perPage = $this->per_page;
         $categorySlug = $this->input->get('slug');
-        $start = $this->input->get('start');
+        $page = ($this->input->get('page')) ? $this->input->get('page') : 0 ;
         $category_array = $this->product_model->getCategoryBySlug($categorySlug);
         $categoryId = $category_array['id_cat'];  
 
         $searchProductService = $this->serviceContainer['search_product'];
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
+        $getParameter['page'] = $page;
         $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE); 
         $search = $searchProductService->getProductBySearch($getParameter);
         $products = $search['collection'];
