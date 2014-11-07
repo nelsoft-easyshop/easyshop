@@ -35,7 +35,7 @@
                 <?php endif; ?>
 
                 <?php if(floatval($value->getDiscountPercentage()) > 0):?>
-                <span class="span-circle-discount"><?=$value->getDiscountPercentage();?>%</span>
+                <span class="span-circle-discount"><?=number_format($value->getDiscountPercentage(),0,'.',',');?>%</span>
                 <?php endif;?>
 
                 <div class="clear"></div>
