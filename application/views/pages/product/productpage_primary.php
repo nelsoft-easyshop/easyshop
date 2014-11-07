@@ -106,8 +106,8 @@
                             <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
                         </div>
                         <?php if(trim($product->getShippedWithinCount()) !== ""): ?>
-                            <div>
-                                Shipped within <?=$product->getShippedWithinCount(); ?> days
+                            <div class=" prod-border-right">
+                                <p class="attr-title txt-shipment">Shipped within:</p> <span class="default"><?=$product->getShippedWithinCount(); ?> days</span>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -132,7 +132,7 @@
                                         </select>
                                     </div>
                                 <?php else: ?>
-                                    <span class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</span>
+                                    <span class="default">FREE SHIPPING NATIONWIDE</span>
                                 <?php endif; ?>
                             <?php endif; ?>
                         <div class="shipping_fee"></div>
