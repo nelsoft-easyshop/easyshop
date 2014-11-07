@@ -89,8 +89,8 @@
 
                 <div class="vendor-select-con">
                     <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-                        <option value="1">Default Sorting</option>
-                        <option value="2">Date Uploaded</option>
+                        <option value="2">Default Sorting</option>
+                        <option value="1">Popularity</option>
                         <option value="3">Hot</option>
                     </select>
                     <div class="clear"></div>
