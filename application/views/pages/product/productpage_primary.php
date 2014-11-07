@@ -260,18 +260,7 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=711804058875446&version=v2.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];
-        if(d.getElementById(id)){return}js=d.createElement(s);
-        js.id=id;js.src="https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+<script>
 </script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
@@ -279,4 +268,6 @@
 <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
+
+<script type='text/javascript' src='/assets/js/src/promo/scratch-and-win.js?ver=<?=ES_FILE_VERSION?>'></script>
 

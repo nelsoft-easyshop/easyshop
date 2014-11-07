@@ -107,6 +107,20 @@ class ReviewProductService
         return $recentReview;
     }
 
+    /**
+     * Insert review to database
+     * @param  integer $memberId
+     * @param  mixed   $inputData
+     *
+     * $inputData breakdown
+     * @var  $inputData['review']
+     * @var  $inputData['parent_review']
+     * @var  $inputData['product_id']
+     * @var  $inputData['rating']
+     * @var  $inputData['title']
+     * 
+     * @return mixed
+     */
     public function submitReview($memberId,$inputData)
     {
 
@@ -179,3 +193,4 @@ class ReviewProductService
         return $returnArray;
     }
 }
+

@@ -54,19 +54,10 @@
     </div>
 </div>
 
+<div>
+    <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s")))); ?>' >
+</div>
+
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
- <script type='text/javascript'>
-    $(document).ready(function(){
-        var endDate = new Date(<?php echo json_encode(date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s"))))); ?>);
-        $('#table-countdown').countdown({
-            until : endDate,
-            serverSync: serverTime,
-            layout: ' <td class="td-time-num"><span class="span-time-num">{dnn}</span><span class="span-time-label">DAYS</td></td>'+
-                ' <td class="td-time-num"><span class="span-time-num">{hnn}</span><span class="span-time-label">HOURS</td></td>'+
-                ' <td class="td-time-num"><span class="span-time-num">{mnn}</span><span class="span-time-label">MINUTES</td></td>' +
-                ' <td class="td-time-num"><span class="span-time-num">{snn}</span><span class="span-time-label">SECONDS</td></td>',
-            onExpiry: reload,
-        });
-    });
-  </script> 
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
+<script src="<?=base_url()?>assets/js/src/promo/countdown-sale.js" type="text/javascript"></script> 

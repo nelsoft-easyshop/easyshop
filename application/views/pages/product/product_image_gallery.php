@@ -46,50 +46,8 @@
 <!-- Load JS -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.carousel.js "></script>
+<script type="text/javascript" src="/assets/js/src/product-page-image-gallery.js "></script>
 
 <script type="text/javascript">
      $.fn.cycle.defaults.autoSelector = '.slideshow';
 </script>
- 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#mobile-product-gallery").owlCarousel({
-            itemsTablet: [768,2],
-            itemsMobile : [479,1],
-            responsive: true,
-            responsiveRefreshRate : 200,
-            responsiveBaseWidth: window,
-            pagination : true,
-            navigation : true,
-            navigationText : ["prev","next"],
-            scrollPerPage : false,
-            dragBeforeAnimFinish : true,
-            mouseDrag : true,
-            touchDrag : true,
-            navigation : true,
-        });
-
-        var delay = (function(){
-          var timer = 0;
-          return function(callback, ms){
-            clearTimeout (timer);
-            timer = setTimeout(callback, ms);
-          };
-        })();
-
-        var $window = $(window);
-        $window.on('load resize', function() {
-             delay(function(){
-                $('.owl-item div').each(function () {
-                    var parentWidth = $(this).width();
-                    if ($(this).find('img').length) {
-                        $(this).find('img').css( 'maxWidth', parentWidth)
-                    }
-                });
-            }, 500);
-        });
-
-        $('.footer-primary').addClass('footer-secondary');
-    });
-</script>
- 
