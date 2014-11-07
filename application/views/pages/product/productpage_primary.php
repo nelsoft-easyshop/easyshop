@@ -108,23 +108,27 @@
                     </div>
                     <div class="col-xs-12 col-sm-7 col-md-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
-                            <?php if(!$isFreeShippingNationwide): ?>
-                                <div class="prod-select-con ui-form-control shipment-select">
-                                    <select class="shiploc" id="shipment_locations">
-                                        <option class="default" selected="" value="0">Select Location</option>
-                                        <?php foreach($shiploc['area'] as $island=>$loc):?>
-                                            <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
-                                            <?php foreach($loc as $region=>$subloc):?>
-                                                <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
-                                                <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                    <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                            <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
+                                <span class="default" selected="" value="0">NOT AVAILABLE</span>
+                            <?php else: ?>
+                                <?php if(!$isFreeShippingNationwide): ?>
+                                    <div class="prod-select-con ui-form-control shipment-select">
+                                        <select class="shiploc" id="shipment_locations">
+                                            <option class="default" selected="" value="0">Select Location</option>
+                                            <?php foreach($shiploc['area'] as $island=>$loc):?>
+                                                <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
+                                                <?php foreach($loc as $region=>$subloc):?>
+                                                    <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
+                                                    <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                        <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                                                    <?php endforeach;?>
                                                 <?php endforeach;?>
                                             <?php endforeach;?>
-                                        <?php endforeach;?>
-                                    </select>
-                                </div>
-                            <?php else: ?>
-                                <span class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</span>
+                                        </select>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="default" selected="" value="0">FREE SHIPPING NATIONWIDE</span>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <div class="shipping_fee"></div>
                     </div>
