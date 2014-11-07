@@ -866,9 +866,44 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }    
-    }         
+    }    
 
-   /**
+    /**
+     *  Sets position of sliderSection->slide node
+     *  @return JSON
+     */
+    public function setPositionParentSlider()
+    {
+        $template = [];
+        $image = [];
+        $map = simplexml_load_file($this->file);        
+        $order = (int) $this->input->get("order");  
+        $index = (int)  $this->input->get("index");  
+        $nodename = (int)  $this->input->get("nodename");  
+        $action = $this->input->get("action");        
+        if($action == "up" && ($index !== $order)) {
+            $sliderOrder = $order;
+            $sliderIndex = $index;
+        }
+        else if($action == "down" && ($index + 1) != count($map->sliderSection->slide)){
+            $sliderOrder = $index;
+            $sliderIndex = $order;
+        }
+
+        $template = $map->sliderSection->slide[$sliderOrder]->template;
+        foreach($map->sliderSection->slide[$sliderOrder]->image as $images) {
+                $image[] = $images;
+        }
+        $this->xmlCmsService->removeXmlNode($this->file,$nodename,$sliderOrder + 1); 
+        $string = $this->xmlCmsService->getString("sliderSection", $template, "", "", "");      
+        $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
+        $this->xmlCmsService->syncSliderValues($this->file,$image,$template,$sliderIndex,$sliderOrder);
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);            
+    }
+
+    /**
      *  Sets position of slide nodes under sliderSection parent node
      *  @return JSON
      */
