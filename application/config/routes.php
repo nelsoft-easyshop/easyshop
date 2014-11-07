@@ -67,14 +67,13 @@ else{
 }
 
 
-if ($enable_splash && ($bypass_IP !== $clientIP) ){
+if ($enable_splash && ($bypass_IP !== $clientIP)){
     $route['default_controller'] = "home/splash";
-    $route['404_override'] = 'home/pagenotfound';
+    $route['404_override'] = 'home/splash';
     $route['(:any)'] = "home/splash";   
 }
 else {
     $route['default_controller'] = "home";
-    #$route['404_override'] = 'home/pagenotfound';
     $route['404_override'] = 'home/userprofile';
     
     # CATEGORY

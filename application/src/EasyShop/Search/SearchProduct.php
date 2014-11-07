@@ -48,15 +48,23 @@ class SearchProduct
     private $categoryManager;
 
     /**
+     * Symfony Http Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $httpRequest;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$categoryManager)
+    public function __construct($em,$collectionHelper,$productManager,$categoryManager,$httpRequest)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
+        $this->httpRequest = $httpRequest;
     }
 
     /**
@@ -69,7 +77,9 @@ class SearchProduct
         if($storeKeyword){
             // Insert into search keyword temp 
             $keywordTemp = new EsKeywordsTemp();
-            $keywordTemp->setKeywords($queryString); 
+            $keywordTemp->setKeywords($queryString);
+            $keywordTemp->setIpAddress($this->httpRequest->getClientIp());
+            $keywordTemp->setTimestamp(date_create(date("Y-m-d H:i:s")));
             $this->em->persist($keywordTemp);
             $this->em->flush();
         }

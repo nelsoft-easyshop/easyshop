@@ -230,10 +230,8 @@ class product extends MY_Controller
     public function item($itemSlug = '')
     {
         header ('Content-type: text/html; charset=ISO-8859-1');
-        // Load Header
         $headerData = $this->fill_header(); 
-        $headerData['title'] = " | Easyshop.ph";
-        $this->load->view('templates/header_new', $headerData); 
+
         // Load Services
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
@@ -396,7 +394,18 @@ class product extends MY_Controller
                         'isFreeShippingNationwide' => $isFreeShippingNationwide, 
                         'url' => '/item/' . $product->getSlug() 
                     );
+
+            // Header 
+            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), 155);
+            $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            // Footer Data
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $footerData['facebook'] = $socialMediaLinks["facebook"];
+            $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/header_new', $headerData); 
             $this->load->view('pages/product/productpage_primary', $viewData);
+            $this->load->view('templates/footer_primary',$footerData);
         }
         else{
             show_404();
@@ -406,7 +415,7 @@ class product extends MY_Controller
     /**
      * Submit reply for review
      *  
-     * @return mixed
+     * @return JSON
      */
     public function submitReply()
     {
@@ -420,6 +429,10 @@ class product extends MY_Controller
         echo json_encode($response);
     }
 
+    /**
+     * Submit review for individual product
+     * @return JSON
+     */
     public function submitReview()
     {
         $reviewProductService = $this->serviceContainer['review_product_service'];
