@@ -5,15 +5,19 @@
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
+<<<<<<< HEAD
 <link type="text/css" href='/assets/css/new-dashboard-transaction.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
 <section class="section-dashboard idTabs">
+=======
+<section class="section-dashboard ">
+>>>>>>> b95190e5fa6b5b841db98e5d184cb086dd80d8ff
     <div class="container">
-        <div class="row">
+        <div class="row sidebarTabs">
             <div class="col-md-3 col-sidebar">
                 <ul class="sidebar-dashboard" >
-                    <li class="active"><a href="#dashboard">Dashboard</a></li>
-                    <li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li>
+                    <a href="#dashboard" class="selected"><li id="dash"  class="mf-li">Dashboard</li></a>
+                    <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
                             <a href="#transactions"><li class="f-li">Transactions</li></a>
@@ -21,13 +25,13 @@
                             <a href="#setup"><li class="f-li">Store Setup</li></a>
                         </ul>
                     </div>
-                    <li>My Account <i class="icon-control-down toggle-down pull-right"></i></li>
+                    <a><li class="ml-li">My Account <i class="icon-control-down toggle-down pull-right"></i></li></a>
                 </ul>
       
             </div>
             <div class="col-md-9 col-content">
-                <div class="div-dashboard-content tab-content">
-                    <div class="tab-pane" id="dashboard">
+                <div class="div-dashboard-content">
+                    <div class="" id="dashboard">
                         <?php include("dashboard-home.php");?>
                     </div>
                     <div class="" id="transactions">
@@ -48,6 +52,7 @@
 <br/>
 
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 

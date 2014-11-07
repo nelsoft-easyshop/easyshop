@@ -10,9 +10,18 @@
         }
         });
     });
+<<<<<<< HEAD
 
 function triggerTab(x){
     $('.idTabs a[href="#'+x+'"]').trigger('click');
 };
 
+=======
+    
+     $( "#dash" ).click(function() {
+        alert("asdasd");
+     });
+     
+     $("#homeTabs ul").idTabs("one"); 
+>>>>>>> b95190e5fa6b5b841db98e5d184cb086dd80d8ff
 }(jQuery));
