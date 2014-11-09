@@ -35,12 +35,8 @@ class CollectionHelper
         else{ 
             foreach($array as $key=>$row){ 
                 $arrayKey = array_keys($row);
-                if(!$noQuote){ 
-                    $head = "'".strtolower($row[$arrayKey[0]])."'";
-                }
-                else{
-                    $head = strtolower($row[$arrayKey[0]]);
-                }
+                $head = strtolower($row[$arrayKey[0]]);
+                $head = $noQuote ? $head : "'$head'";
                 if(!array_key_exists($head, $organizeArray)){
                     $organizeArray[$head] = array();
                 } 

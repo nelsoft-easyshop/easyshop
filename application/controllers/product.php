@@ -250,7 +250,6 @@ class product extends MY_Controller
 
         if($productEntity){
 
-            // variables
             $productId = $productEntity->getIdProduct();
             $categoryId = $productEntity->getCat()->getIdCat();
 
@@ -259,7 +258,7 @@ class product extends MY_Controller
 
             // generate bread crumbs category of product
             $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                ->getParentCategoryRecursive($categoryId);
+                                    ->getParentCategoryRecursive($categoryId);
 
             // get owner avatar image of the product
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
@@ -274,64 +273,27 @@ class product extends MY_Controller
                                           ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributes,true,true);
 
-            // get combination quantity
-            $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                              ->getProductInventoryDetail($productId);
-
-            // get product shipping location
-            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                                        ->getShippingDetailsByProductId($product->getIdProduct());
-
+            // get all shipping location
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                          ->getLocation();
 
-            $finalCombinationQuantity = [];
-            foreach ($productQuantityObject as $key => $value) {
-                if(!array_key_exists($value['id_product_item'],$finalCombinationQuantity)){
-
-                    $locationArray = [];
-                    foreach ($shippingDetails as $shipKey => $shipValue) {
-                        if(intval($shipValue['product_item_id']) === intval($value['id_product_item'])){
-                            $locationArray[] = array(
-                                    'location_id' => $shipValue['location_id'],
-                                    'price' => $shipValue['price'],
-                                );
-                        }
-                    }
-
-                    $finalCombinationQuantity[$value['id_product_item']] = array(
-                        'quantity' => $value['quantity'],
-                        'product_attribute_ids' => [$value['product_attr_id']],
-                        'location' => $locationArray,
-                    );
-                }
-                else{
-                    $finalCombinationQuantity[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
-                }
-            }
-
             // check if totally free shipping 
-            $isFreeShippingNationwide = TRUE;
-            foreach ($shippingDetails as $key => $value) {
-                if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
-                    || floatval($value['price']) !== floatval(0)){
-                    $isFreeShippingNationwide = FALSE;
-                    break;
-                }
-            }
+            $isFreeShippingNationwide = $productManager->isFreeShippingNationwide($productId);
 
-            // check if combination available
-            $noMoreSelection = "";
-            if(count($productQuantityObject) <= 1 && intval($productQuantityObject[0]['product_attr_id']) === 0){
-                $noMoreSelection = $productQuantityObject[0]['id_product_item'];
-            }
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->getShippingDetailsByProductId($productId);
+
+            // get possible combination of the attributes of the product
+            $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
+            $productCombination = $productCombinationAvailable['productCombinationAvailable'];
+            $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
 
             // get payment type available and if button is viewable
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if( intval($product->getIsPromote()) === 1 && (!$product->getEndPromo()) ){
+            if(intval($product->getIsPromote()) === 1 && (!$product->getEndPromo())){
 
                 $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                 if(strlen(trim($bannerfile)) > 0){
@@ -341,14 +303,11 @@ class product extends MY_Controller
                 $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
             }
 
-            // check if the item can be purchase
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
 
-            // product details
-            // clean product details
             $productDescription = $stringUtility->purifyString($product->getDescription());
 
-            // get reviews
+            // get all reviews of the product
             $productReviews = $reviewProductService->getProductReview($productId);
 
             // check user if allowed to review
@@ -378,7 +337,7 @@ class product extends MY_Controller
                         'ownerAvatar' => $avatarImage,
                         'imagesView' => $imagesView,
                         'productAttributes' => $productAttributes,
-                        'productCombinationQuantity' => json_encode($finalCombinationQuantity),
+                        'productCombinationQuantity' => json_encode($productCombination),
                         'shippingInfo' => $shippingDetails,
                         'shiploc' => $shippingLocation,
                         'paymentMethod' => $paymentMethod,
@@ -396,7 +355,7 @@ class product extends MY_Controller
                     );
 
             // Header 
-            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), 155);
+            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
             // Footer Data
             $socialMediaLinks = $this->getSocialMediaLinks();
@@ -421,10 +380,26 @@ class product extends MY_Controller
     {
         $reviewProductService = $this->serviceContainer['review_product_service'];
         $reviewerId =  $this->session->userdata('member_id');
-        $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
-        $response['html'] = $this->load->view('partials/review_reply', $reply, true);
-        $response['isSuccess'] = $reply['isSuccess'];
-        $response['error'] = $reply['error'];
+        $productId = trim($this->input->post('product_id'));
+        $isSuccess = FALSE;
+        $errorMessage = "";
+        if(trim($this->input->post('review'))){
+            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
+            if($canReview){
+                $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+                $response['html'] = $this->load->view('partials/review_reply', $reply, true);
+                $isSuccess = $isSuccess = TRUE; 
+            }
+            else{
+                $errorMessage = "You can't submit reply on this product.";
+            }
+        }
+        else{
+            $errorMessage = "Reply cannot be empty!";
+        }
+
+        $response['isSuccess'] = $isSuccess;
+        $response['error'] = $errorMessage;
 
         echo json_encode($response);
     }
@@ -437,10 +412,26 @@ class product extends MY_Controller
     {
         $reviewProductService = $this->serviceContainer['review_product_service'];
         $reviewerId =  $this->session->userdata('member_id');
-        $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
-        $response['html'] = $this->load->view('partials/review_review', $reply, true);
-        $response['isSuccess'] = $reply['isSuccess'];
-        $response['error'] = $reply['error'];
+        $productId = trim($this->input->post('product_id'));
+        $isSuccess = FALSE;
+        $errorMessage = "";
+        if(trim($this->input->post('review'))){
+            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
+            if($canReview){
+                $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+                $response['html'] = $this->load->view('partials/review_review', $reply, true);
+                $isSuccess = TRUE;
+            }
+            else{
+                $errorMessage = "You can't submit review on this product.";
+            }
+        }
+        else{
+            $errorMessage = "Reply cannot be empty!";
+        }
+
+        $response['isSuccess'] = $isSuccess;
+        $response['error'] = $errorMessage;
 
         echo json_encode($response);
     }

@@ -102,14 +102,14 @@ class EsOrderProductRepository extends EntityRepository
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder()
-                        ->select('COALESCE(COUNT(op.idOrderProduct),0) as total_count')
-                        ->from('EasyShop\Entities\EsOrderProduct','op')
-                        ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
-                        ->where('o.buyer = :memberId')
-                        ->andWhere('op.product = :productId')  
-                        ->setParameter('memberId', $memberId)
-                        ->setParameter('productId', $productId)
-                        ->getQuery(); 
+                       ->select('COALESCE(COUNT(op.idOrderProduct),0) as total_count')
+                       ->from('EasyShop\Entities\EsOrderProduct','op')
+                       ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
+                       ->where('o.buyer = :memberId')
+                       ->andWhere('op.product = :productId')  
+                       ->setParameter('memberId', $memberId)
+                       ->setParameter('productId', $productId)
+                       ->getQuery(); 
         $result = $qb->getOneOrNullResult();
 
         return intval($result['total_count']);

@@ -1,123 +1,156 @@
 
+    (function($) {
 
-    function sortArrayNumber(a,b) {
-        return a - b;
-    }
-
-    function arraysEqual(a, b) {
-        if (a === b) return true;
-        if (a == null || b == null) return false;
-        if (a.length != b.length) return false;
-     
-        for (var i = 0; i < a.length; ++i) {
-            if (a[i] !== b[i]) return false;
-        }
-        return true;
-    }
-
-    function commaSeparateNumber(val){
-        while (/(\d+)(\d{3})/.test(val.toString())){
-            val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
-        }
-        return val;
-    }
-
-    // function for reply and review
-    function submitReviewAndReply($parent,$review,$title,$rating,$type)
-    {
-        // token
-        var $csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-
-        // product id
-        var $productId = $("#productId").val();
-        var $currentReviewCount = $("#review-count").val();
-        
-
-        $url = "/product/submit-reply";
-        if($type == "review"){
-            $url = "/product/submit-review";
-            $currentReviewCount = parseInt($currentReviewCount) + 1;
+        /**
+         * Function call by .sort of the jquery
+         * @param  {integer} a
+         * @param  {integer} b 
+         * @return {integer}
+         */
+        function sortArrayNumber(a, b) {
+            return a - b;
         }
 
-        $.ajax({
-            url: $url,
-            type:"POST",
-            dataType:"JSON",
-            data:{product_id:$productId,parent_review:$parent,review:$review,rating:$rating,title:$title,csrfname:$csrftoken},
-            success:function(data){
-                if(data.isSuccess){
-                    if($type == "reply"){
-                        $(".review-container-"+$parent).append(data.html);
-                        $(".review-container-"+$parent).prev().prev('.div-reply-container').toggle("slow");
-                        $(".review-container-"+$parent).prev().prev('.div-reply-container').prev().children('.p-reply-text').find('.text-cancel').toggle("fade");
-                        $("#textareaReview"+$parent).val("");
-                    }
-                    else{
-                        $("#main-review-container").prepend(data.html);
-                        $("#star-rate").val(0);
-                        $("#review-title").val("");
-                        $("#review-comment").val("");
-                        $(".span-star-container .fa-star-rate").css("color","#d4d4d4");
-                        $("#no-review-div").remove();
-                        $(".span-review-count").html($currentReviewCount);
-                    }
-                }
-                else{
-                    alert(data.error);
-                }
-                $('.btn-reply').prop('disabled', false);
+        /**
+         * Check if the both given arrays are equal
+         * @param  {array} a
+         * @param  {array} b
+         * @return {boolean}
+         */
+        function arraysEqual(a, b) {
+            if (a === b){
+                return true;
             }
-        });
-    }
-
-    function checkCombination($arraySelected)
-    {
-        // check possible combination
-        $.each($productCombQuantity, function(i, val) {
-            $arrayCombination = val.product_attribute_ids;
-            $arrayCombination.sort(sortArrayNumber);
-            $booleanCheck = arraysEqual($arrayCombination,$arraySelected);
-            $combinationQuantity = val.quantity;
-            $combinationLocation = val.location;
-            $("#control-quantity").empty();
-            $('#shipment_locations > option').show().prop('disabled', true);
-            $('#shipment_locations > .default').prop('disabled', false);
-
-            // if found atleast one combination
-            if($booleanCheck){
-
-                if($combinationQuantity <= 0){
-                    $("#control-quantity").append('<option value="0">0</option>');
-                    $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                }
-                else{
-                    for (var i = 1 ; i <= $combinationQuantity; i++) { 
-                        $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
-                    };
-                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                }
-                if($("#isFreeShippingNationwide").val() != ""){
-                    $("#control-quantity").append('<option value="0">FREE SHIPPING NATIONWIDE</option>');
-                }
-                else{
-                    $.each($combinationLocation,function(i, val){
-                        var $text = $("#locationID_"+val.location_id).data('text');
-                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
-                    });
-                }
-
-                $('#shipment_locations > option:disabled').hide();
-                
+            else if (a == null || b == null){
                 return false;
             }
-            
-            $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-            $("#control-quantity").append('<option value="0">0</option>');
-        });
-    }
+            else if (a.length != b.length){
+                return false;
+            }
+            for (var i = 0; i < a.length; ++i) {
+                if (a[i] !== b[i]) return false;
+            }
 
-    (function($) {
+            return true;
+        }
+
+        /**
+         * Seperate the number by comma after 3 digits
+         * @param  {string} val
+         * @return {string} val
+         */
+        function commaSeparateNumber(val){
+            while (/(\d+)(\d{3})/.test(val.toString())){
+                val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+            }
+            return val;
+        }
+
+        /**
+         * function for reply and review
+         * @param  {integer} $parent
+         * @param  {string}  $review
+         * @param  {string}  $title
+         * @param  {integer} $rating
+         * @param  {string}  $type
+         */
+        function submitReviewAndReply($parent, $review, $title, $rating, $type)
+        {
+            // token
+            var $csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+
+            // product id
+            var $productId = $("#productId").val();
+            var $currentReviewCount = $("#review-count").val();
+
+            $url = $("#submitReplyUrl").val();
+            if($type == "review"){
+                $url = $("#submitReviewUrl").val();
+                $currentReviewCount = parseInt($currentReviewCount) + 1;
+            }
+
+            $.ajax({
+                url: $url,
+                type:"POST",
+                dataType:"JSON",
+                data: {
+                        product_id:$productId,
+                        parent_review:$parent,
+                        review:$review,
+                        rating:$rating,
+                        title:$title,
+                        csrfname:$csrftoken
+                    },
+                success:function(data){
+                    if(data.isSuccess){
+                        if($type == "reply"){
+                            $(".review-container-"+$parent).append(data.html);
+                            $(".review-container-"+$parent).prev().prev('.div-reply-container').toggle("slow");
+                            $(".review-container-"+$parent).prev().prev('.div-reply-container').prev().children('.p-reply-text').find('.text-cancel').toggle("fade");
+                            $("#textareaReview"+$parent).val("");
+                        }
+                        else{
+                            $("#main-review-container").prepend(data.html);
+                            $("#star-rate").val(0);
+                            $("#review-title").val("");
+                            $("#review-comment").val("");
+                            $(".span-star-container .fa-star-rate").css("color","#d4d4d4");
+                            $("#no-review-div").remove();
+                            $(".span-review-count").html($currentReviewCount);
+                        }
+                    }
+                    else{
+                        alert(data.error);
+                    }
+                    $('.btn-reply').prop('disabled', false);
+                }
+            });
+        }
+
+        function checkCombination($arraySelected)
+        {
+            // check possible combination
+            $.each($productCombQuantity, function(i, val) {
+                $arrayCombination = val.product_attribute_ids;
+                $arrayCombination.sort(sortArrayNumber);
+                $booleanCheck = arraysEqual($arrayCombination,$arraySelected);
+                $combinationQuantity = val.quantity;
+                $combinationLocation = val.location;
+                $("#control-quantity").empty();
+                $('#shipment_locations > option').show().prop('disabled', true);
+                $('#shipment_locations > .default').prop('disabled', false);
+
+                // if found atleast one combination
+                if($booleanCheck){
+
+                    if($combinationQuantity <= 0){
+                        $("#control-quantity").append('<option value="0">0</option>');
+                        $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+                    }
+                    else{
+                        for (var i = 1 ; i <= $combinationQuantity; i++) { 
+                            $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
+                        };
+                        $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                    }
+                    if($("#isFreeShippingNationwide").val() == ""){
+                        $.each($combinationLocation,function(i, val){
+                            var $text = $("#locationID_"+val.location_id).data('text');
+                            $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
+                        });
+                    }
+
+                    $('#shipment_locations > option:disabled').hide();
+                    
+                    return false;
+                }
+                
+                $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+                $("#control-quantity").append('<option value="0">0</option>');
+            });
+        }
+
 
         // hiden values variables
         $productCombQuantity = JSON.parse($("#productCombQuantity").val());

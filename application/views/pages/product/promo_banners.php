@@ -1,5 +1,5 @@
-<!--
-    FOR DISCOUNT SALE
+
+    <!-- FOR DISCOUNT SALE -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -47,12 +47,12 @@
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 
 
-<!--
-    FOR COUNTDOWN SALE
+
+    <!-- FOR COUNTDOWN SALE -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -102,11 +102,11 @@
         </div>
     </div>
 </div>
--->
 
 
-<!--
-    FOR PROMO
+
+
+    <!-- FOR PROMO -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -154,11 +154,11 @@
         </div>
     </div>
 </div>
--->
 
 
-<!--
-    FOR PROMO TEXT ONLY
+
+
+    <!-- FOR PROMO TEXT ONLY -->
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -176,6 +176,6 @@
         </div>
     </div>
 </div>
--->
+
 
 

@@ -17,7 +17,7 @@
         </div>
          
         <div id="recommended" class="owl-carousel owl-theme">
-            <?php foreach ($recommended as $key => $value): ?>
+            <?php foreach ($recommended as $value): ?>
             <div class="item">
                 <center>
                     <a href="/item/<?=$value->getSlug(); ?>">

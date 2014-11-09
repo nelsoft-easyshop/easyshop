@@ -60,4 +60,5 @@
 
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
-<script src="<?=base_url()?>assets/js/src/promo/countdown-sale.js" type="text/javascript"></script> 
+<script src="<?=base_url()?>assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
+

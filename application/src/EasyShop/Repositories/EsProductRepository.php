@@ -688,51 +688,25 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
-    public function getPopularItem($perPage,$offset,$sellerId=0,$categoryId=array())
+    public function getPopularItemByCategory($categoryId, $offset = 0, $perPage = 1)
     {
-        $em = $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('id_product', 'id_product');
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('p')
+                       ->from('EasyShop\Entities\EsProduct','p')
+                       ->where('p.isDraft = 0')
+                       ->andWhere('p.isDelete = 0')
+                       ->andWhere(
+                            $qb->expr()->in('p.cat', $categoryId)
+                        )
+                       ->addOrderBy(' p.clickcount','DESC')
+                       ->setFirstResult($offset)
+                       ->setMaxResults($perPage)
+                       ->getQuery();
+       
+        $result = $qbResult->getResult();
 
-        if(!empty($categoryId)){
-            $query = $em->createNativeQuery("
-                SELECT `id_product` from es_product 
-                WHERE cat_id IN (:categoryId)
-                AND is_delete = 0 AND is_draft = 0
-                ORDER BY clickcount desc
-                LIMIT :offset , :perpage
-            ", $rsm);
-            $query->setParameter('categoryId', $categoryId); 
-        }
-        elseif(intval($sellerId) !== 0){ 
-            $query = $em->createNativeQuery("
-                SELECT `id_product` from es_product 
-                WHERE member_id = :member_id
-                AND is_delete = 0 AND is_draft = 0
-                ORDER BY clickcount desc
-                LIMIT :offset , :perpage
-            ", $rsm);
-            $query->setParameter('member_id', $sellerId);
-        }
-        else{ 
-            $query = $em->createNativeQuery("
-                SELECT `id_product` from es_product 
-                WHERE member_id = :member_id
-                AND cat_id IN (:categoryId)
-                AND is_delete = 0 AND is_draft = 0
-                ORDER BY clickcount desc
-                LIMIT :offset , :perpage
-            ", $rsm);
-            $query->setParameter('categoryId', $categoryId); 
-            $query->setParameter('member_id', $sellerId); 
-        }
-
-        $query->setParameter('offset', $offset);
-        $query->setParameter('perpage', $perPage);
-        $result = $query->execute();
-        $resultNeeded = array_map(function($value) { return $value['id_product']; }, $result);
-
-        return $resultNeeded;
+        return $result;
     }
 
     /**

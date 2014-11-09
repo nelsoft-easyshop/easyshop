@@ -28,7 +28,7 @@ class ReviewProductService
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$userManager)
+    public function __construct($em, $userManager)
     {
         $this->em = $em;
         $this->userManager = $userManager;
@@ -41,12 +41,22 @@ class ReviewProductService
      * @param integer $productId
      * @return boolean
      */
-    public function checkIfCanReview($viewerId,$productId)
+    public function checkIfCanReview($viewerId, $productId)
     {
-        $buyCount = $this->em->getRepository("EasyShop\Entities\EsOrderProduct")
-                                              ->getProductBuyCountByUser($viewerId,$productId);
+        $memberEntity = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                 ->find($viewerId);
 
-        return ($buyCount > 0) ? TRUE : FALSE;
+        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                  ->find($productId);
+
+        if($memberEntity && $productEntity){
+            $buyCount = $this->em->getRepository("EasyShop\Entities\EsOrderProduct")
+                                 ->getProductBuyCountByUser($viewerId,$productId);
+
+            return $buyCount > 0;
+        }
+
+        return false;
     }
 
    /**
@@ -57,38 +67,38 @@ class ReviewProductService
      */
     public function getProductReview($productId)
     {
-        $recentReview = []; 
-        $productReviewObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
+        $recentReviews = []; 
+        $productReviews = $this->em->getRepository('EasyShop\Entities\EsProductReview')
                                         ->getProductReview($productId);
-        if($productReviewObject){
-            $retrieve = array();
-            foreach ($productReviewObject as $key => $value) {
-                $retrieve[] = $value->getIdReview();
+        if($productReviews){
+            $reviewIds = [];
+            foreach ($productReviews as $value) {
+                $reviewIds[] = $value->getIdReview();
             }
 
-            $productRepliesObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
-                                                ->getReviewReplies($productId,$retrieve);
+            $productReviewReplies = $this->em->getRepository('EasyShop\Entities\EsProductReview')
+                                             ->getReviewReplies($productId, $reviewIds);
 
-            foreach($productRepliesObject as $key=>$temp){
-                $temp->setReview(html_escape($temp->getReview()));
+            foreach($productReviewReplies as $value) {
+                $value->setReview(html_escape($value->getReview()));
             }
 
             $i = 0;
-            foreach ($productReviewObject as $key => $value) { 
-                $recentReview[$i]['id_review'] = $value->getIdReview();
-                $recentReview[$i]['title'] = $value->getTitle();
-                $recentReview[$i]['review'] = $value->getReview();
-                $recentReview[$i]['rating'] = $value->getRating();
-                $recentReview[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
-                $recentReview[$i]['reviewer'] = $value->getMember()->getUsername();
-                $recentReview[$i]['reviewer_avatar'] = $this->userManager->getUserImage($value->getMember()->getIdMember());
+            foreach ($productReviews as $value) { 
+                $recentReviews[$i]['id_review'] = $value->getIdReview();
+                $recentReviews[$i]['title'] = $value->getTitle();
+                $recentReviews[$i]['review'] = $value->getReview();
+                $recentReviews[$i]['rating'] = $value->getRating();
+                $recentReviews[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
+                $recentReviews[$i]['reviewer'] = $value->getMember()->getUsername();
+                $recentReviews[$i]['reviewer_avatar'] = $this->userManager->getUserImage($value->getMember()->getIdMember());
 
-                $recentReview[$i]['replies'] = array();
-                $recentReview[$i]['reply_count'] = 0;
+                $recentReviews[$i]['replies'] = array();
+                $recentReviews[$i]['reply_count'] = 0;
 
-                foreach($productRepliesObject as $reply){ 
+                foreach($productReviewReplies as $reply){ 
                     if($value->getIdReview() == $reply->getPReviewid()){  
-                        $recentReview[$i]['replies'][] = array(
+                        $recentReviews[$i]['replies'][] = array(
                                                     'id_review' => $reply->getIdReview(),
                                                     'review' => $reply->getReview(),
                                                     'rating' => $reply->getRating(),
@@ -96,15 +106,14 @@ class ReviewProductService
                                                     'reviewer' => $reply->getMember()->getUsername(),
                                                     'reviewer_avatar' => $this->userManager->getUserImage($reply->getMember()->getIdMember()),
                                                 );
-                        asort($recentReview[$i]['replies']);
-                        $recentReview[$i]['reply_count']++;
+                        $recentReviews[$i]['reply_count']++;
                     }
                 }
                 $i++;
             } 
         }
 
-        return $recentReview;
+        return $recentReviews;
     }
 
     /**
@@ -121,84 +130,45 @@ class ReviewProductService
      * 
      * @return mixed
      */
-    public function submitReview($memberId,$inputData)
+    public function submitReview($memberId, $inputData)
     {
-
-        // get user inputs
         $review = trim($inputData['review']);
-        $parentReviewId = (isset($inputData['parent_review'])) ? intval($inputData['parent_review']) : 0;
+        $parentReviewId = isset($inputData['parent_review']) ? intval($inputData['parent_review']) : 0;
         $productId = intval($inputData['product_id']); 
-        $title = (isset($inputData['title'])) ? trim($inputData['title']) : ""; 
-        $rating = (isset($inputData['rating'])) ? intval($inputData['rating']) : 0; 
-        $booleanSuccess = FALSE;
-        $error = "";
+        $title = isset($inputData['title']) ? trim($inputData['title']) : ""; 
+        $rating = isset($inputData['rating']) ? intval($inputData['rating']) : 0; 
+        $dateSubmitted = date_create(date("Y-m-d H:i:s"));
 
-        // find member if exist
-        $memberEntity = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->find($memberId);
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
 
-        // find product if exist
-        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->find($productId);
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                  ->find($productId);
 
-        if(strlen(trim($review)) > 0){
-            if($memberEntity && $productEntity){
-                $canReview = $this->checkIfCanReview($memberId,$productId);
-                if(!$canReview){
-                    $dateSubmitted = date_create(date("Y-m-d H:i:s"));
+        $reviewObj = new EsProductReview();
+        $reviewObj->setPReviewid($parentReviewId);
+        $reviewObj->setMember($member);
+        $reviewObj->setDatesubmitted($dateSubmitted);  
+        $reviewObj->setDatehidden($dateSubmitted);  
+        $reviewObj->setReview($review); 
+        $reviewObj->setTitle($title); 
+        $reviewObj->setRating($rating); 
+        $reviewObj->setProduct($product);
 
-                    $reviewObj = new EsProductReview();
-                    $reviewObj->setPReviewid($parentReviewId);
-                    $reviewObj->setMember($memberEntity);
-                    $reviewObj->setDatesubmitted($dateSubmitted);  
-                    $reviewObj->setDatehidden($dateSubmitted);  
-                    $reviewObj->setReview($review); 
-                    $reviewObj->setTitle($title); 
-                    $reviewObj->setRating($rating); 
-                    $reviewObj->setProduct($productEntity);
+        $this->em->persist($reviewObj);
+        $this->em->flush();
 
-                    $this->em->persist($reviewObj);
-                    $this->em->flush();
+        $returnArray = array( 
+                    'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
+                    'reviewUsername' => html_escape($member->getUsername()),
+                    'review' => html_escape($review),
+                    'userPic' => $this->userManager->getUserImage($memberId),
+                    'title' => $title,
+                    'rating' => $rating,
+                    'idReview' => $reviewObj->getIdReview(),
+                    'canReview' => $this->checkIfCanReview($memberId,$productId),
+                ); 
 
-                    $booleanSuccess = TRUE;
-
-                    $returnArray = array(
-                                'isSuccess'=>$booleanSuccess,
-                                'error' => $error,
-                                'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
-                                'reviewUsername' => html_escape($memberEntity->getUsername()),
-                                'review' => html_escape($review),
-                                'userPic' => $this->userManager->getUserImage($memberId),
-                                'title' => $title,
-                                'rating' => $rating,
-                                'idReview' => $reviewObj->getIdReview(),
-                                'canReview' => $this->checkIfCanReview($memberId,$productId),
-                            );
-                }
-                else{
-                    $error = "You can't submit review on this product.";
-                    $returnArray = array(
-                                'isSuccess'=>$booleanSuccess,
-                                'error' => $error,
-                            );
-                }
-            }
-            else{
-                $error = "Something went wrong. Please try again later.";
-                $returnArray = array(
-                            'isSuccess'=>$booleanSuccess,
-                            'error' => $error,
-                        );
-            }
-        }
-        else{ 
-            $error = "Reply cannot be empty!";
-            $returnArray = array(
-                            'isSuccess'=>$booleanSuccess,
-                            'error' => $error,
-                        );
-        }
-        
         return $returnArray;
     }
 }

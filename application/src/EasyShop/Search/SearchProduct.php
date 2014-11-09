@@ -377,27 +377,26 @@ class SearchProduct
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
         $subCategoryList = array();
-           
-        foreach ($subCategory as $key => $value) { 
-            $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
-            $popularProductId = $EsProductRepository->getPopularItem(1,0,0,$subCategoryIds);
-            $popularProduct = array();
-            if(isset($popularProductId[0])){
-                $popularProduct = $EsProductRepository->find($popularProductId[0]);
-                foreach ($popularProduct as $keyProduct => $valueProduct) {
-                    $productId = $valueProduct->getIdProduct();
-                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                    ->getDefaultImage($productId);
-                    $valueProduct->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                    $valueProduct->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
-                    if($productImage != NULL){
-                        $valueProduct->directory = $productImage->getDirectory();
-                        $valueProduct->imageFileName = $productImage->getFilename();
-                    }
+        foreach ($subCategory as $value) {
+            $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
+            $popularProducts = $EsProductRepository->getPopularItemByCategory($subCategoryIds);
+            if(!empty($popularProducts)){ 
+                $productId = $popularProducts[0]->getIdProduct();
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                         ->getDefaultImage($productId);
+                $popularProducts[0]->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $popularProducts[0]->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+                if($productImage != NULL){
+                    $popularProducts[0]->directory = $productImage->getDirectory();
+                    $popularProducts[0]->imageFileName = $productImage->getFilename();
                 }
             }
-            $subCategoryList[$value->getName()]['item'] = $popularProduct;
+            else{
+                $popularProducts[0] = array();
+            }
+            $subCategoryList[$value->getName()]['item'] = $popularProducts[0];
             $subCategoryList[$value->getName()]['slug'] = $value->getSlug();
         }
 

@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-xs-2 col-user-image no-padding" align="center">
         <a href="#"><div class="div-user-image">
@@ -34,3 +33,4 @@
         </div>
     </div>
 </div>
+

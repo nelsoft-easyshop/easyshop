@@ -2,7 +2,7 @@
 
 namespace EasyShop\Utility;
 
-use HTMLPurifier as HTMLPurifier;
+use HTMLPurifier as htmlPurifier;
 
 /**
  * String utility class
@@ -11,6 +11,22 @@ use HTMLPurifier as HTMLPurifier;
  */
 class StringUtility
 {
+    /**
+     * Ezyang Html Purifier Instance
+     *
+     * @var \HTMLPurifier
+     */
+    private $htmlPurifier;
+
+    /**
+     * Constructor.
+     * 
+     */
+    public function __construct($htmlPurifier)
+    {
+        $this->htmlPurifier = $htmlPurifier;
+    }
+
     /**
      * Transforms serialized request parameters into an associative
      * array
@@ -50,9 +66,6 @@ class StringUtility
 
     public function purifyString($string)
     {
-
-        $HTMLPurifier = new HTMLPurifier();
-
-        return  $HTMLPurifier->purify($string);
+        return  $this->htmlPurifier->purify($string);
     }
 }

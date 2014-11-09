@@ -261,6 +261,8 @@
     <input id='review-count' type='hidden' value='<?=count($productReview);?>'>
     <input id="noMoreSelection" type="hidden" value="<?=$noMoreSelection;?>">
     <input id="isFreeShippingNationwide" type="hidden" value="<?=$isFreeShippingNationwide;?>">
+    <input id="submitReplyUrl" type="hidden" value="/product/submit-reply">
+    <input id="submitReviewUrl" type="hidden" value="/product/submit-review">
 </div>
 
 <!-- display view for product details and review -->

@@ -94,15 +94,15 @@ $(function(){
 
     $(document).on('change',"#ship-within",function () {
         var qty = this.value;
-        var v = parseInt(qty);
+        var value = parseInt(qty);
         var tempval;
-        if (isNaN(v)) {
+        if (isNaN(value)) {
             this.value = '';
         } else {
-            if(v > 127){
-                v = 127
+            if(value > 127){
+                value = 127
             }
-            tempval = Math.abs(v);
+            tempval = Math.abs(value);
             this.value = tempval;
         }
     });
@@ -1070,7 +1070,11 @@ function validateWhiteTextBox(idclass)
         "box-shadow": "none"}).removeClass('my_err');
 };
 
-// NUMBER ONLY IN SPECIFIC FIELDS
+/**
+ * Check if the event keycode is number key
+ * @param  {mixed}  evt
+ * @return {Boolean}
+ */
 function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode;

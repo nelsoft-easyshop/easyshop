@@ -40,6 +40,11 @@ class ProductManager
     const RECOMMENDED_PRODUCT_COUNT = 15;
 
     /**
+     * Default limit of meta desciption of the product
+     */
+    const PRODUCT_META_DESCRIPTION_LIMIT = 155;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -766,6 +771,81 @@ class ProductManager
             }
         }
         return $isListingOnly;
+    }
+
+    /**
+     * Check if the product is free shipping nationwide
+     * @param  integer  $productId
+     * @return boolean
+     */
+    public function isFreeShippingNationwide($productId)
+    {
+        $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                    ->getShippingDetailsByProductId($productId);
+
+        // check if totally free shipping 
+        $isFreeShippingNationwide = TRUE;
+        foreach ($shippingDetails as $value) {
+            if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
+                || floatval($value['price']) !== floatval(0)){
+                $isFreeShippingNationwide = FALSE;
+                break;
+            }
+        }
+
+        return $isFreeShippingNationwide;
+    }
+
+    /**
+     * Return the possible combination of the given product
+     * @param  integer $productId
+     * @return mixed
+     */
+    public function getProductCombinationAvailable($productId)
+    {
+        // get combination quantity
+        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                     ->getProductInventoryDetail($productId);
+
+         // get product shipping location
+        $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                    ->getShippingDetailsByProductId($productId);
+
+        $productCombinationAvailable = [];
+        foreach ($productInventory as $key => $value) {
+            if(!array_key_exists($value['id_product_item'],$productCombinationAvailable)){
+
+                $locationArray = [];
+                foreach ($shippingDetails as $shipKey => $shipValue) {
+                    if(intval($shipValue['product_item_id']) === intval($value['id_product_item'])){
+                        $locationArray[] = array(
+                                'location_id' => $shipValue['location_id'],
+                                'price' => $shipValue['price'],
+                            );
+                    }
+                }
+
+                $productCombinationAvailable[$value['id_product_item']] = array(
+                    'quantity' => $value['quantity'],
+                    'product_attribute_ids' => [$value['product_attr_id']],
+                    'location' => $locationArray,
+                );
+            }
+            else{
+                $productCombinationAvailable[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
+            }
+        }
+
+        // check if combination available
+        $noMoreSelection = "";
+        if(count($productInventory) === 1 && intval($productInventory[0]['product_attr_id']) === 0){
+            $noMoreSelection = $productInventory[0]['id_product_item'];
+        }
+
+        return array(
+                'noMoreSelection' => $noMoreSelection,
+                'productCombinationAvailable' => $productCombinationAvailable
+            );
     }
 }
 

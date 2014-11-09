@@ -151,11 +151,11 @@ class ApiFormatter
         }
 
         // get product quantity
-        $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->getProductInventoryDetail($productId);
+        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                     ->getProductInventoryDetail($productId);
 
         $temporaryArray = [];
-        foreach ($productQuantityObject as $key => $value) {
+        foreach ($productInventory as $key => $value) {
              if(!array_key_exists($value['id_product_item'],$temporaryArray)){
                 $temporaryArray[$value['id_product_item']] = array(
                                                             'quantity' => $value['quantity'],
