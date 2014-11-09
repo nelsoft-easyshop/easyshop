@@ -49,12 +49,10 @@ class ApiFormatter
 
     public function formatItem($productId,$isItemView = false)
     {
-      
-
         $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = array(
-                'name' => $product->getName(),
+                'name' => utf8_encode($product->getName()),
                 'slug' => $product->getSlug(),
                 'description' => $product->getDescription(),
                 'brand' => $product->getBrand()->getName(),
@@ -256,7 +254,7 @@ class ApiFormatter
                     'productId' =>  $cartItem['id'],
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
-                    'name' => $cartItem['name'],
+                    'name' => utf8_encode($cartItem['name']),
                     'quantity' => $cartItem['qty'], 
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],  
@@ -287,7 +285,7 @@ class ApiFormatter
         }
 
         return array(
-                    'name' => $product->getName(), 
+                    'name' => utf8_encode($product->getName()), 
                     'slug' => $product->getSlug(),
                     'condition' => $product->getCondition(),
                     'discount' => floatval($product->getDiscountPercentage()),

@@ -286,7 +286,7 @@
     <sliderTemplate>
         <template>
             <templateName>A</templateName>
-            <imageCount>1</imageCount>
+            <imageCount>2</imageCount>
         </template>
         <template>
             <templateName>B</templateName>

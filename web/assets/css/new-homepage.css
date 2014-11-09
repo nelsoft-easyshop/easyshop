@@ -1065,6 +1065,10 @@ header {
     margin: auto;
 }
 
+.slider-temp1-img2 {
+    display: none !important;
+}
+
 .slider-template-3 .img-holder,
 .slider-template-4 .slider-item .img-holder {
     float: left;
@@ -1189,7 +1193,7 @@ header {
 
 #content img {
     max-width:100%;
-    display:block;
+/*    display:block;*/
     height:auto;
 }    
 
@@ -2980,7 +2984,7 @@ h3 > b{
     }    
 }
 
-@media only screen and (min-width: 320px) {
+@media only screen and (min-width: 324px) {
     .main-slider-container {
         height: 300px;
     }
@@ -2988,6 +2992,7 @@ h3 > b{
     .slider-item {
         height: 300px;
     }
+
 }
 
 @media only screen and (min-width: 480px) {
@@ -3028,6 +3033,14 @@ h3 > b{
     .slider-template-4 {
         width: 378.5px !important;
     }
+
+
+}
+
+@media (min-width: 565px) and (max-width: 767px) {
+    .slider-template-1.slider-alt-template2 {
+        width: 378px !important;
+    }
 }
 
 @media only screen and (min-width: 767px) {
@@ -3042,7 +3055,10 @@ h3 > b{
     .slider-template-3,
     .slider-template-4 {
         width: 355px !important;
-    }    
+    }
+
+
+
 }
 
 @media only screen and (min-width: 991px) {
@@ -3074,6 +3090,7 @@ h3 > b{
     .slider-template-4 {
         width: 565px !important;
     }
+
 
 /*    .bx-wrapper .bx-pager, .bx-wrapper .bx-controls-auto {
         bottom: 10px;
@@ -3107,6 +3124,16 @@ h3 > b{
         right: 10px;
     }
 
+
+    .slider-temp1-img1 {
+        display: none !important;
+    }
+
+    .slider-template-1 img.slider-temp1-img2 {
+        display: block !important;
+        max-width: 565px !important;
+    }
+
     /*** ---- 404 responsive css --- ***/
 
     .form-container-404 .form-404-input {
@@ -3125,6 +3152,17 @@ h3 > b{
         position: absolute;
         top: 0;
     }
+}
+
+@media only screen and (max-width: 323px) {
+    .main-slider-container {
+        height: 266px;
+    }
+
+    .slider-item {
+        height: 266px;
+    }
+
 }
 
 @media only screen and (max-width: 1200px) {
