@@ -279,6 +279,7 @@
 <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
 
 <script type='text/javascript' src='/assets/js/src/promo/scratch-and-win.js?ver=<?=ES_FILE_VERSION?>'></script>
 
