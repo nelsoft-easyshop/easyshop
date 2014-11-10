@@ -39,4 +39,66 @@
         }
         });
     });  
+    
+    $( "#info-item-3" ).click(function() {
+        $( "#info-attributes-3" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-3").attr("class");
+         if(i_icon == "info-item-icon-3 fa fa-plus-circle"){
+            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-plus-circle").addClass("info-item-icon-3 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-3 fa fa-minus-circle"){
+            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-minus-circle").addClass("info-item-icon-3 fa fa-plus-circle");
+            $(".text-info-icon-3").text("more info");
+        }
+        });
+    });
+    
+      $( "#info-item-4" ).click(function() {
+        $( "#info-attributes-4" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-4").attr("class");
+         if(i_icon == "info-item-icon-4 fa fa-plus-circle"){
+            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-plus-circle").addClass("info-item-icon-4 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-4 fa fa-minus-circle"){
+            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-minus-circle").addClass("info-item-icon-4 fa fa-plus-circle");
+            $(".text-info-icon-4").text("more info");
+        }
+        });
+    }); 
+    
+      $( "#info-item-5" ).click(function() {
+        $( "#info-attributes-5" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-5").attr("class");
+         if(i_icon == "info-item-icon-5 fa fa-plus-circle"){
+            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-plus-circle").addClass("info-item-icon-5 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-5 fa fa-minus-circle"){
+            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-minus-circle").addClass("info-item-icon-5 fa fa-plus-circle");
+            $(".text-info-icon-5").text("more info");
+        }
+        });
+    }); 
+    
+      $( "#info-item-6" ).click(function() {
+        $( "#info-attributes-6" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-6").attr("class");
+         if(i_icon == "info-item-icon-6 fa fa-plus-circle"){
+            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-plus-circle").addClass("info-item-icon-6 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-6 fa fa-minus-circle"){
+            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-minus-circle").addClass("info-item-icon-6 fa fa-plus-circle");
+            $(".text-info-icon-6").text("more info");
+        }
+        });
+    }); 
+    
+    
+    $( "#dash" ).click(function() {
+        $("#aaa").addClass("selected");
+        $("#active-items").css("display", "block");
+    });
 }(jQuery));
