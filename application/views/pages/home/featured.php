@@ -19,13 +19,15 @@
                                     <div class="div-rec-product-image hover-prod-image">
                                         <center>
                                             <span class="span-me">
-                                                <img src="/assets/images/products/sony-p.jpg" class="img-rec-product">
+                                                <img src="<?=$product['secondary_image']['directory'] . 'categoryview/' . $product['secondary_image']['imageFileName']?>" class="img-rec-product">
                                             </span>
                                         </center>
                                     </div>
+                                    <div class="div-rec-product-image main-prod-image">
+                                    <?PHP else : ?>
+                                        <div class="div-rec-product-image">
                                     <?PHP endif; ?>
                                     <!--main image-->
-                                    <div class="div-rec-product-image main-prod-image">
                                         <center style="background: #fff;">
                                             <span class="span-me">
                                                 
