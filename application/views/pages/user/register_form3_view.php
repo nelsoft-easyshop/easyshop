@@ -18,16 +18,16 @@
         </div>
         <div class="success_content">
           <div>
-            <p><img src="<?=base_url()?>assets/images/img_success.png" ><?php echo $member_username?></p>
+            <p><img src="/assets/images/img_success.png" ><?php echo $member_username?></p>
           </div>
           <div>
 			<br>
             <h2><?php echo $verification_msg?></h2>
 			<br><br>
 			<?php if($logged_in == false):?>
-				<a href="<?=base_url()?>login" class="continue">Go to Login Page</a>
+				<a href="/login" class="continue">Go to Login Page</a>
 			<?php elseif($logged_in == true):?>
-				<a href="<?=base_url()?>" class="continue">Go to Home Page</a>
+				<a href="/" class="continue">Go to Home Page</a>
 			<?php endif;?>
 			
           </div> 
