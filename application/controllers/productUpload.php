@@ -13,7 +13,7 @@ class productUpload extends MY_Controller
         $this->load->model("product_model");
         $this->load->helper('htmlpurifier');
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            redirect(base_url().'login', 'refresh');
+            redirect('/login', 'refresh');
         }
 
         $this->max_file_size_mb = 5;
