@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.idTabs.min.js"></script>
-    <div class="clear"></div>
+<div class="clear"></div>
 
 <section>
     <div class="wrapper">
@@ -44,7 +44,7 @@
                         <p>
                             You have made a successful purchase on Easyshop.ph. An e-mail has been sent to you and the people from whom you purchased
                             regarding the status of your transaction. Please complete any necessary steps that are stated and thank you for using Easyshop.ph.
-                            You may view your pending transactions by clicking <a style='text-decoration:underline; color:#f48000' href='<?=base_url()?>me?me=pending'>here </a>
+                            You may view your pending transactions by clicking <a style='text-decoration:underline; color:#f48000' href='/me?me=pending'>here </a>
                         </p>
                     </div>
                 <?php else: ?>
@@ -58,7 +58,7 @@
                 <div style='font-size: 14px; font-weight:bold;'>
                     <br/><br/>
                     <p>
-                        <a href="<?=base_url()?>home">Continue Shopping</a>
+                        <a href="/">Continue Shopping</a>
                     </p>
                 </div>
             <?php endif ?> 
