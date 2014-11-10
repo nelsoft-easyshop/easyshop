@@ -171,7 +171,6 @@
                                 <li><a href="#<?=$key;?>"><?=$value;?></a></li> 
                             <?php endforeach; ?>
                         </ul>
-
                        <?php foreach($paymentType as $key => $value):?> 
 
     <!-- #### CREDIT CARD / DEBIT CARD #### -->

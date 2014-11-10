@@ -6,7 +6,6 @@
 
 <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
-<link rel="canonical" href="/category/<?=$categorySlug?>"/>
 
 <section style="color-gray display-when-desktop">
     <div class="container container-responsive">

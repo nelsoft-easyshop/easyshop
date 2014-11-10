@@ -109,6 +109,7 @@ class product extends MY_Controller
             $data = array( 
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
+                'relCanonical' => base_url().'category/'.$categorySlug ,
                 ); 
             $data = array_merge($data, $this->fill_header());
 
@@ -244,12 +245,9 @@ class product extends MY_Controller
         $stringUtility = $this->serviceContainer['string_utility'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        // Load Product Section
-        // check of slug exist
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                   ->findOneBy(['slug' => $itemSlug]);
 
-        // user id of the viewer
         $viewerId =  $this->session->userdata('member_id');
 
         if($productEntity){
@@ -257,42 +255,32 @@ class product extends MY_Controller
             $productId = $productEntity->getIdProduct();
             $categoryId = $productEntity->getCat()->getIdCat();
 
-            // get product details
             $product = $productManager->getProductDetails($productEntity);
-
-            // generate bread crumbs category of product
             $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
                                     ->getParentCategoryRecursive($categoryId);
 
-            // get owner avatar image of the product
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
             
-            // get all images of the product
             $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getProductImages($productId);
             $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],TRUE);
 
-            // getting attributes
             $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                           ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributes,true,true);
 
-            // get all shipping location
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                          ->getLocation();
 
-            // check if totally free shipping 
             $isFreeShippingNationwide = $productManager->isFreeShippingNationwide($productId);
 
             $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                         ->getShippingDetailsByProductId($productId);
 
-            // get possible combination of the attributes of the product
             $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
             $productCombination = $productCombinationAvailable['productCombinationAvailable'];
             $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
 
-            // get payment type available and if button is viewable
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
@@ -311,10 +299,7 @@ class product extends MY_Controller
 
             $productDescription = $stringUtility->purifyString($product->getDescription());
 
-            // get all reviews of the product
             $productReviews = $reviewProductService->getProductReview($productId);
-
-            // check user if allowed to review
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
 
             $reviewDetailsData = array(
@@ -325,40 +310,37 @@ class product extends MY_Controller
 
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
 
-            // get recommended products
             $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
-
             $recommendViewArray = [
-                                'recommended'=> $recommendProducts,
-                                'productCategorySlug' => $product->getCat()->getSlug(),
-                            ];
+                                    'recommended'=> $recommendProducts,
+                                    'productCategorySlug' => $product->getCat()->getSlug(),
+                                  ];
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,TRUE);
 
-            $viewData = array(
-                        'product' => $product,
-                        'breadCrumbs' => $breadcrumbs,
-                        'ownerAvatar' => $avatarImage,
-                        'imagesView' => $imagesView,
-                        'productAttributes' => $productAttributes,
-                        'productCombinationQuantity' => json_encode($productCombination),
-                        'shippingInfo' => $shippingDetails,
-                        'shiploc' => $shippingLocation,
-                        'paymentMethod' => $paymentMethod,
-                        'isBuyButtonViewable' => $isBuyButtonViewable,
-                        'isLoggedIn' => $headerData['logged_in'],
-                        'viewerId' => $viewerId,
-                        'canPurchase' => $canPurchase,
-                        'userData' => $headerData['user'],
-                        'bannerView' => $bannerView, 
-                        'reviewDetailsView' => $reviewDetailsView,
-                        'recommendedView' => $recommendedView,
-                        'noMoreSelection' => $noMoreSelection, 
-                        'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                        'url' => '/item/' . $product->getSlug() 
-                    );
+            $viewData = [
+                            'product' => $product,
+                            'breadCrumbs' => $breadcrumbs,
+                            'ownerAvatar' => $avatarImage,
+                            'imagesView' => $imagesView,
+                            'productAttributes' => $productAttributes,
+                            'productCombinationQuantity' => json_encode($productCombination),
+                            'shippingInfo' => $shippingDetails,
+                            'shiploc' => $shippingLocation,
+                            'paymentMethod' => $paymentMethod,
+                            'isBuyButtonViewable' => $isBuyButtonViewable,
+                            'isLoggedIn' => $headerData['logged_in'],
+                            'viewerId' => $viewerId,
+                            'canPurchase' => $canPurchase,
+                            'userData' => $headerData['user'],
+                            'bannerView' => $bannerView, 
+                            'reviewDetailsView' => $reviewDetailsView,
+                            'recommendedView' => $recommendedView,
+                            'noMoreSelection' => $noMoreSelection, 
+                            'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                            'url' => '/item/' . $product->getSlug() 
+                        ];
 
-            // Header data
             $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
  
@@ -383,7 +365,6 @@ class product extends MY_Controller
             $parentCategory = $esCatRepository->findBy(['parent' => EsCat::MAIN_PARENT_CATEGORY]);
             $headerData['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-            // Footer Data data
             $socialMediaLinks = $this->getSocialMediaLinks();
             $footerData['facebook'] = $socialMediaLinks["facebook"];
             $footerData['twitter'] = $socialMediaLinks["twitter"];
