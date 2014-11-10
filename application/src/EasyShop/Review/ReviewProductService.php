@@ -68,16 +68,15 @@ class ReviewProductService
     public function getProductReview($productId)
     {
         $recentReviews = []; 
-        $productReviews = $this->em->getRepository('EasyShop\Entities\EsProductReview')
-                                        ->getProductReview($productId);
+        $esProductReviewRepo = $this->em->getRepository('EasyShop\Entities\EsProductReview');
+        $productReviews = $esProductReviewRepo->getProductReview($productId);
         if($productReviews){
             $reviewIds = [];
             foreach ($productReviews as $value) {
                 $reviewIds[] = $value->getIdReview();
             }
 
-            $productReviewReplies = $this->em->getRepository('EasyShop\Entities\EsProductReview')
-                                             ->getReviewReplies($productId, $reviewIds);
+            $productReviewReplies = $esProductReviewRepo->getReviewReplies($productId, $reviewIds);
 
             foreach($productReviewReplies as $value) {
                 $value->setReview(html_escape($value->getReview()));
@@ -98,14 +97,14 @@ class ReviewProductService
 
                 foreach($productReviewReplies as $reply){ 
                     if($value->getIdReview() == $reply->getPReviewid()){  
-                        $recentReviews[$i]['replies'][] = array(
+                        $recentReviews[$i]['replies'][] = [
                                                     'id_review' => $reply->getIdReview(),
                                                     'review' => $reply->getReview(),
                                                     'rating' => $reply->getRating(),
                                                     'datesubmitted' => $reply->getDatesubmitted()->format('Y-m-d H:i:s'),
                                                     'reviewer' => $reply->getMember()->getUsername(),
                                                     'reviewer_avatar' => $this->userManager->getUserImage($reply->getMember()->getIdMember()),
-                                                );
+                                                ];
                         $recentReviews[$i]['reply_count']++;
                     }
                 }
@@ -158,7 +157,7 @@ class ReviewProductService
         $this->em->persist($reviewObj);
         $this->em->flush();
 
-        $returnArray = array( 
+        $returnArray = [
                     'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
                     'reviewUsername' => html_escape($member->getUsername()),
                     'review' => html_escape($review),
@@ -167,7 +166,7 @@ class ReviewProductService
                     'rating' => $rating,
                     'idReview' => $reviewObj->getIdReview(),
                     'canReview' => $this->checkIfCanReview($memberId,$productId),
-                ); 
+                ]; 
 
         return $returnArray;
     }

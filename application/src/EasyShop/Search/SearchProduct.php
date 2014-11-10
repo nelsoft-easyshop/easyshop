@@ -83,7 +83,6 @@ class SearchProduct
     public function filterBySearchString($productIds,$queryString = "",$storeKeyword = TRUE)
     {
         if($storeKeyword){
-            // Insert into search keyword temp 
             $keywordTemp = new EsKeywordsTemp();
             $keywordTemp->setKeywords($queryString);
             $keywordTemp->setIpAddress($this->httpRequest->getClientIp());
@@ -273,13 +272,11 @@ class SearchProduct
      * @return mixed
      */
     public function getProductBySearch($parameters)
-    {       
-        // Prepare services
+    {
         $searchProductService = $this;
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
 
-        // Prepare variables
         $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):FALSE;
         $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):FALSE;
         $startPrice = isset($parameters['startprice']) && $parameters['startprice']?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
@@ -289,11 +286,8 @@ class SearchProduct
         $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = $pageNumber ? FALSE:TRUE;
 
-        // Search Filter 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-
-        // Search for Product Query String
         $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $productIds : $originalOrder;
@@ -302,7 +296,6 @@ class SearchProduct
 
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
 
-        // total product count
         $totalCount = count($finalizedProductIds);
 
         $offset = intval($pageNumber) * intval($perPage);

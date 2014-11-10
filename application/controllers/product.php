@@ -236,7 +236,6 @@ class product extends MY_Controller
         header ('Content-type: text/html; charset=ISO-8859-1');
         $headerData = $this->fill_header(); 
 
-        // Load Services
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
@@ -263,11 +262,11 @@ class product extends MY_Controller
             
             $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getProductImages($productId);
-            $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],TRUE);
+            $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],true);
 
-            $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                          ->getProductAttributeDetailByName($productId);
-            $productAttributes = $collectionHelper->organizeArray($productAttributes,true,true);
+            $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->getProductAttributeDetailByName($productId);
+            $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
 
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                          ->getLocation();
@@ -285,11 +284,10 @@ class product extends MY_Controller
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if(intval($product->getIsPromote()) === 1 && (!$product->getEndPromo())){
-
+            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
                 $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
-                if(strlen(trim($bannerfile)) > 0){
-                    $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], TRUE); 
+                if($bannerfile){
+                    $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], true); 
                 }
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
                 $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
@@ -308,7 +306,7 @@ class product extends MY_Controller
                         'canReview' => $canReview,
                     );
 
-            $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, TRUE); 
+            $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
 
             $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
             $recommendViewArray = [
@@ -316,7 +314,7 @@ class product extends MY_Controller
                                     'productCategorySlug' => $product->getCat()->getSlug(),
                                   ];
 
-            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,TRUE);
+            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
             $viewData = [
                             'product' => $product,
@@ -341,29 +339,14 @@ class product extends MY_Controller
                             'url' => '/item/' . $product->getSlug() 
                         ];
 
+            if($this->session->userdata('member_id')) {
+                $headerData['user_details'] = $this->fillUserDetails();
+            }
+
             $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
- 
-            $esCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
-            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-            $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = [];
-            foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
-                $homeContent['slider'][] = $sliderView;
-            }
-
-            $headerData['homeContent'] = $homeContent;
-
-            if($headerData['logged_in']){  
-                $headerData['user_details'] = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                                       ->find($viewerId);
-                $headerData['user_details']->profileImage = ($headerData['user_details']->getImgurl() == "") 
-                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                        : $headerData['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
-            }
-            $parentCategory = $esCatRepository->findBy(['parent' => EsCat::MAIN_PARENT_CATEGORY]);
-            $headerData['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+            $headerData['homeContent'] = $this->fillCategoryNavigation();
+            $headerData = array_merge($headerData, $this->fill_header());
 
             $socialMediaLinks = $this->getSocialMediaLinks();
             $footerData['facebook'] = $socialMediaLinks["facebook"];

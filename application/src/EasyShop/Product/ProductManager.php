@@ -45,6 +45,11 @@ class ProductManager
     const PRODUCT_META_DESCRIPTION_LIMIT = 155;
 
     /**
+     * Default limit of meta desciption of the product
+     */
+    const PRODUCT_IS_PROMOTE = 1;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
