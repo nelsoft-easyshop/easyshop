@@ -15,11 +15,11 @@ class EsSocialMediaProvider
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_socialmedia_provider", type="integer", nullable=false)
+     * @ORM\Column(name="id_social_media_provider", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idSocialmediaProvider;
+    private $idSocialMediaProvider;
 
     /**
      * @var string
@@ -31,13 +31,13 @@ class EsSocialMediaProvider
 
 
     /**
-     * Get idSocialmediaProvider
+     * Get idSocialMediaProvider
      *
      * @return integer
      */
-    public function getIdSocialmediaProvider()
+    public function getIdSocialMediaProvider()
     {
-        return $this->idSocialmediaProvider;
+        return $this->idSocialMediaProvider;
     }
 
     /**

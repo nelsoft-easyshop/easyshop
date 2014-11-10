@@ -380,10 +380,10 @@
                             <p><strong>Social Media:</strong></p>
                             <ul>
                                 <li>
-                                    <div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+                                    <div class="fb-like" data-href="<?php echo $facebook; ?>" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
                                 </li>
                                 <li>
-                                    <a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
+                                    <a href="<?php echo $twitter; ?>" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
 
                                 </li>
                             </ul>

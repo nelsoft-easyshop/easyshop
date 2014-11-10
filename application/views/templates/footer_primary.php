@@ -40,10 +40,10 @@
 
                         <h1>Follow Us</h1>
                         <div class="social-media-wrapper">
-                            <a href="https://www.facebook.com/EasyShopPhilippines">
+                            <a href="<?php echo $facebook; ?>">
                                 <img src="/assets/images/img-facebook-new.png" alt="easyshop facebook">
                             </a>
-                            <a href="https://twitter.com/EasyShopPH">
+                            <a href="<?php echo $twitter; ?>">
                                 <img src="/assets/images/img-twitter-new.png" alt="easyshop twitter">
                             </a>
                             <div class="clear"></div>
@@ -57,11 +57,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-left">
-                        <img src="assets/images/img-visa.png" alt="Visa">
-                        <img src="assets/images/img-paypal.png" alt="Paypal">
-                        <img src="assets/images/img-mastercard.png" alt="Mastercard">
-                        <img src="assets/images/img-dragonpay.png" alt="Dragon Pay">
-                        <img src="assets/images/img-cod.png" alt="COD">
+                        <img src="/assets/images/img-visa.png" alt="Visa">
+                        <img src="/assets/images/img-paypal.png" alt="Paypal">
+                        <img src="/assets/images/img-mastercard.png" alt="Mastercard">
+                        <img src="/assets/images/img-dragonpay.png" alt="Dragon Pay">
+                        <img src="/assets/images/img-cod.png" alt="COD">
                     </div>
                     <div class="col-md-6 text-right footer-hide">
                         <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>

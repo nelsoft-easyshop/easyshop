@@ -781,6 +781,9 @@ class Memberpage extends MY_Controller
                 $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
                 $parseData['store_link'] = base_url() . $parseData['user_slug'];
                 $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $parseData['facebook'] = $socialMediaLinks["facebook"];
+                $parseData['twitter'] = $socialMediaLinks["twitter"];
 
                 $hasNotif = FALSE;
                 if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
@@ -934,6 +937,7 @@ class Memberpage extends MY_Controller
                     );
 
                     $parseData = $postData;
+                    $socialMediaLinks = $this->getSocialMediaLinks();
                     $parseData = array_merge($parseData, array(
                             "seller" => $memberEntity->getUsername(),
                             "store_link" => base_url() . $memberEntity->getSlug(),
@@ -942,7 +946,9 @@ class Memberpage extends MY_Controller
                             "invoice" => $orderEntity->getInvoiceNo(),
                             "product_name" => $orderProductEntity->getProduct()->getName(),
                             "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
+                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
+                            "facebook" => $socialMediaLinks["facebook"],
+                            "twitter" => $socialMediaLinks["twitter"]
                         ));
                     $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
 
@@ -1693,7 +1699,7 @@ class Memberpage extends MY_Controller
                 break;
             case 2:
                 $orderSearch = "NEW";
-                $orderBy = array("createddate" => $order);
+                $orderBy = array("lastmodifieddate" => $order);
                 break;
             case 3:
                 $orderSearch = "HOT";
@@ -1701,7 +1707,7 @@ class Memberpage extends MY_Controller
                 break;
             default:
                 $orderSearch = "NULL";
-                $orderBy = array("clickcount"=>$order);
+                $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }
 

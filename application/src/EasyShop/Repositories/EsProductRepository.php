@@ -494,7 +494,7 @@ class EsProductRepository extends EntityRepository
 
             switch(strtoupper($filterArray['sortby'])){
                 case "NEW":
-                    $qbResult = $qbResult->orderBy('p.createddate', $order);
+                    $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
                 case "HOT":
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
@@ -754,6 +754,33 @@ class EsProductRepository extends EntityRepository
                      ->find($result[0]['member_id']);
         return $seller;
 
+    }
+    
+    /**
+     * Returns the raw promo fields of a product. This uses native sql for efficiency.
+     * This is primarily used for mass evaluation of the promo price. Hydrating EsProduct's
+     * takes up too much CPU for this. Returns NULL if the product is not found.
+     *
+     * @param integer $productId
+     * @return mixed
+     */
+    public function getRawProductPromoDetails($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('price', 'price');
+        $rsm->addScalarResult('discount', 'discount');
+        $rsm->addScalarResult('promo_type', 'promo_type');
+        $rsm->addScalarResult('is_promote', 'is_promote');
+        $rsm->addScalarResult('startdate', 'startdate');
+        $rsm->addScalarResult('enddate', 'enddate');
+        $query = $em->createNativeQuery("
+            SELECT `price`, `discount`, `promo_type`, `is_promote`, `startdate`, `enddate` from es_product WHERE id_product = :productId
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();  
+        return isset($result[0]) ? $result[0] : NULL;
     }
     
     

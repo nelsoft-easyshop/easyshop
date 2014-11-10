@@ -243,18 +243,22 @@ class Kernel
             $collectionHelper = $container['collection_helper'];
             $productManager = $container['product_manager'];
             $categoryManager = $container['category_manager'];
+            $httpRequest = $container['http_request'];
+            $promoManager = $container['promo_manager'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
                                                         ,$collectionHelper
                                                         ,$productManager
                                                         ,$categoryManager
+                                                        ,$httpRequest
+                                                        ,$promoManager
                                                     );
         };
 
         //Promo Manager
         $container['promo_manager'] = function ($c) use ($container){
-            return new \EasyShop\Promo\PromoManager($container['config_loader']);
+            return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
 
         // Product Manager
