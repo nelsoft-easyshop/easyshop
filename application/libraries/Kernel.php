@@ -244,6 +244,7 @@ class Kernel
             $productManager = $container['product_manager'];
             $categoryManager = $container['category_manager'];
             $httpRequest = $container['http_request'];
+            $promoManager = $container['promo_manager'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
@@ -251,6 +252,7 @@ class Kernel
                                                         ,$productManager
                                                         ,$categoryManager
                                                         ,$httpRequest
+                                                        ,$promoManager
                                                     );
         };
 
