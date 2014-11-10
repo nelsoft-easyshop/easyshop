@@ -4,6 +4,9 @@ if (!defined('BASEPATH')){
     exit('No direct script access allowed');
 }
 
+use EasyShop\Entities\EsMember as EsMember; 
+use EasyShop\Entities\EsCat as EsCat; 
+
 class product extends MY_Controller 
 { 
 
@@ -239,11 +242,12 @@ class product extends MY_Controller
         $collectionHelper = $this->serviceContainer['collection_helper'];
         $reviewProductService = $this->serviceContainer['review_product_service'];
         $stringUtility = $this->serviceContainer['string_utility'];
+        $categoryManager = $this->serviceContainer['category_manager']; 
 
         // Load Product Section
         // check of slug exist
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $itemSlug]);
+                                  ->findOneBy(['slug' => $itemSlug]);
 
         // user id of the viewer
         $viewerId =  $this->session->userdata('member_id');
@@ -354,15 +358,37 @@ class product extends MY_Controller
                         'url' => '/item/' . $product->getSlug() 
                     );
 
-            // Header 
+            // Header data
             $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
-            // Footer Data
+ 
+            $esCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+            $sliderSection = $homeContent['slider']; 
+            $homeContent['slider'] = [];
+            foreach($sliderSection as $slide){
+                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+                $homeContent['slider'][] = $sliderView;
+            }
+
+            $headerData['homeContent'] = $homeContent;
+
+            if($headerData['logged_in']){  
+                $headerData['user_details'] = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                                       ->find($viewerId);
+                $headerData['user_details']->profileImage = ($headerData['user_details']->getImgurl() == "") 
+                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
+                                        : $headerData['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            }
+            $parentCategory = $esCatRepository->findBy(['parent' => EsCat::MAIN_PARENT_CATEGORY]);
+            $headerData['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+
+            // Footer Data data
             $socialMediaLinks = $this->getSocialMediaLinks();
             $footerData['facebook'] = $socialMediaLinks["facebook"];
             $footerData['twitter'] = $socialMediaLinks["twitter"];
 
-            $this->load->view('templates/header_new', $headerData); 
+            $this->load->view('templates/header_primary', $headerData);
             $this->load->view('pages/product/productpage_primary', $viewData);
             $this->load->view('templates/footer_primary',$footerData);
         }
