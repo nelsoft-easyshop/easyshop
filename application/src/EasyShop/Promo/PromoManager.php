@@ -103,9 +103,8 @@ class PromoManager
      */
     public function hydratePromoDataExpress($productId)
     {
-        
         $productDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')->getRawProductPromoDetails($productId);
-        if($productDetails){
+        if(!$productDetails){
             return 0;
         }
         
@@ -114,7 +113,11 @@ class PromoManager
         $isPromote = $productDetails['is_promote'];
         $startDate = $productDetails['startdate'];
         $endDate = $productDetails['enddate'];
-    
+        $promoType = $productDetails['promo_type'];
+
+        $startDate = date_create($startDate);
+        $endDate = date_create($endDate); 
+
         $promoPrice = $price;
         if (intval($isPromote) === 1) {
             if (isset($this->promoConfig[$promoType])) {
@@ -122,7 +125,8 @@ class PromoManager
                     trim($this->promoConfig[$promoType]['implementation']) !== ''
                 ) {
                     $promoImplementation = $this->promoConfig[$promoType]['implementation'];
-                    $promoPrice = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount,$this->promoConfig[$promoType]['option']);
+                    $promo = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount,$this->promoConfig[$promoType]['option']);
+                    $promoPrice = $promo['promoPrice'];
                 }
             }
         }
@@ -132,6 +136,7 @@ class PromoManager
                 $promoPrice = (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01;
             }
         }
+
         return $promoPrice;
     }
 
