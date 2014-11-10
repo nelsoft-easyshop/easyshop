@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/css/product-page-css.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
 <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 <section class="breadcrumbs-bg">

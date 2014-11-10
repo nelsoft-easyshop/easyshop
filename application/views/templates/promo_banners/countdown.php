@@ -58,7 +58,7 @@
     <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s")))); ?>' >
 </div>
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
-<script src="<?=base_url()?>assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
+<script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
 
