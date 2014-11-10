@@ -55,16 +55,24 @@ class SearchProduct
     private $httpRequest;
 
     /**
+     * Promo Manager Instance
+     *
+     * @var Easyshop\PromoManager
+     */
+    private $promoManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$categoryManager,$httpRequest)
+    public function __construct($em,$collectionHelper,$productManager,$categoryManager,$httpRequest,$promoManager)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
         $this->httpRequest = $httpRequest;
+        $this->promoManager = $promoManager;
     }
 
     /**
@@ -111,21 +119,20 @@ class SearchProduct
      * Search all product id within price given in parameter
      * @param  integer $minPrice 
      * @param  integer $maxPrice
-     * @param  array   $arrayItems
+     * @param  array   $productIds
      * @return array
      */
-    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
+    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$productIds)
     {
-        $productManager = $this->productManager;
+        $promoManager = $this->promoManager;
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
-
         $productIdsReturn = []; 
-        foreach ($arrayItems as $key => $value) {
-            $value = $productManager->getProductDetails($value);
-            $price = round(floatval($value->getFinalPrice()),2);
+        foreach ($productIds as $productId) {
+            $promoPrice = $promoManager->hydratePromoDataExpress($productId);
+            $price = round(floatval($promoPrice),2);
             if($price >= $minPrice && $price <= $maxPrice){ 
-                $productIdsReturn[] = $value->getIdProduct();
+                $productIdsReturn[] = $productId;
             } 
         }
 
@@ -294,12 +301,9 @@ class SearchProduct
         $productIds = ($queryString && empty($productIds)) ? array() : $productIds;
         $originalOrder = ($sortBy) ? $productIds : $originalOrder;
 
-        if($startPrice){
-            // Get product object
-            $filteredProducts = $esProductRepository->findBy(['idProduct' => $productIds]);
-
+        if($startPrice){ 
             // filter object remove product without in the range of the price
-            $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $filteredProducts) : $discountedProduct;
+            $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         }
         else{
             $finalizedProductIds = $productIds;
