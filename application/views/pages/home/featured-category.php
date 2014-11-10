@@ -49,8 +49,17 @@
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
                                     <center>
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <div class="div-rec-product-image">
+                                            <!--Hover-->
+                                            <div class="div-rec-product-image hover-prod-image">
                                                 <center>
+                                                    <span class="span-me">
+                                                        <img src="/assets/images/products/sony-p.jpg" class="img-rec-product">
+                                                    </span>
+                                                </center>
+                                            </div>
+                                            <!--Main Image-->
+                                            <div class="div-rec-product-image main-prod-image">
+                                                <center style="background: #fff;">
                                                     <span class="span-me">
                                                         <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
                                                     </span>

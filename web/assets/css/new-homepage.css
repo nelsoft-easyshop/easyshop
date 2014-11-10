@@ -2961,6 +2961,23 @@ h3 > b{
     font-size: 20px;
 }
 
+.main-prod-image{
+    opacity: 1;
+    margin-top: -41px;
+    position: absolute;
+    left: 0;
+    padding: 20px;
+    top: 41px;
+    -webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
+}
+
+.main-prod-image:hover{
+    opacity: 0;
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
