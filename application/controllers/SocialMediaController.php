@@ -286,6 +286,13 @@ class SocialMediaController extends MY_Controller
         if (intval($getData[0]) === 0 || !isset($getData[1]) || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
+
+        $isMemberRegistered = $this->entityManager->getRepository('EasyShop\Entities\EsMemberMerge')
+                                ->findOneBy(['socialMediaId' => $getData[1]]);
+        if ($isMemberRegistered) {
+            redirect('/', 'refresh');
+        }
+
         $data = array(
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
@@ -328,7 +335,12 @@ class SocialMediaController extends MY_Controller
                 $this->input->post('id'),
                 $socialMediaProvider
             );
-            $this->login($result);
+
+            if ($result) {
+                $this->login($result);
+            } else {
+                $result = 'Invalid Username';
+            }
         }
 
         echo json_encode($result);
