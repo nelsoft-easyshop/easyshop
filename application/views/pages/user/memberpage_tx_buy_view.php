@@ -81,13 +81,13 @@
 						<div class="transac_prod_first">
 							<div class="img_transac_prod_con">
 								<span class="img_transac_prod">
-									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+									<img src="/<?php echo $product['product_image_path'];?>">
 								</span>
 							</div>
 							<div class="info_transac_prod_con">
 								<div class="title_top_transac_table">
 									<span class="title_top_transac_col1">								
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+										<a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 									</span>
 									<span class="title_top_transac_col2">
 										Quantity: <span><?php echo $product['order_quantity']?></span>
@@ -99,7 +99,7 @@
 								<div class="transac_bought_con tx_cont">
 									<span class="transac_bought_con_col1">Bought from: </span>
 									<span class="transac_bought_con_col2">
-										<a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>">
+										<a href="/<?php echo $product['seller_slug'];?>">
 											<?php echo html_escape($product['seller']);?>
 										</a>
 									</span>
