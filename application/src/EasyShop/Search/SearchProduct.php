@@ -279,9 +279,6 @@ class SearchProduct
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
 
-        // Prepare Repository
-        $esProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
-
         // Prepare variables
         $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):FALSE;
         $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):FALSE;
