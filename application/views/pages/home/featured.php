@@ -18,13 +18,13 @@
                                     <div class="div-rec-product-image hover-prod-image">
                                         <center>
                                             <span class="span-me">
-                                                <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
+                                                <img src="/assets/images/products/sony-p.jpg" class="img-rec-product">
                                             </span>
                                         </center>
                                     </div>
                                     <!--main image-->
                                     <div class="div-rec-product-image main-prod-image">
-                                        <center>
+                                        <center style="background: #fff;">
                                             <span class="span-me">
                                                 
                                                 <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
