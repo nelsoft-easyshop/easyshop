@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
