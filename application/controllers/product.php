@@ -106,6 +106,7 @@ class product extends MY_Controller
             $data = array( 
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
+                'relCanonical' => base_url().'category/'.$categorySlug ,
                 ); 
             $data = array_merge($data, $this->fill_header());
 
@@ -451,6 +452,8 @@ class product extends MY_Controller
             $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
+            $data['relCanonical'] = base_url().'item/'.$product_row['slug'];
+            
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/productpage_view_responsive', $data);
             $this->load->view('templates/footer_full');
