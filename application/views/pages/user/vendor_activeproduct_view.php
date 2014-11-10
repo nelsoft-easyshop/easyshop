@@ -3,7 +3,7 @@
 		<div class="post_item_content_left">
 			<div class="post_item_img_table">
 				<span class="post_item_img_con">
-					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+					<img src="/<?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
 			</div>
 			<p>
@@ -20,7 +20,7 @@
 		</div>
 		<div class="post_item_content_right">
 			<div class="product_title_container">
-				<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug']?>"><?php echo html_escape($active_product['name']);?></a></p>
+				<p class="post_item_product_title fm1"><a href="/item/<?php echo $active_product['slug']?>"><?php echo html_escape($active_product['name']);?></a></p>
 			</div>
 			<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
 				<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
