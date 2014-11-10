@@ -77,7 +77,8 @@ class Home extends MY_Controller
         else{
             $em = $this->serviceContainer["entity_manager"];
             $categoryManager = $this->serviceContainer['category_manager']; 
-            $EsCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
+            $userManager = $this->serviceContainer['user_manager']; 
+            $esCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
             $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
             $sliderSection = $homeContent['slider']; 
             $homeContent['slider'] = array();
@@ -91,12 +92,10 @@ class Home extends MY_Controller
                 $memberId = $this->session->userdata('member_id');
                 $data['logged_in'] = true;
                 $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                                ->find($memberId);
-                $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
-                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                        : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+                                           ->find($memberId);
+                $data['user_details']->profileImage = $userManager->getUserImage($memberId,"small");
             }
-            $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
+            $parentCategory = $esCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
             $socialMediaLinks = $this->getSocialMediaLinks();

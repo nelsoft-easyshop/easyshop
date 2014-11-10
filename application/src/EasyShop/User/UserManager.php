@@ -443,26 +443,25 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-        $defaultImagePath = $this->configLoader->getItem('image_path','user_img_directory');
 
         $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
-                $imgFile = '/banner.png';
+                $imgFile = '/'.EsMember::DEFAULT_IMG_BANNER;
                 $isHide = (boolean)$member->getIsHideBanner();
                 break;
             case "small":
-                $imgFile = '/60x60.png';
+                $imgFile = '/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
                 $isHide = (boolean)$member->getIsHideAvatar();
                 break;
             default:
-                $imgFile = '/150x150.png';
+                $imgFile = '/'.EsMember::DEFAULT_IMG_NORMAL_SIZE;
                 $isHide = (boolean)$member->getIsHideAvatar();
                 break;
         }
                 
         if(!file_exists($imageURL.$imgFile) || $isHide){
-            $user_image = '/'.$defaultImagePath.'default'.$imgFile.'?ver='.time();
+            $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
         }
         else{
             $user_image = '/'.$imageURL.$imgFile.'?'.time();

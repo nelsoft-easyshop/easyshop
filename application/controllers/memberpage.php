@@ -11,6 +11,11 @@ if (!defined('BASEPATH'))
  *  @author Rain Jorque
  *
  */
+
+use Easyshop\Entities\EsMember as EsMember;
+use Easyshop\Entities\EsCat as EsCat;
+use Easyshop\Entities\EsProduct as EsProduct;
+
 class Memberpage extends MY_Controller
 {
 
@@ -35,6 +40,7 @@ class Memberpage extends MY_Controller
         $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
     public function sample()
@@ -1791,6 +1797,86 @@ class Memberpage extends MY_Controller
         echo json_encode($return);
     }
 
+    // new implementation starts here
+    
+    public function newMemberpage()
+    {
+        header ('Content-type: text/html; charset=ISO-8859-1');
+
+        $categoryManager = $this->serviceContainer['category_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
+
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $esCatRepo = $this->em->getRepository('EasyShop\Entities\EsCat');
+        $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
+
+        $headerData = $this->fill_header();
+        $memberId = $this->session->userdata('member_id');
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
+
+        if($member){
+
+            $userAvatarImage = $userManager->getUserImage($memberId);
+            $userBannerImage = $userManager->getUserImage($memberId,"banner");
+
+            $userFollowers = $esVendorSubscribeRepo->getFollowers($memberId);
+            $userFollowing = $esVendorSubscribeRepo->getUserFollowing($memberId);
+
+            $userProductCount = $esProductRepo->getUserProductCount($memberId);
+            $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
+            $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
+            $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);
+
+            $dashboardHomeData = [
+                            'avatarImage' => $userAvatarImage,
+                            'bannerImage' => $userBannerImage,
+                            'member' => $member,
+                            'followerCount' => $userFollowers['count'],
+                            'followingCount' => $userFollowing['count'],
+                            'productCount' => $userProductCount,
+                            'activeProductCount' => $userActiveProductCount,
+                            'deletedProductCount' => $userDeletedProductCount,
+                            'draftedProductCount' => $userDraftedProductCount,
+                        ];
+
+            $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, TRUE);
+
+            $dashboardData = [
+                            'dashboardHomeView' => $dashboarHomedView
+                        ];
+
+            $headerData['metadescription'] = "";
+            $headerData['title'] = "Member Page | Easyshop.ph";
+ 
+            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+            $sliderSection = $homeContent['slider']; 
+            $homeContent['slider'] = [];
+            foreach($sliderSection as $slide){
+                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+                $homeContent['slider'][] = $sliderView;
+            }
+
+            $headerData['homeContent'] = $homeContent;
+            if($headerData['logged_in']){  
+                $headerData['user_details'] = $member;
+                $headerData['user_details']->profileImage = $userManager->getUserImage($memberId,"small");
+            }
+            $parentCategory = $esCatRepo->findBy(['parent' => 1]);
+            $headerData['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $footerData['facebook'] = $socialMediaLinks["facebook"];
+            $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/header_primary', $headerData);
+            $this->load->view('pages/user/dashboard/dashboard-primary',$dashboardData);
+            $this->load->view('templates/footer_primary', $footerData);
+        }
+        else{
+            redirect('/login', 'refresh');
+        }
+    }
 }
 
 /* End of file memberpage.php */

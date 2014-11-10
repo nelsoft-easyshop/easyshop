@@ -26,7 +26,7 @@
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
                     <div class="" id="dashboard">
-                        <?php include("dashboard-home.php");?>
+                        <?=$dashboardHomeView; ?>
                     </div>
                     <div class="" id="transactions">transactions</div>
                     <div class="" id="promo">promo</div>

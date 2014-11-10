@@ -2,8 +2,8 @@
 <div class="div-tab">
     <div class="div-member-stats">
         <div class="div-img-cover">
-            <img src="/assets/images/img_cover_2.png" class="img-follower-cover"/>
-            <img src="/assets/images/img_profile_pic.jpg" class="vendor-follower-img"/>
+            <img src="<?=$bannerImage;?>" class="img-follower-cover"/>
+            <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
             <div class="cover-overlay"></div>
         </div>
         <div class="clear"></div>
@@ -11,7 +11,7 @@
             <div class="div-top-name">
                 <div class="row">
                     <div class="col-xs-5">
-                        <p class="p-username"><span class="icon-profile"> </span>Mang Pedring</p>
+                        <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
                     </div>
                     <div class="col-xs-3 col-progress-text">
                         <div class="div-progress-container-text" align="right">
@@ -36,7 +36,7 @@
                             Shop Link: 
                         </p>
                         <div class="form-shop-link">
-                            <input type="text" class="input-shop-link" value="https://easyshop.ph/mangpedring"/>
+                            <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?=$member->getSlug();?>"/>
                             <span class="icon-web"></span>
                         </div>
                         <div class="div-stat-summary">
@@ -46,7 +46,7 @@
                                         Followers
                                     </p>
                                     <p class="p-stat-total">
-                                        15
+                                        <?=$followerCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -54,7 +54,7 @@
                                         Following
                                     </p>
                                     <p class="p-stat-total">
-                                        25
+                                        <?=$followingCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -62,7 +62,7 @@
                                         Item(s)
                                     </p>
                                     <p class="p-stat-total">
-                                        10
+                                        <?=$productCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -130,9 +130,9 @@
     <div class="sidebarTabs">
         <div class="submenu-container">
             <ul class="submenu-ul">
-                <a href="#active-items"><li>Active Items<span class="circle-total">5</span></li></a>
-                <a href="#two"><li>Deleted Items<span class="circle-total">4</span></li></a>
-                <a href="#three"><li>Draft Items<span class="circle-total">0</span></li></a>
+                <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
+                <a href="#two"><li>Deleted Items<span class="circle-total"><?=$deletedProductCount;?></span></li></a>
+                <a href="#three"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
                 <a href="#four"><li>Feedbacks<span class="circle-total">0</span></li></a>
                 <a href="#four"><li>Sale</li></a>
             </ul>

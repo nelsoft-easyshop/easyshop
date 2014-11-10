@@ -81,7 +81,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user_details->profileImage;?>">
+                                                    <img src="<?=$user_details->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user_details->getUsername()); ?>
@@ -362,7 +362,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <?php if(isset($logged_in) && $logged_in): ?>
                                                 <div class="new-user-nav-dropdown">
                                                     <div class="login-profile-con">
-                                                        <img src="/<?=$user_details->profileImage;?>">
+                                                        <img src="<?=$user_details->profileImage;?>">
                                                     </div>
                                                     <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
                                                         <?php echo html_escape($user_details->getUsername()) ;?>

@@ -127,12 +127,11 @@ class MY_Controller extends CI_Controller
     public function fillUserDetails()
     {
             $em = $this->serviceContainer["entity_manager"];
+            $userManager = $this->serviceContainer['user_manager'];
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                                            ->find($memberId);
-            $userDetails->profileImage = ($userDetails->getImgurl() == "") 
-                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+                              ->find($memberId);
+            $userDetails->profileImage = $userManager->getUserImage($memberId,"small");
             return $userDetails;
     }
     
