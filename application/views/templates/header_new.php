@@ -19,6 +19,10 @@
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php if(isset($relCanonical)): ?>
+        <link rel="canonical" href="<?php echo $relCanonical ?>"/>
+    <?php endif; ?>
+    
     
     <!--[if lt IE 9]>
     <script>
