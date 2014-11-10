@@ -15,6 +15,7 @@
                                 <a href="/item/<?php echo $productSlug ?>">
                                 
                                     <!--hover image-->
+                                    <?PHP if ($product['secondary_image']['directory'] && $product['secondary_image']['imageFileName'] ) : ?>
                                     <div class="div-rec-product-image hover-prod-image">
                                         <center>
                                             <span class="span-me">
@@ -22,6 +23,7 @@
                                             </span>
                                         </center>
                                     </div>
+                                    <?PHP endif; ?>
                                     <!--main image-->
                                     <div class="div-rec-product-image main-prod-image">
                                         <center style="background: #fff;">
