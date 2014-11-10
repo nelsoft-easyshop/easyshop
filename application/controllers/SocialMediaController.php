@@ -287,9 +287,13 @@ class SocialMediaController extends MY_Controller
             redirect('/login', 'refresh');
         }
 
-        $isMemberRegistered = $this->entityManager->getRepository('EasyShop\Entities\EsMemberMerge')
-                                                        ->findOneBy(['socialMediaId' => $getData[1]]);
-        if ($isMemberRegistered) {
+        $doesSocialMediaAccountExists = $this->entityManager
+                                                ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                                    ->findOneBy([
+                                                        'socialMediaId' => $getData[1],
+                                                        'socialMediaProvider' => $getData[2]
+                                                    ]);
+        if ($doesSocialMediaAccountExists) {
             redirect('/', 'refresh');
         }
 
