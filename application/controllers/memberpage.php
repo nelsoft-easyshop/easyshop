@@ -50,7 +50,7 @@ class Memberpage extends MY_Controller
     {        
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
-            redirect('/home', 'refresh');
+            redirect('/', 'refresh');
         }
         $data['tab'] = $this->input->get('me');        
         $data = array_merge($data, $this->fill_view());
