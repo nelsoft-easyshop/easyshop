@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
-<link rel="canonical" href="<?php echo base_url()?>category/<?php echo $category_slug?>"/>
 
 <?php
 

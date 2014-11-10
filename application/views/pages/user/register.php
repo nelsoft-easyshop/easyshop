@@ -26,7 +26,7 @@
         <link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
         <link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 
-        <link rel="canonical" href="<?php echo base_url()?>register"/>
+
 
 
         <!-- JS -->
