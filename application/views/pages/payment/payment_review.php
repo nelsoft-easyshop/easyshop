@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-<script src="<?=base_url() ?>assets/js/src/vendor/jquery.idTabs.min.js"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <style type="text/css">
  /* Overlay */
  #simplemodal-overlay {
@@ -70,11 +70,11 @@
                             <?php else: ?> 
 
                                 <br/> <br/>
-                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                 <br/>
                                 <div class="paypal_button">
                                     <a style="cursor:pointer" data-type="2"  class="paypal">
-                                    <img src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+                                    <img src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
                                     <span></span>
                                     </a>
                                 </div>
@@ -99,7 +99,7 @@
                             <?php else: ?> 
 
                             <br /> <br />
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                             <br/>
                             <div class="paypal_button">
                                 <a style="cursor:pointer" data-type="1"  class="paypal">
@@ -119,10 +119,10 @@
                         <?php if($key == 'dragonpay'): ?>
                         <div id="dragonpay" class="payment_inner_content">
 
-                           <img src="<?php echo base_url()?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
+                           <img src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
                            <br><br><br><br> 
 
-                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                           
                             <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                             <br>
@@ -139,7 +139,7 @@
                             $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
                             echo form_open('pay/directbank/', $attr);
                             ?>
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
                             <br/>
                             <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
@@ -159,7 +159,7 @@
                                 $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
                                 echo form_open('pay/cashondelivery/', $attr);
                                 ?>
-                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                
                                 <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
                                 <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
@@ -182,10 +182,10 @@
                                       <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
                                       <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
                                       <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
-                                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
+                                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                                       <?php if(!$value['availability']): ?>
                                           <div style="color:red">
-                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
+                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
                                           </div>
                                       <?php endif; ?>  
                                 </div>
@@ -197,7 +197,7 @@
 <!-- #### DRAGON PAY #### -->
                         <?php if($key == 'pesopaycdb'): ?>
                         <div id="pesopaycdb" class="payment_inner_content">                          
-                            <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
+                            <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
                             <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
                          </div>
                         <?php endif; ?>
@@ -372,6 +372,6 @@
     }
 </script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
