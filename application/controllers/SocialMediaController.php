@@ -35,7 +35,7 @@ class SocialMediaController extends MY_Controller
         $facebookData = $this->socialMediaManager->getAccount($facebookType);
         if ($facebookData->getProperty('email')) {
             $data = $this->socialMediaManager
-                        ->authenticateAccount($facebookData->getId(), $facebookType, $facebookData->getProperty('email'));
+                            ->authenticateAccount($facebookData->getId(), $facebookType, $facebookData->getProperty('email'));
             $esMember = $data['doesAccountExists'];
             $doesAccountMerged = $data['doesAccountMerged'];
             if ($esMember && $doesAccountMerged) {
@@ -44,12 +44,12 @@ class SocialMediaController extends MY_Controller
             }
             else if ($esMember && !$doesAccountMerged) {
                 $data = $this->encrypt->encode(
-                    $esMember->getIdMember().
-                    '~'.
-                    $facebookType.
-                    '~'.
-                    $facebookData->getId()
-                );
+                                            $esMember->getIdMember().
+                                            '~'.
+                                            $facebookType.
+                                            '~'.
+                                            $facebookData->getId()
+                                        );
                 redirect('SocialMediaController/mergeEmail?h=' . $data, 'refresh');
             }
             else if (!$esMember && !$doesAccountMerged) {
@@ -169,7 +169,7 @@ class SocialMediaController extends MY_Controller
         $session = $this->entityManager->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
         $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
         $authenticatedSession->setMember($user)
-            ->setSession($session);
+                                ->setSession($session);
         $this->entityManager->persist($authenticatedSession);
         $this->entityManager->flush();
     }
@@ -192,10 +192,10 @@ class SocialMediaController extends MY_Controller
         );
         $data = array_merge($data, $this->fill_header());
         $data['member'] = $this->entityManager
-                            ->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy([
-                                'idMember' => $getData[0]
-                            ]);
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy([
+                                        'idMember' => $getData[0]
+                                    ]);
         $data['oauthProvider'] = $getData[1];
         $data['oauthId'] = $getData[2];
 
@@ -216,7 +216,7 @@ class SocialMediaController extends MY_Controller
     {
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                    ->findOneBy(['email' => $this->input->post('email')]);
+                                        ->findOneBy(['email' => $this->input->post('email')]);
         $socialMediaLinks = $this->getSocialMediaLinks();
         if ($member) {
             $result = true;
@@ -254,19 +254,19 @@ class SocialMediaController extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
         $memberObj = $this->entityManager
-                        ->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy([
-                                'idMember' => $getData[0]
-                            ]);
+                            ->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy([
+                                    'idMember' => $getData[0]
+                                ]);
         $socialMediaProvider = $this->entityManager
-                                ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
-                                    ->find($getData[2]);
+                                        ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
+                                            ->find($getData[2]);
         $doesSocialMediaAccountExists = $this->entityManager
-                                            ->getRepository('EasyShop\Entities\EsMemberMerge')
-                                                ->findOneBy([
-                                                    'socialMediaId' => $getData[1],
-                                                    'socialMediaProvider' => $getData[2]
-                                                ]);
+                                                ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                                    ->findOneBy([
+                                                        'socialMediaId' => $getData[1],
+                                                        'socialMediaProvider' => $getData[2]
+                                                    ]);
         if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider || $doesSocialMediaAccountExists) {
             redirect('/login', 'refresh');
         }
@@ -288,7 +288,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $isMemberRegistered = $this->entityManager->getRepository('EasyShop\Entities\EsMemberMerge')
-                                ->findOneBy(['socialMediaId' => $getData[1]]);
+                                                        ->findOneBy(['socialMediaId' => $getData[1]]);
         if ($isMemberRegistered) {
             redirect('/', 'refresh');
         }
@@ -321,30 +321,30 @@ class SocialMediaController extends MY_Controller
         $result = false;
         $username = $this->stringUtility->cleanString(strtolower($this->input->post('username')));
         $esMember = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                        ->findOneBy(['username' => $username]);
+                                            ->findOneBy(['username' => $username]);
         $socialMediaProvider = $this->entityManager
-                                ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
-                                    ->find($this->input->post('provider'));
+                                        ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
+                                            ->find($this->input->post('provider'));
         if (!$esMember && $socialMediaProvider) {
             $result = $this->socialMediaManager->registerAccount(
-                $username,
-                $this->input->post('fname'),
-                $this->input->post('gender'),
-                $this->input->post('email'),
-                true,
-                $this->input->post('id'),
-                $socialMediaProvider
-            );
+                                                    $username,
+                                                    $this->input->post('fname'),
+                                                    $this->input->post('gender'),
+                                                    $this->input->post('email'),
+                                                    true,
+                                                    $this->input->post('id'),
+                                                    $socialMediaProvider
+                                                );
 
             if ($result) {
                 $this->login($result);
-            } else {
+            }
+            else {
                 $result = 'Invalid Username';
             }
         }
 
         echo json_encode($result);
-
     }
 
     /**
@@ -354,10 +354,9 @@ class SocialMediaController extends MY_Controller
      */
     public function checkEmailAvailability()
     {
-
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                    ->findOneBy(['email' => $this->input->post('email')]);
+                                            ->findOneBy(['email' => $this->input->post('email')]);
         if ($member) {
             $result = array(
                 'username' => $member->getUsername(),
@@ -366,7 +365,7 @@ class SocialMediaController extends MY_Controller
                 'image' =>  $this->userManager->getUserImage($member->getIdMember())
             );
         }
-        echo json_encode($result);
 
+        echo json_encode($result);
     }
 }

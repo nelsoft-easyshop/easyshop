@@ -78,8 +78,8 @@ class SocialMediaManager
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
      * @param EasyShop\Utility\StringUtility
-     * @param EasyShop\
-     * @param EasShop\
+     * @param EasShop\\EasyShop\FormValidation\ValidationRules
+     * @param Symfony\Component\Form\Forms
      */
     public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility, $formValidation, $formFactory)
     {
