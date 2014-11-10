@@ -1,5 +1,4 @@
-<link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="canonical" href="<?php echo base_url()?>login"/>
+<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 
 <div class="clear mrgn-top-35 display-ib"></div>
 

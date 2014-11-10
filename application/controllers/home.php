@@ -63,6 +63,7 @@ class Home extends MY_Controller
         $data = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
         );
 
         $data = array_merge($data, $this->fill_header());
@@ -365,6 +366,8 @@ class Home extends MY_Controller
 
                 //HEADER DATA
                 $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+                $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+                $headerData['relCanonical'] = base_url().$vendorSlug;
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
 
@@ -422,6 +425,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/followers';
 
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
@@ -724,6 +729,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/about';
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
@@ -884,6 +891,8 @@ class Home extends MY_Controller
                                  ->getVendorDetails($sellerslug);        
         
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/contact';
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
