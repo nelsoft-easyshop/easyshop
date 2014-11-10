@@ -103,7 +103,6 @@ class PromoManager
      */
     public function hydratePromoDataExpress($productId)
     {
-        
         $productDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')->getRawProductPromoDetails($productId);
         if(!$productDetails){
             return 0;
@@ -137,6 +136,7 @@ class PromoManager
                 $promoPrice = (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01;
             }
         }
+
         return $promoPrice;
     }
 
