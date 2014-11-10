@@ -225,6 +225,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('attr_value', 'attr_value');
         $rsm->addScalarResult('attr_price', 'attr_price');
         $rsm->addScalarResult('attr_id', 'attr_id');
+        $rsm->addScalarResult('image_id', 'image_id');
         $rsm->addScalarResult('image_path', 'image_path');
         $rsm->addScalarResult('is_other', 'is_other');
         $rsm->addScalarResult('type', 'type');
@@ -236,6 +237,7 @@ class EsProductRepository extends EntityRepository
                 d.value_name AS attr_value, 
                 d.value_price AS attr_price,
                 d.id_optional_attrdetail as attr_id, 
+                d.product_img_id as image_id, 
                 COALESCE(i.product_image_path,'') AS image_path, 
                 '1' as is_other,
                 'option' as 'type',
@@ -252,6 +254,7 @@ class EsProductRepository extends EntityRepository
                 a.attr_value, 
                 a.attr_price,
                 a.id_product_attr, 
+                '0', 
                 '', 
                 '0',
                 'specific' as 'type',
@@ -685,36 +688,26 @@ class EsProductRepository extends EntityRepository
      * @param  integer[] $category [description]
      * @return mixed
      */
-    public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
+    public function getPopularItemByCategory($categoryId, $offset = 0, $perPage = 1)
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
-        $query = $qb->select('p.idProduct')
-                    ->from('EasyShop\Entities\EsProduct','p') 
-                    ->where('p.isDraft = 0')
-                    ->andWhere('p.isDelete = 0');
+        $qbResult = $qb->select('p')
+                       ->from('EasyShop\Entities\EsProduct','p')
+                       ->where('p.isDraft = 0')
+                       ->andWhere('p.isDelete = 0')
+                       ->andWhere(
+                            $qb->expr()->in('p.cat', $categoryId)
+                        )
+                       ->addOrderBy(' p.clickcount','DESC')
+                       ->setFirstResult($offset)
+                       ->setMaxResults($perPage)
+                       ->getQuery();
+       
+        $result = $qbResult->getResult();
 
-        if(intval($sellerId) !== 0){
-            $query = $query->andWhere('p.member = :member')
-                            ->setParameter('member', $sellerId);
-        }
-
-        if (!empty($categoryId)) { 
-            $query = $query->andWhere(
-                                    $qb->expr()->in('p.cat', $categoryId)
-                                );
-        }
-
-        $qbResult = $query->orderBy('p.clickcount', 'DESC')
-                            ->getQuery()
-                            ->setMaxResults($offset)
-                            ->setFirstResult($perPage);
- 
-        $result = $qbResult->getResult(); 
-        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
-        return $resultNeeded; 
-    }  
+        return $result;
+    }
 
     /**
      * Delete products that do not have images inside admin folder

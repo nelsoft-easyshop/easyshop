@@ -2511,7 +2511,7 @@ class product_model extends CI_Model
      *
      *  @return boolean
      */
-    public function updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup)
+    public function updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays)
     {
         $product = $this->getProductEdit($productID, $memberID);
         if($product){
@@ -2522,6 +2522,7 @@ class product_model extends CI_Model
             $sth->bindParam(':is_cod',$isCOD,PDO::PARAM_INT);
             $sth->bindParam(':billing_id', $billingID,PDO::PARAM_INT);
             $sth->bindParam(':is_meetup', $isMeetup, PDO::PARAM_INT);
+            $sth->bindValue(':ship_within_days', $shipWithinDays, PDO::PARAM_INT);
             $sth->execute();
             return true;
         }else{

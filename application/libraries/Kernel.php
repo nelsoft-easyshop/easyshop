@@ -267,12 +267,14 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
+            $userManager = $container['user_manager'];
             $imageLibrary = new \CI_Image_lib();
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
                                                         $configLoader,
-                                                        $imageLibrary);
+                                                        $imageLibrary,
+                                                        $userManager);
         };
 
 
@@ -281,7 +283,8 @@ class Kernel
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
         $container['string_utility'] = function ($c) {
-            return new \EasyShop\Utility\StringUtility();
+            $htmlPurifier = new \HTMLPurifier();
+            return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
         $container['hash_utility'] = function($c) {
             $encrypt = new CI_Encrypt();
@@ -355,11 +358,7 @@ class Kernel
                 $container['http_request']
                 );
         };
-        
-        $container['string_utility'] = function ($c) {
-            return new \EasyShop\Utility\StringUtility();
-        };
-        
+
         // Form Helper
         $container['form_error_helper'] = function ($c) {
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
@@ -413,6 +412,14 @@ class Kernel
         };
         $container['mobile_notification'] = function($c) use ($smsConfig){
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        };
+
+        // Review product
+        $container['review_product_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\ReviewProductService(
+                            $container['entity_manager'],
+                            $container['user_manager']
+                            );
         };
 
         /* Register services END */

@@ -110,7 +110,7 @@
     <select id="getProductByIdExtended">
         SELECT p.id_product AS id_product, p.condition, p.is_sold_out,p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
         p.name AS product_name, p.description AS description, p.is_promote, p.discount,
-        p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
+        p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku, p.shipped_within_count,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
         m.username AS sellerusername, m.store_name as storename, m.imgurl AS userpic, c.name AS category, i.`product_image_path`,     
         p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`, p.`slug` AS slug, p.is_cod, p.is_meetup, p.billing_info_id, p.cat_other_name
@@ -1002,6 +1002,7 @@ FROM
 <select id="updateProductUploadAdditionalInfo">
     UPDATE `es_product`
     SET is_cod = :is_cod, billing_info_id = :billing_id, is_meetup = :is_meetup
+    ,shipped_within_count = :ship_within_days
     WHERE member_id = :memberid AND id_product = :productid
 </select>
 

@@ -335,6 +335,13 @@ class EsProduct
      */
     private $maxAllowablePoint = '0.0000';
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="shipped_within_count", type="integer", nullable=true)
+     */
+    private $shippedWithinCount;
+
     public function __construct() 
     {
         $this->images = new ArrayCollection();
@@ -1304,6 +1311,29 @@ class EsProduct
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Get shippedWithinCount
+     *
+     * @return integer 
+     */
+    public function getShippedWithinCount()
+    {
+        return $this->shippedWithinCount;
+    }
+    
+    /**
+     * Set promoType
+     *
+     * @param integer $shippedWithinCount
+     * @return EsProduct
+     */
+    public function setShippedWithinCount($shippedWithinCount)
+    {
+        $this->shippedWithinCount = $shippedWithinCount;
+
+        return $this;
     }
         
 }

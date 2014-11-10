@@ -91,6 +91,21 @@ $(function(){
             $(this).val('');
         }
     });
+
+    $(document).on('change',"#ship-within",function () {
+        var qty = this.value;
+        var value = parseInt(qty);
+        var tempval;
+        if (isNaN(value)) {
+            this.value = '';
+        } else {
+            if(value > 127){
+                value = 127
+            }
+            tempval = Math.abs(value);
+            this.value = tempval;
+        }
+    });
     
     $('#shipping_div').on('click', 'input.shipprice,div.chosen-container', function(){
         if( $(this).hasClass('my_err') ){
@@ -1054,3 +1069,20 @@ function validateWhiteTextBox(idclass)
         "-moz-box-shadow": "none",
         "box-shadow": "none"}).removeClass('my_err');
 };
+
+/**
+ * Check if the event keycode is number key
+ * @param  {mixed}  evt
+ * @return {Boolean}
+ */
+function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    if (charCode != 46 && charCode > 31 
+        && (charCode < 48 || charCode > 57)){
+        return false;
+    }
+
+    return true;
+}
+
