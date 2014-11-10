@@ -329,6 +329,7 @@ class Home extends MY_Controller
 
                 //HEADER DATA
                 $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+                $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
 
@@ -384,7 +385,7 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
@@ -672,6 +673,7 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
@@ -832,6 +834,7 @@ class Home extends MY_Controller
                                  ->getVendorDetails($sellerslug);        
         
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
