@@ -27,13 +27,10 @@ class product extends MY_Controller
 
     public function loadMoreProductInCategory($categorySlug)
     {
-        // Loading Services
         $searchProductService = $this->serviceContainer['search_product'];
 
-        // Loading Repositories
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
         $getParameter = $this->input->get() ? $this->input->get() : array();
@@ -74,11 +71,8 @@ class product extends MY_Controller
 
             $subCategoryList = $searchProductService->getPopularProductOfCategory($subCategory);
 
-            // get all product available
             $search = $searchProductService->getProductBySearch($getParameter);
             $response['products'] = $search['collection'];
-            
-            // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
@@ -87,18 +81,13 @@ class product extends MY_Controller
             $response['subCategoryList'] = $subCategoryList;
             $response['categorySlug'] = $categorySlug;
 
-            // Apply protected category
             $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-             // Set image in every category
             $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-
-            // category navigation of desktop version
             $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
                         'environment' => 'desktop'), TRUE );
 
-            // category navigation of mobile version
             $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
                         'environment' => 'mobile'), TRUE );
@@ -113,7 +102,6 @@ class product extends MY_Controller
                 ); 
             $data = array_merge($data, $this->fill_header());
 
-            // Load view
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
             $this->load->view('templates/footer'); 
