@@ -28,12 +28,21 @@ jQuery(function ($) {
                 if (data == false) {
                     $(".username-denied").show();
                     $(".username-accepted").hide();
+                    $(".username-restrictions").hide();
                 }
-                else {
+                else if (data == 'Invalid Username') {
+                    $(".username-restrictions").show();
+                    $(".username-denied").hide();
+                    $(".username-accepted").hide();
+                } else {
                     $(".username-accepted").show();
                     $(".username-denied").hide();
+                    $(".username-restrictions").hide();
                     $('.modal-message').modal({
                         onShow : function () {
+                            $('.simplemodal-close').on('click', function() {
+                                window.location.replace("/");
+                            });
                             $("#modal-login").on('click',function () {
                                 window.location.replace("/");
                             });
@@ -81,6 +90,7 @@ jQuery(function ($) {
                             });
                         }
                     });
+                    $('.simplemodal-close').remove();
                 }
             }
         });

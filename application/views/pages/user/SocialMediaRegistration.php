@@ -21,7 +21,7 @@
                         <div class="form-group form-merge-2">
                             <label class="control-label">Type in your new username</label>
                             <input type="text" class="form-control input-merge" placeholder="New username" id="txt-username"/>
-                            <div class="div-validation-container">
+                            <div class="div-validation-container auto-height">
                                 <p class="span-validation-ok username-accepted" style="display: none">
                                     <i class="glyphicon glyphicon-ok-sign"></i>
                                     Username is available
@@ -30,6 +30,16 @@
                                      <i class="glyphicon glyphicon-remove-sign"></i>
                                      Username is not available
                                  </p>
+                                <div class="username-restrictions">
+                                    <ul>
+                                        <li>
+                                            <i class="glyphicon glyphicon-remove-sign"></i> Only letters, numbers, and underscores are allowed.
+                                        </li>
+                                        <li>
+                                            <i class="glyphicon glyphicon-remove-sign"></i> Must consist of at least 5 characters.
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <button class="btn btn-block btn-orange-lg proceed">
                                 PROCEED
