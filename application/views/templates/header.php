@@ -12,9 +12,14 @@
     <?php require_once("assets/includes/js.php"); ?>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
+    <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    
+    <?php if(isset($relCanonical)): ?>
+        <link rel="canonical" href="<?php echo $relCanonical ?>"/>
+    <?php endif; ?>
+    
     <!--[if lt IE 9]>
     <script>
     var e = ("abbr,article,aside,audio,canvas,datalist,details," +

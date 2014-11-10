@@ -1,3 +1,4 @@
+
 <div class="row mo">
     <div class="row" style="background: url('<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
@@ -12,9 +13,20 @@
                     <div class="item">
                             <center>
                                 <a href="/item/<?php echo $productSlug ?>">
-                                    <div class="div-rec-product-image">
+                                
+                                    <!--hover image-->
+                                    <div class="div-rec-product-image hover-prod-image">
                                         <center>
                                             <span class="span-me">
+                                                <img src="/assets/images/products/sony-p.jpg" class="img-rec-product">
+                                            </span>
+                                        </center>
+                                    </div>
+                                    <!--main image-->
+                                    <div class="div-rec-product-image main-prod-image">
+                                        <center style="background: #fff;">
+                                            <span class="span-me">
+                                                
                                                 <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
                                             </span>
                                         </center>
