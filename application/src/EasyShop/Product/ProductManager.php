@@ -134,8 +134,9 @@ class ProductManager
                               ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
         $totalShippingFee = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
                                             ->getShippingTotalPrice($productId);
+
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping(floatval($totalShippingFee) === floatval(0));
+        $product->setIsFreeShipping(0 === bccomp(floatval($totalShippingFee),0));
         $product->setIsNew($this->isProductNew($product));
         $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
                                            ->getDefaultImage($product->getIdProduct()));
@@ -787,7 +788,8 @@ class ProductManager
         $isFreeShippingNationwide = TRUE;
         foreach ($shippingDetails as $value) {
             if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
-                || floatval($value['price']) !== floatval(0)){
+                || bccomp(floatval($value['price']),0) !== 0){
+
                 $isFreeShippingNationwide = FALSE;
                 break;
             }

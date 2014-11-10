@@ -145,7 +145,11 @@
                 
                 return false;
             }
-            
+
+            $("#shipment_locations > option").each(function() { 
+                $(this).empty().append($(this).data('text'));
+            });
+
             $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
         });
