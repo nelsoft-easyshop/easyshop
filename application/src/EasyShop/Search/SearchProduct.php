@@ -283,40 +283,34 @@ class SearchProduct
         $esProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
 
         // Prepare variables
-        $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
-        $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
-        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
-        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?str_replace( ',', '', trim($parameters['endprice'])):FALSE; 
-        $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;
-        $sortBy = (isset($parameters['sortby']) && $parameters['sortby'])?trim($parameters['sortby']):FALSE;
-        $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
-        $storeKeyword = ($pageNumber) ? FALSE:TRUE;
+        $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):FALSE;
+        $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):FALSE;
+        $startPrice = isset($parameters['startprice']) && $parameters['startprice']?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
+        $endPrice = isset($parameters['endprice']) && $parameters['endprice']?str_replace( ',', '', trim($parameters['endprice'])):FALSE; 
+        $pageNumber = isset($parameters['page']) && $parameters['page']?trim($parameters['page']):FALSE;
+        $sortBy = isset($parameters['sortby']) && $parameters['sortby'] ?trim($parameters['sortby']):FALSE;
+        $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
+        $storeKeyword = $pageNumber ? FALSE:TRUE;
 
         // Search Filter 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
 
         // Search for Product Query String
-        $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
-        $productIds = ($queryString && empty($productIds)) ? array() : $productIds;
-        $originalOrder = ($sortBy) ? $productIds : $originalOrder;
+        $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
+        $productIds = $queryString && empty($productIds) ? [] : $productIds;
+        $originalOrder = $sortBy ? $productIds : $originalOrder;
 
-        if($startPrice){ 
-            // filter object remove product without in the range of the price
-            $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
-        }
-        else{
-            $finalizedProductIds = $productIds;
-        }
+        $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
 
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
 
         // total product count
         $totalCount = count($finalizedProductIds);
 
-        $offset = ($pageNumber*$perPage);
+        $offset = intval($pageNumber) * intval($perPage);
 
-        $paginatedProductIds = array_slice($finalizedProductIds,$offset,$perPage);
+        $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
 
         $products = [];
         foreach ($paginatedProductIds as $productId) {
