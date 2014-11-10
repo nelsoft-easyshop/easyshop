@@ -70,7 +70,7 @@
                                         Sold
                                     </p>
                                     <p class="p-stat-total">
-                                        5
+                                        <?=$soldProductCount; ?>
                                     </p>
                                 </div>
                             </div>

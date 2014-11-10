@@ -64,9 +64,9 @@ class Memberpage extends MY_Controller
         $data['render_searchbar'] = false;
         
         if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fill_userDetails();
+            $data['user_details'] = $this->fillUserDetails();
         }
-        $data['homeContent'] = $this->fill_categoryNavigation();
+        $data['homeContent'] = $this->fillCategoryNavigation();
         $data = array_merge($data, $this->fill_header());
         
         $this->load->view('templates/header_primary', $data);
@@ -1827,6 +1827,7 @@ class Memberpage extends MY_Controller
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
             $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
             $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);
+            $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
 
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
@@ -1838,6 +1839,7 @@ class Memberpage extends MY_Controller
                             'activeProductCount' => $userActiveProductCount,
                             'deletedProductCount' => $userDeletedProductCount,
                             'draftedProductCount' => $userDraftedProductCount,
+                            'soldProductCount' => $userSoldProductCount,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, TRUE);
@@ -1848,22 +1850,9 @@ class Memberpage extends MY_Controller
 
             $headerData['metadescription'] = "";
             $headerData['title'] = "Member Page | Easyshop.ph";
- 
-            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-            $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = [];
-            foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
-                $homeContent['slider'][] = $sliderView;
-            }
-
-            $headerData['homeContent'] = $homeContent;
-            if($headerData['logged_in']){  
-                $headerData['user_details'] = $member;
-                $headerData['user_details']->profileImage = $userManager->getUserImage($memberId,"small");
-            }
-            $parentCategory = $esCatRepo->findBy(['parent' => 1]);
-            $headerData['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+            $headerData['user_details'] = $this->fillUserDetails();
+            $headerData['homeContent'] = $this->fillCategoryNavigation();
+            $headerData = array_merge($headerData, $this->fill_header());
 
             $socialMediaLinks = $this->getSocialMediaLinks();
             $footerData['facebook'] = $socialMediaLinks["facebook"];

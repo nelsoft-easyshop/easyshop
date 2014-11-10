@@ -795,7 +795,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('count', 'count');
 
         $sql = " 
-          SELECT COUNT(*) as count
+          SELECT COUNT(id_product) as count
           FROM es_product
           WHERE member_id = :memberId
         ";
@@ -819,7 +819,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('count', 'count');
 
         $sql = " 
-          SELECT COUNT(*) as count
+          SELECT COUNT(id_product) as count
           FROM es_product
           WHERE is_draft = 0 AND is_delete = 0
           AND member_id = :memberId
@@ -844,7 +844,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('count', 'count');
 
         $sql = " 
-          SELECT COUNT(*) as count
+          SELECT COUNT(id_product) as count
           FROM es_product
           WHERE is_delete = 1
           AND member_id = :memberId
@@ -869,10 +869,29 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('count', 'count');
 
         $sql = " 
-          SELECT COUNT(*) as count
+          SELECT COUNT(id_product) as count
           FROM es_product
           WHERE is_draft = 1 AND is_delete = 0
           AND member_id = :memberId
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    public function getUserSoldProductCount($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+          SELECT COUNT(product_id) as count
+          FROM es_order_product
+          WHERE seller_id = :memberId
         ";
         
         $query = $this->em->createNativeQuery($sql, $rsm);
