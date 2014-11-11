@@ -884,8 +884,14 @@ $string = '<typeNode>
                 $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
                 if ($productImage != NULL) {
+                    $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                        ->findOneBy(['product' => $productData->getIdProduct(), 'isPrimary' => 0]);
                     $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
                     $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
+                    $featuredVendor['product'][$key]['secondary_image']['directory'] =
+                        $secondaryProductImage ? $secondaryProductImage->getDirectory() : '';
+                    $featuredVendor['product'][$key]['secondary_image']['imageFileName'] =
+                        $secondaryProductImage ? $secondaryProductImage->getFilename() : '';
                 }
             }
         }
