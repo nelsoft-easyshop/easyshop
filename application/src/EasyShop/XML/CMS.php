@@ -831,7 +831,10 @@ $string = '<typeNode>
                                     ->findOneBy(['slug' => $product['slug']]);
                 if($product){
                     $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
+                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                ->getSecondaryImage($product->getIdProduct());
+                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
                 }
             }
             array_push($homePageData['categorySection'], $sectionData);
@@ -876,29 +879,13 @@ $string = '<typeNode>
                 ->findOneBy(['slug' => $product['slug']]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
-
-                $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-                $featuredVendor['product'][$key]['secondary_image']['directory'] = "";
-                $featuredVendor['product'][$key]['secondary_image']['imageFileName'] = "";
-                
-                $defaultImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                         ->getDefaultImage($productData->getIdProduct());
                 $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                              ->findOneBy(['product' => $productData->getIdProduct(), 'isPrimary' => 0]);
-                if ($defaultImage !== NULL) {                                                        
-                    $featuredVendor['product'][$key]['image']['directory'] = $defaultImage->getDirectory();
-                    $featuredVendor['product'][$key]['image']['imageFileName'] = $defaultImage->getFilename();
-                }
-
-                if ($secondaryProductImage !== NULL) {
-                    $featuredVendor['product'][$key]['secondary_image']['directory'] = $secondaryProductImage->getDirectory();
-                    $featuredVendor['product'][$key]['secondary_image']['imageFileName'] = $secondaryProductImage->getFilename();
-                }
-
+                                                ->getSecondaryImage($productData->getIdProduct());
+                $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;                     
             }
         }
         $homePageData['seller'] = $featuredVendor;
+        
         //Get Popular Brands
         foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
