@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <center>
             <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our
-            <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448/?type=1">Facebook page</a></strong>
+            <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/295186540690942">Facebook page</a></strong>
         </center>
     </div>
     <?php if($start_promo): ?>
