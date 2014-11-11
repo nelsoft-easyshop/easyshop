@@ -904,10 +904,11 @@ $string = '<typeNode>
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
                                             ->findOneBy(['idBrand' => $brandId]);
             $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
+            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand']->getImage() !== "" ?
                                                                       $popularCategory['popularBrand'][$key]['brand']->getImage() : 
                                                                       EsBrand::IMAGE_UNAVAILABLE_FILE;
         }
+
         $homePageData['popularCategory'] = $popularCategory;
 
         return $homePageData;
