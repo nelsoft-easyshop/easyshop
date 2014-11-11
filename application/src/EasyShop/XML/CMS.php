@@ -801,8 +801,8 @@ $string = '<typeNode>
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
 
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
-            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                ->findOneBy(['slug' => $subCategory]);
+                $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                              ->findOneBy(['slug' => $subCategory]);
             }
         }
 
@@ -917,16 +917,25 @@ $string = '<typeNode>
         $homePageData['seller'] = $featuredVendor;
         
         //Get Popular Brands
-        foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
-            $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
-                                            ->findOneBy(['idBrand' => $brandId]);
-            $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] && trim($popularCategory['popularBrand'][$key]['brand']->getImage())  !== ""  ?
-                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
-                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
+        $popularBrands = [];
+        if(isset($xmlContent['brandSection']['brandId'])){
+            if(!is_array($xmlContent['brandSection']['brandId'])){
+                $temporaryBrandId = $xmlContent['brandSection']['brandId'];
+                $xmlContent['brandSection']['brandId'] = [ $temporaryBrandId ];
+            }
+            foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
+                $brandObject =  $this->em->getRepository('EasyShop\Entities\EsBrand')
+                                         ->findOneBy(['idBrand' => $brandId]);
+                if($brandObject){
+                    $popularBrands[$key]['brand'] = $brandObject;
+                    $popularBrands[$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
+                    $popularBrands[$key]['image']['file'] = $popularBrands[$key]['brand'] && trim($popularBrands[$key]['brand']->getImage())  !== ""  ?
+                                                                            $popularBrands[$key]['brand']->getImage() : EsBrand::IMAGE_UNAVAILABLE_FILE;
+                }
+            }
         }
 
-        $homePageData['popularCategory'] = $popularCategory;
+        $homePageData['popularBrands'] = $popularBrands;
 
         return $homePageData;
     }
