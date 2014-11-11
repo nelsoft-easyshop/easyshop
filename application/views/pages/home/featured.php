@@ -5,9 +5,7 @@
             <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
             <a class="next"><i class="fa fa-angle-right fa-next-slide"></i></a>
             <div id="featured-seller" class="owl-carousel owl-theme">
-            
-                <?php $featuredSellerSlug = reset($homeContent['seller']['product'])['product']->getMember()->getSlug(); ?>
-            
+                <?php $featuredSellerSlug = $homeContent['seller']['memberEntity']->getSlug(); ?>
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
                     <?php $productSlug = $product['product']->getSlug(); ?>
                     <div class="item">
