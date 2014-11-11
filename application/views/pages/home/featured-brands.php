@@ -23,7 +23,7 @@
                         <div class="item">
                             <div class="brand-container">
                                 <div class="span-brand">
-                                    <a href="/advsrch?q_str=<?=$brand['brand']->getName()?>&category=1&seller=&location=&condition=&startprice=&endprice=">
+                                    <a href="/advsrch?q_str=<?php echo html_escape( preg_replace('/[\- ]+/', '+', $brand['brand']->getName()) ); ?>&category=1&seller=&location=&condition=&startprice=&endprice=">
                                         <img class="brand-img" src="<?=$brand['image']['directory'] . $brand['image']['file']?>" />
                                     </a>
                                 </div>
