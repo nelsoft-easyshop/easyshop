@@ -32,6 +32,30 @@ class EsProductImageRepository extends EntityRepository
         $result = $qb->getOneOrNullResult();
         return $result;
     }
+    
+    
+    /**
+     * Returns a secondary image of a product
+     *
+     * @param integer $productId
+     * @return EasyShop\Entities\EsProductImage
+     *
+     */
+    public function getSecondaryImage($productId)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder()
+                            ->select('pi')
+                            ->from('EasyShop\Entities\EsProductImage','pi')
+                            ->where('pi.product = :productId')
+                            ->andWhere('pi.isPrimary = 0')
+                            ->setParameter('productId', $productId)
+                            ->getQuery()
+                            ->setMaxResults(1);
+        $result = $qb->getOneOrNullResult();
+
+        return $result;
+    }
 
     /**
      * Returns the images of a product
@@ -54,6 +78,8 @@ class EsProductImageRepository extends EntityRepository
         return $result;
     }
 
+    
+    
     /**
      * Method used for reverting rubbish data from admin product csv uploads
      * @param int $id
