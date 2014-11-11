@@ -1827,6 +1827,11 @@ class Memberpage extends MY_Controller
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
             $userActiveProducts = $esProductRepo->getUserActiveProducts($memberId);
 
+            $activeProductView = $this->load->view('partials/dashboard-products', 
+                                                    ['products' => $userActiveProducts],
+                                                    true);
+
+
             $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
             $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
@@ -1842,6 +1847,7 @@ class Memberpage extends MY_Controller
                             'deletedProductCount' => $userDeletedProductCount,
                             'draftedProductCount' => $userDraftedProductCount,
                             'soldProductCount' => $userSoldProductCount,
+                            'activeProductView' => $activeProductView,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, TRUE);

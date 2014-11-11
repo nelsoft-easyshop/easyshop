@@ -97,8 +97,7 @@
     }); 
     
     
-    $( "#dash" ).click(function() {
-        $("#aaa").addClass("selected");
+    $( "#dash" ).click(function() { 
         $("#active-items").css("display", "block");
     });
 }(jQuery));

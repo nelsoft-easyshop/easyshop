@@ -50,6 +50,11 @@ class ProductManager
     const PRODUCT_IS_PROMOTE = 1;
 
     /**
+     * Default result product count in dashboard
+     */
+    const PRODUCT_COUNT_DASHBOARD = 10;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -853,6 +858,31 @@ class ProductManager
                 'noMoreSelection' => $noMoreSelection,
                 'productCombinationAvailable' => $productCombinationAvailable
             );
+    }
+
+    public function getActiveProductsByUser($memberId)
+    {
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $products = $esProductRepo->getUserActiveProducts($memberId);
+
+        foreach ($products as $product) {
+            $product = $this->getProductDetails($product);
+
+            $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($product->getDefaultImage()){
+                $product->directory = $product->getDefaultImage()->getDirectory();
+                $product->imageFileName = $product->getDefaultImage()->getFilename();
+            }
+        }
+
+        return $products;
+    }
+
+    public function getProductAverageRating()
+    {
+        
     }
 }
 
