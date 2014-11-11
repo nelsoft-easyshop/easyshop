@@ -1,5 +1,5 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <style type="text/css">
   /* Overlay */
   #simplemodal-overlay {
@@ -117,5 +117,5 @@
     <div class="clear"></div>  
     <div id="storeValue" style="display:none"></div>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='/assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>

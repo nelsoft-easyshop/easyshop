@@ -196,7 +196,7 @@
                 </li>
                 <li class="pos-rel">
                     <div class="header-cart-container">
-                        <a href="<?php echo base_url()."cart/"; ?>" class="header-cart-wrapper">
+                        <a href="/cart" class="header-cart-wrapper">
                             <span class="header-cart-items-con sticky-cart ui-form-control">
                                 <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
                             </span>

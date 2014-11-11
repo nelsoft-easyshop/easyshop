@@ -56,7 +56,7 @@ class Memberpage extends MY_Controller
     {        
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
         $data['tab'] = $this->input->get('me');        
         $data = array_merge($data, $this->fill_view());
@@ -499,10 +499,10 @@ class Memberpage extends MY_Controller
             echo "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
             if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
             }
             else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
             }
         }
         else{
@@ -1129,7 +1129,7 @@ class Memberpage extends MY_Controller
         if(isset($result['error'])){
             print "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$data['userslug']."'},3000);</script>";
+            print "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$data['userslug']."'},3000);</script>";
         }
         else{
             redirect($data['userslug'] . "/" . $vendorLink);

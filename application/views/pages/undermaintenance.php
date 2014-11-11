@@ -5,7 +5,7 @@
       <title>Easyshop.ph | Under Maintenance</title>
       <meta name="description" content="" />
       <meta name="keywords" content=""/>
-      <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+      <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
 
       <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -119,10 +119,10 @@
                 For updates, please check our facebook and twitter pages. <br/><br/>
                 <p class="img_social_media">
                     <a style='margin-right:50px;' href="<?php echo $facebook; ?>" target="_blank">
-                        <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
+                        <img src="/assets/images/img_social_media_facebook.png" alt="facebook">
                     </a>
                     <a class="" href='<?php echo $twitter; ?>' target="_blank">
-                        <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
+                        <img src="/assets/images/img_social_media_twitter.png" alt="Twitter">
                     </a>
                 </p>
                 <br>
