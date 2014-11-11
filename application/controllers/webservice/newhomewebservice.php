@@ -39,6 +39,7 @@ class NewHomeWebService extends MY_Controller
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
+        $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
@@ -725,12 +726,24 @@ class NewHomeWebService extends MY_Controller
         $slug = $this->input->get("slug");
         if($action == "slug") {
 
-            $map->sellerSection->sellerSlug = $slug;
-            if($map->asXML($this->file)) {
+            $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->findBy(['slug' => $slug]);
+
+            if($sellerResult) {
+                $map->sellerSection->sellerSlug = $slug;
+                if($map->asXML($this->file)) {
+                    return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);
+                } 
+            }
+            else {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
-            } 
+                        ->set_output($this->usererror);
+            }
+
+
         }
         else {
             $filename = date('yhmdhs');
