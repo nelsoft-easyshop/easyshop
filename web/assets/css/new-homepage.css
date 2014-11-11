@@ -1569,6 +1569,7 @@ header {
     text-overflow: ellipsis;
     white-space:nowrap;
     overflow:hidden;
+    margin-top: 5px;
 }
 
 .item-name:hover{
@@ -2930,9 +2931,6 @@ font-size: 15px;
 .div-rec-product-image{
     width: 100% !important;
     height: 228px;
-    position: static;
-    display: table-cell;
-    vertical-align: middle;
     text-align: center;
     background: #fff;
 }
@@ -2964,7 +2962,7 @@ h3 > b{
 
 .main-prod-image{
     opacity: 1;
-    margin-top: -41px;
+    margin-top: -21px;
     position: absolute;
     left: 0;
     padding: 20px;
