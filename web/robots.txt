@@ -1,4 +1,0 @@
-sitemap:  https://staging.easyshop.ph/sitemap_index.xml
-
-User-agent: *
-Disallow: /
