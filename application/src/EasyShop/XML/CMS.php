@@ -865,7 +865,7 @@ $string = '<typeNode>
 
         //Get feature vendor details
         $featuredVendor['memberEntity'] = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+                                                   ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['vendor_image'] = array();
         if($featuredVendor['memberEntity']){
             $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['memberEntity']->getIdMember());
@@ -874,13 +874,14 @@ $string = '<typeNode>
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
         shuffle($xmlContent['sellerSection']['productPanel']);    
+        $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $product['slug'], 'member' => $featuredSellerId]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
                 $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getSecondaryImage($productData->getIdProduct());
+                                                  ->getSecondaryImage($productData->getIdProduct());
                 $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;                     
             }
         }
