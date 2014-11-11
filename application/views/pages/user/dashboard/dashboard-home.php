@@ -130,7 +130,7 @@
     <div class="sidebarTabs">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
-                <a id="aaa" href="#active-items"><li>Active Items<span class="circle-total">5</span></li></a>
+                <a href="#active-items"><li>Active Items<span class="circle-total">5</span></li></a>
                 <a href="#deleted-items"><li>Deleted Items<span class="circle-total">4</span></li></a>
                 <a href="#draft-items"><li>Draft Items<span class="circle-total">0</span></li></a>
                 <a href="#feedbacks"><li>Feedbacks<span class="circle-total">0</span></li></a>
