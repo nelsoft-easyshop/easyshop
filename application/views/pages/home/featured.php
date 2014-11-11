@@ -12,45 +12,44 @@
                     <?php $secondaryImage = $product['secondaryProductImage']; ?>
 
                     <div class="item">
-                            <center>
-                                <a href="/item/<?php echo $productSlug ?>">
-                                
-                                    <!--hover image-->
-                                    <?PHP if ($secondaryImage) : ?>
-                                        <div class="div-rec-product-image hover-prod-image">
-                                            <center>
-                                                <span class="span-me">
-                                                    <img src="<?php echo $secondaryImage->getDirectory().'categoryview/'.$secondaryImage->getFilename() ?> " class="img-rec-product">
-                                                </span>
-                                            </center>
-                                        </div>
-                                        <div class="div-rec-product-image main-prod-image">
-                                    <?PHP else : ?>
-                                        <div class="div-rec-product-image">
-                                    <?PHP endif; ?>
-                                    <!--main image-->
-                                            <center style="background: #fff;">
-                                                <span class="span-me">
-                                                    <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                                </span>
-                                            </center>
-                                        </div>
+                        <center>
+                            <a href="/item/<?php echo $productSlug ?>">
+                            
+                                <!--hover image-->
+                                <?PHP if ($secondaryImage) : ?>
+                                    <div class="div-rec-product-image hover-prod-image">
+                                        <center>
+                                            <span class="span-me">
+                                                <img src="<?php echo $secondaryImage->getDirectory().'categoryview/'.$secondaryImage->getFilename() ?> " class="img-rec-product">
+                                            </span>
+                                        </center>
+                                    </div>
+                                    <div class="div-rec-product-image main-prod-image">
+                                <?PHP else : ?>
+                                    <div class="div-rec-product-image">
+                                <?PHP endif; ?>
+                                <!--main image-->
+                                        <center style="background: #fff;">
+                                            <span class="span-me">
+                                                <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                            </span>
+                                        </center>
+                                    </div>
+                                </a>
+                        </center>
+                        <?php if ($product['product']->getIsNew()): ?>
+                            <span class="new-circle">NEW</span>
+                        <?php endif; ?>
 
-                                    </a>
-                            </center>
-                            <?php if ($product['product']->getIsNew()): ?>
-                                <span class="new-circle">NEW</span>
-                            <?php endif; ?>
-
-                            <?PHP if ($product['product']->getDiscount() > 0) : ?>
-                                <span class="discount-circle"><?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
-                            <?PHP endif; ?>
-                            <!-- End .item-image -->
+                        <?PHP if ($product['product']->getDiscount() > 0) : ?>
+                            <span class="discount-circle"><?=number_format($product['product']->getDiscount(), 0, '.', ',')?>%</span>
+                        <?PHP endif; ?>
+                        <!-- End .item-image -->
                           
                         <div class="item-meta-container" align="left">
                             <h3 class="item-name">
                                 <a href="/item/<?=$productSlug?>">
-                                    <?=(strlen($product['product']->getName())>20)?substr_replace($product['product']->getName(), "...", 20):$product['product']->getName();?>
+                                    <?php echo html_escape((strlen($product['product']->getName())>20) ? substr_replace($product['product']->getName(), "...", 20): $product['product']->getName()) ;?>
                                 </a>
                             </h3>
                             <div class="item-meta-inner-container clearfix">
@@ -74,6 +73,7 @@
                                         <span class="pull-right">
                                             <div class="store-logo-container ">
                                                 <div class="span-store-logo">
+                                                
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
                                                         <?PHP if($homeContent['seller']['logo']) : ?>
                                                             <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
@@ -81,6 +81,7 @@
                                                             <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
                                                         <?PHP endif; ?>
                                                     </a>
+
                                                 </div>
                                             </div>
                                         </span>
