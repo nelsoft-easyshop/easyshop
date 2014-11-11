@@ -8,32 +8,35 @@
                 <?php $featuredSellerSlug = $homeContent['seller']['memberEntity']->getSlug(); ?>
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
                     <?php $productSlug = $product['product']->getSlug(); ?>
+                    <?php $defaultImage = $product['product']->getDefaultImage(); ?>
+                    <?php $secondaryImage = $product['secondaryProductImage']; ?>
+
                     <div class="item">
                             <center>
                                 <a href="/item/<?php echo $productSlug ?>">
                                 
                                     <!--hover image-->
-                                    <?PHP if ($product['secondary_image']['directory'] && $product['secondary_image']['imageFileName'] ) : ?>
-                                    <div class="div-rec-product-image hover-prod-image">
-                                        <center>
-                                            <span class="span-me">
-                                                <img src="<?=$product['secondary_image']['directory'] . 'categoryview/' . $product['secondary_image']['imageFileName']?>" class="img-rec-product">
-                                            </span>
-                                        </center>
-                                    </div>
-                                    <div class="div-rec-product-image main-prod-image">
+                                    <?PHP if ($secondaryImage) : ?>
+                                        <div class="div-rec-product-image hover-prod-image">
+                                            <center>
+                                                <span class="span-me">
+                                                    <img src="<?php echo $secondaryImage->getDirectory().'categoryview/'.$secondaryImage->getFilename() ?> " class="img-rec-product">
+                                                </span>
+                                            </center>
+                                        </div>
+                                        <div class="div-rec-product-image main-prod-image">
                                     <?PHP else : ?>
                                         <div class="div-rec-product-image">
                                     <?PHP endif; ?>
                                     <!--main image-->
-                                        <center style="background: #fff;">
-                                            <span class="span-me">
-                                                
-                                                <img src="<?=$product['image']['directory'] . 'categoryview/' . $product['image']['imageFileName']?>" class="img-rec-product">
-                                            </span>
-                                        </center>
-                                    </div>
-                                </a>
+                                            <center style="background: #fff;">
+                                                <span class="span-me">
+                                                    <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
+                                                </span>
+                                            </center>
+                                        </div>
+
+                                    </a>
                             </center>
                             <?php if ($product['product']->getIsNew()): ?>
                                 <span class="new-circle">NEW</span>
