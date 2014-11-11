@@ -7,7 +7,7 @@
 !/web/assets/product/default
 !/web/assets/user/default
 /web/assets/product/product_description/*
-!/web/assets/product/product_description/*.md
+!/web/assets/product/product_description/README.md
 
 
 /application/src/EasyShop/Doctrine/Proxies/*
@@ -17,6 +17,7 @@
 
 /web/assets/temp_product
 /application/resources/local/*
+!application/resources/local/README.md
 /web/assets/user/*
 !/web/assets/user/default
 
