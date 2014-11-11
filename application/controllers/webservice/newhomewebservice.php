@@ -118,13 +118,23 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
 
-        $map->menu->topSellers->seller[$index] = $value;
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $map->menu->topSellers->seller[$index] = $value;
 
-        if($map->asXML($this->file)) {
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }             
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                    ->set_output($this->usererror);         
+        }
+   
     } 
 
     /**
@@ -138,13 +148,23 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("addTopSellers",$value, "", "", ""); 
 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
 
-        if($addXml === TRUE) {
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }            
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }   
+                    ->set_output($this->usererror);            
+        }
+
     } 
 
     /**
