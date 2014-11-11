@@ -837,6 +837,10 @@ $string = '<typeNode>
             }   
 
             $sectionData['products'] = [];
+            if(!isset($categorySection['productPanel'])){
+                $categorySection['productPanel'] = array();
+            }
+
             foreach($categorySection['productPanel'] as $idx => $xmlProductData){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $xmlProductData['slug']]);
