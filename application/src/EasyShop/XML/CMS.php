@@ -861,7 +861,13 @@ $string = '<typeNode>
             array_push($homePageData['categorySection'], $sectionData);
         }
         
-        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
+        $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
+       
+        if(isset($homePageData['adSection']['img'])){
+            $temporaryAdSection = $homePageData['adSection'];
+            $homePageData['adSection'] = [ $temporaryAdSection ] ;
+        }
+
         $sliderTemplates = array();
         foreach($xmlContent['sliderTemplate']['template'] as $template){
             array_push($sliderTemplates, $template['templateName']);
