@@ -94,7 +94,9 @@ else {
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
     #ITEMS
-    $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
+    $route['(?i)item/(:any)'] = 'product/item/$1';
+    $route['(?i)product/submit-reply'] = 'product/submitReply';
+    $route['(?i)product/submit-review'] = 'product/submitReview';
 
 
     #SELL ITEM

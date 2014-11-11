@@ -1825,6 +1825,8 @@ class Memberpage extends MY_Controller
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
+            $userActiveProducts = $esProductRepo->getUserActiveProducts($memberId);
+
             $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
             $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);

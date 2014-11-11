@@ -52,6 +52,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
 </head>
 <body>
 

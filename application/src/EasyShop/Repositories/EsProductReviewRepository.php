@@ -21,8 +21,8 @@ class EsProductReviewRepository extends EntityRepository
                     ->andWhere('r.pReviewid = 0')
                     ->andWhere('r.product = :productId')
                     ->setParameter('productId', $productId)
-                    ->getQuery()
-                    ->setMaxResults(5);
+                    ->orderBy('r.idReview', 'DESC')
+                    ->getQuery();
  
         $result = $query->getResult();
 
@@ -47,7 +47,7 @@ class EsProductReviewRepository extends EntityRepository
                                         $qb->expr()->in('r.pReviewid', $reviewIds)
                                     )
                                 ->setParameter('productId', $productId)
-                                ->orderBy('r.idReview', 'DESC')
+                                ->orderBy('r.idReview', 'ASC')
                                 ->getQuery();
         $result = $qbResult->getResult();
 

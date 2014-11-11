@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fd7fd7c3b7cb869f1ce6d89b2b6714b7",
+    "hash": "51be254b0f55084879d5af86e8f82713",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -338,7 +338,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1579,7 +1579,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
@@ -1898,17 +1898,17 @@
         },
         {
             "name": "symfony/form",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/Form",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "3e3787845ec82533be5f505a9ad28bbee95f986d"
+                "reference": "48504d9847cf4158bb63db66adbb0f66b87884a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/3e3787845ec82533be5f505a9ad28bbee95f986d",
-                "reference": "3e3787845ec82533be5f505a9ad28bbee95f986d",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/48504d9847cf4158bb63db66adbb0f66b87884a2",
+                "reference": "48504d9847cf4158bb63db66adbb0f66b87884a2",
                 "shasum": ""
             },
             "require": {
@@ -2042,17 +2042,17 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "4cd6c807598e560db7b3da50c4330fdb4808cfa1"
+                "reference": "8d6ab2d294400bb03e33565a1fd284bba87e932c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/4cd6c807598e560db7b3da50c4330fdb4808cfa1",
-                "reference": "4cd6c807598e560db7b3da50c4330fdb4808cfa1",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/8d6ab2d294400bb03e33565a1fd284bba87e932c",
+                "reference": "8d6ab2d294400bb03e33565a1fd284bba87e932c",
                 "shasum": ""
             },
             "require": {
@@ -2091,7 +2091,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-11-04 14:29:39"
         },
         {
             "name": "symfony/http-kernel",
@@ -2419,17 +2419,17 @@
         },
         {
             "name": "symfony/security",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/Security",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a"
+                "reference": "523afec3bf83cfaf067d3c5b92b02eaa18d730cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a",
-                "reference": "cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/523afec3bf83cfaf067d3c5b92b02eaa18d730cd",
+                "reference": "523afec3bf83cfaf067d3c5b92b02eaa18d730cd",
                 "shasum": ""
             },
             "require": {
@@ -2489,7 +2489,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-11-04 14:29:39"
         },
         {
             "name": "symfony/security-bundle",
@@ -2708,17 +2708,17 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Bridge/Twig",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "fa54baa7d1de1ea25af139461cfa8055e0f813ec"
+                "reference": "4779c8f25cb59038fc0d14cfc0d603beff65c82b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/fa54baa7d1de1ea25af139461cfa8055e0f813ec",
-                "reference": "fa54baa7d1de1ea25af139461cfa8055e0f813ec",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/4779c8f25cb59038fc0d14cfc0d603beff65c82b",
+                "reference": "4779c8f25cb59038fc0d14cfc0d603beff65c82b",
                 "shasum": ""
             },
             "require": {
@@ -2729,6 +2729,7 @@
             "require-dev": {
                 "symfony/console": "~2.2",
                 "symfony/expression-language": "~2.4",
+                "symfony/finder": "~2.3",
                 "symfony/form": "~2.6",
                 "symfony/http-kernel": "~2.2",
                 "symfony/routing": "~2.2",
@@ -2741,6 +2742,7 @@
             },
             "suggest": {
                 "symfony/expression-language": "For using the ExpressionExtension",
+                "symfony/finder": "",
                 "symfony/form": "For using the FormExtension",
                 "symfony/http-kernel": "For using the HttpKernelExtension",
                 "symfony/routing": "For using the RoutingExtension",
@@ -2778,21 +2780,21 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-11-03 19:16:49"
         },
         {
             "name": "symfony/validator",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/Validator",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "6e521cdbc963cef7daf9931a7bde48b56d67d10a"
+                "reference": "789abdd56f9d1762809bbc2c371bef71d8830d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/6e521cdbc963cef7daf9931a7bde48b56d67d10a",
-                "reference": "6e521cdbc963cef7daf9931a7bde48b56d67d10a",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/789abdd56f9d1762809bbc2c371bef71d8830d48",
+                "reference": "789abdd56f9d1762809bbc2c371bef71d8830d48",
                 "shasum": ""
             },
             "require": {
@@ -2848,7 +2850,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-11-04 14:29:39"
         },
         {
             "name": "symfony/yaml",
@@ -2857,12 +2859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "9da3813f36985a4089f7e83c601a1034d125ff69"
+                "reference": "3db1d6cb51b49840e0f3b1663da23cccf0286bf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/9da3813f36985a4089f7e83c601a1034d125ff69",
-                "reference": "9da3813f36985a4089f7e83c601a1034d125ff69",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/3db1d6cb51b49840e0f3b1663da23cccf0286bf6",
+                "reference": "3db1d6cb51b49840e0f3b1663da23cccf0286bf6",
                 "shasum": ""
             },
             "require": {
@@ -2871,7 +2873,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -2895,7 +2897,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-11-10 18:00:54"
         },
         {
             "name": "twig/twig",
@@ -2955,12 +2957,8 @@
             "time": "2014-10-17 12:53:44"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "pimple/pimple": 20,
@@ -2978,10 +2976,6 @@
         "noiselabs/nusoap-bundle": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }
