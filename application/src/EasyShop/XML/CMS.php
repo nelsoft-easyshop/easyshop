@@ -858,16 +858,14 @@ $string = '<typeNode>
                 $target = $sliderImage['target'];
                 $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
             }
-            
-            
         }
 
         //Get feature vendor details
-        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+        $featuredVendor['memberEntity'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                 ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['vendor_image'] = array();
-        if($featuredVendor['name']){
-            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        if($featuredVendor['memberEntity']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['memberEntity']->getIdMember());
         }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
@@ -878,25 +876,29 @@ $string = '<typeNode>
                 ->findOneBy(['slug' => $product['slug']]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
-                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                    ->getDefaultImage($productData->getIdProduct());
+
                 $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                 $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-                if ($productImage != NULL) {
-                    $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                        ->findOneBy(['product' => $productData->getIdProduct(), 'isPrimary' => 0]);
-                    $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
-                    $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
-                    $featuredVendor['product'][$key]['secondary_image']['directory'] =
-                        $secondaryProductImage ? $secondaryProductImage->getDirectory() : '';
-                    $featuredVendor['product'][$key]['secondary_image']['imageFileName'] =
-                        $secondaryProductImage ? $secondaryProductImage->getFilename() : '';
+                $featuredVendor['product'][$key]['secondary_image']['directory'] = "";
+                $featuredVendor['product'][$key]['secondary_image']['imageFileName'] = "";
+                
+                $defaultImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                         ->getDefaultImage($productData->getIdProduct());
+                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                              ->findOneBy(['product' => $productData->getIdProduct(), 'isPrimary' => 0]);
+                if ($defaultImage !== NULL) {                                                        
+                    $featuredVendor['product'][$key]['image']['directory'] = $defaultImage->getDirectory();
+                    $featuredVendor['product'][$key]['image']['imageFileName'] = $defaultImage->getFilename();
                 }
+
+                if ($secondaryProductImage !== NULL) {
+                    $featuredVendor['product'][$key]['secondary_image']['directory'] = $secondaryProductImage->getDirectory();
+                    $featuredVendor['product'][$key]['secondary_image']['imageFileName'] = $secondaryProductImage->getFilename();
+                }
+
             }
         }
         $homePageData['seller'] = $featuredVendor;
-
         //Get Popular Brands
         foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
             $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
