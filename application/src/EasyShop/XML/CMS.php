@@ -825,6 +825,12 @@ $string = '<typeNode>
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+           
+            if(!isset($categorySection["sub"])){
+                $categorySection["sub"] = [];
+            }
+            
+            
             if(isset($categorySection['sub']['text'])){
                 $subTemporary = $categorySection['sub'];
                 $categorySection['sub'] = [ $subTemporary ];
