@@ -821,14 +821,29 @@ $string = '<typeNode>
             $xmlContent['categorySection'] = array();
             array_push($xmlContent['categorySection'], $temporary);
         }
-        
+   
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);
+                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+            if(isset($categorySection['sub']['text'])){
+                $subTemporary = $categorySection['sub'];
+                $categorySection['sub'] = [ $subTemporary ];
+            }   
             $sectionData['subHeaders'] = $categorySection['sub'];
-            foreach($categorySection['productPanel'] as $idx=>$product){
+            
+            if(isset($categorySection['productPanel']['slug'])){
+                $productPanelTemporary = $categorySection['productPanel'];
+                $categorySection['productPanel'] = [ $productPanelTemporary ];
+            }   
+
+            $sectionData['products'] = [];
+            if(!isset($categorySection['productPanel'])){
+                $categorySection['productPanel'] = array();
+            }
+
+            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
                 if($product){
                     $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
                     $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
@@ -875,9 +890,13 @@ $string = '<typeNode>
 
         shuffle($xmlContent['sellerSection']['productPanel']);    
         $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
+        $featuredVendor['product'] = [];
+          
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+        
+            $productSlug = isset($product['slug']) ? $product['slug'] : $product;        
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug'], 'member' => $featuredSellerId]);
+                                    ->findOneBy(['slug' => $productSlug, 'member' => $featuredSellerId]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
                 $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
