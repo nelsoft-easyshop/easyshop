@@ -21,23 +21,15 @@
                             
                                 <!--hover image-->
                                 <?PHP if ($secondaryImage) : ?>
-                                    <div class="div-rec-product-image hover-prod-image">
-                                        <center>
-                                            <span class="span-me">
-                                                <img src="<?php echo $secondaryImage->getDirectory().'categoryview/'.$secondaryImage->getFilename() ?> " class="img-rec-product">
-                                            </span>
-                                        </center>
+                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                        
                                     </div>
-                                    <div class="div-rec-product-image main-prod-image">
+                                    <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP else : ?>
-                                    <div class="div-rec-product-image">
+                                    <div class="div-rec-product-image" style="background: #fff  url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP endif; ?>
                                 <!--main image-->
-                                        <center style="background: #fff;">
-                                            <span class="span-me">
-                                                <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                            </span>
-                                        </center>
+                                        
                                     </div>
                                 </a>
                         </center>
