@@ -83,8 +83,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -176,8 +206,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -269,8 +329,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -387,8 +477,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -480,8 +600,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -573,8 +723,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -695,8 +875,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -788,8 +998,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -881,8 +1121,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">
@@ -999,8 +1269,38 @@
                                                     Juan Delafo foooooo0000oooooooooz
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span>view delivery details</span>
+                                            <div class="pos-rel">
+                                                <span class="view-delivery-lnk">view delivery details</span>
+                                                <div class="view-delivery-details">
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Consignee:</strong>
+                                                        <span>Clark Christopher Reyes</span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Mobile:</strong>
+                                                            <span>09123456789</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pd-tb-8">
+                                                            <strong>Telephone:</strong>
+                                                            <span>727-1234</span>
+                                                        </div>
+                                                        <div class="pd-tb-8">
+                                                            <strong>State/Region:</strong>
+                                                            <span>Quezon City</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 pd-tb-8">
+                                                        <strong>Address:</strong>
+                                                        <span>#1 aniston Montgomery Place E. Rodriguez Q.C.</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="btn btn-default-3">

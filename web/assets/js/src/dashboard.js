@@ -135,4 +135,8 @@
         $(this).next(".info-attributes").slideToggle();
     });
 
+    $(".view-delivery-lnk").click(function() {
+        $(this).next(".view-delivery-details").slideToggle();
+    });
+
 }(jQuery));
