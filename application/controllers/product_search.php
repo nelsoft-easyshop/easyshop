@@ -45,7 +45,7 @@ class product_search extends MY_Controller {
                 $html .= "<ul>";
                 foreach ($keywords as $value) {
                     $showValue = $this->highlights($value,$stringData);
-                    $html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
+                    $html .= "<li><a href='/search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
 
                 }
                 $html .= "</ul>";

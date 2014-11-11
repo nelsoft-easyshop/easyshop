@@ -61,7 +61,7 @@ class messages extends MY_Controller
             $this->load->view('templates/footer_full', $viewData);
         }
         else {
-            redirect(base_url() . 'home', 'refresh');
+            redirect('/', 'refresh');
         }
     }
 
