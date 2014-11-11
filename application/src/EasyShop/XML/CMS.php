@@ -882,14 +882,17 @@ $string = '<typeNode>
         $featuredVendor['memberEntity'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                    ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['vendor_image'] = array();
+        $featuredSellerId = 0;
         if($featuredVendor['memberEntity']){
             $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['memberEntity']->getIdMember());
+            $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
         }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
         shuffle($xmlContent['sellerSection']['productPanel']);    
-        $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
+        
+     
         $featuredVendor['product'] = [];
           
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
