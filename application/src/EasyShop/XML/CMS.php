@@ -890,9 +890,10 @@ $string = '<typeNode>
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
+        if(!isset($xmlContent['sellerSection']['productPanel'])){
+            $xmlContent['sellerSection']['productPanel'] = array();
+        }
         shuffle($xmlContent['sellerSection']['productPanel']);    
-        
-     
         $featuredVendor['product'] = [];
           
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {

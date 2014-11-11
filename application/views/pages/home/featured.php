@@ -2,8 +2,12 @@
 <div class="row mo">
     <div class="row" style="background: url('<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
-            <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
-            <a class="next"><i class="fa fa-angle-right fa-next-slide"></i></a>
+            
+            <?php if(count($homeContent['seller']['product']) > 0): ?>
+                <a class="prev"><i class="fa fa-angle-left fa-prev-slide"></i></a>
+                <a class="next"><i class="fa fa-angle-right fa-next-slide"></i></a>
+            <?php endif; ?>
+            
             <div id="featured-seller" class="owl-carousel owl-theme">
                 <?php $featuredSellerSlug = $homeContent['seller']['memberEntity']->getSlug(); ?>
                 <?PHP foreach ($homeContent['seller']['product'] as $product) : ?>
@@ -17,23 +21,15 @@
                             
                                 <!--hover image-->
                                 <?PHP if ($secondaryImage) : ?>
-                                    <div class="div-rec-product-image hover-prod-image">
-                                        <center>
-                                            <span class="span-me">
-                                                <img src="<?php echo $secondaryImage->getDirectory().'categoryview/'.$secondaryImage->getFilename() ?> " class="img-rec-product">
-                                            </span>
-                                        </center>
+                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                        
                                     </div>
-                                    <div class="div-rec-product-image main-prod-image">
+                                    <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP else : ?>
-                                    <div class="div-rec-product-image">
+                                    <div class="div-rec-product-image" style="background: #fff  url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP endif; ?>
                                 <!--main image-->
-                                        <center style="background: #fff;">
-                                            <span class="span-me">
-                                                <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                            </span>
-                                        </center>
+                                        
                                     </div>
                                 </a>
                         </center>
