@@ -821,18 +821,25 @@ $string = '<typeNode>
             $xmlContent['categorySection'] = array();
             array_push($xmlContent['categorySection'], $temporary);
         }
-        
+   
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
             if(isset($categorySection['sub']['text'])){
                 $subTemporary = $categorySection['sub'];
-                $categorySection['sub'] = array($subTemporary);
+                $categorySection['sub'] = [ $subTemporary ];
             }   
             $sectionData['subHeaders'] = $categorySection['sub'];
-            foreach($categorySection['productPanel'] as $idx=>$product){
+            
+            if(isset($categorySection['productPanel']['slug'])){
+                $productPanelTemporary = $categorySection['productPanel'];
+                $categorySection['productPanel'] = [ $productPanelTemporary ];
+            }   
+
+            $sectionData['products'] = [];
+            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
                 if($product){
                     $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
                     $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
