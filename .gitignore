@@ -7,6 +7,8 @@
 !/web/assets/product/default
 !/web/assets/user/default
 /web/assets/product/product_description/*
+!/web/assets/product/product_description/*.md
+
 
 /application/src/EasyShop/Doctrine/Proxies/*
 /web/*.xml.gz
