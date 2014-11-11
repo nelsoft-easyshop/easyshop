@@ -10,18 +10,130 @@
         }
         });
     });
-<<<<<<< HEAD
-
-function triggerTab(x){
-    $('.idTabs a[href="#'+x+'"]').trigger('click');
-};
-
-=======
     
-     $( "#dash" ).click(function() {
-        alert("asdasd");
-     });
-     
-     $("#homeTabs ul").idTabs("one"); 
->>>>>>> b95190e5fa6b5b841db98e5d184cb086dd80d8ff
+    
+    $( "#info-item-1" ).click(function() {
+        $( "#info-attributes-1" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-1").attr("class");
+         if(i_icon == "info-item-icon-1 fa fa-plus-circle"){
+            $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-plus-circle").addClass("info-item-icon-1 fa fa-minus-circle");
+            $(".text-info-icon-1").text("less info");
+        }
+        else if(i_icon == "info-item-icon-1 fa fa-minus-circle"){
+            $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-minus-circle").addClass("info-item-icon-1 fa fa-plus-circle");
+            $(".text-info-icon-1").text("more info");
+        }
+        });
+    });
+    
+    $( "#info-item-2" ).click(function() {
+        $( "#info-attributes-2" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-2").attr("class");
+         if(i_icon == "info-item-icon-2 fa fa-plus-circle"){
+            $('i.info-item-icon-2').removeClass("info-item-icon-2 fa fa-plus-circle").addClass("info-item-icon-2 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-2 fa fa-minus-circle"){
+            $('i.info-item-icon-2').removeClass("info-item-icon-2 fa fa-minus-circle").addClass("info-item-icon-2 fa fa-plus-circle");
+            $(".text-info-icon-2").text("more info");
+        }
+        });
+    });  
+    
+    $( "#info-item-3" ).click(function() {
+        $( "#info-attributes-3" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-3").attr("class");
+         if(i_icon == "info-item-icon-3 fa fa-plus-circle"){
+            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-plus-circle").addClass("info-item-icon-3 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-3 fa fa-minus-circle"){
+            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-minus-circle").addClass("info-item-icon-3 fa fa-plus-circle");
+            $(".text-info-icon-3").text("more info");
+        }
+        });
+    });
+    
+      $( "#info-item-4" ).click(function() {
+        $( "#info-attributes-4" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-4").attr("class");
+         if(i_icon == "info-item-icon-4 fa fa-plus-circle"){
+            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-plus-circle").addClass("info-item-icon-4 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-4 fa fa-minus-circle"){
+            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-minus-circle").addClass("info-item-icon-4 fa fa-plus-circle");
+            $(".text-info-icon-4").text("more info");
+        }
+        });
+    }); 
+    
+      $( "#info-item-5" ).click(function() {
+        $( "#info-attributes-5" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-5").attr("class");
+         if(i_icon == "info-item-icon-5 fa fa-plus-circle"){
+            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-plus-circle").addClass("info-item-icon-5 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-5 fa fa-minus-circle"){
+            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-minus-circle").addClass("info-item-icon-5 fa fa-plus-circle");
+            $(".text-info-icon-5").text("more info");
+        }
+        });
+    }); 
+    
+      $( "#info-item-6" ).click(function() {
+        $( "#info-attributes-6" ).slideToggle( "slow", function() {
+        var i_icon = $("i.info-item-icon-6").attr("class");
+         if(i_icon == "info-item-icon-6 fa fa-plus-circle"){
+            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-plus-circle").addClass("info-item-icon-6 fa fa-minus-circle");
+            $(".text-info-icon-2").text("less info");
+        }
+        else if(i_icon == "info-item-icon-6 fa fa-minus-circle"){
+            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-minus-circle").addClass("info-item-icon-6 fa fa-plus-circle");
+            $(".text-info-icon-6").text("more info");
+        }
+        });
+    }); 
+    
+    
+    $( "#dash" ).click(function() {
+        $("#aaa").addClass("selected");
+        $("#active-items").css("display", "block");
+    });
+
+    $('.transaction-title-bought').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-bought').slideToggle();
+        $('.on-going-transaction-list-sold').slideUp();
+        $('.transaction-title-sold').removeClass("active-bar");
+    });
+
+    $('.transaction-title-sold').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-sold').slideToggle();
+        $('.on-going-transaction-list-bought').slideUp();
+        $('.transaction-title-bought').removeClass("active-bar");
+    });
+
+        $('.transaction-title-bought-completed').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-bought-completed').slideToggle();
+        $('.on-going-transaction-list-sold-completed').slideUp();
+        $('.transaction-title-sold-completed').removeClass("active-bar");
+    });
+
+    $('.transaction-title-sold-completed').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-sold-completed').slideToggle();
+        $('.on-going-transaction-list-bought-completed').slideUp();
+        $('.transaction-title-bought-completed').removeClass("active-bar");
+    });
+
+    $(".trans-item-info").click(function() {
+        $(this).children("i").toggleClass("fa-minus-circle");
+        $(this).next(".info-attributes").slideToggle();
+    });
+
+
 }(jQuery));

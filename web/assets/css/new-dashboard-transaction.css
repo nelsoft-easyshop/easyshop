@@ -1,0 +1,222 @@
+.mrgn-top-12 {
+    margin-top: 12px;
+}
+
+.btn-loadmore {
+    background-color: #e2e2e2;
+    border: none;
+    font-weight: 900;
+    font-size: 16px;
+    height: 42px;
+    line-height: 32px;
+    max-width: 170px;
+    width: 100%;
+}
+
+.btn-loadmore {
+    background-color: #c2c2c2;
+}
+
+.transaction-tabs ul {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    height: 60px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.transaction-tabs ul li {
+    float: left;
+    font-size: 16px;
+    text-align: center;
+    height: 60px;
+    line-height: 54px;
+    width: 50%;
+}
+
+.transaction-tabs ul li:first-child {
+    border-right: 1px solid #e2e2e2;
+}
+
+.transaction-tabs ul li a {
+    display: block;
+    text-transform: uppercase;
+}
+
+.transaction-tabs ul li a.selected {
+    border-bottom: 4px solid #fe893a;
+    color: #fe893a;
+    font-weight: 900;
+}
+
+.transaction-title-bought,
+.transaction-title-sold,
+.transaction-title-bought-completed,
+.transaction-title-sold-completed {
+    background-color: #f4f4f4;
+    border-bottom: 3px solid #e2e2e2;
+    border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 58px;
+    line-height: 58px;
+    padding-left: 30px;
+    text-transform: uppercase;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.transaction-title-bought,
+.transaction-title-sold,
+.transaction-title-bought-completed,
+.transaction-title-sold-completed {
+    background:#f4f4f4 url(../images/sprites/dashboard-arrow.png) no-repeat right center;
+}
+
+.transaction-title-bought.active-bar,
+.transaction-title-sold.active-bar,
+.transaction-title-bought-completed.active-bar,
+.transaction-title-sold-completed.active-bar {
+    background:#f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
+}
+
+.transaction-title-bought .trans-title,
+.transaction-title-sold .trans-title,
+.transaction-title-bought-completed .trans-title,
+.transaction-title-sold-completed .trans-title {
+    font-size: 16px;
+    font-weight: 900;
+    padding-right: 18px;
+}
+
+.transaction-title-bought .count,
+.transaction-title-sold .count,
+.transaction-title-bought-completed .count,
+.transaction-title-sold-completed .count {
+    background-color: #878787;
+    border-radius: 90px;
+    display: inline-block;
+    color: #fff;
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    width: 28px;
+    -moz-border-radius: 90px;
+    -webkit-border-radius: 90px;
+}
+
+.transaction-search {
+    background: url(../images/img_search2.png) no-repeat 7px center;
+    max-width: 300px;
+    padding-left: 35px !important;
+    width: 100%;
+}
+
+.on-going-transaction-list-bought,
+.on-going-transaction-list-sold,
+.on-going-transaction-list-bought-completed,
+.on-going-transaction-list-sold-completed {
+    display: none;
+}
+
+.transaction-item .item-list-panel {
+    margin-bottom: 15px;
+}
+
+.transaction-right-content {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.transaction-right-content button {
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.transaction-right-content .btn.btn-default-3 {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    margin-bottom: 6px;
+}
+
+.img-completed,
+.img-give-feedback {
+    background-image: url(../images/sprites/dashboard-sprite.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 5px;
+    height: 21px;
+    vertical-align: bottom;
+    width: 20px;
+    
+}
+
+.img-completed {
+    background-position: -7px 0px;
+}
+
+.img-give-feedback {
+    background-position: -30px 0px;
+}
+
+.btn.btn-default-1:hover .img-give-feedback {
+    background: url(../images/sprites/dashboard-sprite.png) no-repeat -30px -20px;
+}
+
+.trans-item-info .fa-minus-circle:before {
+    content: "\f056" !important;
+}
+
+.transaction-profile-wrapper {
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    padding: 14px 0;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.transaction-profile-wrapper h4 {
+    font-size: 16px;
+}
+
+.transac-item-profile-con {
+    background-color: #f4f4f4;
+    border:1px solid #f4f4f4;
+    border-radius: 4px;
+    display: inline-block;
+    height: 26px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 24px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.transac-item-profile-con img {
+    bottom: 0;
+    left: 0;
+    height: auto;
+    margin:auto;
+    max-height: 26px;
+    max-width: 24px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.transac-item-consignee-name {
+    display: inline-block;
+    text-overflow: ellipsis;
+    max-width: 145px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
