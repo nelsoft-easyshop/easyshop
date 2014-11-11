@@ -886,9 +886,13 @@ $string = '<typeNode>
 
         shuffle($xmlContent['sellerSection']['productPanel']);    
         $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
+        $featuredVendor['product'] = [];
+          
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+        
+            $productSlug = isset($product['slug']) ? $product['slug'] : $product;        
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug'], 'member' => $featuredSellerId]);
+                                    ->findOneBy(['slug' => $productSlug, 'member' => $featuredSellerId]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
                 $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
