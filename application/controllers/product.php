@@ -6,6 +6,7 @@ if (!defined('BASEPATH')){
 
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Entities\EsCat as EsCat; 
+use EasyShop\Entities\EsProduct as EsProduct; 
 
 class product extends MY_Controller 
 { 
@@ -272,7 +273,7 @@ class product extends MY_Controller
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
+            if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                 $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                 if($bannerfile){
                     $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], true); 

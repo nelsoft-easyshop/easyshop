@@ -8,15 +8,13 @@ use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
 use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductShippingHead; 
-
+use EasyShop\Entities\EsProductImage as EsProductImage;
 use Easyshop\Entities\EsProductItem;
-
 use EasyShop\Entities\EsMemberProdcat;
-
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\ArrayCollection;
 use Easyshop\Entities\EsProducItemLock;
 use EasyShop\Entities\EsCat;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product Manager Class
@@ -45,34 +43,9 @@ class ProductManager
     const PRODUCT_META_DESCRIPTION_LIMIT = 155;
 
     /**
-     * Default limit of meta desciption of the product
-     */
-    const PRODUCT_IS_PROMOTE = 1;
-
-    /**
      * Default result product count in dashboard
      */
     const PRODUCT_COUNT_DASHBOARD = 10;
-
-    /**
-     * Value for is_delete is active
-     */
-    const IS_DELETE_ON = 1;
-
-    /**
-     * Value for is_draft is active
-     */
-    const IS_DRAFT_ON = 1;
-
-    /**
-     * Default Value for is_delete 
-     */
-    const IS_DELETE_OFF = 0;
-
-    /**
-     * Default Value for is_draft
-     */
-    const IS_DRAFT_OFF = 0;
 
     /**
      * Entity Manager instance
@@ -883,7 +856,7 @@ class ProductManager
      * @return objec
      */
     public function getProductsByUser($memberId,
-                                      $isDelete = self::IS_DELETE_OFF,
+                                      $isDelete = [self::IS_DELETE_OFF],
                                       $isDraft = [self::IS_DRAFT_OFF],
                                       $offset = 0,
                                       $searchString = "",
@@ -912,9 +885,8 @@ class ProductManager
         $products = [];
         foreach ($resultProducts as $resultProduct) {
             $product = $this->getProductDetails($resultProduct);
-
-            $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
             if($product->getDefaultImage()){
                 $product->directory = $product->getDefaultImage()->getDirectory();
@@ -925,6 +897,7 @@ class ProductManager
             $product->reviewCount = $esProductRepo->getProductReviewCount($product->getIdProduct());
             $product->availableStock = $esProductRepo->getProductAvailableStocks($product->getIdProduct());
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
+            
             $products[] = $product;
         }
 

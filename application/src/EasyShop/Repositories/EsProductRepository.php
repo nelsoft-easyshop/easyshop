@@ -778,101 +778,38 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Return count users product
-     * @param  integer $memberId
+     * @param  integer $memberId  
+     * @param  integer $isDelete
+     * @param  integer $isDraft
+     * @param  string  $searchString
      * @return integer
      */
-    public function getUserProductCount($memberId)
+    public function getUserProductCount($memberId,
+                                        $isDelete = [0,1],
+                                        $isDraft = [0,1],
+                                        $searchString = "")
     {
         $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('count', 'count');
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('COUNT(p.idProduct)')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where('p.member = :member_id')
+                     ->setParameter('member_id', $memberId)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        );
 
-        $sql = " 
-            SELECT COUNT(id_product) as count
-            FROM es_product
-            WHERE member_id = :memberId
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberId', $memberId); 
-        $result = $query->getOneOrNullResult();
+        if($searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
 
-        return (int) $result['count'];
-    }
+        $resultCount = $queryBuilder->getQuery()->getSingleScalarResult();
 
-    /**
-     * Return count users active product
-     * @param  integer $memberId
-     * @return integer
-     */
-    public function getUserActiveProductCount($memberId)
-    {
-        $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('count', 'count');
-
-        $sql = " 
-            SELECT COUNT(id_product) as count
-            FROM es_product
-            WHERE is_draft = 0 AND is_delete = 0
-            AND member_id = :memberId
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberId', $memberId); 
-        $result = $query->getOneOrNullResult();
-
-        return (int) $result['count'];
-    }
-
-    /**
-     * Return count users deleted product
-     * @param  integer $memberId
-     * @return integer
-     */
-    public function getUserDeletedProductCount($memberId)
-    {
-        $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('count', 'count');
-
-        $sql = " 
-            SELECT COUNT(id_product) as count
-            FROM es_product
-            WHERE is_delete = 1
-            AND member_id = :memberId
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberId', $memberId); 
-        $result = $query->getOneOrNullResult();
-
-        return (int) $result['count'];
-    }
-
-    /**
-     * Return count users draft product
-     * @param  integer $memberId
-     * @return integer
-     */
-    public function getUserDraftedProductCount($memberId)
-    {
-        $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('count', 'count');
-
-        $sql = " 
-            SELECT COUNT(id_product) as count
-            FROM es_product
-            WHERE is_draft = 1 AND is_delete = 0
-            AND member_id = :memberId
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberId', $memberId); 
-        $result = $query->getOneOrNullResult();
-
-        return (int) $result['count'];
+        return $resultCount;
     }
 
     /**
@@ -911,15 +848,16 @@ class EsProductRepository extends EntityRepository
                                     $isDraft,
                                     $offset = 0,
                                     $perPage = 10,
-                                    $searchString,
-                                    $orderByField)
+                                    $searchString = "",
+                                    $orderByField = "p.idProduct")
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select('p')
                      ->from('EasyShop\Entities\EsProduct','p')
-                     ->where('p.isDelete = :isDelete')
-                     ->setParameter('isDelete', $isDelete)
+                     ->where(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
                      ->andWhere(
                             $queryBuilder->expr()->in('p.isDraft', $isDraft)
                         )

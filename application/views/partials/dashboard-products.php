@@ -22,7 +22,12 @@
                                 <p class="item-list-name">
                                     <?php if($product->getName()): ?>
                                     <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
-                                        <?=htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1');?>
+                                        <?php if(strlen($product->getName()) > 40): ?>
+                                            <?=substr_replace( htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1'), "...", 40); ?>
+                                        <?php else: ?>
+                                            <?=htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1');?>
+                                        <?php endif; ?>
+                                        
                                     </a>
                                     <?php else: ?>
                                         (NO NAME)
@@ -54,10 +59,11 @@
                                                 <tr>
                                                     <td class="td-label-desc"><span class="strong-label">Description: </span></td>
                                                     <td class="td-desc-item">
-                                                        <?php 
-                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                            echo substr_replace( $dummytext, "...", 100);
-                                                        ?>
+                                                        <?php if(strlen($product->getBrief()) > 100): ?>
+                                                            <?=substr_replace( $product->getBrief(), "...", 100); ?>
+                                                        <?php else: ?>
+                                                            <?=html_escape($product->getBrief());?>
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -75,19 +81,21 @@
                                 <?php endfor; ?>
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
+                                <?=form_open('/sell/edit/step2'); ?>
+                                <input type="hidden" name="p_id" value="<?=$product->getIdProduct(); ?>" />
+                                <input type="hidden" name="hidden_attribute" value="<?=$product->getCat()->getIdCat(); ?>" />
+                                <input type="hidden" name="othernamecategory" value="<?=$product->getCatOtherName(); ?>" />
                                 <button class="btn btn-action-edit">
                                     <i class="icon-edit"></i>edit
                                 </button>
-                                
+                                <?=form_close();?>
                                 <button class="btn btn-action-delete">
                                     <i class="icon-delete"></i>delete
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                            
-                            </td>
+                            <td></td>
                             <td colspan="2" class="td-attributes">
                                 <div class="info-main-cont">
                                     <div class="toggle-info" id="info-item-1">

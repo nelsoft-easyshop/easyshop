@@ -139,14 +139,54 @@
     });
 
     $(document.body).on('click',".individual",function () {
-        $this = $(this);
+        var $this = $(this);
         var $page = $this.data('page');
         var $parentContainer = $this.parent().parent().parent().parent();
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
-        var $urlRequest = $('#request-url').val();
         var $container = $parentContainer.find('.container-id').val();
+
+        requestProduct($page, $textInput, $filterInput, $requestType, $container);
+    });
+
+    $(document.body).on('change','.search-filter',function () {
+        var $this = $(this);
+        var $page = 0;
+        var $parentContainer = $this.parent().parent().parent();
+        var $textInput = $parentContainer.find('.search-field').val();
+        var $filterInput = $this.val();
+        var $requestType = $parentContainer.find('.request-type').val();
+        var $container = $parentContainer.find('.container-id').val(); 
+
+        requestProduct($page, $textInput, $filterInput, $requestType, $container);
+    });
+
+    $(".search-field").keyup(function(event){
+        if(event.keyCode == 13){
+            var $this = $(this);
+            var $page = 0;
+            var $parentContainer = $this.parent().parent().parent();
+            var $textInput = $this.val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val(); 
+
+            requestProduct($page, $textInput, $filterInput, $requestType, $container);
+        }
+    });
+
+    /**
+     * Ajax Request for getting product in active, draft and 
+     * @param  integer $page
+     * @param  string  $textInput
+     * @param  string  $filterInput
+     * @param  string  $requestType
+     * @param  string $container
+     */
+    var requestProduct = function($page, $textInput, $filterInput, $requestType, $container)
+    {
+        var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
             url: $urlRequest,
@@ -166,6 +206,6 @@
                 $('#'+$container).show();
             }
         });
-    });
+    }
 
 }(jQuery));

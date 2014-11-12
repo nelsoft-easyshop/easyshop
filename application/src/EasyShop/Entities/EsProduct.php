@@ -342,6 +342,31 @@ class EsProduct
      */
     private $shippedWithinCount;
 
+    /**
+     * Default value if the product is promoted
+     */
+    const PRODUCT_IS_PROMOTE_ON = 1;
+
+    /**
+     * Value for is_delete is active
+     */
+    const IS_DELETE_ON = 1;
+
+    /**
+     * Value for is_draft is active
+     */
+    const IS_DRAFT_ON = 1;
+
+    /**
+     * Default Value for is_delete 
+     */
+    const IS_DELETE_OFF = 0;
+
+    /**
+     * Default Value for is_draft
+     */
+    const IS_DRAFT_OFF = 0;
+
     public function __construct() 
     {
         $this->images = new ArrayCollection();

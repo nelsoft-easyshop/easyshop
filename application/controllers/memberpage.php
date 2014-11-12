@@ -1826,9 +1826,10 @@ class Memberpage extends MY_Controller
             $userFollowing = $esVendorSubscribeRepo->getUserFollowing($memberId);
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
-            $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
-            $isDelete = $productManager::IS_DELETE_OFF;
-            $isDraft = [$productManager::IS_DRAFT_OFF];
+
+            $isDelete = [EsProduct::IS_DELETE_OFF];
+            $isDraft = [EsProduct::IS_DRAFT_OFF];
+            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userActiveProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
             $paginationData['lastPage'] = ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
             $activeProductsData = [
@@ -1837,9 +1838,9 @@ class Memberpage extends MY_Controller
                             ];
             $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
-            $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
-            $isDelete = $productManager::IS_DELETE_ON;
-            $isDraft = [$productManager::IS_DRAFT_OFF,$productManager::IS_DRAFT_ON];
+            $isDelete = [EsProduct::IS_DELETE_ON];
+            $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userDeletedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft); 
             $paginationData['lastPage'] = ceil($userDeletedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
             $deletedProductsData = [
@@ -1848,9 +1849,9 @@ class Memberpage extends MY_Controller
                             ];
             $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
 
-            $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId); 
-            $isDelete = $productManager::IS_DELETE_OFF;
-            $isDraft = [$productManager::IS_DRAFT_ON];
+            $isDelete = [EsProduct::IS_DELETE_OFF];
+            $isDraft = [EsProduct::IS_DRAFT_ON];
+            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userDraftedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
             $paginationData['lastPage'] = ceil($userDraftedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
             $draftedProductsData = [
@@ -1907,24 +1908,25 @@ class Memberpage extends MY_Controller
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
         $memberId = $this->session->userdata('member_id');
-        $page = $this->input->get('page') ? trim($this->input->get('page')) : 0;
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
         $requestType = trim($this->input->get('request'));
         $sortType = trim($this->input->get('sort'));
         $searchString = trim($this->input->get('search_string'));
  
-        $isDelete = $productManager::IS_DELETE_OFF;
-        $isDraft = [$productManager::IS_DRAFT_OFF];
+        $isDelete = [EsProduct::IS_DELETE_OFF];
+        $isDraft = [EsProduct::IS_DRAFT_OFF];
 
         if(strtolower($requestType) === "deleted"){ 
-            $isDelete = $productManager::IS_DELETE_ON;
-            $isDraft = [$productManager::IS_DRAFT_OFF,$productManager::IS_DRAFT_ON];
+            $isDelete = [EsProduct::IS_DELETE_ON];
+            $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
 
         }
         elseif (strtolower($requestType) === "drafted"){ 
-            $isDelete = $productManager::IS_DELETE_OFF;
-            $isDraft = [$productManager::IS_DRAFT_ON];
+            $isDelete = [EsProduct::IS_DELETE_OFF];
+            $isDraft = [EsProduct::IS_DRAFT_ON];
         }
 
+        $userProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft, $searchString);
         $userProducts = $productManager->getProductsByUser($memberId,
                                                            $isDelete,
                                                            $isDraft,
@@ -1933,7 +1935,7 @@ class Memberpage extends MY_Controller
                                                            $sortType); 
 
         $paginationData = [
-                'lastPage' => ceil(count($userProducts)/$productManager::PRODUCT_COUNT_DASHBOARD)
+                'lastPage' => ceil($userProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
                 ,'isHyperLink' => false
                 , 'currentPage' => $page
             ];
