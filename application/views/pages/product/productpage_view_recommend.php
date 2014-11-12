@@ -19,12 +19,17 @@
         <div id="recommended" class="owl-carousel owl-theme">
             <?php foreach ($recommended as $value): ?>
             <div class="item">
+                <center>
                     <a href="/item/<?=$value->getSlug(); ?>">
-                        <div class="div-rec-product-image" style="background: #fff url(/<?=$value->directory.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
-                            
+                        <div class="div-rec-product-image">
+                            <center>
+                                <span class="span-me">
+                                    <img src="/<?=$value->directory.'categoryview/'.$value->imageFileName; ?>" class="img-rec-product">
+                                </span>
+                            </center>
                         </div>
                     </a>
-                
+                </center>
                 <?php if($value->getIsNew()): ?>
                 <span class="span-circle-new">NEW</span>
                 <?php endif; ?>
