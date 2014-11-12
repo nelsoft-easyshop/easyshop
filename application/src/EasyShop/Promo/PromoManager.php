@@ -105,7 +105,7 @@ class PromoManager
     {
         $productDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')->getRawProductPromoDetails($productId);
         if(!$productDetails){
-            return 0;
+            return NULL;
         }
         
         $price = $productDetails['price'];
