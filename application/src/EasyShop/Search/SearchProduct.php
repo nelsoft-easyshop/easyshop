@@ -72,10 +72,9 @@ class SearchProduct
      * @param  string $string
      * @return array
      */
-    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = TRUE)
+    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = true)
     {
         if($storeKeyword){
-            // Insert into search keyword temp 
             $keywordTemp = new EsKeywordsTemp();
             $keywordTemp->setKeywords($queryString);
             $keywordTemp->setIpAddress($this->httpRequest->getClientIp());
@@ -85,22 +84,27 @@ class SearchProduct
         }
 
         $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-        $stringCollection = array();
-        $ids = $productIds; 
+        $stringCollection = [];
+        $ids = $productIds;
 
-        if(trim($clearString) != ""){
-            $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '+"'.implode('" +"', $explodedString) .'"';
-            $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-            $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
-            $stringCollection[2] = '"'.trim($clearString).'"'; 
-            $boolean = (strlen($clearString) > 1) ? FALSE : TRUE;
+        if(trim($clearString)){
+            $explodedString = explode(' ', trim($clearString));
+            $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+
+            $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+            $wildCardString = !implode('* +', $explodedStringWithRegEx)
+                              ? "" 
+                              : '+'.implode('* +', $explodedStringWithRegEx) .'*';
+            $stringCollection[] = str_replace("+*", "", $wildCardString);
+            $stringCollection[] = '"'.trim($clearString).'"'; 
+
+            $isLimit = strlen($clearString) > 1;
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection,$productIds,$boolean);
+                                 ->findByKeyword($stringCollection,$productIds,$isLimit);
 
             $ids = [];
-            foreach ($products as $key => $value) {
-                $ids[] = $value['idProduct']; 
+            foreach ($products as $product) {
+                $ids[] = $product['idProduct']; 
             }
         }
         
