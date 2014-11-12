@@ -2618,12 +2618,13 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     .user-nav-dropdown:after,
     .nav-dropdown:after,
     .user-nav-dropdown,
-    .user-nav-dropdown {
+    .user-nav-dropdown,
+    .nav-dropdown:before {
       display: none;
     }
 
     ul.nav-dropdown {
-        display: block !important;
+        display: block;
         width: auto;
         border:none;
         border-radius: 0px;
