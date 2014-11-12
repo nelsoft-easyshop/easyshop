@@ -897,11 +897,24 @@ class ProductManager
             $product->reviewCount = $esProductRepo->getProductReviewCount($product->getIdProduct());
             $product->availableStock = $esProductRepo->getProductAvailableStocks($product->getIdProduct());
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
-            
+            $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
+            $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
             $products[] = $product;
         }
 
         return $products;
+    }
+
+    public function updateIsDeleteStatus($productId, $memberId, $isDeleteStatus)
+    {
+        $product = $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                             ->find($productId);
+
+        if($product && $product->getMember()->getIdMember() === (int) $memberId){
+            
+        }
+
+        return false;
     }
 }
 

@@ -97,27 +97,23 @@
                         <tr>
                             <td></td>
                             <td colspan="2" class="td-attributes">
+                                <?php if(!empty($product->attributes)): ?>
                                 <div class="info-main-cont">
-                                    <div class="toggle-info" id="info-item-1">
-                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
+                                    <div class="toggle-info more-info-attribute">
+                                        <i class="info-item-icon fa fa-plus-circle"></i> <span class="text-info-icon">more info</span>
                                     </div>
-                                    <div class="info-attributes" id="info-attributes-1">
+                                    <div class="info-attributes">
                                         <div class="row">
-                                            <div class="col-xs-5">
-                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                            </div>
-                                            <div class="col-xs-5">
-                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                            </div>
-                                            <div class="col-xs-5">
-                                                <span class="strong-label">SIM : </span>single, dual
-                                            </div>
-                                            <div class="col-xs-5">
-                                                <span class="strong-label">Material : </span>plastic, metal
-                                            </div>
+                                            <?php foreach($product->attributes as $attributeName => $attributeValue): ?>
+                                                <div class="col-xs-5">
+                                                    <span class="strong-label"><?=$attributeName;?> : </span>
+                                                    <?=implode(', ', $attributeValue); ?> 
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     </tbody>

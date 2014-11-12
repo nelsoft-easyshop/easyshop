@@ -10,93 +10,38 @@
         }
         });
     });
-    
-    
+
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-1").attr("class");
-         if(i_icon == "info-item-icon-1 fa fa-plus-circle"){
-            $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-plus-circle").addClass("info-item-icon-1 fa fa-minus-circle");
-            $(".text-info-icon-1").text("less info");
-        }
-        else if(i_icon == "info-item-icon-1 fa fa-minus-circle"){
-            $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-minus-circle").addClass("info-item-icon-1 fa fa-plus-circle");
-            $(".text-info-icon-1").text("more info");
-        }
+            var i_icon = $("i.info-item-icon-1").attr("class");
+             if(i_icon == "info-item-icon-1 fa fa-plus-circle"){
+                $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-plus-circle").addClass("info-item-icon-1 fa fa-minus-circle");
+                $(".text-info-icon-1").text("less info");
+            }
+            else if(i_icon == "info-item-icon-1 fa fa-minus-circle"){
+                $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-minus-circle").addClass("info-item-icon-1 fa fa-plus-circle");
+                $(".text-info-icon-1").text("more info");
+            }
         });
     });
-    
-    $( "#info-item-2" ).click(function() {
-        $( "#info-attributes-2" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-2").attr("class");
-         if(i_icon == "info-item-icon-2 fa fa-plus-circle"){
-            $('i.info-item-icon-2').removeClass("info-item-icon-2 fa fa-plus-circle").addClass("info-item-icon-2 fa fa-minus-circle");
-            $(".text-info-icon-2").text("less info");
-        }
-        else if(i_icon == "info-item-icon-2 fa fa-minus-circle"){
-            $('i.info-item-icon-2').removeClass("info-item-icon-2 fa fa-minus-circle").addClass("info-item-icon-2 fa fa-plus-circle");
-            $(".text-info-icon-2").text("more info");
-        }
-        });
-    });  
-    
-    $( "#info-item-3" ).click(function() {
-        $( "#info-attributes-3" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-3").attr("class");
-         if(i_icon == "info-item-icon-3 fa fa-plus-circle"){
-            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-plus-circle").addClass("info-item-icon-3 fa fa-minus-circle");
-            $(".text-info-icon-2").text("less info");
-        }
-        else if(i_icon == "info-item-icon-3 fa fa-minus-circle"){
-            $('i.info-item-icon-3').removeClass("info-item-icon-3 fa fa-minus-circle").addClass("info-item-icon-3 fa fa-plus-circle");
-            $(".text-info-icon-3").text("more info");
-        }
+
+    $(document.body).on('click',".more-info-attribute",function () {
+        $this = $(this);
+        $iconElement = $this.children('i');
+        $spanElement = $this.children('span');
+        $this.next().slideToggle( "fast", function() {
+            var i_icon = $iconElement.attr("class");
+             if(i_icon == "info-item-icon fa fa-plus-circle"){
+                $iconElement.removeClass("info-item-icon fa fa-plus-circle").addClass("info-item-icon fa fa-minus-circle");
+                $spanElement.text("less info");
+            }
+            else if(i_icon == "info-item-icon fa fa-minus-circle"){
+                $iconElement.removeClass("info-item-icon fa fa-minus-circle").addClass("info-item-icon fa fa-plus-circle");
+                $spanElement.text("more info");
+            }
         });
     });
-    
-    $( "#info-item-4" ).click(function() {
-        $( "#info-attributes-4" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-4").attr("class");
-         if(i_icon == "info-item-icon-4 fa fa-plus-circle"){
-            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-plus-circle").addClass("info-item-icon-4 fa fa-minus-circle");
-            $(".text-info-icon-2").text("less info");
-        }
-        else if(i_icon == "info-item-icon-4 fa fa-minus-circle"){
-            $('i.info-item-icon-4').removeClass("info-item-icon-4 fa fa-minus-circle").addClass("info-item-icon-4 fa fa-plus-circle");
-            $(".text-info-icon-4").text("more info");
-        }
-        });
-    }); 
-    
-    $( "#info-item-5" ).click(function() {
-        $( "#info-attributes-5" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-5").attr("class");
-         if(i_icon == "info-item-icon-5 fa fa-plus-circle"){
-            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-plus-circle").addClass("info-item-icon-5 fa fa-minus-circle");
-            $(".text-info-icon-2").text("less info");
-        }
-        else if(i_icon == "info-item-icon-5 fa fa-minus-circle"){
-            $('i.info-item-icon-5').removeClass("info-item-icon-5 fa fa-minus-circle").addClass("info-item-icon-5 fa fa-plus-circle");
-            $(".text-info-icon-5").text("more info");
-        }
-        });
-    }); 
-    
-    $( "#info-item-6" ).click(function() {
-        $( "#info-attributes-6" ).slideToggle( "slow", function() {
-        var i_icon = $("i.info-item-icon-6").attr("class");
-         if(i_icon == "info-item-icon-6 fa fa-plus-circle"){
-            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-plus-circle").addClass("info-item-icon-6 fa fa-minus-circle");
-            $(".text-info-icon-2").text("less info");
-        }
-        else if(i_icon == "info-item-icon-6 fa fa-minus-circle"){
-            $('i.info-item-icon-6').removeClass("info-item-icon-6 fa fa-minus-circle").addClass("info-item-icon-6 fa fa-plus-circle");
-            $(".text-info-icon-6").text("more info");
-        }
-        });
-    }); 
-    
-    
+
     $( "#dash" ).click(function() { 
         $("#active-items").css("display", "block");
     });
