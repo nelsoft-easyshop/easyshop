@@ -101,10 +101,50 @@
         $("#active-items").css("display", "block");
     });
 
+    $('.transaction-title-bought').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-bought').slideToggle();
+        $('.on-going-transaction-list-sold').slideUp();
+        $('.transaction-title-sold').removeClass("active-bar");
+    });
+
+    $('.transaction-title-sold').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-sold').slideToggle();
+        $('.on-going-transaction-list-bought').slideUp();
+        $('.transaction-title-bought').removeClass("active-bar");
+    });
+
+        $('.transaction-title-bought-completed').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-bought-completed').slideToggle();
+        $('.on-going-transaction-list-sold-completed').slideUp();
+        $('.transaction-title-sold-completed').removeClass("active-bar");
+    });
+
+    $('.transaction-title-sold-completed').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.on-going-transaction-list-sold-completed').slideToggle();
+        $('.on-going-transaction-list-bought-completed').slideUp();
+        $('.transaction-title-bought-completed').removeClass("active-bar");
+    });
+
+    $(".trans-item-info").click(function() {
+        $(this).children("i").toggleClass("fa-minus-circle");
+        $(this).next(".info-attributes").slideToggle();
+    });
+
+    $(".view-delivery-lnk").click(function() {
+        $(this).next(".view-delivery-details").slideToggle();
+    });
+
     $(document.body).on('click',".individual",function () {
         $this = $(this);
-        var $textInput = $this.parent().parent().parent().find('.search-field').val(); 
-        var $filterInput = $this.parent().parent().parent().find('.search-filter').val();
+        var $parentContainer = $this.parent().parent().parent().parent();
+        var $textInput = $parentContainer.find('.search-field').val();
+        var $filterInput = $parentContainer.find('.search-filter').val();
+
+        console.log($textInput);
     });
 
 }(jQuery));

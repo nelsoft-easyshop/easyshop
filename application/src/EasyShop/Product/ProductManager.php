@@ -724,10 +724,10 @@ class ProductManager
     {
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
-        $defaultAttributes = array();                    
+        $defaultAttributes = [];
         if($product){
             $inventoryDetails = $this->getProductInventory($product);
-            $defaultInventory = array();
+            $defaultInventory = [];
             foreach($inventoryDetails as $inventory){
                 if($inventory['quantity'] > 0){
                     $defaultInventory = $inventory;
@@ -737,13 +737,11 @@ class ProductManager
 
             $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getProductAttributeDetailByName($productId);
-            /**
-             *  If the default quantity has been set
-             */
-            if( intval($defaultInventory['product_attribute_ids'][0]['id']) === 0 &&
-                intval($defaultInventory['product_attribute_ids'][0]['is_other']) === 0)
+
+            if( (int)$defaultInventory['product_attribute_ids'][0]['id'] === 0 &&
+                (int)$defaultInventory['product_attribute_ids'][0]['is_other'] === 0)
             {
-                foreach($attributes as $attributeIndex => $attribute){
+                foreach($attributes as $attribute){
                     if(!array_key_exists($attribute['attr_name'],$defaultAttributes)){
                         $defaultAttributes[$attribute['attr_name']] = $attribute;
                     }
@@ -752,9 +750,9 @@ class ProductManager
             else{
                 foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
                     foreach($attributes as $attributeIndex => $attribute){
-                        if(intval($productAttributeId['id']) === intval($attribute['attr_id']) &&
-                        intval($productAttributeId['is_other']) === intval($attribute['is_other'])){
-                            array_push($defaultAttributes, $attribute);
+                        if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
+                           (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
+                            $defaultAttributes[] = $attribute;
                             unset($attributes[$attributeIndex]);
                         } 
                     }
@@ -762,6 +760,7 @@ class ProductManager
             }
            
         }
+
         return $defaultAttributes;
     }
     
@@ -781,6 +780,7 @@ class ProductManager
                 $isListingOnly = true;
             }
         }
+
         return $isListingOnly;
     }
 
@@ -794,13 +794,12 @@ class ProductManager
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
-        // check if totally free shipping 
-        $isFreeShippingNationwide = TRUE;
+        $isFreeShippingNationwide = true;
         foreach ($shippingDetails as $value) {
-            if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
-                || bccomp(floatval($value['price']),0) !== 0){
+            if((int)$value['location_id'] !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
+                || bccomp((float)$value['price'],0) !== 0){
 
-                $isFreeShippingNationwide = FALSE;
+                $isFreeShippingNationwide = false;
                 break;
             }
         }
@@ -815,11 +814,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
-        // get combination quantity
         $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                      ->getProductInventoryDetail($productId);
 
-         // get product shipping location
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
@@ -829,41 +826,64 @@ class ProductManager
 
                 $locationArray = [];
                 foreach ($shippingDetails as $shipKey => $shipValue) {
-                    if(intval($shipValue['product_item_id']) === intval($value['id_product_item'])){
-                        $locationArray[] = array(
+                    if((int)$shipValue['product_item_id'] === (int)$value['id_product_item']){
+                        $locationArray[] = [
                                 'location_id' => $shipValue['location_id'],
                                 'price' => $shipValue['price'],
-                            );
+                            ];
                     }
                 }
 
-                $productCombinationAvailable[$value['id_product_item']] = array(
+                $productCombinationAvailable[$value['id_product_item']] = [
                     'quantity' => $value['quantity'],
                     'product_attribute_ids' => [$value['product_attr_id']],
                     'location' => $locationArray,
-                );
+                ];
             }
             else{
                 $productCombinationAvailable[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
             }
         }
 
-        // check if combination available
         $noMoreSelection = "";
-        if(count($productInventory) === 1 && intval($productInventory[0]['product_attr_id']) === 0){
+        if(count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0){
             $noMoreSelection = $productInventory[0]['id_product_item'];
         }
 
-        return array(
+        return [
                 'noMoreSelection' => $noMoreSelection,
                 'productCombinationAvailable' => $productCombinationAvailable
-            );
+            ];
     }
 
-    public function getActiveProductsByUser($memberId, $offset = 0)
+    /**
+     * Get all active product of specific user
+     * @param  integer  $memberId
+     * @param  integer $offset
+     * @return objec
+     */
+    public function getActiveProductsByUser($memberId, $offset = 0, $searchString = "" ,$sortString = "")
     {
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $resultProducts = $esProductRepo->getUserActiveProducts($memberId, $offset,self::PRODUCT_COUNT_DASHBOARD);
+
+
+        switch( $sortString ){
+            case "lastmodified":
+                $orderByColumn = "p.lastmodifieddate";
+                break;
+            case "new": 
+                $orderByColumn = "p.createddate";
+                break;
+            default: 
+                $orderByColumn = "p.idProduct";
+                break;
+        }
+
+        $resultProducts = $esProductRepo->getUserActiveProducts($memberId,
+                                                                 $offset,
+                                                                 self::PRODUCT_COUNT_DASHBOARD,
+                                                                 $searchString,
+                                                                 $orderByColumn);
         $products = [];
 
         foreach ($resultProducts as $resultProduct) {

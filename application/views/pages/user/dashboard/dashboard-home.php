@@ -129,7 +129,7 @@
     </div>
     <div class="sidebarTabs">
         <div class="submenu-container">
-            <ul class="submenu-ul">
+            <ul class="submenu-ul idTabs">
                 <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
                 <a href="#deleted-items"><li>Deleted Items<span class="circle-total"><?=$deletedProductCount;?></span></li></a>
                 <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
@@ -159,9 +159,15 @@
                             </select>
                         </div>
                     </div>
+                    <div>
+                        <input type="hidden" class="container-id" value="active-product-container" />
+                        <input type="hidden" class="request-type" value="active" />
+                    </div>
                 </div>
                 
+                <div id="active-product-container">
                 <?=$activeProductView;?>
+                </div>
                
             </div>
             

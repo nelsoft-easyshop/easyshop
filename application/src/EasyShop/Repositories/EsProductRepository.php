@@ -906,20 +906,30 @@ class EsProductRepository extends EntityRepository
      * @param  integer $perPage
      * @return object
      */
-    public function getUserActiveProducts($memberId, $offset = 0, $perPage = 10)
+    public function getUserActiveProducts($memberId,
+                                          $offset = 0,
+                                          $perPage = 10,
+                                          $searchString,
+                                          $orderByField)
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
-        $qbStatement = $queryBuilder->select('p')
-                                    ->from('EasyShop\Entities\EsProduct','p')
-                                    ->where('p.isDraft = 0')
-                                    ->andWhere('p.isDelete = 0')
-                                    ->andWhere('p.member = :member_id')
-                                    ->setParameter('member_id', $memberId)
-                                    ->setFirstResult($offset)
+        $queryBuilder->select('p')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where('p.isDraft = 0')
+                     ->andWhere('p.isDelete = 0')
+                     ->andWhere('p.member = :member_id')
+                     ->setParameter('member_id', $memberId);
+
+        if(!$searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
+
+        $queryBuilder->orderBy($orderByField,"DESC");
+        $qbStatement = $queryBuilder->setFirstResult($offset)
                                     ->setMaxResults($perPage)
                                     ->getQuery();
-       
         $resultSet = $qbStatement->getResult();
 
         return $resultSet;
@@ -977,8 +987,8 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Return product available stock count
-     * @param  [type] $productId [description]
-     * @return [type]            [description]
+     * @param  integer $productId
+     * @return integer
      */
     public function getProductAvailableStocks($productId)
     {
@@ -1001,8 +1011,8 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Return sold count of product
-     * @param  [type] $productId [description]
-     * @return [type]            [description]
+     * @param  integer $productId
+     * @return integer
      */
     public function getSoldProductCount($productId)
     {

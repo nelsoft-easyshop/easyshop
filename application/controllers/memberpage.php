@@ -37,7 +37,7 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        $this->qrManager = $this->serviceContainer['qr_code_manager'];
+        // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->em = $this->serviceContainer['entity_manager']; 
@@ -1828,10 +1828,10 @@ class Memberpage extends MY_Controller
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
             $userActiveProducts = $productManager->getActiveProductsByUser($memberId);
 
-            $paginationData = array(
+            $paginationData = [
                 'lastPage' => ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
                 ,'isHyperLink' => false
-            );
+            ];
 
             $activeProductsData = [
                             'products' => $userActiveProducts,
@@ -1881,6 +1881,29 @@ class Memberpage extends MY_Controller
         else{
             redirect('/login', 'refresh');
         }
+    }
+
+    public function productPaginate()
+    {
+        $productManager = $this->serviceContainer['product_manager'];
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 0;
+        $requestType = trim($this->input->get('request'));
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string'));
+
+        $userActiveProducts = $productManager->getActiveProductsByUser($memberId, $page, $searchString, $sorttype);
+
+        $paginationData = [
+                'lastPage' => ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
+                ,'isHyperLink' => false
+            ];
+
+        $activeProductsData = [
+                        'products' => $userActiveProducts,
+                        'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                    ];
+
+        $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
     }
 }
 
