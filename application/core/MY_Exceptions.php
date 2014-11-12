@@ -32,10 +32,8 @@ class MY_Exceptions extends CI_Exceptions {
             $CI->load->view('templates/header_primary', $data);
             $CI->load->view('pages/general_error');
 
-            $CFG =& load_class('Config', 'core');
-            $CFG->load('social_media_links', true);    
-            $socialMediaLinks = $CFG->config['social_media_links'];     
-            
+            $socialMediaLinks = $CI->config->load('social_media_links', TRUE);
+
             $viewData['facebook'] = $socialMediaLinks["facebook"];
             $viewData['twitter'] = $socialMediaLinks["twitter"];               
             $CI->load->view('templates/footer_primary', $viewData);
