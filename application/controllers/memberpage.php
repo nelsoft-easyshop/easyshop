@@ -1902,6 +1902,24 @@ class Memberpage extends MY_Controller
         }
     }
 
+    public function softDeleteProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->post('product_id');
+
+        $productManager = $this->serviceContainer['product_manager'];
+
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_ON);
+    }
+
+    public function hardDeleteProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->post('product_id');
+
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_HARD_ON);
+    }
+
     public function productMemberPagePaginate()
     {
         $productManager = $this->serviceContainer['product_manager'];

@@ -89,7 +89,7 @@
                                     <i class="icon-edit"></i>edit
                                 </button>
                                 <?=form_close();?>
-                                <button class="btn btn-action-delete">
+                                <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
                                 </button>
                             </td>

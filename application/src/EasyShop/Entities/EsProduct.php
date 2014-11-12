@@ -353,6 +353,11 @@ class EsProduct
     const IS_DELETE_ON = 1;
 
     /**
+     * Value for hard is_delete is active
+     */
+    const IS_DELETE_HARD_ON = 1;
+
+    /**
      * Value for is_draft is active
      */
     const IS_DRAFT_ON = 1;

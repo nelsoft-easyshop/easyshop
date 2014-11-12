@@ -110,6 +110,9 @@ else {
     # USER
     $route['(?i)me'] = 'memberpage/newMemberpage';
     $route['(?i)me/product/next'] = 'memberpage/productMemberPagePaginate';
+    $route['(?i)me/product/delete-soft'] = 'memberpage/softDeleteProduct';
+    $route['(?i)me/product/delete-hard'] = 'memberpage/hardDeleteProduct';
+
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
     $route['(?i)exportbuytransactions'] = 'memberpage/exportBuyTransactions'; # inon baguio

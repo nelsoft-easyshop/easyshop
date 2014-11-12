@@ -911,7 +911,9 @@ class ProductManager
                                              ->find($productId);
 
         if($product && $product->getMember()->getIdMember() === (int) $memberId){
-            
+            $product->setIsDelete($isDeleteStatus); 
+            $this->em->flush();
+            return true;
         }
 
         return false;
