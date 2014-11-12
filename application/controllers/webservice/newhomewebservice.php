@@ -37,6 +37,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
+        $this->tempHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
 
@@ -928,6 +929,29 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }         
+    }    
+
+    public function fetchPreviewSlider()
+    {
+
+        $map = simplexml_load_file($this->file);
+
+        foreach ($map->sliderSection as $key => $slider) {
+            $sliders[] = $slider;
+        }
+
+        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);
+
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
+
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = array();
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+            array_push($homeContent['slider'], $sliderView);
+        }
+        $data['homeContent'] = $homeContent;
+        $this->load->view('partials/sliderpreview', $data);
     }    
 
     /**

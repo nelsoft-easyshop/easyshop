@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<map>
+    
+    <sliderSection>
+        
+
+        
+        
+        <slide>
+            <template>C</template>
+            <image>
+                <path>/assets/images/homeslider/sellerspromo.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282474635295466</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/buyatzero.jpg</path>
+                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448</target>
+            </image>
+        </slide>                
+    </sliderSection>
+
+</map>

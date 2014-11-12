@@ -104,7 +104,23 @@ class Resource
         
         return $xmlfile;
     
-    }      
+    }   
+
+    /**
+     * Returns the temp home xml file used by the application
+     *
+     * @return string
+     */
+    public function getTempHomeXMLfile()
+    {
+        $xmlfile = 'page/new_home_page_temp';
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home_temp'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_home_temp');
+        }
+        
+        return $xmlfile;
+    
+    }       
 
 }
 

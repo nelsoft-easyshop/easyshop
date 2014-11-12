@@ -55,6 +55,27 @@ class CMS
         $this->urlUtility = $urlUtility;
     }
 
+
+    public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0)
+    {
+        $map = simplexml_load_file($tempHomeFile);
+        $tempSliderCount = count($map->sliderSection->slide);
+
+        foreach ($sliders[0] as $key => $value) {
+
+            echo $value->template;
+        
+            if( $tempSliderCount> 1) {
+                $this->removeXmlNode($tempHomeFile, "mainSliderSection",1);
+                $tempSliderCount--;
+            }
+
+        }
+
+    }    
+
+
+    
     /**
      *  First part of re-ordering the slide parent node
      *  @param string $image
