@@ -336,7 +336,7 @@
                                                 </a>
                                             </div>
                                             <div class="media-body">
-                                                <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['vendor_name'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
+                                                <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
                                                 <span class="sub-title"><span class='join-lbl'>Joined: </span><?php echo $fu['datecreated']?></span>
                                             </div>
                                         </div>
