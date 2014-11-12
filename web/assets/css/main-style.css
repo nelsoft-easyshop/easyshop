@@ -219,6 +219,7 @@ textarea {
 .vendor-login-con.vendor-out-con {
     max-width: 245px;
     margin-top: 1px;
+    padding: 0 9px;
     width: 100%; 
 }
 
