@@ -170,7 +170,7 @@
                                         <td style="padding: 5px 0px 3px 45px; margin-top: 5px; font-size: 12px;">
                                             <input id="<?php echo $row['rowid']; ?>"
                                                    onkeypress="return isNumberKey(event);" type="text" class="inpt_qty"
-                                                   mx="<?php echo $row['maxqty']; ?>" onchange="sum(this);"
+                                                   mx="<?php echo $row['maxqty']; ?>" onchange="changeQuantity(this);"
                                                    maxlength="3" value="<?php echo $row['qty']; ?>"
                                                    style="height: 25px !important;">
                                         </td>
