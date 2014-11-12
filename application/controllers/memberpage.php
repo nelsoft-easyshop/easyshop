@@ -1817,6 +1817,7 @@ class Memberpage extends MY_Controller
                            ->find($memberId);
 
         if($member){
+            $paginationData['isHyperLink'] = false;
 
             $userAvatarImage = $userManager->getUserImage($memberId);
             $userBannerImage = $userManager->getUserImage($memberId,"banner");
@@ -1826,24 +1827,39 @@ class Memberpage extends MY_Controller
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
-            $userActiveProducts = $productManager->getActiveProductsByUser($memberId);
-
-            $paginationData = [
-                'lastPage' => ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
-                ,'isHyperLink' => false
-            ];
-
+            $isDelete = $productManager::IS_DELETE_OFF;
+            $isDraft = [$productManager::IS_DRAFT_OFF];
+            $userActiveProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
+            $paginationData['lastPage'] = ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
             $activeProductsData = [
-                            'products' => $userActiveProducts,
-                            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                        ];
-
+                                'products' => $userActiveProducts,
+                                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                            ];
             $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
             $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
-            $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);
-            $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
+            $isDelete = $productManager::IS_DELETE_ON;
+            $isDraft = [$productManager::IS_DRAFT_OFF,$productManager::IS_DRAFT_ON];
+            $userDeletedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft); 
+            $paginationData['lastPage'] = ceil($userDeletedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+            $deletedProductsData = [
+                                'products' => $userDeletedProducts,
+                                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                            ];
+            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
 
+            $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId); 
+            $isDelete = $productManager::IS_DELETE_OFF;
+            $isDraft = [$productManager::IS_DRAFT_ON];
+            $userDraftedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
+            $paginationData['lastPage'] = ceil($userDraftedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+            $draftedProductsData = [
+                                'products' => $userDraftedProducts,
+                                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                            ];
+            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
+
+            $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
                             'bannerImage' => $userBannerImage,
@@ -1856,6 +1872,8 @@ class Memberpage extends MY_Controller
                             'draftedProductCount' => $userDraftedProductCount,
                             'soldProductCount' => $userSoldProductCount,
                             'activeProductView' => $activeProductView,
+                            'deletedProductView' => $deletedProductView,
+                            'draftedProductView' => $draftedProductView,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, TRUE);
@@ -1883,27 +1901,55 @@ class Memberpage extends MY_Controller
         }
     }
 
-    public function productPaginate()
+    public function productMemberPagePaginate()
     {
         $productManager = $this->serviceContainer['product_manager'];
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
+        $memberId = $this->session->userdata('member_id');
         $page = $this->input->get('page') ? trim($this->input->get('page')) : 0;
         $requestType = trim($this->input->get('request'));
         $sortType = trim($this->input->get('sort'));
         $searchString = trim($this->input->get('search_string'));
+ 
+        $isDelete = $productManager::IS_DELETE_OFF;
+        $isDraft = [$productManager::IS_DRAFT_OFF];
 
-        $userActiveProducts = $productManager->getActiveProductsByUser($memberId, $page, $searchString, $sorttype);
+        if(strtolower($requestType) === "deleted"){ 
+            $isDelete = $productManager::IS_DELETE_ON;
+            $isDraft = [$productManager::IS_DRAFT_OFF,$productManager::IS_DRAFT_ON];
+
+        }
+        elseif (strtolower($requestType) === "drafted"){ 
+            $isDelete = $productManager::IS_DELETE_OFF;
+            $isDraft = [$productManager::IS_DRAFT_ON];
+        }
+
+        $userProducts = $productManager->getProductsByUser($memberId,
+                                                           $isDelete,
+                                                           $isDraft,
+                                                           $productManager::PRODUCT_COUNT_DASHBOARD*($page-1),
+                                                           $searchString,
+                                                           $sortType); 
 
         $paginationData = [
-                'lastPage' => ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
+                'lastPage' => ceil(count($userProducts)/$productManager::PRODUCT_COUNT_DASHBOARD)
                 ,'isHyperLink' => false
+                , 'currentPage' => $page
             ];
 
-        $activeProductsData = [
-                        'products' => $userActiveProducts,
+        $viewData = [
+                        'products' => $userProducts,
                         'pagination' => $this->load->view('pagination/default', $paginationData, true),
                     ];
 
-        $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
+        $htmlView = $this->load->view('partials/dashboard-products', $viewData, true);
+
+        $responseArray = [
+                    'html' => $htmlView,
+                ];
+
+        echo json_encode($responseArray);
     }
 }
 

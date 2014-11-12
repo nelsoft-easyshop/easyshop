@@ -20,9 +20,13 @@
                             </td>
                             <td class="td-meta-info">
                                 <p class="item-list-name">
+                                    <?php if($product->getName()): ?>
                                     <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
-                                        <?=htmlspecialchars($product->getName(),ENT_QUOTES,'ISO-8859-1');;?>
+                                        <?=htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1');?>
                                     </a>
+                                    <?php else: ?>
+                                        (NO NAME)
+                                    <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>

@@ -906,22 +906,27 @@ class EsProductRepository extends EntityRepository
      * @param  integer $perPage
      * @return object
      */
-    public function getUserActiveProducts($memberId,
-                                          $offset = 0,
-                                          $perPage = 10,
-                                          $searchString,
-                                          $orderByField)
+    public function getUserProducts($memberId,
+                                    $isDelete,
+                                    $isDraft,
+                                    $offset = 0,
+                                    $perPage = 10,
+                                    $searchString,
+                                    $orderByField)
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select('p')
                      ->from('EasyShop\Entities\EsProduct','p')
-                     ->where('p.isDraft = 0')
-                     ->andWhere('p.isDelete = 0')
+                     ->where('p.isDelete = :isDelete')
+                     ->setParameter('isDelete', $isDelete)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        )
                      ->andWhere('p.member = :member_id')
                      ->setParameter('member_id', $memberId);
 
-        if(!$searchString){
+        if($searchString){
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
         }

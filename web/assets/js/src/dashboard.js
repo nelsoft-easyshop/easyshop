@@ -54,7 +54,7 @@
         });
     });
     
-      $( "#info-item-4" ).click(function() {
+    $( "#info-item-4" ).click(function() {
         $( "#info-attributes-4" ).slideToggle( "slow", function() {
         var i_icon = $("i.info-item-icon-4").attr("class");
          if(i_icon == "info-item-icon-4 fa fa-plus-circle"){
@@ -68,7 +68,7 @@
         });
     }); 
     
-      $( "#info-item-5" ).click(function() {
+    $( "#info-item-5" ).click(function() {
         $( "#info-attributes-5" ).slideToggle( "slow", function() {
         var i_icon = $("i.info-item-icon-5").attr("class");
          if(i_icon == "info-item-icon-5 fa fa-plus-circle"){
@@ -82,7 +82,7 @@
         });
     }); 
     
-      $( "#info-item-6" ).click(function() {
+    $( "#info-item-6" ).click(function() {
         $( "#info-attributes-6" ).slideToggle( "slow", function() {
         var i_icon = $("i.info-item-icon-6").attr("class");
          if(i_icon == "info-item-icon-6 fa fa-plus-circle"){
@@ -140,11 +140,32 @@
 
     $(document.body).on('click',".individual",function () {
         $this = $(this);
+        var $page = $this.data('page');
         var $parentContainer = $this.parent().parent().parent().parent();
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $parentContainer.find('.search-filter').val();
+        var $requestType = $parentContainer.find('.request-type').val();
+        var $urlRequest = $('#request-url').val();
+        var $container = $parentContainer.find('.container-id').val();
+        var $ajaxRequest = $.ajax({
+            type: "get",
+            url: $urlRequest,
+            data: {
+                    page:$page,
+                    search_string:$textInput,
+                    sort:$filterInput,
+                    request:$requestType,
 
-        console.log($textInput);
+                } ,
+            beforeSend: function(){ 
+                $('#'+$container).hide();
+            },
+            success: function(d){ 
+                var $response = $.parseJSON(d);
+                $('#'+$container).html($response.html);
+                $('#'+$container).show();
+            }
+        });
     });
 
 }(jQuery));

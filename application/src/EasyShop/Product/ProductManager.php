@@ -52,7 +52,27 @@ class ProductManager
     /**
      * Default result product count in dashboard
      */
-    const PRODUCT_COUNT_DASHBOARD = 3;
+    const PRODUCT_COUNT_DASHBOARD = 10;
+
+    /**
+     * Value for is_delete is active
+     */
+    const IS_DELETE_ON = 1;
+
+    /**
+     * Value for is_draft is active
+     */
+    const IS_DRAFT_ON = 1;
+
+    /**
+     * Default Value for is_delete 
+     */
+    const IS_DELETE_OFF = 0;
+
+    /**
+     * Default Value for is_draft
+     */
+    const IS_DRAFT_OFF = 0;
 
     /**
      * Entity Manager instance
@@ -862,11 +882,14 @@ class ProductManager
      * @param  integer $offset
      * @return objec
      */
-    public function getActiveProductsByUser($memberId, $offset = 0, $searchString = "" ,$sortString = "")
+    public function getProductsByUser($memberId,
+                                      $isDelete = self::IS_DELETE_OFF,
+                                      $isDraft = [self::IS_DRAFT_OFF],
+                                      $offset = 0,
+                                      $searchString = "",
+                                      $sortString = "")
     {
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-
-
         switch( $sortString ){
             case "lastmodified":
                 $orderByColumn = "p.lastmodifieddate";
@@ -879,13 +902,14 @@ class ProductManager
                 break;
         }
 
-        $resultProducts = $esProductRepo->getUserActiveProducts($memberId,
-                                                                 $offset,
-                                                                 self::PRODUCT_COUNT_DASHBOARD,
-                                                                 $searchString,
-                                                                 $orderByColumn);
+        $resultProducts = $esProductRepo->getUserProducts($memberId,
+                                                          $isDelete,
+                                                          $isDraft,
+                                                          $offset,
+                                                          self::PRODUCT_COUNT_DASHBOARD,
+                                                          $searchString,
+                                                          $orderByColumn);
         $products = [];
-
         foreach ($resultProducts as $resultProduct) {
             $product = $this->getProductDetails($resultProduct);
 
@@ -901,7 +925,6 @@ class ProductManager
             $product->reviewCount = $esProductRepo->getProductReviewCount($product->getIdProduct());
             $product->availableStock = $esProductRepo->getProductAvailableStocks($product->getIdProduct());
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
-
             $products[] = $product;
         }
 

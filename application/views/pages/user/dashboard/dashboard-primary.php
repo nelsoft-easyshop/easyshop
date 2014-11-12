@@ -47,7 +47,7 @@
 <br/>
 
 <div>
-    <input type="hidden" class="request-url" value="/me/product/next" />
+    <input type="hidden" id="request-url" value="/me/product/next" />
 </div>
 
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>
