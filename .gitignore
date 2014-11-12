@@ -1,3 +1,4 @@
+/web/robots.txt
 /vendor
 /web/assets/product/*
 /web/assets/images/reports/*
@@ -6,6 +7,8 @@
 !/web/assets/product/default
 !/web/assets/user/default
 /web/assets/product/product_description/*
+!/web/assets/product/product_description/README.md
+
 
 /application/src/EasyShop/Doctrine/Proxies/*
 /web/*.xml.gz
@@ -14,10 +17,11 @@
 
 /web/assets/temp_product
 /application/resources/local/*
+!application/resources/local/README.md
 /web/assets/user/*
 !/web/assets/user/default
 
-config.php
+/config.php
 .DS_Store
 
 application/cache/*
