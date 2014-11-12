@@ -34,9 +34,9 @@
                 <?php endif;?>
 
                 <div class="clear"></div>
-                <a href="#">
+                <a href="/item/<?=$value->getSlug(); ?>">
                     <p class="p-rec-product-name">
-                        <?=htmlspecialchars($value->getName(),ENT_QUOTES,'ISO-8859-1');?>
+                    <?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">
