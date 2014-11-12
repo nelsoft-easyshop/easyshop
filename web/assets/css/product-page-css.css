@@ -451,9 +451,10 @@ body{
 .div-rec-product-image{
     width: 100% !important;
     height: 228px;
+    vertical-align: middle;
+    text-align: center;
     background: #e2e2e2;
     margin-bottom: 10px;
-    display: block !important;
 }
 
 .span-me{
@@ -461,6 +462,8 @@ body{
     max-width: 100% !important;
     height: 228px;
     max-height: 228px;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .img-rec-product{
@@ -560,7 +563,6 @@ body{
     color: #fff;
     font-weight: 900;
     padding: 22.5px 0;
-    font-size: 15px;
 }
 
 .span-circle-discount{
@@ -575,7 +577,6 @@ body{
     color: #fff;
     font-weight: 900;
     padding: 22.5px 0;
-    font-size: 15px;
 }
 
 .div-rec-title{
@@ -898,7 +899,6 @@ body{
     .p-rec-product-price{
         font-size: 14px;
         margin: 0px;
-        height: 48px;
     }
 
     .btn.btn-default-1{
