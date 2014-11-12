@@ -1905,19 +1905,35 @@ class Memberpage extends MY_Controller
     public function softDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
-        $productId = $this->input->post('product_id');
-
+        $productId = $this->input->get('product_id');
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productManager = $this->serviceContainer['product_manager'];
 
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_ON);
+
+        $responseArray = [
+            'isSuccess' => $deleteResponse,
+            'message' => $deleteResponse ? "You can't delete this product" : "",
+        ];
+
+        echo json_encode($responseArray);
     }
 
     public function hardDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
-        $productId = $this->input->post('product_id');
+        $productId = $this->input->get('product_id');
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productManager = $this->serviceContainer['product_manager'];
 
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_HARD_ON);
+
+        $responseArray = [
+            'isSuccess' => $deleteResponse,
+            'message' => $deleteResponse ? "You can't delete this product" : "",
+        ];
+
+        echo json_encode($responseArray);
     }
 
     public function productMemberPagePaginate()

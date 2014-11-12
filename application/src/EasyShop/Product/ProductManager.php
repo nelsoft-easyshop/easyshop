@@ -5,8 +5,7 @@ namespace EasyShop\Product;
 use Easyshop\Promo\PromoManager as PromoManager;
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
-use EasyShop\Entities\EsOrder; 
-use EasyShop\Entities\EsProduct; 
+use EasyShop\Entities\EsOrder;  
 use EasyShop\Entities\EsProductShippingHead; 
 use EasyShop\Entities\EsProductImage as EsProductImage;
 use Easyshop\Entities\EsProductItem;
@@ -102,7 +101,12 @@ class ProductManager
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary, $userManager)
+    public function __construct($em,
+                                $promoManager,
+                                $collectionHelper,
+                                $configLoader,
+                                $imageLibrary,
+                                $userManager)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
@@ -907,8 +911,7 @@ class ProductManager
 
     public function updateIsDeleteStatus($productId, $memberId, $isDeleteStatus)
     {
-        $product = $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                             ->find($productId);
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->find($productId);
 
         if($product && $product->getMember()->getIdMember() === (int) $memberId){
             $product->setIsDelete($isDeleteStatus); 

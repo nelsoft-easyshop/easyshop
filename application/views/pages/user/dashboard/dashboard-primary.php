@@ -48,8 +48,11 @@
 
 <div>
     <input type="hidden" id="request-url" value="/me/product/next" />
+    <input type="hidden" id="request-url-soft-delete" value="/me/product/delete-soft" />
+    <input type="hidden" id="request-url-hard-delete" value="/me/product/delete-hard" />
 </div>
 
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>

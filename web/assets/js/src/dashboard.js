@@ -121,6 +121,60 @@
         }
     });
 
+    $(document.body).on('click','.soft-delete',function () {
+
+        var $confirm = confirm("Are you sure you want to move this item to deleted item?");
+        if($confirm){
+            var $this = $(this);
+            var $productId = $this.data('id');
+            var $urlRequest = $("#request-url-soft-delete").val();
+            var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $urlRequest,
+                        data: {
+                                product_id:$productId
+                            },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d);
+                            console.log($response);
+                            if($response.isSuccess){
+                                $('#item-list-'+$productId).remove();
+                                $("#deleted-product-container").children().last().remove();
+                            }
+                            else{
+                                alert($response.message);
+                            }
+                        }
+                    });
+        }
+    });
+
+    $(document.body).on('click','.hard-delete',function () {
+        var $confirm = confirm("Are you sure you want to permanently delete this item?");
+        if($confirm){
+            var $this = $(this);
+            var $productId = $this.data('id');
+            var $urlRequest = $("#request-url-hard-delete").val();
+            var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $urlRequest,
+                        data: {
+                                product_id:$productId
+                            },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d);
+                            console.log($response);
+                            if($response.isSuccess){
+                                $('#item-list-'+$productId).remove();
+                            }
+                            else{
+                                alert($response.message);
+                            }
+                        }
+                    });
+        }
+    });
+
     /**
      * Ajax Request for getting product in active, draft and 
      * @param  integer $page

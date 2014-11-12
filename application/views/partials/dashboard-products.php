@@ -1,6 +1,6 @@
 
 <?php foreach ($products as $product): ?>
-<div class="items-list-container">
+<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container">
     <div class="row">
         <div class="col-md-12">
             <div class="item-list-panel">
@@ -88,10 +88,10 @@
                                 <button class="btn btn-action-edit">
                                     <i class="icon-edit"></i>edit
                                 </button>
-                                <?=form_close();?>
-                                <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-delete">
+                                <?=form_close();?> 
+                                <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
-                                </button>
+                                </button> 
                             </td>
                         </tr>
                         <tr>
