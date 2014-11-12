@@ -31,7 +31,12 @@ class MY_Exceptions extends CI_Exceptions {
             $CI->output->set_status_header('404'); 
             $CI->load->view('templates/header_primary', $data);
             $CI->load->view('pages/general_error');
-            $CI->load->view('templates/footer_primary');
+
+            $socialMediaLinks = $CI->config->load('social_media_links', TRUE);
+
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];               
+            $CI->load->view('templates/footer_primary', $viewData);
             echo $CI->output->get_output();
             exit;
         } 
