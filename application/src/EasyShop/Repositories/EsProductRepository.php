@@ -29,7 +29,7 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult( 'idProduct', 'idProduct');
         $limitString = ($booleanLimit) ? "LIMIT 500" : "";
         $query = $this->em->createNativeQuery("
-            SELECT `id_product` as idProduct
+            SELECT DISTINCT(`id_product`) as idProduct
                 , `name` 
                 , `weight`
             FROM (
@@ -51,8 +51,9 @@ class EsProductRepository extends EntityRepository
                             AND a.member_id = b.id_member
                             AND a.id_product in (:ids)
                             AND (
-                            MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE)
-                            OR MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE)
+                            MATCH (b.`store_name`) AGAINST (:param2 IN BOOLEAN MODE)
+                            OR MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE)
+                            OR MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE)
                             OR MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
                             )
                     $limitString
