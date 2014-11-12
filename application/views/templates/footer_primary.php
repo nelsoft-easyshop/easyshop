@@ -17,7 +17,6 @@
                                 <h1>Information</h1>
                                 <ul>
                                     <li><a href="/cart">View Cart</a></li>
-                                    <li><a href="/about">About Us</a></li>
                                     <li><a href="/contact">Contact Us</a></li>
                                     <li><a href="/policy">Privacy Policy</a></li>
                                     <li><a href="/terms">Terms of Use</a></li>
