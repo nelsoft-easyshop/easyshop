@@ -70,12 +70,12 @@
 	<h1>Easyshop.ph is still under construction</h1>
 		<div id="body">
 			<code>
-			<p><a href="<?=base_url()?>memberpage">Memberpage</a></p>
-			<p><a href="<?=base_url()?>home">Homepage</a></p>
-			<p><a href="<?=base_url()?>register">Registration</a></p>
-			<p><a href="<?=base_url()?>login">Login</a></p>
-			<p><a href="<?=base_url()?>product/view">Sample Product Page</a></p>
-			<p><a href="<?=base_url()?>product/searchbycategory">Sample Category Page</a></p>
+			<p><a href="/memberpage">Memberpage</a></p>
+			<p><a href="/home">Homepage</a></p>
+			<p><a href="/register">Registration</a></p>
+			<p><a href="/login">Login</a></p>
+			<p><a href="/product/view">Sample Product Page</a></p>
+			<p><a href="/product/searchbycategory">Sample Category Page</a></p>
 		</code>
 	</div>
 

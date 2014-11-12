@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="screen"/>
 <div class="wrapper info_wrapper">
-    <img src="<?= base_url() ?>assets/images/img-triple-treat.png" alt="Triple Treats">
+    <img src="/assets/images/img-triple-treat.png" alt="Triple Treats">
 </div>
 
 <div class="wrapper mrgntop-30">
@@ -10,7 +10,7 @@
         <div>
             <input type="text" class="pd-8-12 width-300" id="txt_status">
             <input type="button" value="Status" class="orange_btn3" id="btn_status_check">
-            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
+            <img src="/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
         </div>
         <div class="status">
             <div class="qualified border_radius1">
@@ -49,9 +49,9 @@
             <ul>
                 <li>
                     Like us on 
-                    <a href="https://facebook.com/easyshopphilippines" class="blue">Facebook</a>
+                    <a href="<?php echo $facebook; ?>" class="blue">Facebook</a>
                 </li>
-                <li>Upload three items at <a href="<?=base_url()?>" class="blue">EasyShop.ph</a></li>
+                <li>Upload three items at <a href="/" class="blue">EasyShop.ph</a></li>
                 <li>Leave your EasyShop.ph username in the comment box</li>
             </ul>
             <p class="pd-top-30">

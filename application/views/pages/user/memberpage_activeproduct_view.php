@@ -5,7 +5,7 @@
 
 			
 			    <span class="post_item_img_con">
-				    <img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+				    <img src="/<?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 			    </span>
 			</div>
 			<p><small>Last modified : <?php echo date_format(date_create($active_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -23,7 +23,7 @@
 		</div>
 		<div class="post_item_content_right">
 			<div class="product_title_container">
-				<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
+				<p class="post_item_product_title fm1"><a href="/item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
 				<div class="post_item_button">
 					<?php echo form_open('sell/edit/step2'); ?>
 					<input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 

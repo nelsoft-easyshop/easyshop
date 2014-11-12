@@ -35,9 +35,9 @@
                 html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
                 html +='<td class=" sorting_1">';
                 if (Nav_msg.status == "sender") {
-                    html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
+                    html +='<img src="/'+Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'">';
                 } else {
-                    html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
+                    html +='<img src="/'+Nav_msg.sender_img+'/60x60.png" data="'+Nav_msg.recipient_img+'">';
                 }
                 span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
                 html +='</td>';

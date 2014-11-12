@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.dataTables.min.js"></script>
 
 <div class="container wrapper inbox-view-content">
     <div id="head_container">       
@@ -57,16 +57,16 @@
     </div>
     <div id="msg_inbox_container" class = "msg_container">
         <div id="msg_field">
-            <!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
+            <!-- <img id="msg_loader" src="/assets/images/orange_loader.gif"> -->
         </div>
         <div id="msg_textarea">
             <textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
-            <button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
+            <button id="send_btn" data="">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
         </div>
     </div>
 </div>
 <div id="modal-background">
-    <img src="<?=base_url()?>assets/images/horizontal_loading.gif">
+    <img src="/assets/images/horizontal_loading.gif">
 </div>
 <div id="modal-container">
     <div id="modal-div-header">
@@ -189,7 +189,7 @@ function Reload()
         asycn :true,
         type:"POST",
         dataType : "json",
-        url : "<?=base_url()?>messages/retrieve_msgs",
+        url : "/messages/retrieve_msgs",
         data : {csrfname:csrftoken,todo:todo},
         success : function(d)
         {
@@ -278,7 +278,7 @@ function send_msg(recipient,msg)
         type : "POST",
         dataType : "json",
         async: false,
-        url : "<?=base_url()?>messages/send_msg",
+        url : "/messages/send_msg",
         beforeSend :function(){
             $("#msg_textarea img").show();
             $("#send_btn").hide();
@@ -470,7 +470,7 @@ function delete_data(ids)
             $("#modal-background").show();
             $("#modal-background img").show();
         },
-        url : "<?=base_url()?>messages/delete_msg",
+        url : "/messages/delete_msg",
         data : {id_msg:ids,csrfname:csrftoken},
         success : function(d) {
             data = d;
@@ -492,7 +492,7 @@ function seened(obj)
             async : false,
             type : "POST",
             dataType : "json",
-            url : "<?=base_url()?>messages/is_seened",
+            url : "/messages/is_seened",
             data : {checked:checked,csrfname:csrftoken},
             success : function(data) {
                 if (data === true) {

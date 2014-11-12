@@ -5,7 +5,7 @@
                    <?php if($item['is_soldout']): ?>
                         <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con"> 
                     <?php else: ?>
-                        <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
+                        <a href="<?= '/item/'.$item['slug'];?>" class="cd_link_con"> 
                     <?php endif; ?> 
                     <?php if(intval($item['is_promote']) === 1): ?> 
                   
@@ -33,13 +33,13 @@
                             <?php endif; ?>
                         </span>
                     </div>
-                    <a href="<?=base_url().'item/'.$item['slug'];?>">
+                    <a href="<?= '/item/'.$item['slug'];?>">
                         <span class="cd_prod_img_con">
-                            <img src="<?= base_url().$item['path'].'categoryview/'.$item['file']; ?>">
+                            <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
                         </span>
                     </a>
                     <h3>
-                        <a href="<?=base_url().'item/'.$item['slug'];?>"><?php echo es_string_limit(html_escape($item['name']), 54, '...');?></a>
+                        <a href="<?= '/item/'.$item['slug'];?>"><?php echo es_string_limit(html_escape($item['name']), 54, '...');?></a>
                     </h3>
                     <div class="price-cnt">
                         <?php if(intval($item['is_promote']) === 1): ?> 

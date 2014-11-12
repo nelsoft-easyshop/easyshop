@@ -36,7 +36,7 @@ class Payment extends MY_Controller{
     {
         $res = true;
         if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         };
         $unchecked = $this->input->post('itm');
         $carts = $this->cart->contents();
@@ -96,15 +96,23 @@ class Payment extends MY_Controller{
         // check the availability of the product
         $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
         $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count'];
-        $codCount = $productAvailability['cod_count']; 
-
+        $successCount = $productAvailability['success_count']; 
         // check the purchase limit and payment type available
         $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
+        $itemArray = $purchaseLimitPaymentType['itemArray'];
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         unset($paymentType['cdb']);
         $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
-        $soloRestriction = $purchaseLimitPaymentType['solo_restriction']; 
+        $soloRestriction = $purchaseLimitPaymentType['solo_restriction'];  
+
+        foreach ($itemArray as $key => $value) {
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
+            $product_array =  $this->product_model->getProductById($productId);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
+            $maxqty = $newQty[$itemId]['quantity'];
+            $itemArray[$key]['isAvailable'] = ($maxqty <= 0 || strtolower($value['isAvailable']) == "false") ? "false" : "true";
+        }
 
         // get all possible error message
         $errorMessage = [];
@@ -115,16 +123,11 @@ class Payment extends MY_Controller{
         }
 
         if($qtySuccess != count($itemArray)){
+
             $canContinue = false;
             array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
                                     Someone may have purchased the item before you can complete your payment.
                                     Check the availability of your item and try again.');
-        }
-
-        if($codCount != count($itemArray)){
-            // $canContinue = false;
-            unset($paymentType['cod']);
-            array_push($errorMessage, 'One of your items is unavailable for cash on delivery.'); 
         }
 
         if(!$purchaseLimit){
@@ -134,6 +137,9 @@ class Payment extends MY_Controller{
 
         if(!$soloRestriction){
             $canContinue = false;
+            foreach ($itemArray as $key => $value) {
+                $itemArray[$key]['isAvailable'] = "false";
+            }
             array_push($errorMessage, 'One of your items can only be purchased individually.');
         }
 
@@ -324,6 +330,7 @@ class Payment extends MY_Controller{
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+            $itemArray[$value['rowid']]['isAvailable'] = ($availability == "Available") ? "true" : "false";
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
@@ -362,6 +369,7 @@ class Payment extends MY_Controller{
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
                 $can_purchase = $this->product_model->is_purchase_allowed($memberId ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
+                    $itemArray[$key]['isAvailable'] = "false";
                     $purchaseLimit = false;
                     break;
                 }
@@ -375,6 +383,7 @@ class Payment extends MY_Controller{
             'payment_type' => $paymentType,
             'purchase_limit' => $purchaseLimit,
             'solo_restriction' => $soloRestriction,
+            'itemArray' => $itemArray,
         );
     }
     
@@ -384,7 +393,7 @@ class Payment extends MY_Controller{
     public function review()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         $member_id =  $this->session->userdata('member_id');
@@ -451,7 +460,7 @@ class Payment extends MY_Controller{
     {
         header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         };
 
         $paypalReturnURL    = base_url().'pay/paypal'; 
@@ -752,7 +761,7 @@ class Payment extends MY_Controller{
     function paypal()
     { 
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
  
         $status = 'f'; 
@@ -773,7 +782,7 @@ class Payment extends MY_Controller{
         }
 
         $this->generateFlash($txnid,$message,$status);
-        redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
+        redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
     /**
@@ -927,7 +936,7 @@ class Payment extends MY_Controller{
         if(!$this->session->userdata('member_id') 
             || !$this->input->post('paymentToken') 
             || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         $lastDigit = substr($this->input->post('paymentToken'), -1);
@@ -957,7 +966,7 @@ class Payment extends MY_Controller{
         }
 
         $this->generateFlash($txnid,$message,$status);
-        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     #START OF DRAGONPAY PAYMENT
@@ -1086,7 +1095,7 @@ class Payment extends MY_Controller{
     function dragonPayReturn()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         $paymentType = $this->PayMentDragonPay;   
@@ -1111,7 +1120,7 @@ class Payment extends MY_Controller{
         }
         
         $this->generateFlash($txnId,$message,$status);
-        redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     #START OF PESOPAY PAYMENT
@@ -1162,7 +1171,7 @@ class Payment extends MY_Controller{
     function pesoPayReturnUrl()
     { 
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
  
         $status =  $this->input->get('status');
@@ -1183,7 +1192,7 @@ class Payment extends MY_Controller{
         }
 
         $this->generateFlash($txnId,$message,$status);
-        redirect(base_url().'payment/success/debitcreditcard?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/debitcreditcard?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     function pesoPayDataFeed()
@@ -1307,7 +1316,12 @@ class Payment extends MY_Controller{
         $this->load->view('templates/header', $data);
         // $this->load->view('pages/payment/payment_response' ,$response);  
         $this->load->view('pages/payment/payment_response_responsive' ,$response);  
-        $this->load->view('templates/footer_full'); 
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData); 
  
    }
 
@@ -1338,7 +1352,7 @@ class Payment extends MY_Controller{
      *   'order_id' => Transaction Number
      *   'invoice_no' => Invoice number)
      */
-    function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
+    public function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
@@ -1391,6 +1405,9 @@ class Payment extends MY_Controller{
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $buyerData['facebook'] = $socialMediaLinks["facebook"];
+            $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
             unset($buyerData['buyer_email']);
 
@@ -1418,13 +1435,16 @@ class Payment extends MY_Controller{
 
         // Send email to seller of each product - once per seller
         if($sellerFlag){
+            $socialMediaLinks = $this->getSocialMediaLinks();
             $sellerData = array(
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
                 'invoice_no' => $transactionData['invoice_no'],
                 'payment_msg_seller' => $transactionData['payment_msg_seller'],
-                'payment_method_name' => $transactionData['payment_method_name']
+                'payment_method_name' => $transactionData['payment_method_name'],
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"]
             );
 
             foreach($transactionData['seller'] as $seller_id => $seller){
@@ -1711,7 +1731,7 @@ class Payment extends MY_Controller{
     function pay()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         /* JSON Decode*/
@@ -1738,7 +1758,7 @@ class Payment extends MY_Controller{
         $this->removeItemFromCart();  
         $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
-        echo base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+        echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
     }
 
     /**
@@ -1748,7 +1768,7 @@ class Payment extends MY_Controller{
     public function postBackPayPal()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         $carts = $this->session->all_userdata();
@@ -1785,13 +1805,13 @@ class Payment extends MY_Controller{
         $this->removeItemFromCart();
         $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
         $this->generateFlash($txnid,$message,$status);
-        redirect(base_url().'payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
+        redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
     public function returnDragonPay()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
         $paymentService = $this->serviceContainer['payment_service'];
         $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
@@ -1806,7 +1826,7 @@ class Payment extends MY_Controller{
         
         extract($response);
         $this->generateFlash($txnId,$message,$status);
-        redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     public function postBackDragonPay()

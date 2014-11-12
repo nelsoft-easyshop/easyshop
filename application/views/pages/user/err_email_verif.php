@@ -3,7 +3,7 @@
     <section>
       <div class="wrapper">
         <div class="logo">
-            <a href="<?=base_url()?>home"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Logo"></a>
+            <a href="/"><img src="/assets/images/img_logo.png" alt="Logo"></a>
         </div>
     </section>
     <div class="clear"></div>

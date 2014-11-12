@@ -1,6 +1,6 @@
 <?php if(!$modal): ?>
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <div id='previewProduct' style='width:1100px; margin-left: 10%; margin-top: 7%;'>
 
@@ -41,7 +41,7 @@
                 
                 <br/><br/>
                 <?php foreach($x['products'] as $y): ?>
-                    <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
+                    <div style='width:auto; height:20px;'><a href='/item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>       
@@ -96,7 +96,7 @@
                 <input type="checkbox" id="allow_cashondelivery" name="allow_cashondelivery" style="position:absolute; top:29px">
                 <label for="allow_cashondelivery" > <span class="orange" style="position:absolute; top:26px; left: 20px;"><strong>Allow </strong></span> <span class="cod" style="position:absolute; left: 50px;"></span> </label> 
                 <a class="tooltips" href="javascript:void(0)" style="position:absolute; top:20px; left:150px;">
-                    <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                    <img src="/assets/images/icon_qmark.png" alt="">
                     <span class="1line_tooltip">Payment for items that are paid with the Cash on Delivery option are not covered by Easyshop.ph</span>
                 </a> 
             </div>
@@ -137,7 +137,7 @@
                 <div class="wrapper">
                     <div class="content_wrapper">
                         <div  id="product_content_gallery">
-                            <div class="prod_con_gal"> <a class="jqzoom"  href="javascript:void"> <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
+                            <div class="prod_con_gal"> <a class="jqzoom"  href="javascript:void"> <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
                             <br/>
                             
                             
@@ -145,7 +145,7 @@
                               <div class="jcarousel">
                                 <ul id="thumblist">
                                   <?php foreach($product_images as $image): ?>
-                                  <li> <a href="javascript:void(0);"> <img src='<?=base_url()?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
+                                  <li> <a href="javascript:void(0);"> <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
                                   <?php endforeach;?>
                                 </ul>
 
@@ -163,7 +163,7 @@
                 <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
                   <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
                   <span class="seller-name"> 
-                      <img src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
+                      <img src="/<?php echo $product['userpic']?>/60x60.png"><br />
                       <span><?php echo html_escape($product['sellerusername']);?></span> 
                       <p style='font-size:8px;'>No ratings received.</p>
                   </span> 
@@ -177,7 +177,7 @@
                         <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
                           <?php foreach($product_option as $i):?>
                           <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-                          <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
+                          <a href="#" rel="{gallery: 'gal1', smallimage: '/<?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '/<?php echo $i['img_path'].$i['img_file']; ?>'}">
                           <?php endif; ?>
                           <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
                           <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
@@ -280,7 +280,7 @@
                 <div id="tabs-3">
                   <div class="reviews_title">
                     <h3>Product reviews</h3>
-                      <p class="write_review"> <img src="<?=base_url()?>assets/images/img_edit.png">Write a review </p>
+                      <p class="write_review"> <img src="/assets/images/img_edit.png">Write a review </p>
                   </div>
                   <div class="reviews_content">
                     <div> <strong>This product has 0 reviews so far. Be the first to review it.</strong> </div>
@@ -312,7 +312,7 @@
 	<?php echo form_close();?>
     
 </div>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_preview.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/assets/js/src/productUpload_preview.js?ver=<?=ES_FILE_VERSION?>"></script>
 
 <?php endif;?>

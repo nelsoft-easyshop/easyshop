@@ -1,10 +1,10 @@
-<link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/>
+<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link  type="text/css"  href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/>
 <!--Chosen CSS-->
-<link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <div class="clear"></div>
@@ -97,7 +97,7 @@
                     
                     <br/><br/>
                     <?php foreach($x['products'] as $y): ?>
-                        <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
+                        <div style='width:auto; height:20px;'><a href='/item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>       
@@ -212,7 +212,7 @@
     <div id="dialog_preference_name" style="display:none;">
         <label for="preference_name">Name: </label>
         <input type="text" id="preference_name" name="preference_name" maxlength="30">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
     </div>
 
     <select id="shiploc_clone" style="display:none;" class="shiploc" name="shiploc" multiple data-placeholder="Select location(s)">
@@ -248,6 +248,11 @@
                     </span>
                 </div>
                 <div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
+                        
+                    <div class="pd-bttm-15">
+                        Shipped Within <input type="text" class="shipping-days form-control" name="ship_within" size=3 value="<?=$product['shipped_within_count']; ?>" id="ship-within" onkeypress="return isNumberKey(event)" /> Days
+                    </div> 
+
                     <div class="pd-bottom-20 delivery-btn-con">
                         <div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
                         </div>
@@ -413,17 +418,13 @@
 
     <div class="clear"></div>  
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.numeric.js"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
-<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js"></script>
-
-<script src="<?=base_url()?>assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
-<!--
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
--->
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js" ></script>
 
 <script type="text/javascript">
 $(".product_combination").each(function() {

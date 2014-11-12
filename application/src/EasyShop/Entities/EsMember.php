@@ -854,7 +854,11 @@ class EsMember
      * @return string 
      */
     public function getStoreName()
-    {
+    {   
+        if(!$this->storeName){
+            return $this->getUsername();
+        }
+
         return $this->storeName;
     }
 

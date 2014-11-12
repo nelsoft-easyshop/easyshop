@@ -1,6 +1,6 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <div class="res_wrapper">
     <div class="seller_product_content">
         <div class="inner_seller_product_content">
@@ -209,7 +209,7 @@
                                 <div id="product_content_gallery" class="step4_prod_cont_gal">
                                     <div class="prod_con_gal"> 
                                         <a class="jqzoom"  href="javascript:void"> 
-                                            <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> 
+                                            <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> 
                                         </a> 
                                     </div>
                                     <br/>
@@ -219,7 +219,7 @@
                                                 <?php foreach($product_images as $image): ?>
                                                     <li>
                                                         <a href="javascript:void(0);">
-                                                            <img src='<?=base_url()?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> 
+                                                            <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> 
                                                         </a>
                                                     </li>
                                                 <?php endforeach;?>
@@ -249,7 +249,7 @@
                                             <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
                                                 <?php foreach($product_option as $i):?>
                                                     <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-                                                        <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
+                                                        <a href="#" rel="{gallery: 'gal1', smallimage: '/<?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '/<?php echo $i['img_path'].$i['img_file']; ?>'}">
                                                             <?php endif; ?>
                                                                 <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
                                                             <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
@@ -408,7 +408,7 @@
         </div>
     </div>
     <div class="clear"></div>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#tabs').tabs();
 </script>
