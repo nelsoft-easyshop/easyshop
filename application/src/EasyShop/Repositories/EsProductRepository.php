@@ -51,8 +51,8 @@ class EsProductRepository extends EntityRepository
                             AND a.member_id = b.id_member
                             AND a.id_product in (:ids)
                             AND (
-                            MATCH (b.`store_name`) AGAINST (:param2 IN BOOLEAN MODE) 
-                            OR MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE)
+                                MATCH (b.`store_name`) AGAINST (:param2 IN BOOLEAN MODE) 
+                                OR MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE)
                             )
                     $limitString
                 ) as score_table
