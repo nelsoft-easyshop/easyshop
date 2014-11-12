@@ -475,12 +475,12 @@ sub, sup{
 
 .ui-dialog-titlebar-close{
     float: right !important;
-    margin-top: -28px !important;
+    margin-top: 10px !important;
     background: #fff !important;
     background-color: #fff !important;
     border: 0px !important;
     padding: 0px !important;
-    margin-right: 6px !important;
+    margin-right: 15px !important;
     border-radius: 3px !important;
     
 }
@@ -958,4 +958,13 @@ line-height: 30px !important;
     display: block;
     margin-left: 88px;
     }
+}
+.ui-dialog-titlebar-close2{
+    background: none repeat scroll 0 0 #fff !important;
+    border: 0 none !important;
+    border-radius: 3px !important;
+    float: right !important;
+    margin-right: 12px !important;
+    margin-top: 8px !important;
+    padding: 0 !important;
 }
