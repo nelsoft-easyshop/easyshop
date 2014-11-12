@@ -100,4 +100,11 @@
     $( "#dash" ).click(function() { 
         $("#active-items").css("display", "block");
     });
+
+    $(document.body).on('click',".individual",function () {
+        $this = $(this);
+        var $textInput = $this.parent().parent().parent().find('.search-field').val(); 
+        var $filterInput = $this.parent().parent().parent().find('.search-filter').val();
+    });
+
 }(jQuery));

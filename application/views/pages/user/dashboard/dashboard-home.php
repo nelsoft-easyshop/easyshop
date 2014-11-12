@@ -146,16 +146,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-search-item">
-                            <input type="text" class="input-search-item" placeholder="Search product from list..."/>
+                            <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
                             <span class="icon-search"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-filter">
                             <label>Sort by:</label>
-                            <select class="select-filter-item">
-                                <option>last modified</option>
-                                <option>new</option>
+                            <select class="select-filter-item search-filter">
+                                <option value="1">last modified</option>
+                                <option value="2">new</option>
                             </select>
                         </div>
                     </div>

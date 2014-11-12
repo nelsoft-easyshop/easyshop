@@ -52,7 +52,7 @@ class ProductManager
     /**
      * Default result product count in dashboard
      */
-    const PRODUCT_COUNT_DASHBOARD = 10;
+    const PRODUCT_COUNT_DASHBOARD = 3;
 
     /**
      * Entity Manager instance
@@ -860,13 +860,14 @@ class ProductManager
             );
     }
 
-    public function getActiveProductsByUser($memberId)
+    public function getActiveProductsByUser($memberId, $offset = 0)
     {
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $products = $esProductRepo->getUserActiveProducts($memberId);
+        $resultProducts = $esProductRepo->getUserActiveProducts($memberId, $offset,self::PRODUCT_COUNT_DASHBOARD);
+        $products = [];
 
-        foreach ($products as $product) {
-            $product = $this->getProductDetails($product);
+        foreach ($resultProducts as $resultProduct) {
+            $product = $this->getProductDetails($resultProduct);
 
             $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -875,14 +876,16 @@ class ProductManager
                 $product->directory = $product->getDefaultImage()->getDirectory();
                 $product->imageFileName = $product->getDefaultImage()->getFilename();
             }
+
+            $product->rating = $esProductRepo->getProductAverageRating($product->getIdProduct());
+            $product->reviewCount = $esProductRepo->getProductReviewCount($product->getIdProduct());
+            $product->availableStock = $esProductRepo->getProductAvailableStocks($product->getIdProduct());
+            $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
+
+            $products[] = $product;
         }
 
         return $products;
-    }
-
-    public function getProductAverageRating()
-    {
-        
     }
 }
 

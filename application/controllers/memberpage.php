@@ -1805,6 +1805,7 @@ class Memberpage extends MY_Controller
 
         $categoryManager = $this->serviceContainer['category_manager'];
         $userManager = $this->serviceContainer['user_manager'];
+        $productManager = $this->serviceContainer['product_manager'];
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esCatRepo = $this->em->getRepository('EasyShop\Entities\EsCat');
@@ -1825,12 +1826,19 @@ class Memberpage extends MY_Controller
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
             $userActiveProductCount = $esProductRepo->getUserActiveProductCount($memberId);
-            $userActiveProducts = $esProductRepo->getUserActiveProducts($memberId);
+            $userActiveProducts = $productManager->getActiveProductsByUser($memberId);
 
-            $activeProductView = $this->load->view('partials/dashboard-products', 
-                                                    ['products' => $userActiveProducts],
-                                                    true);
+            $paginationData = array(
+                'lastPage' => ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
+                ,'isHyperLink' => false
+            );
 
+            $activeProductsData = [
+                            'products' => $userActiveProducts,
+                            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                        ];
+
+            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
             $userDeletedProductCount = $esProductRepo->getUserDeletedProductCount($memberId);
             $userDraftedProductCount = $esProductRepo->getUserDraftedProductCount($memberId);

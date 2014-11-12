@@ -8,35 +8,40 @@
                     <tbody>
                         <tr>
                             <td class="td-image-cont" width="20%" >
-                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
+                                <div class="div-product-image" style="background: url(/<?=$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
+                                    
+                                    <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
-                                        13%
+                                        <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                                 
                             </td>
                             <td class="td-meta-info">
                                 <p class="item-list-name">
-                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
+                                    <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
                                         <?=htmlspecialchars($product->getName(),ENT_QUOTES,'ISO-8859-1');;?>
                                     </a>
                                 </p>
                                 <p class="item-amount">
-                                    <span class="item-original-amount">P34,000.00</span>
-                                    <span class="item-current-amount">P24,000.00</span>
+                                    <?php if((float)$product->getDiscountPercentage() > 0):?>
+                                    <span class="item-original-amount">P<?=number_format($product->getOriginalPrice(),2,'.',',');?></span>
+                                    <?php endif; ?>
+                                    <span class="item-current-amount">P<?=number_format($product->getFinalPrice(),2,'.',',');?></span></span>
                                 </p>
                                 <div class="div-meta-description">
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <span class="strong-label">Sold Item(s) : </span> 20
+                                            <span class="strong-label">Sold Item(s) : </span> <?=$product->soldCount; ?>
                                         </div>
                                         <div class="col-xs-8">
-                                            <span class="strong-label">Available Stock(s) : </span> 2
+                                            <span class="strong-label">Available Stock(s) : </span> <?=$product->availableStock; ?>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <span class="strong-label">Category : </span> Special Promo
+                                            <span class="strong-label">Category : </span> <?=html_escape($product->getCat()->getName());?>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -58,15 +63,14 @@
                                 
                             </td>
                             <td class="td-item-actions" width="25%">
-                                <p>Last Modified: 2014-01-21</p>
+                                <p>Last Modified: <?=$product->getLastmodifieddate()->format('Y-m-d'); ?></p>
                                 <div class="">
-                                    <i class="icon-star star-stat star-active"></i>
-                                    <i class="icon-star star-stat star-active"></i>
-                                    <i class="icon-star star-stat star-active"></i>
-                                    <i class="icon-star star-stat star-active"></i>
-                                    <i class="icon-star star-stat"></i>
+                                <?php for ($i=0; $i < 5; $i++): ?>
+                                    <i class="icon-star star-stat <?=$product->rating > 0 ? 'star-active' : '' ?>"></i>
+                                    <?php $product->rating--; ?>
+                                <?php endfor; ?>
                                 </div>
-                                <p>Total Reviews : 20</p>
+                                <p>Total Reviews : <?=$product->reviewCount; ?></p>
                                 <button class="btn btn-action-edit">
                                     <i class="icon-edit"></i>edit
                                 </button>
@@ -112,3 +116,6 @@
 </div>
 <?php endforeach; ?>
 
+<div id="pagination-section">
+    <?=$pagination;?>
+</div>
