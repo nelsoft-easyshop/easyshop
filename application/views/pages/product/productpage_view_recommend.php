@@ -20,7 +20,7 @@
             <?php foreach ($recommended as $value): ?>
             <div class="item">
                     <a href="/item/<?=$value->getSlug(); ?>">
-                        <div class="div-rec-product-image" style="background: #fff url(/<?=$value->directory.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
+                        <div class="div-rec-product-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
                             
                         </div>
                     </a>
