@@ -54,9 +54,14 @@ class EsProductRepository extends EntityRepository
                                 MATCH (b.`store_name`) AGAINST (:param2 IN BOOLEAN MODE)
                                 OR MATCH (a.`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE)
                                 OR MATCH (a.`name`) AGAINST (:param2 IN BOOLEAN MODE)
+
                                 OR MATCH (b.`store_name`) AGAINST (:param0 IN BOOLEAN MODE)
                                 OR MATCH (a.`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE)
                                 OR MATCH (a.`name`) AGAINST (:param0 IN BOOLEAN MODE)
+
+                                OR MATCH (b.`store_name`) AGAINST (:param1 IN BOOLEAN MODE)
+                                OR MATCH (a.`name`) AGAINST (:param1 IN BOOLEAN MODE)
+                                OR MATCH (a.`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
                             )
                     $limitString
                 ) as score_table
@@ -66,7 +71,7 @@ class EsProductRepository extends EntityRepository
 
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]);
-        $query->setParameter('param2', $stringCollection[2]);
+        $query->setParameter('param2', $stringCollection[2]); 
         $query->setParameter('ids', $productIds);
         $results = $query->execute();
 
