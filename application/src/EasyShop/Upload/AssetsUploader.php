@@ -3,11 +3,11 @@
 namespace Easyshop\Upload;
 
 /**
- * Product Upload Class
+ * Easyshop Upload Class
  *
  * @author Sam Gavinio <samgavinio@easyshop.ph>
  */
-class ProductUpload
+class AssetsUploader
 {
 
     /**
@@ -16,14 +16,21 @@ class ProductUpload
      */
     private $awsUploader;
     
+    /**
+     * The environement of the application
+     *
+     * @var string 
+     */
+    private $environment;
     
     /**
      * Inject dependencies
      * @param \EasyShop\Upload\AwsUpload $awsUploader
      */
-    public function __construct($awsUploader)
+    public function __construct($awsUploader, $environment = 'DEVELOPMENT')
     {
         $this->awsUploader = $awsUploader;
+        $this->environment = $environment;
     }
     
      
@@ -35,13 +42,13 @@ class ProductUpload
      * @param integer $productId
      * @param string[] $fileNames
      */
-    public function uploadImageDirectory($environment, $sourceDirectory, $destinationDirectory, $productId, $fileNames = NULL)
+    public function uploadImageDirectory($sourceDirectory, $destinationDirectory, $productId, $fileNames = NULL)
     {    
         $sourceDirectory = rtrim($sourceDirectory,'/');
         $destinationDirectory = rtrim($destinationDirectory,'/');
         
         
-        if(strtolower($environment) !== 'development'){
+        if(strtolower($this->environment) !== 'development'){
             $sourceDirectory = ltrim($sourceDirectory,'.');
             $destinationDirectory = ltrim($destinationDirectory,'.');
         }
@@ -60,7 +67,7 @@ class ProductUpload
                     $explodedFilename = explode('_', $file);
                     $explodedFilename[0] = $productId;
                     $newFileName = implode('_', $explodedFilename);
-                    if(strtolower($environment) !== 'development'){
+                    if(strtolower($this->environment) !== 'development'){
                         $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
                     }
                     else{
@@ -73,6 +80,16 @@ class ProductUpload
                 $this->uploadImageDirectory($sourceDirectory.'/'.$key, $destinationDirectory.'/'.$key,$productId,$fileNames);
             }
         }
+    }
+    
+    
+    /**
+     *
+     *
+     */
+    public function uploadUserAvatar()
+    {
+    
     }
     
 }
