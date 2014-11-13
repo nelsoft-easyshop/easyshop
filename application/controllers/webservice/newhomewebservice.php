@@ -948,6 +948,7 @@ class NewHomeWebService extends MY_Controller
 
     public function commitSliderChanges()
     {
+
         $map = simplexml_load_file($this->tempHomefile);
 
         foreach ($map->sliderSection->slide as $key => $slider) {
@@ -955,9 +956,8 @@ class NewHomeWebService extends MY_Controller
         }        
         $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
         $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
-        return $this->output
-                ->set_content_type('application/json')
-                ->set_output($this->json);                
+        $this->fetchPreviewSlider();
+               
     }
 
     public function fetchPreviewSlider($isForSync = false)
