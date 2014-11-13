@@ -1803,12 +1803,10 @@ class Memberpage extends MY_Controller
     {
         header ('Content-type: text/html; charset=ISO-8859-1');
 
-        $categoryManager = $this->serviceContainer['category_manager'];
         $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $esCatRepo = $this->em->getRepository('EasyShop\Entities\EsCat');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
 
         $headerData = $this->fill_header();
@@ -1877,14 +1875,14 @@ class Memberpage extends MY_Controller
                             'draftedProductView' => $draftedProductView,
                         ];
 
-            $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, TRUE);
+            $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
 
             $dashboardData = [
-                            'dashboardHomeView' => $dashboarHomedView
-                        ];
+                        'dashboardHomeView' => $dashboarHomedView
+                    ];
 
             $headerData['metadescription'] = "";
-            $headerData['title'] = "Member Page | Easyshop.ph";
+            $headerData['title'] = "Dashboard | Easyshop.ph";
             $headerData['user_details'] = $this->fillUserDetails();
             $headerData['homeContent'] = $this->fillCategoryNavigation();
             $headerData = array_merge($headerData, $this->fill_header());
@@ -1914,6 +1912,7 @@ class Memberpage extends MY_Controller
         $responseArray = [
             'isSuccess' => $deleteResponse,
             'message' => $deleteResponse ? "You can't delete this product" : "",
+            'nextProduct' => ''
         ];
 
         echo json_encode($responseArray);
@@ -1931,6 +1930,7 @@ class Memberpage extends MY_Controller
         $responseArray = [
             'isSuccess' => $deleteResponse,
             'message' => $deleteResponse ? "You can't delete this product" : "",
+            'nextProduct' => ''
         ];
 
         echo json_encode($responseArray);
@@ -1975,9 +1975,9 @@ class Memberpage extends MY_Controller
             ];
 
         $viewData = [
-                        'products' => $userProducts,
-                        'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                    ];
+                'products' => $userProducts,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
 
         $htmlView = $this->load->view('partials/dashboard-products', $viewData, true);
 

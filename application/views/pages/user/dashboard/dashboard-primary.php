@@ -15,11 +15,17 @@
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
                             <a href="#transactions"><li class="f-li">Transactions</li></a>
-                            <a href="#promo"><li>Promo</li></a>
                             <a href="#setup"><li class="f-li">Store Setup</li></a>
                         </ul>
                     </div>
-                    <a><li class="ml-li">My Account <i class="icon-control-down toggle-down pull-right"></i></li></a>
+                    <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
+                    <div id="my-account-menu">
+                        <ul class="sidebar-submenu submenu-my-account">
+                            <a href="#personal-information"><li class="f-li">Personal Information</li></a>
+                            <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
+                            <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
+                        </ul>
+                    </div>
                 </ul>
       
             </div>
@@ -28,11 +34,17 @@
                     <div class="" id="dashboard">
                         <?=$dashboardHomeView; ?>
                     </div>
-                    <div class="" id="transactions">
+                    <div id="transactions">
                         <?php include("dashboard-transactions.php");?>
                     </div>
-                    <div class="" id="promo">promo</div>
-                    <div class="" id="setup">setup</div>
+                    <div id="setup">setup</div>
+                    <div id="personal-information">
+                        <?php include("dashboard-personal-info.php");?>
+                    </div>
+                    <div id="delivery-address">
+                        <?php include("dashboard-delivery-address.php");?>
+                    </div>
+                    <div id="account-settings">account settings</div>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -50,6 +62,11 @@
     <input type="hidden" id="request-url" value="/me/product/next" />
     <input type="hidden" id="request-url-soft-delete" value="/me/product/delete-soft" />
     <input type="hidden" id="request-url-hard-delete" value="/me/product/delete-hard" />
+    <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
+        <input type="hidden" name="p_id" value="" />
+        <input type="hidden" name="hidden_attribute" value="" />
+        <input type="hidden" name="othernamecategory" value="" />"
+    <?=form_close();?> 
 </div>
 
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>

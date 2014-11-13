@@ -11,6 +11,24 @@
         });
     });
 
+     $( "#my-account-menu-trigger" ).click(function() {
+        $( "#my-account-menu" ).slideToggle( "slow", function() {
+            var attr = $("i.a").attr("class");
+            if(attr == "a icon-control-down toggle-down pull-right"){
+                $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
+                $( ".ml-li" ).css("border-radius", "0px");
+                $( ".submenu-my-account" ).css("border-radius", "0px 0px 7px 7px");
+                $( ".f-a" ).css("border-radius", "0px 0px 7px 7px");
+            }
+            else if(attr == "a icon-control-up toggle-down pull-right"){
+                $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
+                $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
+                $( ".submenu-my-account" ).css("border-radius", "0px");
+                $( ".f-a" ).css("border-radius", "0px");
+            }
+        });
+    });
+
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
             var i_icon = $("i.info-item-icon-1").attr("class");
@@ -82,6 +100,14 @@
     $(".view-delivery-lnk").click(function() {
         $(this).next(".view-delivery-details").slideToggle();
     });
+    
+    $( "#set-default" ).hover(function() {
+        $( ".default-ad-explain" ).slideToggle( "slow" );
+    });
+    
+    $( ".map-trigger" ).click(function() {
+        $( ".map-container" ).slideToggle( "slow" );
+    });
 
     $(document.body).on('click',".individual",function () {
         var $this = $(this);
@@ -122,7 +148,6 @@
     });
 
     $(document.body).on('click','.soft-delete',function () {
-
         var $confirm = confirm("Are you sure you want to move this item to deleted item?");
         if($confirm){
             var $this = $(this);
@@ -135,8 +160,7 @@
                                 product_id:$productId
                             },
                         success: function(d){ 
-                            var $response = $.parseJSON(d);
-                            console.log($response);
+                            var $response = $.parseJSON(d); 
                             if($response.isSuccess){
                                 $('#item-list-'+$productId).remove();
                                 $("#deleted-product-container").children().last().remove();
@@ -162,8 +186,7 @@
                                 product_id:$productId
                             },
                         success: function(d){ 
-                            var $response = $.parseJSON(d);
-                            console.log($response);
+                            var $response = $.parseJSON(d); 
                             if($response.isSuccess){
                                 $('#item-list-'+$productId).remove();
                             }
@@ -174,6 +197,13 @@
                     });
         }
     });
+
+    $(document.body).on('click','.btn-edit-product',function () {
+        var $this = $(this);
+
+        $("#formEdit").submit();
+    });
+    
 
     /**
      * Ajax Request for getting product in active, draft and 
@@ -206,5 +236,5 @@
             }
         });
     }
-
+ 
 }(jQuery));

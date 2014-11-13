@@ -4,7 +4,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use EasyShop\Entities\EsProduct; 
+use EasyShop\Entities\EsProduct as EsProduct; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -785,8 +785,10 @@ class EsProductRepository extends EntityRepository
      * @return integer
      */
     public function getUserProductCount($memberId,
-                                        $isDelete = [0,1],
-                                        $isDraft = [0,1],
+                                        $isDelete = [EsProduct::IS_DELETE_ON,
+                                                    EsProduct::IS_DELETE_OFF],
+                                        $isDraft = [EsProduct::IS_DRAFT_ON,
+                                                    EsProduct::IS_DRAFT_OFF],
                                         $searchString = "")
     {
         $this->em = $this->_em;

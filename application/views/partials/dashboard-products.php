@@ -81,14 +81,12 @@
                                 <?php endfor; ?>
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
-                                <?=form_open('/sell/edit/step2'); ?>
                                 <input type="hidden" name="p_id" value="<?=$product->getIdProduct(); ?>" />
                                 <input type="hidden" name="hidden_attribute" value="<?=$product->getCat()->getIdCat(); ?>" />
                                 <input type="hidden" name="othernamecategory" value="<?=$product->getCatOtherName(); ?>" />
-                                <button class="btn btn-action-edit">
+                                <button class="btn btn-action-edit btn-edit-product">
                                     <i class="icon-edit"></i>edit
                                 </button>
-                                <?=form_close();?> 
                                 <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
                                 </button> 
