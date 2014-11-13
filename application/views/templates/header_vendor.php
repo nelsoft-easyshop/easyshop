@@ -6,7 +6,7 @@
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg">
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?php echo getAssetsDomain().'.'.$bannerImage?>" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -14,7 +14,7 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div class="vendor-profile-photo-wrapper">
-                                <img src="<?=$avatarImage?>" alt="Profile Photo">
+                                <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                             </div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                     <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name'])?></h4>
                     <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
                     <p>
-                        <img src="/assets/images/img-icon-marker.png" alt="marker">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
                         <?php else:?>
@@ -33,7 +33,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn">
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
-                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                     </div>
                     <?php else: ?>
@@ -66,11 +66,11 @@
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
                 <a href="javascript:void(0)" id="banner_edit">
-                    <img src="/assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
+                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?php echo getAssetsDomain().'.'.$bannerImage?>" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -99,7 +99,7 @@
 
                             <div class="edit-profile-photo">
                                 <div>
-                                    <img src="/assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                 <div><a id="avatar_edit" href="javascript:void(0)">Upload Photo</a></div>
                                 <div><a id="avatar_remove" href="javascript:void(0)">Remove Photo</a></div>
                             </div>
-                            <img id="imageCropPreview" src="<?=$avatarImage?>" alt="Profile Photo">
+                            <img id="imageCropPreview" src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                 <?php if(!$hasNoItems): ?>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']?>" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <?php endif; ?>
@@ -175,14 +175,14 @@
             <ul class="sticky-nav">
                 <li>
                     <div class="vendor-profile-img-con">
-                        <img src="<?=$avatarImage?>" alt="Profile Photo">
+                        <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                     </div>
                     <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
                 </li>
                 <li>
-                    <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']?>"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
                 </li>
                 <li> 
                     <form class="search-form">
@@ -212,7 +212,7 @@
                                         <div class="mrgn-bttm-15">
                                             <div class="header-cart-item-img">
                                                 <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                    <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                 </a>
                                             </div>
                                             <div class="header-cart-item-con">
