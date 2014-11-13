@@ -362,9 +362,9 @@ $string = '<typeNode>
                      }
                 }
                 $index++;                
-            }            
+            }  
+            return true;          
         }
-
         else if($nodeName == "mainSliderSection"){
             $referred = "/map/sliderSection/slide[".$index."]"; 
 

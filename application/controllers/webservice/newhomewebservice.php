@@ -880,7 +880,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);        
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
-        $nodename = (int)  $this->input->get("nodename");  
+        $nodename =  $this->input->get("nodename");  
         $action = $this->input->get("action");        
         if($action == "up" && ($index !== $order)) {
             $sliderOrder = $order;
@@ -929,11 +929,24 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }         
-    }    
+    }  
+
+    public function commitSliderChanges()
+    {
+        $map = simplexml_load_file($this->tempHomefile);
+
+        foreach ($map->sliderSection->slide as $key => $slider) {
+            $sliders[] = $slider;
+        }        
+        $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
+        $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);                
+    }
 
     public function fetchPreviewSlider()
     {
-
         $map = simplexml_load_file($this->file);
 
         foreach ($map->sliderSection->slide as $key => $slider) {
