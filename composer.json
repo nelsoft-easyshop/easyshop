@@ -42,7 +42,8 @@
     
     "autoload": {
          "classmap" : [
-            "system/libraries/"
+            "system/libraries/",
+            "application/libraries/"
         ]
     }
 
