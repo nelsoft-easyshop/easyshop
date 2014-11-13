@@ -317,7 +317,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         else {
             html += '<span class="float_right">';
         }
-        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img+'/60x60.png"></span></span>';
         html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
@@ -352,7 +352,7 @@ function specific_msgs()
         } else {
             html += '<span class="float_right">';
         }
-        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img+'/60x60.png"></span></span>';
         html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
@@ -404,10 +404,10 @@ function onFocus_Reload(msgs)
             html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
             html +='<td class=" sorting_1">';
             if (Nav_msg.status == "sender") {
-                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src="'+ config.assetsDomain + Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'"></span></div>';
             }
             else {
-                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src="'+ config.assetsDomain + Nav_msg.sender_img+'/60x60.png" data="'+Nav_msg.recipient_img+'"></span></div>';
             }
             span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
             html +='</td>';
