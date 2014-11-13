@@ -428,10 +428,9 @@ class Kernel
                                                 ));
             return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
         };
-        
-        
-        $container['product_uploader'] = function($c) use ($container){
-            return new \EasyShop\Upload\ProductUpload($container["aws_uploader"]);
+
+        $container['assets_uploader'] = function($c) use ($container){
+            return new \EasyShop\Upload\AssetsUploader(ENVIRONMENT, $container["aws_uploader"]);
         };
         
         $container["image_utility"] = function($c) use ($container){
