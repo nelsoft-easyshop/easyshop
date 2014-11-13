@@ -76,9 +76,12 @@
             
             <div class="form-group">
                 <label class="col-sm-3 control-label">Map Location : </label>
-                <div class="col-sm-8">
-                    <p>Location not marked</p> <span class="map-trigger">Map</span>
+                <div class="col-sm-8 col-map">
+                    <span>Location not marked</span> <span class="map-trigger">Mark on map <i class="fa fa-caret-down"></i></span>
+                    
                     <div class="map-container">
+                        <span><a href="#"><i class="fa fa-search"></i> Search Address</a></span>
+                        <span class="span-current-location"><a href="#"><i class="fa fa-map-marker"></i> Current Location</a><span>
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3861.5040209573253!2d120.9912379!3d14.570331999999999!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c981a81d19cb%3A0x908919dcb6a3f9f1!2sMarc+2000+Tower%2C+%231973+San+Andres+St%2C+Malate%2C+Manila%2C+Metro+Manila!5e0!3m2!1sen!2sph!4v1415776376560" width="600" height="450" frameborder="0" style="border:0"></iframe>
                     </div>
                 </div>
