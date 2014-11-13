@@ -35,7 +35,7 @@
                     </div>
                     <a href="<?= '/item/'.$item['slug'];?>">
                         <span class="cd_prod_img_con">
-                            <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
+                            <img src="<?php echo getAssetsDomain(); ?><?= $item['path'].'categoryview/'.$item['file']; ?>">
                         </span>
                     </a>
                     <h3>

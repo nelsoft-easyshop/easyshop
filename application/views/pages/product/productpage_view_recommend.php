@@ -60,7 +60,7 @@
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                                <img src="<?=$value->ownerAvatar; ?>" class="store-logo">
+                                                <img src="<?php echo getAssetsDomain().'.'.$value->ownerAvatar; ?>" class="store-logo">
                                             </div>
                                         </div>
                                     </span>

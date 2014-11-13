@@ -849,10 +849,10 @@
                         
                         //GENERATE STAR RATINGS
                         for(i=value.rating;i>0;i--){
-                            on_star_html += "<img src='"+config.base_url+"assets/images/star-on.png' alt='*' title=''>";
+                            on_star_html += "<img src='"+config.assetsDomain+"assets/images/star-on.png' alt='*' title=''>";
                         }
                         for(i=5-value.rating;i>0;i--){
-                            off_star_html += "<img src='"+config.base_url+"assets/images/star-off.png' alt='*' title=''>";
+                            off_star_html += "<img src='"+config.assetsDomain+"assets/images/star-off.png' alt='*' title=''>";
                         }
                         
                         //CREATE NEW LEFT AND RIGHT DIV

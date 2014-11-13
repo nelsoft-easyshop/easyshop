@@ -20,7 +20,7 @@
 						<?php endif; ?>
 					
 						<span class="prod_img_container">
-							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']."categoryview/" . $items[$i]['file']; ?>">
+							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo getAssetsDomain() ?><?php echo $items[$i]['path']."categoryview/" . $items[$i]['file']; ?>">
 						</span>
 					</span>	
 				</a>

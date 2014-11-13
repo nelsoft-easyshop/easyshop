@@ -2,7 +2,7 @@
     $(document).ready(function () {
         $('.has-tooltip').hover(function () {
             var tooltip = $(this).find('.tooltip');
-            tooltip.html('<img src="' + $(this).data('image') + '" >').fadeIn();
+            tooltip.html('<img src="' + config.assetsDomain + $(this).data('image') + '" >').fadeIn();
         },function () {
             $(this).find('.tooltip').hide();
         }).append('<span class="tooltip"></span>');

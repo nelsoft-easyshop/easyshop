@@ -28,7 +28,7 @@
                 </h1>
                 <div>
                     By:
-                        <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
+                        <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
@@ -185,29 +185,29 @@
                         <p class="attr-title">Payment:</p>
 
                         <?php if(isset($paymentMethod['cdb'])): ?>
-                            <img src="/assets/images/img-mastercard-colored.png" alt="Mastercard">
-                            <img src="/assets/images/img-visa-colored.png" alt="Visa">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-colored.png" alt="Mastercard">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-colored.png" alt="Visa">
                         <?php else: ?>
-                            <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
-                            <img src="/assets/images/img-visa-black.png" alt="Visa">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
                         <?php endif; ?>
 
                         <?php if(isset($paymentMethod['dragonpay'])) : ?>
-                            <img src="/assets/images/img-dragonpay-colored.png" alt="Dragon Pay">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-colored.png" alt="Dragon Pay">
                         <?php else: ?>
-                            <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-black.png" alt="Dragon Pay">
                         <?php endif; ?> 
 
                         <?php if(isset($paymentMethod['paypal'])) : ?>
-                            <img src="/assets/images/img-paypal-colored.png" alt="Paypal">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-colored.png" alt="Paypal">
                         <?php else: ?>
-                            <img src="/assets/images/img-paypal-black.png" alt="Paypal">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-black.png" alt="Paypal">
                         <?php endif; ?>
 
                         <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?>
-                            <img src="/assets/images/img-cod-colored.png" alt="Cash on Delivery">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-colored.png" alt="Cash on Delivery">
                         <?php else: ?>
-                            <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
                         <?php endif; ?>
 
 
@@ -224,7 +224,7 @@
                         <p class="attr-title">Share with:</p>
                         <a href="javascript:void(0)" class="facebook-lnk">
                             <div class="ui-form-control share-facebook">
-                                <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-facebook-prod.png" alt="Facebook"> 
                                 <span>Facebook</span>
                                 <div id="fb-root"></div>
                                 <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
@@ -232,7 +232,7 @@
                         </a>
                         <span class="twitter-lnk">
                             <div class="ui-form-control share-twitter">
-                                <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
                                 <a class="twitter-share-button" data-url="<?=$url?>" data-related="twitterdev" data-size="large"
                                     data-count="none">
@@ -242,7 +242,7 @@
                         </span>
                         <a href="https://plus.google.com/share?url=<?=$url?>">
                             <div class="ui-form-control share-googleplus">
-                                <img src="/assets/images/img-googleplus-prod.png" alt="Google+"> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-googleplus-prod.png" alt="Google+"> 
                                 <span>Google+</span>
                             </div>
                         </a>

@@ -96,7 +96,7 @@
                 <input type="checkbox" id="allow_cashondelivery" name="allow_cashondelivery" style="position:absolute; top:29px">
                 <label for="allow_cashondelivery" > <span class="orange" style="position:absolute; top:26px; left: 20px;"><strong>Allow </strong></span> <span class="cod" style="position:absolute; left: 50px;"></span> </label> 
                 <a class="tooltips" href="javascript:void(0)" style="position:absolute; top:20px; left:150px;">
-                    <img src="/assets/images/icon_qmark.png" alt="">
+                    <img src="<?php echo getAssetsDomain(); ?>assets/images/icon_qmark.png" alt="">
                     <span class="1line_tooltip">Payment for items that are paid with the Cash on Delivery option are not covered by Easyshop.ph</span>
                 </a> 
             </div>
@@ -137,7 +137,7 @@
                 <div class="wrapper">
                     <div class="content_wrapper">
                         <div  id="product_content_gallery">
-                            <div class="prod_con_gal"> <a class="jqzoom"  href="javascript:void"> <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
+                            <div class="prod_con_gal"> <a class="jqzoom"  href="javascript:void"> <img src="<?php echo getAssetsDomain(); ?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
                             <br/>
                             
                             
@@ -145,7 +145,7 @@
                               <div class="jcarousel">
                                 <ul id="thumblist">
                                   <?php foreach($product_images as $image): ?>
-                                  <li> <a href="javascript:void(0);"> <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
+                                  <li> <a href="javascript:void(0);"> <img src='<?php echo getAssetsDomain(); ?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
                                   <?php endforeach;?>
                                 </ul>
 
@@ -163,7 +163,7 @@
                 <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
                   <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
                   <span class="seller-name"> 
-                      <img src="/<?php echo $product['userpic']?>/60x60.png"><br />
+                      <img src="<?php echo getAssetsDomain(); ?><?php echo $product['userpic']?>/60x60.png"><br />
                       <span><?php echo html_escape($product['sellerusername']);?></span> 
                       <p style='font-size:8px;'>No ratings received.</p>
                   </span> 
@@ -280,7 +280,7 @@
                 <div id="tabs-3">
                   <div class="reviews_title">
                     <h3>Product reviews</h3>
-                      <p class="write_review"> <img src="/assets/images/img_edit.png">Write a review </p>
+                      <p class="write_review"> <img src="<?php echo getAssetsDomain(); ?>assets/images/img_edit.png">Write a review </p>
                   </div>
                   <div class="reviews_content">
                     <div> <strong>This product has 0 reviews so far. Be the first to review it.</strong> </div>

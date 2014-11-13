@@ -57,7 +57,7 @@ function appendNewSelectionRow(){
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
-    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+config.assetsDomain+'assets/images/img_upload_photo.jpg"></a>\
     <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
@@ -189,7 +189,7 @@ function resetControlPanel(buttonReset)
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
-         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.assetsDomain+'assets/images/img_upload_photo.jpg"></a>\
         <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     </div><div class="clear"></div>';
@@ -1122,7 +1122,7 @@ var currentRequest = null;
         $('#prod_brand').val($this.data('brandid')).trigger( "change" );
         $("#brand_sch").val($this.text()).trigger( "change" ); 
         $('#brand_search_drop_content').empty().hide(); 
-        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.assetsDomain+'assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
     $(document).on("click",".add_brand", function(){
@@ -1168,7 +1168,7 @@ var currentRequest = null;
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.assetsDomain+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
 })( jQuery );
 // BRAND SEARCH END

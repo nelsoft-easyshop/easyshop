@@ -56,7 +56,7 @@
                                     </div>
 
                                     <span class="cd_prod_img_con">
-                                        <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
+                                        <img src="<?php echo getAssetsDomain(); ?><?= $item['path'].'categoryview/'.$item['file']; ?>">
                                     </span>
 
                                     <h3>
@@ -126,7 +126,7 @@
                     </div>
 
                     <span class="cd_prod_img_con">
-                        <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
+                        <img src="<?php echo getAssetsDomain(); ?><?= $item['path'].'categoryview/'.$item['file']; ?>">
                     </span>
 
                     <h3>
@@ -181,7 +181,7 @@
                             data:{page_number:offset,csrfname : csrftoken},
                             type: 'post',
                             dataType: 'JSON',
-                            onLoading:jQuery(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
+                            onLoading:jQuery(".loading_products").html('<img src="' + config.assetsDomain + 'assets/images/orange_loader.gif" />').show(),
                             success: function(d) {
                                 if(d == "0"){
                                     ajax_is_on = true;

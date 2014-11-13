@@ -75,7 +75,7 @@
                         <div class="clear"></div>
                         <div id="avatar_cont">
                             <span>
-                                <img src="<?=$image_profile?>" id="user_image">
+                                <img src="<?php echo getAssetsDomain().'.'.$image_profile?>" id="user_image">
                             </span>
                         </div>
                         <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
@@ -138,10 +138,10 @@
                         You have not received ratings yet.
                     <?php else:?>
                     <?php for($i = 0; $i < $allfeedbacks['rating1']; $i++):?>
-                    <img src="/assets/images/star-on.png">
+                    <img src="<?php echo getAssetsDomain()?>assets/images/star-on.png">
                 <?php endfor;?>
                 <?php for($i = 0; $i < 5-$allfeedbacks['rating1']; $i++):?>
-                <img src="/assets/images/star-off.png">
+                <img src="<?php echo getAssetsDomain()?>assets/images/star-off.png">
             <?php endfor;?>
         <?php endif;?>
     </span>
@@ -151,10 +151,10 @@
         You have not received ratings yet.
     <?php else:?>
     <?php for($i = 0; $i < $allfeedbacks['rating2']; $i++):?>
-    <img src="/assets/images/star-on.png">
+    <img src="<?php echo getAssetsDomain()?>assets/images/star-on.png">
 <?php endfor;?>
 <?php for($i = 0; $i < 5-$allfeedbacks['rating2']; $i++):?>
-    <img src="/assets/images/star-off.png">
+    <img src="<?php echo getAssetsDomain()?>assets/images/star-off.png">
 <?php endfor;?>
 <?php endif;?>
 </span>
@@ -165,10 +165,10 @@
         You have not received ratings yet.
     <?php else:?>
     <?php for($i = 0; $i < $allfeedbacks['rating3']; $i++):?>
-    <img src="/assets/images/star-on.png">
+    <img src="<?php echo getAssetsDomain()?>assets/images/star-on.png">
 <?php endfor;?>
 <?php for($i = 0; $i < 5-$allfeedbacks['rating3']; $i++):?>
-    <img src="/assets/images/star-off.png">
+    <img src="<?php echo getAssetsDomain()?>assets/images/star-off.png">
 <?php endfor;?>
 <?php endif;?>
 </span>
@@ -211,7 +211,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     
@@ -220,7 +220,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -232,7 +232,7 @@
                 <div class="post_item_img_table">
                                                                               
                 <span class="post_item_img_con">
-                    <img src="/<?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+                    <img src="<?php echo getAssetsDomain()?><?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
                 </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($active_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -369,7 +369,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     <?php if($deleted_count == 0):?>
@@ -377,7 +377,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top:50px;">
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -389,7 +389,7 @@
                 <div class="post_item_img_table">
 
                     <span class="post_item_img_con">
-                        <img src="/<?php echo $deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+                        <img src="<?php echo getAssetsDomain()?><?php echo $deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                     </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -521,7 +521,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     
@@ -530,7 +530,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -542,7 +542,7 @@
                 <div class="post_item_img_table">
 
                 <span class="post_item_img_con">
-                    <img src="/<?php echo $draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
+                    <img src="<?php echo getAssetsDomain()?><?php echo $draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
                 </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($draft_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -1062,7 +1062,7 @@
                     
                     <span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
                         <span class="verify_now">Verify Now</span>
-                        <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+                        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
                     </span>	
                     <span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
                         <span class="span_bg chk_img"></span><span style='font-size:14px; font-weight:bold; color:#1f4f98;'><strong>Verified</strong></span>
@@ -1451,7 +1451,7 @@
         <div class="clear"></div>
         <div class="bottom_save" style="text-align:left">
             <input type="button" name="billing_info_btn" id="billing_info_btn" class="orange_btn3" value="Save">
-            <img src="/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
         </div>
         <?php echo form_close();?>			
     </div>
@@ -1662,7 +1662,7 @@
     <div class="clear"></div>
     <div class="bottom_save" style='text-align:left;'>
         <input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn" style="position: relative; left:40%;">
-        <img src="/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
     </div>	
     <?php echo form_close();?>
 
@@ -1678,7 +1678,7 @@
         <label for="tx_password">Enter your password:</label>
         <input type="password" id="tx_password" name="tx_password">
         <span class="error red"></span>
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
     </div>
     
     <br/>
@@ -1689,7 +1689,7 @@
     <p class="cod msg">This transaction will be marked as completed.</p>
     
     <div id="tx_dialog_loadingimg" style="text-align:center;">
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     <br/>
 </div>
@@ -1741,7 +1741,7 @@
 
         
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $transac_counter = 0;$pageNum = 0;?>
@@ -1832,7 +1832,7 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="/<?php echo $product['product_image_path'];?>">
+                                    <img src="<?php echo getAssetsDomain()?><?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
@@ -2047,7 +2047,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0; $pageNum = 0;?>
@@ -2126,7 +2126,7 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="/<?php echo $product['product_image_path'];?>">
+                                    <img src="<?php echo getAssetsDomain()?><?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
@@ -2344,7 +2344,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0; $pageNum = 0;?>
@@ -2372,7 +2372,7 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="/<?php echo $product['product_image_path'];?>">
+                                    <img src="<?php echo getAssetsDomain()?><?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
@@ -2499,7 +2499,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0;$pageNum=0;?>
@@ -2568,7 +2568,7 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="/<?php echo $product['product_image_path'];?>">
+                                    <img src="<?php echo getAssetsDomain()?><?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">

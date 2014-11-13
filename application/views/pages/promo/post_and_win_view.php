@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="screen"/>
 <div class="wrapper info_wrapper">
-    <img src="/assets/images/img-triple-treat.png" alt="Triple Treats">
+    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-triple-treat.png" alt="Triple Treats">
 </div>
 
 <div class="wrapper mrgntop-30">
@@ -10,7 +10,7 @@
         <div>
             <input type="text" class="pd-8-12 width-300" id="txt_status">
             <input type="button" value="Status" class="orange_btn3" id="btn_status_check">
-            <img src="/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
         </div>
         <div class="status">
             <div class="qualified border_radius1">

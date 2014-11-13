@@ -72,7 +72,7 @@
 						<div class="transac_prod_first">
 							<div class="img_transac_prod_con">
 								<span class="img_transac_prod">
-									<img src="/<?php echo $product['product_image_path'];?>">
+									<img src="<?php echo getAssetsDomain()?><?php echo $product['product_image_path'];?>">
 								</span>
 							</div>
 							<div class="info_transac_prod_con">

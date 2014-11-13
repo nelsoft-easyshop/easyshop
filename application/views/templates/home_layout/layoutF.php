@@ -33,7 +33,7 @@
                         <div class="col-md-10">
                             <div class="row">
                                 <a href="<?php echo $banners['left']['target']?>">
-                                    <img class="img-responsive" src="/<?php echo $banners['left']['img']?>">
+                                    <img class="img-responsive" src="<?php echo getAssetsDomain() ?><?php echo $banners['left']['img']?>">
                                 </a>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                         <div class="media pd-8-12 side-panel">
                                             <div class="pull-left media-image">
                                                 <a class="" target="_blank" href="/<?php echo html_escape($fu['userslug'])?>">
-                                                    <img class="media-object" src="/<?php echo  $fu['imgurl']?>">
+                                                    <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo  $fu['imgurl']?>">
                                                 </a>
                                             </div>
                                             <div class="media-body">
@@ -84,7 +84,7 @@
                         <div class="col-md-10">
                             <div class="row">
                                 <a href="<?php echo $banners['left']['target']?>">
-                                    <img class="img-responsive" src="/<?php echo $banners['left']['img']?>">
+                                    <img class="img-responsive" src="<?php echo getAssetsDomain() ?><?php echo $banners['left']['img']?>">
                                 </a>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                 <div class="row mrgn-bttm-8">
                     <div class="col-md-12 ">
                         <a href="<?php echo $banners['mid']['target']?>">
-                            <img class="img-responsive" src="/<?php echo $banners['mid']['img']?>">
+                            <img class="img-responsive" src="<?php echo getAssetsDomain() ?><?php echo $banners['mid']['img']?>">
                         </a>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                             <div class="col-md-9 col-sm-9 media-sub media-content">
                                 <div class="pull-left media-image">
                                     <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                        <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                                        <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                     </a>
                                 </div>
                                 <div class="media-body">
@@ -167,7 +167,7 @@
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
                                         <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                                            <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -219,7 +219,7 @@
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
                                         <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                                            <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -271,7 +271,7 @@
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
                                         <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                                            <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -331,7 +331,7 @@
                                             <div class="pull-left media-image" >
                                                 <a target="_blank" href="/<?php echo html_escape($fu['vendor_name'])?>">
                                                     <span>
-                                                        <img class="media-object" src="/<?php echo $fu['imgurl']?>">
+                                                        <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $fu['imgurl']?>">
                                                     </span>
                                                 </a>
                                             </div>
@@ -358,7 +358,7 @@
                                     <div class="col-md-9 col-sm-9 media-sub media-content">
                                         <div class="pull-left media-image">
                                             <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                                <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                                                <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                             </a>
                                         </div>
                                         <div class="media-body">
@@ -420,7 +420,7 @@
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
                                         <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
+                                            <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -435,7 +435,7 @@
                 <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
                     <div class="row">
                         <a href="<?php echo $banners['right']['target']?>">
-                            <img class="img-responsive" src="/<?php echo $banners['right']['img']?>">
+                            <img class="img-responsive" src="<?php echo getAssetsDomain() ?><?php echo $banners['right']['img']?>">
                         </a>
                     </div>
                 </div>
@@ -447,7 +447,7 @@
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
                                         <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
+                                            <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">

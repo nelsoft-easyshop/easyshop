@@ -78,7 +78,7 @@
                                                 <div class="div-rec-product-image">
                                                     <center>
                                                         <span class="span-me">
-                                                            <img src="/assets/images/img_main_product.png" class="img-rec-product">
+                                                            <img src="<?php echo getAssetsDomain()?>assets/images/img_main_product.png" class="img-rec-product">
                                                         </span>
                                                     </center>
                                                 </div>

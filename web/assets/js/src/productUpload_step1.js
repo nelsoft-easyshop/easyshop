@@ -21,7 +21,7 @@
                 type: "GET",
                 url: config.base_url + 'product_search/searchCategory', 
                 data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
-                onLoading:jQuery(".cat_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show(),
+                onLoading:jQuery(".cat_sch_loading").html('<img src="'+config.assetsDomain+'assets/images/orange_loader_small.gif" />').show(),
                 beforeSend : function(){       
                     if(currentRequest != null) {
                         currentRequest.abort();
@@ -32,7 +32,7 @@
                     var obj = jQuery.parseJSON(response);
                     var html = '<ul>';
                     var data_content, data_id, cnt;
-                    var delim_img = ' <img src = "'+config.base_url+'assets/images/img_bullet2.jpg"/> ';
+                    var delim_img = ' <img src = "'+config.assetsDomain+'assets/images/img_bullet2.jpg"/> ';
                     console.log(obj.length);
                     if((obj.length)>0){
                         jQuery.each(obj,function(){

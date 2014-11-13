@@ -323,7 +323,7 @@
                         url: loadUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get', 
                         dataType: 'json',
-                        onLoading:$(".loading_products").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
+                        onLoading:$(".loading_products").html('<img src="'+config.assetsDomain+'assets/images/orange_loader.gif" />').show(),
                         success: function(response) {
                             if(response.count > 0){
                                 $('#product_content').append(response.view);

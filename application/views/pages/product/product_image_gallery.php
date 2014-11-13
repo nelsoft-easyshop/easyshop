@@ -10,7 +10,7 @@
             <div class="slideshow vertical" data-cycle-allow-wrap='false' data-cycle-fx="carousel" data-cycle-timeout="0" data-cycle-carousel-visible="4" data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-vertical=true>
                 <?php foreach($images as $image): ?>
                     <a href="javascript:void(0);" id="image<?=$image->getIdProductImage();?>" data-imageid="<?=$image->getIdProductImage();?>" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
-                        <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
+                        <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
                     </a>
                 <?php endforeach;?>
             </div>
@@ -25,7 +25,7 @@
         <div class="prod-gallery-container">
             <div class="prod_con_gal"> 
                 <a href="/<?=$images[0]->getDirectory(); ?><?=$images[0]->getFilename(); ?>" class="jqzoom" rel='gal1'  title="Easyshop.ph" > 
-                    <img src="/<?=$images[0]->getDirectory(); ?>small/<?=$images[0]->getFilename(); ?>"  title="product">
+                    <img src="<?php echo getAssetsDomain().$images[0]->getDirectory(); ?>small/<?=$images[0]->getFilename(); ?>"  title="product">
                 </a> 
             </div>
         </div>
@@ -37,7 +37,7 @@
     <div id="mobile-product-gallery" class="owl-carousel">
         <?php foreach($images as $image): ?>
             <div> 
-                 <img src='/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>'>
+                 <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>'>
             </div>
         <?php endforeach;?>
     </div>

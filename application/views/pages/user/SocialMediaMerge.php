@@ -15,7 +15,7 @@
                     <button class="btn  btn-orange-lg proceed">
                         PROCEED <i class="glyphicon glyphicon-play"></i>
                     </button>
-                    <img src="/assets/images/orange_loader.gif" style="display: none">
+                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" style="display: none">
                     <b>
                         <div class="div-link-login">
                             <a href="/register">

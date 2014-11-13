@@ -3,7 +3,7 @@
 		<div class="post_item_content_left">
 			<div class="post_item_img_table">
 				<span class="post_item_img_con">
-					<img src="/<?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+					<img src="<?php echo getAssetsDomain()?><?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
 			</div>
 			<p>

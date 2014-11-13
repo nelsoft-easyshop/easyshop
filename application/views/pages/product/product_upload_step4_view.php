@@ -209,7 +209,7 @@
                                 <div id="product_content_gallery" class="step4_prod_cont_gal">
                                     <div class="prod_con_gal"> 
                                         <a class="jqzoom"  href="javascript:void"> 
-                                            <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> 
+                                            <img src="<?php echo getAssetsDomain(); ?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> 
                                         </a> 
                                     </div>
                                     <br/>
@@ -219,7 +219,7 @@
                                                 <?php foreach($product_images as $image): ?>
                                                     <li>
                                                         <a href="javascript:void(0);">
-                                                            <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> 
+                                                            <img src='<?php echo getAssetsDomain(); ?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> 
                                                         </a>
                                                     </li>
                                                 <?php endforeach;?>
@@ -235,7 +235,7 @@
                                 <h4 class="id-class" id="<?php echo $product['id_product'];?>"> 
                                     <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
                                     <span class="seller-name"> 
-                                        <img src="<?=$avatarImage?>"><br />
+                                        <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>"><br />
                                         <span><?php echo html_escape(  $product['storename'] && strlen($product['storename']) > 0 ? $product['storename'] : $product['sellerusername']  );?></span> 
                                         <p>No ratings received.</p>
                                     </span>

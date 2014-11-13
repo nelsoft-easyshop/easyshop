@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
         
     $(document).on('change',"#add_more_photo_input",function (e){
-        $('.current_selected').append('<div class="main_images loader"><span><img src="'+config.base_url+'assets/images/orange_loader.gif" /></span><h3>Uploading Please Wait...</h3></div>');
+        $('.current_selected').append('<div class="main_images loader"><span><img src="'+config.assetsDomain+'assets/images/orange_loader.gif" /></span><h3>Uploading Please Wait...</h3></div>');
         startUpload();
 
     });
@@ -161,7 +161,7 @@ $(document).ready(function() {
             success: function(d) {   
                if(d.e == 0){
                     $('.current_selected > .loader').remove();
-                    $('.current_selected').append('<div class="main_images" id="'+d.d+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic imglink" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >E</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic imglink" href="javascript:void(0)">X</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a><div><img src="'+config.base_url+'assets/images/mainslide/'+d.f+'"></div></div>');
+                    $('.current_selected').append('<div class="main_images" id="'+d.d+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic imglink" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >E</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic imglink" href="javascript:void(0)">X</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a><div><img src="'+config.assetsDomain+'assets/images/mainslide/'+d.f+'"></div></div>');
                }else{
                     alert(d.m);
                }

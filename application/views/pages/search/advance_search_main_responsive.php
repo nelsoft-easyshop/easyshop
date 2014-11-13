@@ -182,7 +182,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 							<?php endif; ?>
                             
 							<span class="prod_img_container">
-								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
+								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo getAssetsDomain() ?><?php echo $items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
 							</span>
 						</span>	
 					</a>
@@ -360,7 +360,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 						<tr>
 							<td width="90px" class="v-align-top">
 								<span class="prod_img_container">
-									<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']. "small/" .$items[$i]['file']; ?>">
+									<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo getAssetsDomain() ?><?php echo $items[$i]['path']. "small/" .$items[$i]['file']; ?>">
 								</span>
 							</td>
 							<td class="v-align-top">
