@@ -15,6 +15,9 @@
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    <?php if(isset($relCanonical)): ?>
+        <link rel="canonical" href="<?php echo $relCanonical ?>"/>
+    <?php endif; ?>
     <!--[if lt IE 9]>
     <script>
     var e = ("abbr,article,aside,audio,canvas,datalist,details," +
@@ -200,12 +203,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                           <div class="search-container">
-                                                <!-- <select name="category" class="ui-form-control">
-                                                    <option value="1">- All -</option>
-                                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                                        <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
-                                                    <?php endforeach; ?>
-                                                </select> -->
                                                 <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
                                             </div>
                                         </div>

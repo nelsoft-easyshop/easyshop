@@ -230,6 +230,36 @@ p {
     border:1px solid #a90020;
 }
 
+.btn {
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+
+.btn.btn-default-3 {
+    border-bottom: 2px solid #007c67 !important;
+    background-color: #00a388 !important;
+    color: #fff;
+}
+
+.btn.btn-default-3:hover {
+    border-bottom: 2px solid #006655 !important;
+    background-color: #02846f !important;
+    color: #fff;
+}
+
+.btn.btn-default-1 {
+    border: 2px solid #565656 !important;
+    background-color: #fff !important;
+    color: #565656 !important;
+}
+
+.btn.btn-default-1:hover {
+    background-color: #585a59 !important;
+    color: #fff !important;
+}
 
 /****** Font sizes ******/
 .f36 {

@@ -243,12 +243,16 @@ class Kernel
             $collectionHelper = $container['collection_helper'];
             $productManager = $container['product_manager'];
             $categoryManager = $container['category_manager'];
+            $httpRequest = $container['http_request'];
+            $configLoader = $container['config_loader'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
                                                         ,$collectionHelper
                                                         ,$productManager
                                                         ,$categoryManager
+                                                        ,$httpRequest
+                                                        ,$configLoader
                                                     );
         };
 

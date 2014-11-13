@@ -48,15 +48,36 @@ class SearchProduct
     private $categoryManager;
 
     /**
+     * Symfony Http Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $httpRequest;
+
+    /**
+     * Symfony Http Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $configLoader;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$categoryManager)
+    public function __construct($em,
+                                $collectionHelper,
+                                $productManager,
+                                $categoryManager,
+                                $httpRequest,
+                                $configLoader)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
+        $this->httpRequest = $httpRequest;
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -64,33 +85,39 @@ class SearchProduct
      * @param  string $string
      * @return array
      */
-    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = TRUE)
+    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = true)
     {
         if($storeKeyword){
-            // Insert into search keyword temp 
             $keywordTemp = new EsKeywordsTemp();
-            $keywordTemp->setKeywords($queryString); 
+            $keywordTemp->setKeywords($queryString);
+            $keywordTemp->setIpAddress($this->httpRequest->getClientIp());
+            $keywordTemp->setTimestamp(date_create(date("Y-m-d H:i:s")));
             $this->em->persist($keywordTemp);
             $this->em->flush();
         }
 
         $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-        $stringCollection = array();
-        $ids = $productIds; 
+        $stringCollection = [];
+        $ids = $productIds;
 
-        if(trim($clearString) != ""){
-            $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '+"'.implode('" +"', $explodedString) .'"';
-            $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-            $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
-            $stringCollection[2] = '"'.trim($clearString).'"'; 
-            $boolean = (strlen($clearString) > 1) ? FALSE : TRUE;
+        if(trim($clearString)){
+            $explodedString = explode(' ', trim($clearString));
+            $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+
+            $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+            $wildCardString = !implode('* +', $explodedStringWithRegEx)
+                              ? "" 
+                              : '+'.implode('* +', $explodedStringWithRegEx) .'*';
+            $stringCollection[] = str_replace("+*", "", $wildCardString);
+            $stringCollection[] = '"'.trim($clearString).'"'; 
+
+            $isLimit = strlen($clearString) > 1;
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection,$productIds,$boolean);
+                                 ->findByKeyword($stringCollection,$productIds,$isLimit);
 
             $ids = [];
-            foreach ($products as $key => $value) {
-                $ids[] = $value['idProduct']; 
+            foreach ($products as $product) {
+                $ids[] = $product['idProduct']; 
             }
         }
         
@@ -208,10 +235,16 @@ class SearchProduct
                                 ,'sorttype'
                             );
 
-        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
-        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
+        $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
+        $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
+
+        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,false);
+        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter, $notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds);
+                               ->getProductByParameterFiltering($filteredArray,
+                                                                $productIds,
+                                                                $excludePromo,
+                                                                $excludeProducts);
 
         return $productIds;
     }

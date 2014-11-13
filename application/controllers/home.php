@@ -61,8 +61,9 @@ class Home extends MY_Controller
     {
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
-            'title' => ' Shopping made easy | Easyshop.ph',
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
         );
 
         $data = array_merge($data, $this->fill_header());
@@ -121,28 +122,6 @@ class Home extends MY_Controller
       $this->load->view('templates/footer_full');
     }
 
-    /**
-     * Renders 404 page
-     *
-     * @return View
-     */
-    public function pagenotfound()
-    {
-        $this->output->set_status_header('404'); 
-        $page = $_SERVER['REQUEST_URI'];
-        log_message('error', '404 Page Not Found --> '.$page);
-        $data = array('title' => 'Page Not Found | Easyshop.ph',);
-
-        if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fillUserDetails();
-        }
-        $data['homeContent'] = $this->fillCategoryNavigation();  
-
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/general_error');
-        $this->load->view('templates/footer_primary');
-    }
     
     /**
      * Renders splash page
@@ -351,6 +330,8 @@ class Home extends MY_Controller
 
                 //HEADER DATA
                 $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+                $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+                $headerData['relCanonical'] = base_url().$vendorSlug;
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
 
@@ -388,7 +369,7 @@ class Home extends MY_Controller
         }
         // Load invalid link error page
         else{
-            $this->pagenotfound();
+            show_404();
         }
 
     }
@@ -406,6 +387,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/followers';
 
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
@@ -694,6 +677,8 @@ class Home extends MY_Controller
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/about';
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
         $this->load->view('templates/header_new', $headerData);
@@ -854,6 +839,8 @@ class Home extends MY_Controller
                                  ->getVendorDetails($sellerslug);        
         
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
+        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
+        $headerData['relCanonical'] = base_url().$sellerslug.'/contact';
         $bannerData['vendorLink'] = "contact";
         $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);

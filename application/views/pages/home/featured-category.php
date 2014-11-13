@@ -44,18 +44,26 @@
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
                             <?php $sellerimage = $productSection['userimage']; ?>
+                            <?php $secondaryImage = $productSection['productSecondaryImage']; ?>
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
                                     <center>
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <div class="div-rec-product-image">
-                                                <center>
-                                                    <span class="span-me">
-                                                        <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                                    </span>
-                                                </center>
-                                            </div>
+
+                                            <!--hover image-->
+                                            <?php if($secondaryImage): ?>
+                                                <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                                    
+                                                </div>
+                                                <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                            <?PHP else : ?>
+                                                <div class="div-rec-product-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                            <?PHP endif; ?>
+                                            <!--main image-->
+                                                    
+                                                </div>
+                                                
                                         </a>
                                     </center>
                                     <?php if ($product->getIsNew()): ?>

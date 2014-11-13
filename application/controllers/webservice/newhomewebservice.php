@@ -39,6 +39,7 @@ class NewHomeWebService extends MY_Controller
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
+        $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
@@ -117,13 +118,23 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
 
-        $map->menu->topSellers->seller[$index] = $value;
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $map->menu->topSellers->seller[$index] = $value;
 
-        if($map->asXML($this->file)) {
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }             
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                    ->set_output($this->usererror);         
+        }
+   
     } 
 
     /**
@@ -137,13 +148,23 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("addTopSellers",$value, "", "", ""); 
 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
 
-        if($addXml === TRUE) {
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }            
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }   
+                    ->set_output($this->usererror);            
+        }
+
     } 
 
     /**
@@ -155,15 +176,28 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
-
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }   
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
+
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
+
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }               
+        }
+
+
     } 
     /**
      *  Method that handles add,edit,delete for topProducts node 
@@ -175,14 +209,25 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
-
-        $map->menu->topProducts->product[$index] = $value;
-
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $map->menu->topProducts->product[$index] = $value;
+
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }   
+        }
+
+   
     }      
 
 
@@ -196,15 +241,18 @@ class NewHomeWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $target = $this->input->get("target");
+                        
         $string = $this->xmlCmsService->getString("newArrivals",$value, "", "", $target); 
-
         $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/newArrivals/arrival[last()]',"\t\t\t","\n");
 
         if($addXml === TRUE) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
-        }   
+        }    
+        
+
+
     } 
 
     /**
@@ -226,7 +274,7 @@ class NewHomeWebService extends MY_Controller
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
-        }    
+        }  
     }     
 
     /**
@@ -725,12 +773,24 @@ class NewHomeWebService extends MY_Controller
         $slug = $this->input->get("slug");
         if($action == "slug") {
 
-            $map->sellerSection->sellerSlug = $slug;
-            if($map->asXML($this->file)) {
+            $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->findBy(['slug' => $slug]);
+
+            if($sellerResult) {
+                $map->sellerSection->sellerSlug = $slug;
+                if($map->asXML($this->file)) {
+                    return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);
+                } 
+            }
+            else {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
-            } 
+                        ->set_output($this->usererror);
+            }
+
+
         }
         else {
             $filename = date('yhmdhs');
@@ -866,9 +926,44 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }    
-    }         
+    }    
 
-   /**
+    /**
+     *  Sets position of sliderSection->slide node
+     *  @return JSON
+     */
+    public function setPositionParentSlider()
+    {
+        $template = [];
+        $image = [];
+        $map = simplexml_load_file($this->file);        
+        $order = (int) $this->input->get("order");  
+        $index = (int)  $this->input->get("index");  
+        $nodename = (int)  $this->input->get("nodename");  
+        $action = $this->input->get("action");        
+        if($action == "up" && ($index !== $order)) {
+            $sliderOrder = $order;
+            $sliderIndex = $index;
+        }
+        else if($action == "down" && ($index + 1) != count($map->sliderSection->slide)){
+            $sliderOrder = $index;
+            $sliderIndex = $order;
+        }
+
+        $template = $map->sliderSection->slide[$sliderOrder]->template;
+        foreach($map->sliderSection->slide[$sliderOrder]->image as $images) {
+                $image[] = $images;
+        }
+        $this->xmlCmsService->removeXmlNode($this->file,$nodename,$sliderOrder + 1); 
+        $string = $this->xmlCmsService->getString("sliderSection", $template, "", "", "");      
+        $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
+        $this->xmlCmsService->syncSliderValues($this->file,$image,$template,$sliderIndex,$sliderOrder);
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);            
+    }
+
+    /**
      *  Sets position of slide nodes under sliderSection parent node
      *  @return JSON
      */

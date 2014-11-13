@@ -12,9 +12,14 @@
     <?php require_once("assets/includes/js.php"); ?>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
+    <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    
+    <?php if(isset($relCanonical)): ?>
+        <link rel="canonical" href="<?php echo $relCanonical ?>"/>
+    <?php endif; ?>
+    
     <!--[if lt IE 9]>
     <script>
     var e = ("abbr,article,aside,audio,canvas,datalist,details," +
@@ -197,7 +202,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="search_box prob_search_box">
                 <div>
                 <span class="main_srch_img_con"></span>
-                <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
+                <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?= $this->input->get('q_str') ? html_escape(trim($this->input->get('q_str'))) : "" ; ?>" autocomplete="off">
                 
                 <select name="category" id="category">
                     <option value="1">All Categories</option>
