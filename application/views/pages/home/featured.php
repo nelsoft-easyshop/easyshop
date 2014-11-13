@@ -72,9 +72,9 @@
                                                 
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
                                                         <?PHP if($homeContent['seller']['logo']) : ?>
-                                                            <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                            <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['logo']?>" class="img-store-logo"/>
                                                         <?PHP else : ?>
-                                                            <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
+                                                            <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
                                                         <?PHP endif; ?>
                                                     </a>
 
@@ -96,9 +96,9 @@
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
                             <?PHP if($homeContent['seller']['logo']) : ?>
-                                <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['logo']?>" class="img-featured-seller"/>
                             <?PHP else : ?>
-                                <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
                             <?PHP endif; ?>
                         </a>
                     </div>

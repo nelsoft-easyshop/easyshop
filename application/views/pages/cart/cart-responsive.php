@@ -23,7 +23,7 @@
                     <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
                        data-image="/<?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
                         <span class="cart-item-image-con">
-                            <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                            <img  src="<?php echo getAssetsDomain(); ?><?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
                         </span>
                     </a>
                 </td>
@@ -118,7 +118,7 @@
                                             <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
                                                data-image="/<?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>">
                                                 <span class="cart-item-image-con">
-                                                    <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                                                    <img  src="<?php echo getAssetsDomain(); ?><?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
                                                 </span>
                                             </a>
                                         </td>

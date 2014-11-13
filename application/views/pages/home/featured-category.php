@@ -7,8 +7,8 @@
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
                         <span class="pull-left">
-                            <img src="/assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
-                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
                         </span>
                         <p>
                             <span>
@@ -100,7 +100,7 @@
                                                     <div class="store-logo-container ">
                                                         <div class="span-store-logo">
                                                             <a href="/<?php echo $product->getMember()->getSlug() ?>">
-                                                                <img src="<?php echo $sellerimage ?>" class="img-store-logo"/>
+                                                                <img src="<?php echo getAssetsDomain().'.'.$sellerimage ?>" class="img-store-logo"/>
                                                             </a>
                                                         </div>
                                                     </div>
