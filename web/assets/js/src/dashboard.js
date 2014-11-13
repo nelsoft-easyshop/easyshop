@@ -169,4 +169,31 @@
         $( ".map-container" ).slideToggle( "slow" );
     });
    
+   $( "#btn-edit-email" ).click(function() {
+      $( ".current-email" ).slideToggle( "slow" );
+      $( ".edit-email" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-edit-email" ).click(function() {
+        $( "#btn-edit-email" ).trigger( "click" );
+    });
+    
+    $( "#btn-edit-password" ).click(function() {
+      $( ".current-password" ).slideToggle( "slow" );
+      $( ".edit-password" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-edit-password" ).click(function() {
+        $( "#btn-edit-password" ).trigger( "click" );
+    });
+    
+    $( "#btn-edit-status" ).click(function() {
+      $( ".current-status" ).slideToggle( "slow" );
+      $( ".edit-status" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-deact-status" ).click(function() {
+        $( "#btn-edit-status" ).trigger( "click" );
+    });
 }(jQuery));
+
