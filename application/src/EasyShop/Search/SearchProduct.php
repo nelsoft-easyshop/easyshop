@@ -55,16 +55,29 @@ class SearchProduct
     private $httpRequest;
 
     /**
+     * Symfony Http Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $configLoader;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$categoryManager,$httpRequest)
+    public function __construct($em,
+                                $collectionHelper,
+                                $productManager,
+                                $categoryManager,
+                                $httpRequest,
+                                $configLoader)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
         $this->httpRequest = $httpRequest;
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -222,10 +235,16 @@ class SearchProduct
                                 ,'sorttype'
                             );
 
-        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
-        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
+        $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
+        $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
+
+        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,false);
+        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter, $notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds);
+                               ->getProductByParameterFiltering($filteredArray,
+                                                                $productIds,
+                                                                $excludePromo,
+                                                                $excludeProducts);
 
         return $productIds;
     }
