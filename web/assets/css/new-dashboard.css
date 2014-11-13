@@ -680,6 +680,22 @@ a{
     top: 8px;
 }
 
+.val-success-pass{
+    color: #007c67;
+    font-size: 22px;
+    position: absolute;
+    right: 21px;
+    top: 8px;
+}
+
+.val-error-icon-pass{
+    color: #ff3e1d;
+    font-size: 22px;
+    position: absolute;
+    right: 21px;
+    top: 8px;
+}
+
 .text-required{
     padding-right: 34px;
 }
@@ -714,9 +730,180 @@ a{
 
 .map-container{
     display: none;
+    font-weight: 900;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #ff893a;
 }
 
 .map-container iframe{
     width: 100% !important;
     height: 300px !important;
+    margin-top: 10px;
+}
+
+.map-trigger{
+    border-left: solid #e2e2e2 1px;
+    margin-left:10px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.col-map{
+    padding-top: 10px;
+}
+
+.col-map span{
+    font-size: 14px;
+}
+
+.span-current-location{
+    margin-left: 20px;
+}
+
+.panel-setting-title{
+    font-weight: 900;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.btn-setting-edit-btn{
+    border: solid #00a388 2px;
+    border-bottom: 2px solid #007c67;
+    background-color: #00a388;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 6px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+.btn-setting-edit-btn:hover{
+    border: 2px solid #007c67;
+    background: #007c67;
+    color: #fff;
+}
+
+.btn-setting-save-btn{
+    border: solid #ff893a 2px;
+    border-bottom: 2px solid #ff893a;
+    background-color: #ff893a;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.btn-setting-save-btn:hover{
+    border: 2px solid #ff6237;
+    background: #ff6237;
+    color: #fff;
+}
+
+.btn-setting-cancel-btn{
+    border: solid #565656 2px;
+    border-bottom: 2px solid #565656;
+    background-color: #fff;
+    color: #565656;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.btn-setting-cancel-btn:hover{
+    border: 2px solid #565656;
+    background: #565656;
+    color: #fff;
+}
+
+.setting-current-email{
+    font-size: 15px;
+    margin-right: 20px;
+}
+
+.btn-setting-edit-btn > .icon-edit{
+    margin-right: 5px;
+}
+
+.p-note-setting{
+    margin-top: 24px;
+    line-height: 20px;
+}
+
+.div-account-setting{
+    width: 100%;
+    border: solid #e2e2e2 1px;
+    min-height: 200px;
+    padding: 30px 40px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.btn-deactivate{
+    text-transform: uppercase;
+}
+
+.p-deact-note-setting{
+    margin-top: 13px;
+    line-height: 20px;
+}
+
+.btn-easydeal-btn{
+    background: #fff;
+    border: solid #24d177 3px;
+    border-radius: 5px;
+    font-weight: 900;
+    font-size: 16px;
+    color: #24d177;
+    padding: 10px 30px;
+}
+
+.btn-easydeal-btn:hover{
+    color: #24d177;
+}
+
+.btn-easydeal-btn > img{
+    height: 25px;
+}
+
+.col-inline-textbtn{
+    padding-right: 0px;
+}
+
+.edit-email, .edit-password, .edit-status{
+    display: none;
+}
+
+.form-action-password{
+    padding-left: 15px;
+}
+
+.p-orange{
+    color: #ff893a;
+    font-weight: 900;
+    font-size: 15px;
+}
+
+.div-reason-choice > input[type="radio"],
+.div-reason-choice > input[type="checkbox"]
+{
+    margin: 0px !important;
+    height: 11px !important;
+}
+
+.div-reason-choice > label{
+    font-size: 14px;
+}
+
+.password-label-strength > b{
+    font-weight: 900;
 }
