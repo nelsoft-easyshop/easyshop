@@ -56,7 +56,14 @@ class CMS
     }
   
 
-
+    /**
+     *  Syncs values from new_home_page.xml to new_home_page_temp.xml
+     *  @param string $tempHomeFile
+     *  @param string $homeFile
+     *  @param array $sliders
+     *  @param int $order
+     *  @param int $subIndex
+     */
     public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0, $subIndex = 0)
     {
 

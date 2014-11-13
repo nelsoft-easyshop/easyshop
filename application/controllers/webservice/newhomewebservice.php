@@ -250,7 +250,7 @@ class NewHomeWebService extends MY_Controller
      *
      *  @return string
      */
-    public function getSliderContents() 
+    public function getTempContents() 
     {
         $this->output
             ->set_content_type('text/plain') 
