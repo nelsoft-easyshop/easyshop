@@ -35,16 +35,24 @@ class ApiFormatter
     private $productManager;
 
     /**
+     * The review product service
+     *
+     * @var EasyShop\Review\ReviewProduct
+     */
+    private $reviewProductService;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$cartManager)
+    public function __construct($em,$collectionHelper,$productManager,$cartManager,$reviewProductService)
     {
         $this->em = $em;  
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->cartManager = $cartManager;
         $this->cartImplementation = $cartManager->getCartObject();
+        $this->reviewProductService = $reviewProductService;
     }
 
     public function formatItem($productId,$isItemView = false)
@@ -195,7 +203,7 @@ class ApiFormatter
         }
 
         // get reviews 
-        $recentReview = $this->productManager->getProductReview($productId);
+        $recentReview = $this->reviewProductService->getProductReview($productId);
 
         return array(
                 'productDetails' => $productDetails,
