@@ -479,6 +479,9 @@ class Memberpage extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
         
+        $this->serviceContainer["assets_uploader"]->uploadUserAvatar($uid, $data);
+        exit();
+        
         //echo error may be here: $result['error']
         $result = $this->memberpage_model->upload_img($uid, $data);
         
