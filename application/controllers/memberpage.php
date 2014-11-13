@@ -40,7 +40,7 @@ class Memberpage extends MY_Controller
     public function sample()
     {
         $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
-        echo '<img src="/'.$this->qrManager->getImagePath('asd').'"/>';
+        echo '<img src="' getAssetsDomain().$this->qrManager->getImagePath('asd').'"/>';
     }
 
     /**
