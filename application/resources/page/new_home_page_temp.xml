@@ -2,21 +2,100 @@
 <map>
     
     <sliderSection>
+
+         
+            
         
 
-        
-        
-        <slide>
+		
+
+		
+
+		<slide>
+            <template>A</template>
+            
+
+			
+
+			<image>
+                <path>/assets/images/homeslider/hs_0.jpg</path>
+                <target>/</target>
+            </image>
+
+			<image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+
+			<image>
+                <path>/assets/images/homeslider/hs_0_2_1.jpg</path>
+                <target>/</target>
+            </image>
+
+        </slide>
+
+		<slide>
+            <template>A</template>
+            <image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+
+        </slide>
+
+		<slide>
             <template>C</template>
             <image>
-                <path>/assets/images/homeslider/sellerspromo.jpg</path>
-                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282474635295466</target>
+                <path>/assets/images/homeslider/hs_0_2_1.jpg</path>
+                <target>/</target>
             </image>
+
+			<image>
+                <path>/assets/images/homeslider/hs_0_2_2.jpg</path>
+                <target>/</target>
+            </image>
+
+        </slide>
+
+		<slide>
+            <template>D</template>
             <image>
-                <path>/assets/images/homeslider/buyatzero.jpg</path>
-                <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448</target>
+                <path>/assets/images/homeslider/hs_6.jpg</path>
+                <target>/</target>
             </image>
-        </slide>                
+
+			<image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+
+			<image>
+                <path>/assets/images/homeslider/hs_0_3.jpg</path>
+                <target>/</target>
+            </image>
+
+        </slide>   
+
+
     </sliderSection>
+
+    <sliderTemplate>
+        <template>
+            <templateName>A</templateName>
+            <imageCount>2</imageCount>
+        </template>
+        <template>
+            <templateName>B</templateName>
+            <imageCount>1</imageCount>            
+        </template>
+        <template>
+            <templateName>C</templateName>
+            <imageCount>2</imageCount>            
+        </template>
+        <template>
+            <templateName>D</templateName>
+            <imageCount>3</imageCount>            
+        </template>                
+    </sliderTemplate>      
 
 </map>

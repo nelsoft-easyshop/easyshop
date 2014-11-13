@@ -936,10 +936,10 @@ class NewHomeWebService extends MY_Controller
 
         $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection as $key => $slider) {
+        foreach ($map->sliderSection->slide as $key => $slider) {
             $sliders[] = $slider;
         }
-
+        $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
         $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);
 
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
