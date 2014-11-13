@@ -61,8 +61,8 @@
       <div class="copyright">
            <p style='font-weight:bold'>This page is best viewed with one of these browsers:
                 <span class="browser-lnk">
-                  <a href='https://www.google.com/intl/en/chrome/browser/' target="_blank"><img src='/assets/images/icon_browser_chrome.png'> <span>Chrome</span></a>
-                  <a href='http://www.mozilla.org/en-US/firefox/new/' target="_blank"><img src='/assets/images/icon_browser_firefox.png'> <span>Firefox</span></a>
+                  <a href='https://www.google.com/intl/en/chrome/browser/' target="_blank"><img src='<?php echo getAssetsDomain(); ?>assets/images/icon_browser_chrome.png'> <span>Chrome</span></a>
+                  <a href='http://www.mozilla.org/en-US/firefox/new/' target="_blank"><img src='<?php echo getAssetsDomain(); ?>assets/images/icon_browser_firefox.png'> <span>Firefox</span></a>
               </span>
            </p>
           <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
