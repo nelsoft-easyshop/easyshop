@@ -123,6 +123,8 @@
 </div>
 <?php endforeach; ?>
 
-<div id="pagination-section">
+<?php if(isset($pagination)): ?>
+<div class="pagination-section">
     <?=$pagination;?>
 </div>
+<?php endif; ?>

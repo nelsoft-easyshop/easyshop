@@ -1911,7 +1911,7 @@ class Memberpage extends MY_Controller
 
         $responseArray = [
             'isSuccess' => $deleteResponse,
-            'message' => $deleteResponse ? "You can't delete this product" : "",
+            'message' => $deleteResponse ? "" : "You can't delete this item.",
             'nextProduct' => ''
         ];
 
@@ -1922,15 +1922,33 @@ class Memberpage extends MY_Controller
     {
         $memberId = $this->session->userdata('member_id');
         $productId = $this->input->get('product_id');
+
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string')); 
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productManager = $this->serviceContainer['product_manager'];
 
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_HARD_ON);
 
+        $isDelete = [EsProduct::IS_DELETE_ON];
+        $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+        $userProducts = $productManager->getProductsByUser($memberId,
+                                                           $isDelete,
+                                                           $isDraft,
+                                                           $productManager::PRODUCT_COUNT_DASHBOARD*($page-1),
+                                                           $searchString,
+                                                           $sortType);
+
+        $viewData['products'] = $userProducts;
+        $htmlView = $this->load->view('partials/dashboard-products', $viewData, true);
+
         $responseArray = [
             'isSuccess' => $deleteResponse,
-            'message' => $deleteResponse ? "You can't delete this product" : "",
-            'nextProduct' => ''
+            'message' => $deleteResponse ? "" : "You can't delete this item.",
+            'html' => $htmlView,
+            'count' => count($userProducts),
         ];
 
         echo json_encode($responseArray);
