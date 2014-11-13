@@ -9,7 +9,7 @@
         </div>                        
         <div class="img-holder temp3-img-2">
               <a href="<?php echo $sliderImage[1]['target']['url'] ?>" target=<?php echo $sliderImage[1]['target']['targetString'];?>>
-                <img src="<?php echo getAssetsDomain().'.'.echo $sliderImage[1]['path'] ?>">
+                <img src="<?php echo getAssetsDomain().'.'. $sliderImage[1]['path'] ?>">
             </a>
         </div>
         
