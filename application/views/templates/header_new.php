@@ -71,7 +71,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div class="main-container">
         <div>
             <a href="/">
-                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
             </a>
         </div>
         <div class="search-container">
@@ -101,7 +101,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="mrgn-bttm-15">
                                     <div class="header-cart-item-img">
                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                            <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                         </a>
                                     </div>
                                     <div class="header-cart-item-con">
@@ -137,7 +137,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <?=$msgs['unread_msgs'];?>
                 </span>
                 <?php endif;?>
-                <img src="/assets/images/img-default-icon-user.jpg"> 
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
                 <a href="/<?php echo html_escape($user['slug'])?>" class="vendor-login-name">
                     <span>
                         <strong><?php echo html_escape($user['username']); ?></strong>
@@ -177,7 +177,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <?php else: ?>
         <div>
             <div class="vendor-login-con vendor-out-con">
-                <img src="/assets/images/img-default-icon-user.jpg"> 
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
                 <a href="/login"><strong>login</strong></a>  or 
                 <a href="/register"><strong>Create and account</strong></a>
             </div>

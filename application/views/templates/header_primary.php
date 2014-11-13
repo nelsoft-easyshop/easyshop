@@ -85,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user_details->profileImage;?>">
+                                                    <img src="<?php echo getAssetsDomain(); ?><?=$user_details->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user_details->getUsername()); ?>
@@ -120,7 +120,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
-                                                <img src="/assets/images/img-login-icon.png" alt="login">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
@@ -140,7 +140,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <h1 class="logo clearfix">
                                 <span>EasyShop.ph</span>
                                 <a href="/" title="EasyShop.ph Website">
-                                    <img src="/assets/images/img_logo.png" alt="Online Shopping">
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Online Shopping">
                                 </a>
                             </h1>
                         </div><!-- End .col-md-5 -->
@@ -166,7 +166,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
                                                                     <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                                        <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
@@ -221,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div  class="sticky-nav-logo-con">
                                 <div class="sticky-nav-logo">
                                     <a href="">
-                                        <img src="/assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
                                     </a>
                                 </div>
                             </div>
@@ -293,7 +293,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <?php if($topSeller['details']): ?>
                                                                 <a href="<?php echo $topSeller['details']->getSlug() ?>">
                                                                     <div class="top-seller-profile-photo">
-                                                                        <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
+                                                                        <img src="<?php echo getAssetsDomain().'.'.$topSeller['image'] ?>" alt="seller profile photo">
                                                                     </div>
                                                                     <div class="top-seller-name">
                                                                         <?php $storeName = $topSeller['details']->getStoreName(); ?>
@@ -336,7 +336,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
                                                                     <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                                        <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
@@ -366,7 +366,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <?php if(isset($logged_in) && $logged_in): ?>
                                                 <div class="new-user-nav-dropdown">
                                                     <div class="login-profile-con">
-                                                        <img src="/<?=$user_details->profileImage;?>">
+                                                        <img src="<?php echo getAssetsDomain(); ?><?=$user_details->profileImage;?>">
                                                     </div>
                                                     <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
                                                         <?php echo html_escape($user_details->getUsername()) ;?>
@@ -401,7 +401,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </div>
                                             <?php else: ?> 
                                                 <div class="header-link">
-                                                    <img src="/assets/images/img-login-icon.png" alt="login">
+                                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-login-icon.png" alt="login">
                                                     <a href="/login">login</a>&nbsp;or&nbsp;
                                                     <a href="/register">create an account</a>
                                                 </div>
