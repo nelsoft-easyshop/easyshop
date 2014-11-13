@@ -44,16 +44,15 @@
                     <div id="delivery-address">
                         <?php include("dashboard-delivery-address.php");?>
                     </div>
-                    <div id="account-settings">account settings</div>
+                    <div id="account-settings">
+                        <?php include("dashboard-account-settings.php");?>
+                    </div>
                 </div>
                 <div class="clear"></div>
             </div>
         </div>
     </div>
 </section>
-<br/>
-<br/>
-<br/>
 <br/>
 <br/>
 <br/>
