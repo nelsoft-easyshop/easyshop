@@ -434,7 +434,10 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productIds
      * @return array
      */
-    public function getProductByParameterFiltering($filterArray,$productIds = array())
+    public function getProductByParameterFiltering($filterArray,
+                                                   $productIds = [],
+                                                   $excludePromos = [],
+                                                   $excludeProduct = [])
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -488,6 +491,18 @@ class EsProductRepository extends EntityRepository
         if(!empty($productIds)){
             $qbResult = $qbResult->andWhere(
                                         $qb->expr()->in('p.idProduct', $productIds)
+                                    );
+        }
+
+        if(!empty($excludePromos)){
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->notIn('p.promoType', $excludePromos)
+                                    );
+        }
+
+        if(!empty($excludeProduct)){
+            $qbResult = $qbResult->andWhere(
+                                        $qb->expr()->notIn('p.slug', $excludeProduct)
                                     );
         }
 

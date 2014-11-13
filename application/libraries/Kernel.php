@@ -245,6 +245,7 @@ class Kernel
             $categoryManager = $container['category_manager'];
             $httpRequest = $container['http_request'];
             $promoManager = $container['promo_manager'];
+            $configLoader = $container['config_loader'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
@@ -253,6 +254,7 @@ class Kernel
                                                         ,$categoryManager
                                                         ,$httpRequest
                                                         ,$promoManager
+                                                        ,$configLoader
                                                     );
         };
 
