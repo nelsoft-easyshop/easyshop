@@ -6,3 +6,4 @@ $config = [
                     ],
         'hide_product_slug' => [],
     ];
+
