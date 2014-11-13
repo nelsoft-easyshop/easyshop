@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
     <meta name="keywords" content=""/>
-    <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
     <?php endif; ?>
@@ -52,6 +52,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
 </head>
 <body>
 

@@ -1,9 +1,9 @@
 
 <meta name="viewport" content="width=device-width, maximum-scale=1.0">
-<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <div class="clear"></div>
     <section style="color-gray display-when-desktop">
         <div class="container container-responsive">
@@ -87,7 +87,7 @@
                                         }
                                     ?> 
                                         <div class="<?php echo $typeOfView; ?>"> 
-                                            <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+                                            <a href="/<?php echo "item/" . $productSlug; ?>">
                                                 <span class="prod_img_wrapper">
                                                     <?php if(floatval($percentage) > 0):?>
                                                     <div>
@@ -98,12 +98,12 @@
                                                     <?php endif; ?>
                                                 
                                                     <span class="prod_img_container">
-                                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                                                            <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
                                                     </span>
                                                 </span>
                                             </a>
                                             <h3>
-                                                <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+                                                <a href="/<?php echo "item/" . $productSlug; ?>">
                                                     <?php echo $productName; ?>
                                                 </a>
                                             </h3>
@@ -183,14 +183,14 @@
                                     <tr>
                                         <td width="90px" class="v-align-top">
                                             <span class="prod_img_container">
-                                                 <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
-                                                    <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                                                 <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
+                                                    <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
                                                 </a>
                                             </span>
                                         </td>
                                         <td class="v-align-top">
                                             <p class="p-item-name"> 
-                                                <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
+                                                <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
                                                     <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
                                                 </a>
                                             </p>
@@ -297,7 +297,7 @@
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div> 
 
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>

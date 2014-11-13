@@ -8,7 +8,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Easyshop.ph - Welcome</title>
-        <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <meta property="og:title" content="EasyShop.ph" />
         <meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia.
            The mission that EasyShop has is to provide its customer with a Fast and Easy
@@ -18,13 +18,13 @@
         <meta name="viewport" content="width=device-width">
 
         <!-- CSS -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css?ver=<?=ES_FILE_VERSION?>"><!-- responsive menu -->
+        <link rel="stylesheet" href="/assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="/assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
+        <link rel="stylesheet" href="/assets/css/landingpage/responsive-nav.css?ver=<?=ES_FILE_VERSION?>"><!-- responsive menu -->
 
         <!-- Contact Form CSS files -->
-        <link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
-        <link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link type='text/css' href='/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
+        <link type='text/css' href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 
 
 
@@ -76,13 +76,13 @@
     <header id="header" class="">
         <div class="header">
                 <div class="logo_con">
-                    <a href='<?=base_url()?>'><span class="span_bg logo"></span></a>
+                    <a href='/'><span class="span_bg logo"></span></a>
                 </div>
                 <div class="nav_container">
                     <nav class="nav-collapse">
                       <ul>
-                        <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
-                        <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
+                        <li class="grid-1"><a href="/">Shop</a></li>
+                        <li class="grid-1"><a href="/sell/step1">Sell</a></li>
                         <?php if(!$logged_in): ?>
                         <li class="btn_login">
                             <?php echo form_open('login');?>
@@ -96,17 +96,17 @@
                         </li>
                         <?php else: ?>
                             <li class='btn_login'>
-                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($user["username"]);?>'/></a>
+                                <a href='/me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($user["username"]);?>'/></a>
                             </li>
 
 
                              <li class="btn_register">
-                                <a href='<?=base_url()?>login/logout'><span class='btn' id='signout'>Sign-out</span></a>
+                                <a href='/login/logout'><span class='btn' id='signout'>Sign-out</span></a>
                             </li>
                         <?php endif; ?>
                         <li class="shop_con">
-                            <a href="<?=base_url()?>home">Shop</a>
-                            <a href="<?=base_url()?>sell/step1">Sell</a>
+                            <a href="/">Shop</a>
+                            <a href="/sell/step1">Sell</a>
                         </li>
                       </ul>
                     </nav>
@@ -284,8 +284,8 @@
                             <input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
                             <span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
                             <div id="username_status">
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
                                 <span class="username_availability"></span>
                             </div>
                         </div>
@@ -305,8 +305,8 @@
                             <h4 class="txt_cp">Confirm Password</h4>
                             <input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
                             <span class="field_pword_status">
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
                             </span>
                             <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                             <span class="help-block spnmsg padding1" style="text-align:left"></span>
@@ -316,8 +316,8 @@
                             <input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
                             <input type="hidden" id="emailcheck" value="">
                             <div id="email_status">
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
                             </div>
                             <br/>
                             <span class="red email_availability"></span>
@@ -329,8 +329,8 @@
                             <input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
                             <input type="hidden" id="mobilecheck" value="">
                             <div id="mobile_status">
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
                                 <span class=" red  mobile_availability"></span>
                             </div>
                             <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
@@ -346,7 +346,7 @@
                             <!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
                             <input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
                             <div style='display:inline-block; position:absolute; width:50px; overflow:hidden;'>
-                            <img style='display:none;margin-top:5px;margin-left:5px;' src="<?=base_url()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
+                            <img style='display:none;margin-top:5px;margin-left:5px;' src="/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
                             </div>
                         </div>
                     </fieldset>
@@ -360,10 +360,10 @@
             <div class="footer">
                 <ul>
                     <li>
-                        <a href="<?=base_url()?>home">Shop</a>
+                        <a href="/">Shop</a>
                     </li>
                     <li>
-                        <a href="<?=base_url()?>sell/step1">Sell</a>
+                        <a href="/sell/step1">Sell</a>
                     </li>
                     <li>
                         <div class="footer_payment">
@@ -380,10 +380,10 @@
                             <p><strong>Social Media:</strong></p>
                             <ul>
                                 <li>
-                                    <div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+                                    <div class="fb-like" data-href="<?php echo $facebook; ?>" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
                                 </li>
                                 <li>
-                                    <a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
+                                    <a href="<?php echo $twitter; ?>" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
 
                                 </li>
                             </ul>
@@ -410,14 +410,14 @@
 <?php echo form_close();?>
 
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js"></script>
-<script src="<?=base_url()?>assets/js/src/landingpage-responsive-nav.js"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
+<script src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
+<script src="/assets/js/src/landingpage-responsive-nav.js"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+<script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
 
 <script type="text/javascript">
     var config = {
@@ -445,8 +445,8 @@
     });
 </script>
 <!-- password meter: uses mootool, consider replacing -->
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
 <!-- end mootool -->
 <script>
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');

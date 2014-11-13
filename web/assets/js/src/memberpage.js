@@ -811,7 +811,7 @@ $(document).ready(function(){
                 }
             }
             else
-                window.location.replace('<?php echo base_url();?>' + 'memberpage');
+                window.location.replace('/memberpage');
         });
     });
 });

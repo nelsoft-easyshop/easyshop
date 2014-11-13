@@ -133,7 +133,7 @@ class PayPalGateway extends AbstractGateway
     {
         header('Content-type: application/json');
         if(!$memberId){
-            redirect(base_url().'home', 'refresh');
+            redirect('/', 'refresh');
         }
 
         // Point Gateway

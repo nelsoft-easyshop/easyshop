@@ -67,7 +67,7 @@
 }
 </style>
 
-<link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <div id="linklist">
   <ul>
     <li>
@@ -104,7 +104,7 @@
                       data-ratioxx="<?=explode(',' ,$value['imagemap']['coordinate'])[2]?>"
                       data-ratioyy="<?=explode(',' ,$value['imagemap']['coordinate'])[3]?>"
                       data-link="<?=$value['imagemap']['target']?>"
-                    class="editPic" src="<?= base_url().$value['src']; ?>">  </div>  
+                    class="editPic" src="<?= '/'.$value['src']; ?>">  </div>  
                 </div>
             <?php endforeach; ?>
         </div>  
@@ -174,7 +174,7 @@
 </div>
 
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/manage.js'></script>
-<script type='text/javascript' src="<?=base_url()?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='/assets/js/src/manage.js'></script>
+<script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>

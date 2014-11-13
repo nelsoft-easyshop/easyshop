@@ -1,4 +1,4 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <div class="wrapper2">
 
     <div class="clear"></div>
@@ -20,12 +20,12 @@
             <div class="add_product_category">
                <br/><br/>
                <p><h2>Verify your e-mail address to carry out a transaction.</h2></p>
-               <p><a href = "<?=base_url()?>me?me=myinfo">You may also resend the verification e-mail by going to your member page.</a></p>
+               <p><a href = "/me?me=myinfo">You may also resend the verification e-mail by going to your member page.</a></p>
                <br/><br/><br/><br/><br/><br/>
             </div>
 
             <div class="clear"></div>
-            <!--<form action="<?php echo base_url() . 'productUpload/step2'; ?>" method="POST">-->
+            <!--<form action="<?php echo '/productUpload/step2'; ?>" method="POST">-->
             <?php echo form_open('productUpload/step2');?>
 
                 <div class="add_category_submit"> <input type="hidden" name="hidden_attribute" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed"></div>
@@ -55,7 +55,7 @@
                     $.ajax({
                         async: false,
                         type: "POST",
-                        url: '<?php echo base_url(); ?>' + D.action,
+                        url: '/' + D.action,
                         data: "cat_id=" + D.cat_id + "&level=" + D.level,
                         dataType: "json",
                         beforeSend: function(jqxhr, settings) {

@@ -1,10 +1,8 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
-<!-- Start of simple slider-->
-<!--<link rel="stylesheet" href="--><?//=base_url()?><!--assets/css/normalize.min.css" />-->
-<link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.css" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.skinFlat.css" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css" />
-<script src="<?=base_url()?>assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
+<link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
+<link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
+<link rel="stylesheet" href="/assets/css/bootstrap.css" />
+<script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
 <script type="text/javascript">
     var af = new Array();
 </script>
@@ -112,7 +110,7 @@
                                 <h5>
                                     Categories where your listing will appear 
                                     <a class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span class="1line_tooltip">
                                             Your item will be listed under this EasyShop category
                                         </span>
@@ -141,7 +139,7 @@
                                 <div class="col-xs-12 col-sm-10 col-md-10">
                                     <input class="width-50p ui-form-control" type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
                                     <a  class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span class="lines_tooltip">
                                             Give your listing a descriptive title. Include necessary information so that other users may easily find your listing.
                                         </span>
@@ -163,7 +161,7 @@
                                         <?php endforeach; ?>
                                     </select>
                                     <a class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span class="lines_tooltip">
                                             Identify the condition of your item so potential buyers may know what they should be getting.
                                         </span>
@@ -181,7 +179,7 @@
                                     Add Photos
                                     <span class="required">You are required to have a minimum of 1 photo</span>
                                     <a class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span class="twolines_tooltip">
                                             Upload images for your listing. We recommend that you keep the image resolution within <?php echo $img_max_dimension[0].'x'.$img_max_dimension[1]; ?> for best quality of your images
                                         </span>
@@ -209,7 +207,7 @@
                                             </script>
                                             <div id="previewList<?php echo $main_img_cnt; ?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
                                                 <span class="upload_img_con">
-                                                    <img src="<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?>" alt="<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?> ">
+                                                    <img src="/<?php echo $main_image['path'].'categoryview/'.$main_image['file'];?>" alt="/<?php echo $main_image['path'].'categoryview/'.$main_image['file'];?> ">
                                                 </span>
                                                 <a href="javascript:void(0)" class="removepic" data-number="<?php echo $main_img_cnt; ?>"  data-imgid="<?php echo $main_image['id_product_image'];?>">x</a>
                                                 <br>
@@ -251,7 +249,7 @@
                                 <div class="col-xs-12 col-sm-10 col-md-10">
                                     <input type="text" class="width-50p ui-form-control"  maxlength="15" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'';?>">
                                     <a class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
                                         </span>
                                     </a>
@@ -286,7 +284,7 @@
                                 <div class="col-xs-12 col-sm-10 col-md-10">
                                     <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>">
                                     <a class="tooltips" href="javascript:void(0)">
-                                        <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                        <img src="/assets/images/icon_qmark.png" alt="">
                                         <span>
                                             Provide meaningful keywords for your listing so that other users may search for it more easily.
                                         </span>
@@ -317,7 +315,7 @@
                                             <div class="col-xs-12 col-sm-10 col-md-10">
                                                 <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
                                                 <a class="tooltips" href="javascript:void(0)">
-                                                    <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                                    <img src="/assets/images/icon_qmark.png" alt="">
                                                     <span>Describe your item in a brief but precise way.</span>
                                                 </a>
                                             </div>
@@ -340,7 +338,7 @@
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">SKU Code: </div> <!-- SKU of the product -->
                                             <div class="col-xs-12 col-sm-10 col-md-10">
                                                 <input class="width-50p ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
-                                                <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                                <a class="tooltips" href="javascript:void(0)"><img src="/assets/images/icon_qmark.png" alt="">
                                                     <span class="2lines_tooltip">Stock Keeping Unit: you can assign any code in order to keep track of your items</span>
                                                 </a>
                                             </div>
@@ -385,8 +383,8 @@
                                                     </div>
                                                     <div class="image-div col-xs-2 col-sm-2 col-md-3 pd-bttm-10">
                                                         <input type="hidden" class="image-val imageText1"/>
-                                                        <!-- <a class="attr-image image1" data-cnt='1' href="javascript:void(0)"><img src="<?=base_url().'assets/images/img_upload_photo.jpg'?>"></a> -->
-                                                        <a class="select-image qty-image-con image1" data-cnt='1' href="javascript:void(0)"><img src="<?=base_url().'assets/images/img_upload_photo.jpg'?>"></a>
+                                                        <!-- <a class="attr-image image1" data-cnt='1' href="javascript:void(0)"><img src="<?= '/assets/images/img_upload_photo.jpg'?>"></a> -->
+                                                        <a class="select-image qty-image-con image1" data-cnt='1' href="javascript:void(0)"><img src="<?= '/assets/images/img_upload_photo.jpg'?>"></a>
                                                         <a class="select-image image1 select-image-pencil" data-cnt='1' href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>
                                                         <!-- <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a> -->
                                                     </div>
@@ -522,13 +520,13 @@
     var combinationcnt = '<?=$cmbcounter;?>';  
     var isEdit =  '<?=(isset($is_edit)) ? "1" : "0" ?>';
 </script>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
-<script src="<?=base_url()?>assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
-<script src="<?=base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
-<script src="<?=base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+<script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
+<script type="text/javascript" src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
+<script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+<script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
+<script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
 <?php if(isset($soloAttribute)): ?>
     <?php foreach ($soloAttribute as $key => $value): ?>

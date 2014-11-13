@@ -14,26 +14,23 @@ $productManager = $CI->kernel->serviceContainer['product_manager'];
 
 $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
 
-$con = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
-
-if (mysqli_connect_errno()) {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
+$dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'],
+                $configDatabase['user'],
+                $configDatabase['password']);
 
 $sql = "SELECT id_product FROM es_product";
-$sth = mysqli_query($con,$sql); 
 $counter = 0;
 echo PHP_EOL .'Scanning of data started ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
 echo PHP_EOL;
 
-while($r = mysqli_fetch_array($sth)) { 
-    $productManager->generateSearchKeywords($r['id_product']);
-    echo $r['id_product'] . ' DONE'.PHP_EOL;
+foreach ($dbh->query($sql) as $row) {
+    $productManager->generateSearchKeywords($row['id_product']);
+    echo $row['id_product'] . ' DONE'.PHP_EOL;
     $counter++;
 }
 
 echo PHP_EOL .'Scanning of data ended ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
 echo PHP_EOL.$counter.' ROWS AFFECTED!'.PHP_EOL;
 
-mysqli_close($con);
+$dbh = null;
 ?>

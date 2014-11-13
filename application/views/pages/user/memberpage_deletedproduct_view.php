@@ -4,7 +4,7 @@
             <div class="post_item_img_table">
             
                 <span class="post_item_img_con">
-                   <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+                   <img src="/<?php echo $deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                 </span>
             </div>
 			<p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>

@@ -21,8 +21,9 @@
                         <p>Recommended</p>
                         <ul class='slides_prod slider_product'>
                             <?PHP for($px=0;$px < sizeof($cat_items[$x][0][$x2]['popular']);$px++): ?>
+
                                 <li>
-                                    <a href='/item/<?= $cat_items[$x][0][$x2]['popular'][$px]['slug']?>'>
+                                    <a href='/item/<?= '/item/'.$cat_items[$x][0][$x2]['popular'][$px]['slug']?>'>
                                         <span class="cat_slide_img_wrapper">
                                             <span class="cat_slide_img_con">
                                                 <img src="<?php echo getAssetsDomain().$cat_items[$x][0][$x2]['popular'][$px]['path'].'thumbnail/'.$cat_items[$x][0][$x2]['popular'][$px]['file']; ?>"/>
@@ -33,12 +34,13 @@
                                         <br />
                                     </a>
                                 </li> 
+
                             <?PHP endfor; ?>                                        
                         </ul>
                         
                         <ul class='category_product_types'>         
                             <?PHP for($x3=0;$x3 < sizeof($cat_items[$x][0][$x2][6]);$x3++): ?>     
-                            <li><a href='<?=base_url()?>category/<?PHP echo $cat_items[$x][0][$x2][6][$x3]['slug'];?>'><?PHP echo html_escape($cat_items[$x][0][$x2][6][$x3]['name']); ?></a></li>
+                            <li><a href='/category/<?PHP echo $cat_items[$x][0][$x2][6][$x3]['slug'];?>'><?PHP echo html_escape($cat_items[$x][0][$x2][6][$x3]['name']); ?></a></li>
                             <?PHP endfor; ?>     
                         </ul>  
                     </div>

@@ -4,6 +4,7 @@ namespace Easyshop\SocialMedia;
 
 use \DateTime;
 use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsMemberMerge;
 use Facebook\FacebookSession;
 
 class SocialMediaManager
@@ -54,6 +55,19 @@ class SocialMediaManager
      * @var EasyShop\Utility\StringUtility
      */
     private $stringUtility;
+
+    /**
+     * Form validation
+     *
+     */
+    private $formValidation;
+
+    /**
+     *
+     * Form Factory
+     *
+     */
+    private $formFactory;
     
     /**
      * Class constructor. Loads dependencies.
@@ -64,8 +78,10 @@ class SocialMediaManager
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
      * @param EasyShop\Utility\StringUtility
+     * @param EasShop\\EasyShop\FormValidation\ValidationRules
+     * @param Symfony\Component\Form\Forms
      */
-    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility)
+    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility, $formValidation, $formFactory)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
@@ -73,6 +89,8 @@ class SocialMediaManager
         $this->userManager = $userManager;
         $this->oauthConfig = $configLoader->getItem('oauth');
         $this->stringUtility = $stringUtility;
+        $this->formValidation = $formValidation;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -127,7 +145,6 @@ class SocialMediaManager
                 $userProfile = $googleData->userinfo->get();
                 break;
         }
-
         return $userProfile;
     }
 
@@ -144,19 +161,28 @@ class SocialMediaManager
      *
      * @param $oauthId
      * @param $oauthProvider
-     * @return false or EsMember
+     * @param $email
+     * @return array
      */
-    public function authenticateAccount($oauthId, $oauthProvider)
+    public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
-        $response = FALSE;
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                        ->findOneBy(array(
-                                'oauthId' => $oauthId,
-                                'oauthProvider' => $oauthProvider
-                            ));
-        if($member){
-            $response = $member;
+        $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy(array(
+                                    'email' => $email
+                                ));
+        $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
+                                    ->findOneBy(array(
+                                        'socialMediaId' => $oauthId,
+                                        'socialMediaProvider' => $oauthProvider
+                                    ));
+        if ($socialMediaAccount) {
+            $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($socialMediaAccount->getMember());
         }
+        $response = array(
+            'doesAccountExists' => $doesEmailExists,
+            'doesAccountMerged' => $socialMediaAccount
+        );
 
         return $response;
     }
@@ -175,32 +201,62 @@ class SocialMediaManager
      */
     public function registerAccount($username, $fullname, $gender, $email, $emailVerify, $oAuthId, $oAuthProvider)
     {
-        $username = $this->stringUtility->cleanString(strtolower($username));
-        $existingMember = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->findOneBy(['username' => $username]);
-        if($existingMember){
-            $username = $this->stringUtility->cleanString(strtolower($fullname));
+        $member = false;
+        $rules = $this->formValidation->getRules('register');
+        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+            ->setMethod('POST')
+            ->add('username', 'text', array('constraints' => $rules['username']))
+            ->getForm();
+
+        $form->submit([ 'username' => $username]);
+        if ($form->isValid()) {
+            $member = new EsMember();
+            $member->setUsername($username);
+            $member->setFullname($fullname);
+            $member->setGender($gender);
+            $member->setEmail($email);
+            $member->setIsEmailVerify($emailVerify);
+            $member->setDatecreated(new DateTime('now'));
+            $member->setLastmodifieddate(new DateTime('now'));
+            $member->setLastLoginDatetime(new DateTime('now'));
+            $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
+            $member->setLastFailedLoginDatetime(new DateTime('now'));
+            $member->setSlug('');
+            $this->em->persist($member);
+            $this->em->flush();
+
+            $this->userManager->generateUserSlug($member->getIdMember());
+            $member = $this->mergeAccount($member, $oAuthId, $oAuthProvider);
         }
 
-        $member = new EsMember();
-        $member->setUsername($username);
-        $member->setFullname($fullname);
-        $member->setGender($gender);
-        $member->setEmail($email);
-        $member->setIsEmailVerify($emailVerify);
-        $member->setDatecreated(new DateTime('now'));
-        $member->setLastmodifieddate(new DateTime('now'));
-        $member->setLastLoginDatetime(new DateTime('now'));
-        $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
-        $member->setLastFailedLoginDatetime(new DateTime('now'));
-        $member->setOauthId($oAuthId);
-        $member->setOauthProvider($oAuthProvider);
-        $member->setSlug('');
-        $this->em->persist($member);
-        $this->em->flush();
+        return $member;
+    }
 
-        $this->userManager->generateUserSlug($member->getIdMember());
-        
+    /**
+     * Merge account
+     * @param $member
+     * @param $oAuthId
+     * @param $oAuthProvider
+     * @return EsMember
+     */
+    public function mergeAccount($member, $oAuthId, $oAuthProvider)
+    {
+        $doesAccountMerged = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
+                                ->findBy([
+                                    'member' => $member->getidMember(),
+                                    'socialMediaId' => $oAuthId,
+                                    'socialMediaProvider' => $oAuthProvider->getIdSocialMediaProvider()
+                                ]);
+        if (!$doesAccountMerged) {
+            $socialAccount = new EsMemberMerge();
+            $socialAccount->setMember($member);
+            $socialAccount->setSocialMediaId($oAuthId);
+            $socialAccount->setSocialMediaProvider($oAuthProvider);
+            $socialAccount->setCreatedAt(new DateTime('now'));
+            $this->em->persist($socialAccount);
+            $this->em->flush();
+        }
+
         return $member;
     }
 

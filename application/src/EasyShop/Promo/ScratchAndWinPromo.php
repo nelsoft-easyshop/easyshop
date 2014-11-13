@@ -16,26 +16,48 @@ class ScratchAndWinPromo extends AbstractPromo
         if(!isset($this->product)){
             return null;
         }
-        
-        $this->dateToday = $this->dateToday->getTimestamp();
-        $this->startDateTime = $this->startDateTime->getTimestamp();
-        $this->endDateTime = $this->endDateTime->getTimestamp();
-        
-        $this->promoPrice = $this->product->getPrice();
-        if(!($this->dateToday < $this->startDateTime) ||
-            ($this->endDateTime < $this->startDateTime) ||
-            ($this->dateToday > $this->endDateTime))
-        {   
-            $this->promoPrice = 0;
-            $this->isStartPromo = true;
-        }
-          
-        $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
-        $this->persist();        
-        
+        $promoData = $this->getPromoData(
+            $this->product->getPrice(),
+            $this->dateToday,
+            $this->endDateTime,
+            $this->product->getDiscount()
+        );
+
+        $this->promoPrice = $promoData['promoPrice'];
+        $this->isStartPromo = $promoData['isStartPromo'];
+        $this->isEndPromo = $promoData['isEndPromo'];
+        $this->persist();
+
         return $this->product;
     }
 
+    /**
+     * Calculates Promo Price and Checks if promo has started and if promo promo has ended.
+     * @param $price
+     * @param $startDate
+     * @param $endDate
+     * @param $discount
+     * @param $option
+     * @return array
+     */
+    public static function getPromoData($price, $startDate, $endDate, $discount, $option = array())
+    {
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        $promoDetails = array(
+            'promoPrice' => $price,
+            'isStartPromo' => false,
+            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
+        );
+
+        if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
+            $promoDetails['promoPrice'] = 0;
+            $promoDetails['isStartPromo'] = true;
+        }
+
+        return $promoDetails;
+    }
 
 }
-

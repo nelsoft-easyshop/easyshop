@@ -21,11 +21,11 @@
  * Easyshop Revision 1.0: swapimage function - added option to disable image swapping
  *
  */
-(function ($) {	
+(function ($) { 
     //GLOBAL VARIABLES
     //var isIE6 = ($.browser.msie && $.browser.version < 7);
     var isIE6 = false;
-	var body = $(document.body);
+    var body = $(document.body);
     var window = $(window);
     var jqzoompluging_disabled = false; //disabilita globalmente il plugin
     $.fn.jqzoom = function (options) {
@@ -402,16 +402,18 @@
                 /**** start fixed height of large image window ****/
                     var zoombigview= $('.zoomWindow');
                     var img= $('.zoomPad img');
-                    var zoomwindowpos= (400 - img.height() )/ 2;
-                    if(img.height() < 400)
+                    var zoomwindowpos= (542 - img.height() )/ 2;
+                    var zoomwrapperimg= $('.zoomWrapperImage img');
+                    if(img.height() < 542)
                     {
                         zoombigview.css('top', -zoomwindowpos + 'px');
                     }
 
-                   if (img.height() == 400)
+                   if (img.height() == 542)
                     {
                         zoombigview.css('top', '0px');
                     }
+
                 /*** end here ****/
                 
                 this.node.css({
@@ -583,7 +585,7 @@
                 this.node.css({
                     // 'left': this.node.leftpos + 'px',
                     // 'top': this.node.toppos + 'px',
-                     'left': '410px',
+                     'left': '0px',
                      
                 });
                 return this;
@@ -739,9 +741,9 @@
         defaults: {
             zoomType: 'standard',
             //innerzoom/standard/reverse/drag
-            zoomWidth: 400,
+            zoomWidth: 445,
             //zoomWindow  default width
-            zoomHeight: 400,
+            zoomHeight: 542,
             //zoomWindow  default height
             xOffset: 10,
             //zoomWindow x offset, can be negative(more on the left) or positive(more on the right)

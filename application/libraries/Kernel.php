@@ -228,7 +228,7 @@ class Kernel
         $container['request'] = function ($c) use($container) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
-        
+
         //Cart Manager
         $container['cart_manager'] = function ($c) use ($container) {
             $productManager = $container['product_manager'];
@@ -244,6 +244,7 @@ class Kernel
             $productManager = $container['product_manager'];
             $categoryManager = $container['category_manager'];
             $httpRequest = $container['http_request'];
+            $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
 
             return new \EasyShop\Search\SearchProduct(
@@ -252,13 +253,14 @@ class Kernel
                                                         ,$productManager
                                                         ,$categoryManager
                                                         ,$httpRequest
+                                                        ,$promoManager
                                                         ,$configLoader
                                                     );
         };
 
         //Promo Manager
         $container['promo_manager'] = function ($c) use ($container){
-            return new \EasyShop\Promo\PromoManager($container['config_loader']);
+            return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
 
         // Product Manager
@@ -267,12 +269,14 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
+            $userManager = $container['user_manager'];
             $imageLibrary = new \CI_Image_lib();
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
                                                         $configLoader,
-                                                        $imageLibrary);
+                                                        $imageLibrary,
+                                                        $userManager);
         };
 
 
@@ -281,13 +285,17 @@ class Kernel
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
         $container['string_utility'] = function ($c) {
-            return new \EasyShop\Utility\StringUtility();
+            $htmlPurifier = new \HTMLPurifier();
+            return new \EasyShop\Utility\StringUtility($htmlPurifier);
+        };
+        $container['hash_utility'] = function($c) {
+            $encrypt = new CI_Encrypt();
+            return new \EasyShop\Utility\HashUtility($encrypt);
         };
         $container['url_utility'] = function ($c) {
             return new \EasyShop\Utility\UrlUtility();
         };
-        
-        
+
         $socialMediaConfig = require APPPATH . 'config/oauth.php';
         $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
             $fbRedirectLoginHelper = new \Facebook\FacebookRedirectLoginHelper(
@@ -306,13 +314,17 @@ class Kernel
             $userManager = $container['user_manager'];
             $configLoader = $container['config_loader'];
             $stringUtility = $container['string_utility'];
+            $formValidation = $container['form_validation'];
+            $formFactory = $container['form_factory'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $fbRedirectLoginHelper,
                 $googleClient,
                 $em,
                 $userManager,
                 $configLoader,
-                $stringUtility
+                $stringUtility,
+                $formValidation,
+                $formFactory
             );
         };
         // Category Manager
@@ -348,11 +360,7 @@ class Kernel
                 $container['http_request']
                 );
         };
-        
-        $container['string_utility'] = function ($c) {
-            return new \EasyShop\Utility\StringUtility();
-        };
-        
+
         // Form Helper
         $container['form_error_helper'] = function ($c) {
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
@@ -382,14 +390,25 @@ class Kernel
             }
             return new \nusoap_client($url,true);
         };
- 
+
+        // QR Code Generator
+        $container['qr_code_manager'] = function ($c) {
+            $qrCode = new \PHPQRCode\QRcode();
+            return  new \EasyShop\QrCode\QrCodeManager($qrCode);
+        };
+
         // API formatter 
         $container['api_formatter'] = function ($c) use($container) {
             $em = $container['entity_manager']; 
             $collectionHelper = $container['collection_helper'];
             $productManager = $container['product_manager'];
             $cartManager = $container['cart_manager'];
-            return new \EasyShop\Api\ApiFormatter($em,$collectionHelper,$productManager,$cartManager);
+            $reviewProductService = $container['review_product_service'];
+            return new \EasyShop\Api\ApiFormatter($em,
+                                                  $collectionHelper,
+                                                  $productManager,
+                                                  $cartManager,
+                                                  $reviewProductService);
         }; 
 
         // Notification Services
@@ -420,6 +439,14 @@ class Kernel
             return new \EasyShop\Image\ImageUtility($imageLibrary);
         };
         
+        // Review product
+        $container['review_product_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\ReviewProductService(
+                            $container['entity_manager'],
+                            $container['user_manager']
+                            );
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
