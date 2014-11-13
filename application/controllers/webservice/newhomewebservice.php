@@ -239,6 +239,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function getContents() 
     {
+        $this->fetchPreviewSlider(true);
         $this->output
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->file));
@@ -251,7 +252,6 @@ class NewHomeWebService extends MY_Controller
      */
     public function getSliderContents() 
     {
-        $this->fetchPreviewSlider(true);
         $this->output
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->tempHomefile));
@@ -967,13 +967,10 @@ class NewHomeWebService extends MY_Controller
         foreach ($map->sliderSection->slide as $key => $slider) {
             $sliders[] = $slider;
         }
-        if($this->input->get("userid") == NULL) {
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);
-        }
 
-        if($isForSync) {
-            return true;
+        if($this->input->post('search') != false) {
+            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);            
         }
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
 
