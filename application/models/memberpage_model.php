@@ -665,14 +665,14 @@ class memberpage_model extends CI_Model
                 $data[$r['id_order']]['is_flag'] = $r['is_flag'];
                 $data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
             }
-            
+
             #Fetch order product details
             $query = $this->xmlmap->getFilenameID('sql/users','getOrderProductTransactionDetails');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':order_id', $r['id_order'], PDO::PARAM_INT);
             $sth->execute();
             $op = $sth->fetchAll(PDO::FETCH_ASSOC);
-            
+
             foreach($op as $p){
                 //Assemble User Array
                 if( !isset($data[$r['id_order']]['users'][$p['seller_id']]) ){
@@ -682,7 +682,6 @@ class memberpage_model extends CI_Model
                         'has_feedb' => (int)$p['for_memberid'] === 0 ? 0 : 1
                     );
                 }
-            
                 //Assemble Product Array
                 if( !isset($data[$r['id_order']]['products'][$p['id_order_product']]) ){
                     $product = array_slice($p,1,13);
@@ -700,7 +699,7 @@ class memberpage_model extends CI_Model
                     explodeImagePath($imagepath);
                     $data[$r['id_order']]['products'][$p['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
                 }
-                
+
                 //Assemble product attribute array
                 if(!isset($data[$r['id_order']]['products'][$p['id_order_product']]['attr'])){
                     $data[$r['id_order']]['products'][$p['id_order_product']]['attr'] = array();

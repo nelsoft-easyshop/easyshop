@@ -271,6 +271,13 @@ class Kernel
                                                         $imageLibrary);
         };
 
+        $container['transaction_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $productManager = $container['product_manager'];
+
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+        };
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {

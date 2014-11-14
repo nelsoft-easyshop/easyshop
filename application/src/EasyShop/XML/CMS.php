@@ -753,8 +753,8 @@ $string = '<typeNode>
         }
         
         $homePageData['adSection'] = $xmlContent['adSection']['ad'];
-        $sliderTemplates = $xmlContent['sliderTemplate']['template'];
-        $homePageData['slider'] = $xmlContent['sliderSection']['slide'];
+        $sliderTemplates = $xmlContent['sliderTemplate'];
+        $homePageData['slider'] = $xmlContent['sliderTemplate']['slide'];
         foreach($homePageData['slider'] as $idx => $slide){
             $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
             $template = 'partials/homesliders/'.$template;

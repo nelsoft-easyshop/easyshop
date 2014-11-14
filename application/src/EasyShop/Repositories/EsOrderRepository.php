@@ -74,7 +74,6 @@ class EsOrderRepository extends EntityRepository
                         ->andWhere('o.orderStatus != 2')    
                         ->andWhere('o.paymentMethod IN(:paymentMethodLists)')                                  
                         ->orderBy('o.idOrder', "desc")    
-                        ->groupBy('o.idOrder', 'o.dateadded', 'o.orderStatus', 'o.buyer')    
                         ->setParameter('sellerId', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT) 
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)                         
@@ -102,8 +101,9 @@ class EsOrderRepository extends EntityRepository
                                                             op.orderQuantity as orderQuantity, 
                                                             IDENTITY(o.buyer) as buyerId, 
                                                             o.dateadded as dateadded, 
-                                                            o.idOrder, 
-                                                            o.invoiceNo, 
+                                                            o.idOrder,
+                                                            o.invoiceNo,
+                                                            pm.idPaymentMethod,
                                                             pm.name as paymentMethod")
                         ->from('EasyShop\Entities\EsOrder','o')
                         ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')

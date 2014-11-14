@@ -35,6 +35,8 @@ class Memberpage extends MY_Controller
         // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->entityManager = $this->serviceContainer['entity_manager'];
+        $this->transactionManager = $this->serviceContainer['transaction_manager'];
     }
 
     public function sample()
@@ -50,7 +52,7 @@ class Memberpage extends MY_Controller
     {        
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
+            redirect('/home', 'refresh');
         }
         $data['tab'] = $this->input->get('me');        
         $data = array_merge($data, $this->fill_view());
@@ -62,10 +64,17 @@ class Memberpage extends MY_Controller
         }
         $data['homeContent'] = $this->fill_categoryNavigation();
         $data = array_merge($data, $this->fill_header());
-        
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-        $this->load->view('templates/footer_primary');
+
+        $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
+        $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/user/memberpage_view', $data);
+        $this->load->view('templates/footer');
+
+//        $this->load->view('templates/header_primary', $data);
+//        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
+//        $this->load->view('templates/footer_primary');
     }
 
     /**
@@ -404,7 +413,46 @@ class Memberpage extends MY_Controller
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
     
     }
-    
+
+    public function newPage()
+    {
+        $data = $this->fill_header();
+        if(!$this->session->userdata('member_id')){
+            redirect('/home', 'refresh');
+        }
+        $data['tab'] = $this->input->get('me');
+        $data = array_merge($data, $this->fill_view());
+        $data['render_logo'] = false;
+        $data['render_searchbar'] = false;
+
+        if($this->session->userdata('member_id')) {
+            $data['user_details'] = $this->fill_userDetails();
+            $data['user_details2'] = $this->getMemberPageDetails();
+        }
+        $data['homeContent'] = $this->fill_categoryNavigation();
+        $data = array_merge($data, $this->fill_header());
+
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
+        $this->load->view('templates/footer_primary');
+
+    }
+    public function getMemberPageDetails()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $data['transaction'] = [
+            'ongoing' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId),
+            ],
+            'complete' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails(),
+                'sold' => '',
+            ]
+        ];
+
+        return $data;
+    }
 
     /**
      *  Fetch all data needed when displaying the Member page
@@ -441,6 +489,10 @@ class Memberpage extends MY_Controller
                 'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
             )
         );
+        print "<pre>";
+        print_r($data['transaction']['sell']);
+        print "</pre>";
+
         $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
         $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
         $data['sales'] = array(
