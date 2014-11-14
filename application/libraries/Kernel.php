@@ -434,7 +434,6 @@ class Kernel
             $imageLibrary = new MY_Image_lib();
             return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
                                                         $container["aws_uploader"],
-                                                        $container["image_utility"],
                                                         $container["config_loader"],
                                                         $uploadLibrary,
                                                         $imageLibrary,
