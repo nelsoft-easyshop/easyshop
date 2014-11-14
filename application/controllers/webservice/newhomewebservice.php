@@ -30,7 +30,8 @@ class NewHomeWebService extends MY_Controller
     private $file;    
 
     /**
-     * The Mobile XML resource
+     * Handles if the request is authenticated
+     * @var bool
      */    
     private $isAuthenticated; 
 
