@@ -71,7 +71,7 @@ class CMS
         foreach ($sliders as $key => $value) {  
             $map->sliderSection->slide[$key]->template = $value->template;
             $map->asXML($tempHomeFile);                
-            $string = $this->getString("sliderSection","" , "", "", "");       
+            $string = $this->getString("sliderSection", "", "", "", "");       
             $this->addXmlFormatted($map,$string,'/map/sliderSection/slide[last()]',"\t\t","\n\n", true, true);   
         }
 
@@ -811,41 +811,20 @@ $string = '<typeNode>
      * @param boolean $isCategoryNavigationOnly
      * @return mixed
      */
+    /**
+     * Returns the home page data
+     * 
+     * @param boolean $isCategoryNavigationOnly
+     * @return mixed
+     */
     public function getHomeData($isCategoryNavigationOnly = false, $isForCms = false)
     {
         $homeXmlFile = (!$isForCms) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
-
+        
         $homePageData = array();
         $homePageData['categorySection'] = array(); 
 
-        $sliderTemplates = array();
-        foreach($xmlContent['sliderTemplate']['template'] as $template){
-            array_push($sliderTemplates, $template['templateName']);
-        }
-
-        $homePageData['slider'] = $xmlContent['sliderSection']['slide'];
-        foreach($homePageData['slider'] as $idx => $slide){
-           
-            $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
-            $template = 'partials/homesliders/'.$template;
-            $homePageData['slider'][$idx]['template'] = $template;            
-            if(isset($homePageData['slider'][$idx]['image']['path'])){
-                $temporary = $homePageData['slider'][$idx]['image'];
-                $homePageData['slider'][$idx]['image'] = array();
-                array_push($homePageData['slider'][$idx]['image'], $temporary);
-            }
-            
-            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
-                $target = $sliderImage['target'];
-                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
-            }
-            
-            
-        }  
-        if($isForCms) {
-            return $homePageData;
-        }
 
         //Start Get Category Navigation
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
