@@ -338,9 +338,9 @@ class EsProduct
     /**
      * @var integer
      *
-     * @ORM\Column(name="shipped_within_count", type="integer", nullable=true)
+     * @ORM\Column(name="ships_within_days", type="integer", nullable=true)
      */
-    private $shippedWithinCount;
+    private $shipsWithinDays;
 
     public function __construct() 
     {
@@ -1318,20 +1318,20 @@ class EsProduct
      *
      * @return integer 
      */
-    public function getShippedWithinCount()
+    public function getShipsWithinDays()
     {
-        return $this->shippedWithinCount;
+        return $this->shipsWithinDays;
     }
     
     /**
      * Set promoType
      *
-     * @param integer $shippedWithinCount
+     * @param integer $shipsWithinDays
      * @return EsProduct
      */
-    public function setShippedWithinCount($shippedWithinCount)
+    public function setShipsWithinDays($shipsWithinDays)
     {
-        $this->shippedWithinCount = $shippedWithinCount;
+        $this->shipsWithinDays = $shipsWithinDays;
 
         return $this;
     }

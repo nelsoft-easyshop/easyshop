@@ -105,9 +105,9 @@
                         <div class="prod-availability-container prod-border-right">
                             <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
                         </div>
-                        <?php if(trim($product->getShippedWithinCount()) !== ""): ?>
+                        <?php if(trim($product->getShipsWithinDays()) !== ""): ?>
                             <div class=" prod-border-right">
-                                <p class="attr-title txt-shipment">Shipped within:</p> <span class="default"><?=$product->getShippedWithinCount(); ?> days</span>
+                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> days</span>
                             </div>
                         <?php endif; ?>
                     </div>
