@@ -216,17 +216,7 @@
                 clearTimeout(el.timer);
                 //show lens and zoomWindow
                 lens.show();
-
-                var prodcongalheight = $('.prod_con_gal').height();
-                var prodcongalwidth = $('.prod_con_gal').width();
-                var zoomwrapperimg= $('.zoomWrapperImage img');
-                if (zoomwrapperimg < prodcongalwidth) {
-                    stage.hide();
-                }
-                else {
-                    stage.show();
-                };
-
+                stage.show();
             },
             deactivate: function (e) {
                 switch (settings.zoomType) {
