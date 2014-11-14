@@ -221,7 +221,6 @@ class product extends MY_Controller
      */
     public function item($itemSlug = '')
     {
-        header ('Content-type: text/html; charset=ISO-8859-1');
         $headerData = $this->fill_header(); 
 
         $productManager = $this->serviceContainer['product_manager'];

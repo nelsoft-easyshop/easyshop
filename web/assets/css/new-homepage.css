@@ -1569,6 +1569,7 @@ header {
     text-overflow: ellipsis;
     white-space:nowrap;
     overflow:hidden;
+    margin-top: 5px;
 }
 
 .item-name:hover{
@@ -2456,7 +2457,7 @@ width: 100% !important;
     border: 3px solid #565656;
     background-color: #fff;
     color: #565656;
-    padding: 8px 15px;
+    padding: 8px 7px;
     font-weight: 900;
     border-radius: 4px;
     font-size: 13px;
@@ -2930,9 +2931,6 @@ font-size: 15px;
 .div-rec-product-image{
     width: 100% !important;
     height: 228px;
-    position: static;
-    display: table-cell;
-    vertical-align: middle;
     text-align: center;
     background: #fff;
 }
@@ -2964,15 +2962,15 @@ h3 > b{
 
 .main-prod-image{
     opacity: 1;
-    margin-top: -41px;
+    margin-top: -21px;
     position: absolute;
     left: 0;
     padding: 20px;
     top: 41px;
-    -webkit-transition: opacity 1s ease-in-out;
-    -moz-transition: opacity 1s ease-in-out;
-    -o-transition: opacity 1s ease-in-out;
-    transition: opacity 1s ease-in-out;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .main-prod-image:hover{
@@ -3385,7 +3383,7 @@ h3 > b{
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        margin-top: 5px;
+        margin-top: 15px;
     }
     
     .old-price, .item-price{
@@ -3908,5 +3906,11 @@ h3 > b{
     /*** Footer ***/
     .social-media-wrapper ul {
         width: 256px;
+    }
+}
+
+@media only screen and (min-width: 1119px) {
+    .mo > .row{
+        padding: 40px 0px 0px 0px !important;
     }
 }

@@ -822,8 +822,8 @@ $string = '<typeNode>
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
 
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
-            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                ->findOneBy(['slug' => $subCategory]);
+                $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                              ->findOneBy(['slug' => $subCategory]);
             }
         }
 
@@ -842,23 +842,53 @@ $string = '<typeNode>
             $xmlContent['categorySection'] = array();
             array_push($xmlContent['categorySection'], $temporary);
         }
-        
+   
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);
+                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+           
+            if(!isset($categorySection["sub"])){
+                $categorySection["sub"] = [];
+            }
+            
+            
+            if(isset($categorySection['sub']['text'])){
+                $subTemporary = $categorySection['sub'];
+                $categorySection['sub'] = [ $subTemporary ];
+            }   
             $sectionData['subHeaders'] = $categorySection['sub'];
-            foreach($categorySection['productPanel'] as $idx=>$product){
+            
+            if(isset($categorySection['productPanel']['slug'])){
+                $productPanelTemporary = $categorySection['productPanel'];
+                $categorySection['productPanel'] = [ $productPanelTemporary ];
+            }   
+
+            $sectionData['products'] = [];
+            if(!isset($categorySection['productPanel'])){
+                $categorySection['productPanel'] = array();
+            }
+
+            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
                 if($product){
                     $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
+                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                ->getSecondaryImage($product->getIdProduct());
+                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
                 }
             }
             array_push($homePageData['categorySection'], $sectionData);
         }
         
-        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
+        $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
+       
+        if(isset($homePageData['adSection']['img'])){
+            $temporaryAdSection = $homePageData['adSection'];
+            $homePageData['adSection'] = [ $temporaryAdSection ] ;
+        }
+
         $sliderTemplates = array();
         foreach($xmlContent['sliderTemplate']['template'] as $template){
             array_push($sliderTemplates, $template['templateName']);
@@ -879,49 +909,60 @@ $string = '<typeNode>
                 $target = $sliderImage['target'];
                 $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
             }
-            
-            
         }
 
         //Get feature vendor details
-        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['memberEntity'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                   ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['vendor_image'] = array();
-        if($featuredVendor['name']){
-            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        $featuredSellerId = 0;
+        if($featuredVendor['memberEntity']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['memberEntity']->getIdMember());
+            $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
         }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
+        if(!isset($xmlContent['sellerSection']['productPanel'])){
+            $xmlContent['sellerSection']['productPanel'] = array();
+        }
         shuffle($xmlContent['sellerSection']['productPanel']);    
+        $featuredVendor['product'] = [];
+          
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+        
+            $productSlug = isset($product['slug']) ? $product['slug'] : $product;        
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $productSlug, 'member' => $featuredSellerId]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
-                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                    ->getDefaultImage($productData->getIdProduct());
-                $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-                if ($productImage != NULL) {
-                    $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
-                    $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
-                }
+                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                  ->getSecondaryImage($productData->getIdProduct());
+                $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;                     
             }
         }
         $homePageData['seller'] = $featuredVendor;
-
+        
         //Get Popular Brands
-        foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
-            $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
-                                            ->findOneBy(['idBrand' => $brandId]);
-            $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
-                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
-                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
+        $popularBrands = [];
+        if(isset($xmlContent['brandSection']['brandId'])){
+            if(!is_array($xmlContent['brandSection']['brandId'])){
+                $temporaryBrandId = $xmlContent['brandSection']['brandId'];
+                $xmlContent['brandSection']['brandId'] = [ $temporaryBrandId ];
+            }
+            foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
+                $brandObject =  $this->em->getRepository('EasyShop\Entities\EsBrand')
+                                         ->findOneBy(['idBrand' => $brandId]);
+                if($brandObject){
+                    $popularBrands[$key]['brand'] = $brandObject;
+                    $popularBrands[$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
+                    $popularBrands[$key]['image']['file'] = $popularBrands[$key]['brand'] && trim($popularBrands[$key]['brand']->getImage())  !== ""  ?
+                                                                            $popularBrands[$key]['brand']->getImage() : EsBrand::IMAGE_UNAVAILABLE_FILE;
+                }
+            }
         }
-        $homePageData['popularCategory'] = $popularCategory;
+
+        $homePageData['popularBrands'] = $popularBrands;
 
         return $homePageData;
     }

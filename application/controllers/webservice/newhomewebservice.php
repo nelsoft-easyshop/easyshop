@@ -40,6 +40,7 @@ class NewHomeWebService extends MY_Controller
         $this->tempHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
+        $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
@@ -118,13 +119,23 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
 
-        $map->menu->topSellers->seller[$index] = $value;
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $map->menu->topSellers->seller[$index] = $value;
 
-        if($map->asXML($this->file)) {
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }             
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                    ->set_output($this->usererror);         
+        }
+   
     } 
 
     /**
@@ -138,13 +149,23 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("addTopSellers",$value, "", "", ""); 
 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
+        $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                    ->findBy(['slug' => $value]);
+        if($sellerResult) {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topSellers/seller[last()]',"\t\t\t","\n");
 
-        if($addXml === TRUE) {
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }            
+        }
+        else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }   
+                    ->set_output($this->usererror);            
+        }
+
     } 
 
     /**
@@ -156,15 +177,28 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
-
-        if($addXml === TRUE) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }   
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
+
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/topProducts/product[last()]',"\t\t\t","\n");
+
+            if($addXml === TRUE) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }               
+        }
+
+
     } 
     /**
      *  Method that handles add,edit,delete for topProducts node 
@@ -176,14 +210,25 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
-
-        $map->menu->topProducts->product[$index] = $value;
-
-        if($map->asXML($this->file)) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }    
+                ->set_content_type('application/json')
+                ->set_output( $this->slugerrorjson);
+        }
+        else {
+            $map->menu->topProducts->product[$index] = $value;
+
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            }   
+        }
+
+   
     }      
 
 
@@ -197,15 +242,18 @@ class NewHomeWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $target = $this->input->get("target");
+                        
         $string = $this->xmlCmsService->getString("newArrivals",$value, "", "", $target); 
-
         $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/menu/newArrivals/arrival[last()]',"\t\t\t","\n");
 
         if($addXml === TRUE) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
-        }   
+        }    
+        
+
+
     } 
 
     /**
@@ -227,7 +275,7 @@ class NewHomeWebService extends MY_Controller
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
-        }    
+        }  
     }     
 
     /**
@@ -726,12 +774,24 @@ class NewHomeWebService extends MY_Controller
         $slug = $this->input->get("slug");
         if($action == "slug") {
 
-            $map->sellerSection->sellerSlug = $slug;
-            if($map->asXML($this->file)) {
+            $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->findBy(['slug' => $slug]);
+
+            if($sellerResult) {
+                $map->sellerSection->sellerSlug = $slug;
+                if($map->asXML($this->file)) {
+                    return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);
+                } 
+            }
+            else {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
-            } 
+                        ->set_output($this->usererror);
+            }
+
+
         }
         else {
             $filename = date('yhmdhs');
