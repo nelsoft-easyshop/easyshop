@@ -408,6 +408,11 @@
         </div>
     </div>
     <div class="clear"></div>
+</div>
+
+<?php include("product_upload_step4_product_preview.php"); ?>
+
+
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#tabs').tabs();
