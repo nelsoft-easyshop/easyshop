@@ -258,3 +258,18 @@
         </div>
     </div>
 </div>
+
+<div id="hidden-product-container">
+    <div id="hidden-active-container">
+        <div id="hidden-active-container-default">
+            
+        </div>
+    </div>
+    <div id="hidden-deleted-container">
+        
+    </div>
+    <div id="hidden-drafted-container">
+        
+    </div>
+</div>
+

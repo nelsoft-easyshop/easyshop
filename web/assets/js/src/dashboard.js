@@ -163,9 +163,7 @@
                         success: function(d){ 
                             var $response = $.parseJSON(d); 
                             if($response.isSuccess){
-                                $('#item-list-'+$productId).remove();
-                                $("#deleted-product-container").children().last().remove();
-                                $(".deleted-span-circle").html($deletedCount + 1);
+                                window.location = "/me";
                             }
                             else{
                                 alert($response.message);
@@ -181,24 +179,17 @@
             var $this = $(this);
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-hard-delete").val();
-            var $searchString = $("#deleted-items").find('.search-field').val();
-            var $sortString = $("#deleted-items").find('.search-filter').val(); 
-            var $currentPage = $("#deleted-product-container > .pagination-section > ul > .active").data('page');
 
             var $ajaxRequest = $.ajax({
                         type: "get",
                         url: $urlRequest,
                         data: {
                                 product_id:$productId,
-                                page:$currentPage,
-                                search_string:$searchString,
-                                sort:$sortString
                             },
                         success: function(d){ 
                             var $response = $.parseJSON(d); 
                             if($response.isSuccess){
-                                $('#item-list-'+$productId).remove();
-                                $($response.html).insertBefore( "#deleted-product-container > .pagination-section");
+                                window.location = "/me";
                             }
                             else{
                                 alert($response.message);
@@ -254,3 +245,4 @@
     }
  
 }(jQuery));
+
