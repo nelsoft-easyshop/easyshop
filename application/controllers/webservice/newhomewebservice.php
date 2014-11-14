@@ -287,7 +287,6 @@ class NewHomeWebService extends MY_Controller
      */
     public function getContents() 
     {
-        $this->fetchPreviewSlider(true);
         $this->output
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->file));
@@ -295,15 +294,29 @@ class NewHomeWebService extends MY_Controller
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
-     *
      *  @return string
      */
     public function getTempContents() 
-    {
+    {         
+        $this->syncTempHomeFiles();
         $this->output
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->tempHomefile));
     }      
+
+    public function syncTempHomeFiles()
+    {
+        $map = simplexml_load_file($this->file);
+
+        foreach ($map->sliderSection->slide as $key => $slider) {
+            $sliders[] = $slider;
+        }
+
+        if($this->input->get('search') != false) {
+            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);            
+        }          
+    }
 
     /**
      *  Sets Brand Section
@@ -1006,9 +1019,12 @@ class NewHomeWebService extends MY_Controller
         }         
     }  
 
+    /**
+     *  Syncs the changes from new_home_page_temp.xml to new_home_page.xml
+     *  @return VIEW
+     */
     public function commitSliderChanges()
     {
-
         $map = simplexml_load_file($this->tempHomefile);
 
         foreach ($map->sliderSection->slide as $key => $slider) {
@@ -1020,18 +1036,13 @@ class NewHomeWebService extends MY_Controller
                
     }
 
-    public function fetchPreviewSlider($isForSync = false)
+    /**
+     *  Retrieves a partial view of the home slider
+     *  @return VIEW
+     */
+    public function fetchPreviewSlider()
     {
-        $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection->slide as $key => $slider) {
-            $sliders[] = $slider;
-        }
-
-        if($this->input->post('search') != false) {
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);            
-        }
         $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
 
         $sliderSection = $homeContent['slider']; 
