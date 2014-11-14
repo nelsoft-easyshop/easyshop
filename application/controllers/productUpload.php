@@ -973,7 +973,7 @@ class productUpload extends MY_Controller
                 }
             }
             
-            $this->serviceContainer["assets_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
+            $this->serviceContainer["assets_uploader"]->uploadImageDirectory($tempDirectory, $originalPath, $product_id, $arrayNameOnly);
 
             #saving combination
             if(count($combination) <= 0){
