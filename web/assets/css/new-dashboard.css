@@ -720,3 +720,7 @@ a{
     width: 100% !important;
     height: 300px !important;
 }
+
+#hidden-product-container{
+    display: none;
+}

@@ -262,14 +262,42 @@
 <div id="hidden-product-container">
     <div id="hidden-active-container">
         <div id="hidden-active-container-default">
+            <div id="page-1">
+                <?=$activeProductView;?>
+            </div>
+        </div>
+        <div id="hidden-active-container-lastmodified">
+            
+        </div>
+        <div id="hidden-active-container-new">
             
         </div>
     </div>
     <div id="hidden-deleted-container">
-        
+        <div id="hidden-deleted-container-default">
+            <div id="page-1">
+                <?=$deletedProductView;?>
+            </div>
+        </div>
+        <div id="hidden-deleted-container-lastmodified">
+            
+        </div>
+        <div id="hidden-deleted-container-new">
+            
+        </div>
     </div>
     <div id="hidden-drafted-container">
-        
+        <div id="hidden-drafted-container-default">
+            <div id="page-1">
+                <?=$draftedProductView;?>
+            </div>
+        </div>
+        <div id="hidden-drafted-container-lastmodified">
+            
+        </div>
+        <div id="hidden-drafted-container-new">
+            
+        </div>
     </div>
 </div>
 

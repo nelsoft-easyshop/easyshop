@@ -117,33 +117,32 @@
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
         var $container = $parentContainer.find('.container-id').val();
-
-        requestProduct($page, $textInput, $filterInput, $requestType, $container);
+        isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
     });
 
     $(document.body).on('change','.search-filter',function () {
         var $this = $(this);
-        var $page = 0;
+        var $page = 1;
         var $parentContainer = $this.parent().parent().parent();
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $this.val();
         var $requestType = $parentContainer.find('.request-type').val();
         var $container = $parentContainer.find('.container-id').val(); 
 
-        requestProduct($page, $textInput, $filterInput, $requestType, $container);
+        isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
     });
 
     $(".search-field").keyup(function(event){
         if(event.keyCode == 13){
             var $this = $(this);
-            var $page = 0;
+            var $page = 1;
             var $parentContainer = $this.parent().parent().parent();
             var $textInput = $this.val();
             var $filterInput = $parentContainer.find('.search-filter').val();
             var $requestType = $parentContainer.find('.request-type').val();
             var $container = $parentContainer.find('.container-id').val(); 
 
-            requestProduct($page, $textInput, $filterInput, $requestType, $container);
+            requestProduct($page, $textInput, $filterInput, $requestType, $container, true);
         }
     });
 
@@ -211,6 +210,33 @@
         $("#formEdit").submit();
     });
     
+    var isAjaxRequestForProduct = function($page, $textInput, $filterInput, $requestType, $container)
+    {
+        if($container == "deleted-product-container"){
+            if($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).length > 0){
+                $('#'+$container).empty().append($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).html());
+            }
+            else{
+                requestProduct($page, $textInput, $filterInput, $requestType, $container);
+            }
+        }
+        else if($container == "drafted-product-container"){
+            if($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).length > 0){ 
+                $('#'+$container).empty().append($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).html());
+            }
+            else{
+                requestProduct($page, $textInput, $filterInput, $requestType, $container);
+            }
+        }
+        else{
+            if($("#hidden-active-container-" + $filterInput + " > #page-"+$page).length > 0){
+                $('#'+$container).empty().append($("#hidden-active-container-" + $filterInput + " > #page-"+$page).html());
+            }
+            else{
+                requestProduct($page, $textInput, $filterInput, $requestType, $container);
+            }
+        }
+    }
 
     /**
      * Ajax Request for getting product in active, draft and 
@@ -220,7 +246,7 @@
      * @param  string  $requestType
      * @param  string $container
      */
-    var requestProduct = function($page, $textInput, $filterInput, $requestType, $container)
+    var requestProduct = function($page, $textInput, $filterInput, $requestType, $container, $searchByString)
     {
         var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
@@ -238,8 +264,21 @@
             },
             success: function(d){ 
                 var $response = $.parseJSON(d);
+                var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
                 $('#'+$container).html($response.html);
                 $('#'+$container).show();
+
+                if( !$searchByString ){
+                    if($container == "deleted-product-container"){
+                        $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                    }
+                    else if($container == "drafted-product-container"){
+                        $("#hidden-drafted-container-" + $filterInput).append($appendString);
+                    }
+                    else{
+                        $("#hidden-active-container-" + $filterInput).append($appendString);
+                    }
+                }
             }
         });
     }
