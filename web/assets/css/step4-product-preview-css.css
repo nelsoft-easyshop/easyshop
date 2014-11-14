@@ -1,3 +1,7 @@
+.step4_section {
+    border-radius: 4px;
+}
+
 .center.disable-buttons a {
     cursor: default;
 }

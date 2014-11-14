@@ -1,7 +1,7 @@
 <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<div class="res_wrapper">
+<div class="container">
     <div class="seller_product_content">
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
