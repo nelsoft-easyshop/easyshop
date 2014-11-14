@@ -71,6 +71,7 @@
         $(el).bind('click', function (e) {
             e.preventDefault();
             return false;
+
         });
         //setting the default zoomType if not in settings
         var zoomtypes = ['standard', 'drag', 'innerzoom', 'reverse'];
@@ -170,6 +171,7 @@
                     if (regex.test(rel)) {
                         return this;
                     }
+                
                 });
                 if (thumblist.length > 0) {
                     //getting the first to the last
@@ -185,6 +187,7 @@
                         i++;
                     }
                     $(this).click(function (e) {
+
                         if($(this).hasClass('zoomThumbActive')){
                           return false;
                         }
@@ -194,12 +197,15 @@
                         e.preventDefault();
                         obj.swapimage(this);
                         return false;
+
                     });
+
                 });
             },
 
 
             load: function () {
+
                 if (el.largeimageloaded == false && el.largeimageloading == false) {
                     var url = $(el).attr('href');
                     el.largeimageloading = true;
@@ -210,7 +216,17 @@
                 clearTimeout(el.timer);
                 //show lens and zoomWindow
                 lens.show();
-                stage.show();
+
+                var prodcongalheight = $('.prod_con_gal').height();
+                var prodcongalwidth = $('.prod_con_gal').width();
+                var zoomwrapperimg= $('.zoomWrapperImage img');
+                if (zoomwrapperimg < prodcongalwidth) {
+                    stage.hide();
+                }
+                else {
+                    stage.show();
+                };
+
             },
             deactivate: function (e) {
                 switch (settings.zoomType) {
@@ -357,6 +373,7 @@
             this.hide = function () {
                 this.node.css('visibility', 'hidden');
             };
+
             return this;
         }
 /*========================================================,
@@ -388,12 +405,14 @@
                 /*****start add margin left to fixed zoom lens position ****/    
                     var zoomlensview= $('.zoomPup');
                     var img= $('.zoomPad img');
-                    var zoomlenssize= (400 - img.width() )/ 2;
-                    if(img.width() < 400)
+                    var prodcongalsize= $('.prod_con_gal');
+                    var zoomlenssize= (prodcongalsize.width() - img.width() )/ 2;
+                    if(img.width() < prodcongalsize)
                     {
                         zoomlensview.css('margin-left', zoomlenssize + 'px');
+                        $('.zoomWindow').css('margin-left', zoomlenssize + 'px');
                     }
-                    if (img.width() == 400)
+                    if (img.width() == prodcongalsize)
                     {
                         zoomlensview.css('margin-left', '0px');
                     }
@@ -402,18 +421,24 @@
                 /**** start fixed height of large image window ****/
                     var zoombigview= $('.zoomWindow');
                     var img= $('.zoomPad img');
-                    var zoomwindowpos= (542 - img.height() )/ 2;
+                    var imagewidth= $('.zoomPad img').width();
+                    var imgheight= $('.zoomPad img').height();
+                    var zoomwindowpos= (540 - img.height() )/ 2;
                     var zoomwrapperimg= $('.zoomWrapperImage img');
-                    if(img.height() < 542)
+                    if(img.height() < 540)
                     {
-                        zoombigview.css('top', -zoomwindowpos + 'px');
+                        zoombigview.css({'top': '0px', 'width': imagewidth });
+                        $('.zoomWrapperImage').css({'height': imgheight});
+                        $('.zoomPad').css("height", imgheight);
+                        $('.prod_con_gal').css("height", imgheight);
                     }
 
-                   if (img.height() == 542)
+                   if (img.height() == 540)
                     {
-                        zoombigview.css('top', '0px');
+                        zoombigview.css({'top': '0px','width': img });
+                        $('.zoomWrapperImage').css({'height': imgheight});
+                        $('.zoomPad').css("height", imgheight);
                     }
-
                 /*** end here ****/
                 
                 this.node.css({
@@ -557,6 +582,7 @@
             this.node = $("<div class='zoomWindow'><div class='zoomWrapper'><div class='zoomWrapperTitle'></div><div class='zoomWrapperImage'></div></div></div>");
             this.ieframe = $('<iframe class="zoomIframe" src="javascript:\'\';" marginwidth="0" marginheight="0" align="bottom" scrolling="no" frameborder="0" ></iframe>');
             this.setposition = function () {
+                            var imssg= $('.zoomPad img');
                 this.node.leftpos = 0;
                 this.node.toppos = 0;
                 if (settings.zoomType != 'innerzoom') {
@@ -581,12 +607,14 @@
                     }
                 } 
 
-
                 this.node.css({
                     // 'left': this.node.leftpos + 'px',
                     // 'top': this.node.toppos + 'px',
                      'left': '0px',
-                     
+                     'top': '0px',
+                     'bottom': '0px',
+                     'right': '0px',
+                     'margin': 'auto'
                 });
                 return this;
             };
@@ -613,7 +641,7 @@
                   });
                   $('.zoomWrapperImage', this.node).css({
                       width: '100%',
-                      height: Math.round(settings.zoomHeight) + 'px'
+                      // height: Math.round(settings.zoomHeight) + 'px'
                   });
                   //zoom title
                  $('.zoomWrapperTitle', this.node).css({
