@@ -62,9 +62,8 @@ class CMS
      *  @param string $homeFile
      *  @param array $sliders
      *  @param int $order
-     *  @param int $subIndex
      */
-    public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0, $subIndex = 0)
+    public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0)
     {
 
         $map = simplexml_load_file($tempHomeFile);        
@@ -72,7 +71,7 @@ class CMS
         foreach ($sliders as $key => $value) {  
             $map->sliderSection->slide[$key]->template = $value->template;
             $map->asXML($tempHomeFile);                
-            $string = $this->getString("sliderSection","test" , "", "", "");       
+            $string = $this->getString("sliderSection","" , "", "", "");       
             $this->addXmlFormatted($map,$string,'/map/sliderSection/slide[last()]',"\t\t","\n\n", true, true);   
         }
 
@@ -84,11 +83,12 @@ class CMS
 
 
     /**
-     *  First part of re-ordering the slide parent node
+     *  Handles the re-ordering of sliderSection parent node
      *  @param string $image
      *  @param string $template
      *  @param int $index
      *  @param int $order
+     *  @param int $subIndex
      */
     public function syncSliderValues($file,$image, $template, $index, $order, $subIndex = 0)
     {
@@ -353,14 +353,14 @@ $string = '<typeNode>
             $index = 0;
             $map = simplexml_load_file($file);
             $tempSliderCount = count($map->sliderSection->slide);
+
             foreach ($map->sliderSection->slide as $key => $value) {
                 if( $tempSliderCount> 1) {
                     $this->removeXmlNode($file, "mainSliderSection",1);
                     $tempSliderCount--;
                 }
                 else {
-                    $imageCount = count($map->sliderSection->slide[0]->image);
-
+                    $imageCount = count($value->image);
                     foreach($value->image as $images) {
                         if($imageCount > 1) {
                             $this->removeXmlNode($file, "subSliderSection",1,1);
