@@ -62,13 +62,7 @@ class ImageUtility
         $this->imageLibrary->clear();
         return $isSuccessful;
     }
-    
-    public function convertFormat($sourceImage)
-    {
-        $config['source_image'] = $sourceImage;
-        $this->imageLibrary->initialize($config);
-        $this->imageLibrary->convert('jpg', TRUE);
-    }
+
     
     
 }
