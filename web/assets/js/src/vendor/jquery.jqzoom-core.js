@@ -572,7 +572,6 @@
             this.node = $("<div class='zoomWindow'><div class='zoomWrapper'><div class='zoomWrapperTitle'></div><div class='zoomWrapperImage'></div></div></div>");
             this.ieframe = $('<iframe class="zoomIframe" src="javascript:\'\';" marginwidth="0" marginheight="0" align="bottom" scrolling="no" frameborder="0" ></iframe>');
             this.setposition = function () {
-                            var imssg= $('.zoomPad img');
                 this.node.leftpos = 0;
                 this.node.toppos = 0;
                 if (settings.zoomType != 'innerzoom') {
