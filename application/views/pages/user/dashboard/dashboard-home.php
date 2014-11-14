@@ -134,7 +134,7 @@
                 <a href="#deleted-items"><li>Deleted Items<span class="circle-total">4</span></li></a>
                 <a href="#draft-items"><li>Draft Items<span class="circle-total">0</span></li></a>
                 <a href="#feedbacks"><li>Feedbacks<span class="circle-total">0</span></li></a>
-                <a href="#sale"><li>Sale</li></a>
+                <a href="#sales"><li>Sales</li></a>
             </ul>
         </div>
         <div class="product-items">
@@ -824,14 +824,16 @@
             </div>
             
             <div id="feedbacks">
-                <div class="jumbotron no-items">
+                <!--<div class="jumbotron no-items">
                     <i class="icon-category"></i>No items for this category
-                </div>
+                </div>-->
+                <?php include("feedbacks.php");?>
             </div>
-            <div id="sale">
-                <div class="jumbotron no-items">
+            <div id="sales">
+            <?php include("sales.php");?>
+                 <!--<div class="jumbotron no-items">
                     <i class="icon-category"></i>No items for this category
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
