@@ -213,6 +213,12 @@ body{
     border: solid #868686 1px;
 }
 
+.error-label{
+    color: #ff3e1e;
+    display: block;
+    font-size: 11px;
+}
+
 .fa-star-rate{
     font-size: 25px;
     color: #d4d4d4;
@@ -338,6 +344,10 @@ body{
     resize: none;
 }
 
+.error-label-textarea{
+    margin-left: -35px;
+}
+
 .input-textarea-write:focus{
     border: solid #868686 1px;
 }
@@ -408,6 +418,15 @@ body{
 
 .p-no-review-note{
     padding: 40px 0px;
+}
+
+
+.error-field-review{
+    border: solid #ff3e1e 1px;
+}
+
+.error-field-review:focus{
+    border: solid #ff3e1e 1px;
 }
 
 #owl-demo .item{
@@ -852,6 +871,10 @@ body{
     .input-textarea-write{
         margin-left: 9px;
     }
+    
+    .error-label-textarea {
+        margin-left: 10px;
+    }
 }
 
 @media only screen and (max-width: 479px) {
@@ -948,6 +971,8 @@ body{
     .p-rec-product-price > span {
         display: block;
     }
+    
+    
 }
 @media only screen and (max-width: 770px) {
      
