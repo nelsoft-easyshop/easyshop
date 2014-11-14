@@ -27,7 +27,6 @@
                                         <?php else: ?>
                                             <?=htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1');?>
                                         <?php endif; ?>
-                                        
                                     </a>
                                     <?php else: ?>
                                         (NO NAME)
@@ -80,7 +79,8 @@
                                     <?php $product->rating--; ?>
                                 <?php endfor; ?>
                                 </div>
-                                <p>Total Reviews : <?=$product->reviewCount; ?></p> 
+                                <p>Total Reviews : <?=$product->reviewCount; ?></p>
+                                <?php if($product->getIsDelete() === 0): ?>
                                 <button class="btn btn-action-edit btn-edit-product"
                                 data-productid="<?=$product->getIdProduct(); ?>"
                                 data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
@@ -88,6 +88,11 @@
                                 >
                                     <i class="icon-edit"></i>edit
                                 </button>
+                                <?php else: ?>
+                                <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
+                                    <i class="icon-delete"></i>Restore
+                                </button>
+                                <?php endif; ?>
                                 <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
                                 </button> 

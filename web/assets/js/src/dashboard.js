@@ -198,6 +198,33 @@
         }
     });
 
+    $(document.body).on('click','.btn-restore',function () {
+        var $confirm = confirm("Are you sure you want to restore this item?");
+        if($confirm){
+            var $this = $(this);
+            var $productId = $this.data('id');
+            var $urlRequest = $("#request-url-resotre").val();
+
+            var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $urlRequest,
+                        data: {
+                                product_id:$productId,
+                            },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d); 
+                            if($response.isSuccess){
+                                window.location = "/me";
+                            }
+                            else{
+                                alert($response.message);
+                            }
+                        }
+                    });
+        }
+    });
+    
+
     $(document.body).on('click','.btn-edit-product',function () {
         var $this = $(this);
         var $productId = $this.data('productid');

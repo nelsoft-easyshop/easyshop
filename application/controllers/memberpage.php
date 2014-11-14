@@ -1932,6 +1932,22 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
+    public function restoreProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->get('product_id');
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productManager = $this->serviceContainer['product_manager'];
+        $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_OFF);
+
+        $responseArray = [
+            'isSuccess' => $restoreResponse,
+            'message' => $restoreResponse ? "" : "You can't restore this item.",
+        ];
+
+        echo json_encode($responseArray);
+    }
+
     public function productMemberPagePaginate()
     {
         $productManager = $this->serviceContainer['product_manager'];
