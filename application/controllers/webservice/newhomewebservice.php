@@ -29,6 +29,11 @@ class NewHomeWebService extends MY_Controller
      */    
     private $file;    
 
+    /**
+     * The Mobile XML resource
+     */    
+    private $isAuthenticated; 
+
     public function __construct() 
     {
         parent::__construct();
@@ -43,7 +48,7 @@ class NewHomeWebService extends MY_Controller
         $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {        
-            $this->authentication($this->input->get(), $this->input->get('hash'));
+            $this->isAuthenticated = $this->authentication($this->input->get(), $this->input->get('hash'));
         }    
     }
 
@@ -291,32 +296,6 @@ class NewHomeWebService extends MY_Controller
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->file));
     }   
-
-    /**
-     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
-     *  @return string
-     */
-    public function getTempContents() 
-    {         
-        $this->syncTempHomeFiles();
-        $this->output
-            ->set_content_type('text/plain') 
-            ->set_output(file_get_contents($this->tempHomefile));
-    }      
-
-    public function syncTempHomeFiles()
-    {
-        $map = simplexml_load_file($this->file);
-
-        foreach ($map->sliderSection->slide as $key => $slider) {
-            $sliders[] = $slider;
-        }
-
-        if($this->input->get('search') != false) {
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);            
-        }          
-    }
 
     /**
      *  Sets Brand Section
@@ -1025,14 +1004,19 @@ class NewHomeWebService extends MY_Controller
      */
     public function commitSliderChanges()
     {
-        $map = simplexml_load_file($this->tempHomefile);
+        if($this->isAuthenticated) {
+            $map = simplexml_load_file($this->tempHomefile);
 
-        foreach ($map->sliderSection->slide as $key => $slider) {
-            $sliders[] = $slider;
-        }        
-        $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
-        $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
-        $this->fetchPreviewSlider();
+            foreach ($map->sliderSection->slide as $key => $slider) {
+                $sliders[] = $slider;
+            }        
+            $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
+            $this->fetchPreviewSlider();
+        } 
+        else {
+            show_404();
+        }       
                
     }
 
@@ -1109,6 +1093,44 @@ class NewHomeWebService extends MY_Controller
             }   
         }
     }
+
+
+    /**
+     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  @return string
+     */
+    public function getTempContents() 
+    {         
+        if(file_exists($this->tempHomefile)) {
+            $this->syncTempHomeFiles();
+        }       
+        else {
+            copy($this->file, $this->tempHomefile);
+        }     
+        $this->output
+            ->set_content_type('text/plain') 
+            ->set_output(file_get_contents($this->tempHomefile));
+    }     
+
+
+    /**
+     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  @return string
+     */
+    public function syncTempHomeFiles()
+    {
+        $map = simplexml_load_file($this->file);
+
+        foreach ($map->sliderSection->slide as $key => $slider) {
+            $sliders[] = $slider;
+        }
+        if(!$this->input->get() === false) {
+            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);              
+        }
+          
+    }
+
 }
 
 
