@@ -14,7 +14,13 @@ class EsProductImage
 {
 
     const IMAGE_UNAVAILABLE_DIRECTORY =  'assets/product/unavailable/';
+    
     const IMAGE_UNAVAILABLE_FILE =  'unavailable_product_img.jpg';
+    
+    const DEFAULT_IMAGE_DIRECTORY = 'assets/product/default/';
+    
+    const DEFAULT_IMAGE_FILE = 'default_product_img.jpg';
+    
 
     /**
      * @var integer
@@ -198,8 +204,8 @@ class EsProductImage
     {
         if($this->directory === '' && $this->filename === ''){
             if(trim($this->productImagePath) === ''){
-                $this->directory = 'assets/product/default/';
-                $this->filename = 'default_product_img.jpg';
+                $this->directory = self::DEFAULT_IMAGE_DIRECTORY;
+                $this->filename = self::DEFAULT_IMAGE_FILE;
             }
             else{
                 if(file_exists($this->productImagePath)){
