@@ -380,7 +380,7 @@ class Home extends MY_Controller
      *
      * @param string $vendorSlug
      */
-    public function oldUserprofile($vendorSlug)
+    public function oldUserProfile($vendorSlug)
     {
         redirect('/'.$vendorSlug, 'location', 301);
     }

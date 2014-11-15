@@ -106,7 +106,7 @@ else {
     $route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
 
     # USER
-    $route['(?i)vendor/(:any)'] = 'home/oldUserprofile/$1';
+    $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';
     $route['(?i)me'] = 'memberpage'; # janz
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
