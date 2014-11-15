@@ -373,6 +373,11 @@ class Home extends MY_Controller
         }
 
     }
+    
+    public function oldUserprofile($vendorSlug)
+    {
+        redirect('/'.$vendorSlug, 'location', 301);
+    }
 
     /**
      * Render users follower page
