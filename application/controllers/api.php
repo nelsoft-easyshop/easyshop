@@ -65,13 +65,12 @@ class Api extends MY_Controller
         if($member){
             $userShippingAddress = $this->em->getRepository("EasyShop\Entities\EsAddress")
                         ->findOneBy(["idMember"=>$member->getIdMember(),"type"=> EsAddress::TYPE_DELIVERY]);
-            if($userShippingAddress){
+            
                 $userDetails['userDetails']['id_member'] = $member->getIdMember();
                 $userDetails['userDetails']['fullname'] = $member->getFullname() === null || $member->getFullname() === '' ? $member->getUsername() : $member->getFullname();
                 $userDetails['userDetails']['email'] = $member->getEmail();
-                $userDetails['userDetails']['city'] = $userShippingAddress->getCity()->getLocation();
+                $userDetails['userDetails']['city'] =  $userShippingAddress ? $userShippingAddress->getCity()->getLocation() : 'Manila';
                 $userDetails['userDetails']['is_email_verify'] = $member->getIsEmailVerify();
-            }
         }
 
         echo json_encode($userDetails, JSON_PRETTY_PRINT);
