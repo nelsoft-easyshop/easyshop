@@ -27,8 +27,10 @@
         badIE : badIE,
         assetsDomain: "<?php echo getAssetsDomain(); ?>"
     };
-
-   window.alert = function(message, detail){
+    
+    
+    if (typeof jQuery.ui != 'undefined') {
+        window.alert = function(message, detail){
         var detail = (typeof detail === "undefined") ? "" : '<hr/>'+detail;
         var html_content = '<b>'+message+'</b>'+detail;        
         $(document.createElement('div'))
@@ -41,7 +43,9 @@
                 modal: true,
                 resizable: false
             });
-   };
+        };
+    }
+
    
 
    var entityMap = {
