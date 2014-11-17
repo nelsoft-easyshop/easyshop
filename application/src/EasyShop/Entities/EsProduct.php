@@ -336,6 +336,27 @@ class EsProduct
     private $maxAllowablePoint = '0.0000';
 
     /**
+     *  @var integer
+     *
+     *  isDelete value for active items
+     */
+    const ACTIVE = 0;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for deleted items ( item can be restored )
+     */
+    const DELETE = 1;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for fully deleted items ( item cannot be restored )
+     */
+    const FULL_DELETE = 2;
+
+    /*
      * @var integer
      *
      * @ORM\Column(name="ships_within_days", type="integer", nullable=true)

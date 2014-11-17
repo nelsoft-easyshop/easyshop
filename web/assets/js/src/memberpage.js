@@ -142,6 +142,7 @@ var memconf = {
     ajaxStat: null,
     itemPerPage: 10,
     active: {
+        bulkoption: 0,
         schVal: '',
         sortVal: 1,
         sortOrder: 1,
@@ -149,6 +150,7 @@ var memconf = {
         status2: 0 //Draft Status
     },
     deleted: {
+        bulkoption: 0,
         schVal: '',
         sortVal: 1,
         sortOrder: 1,
@@ -156,6 +158,7 @@ var memconf = {
         status2: 0 //Draft Status
     },
     draft:{
+        bulkoption: 0,
         schVal: '',
         sortVal: 1,
         sortOrder: 1,
@@ -163,6 +166,7 @@ var memconf = {
         status2: 1 //Draft Status
     },
     buy: {
+        bulkoption: 0,
         status : 0,
         schVal: '',
         sortVal: 0,
@@ -170,6 +174,7 @@ var memconf = {
         status2: ""
     },
     sell: {
+        bulkoption: 0,
         status : 0,
         schVal: '',
         sortVal: 0,
@@ -177,6 +182,7 @@ var memconf = {
         status2: ""
     },
     cbuy: {
+        bulkoption: 0,
         status : 1,
         schVal: '',
         sortVal: 0,
@@ -184,6 +190,7 @@ var memconf = {
         status2: ""
     },
     csell: {
+        bulkoption: 0,
         status : 1,
         schVal: '',
         sortVal: 0,
@@ -191,6 +198,44 @@ var memconf = {
         status2: ""
     }
 };
+
+(function($){
+
+    $('.bulk_options.menu .menu_option').on('click',function(){
+        var $parentDiv = $(this).closest('div.dashboard_table');
+        memconf[$parentDiv.attr('data-key')].bulkoption = 1;
+
+        $(this).parent().hide();
+        $($(this).attr('data-cont')).show();
+        $parentDiv.find('.bulk_options.selection').show();
+    });
+
+    $('.bulk_options.options .bulk_cancel').on('click',function(){
+        var $parentDiv = $(this).closest('div.dashboard_table');
+        memconf[$parentDiv.attr('data-key')].bulkoption = 0;
+
+        $parentDiv.find('.bulk_options.menu').show();
+        $parentDiv.find('.bulk_options.options').hide();
+        $parentDiv.find('.bulk_options.selection').hide();
+        $parentDiv.find('.bulk_options.selection input').prop('checked', false);
+    });
+
+    $('.bulk_options.options .main_option').on('click',function(){
+        var $parentDiv = $(this).closest('div.dashboard_table');
+        var $form = $(this).siblings('form');
+        var selectedCheckbox = $parentDiv.find('.bulk_options.selection .bulk_checkbox_selection:checked');
+        var arrProductId = [];
+
+        selectedCheckbox.each(function(k,v){
+            arrProductId.push($(v).val());
+        });
+
+        $form.children('input[name="bulk_p_id"]').val(JSON.stringify(arrProductId));
+
+        $form.submit();
+    });
+
+})(jQuery);
 
 /****************** EDIT USER SLUG  ******************************/
 (function($){
@@ -317,7 +362,8 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
         type: "GET",
         url: '/memberpage/'+controller,
         data: "s="+memconf[key].status+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
-            "&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key+"&s2="+memconf[key].status2,
+            "&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key+"&s2="+memconf[key].status2+
+            "&bulkoption="+memconf[key].bulkoption,
         beforeSend: function(){
             if(memconf.ajaxStat != null){
                 memconf.ajaxStat.abort();

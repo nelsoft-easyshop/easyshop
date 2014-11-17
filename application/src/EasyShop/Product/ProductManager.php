@@ -780,6 +780,52 @@ class ProductManager
     }
 
     /**
+     *  Bulk Restore products in memberpage
+     *
+     *  @param array $arrProductId - product Ids
+     *  @param integer $memberId
+     *
+     *  @return boolean
+     */
+    public function editBulkIsDelete($arrProductId, $memberId, $selector = "restore")
+    {
+        $arrayProductId = is_array($arrProductId) ? $arrProductId : array($arrProductId);
+        $objMember = $this->em->find("EasyShop\Entities\EsMember", $memberId);
+
+        switch( $selector ){
+            case "restore":
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+            case "delete":
+                $isDeleteVal = EsProduct::DELETE;
+                break;
+            case "full_delete":
+                $isDeleteVal = EsProduct::FULL_DELETE;
+                break;
+            default:
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+        }
+
+        foreach($arrayProductId as $productId){
+            $objProduct = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                   ->findOneBy(array(
+                                        "idProduct" => $productId,
+                                        "member" => $objMember
+                                    ));
+
+            $objProduct->setIsDelete($isDeleteVal)
+                       ->setLastmodifieddate(date_create());
+
+            $this->em->persist($objProduct);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
+    
+    /*
      * Check if the product is free shipping nationwide
      * @param  integer  $productId
      * @return boolean
