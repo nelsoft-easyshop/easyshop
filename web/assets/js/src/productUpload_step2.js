@@ -57,7 +57,7 @@ function appendNewSelectionRow(){
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
-    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+config.assetsDomain+'assets/images/img_upload_photo.jpg"></a>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
     <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
@@ -189,7 +189,7 @@ function resetControlPanel(buttonReset)
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
-         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.assetsDomain+'assets/images/img_upload_photo.jpg"></a>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
         <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     </div><div class="clear"></div>';
@@ -1047,7 +1047,7 @@ var previous,editSelectedValue,editSelectedId;
             $('.control-panel-'+row +' > .value-section > .select-value-section > #value-data-'+row).val(value);
             $('.control-panel-'+row +' > .price-div > .price'+row).val(price);
             $('.control-panel-'+row +' > .image-div > .imageText'+row).val(image);
-            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",config.base_url+displayImage);
+            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",'/'+displayImage);
             $('#value-data-'+row).trigger("liszt:updated");
         });
     });
@@ -1073,7 +1073,7 @@ var currentRequest = null;
         if(searchQuery != ""){
             currentRequest = $.ajax({
                 type: "GET",
-                url: config.base_url+'product_search/searchBrand',
+                url: '/product_search/searchBrand',
                 data: "data="+searchQuery, 
                 beforeSend : function(){
                     if(currentRequest != null) {
@@ -1122,7 +1122,7 @@ var currentRequest = null;
         $('#prod_brand').val($this.data('brandid')).trigger( "change" );
         $("#brand_sch").val($this.text()).trigger( "change" ); 
         $('#brand_search_drop_content').empty().hide(); 
-        $(".brand_sch_loading").html('<img src="'+config.assetsDomain+'assets/images/check_icon.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="/assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
     $(document).on("click",".add_brand", function(){
@@ -1168,7 +1168,7 @@ var currentRequest = null;
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        $(".brand_sch_loading").html('<img src="'+config.assetsDomain+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="/assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
 })( jQuery );
 // BRAND SEARCH END
@@ -1315,7 +1315,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('.filescnttxt').val(filescnt); 
         $('#afstart').val(JSON.stringify(afstart));   
         $('#form_files').ajaxForm({
-            url: config.base_url+'productUpload/uploadimage',
+            url: '/productUpload/uploadimage',
             type: "POST", 
             dataType: "json",             
             xhr: function(){
@@ -1352,7 +1352,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 if(badIE == true){
                     if(d.err != '1'){
                         $.each( arrayUpload, function( key, value ) {
-                            $('#previewList'+value + ' > span > img').attr("src",config.base_url+tempDirectory+'/'+imageName);
+                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/'+imageName);
                         });
                     } 
                     $(".files").remove();
@@ -1382,7 +1382,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         var selector = $(this);
         currentCnt = selector.data('cnt');
         $('.imageText'+currentCnt).val('');
-        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+"assets/images/img_upload_photo.jpg");
+        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src","/assets/images/img_upload_photo.jpg");
     });
 
     $(document).on('click',".attr-image",function (e){
@@ -1432,7 +1432,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
         canProceed = false;
         $('#other_files').ajaxForm({
-            url: config.base_url+'productUpload/uploadimageOther',
+            url: '/productUpload/uploadimageOther',
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
@@ -1453,19 +1453,19 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/loading/preloader-whiteBG.gif');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             success :function(d) {   
                 canProceed = true;
                 if(d.result == "ok"){
                     imageAttr.push(picName);
                     $('.imageText'+currentCnt).val(picName); 
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+tempDirectory+'other/'+picName);
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/'+picName);
                     pictureCountOther++;    
                 }
                 else{
                     alert(d.msg);
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
                 }
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
@@ -1473,7 +1473,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
                 canProceed = true;
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();

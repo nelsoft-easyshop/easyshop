@@ -90,7 +90,7 @@
     $(document).ready(function(){
         var txt_status = $('#txt_status');
         var btn_status = $("#btn_status_check");
-        var base_url = config.base_url;
+        var base_url = '/';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var notf_user = $('#notf_user');

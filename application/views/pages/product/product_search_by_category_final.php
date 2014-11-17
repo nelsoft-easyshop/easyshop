@@ -335,7 +335,7 @@ $(document).ready(function() {
     }
  
     // START OF INFINITE SCROLLING FUNCTION
-    var base_url = config.base_url;
+    var base_url = '/';
     var offset = 1;
     var request_ajax = true;
     var ajax_is_on = false;

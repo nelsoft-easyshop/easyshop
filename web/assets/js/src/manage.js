@@ -9,7 +9,7 @@ $(document).ready(function() {
 
     $(document).on('click',"#slideProductBtn",function (e){
         $('#slideProduct').ajaxForm({
-            url: config.base_url+'manage/editSlideProduct',
+            url: '/manage/editSlideProduct',
             type: 'POST', 
             dataType: 'json',
             success: function(d) {   
@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
         
     $(document).on('change',"#add_more_photo_input",function (e){
-        $('.current_selected').append('<div class="main_images loader"><span><img src="'+config.assetsDomain+'assets/images/orange_loader.gif" /></span><h3>Uploading Please Wait...</h3></div>');
+        $('.current_selected').append('<div class="main_images loader"><span><img src="/assets/images/orange_loader.gif" /></span><h3>Uploading Please Wait...</h3></div>');
         startUpload();
 
     });
@@ -52,7 +52,7 @@ $(document).ready(function() {
         } 
         $.ajax({
             type: "GET",
-            url: config.base_url +  'manage/moveNodeXml/'+action,
+            url: '/manage/moveNodeXml/'+action,
             data: "node="+ node,
             dataType: "json",
             cache: false,
@@ -80,7 +80,7 @@ $(document).ready(function() {
         $('#link').val(deftarget);
         
         var jcrop_api, width, height;
-        $('#image_prev').attr('src', config.base_url + node);
+        $('#image_prev').attr('src', '/' + node);
 
         var image = new Image();
         image.src = $('#image_prev').attr("src");
@@ -104,7 +104,7 @@ $(document).ready(function() {
                     getyy = encodeURI($('#image_yy').val());
                     $.ajax({
                         type: "GET",
-                        url: config.base_url +  'manage/updateNodeXml',
+                        url: '/manage/updateNodeXml',
                         data: "node="+ node+"&target="+target+"&getx="+getx+"&getxx="+getxx+"&gety="+gety+"&getyy="+getyy,
                         dataType: "json",
                         cache: false,
@@ -155,13 +155,13 @@ $(document).ready(function() {
     function startUpload()
     {  
         $('#picform').ajaxForm({
-            url: config.base_url+'manage/uploadMainSlide',
+            url: '/manage/uploadMainSlide',
             type: 'POST', 
             dataType: 'json',
             success: function(d) {   
                if(d.e == 0){
                     $('.current_selected > .loader').remove();
-                    $('.current_selected').append('<div class="main_images" id="'+d.d+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic imglink" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >E</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic imglink" href="javascript:void(0)">X</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a><div><img src="'+config.assetsDomain+'assets/images/mainslide/'+d.f+'"></div></div>');
+                    $('.current_selected').append('<div class="main_images" id="'+d.d+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic imglink" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >E</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic imglink" href="javascript:void(0)">X</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a><div><img src="/assets/images/mainslide/'+d.f+'"></div></div>');
                }else{
                     alert(d.m);
                }
@@ -174,7 +174,7 @@ $(document).ready(function() {
     {                 
         $.ajax({
             type: "GET",
-            url: config.base_url +  'manage/removeMainSlide',
+            url: '/manage/removeMainSlide',
             data: "node="+ node,
             dataType: "json",
             cache: false,
