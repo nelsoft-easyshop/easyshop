@@ -1417,57 +1417,6 @@ class productUpload extends MY_Controller
             redirect('sell/step1', 'refresh');
         }
     }
-    
-    /**
-     * Render view for last upload tsep
-     *
-     */
-    public function finishProductUpload()
-    {
-        $this->load->model("memberpage_model");
-        
-        if( $this->input->post('prod_h_id') ){
-            $productID = $this->input->post('prod_h_id');
-            $memberID = $this->session->userdata('member_id');
-            $um = $this->serviceContainer['user_manager'];
-            
-            $product_row = $this->product_model->getProductById($productID, true);
-            if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberID))){
-                redirect('sell/step1', 'refresh');
-            }
-            $quantities = $this->product_model->getProductQuantity($productID);
-            $availability = "varies";
-         
-            foreach($quantities as $qty){
-                if(count($qty['product_attribute_ids'])===1){
-                    if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
-                        $availability = $qty['quantity'];
-                    }
-                }   
-            }
-            $product_options = $this->product_model->getProductAttributes($productID, 'NAME');
-            $product_options = $this->product_model->implodeAttributesByName($product_options);
-            
-            $data = array(
-                'product_id' => $productID,
-                'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-                'product' => $product_row,
-                'product_images' => $this->product_model->getProductImages($productID),
-                'product_options' => $product_options,
-                'availability' => $availability,
-                'shipping_summary' => $this->product_model->getShippingSummary($productID),
-                'attr' => $this->product_model->getPrdShippingAttr($productID),
-                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID),
-                'avatarImage' => $um->getUserImage($memberID, "small")
-            );
-            $data = array_merge($data, $this->fill_view());
-            
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/product/product_upload_step4_view',$data);
-            $this->load->view('templates/footer');
-        }
-    }
-    
 }
 
 
