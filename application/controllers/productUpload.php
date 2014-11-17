@@ -22,6 +22,8 @@ class productUpload extends MY_Controller
         $this->img_dimension['small'] = array(400,535);
         $this->img_dimension['categoryview'] = array(220,200);
         $this->img_dimension['thumbnail'] = array(60,80);
+
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
     function fill_view()
@@ -1361,6 +1363,44 @@ class productUpload extends MY_Controller
         
         echo json_encode($serverResponse);
     }
+
+    public function finishProductPreview()
+    {
+        $productRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $productImageRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+
+        $stringUtility = $this->serviceContainer['string_utility'];
+        $userManager = $this->serviceContainer['user_manager'];
+
+        $productId = $this->input->post('prod_h_id');
+        $product = $productRepository->find($productId);
+
+        if($product){
+
+            $headerData =  $this->fill_view();
+            $productImages = $productImageRepository->getProductImages($productId);
+            $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
+            $billingInfo = $productRepository->getProductBillingInfo($product->getMember()->getIdMember(), $productId);
+            $productPreviewData = [
+                        'product' => $product,
+                        'productDescription' => $stringUtility->purifyString($product->getDescription()),
+                        'productImages' => $productImages,
+                        'avatarImage' => $avatarImage,
+                    ];
+
+            $mainViewData = [
+                        'product' => $product,
+                        'productBillingInfo' => $billingInfo,
+                        'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                    ];
+            $this->load->view('templates/header', $headerData);
+            $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
+            $this->load->view('templates/footer');
+        }
+        else{
+            show_404();
+        }
+    }
     
     /**
      * Render view for last upload tsep
@@ -1407,6 +1447,7 @@ class productUpload extends MY_Controller
             $data = array_merge($data, $this->fill_view());
             
             $this->load->view('templates/header', $data);
+            $this->load->view('pages/product/product_upload_step4_view',$data);
             $this->load->view('pages/product/product_upload_step4_view',$data);
             $this->load->view('templates/footer');
         }

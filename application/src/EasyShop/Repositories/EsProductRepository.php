@@ -800,7 +800,36 @@ class EsProductRepository extends EntityRepository
         return isset($result[0]) ? $result[0] : NULL;
     }
     
-    
+    /**
+     * Get product bank and billing information
+     * @param  integer $memberId
+     * @param  integer $productId
+     * @return object
+     */
+    public function getProductBillingInfo($memberId, $productId)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $queryBuilder = $qb->select('bi.bankAccountName,
+                                     bi.bankAccountNumber,
+                                     bank.bankName')
+                           ->from('EasyShop\Entities\EsProduct','p') 
+                           ->innerJoin('EasyShop\Entities\EsBillingInfo', 'bi', 'WITH',
+                                $qb->expr()->andX(
+                                    $qb->expr()->eq('p.billingInfoId', 'bi.idBillingInfo'),
+                                    $qb->expr()->eq('bi.member', ':member_id'),
+                                    $qb->expr()->eq('p.idProduct', ':product_id')
+                                )
+                            )
+                           ->innerJoin('EasyShop\Entities\EsBankInfo', 'bank', 'WITH', 'bi.bankId = bank.idBank')
+                           ->setParameter('member_id', $memberId) 
+                           ->setParameter('product_id', $productId)
+                           ->getQuery();
+
+        $result = $queryBuilder->getResult();
+
+        return $result[0];
+    }
 }
 
 

@@ -7,19 +7,18 @@
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1> 
-                    <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
+                    <span id="pname"> <?=html_escape($product->getName())?> </span>
                 </h1>
                 <div>
                     By:
                         <span class="product-profile-photo"><img src="<?=$avatarImage?>"></span>
-                       <?php echo html_escape(  $product['storename'] && strlen($product['storename']) > 0 ? $product['storename'] : $product['sellerusername']  );?>
+                       <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
         </div>
         <div class="prod-border-bttm"></div>
     </div>
 </section>
-
 
 <div class="container">
     <div class="row pd-top-40">
@@ -28,9 +27,9 @@
                 <div class="col-md-3">
                     <div class="thumbnails-img-container">
                         <div class="slideshow">
-                            <?php foreach($product_images as $image): ?>
+                            <?php foreach($productImages as $image): ?>
                                 <a href="javascript:void(0);">
-                                    <img src='/<?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> 
+                                    <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
                                 </a>
                             <?php endforeach;?>
                         </div>
@@ -43,7 +42,7 @@
                 <div class="col-md-9">
                     <div class="prod-gallery-container">
                         <div class="prod_con_gal text-center">
-                            <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> 
+                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                     </div>
                 </div>
@@ -52,7 +51,7 @@
             <div class="mobile-product-gallery">
                 <div id="mobile-product-gallery" class="owl-carousel">
                         <div> 
-                            <img src="/<?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>">
+                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                         <div class="owl-controls">
                             <div class="owl-prev">prev</div>
@@ -63,16 +62,24 @@
         </div>
 
         <div class="col-md-6">
+            <?php if(floatval($product->getDiscountPercentage()) > 0):?>
             <div class="prod-price-container">
-                <span class="base-price" data-baseprice="<?php echo $product['price']?>">
-                    P<?php echo number_format($product['price'],2,'.',',');?>
+                <span class="base-price" data-baseprice="<?=number_format($product->getOriginalPrice(),2,'.',','); ?>"> 
+                    P<?=number_format($product->getOriginalPrice(),2,'.',',');?> 
                 </span>
 
-                <span class="discounted-price"> P12,233.00</span>
+                <span class="discounted-price"> P<?=number_format($product->getFinalPrice(),2,'.',','); ?></span> 
             </div>
             <div class="prod-dc-container text-right">
-                <span class="prod-dc-badge"> -12%</span>
+                <span class="prod-dc-badge"> -<?=number_format($product->getDiscountPercentage(),0,'.',',');?>%</span>
             </div>
+            <?php else: ?>
+            <div class="prod-price-container">
+                <span class="discounted-price" data-baseprice="<?=number_format($product->getOriginalPrice(),2,'.',','); ?>"> 
+                    P<?=number_format($product->getFinalPrice(),2,'.',',');?> 
+                </span>
+            </div>
+            <?php endif;?>
             <div class="clear"></div>
             <div class="col-md-12 prod-border-bttm"></div>
             <div class="clear"></div>
@@ -197,35 +204,10 @@
         </div>
         <div class="tab-pane fade in active" id="details">
             <div class="div-detail-container ">
-                <p class="p-detail-title">Product Detail</p>
                 <div class="p-html-description">
-                    <p> 
-                        <strong>Description: </strong>
-                        <?php echo html_purify($product['description']);?> 
+                    <p>  
+                        <?=$productDescription;?> 
                     </p>
-                    <ul>
-                        <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
-                        <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
-                        <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
-                    </ul>
-                    <h5><strong>Specification</strong></h5>
-                    <div class="spec_panel-list"> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
-                        <?php foreach($product_options as $key=>$product_option):?>
-                            <?php if(count($product_option)===1): ?>
-                                <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
-                                    <div class="tab2_html_con">
-                                        <strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
-                                        <?php echo html_purify($product_option[0]['value']);?>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="spec_panel-list"> 
-                                        <span><?php echo html_escape(str_replace("'", '', $key));?></span> 
-                                        <span><?php echo html_escape($product_option[0]['value']);?></span>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        <?php endforeach;?>
-                    </div>
                     <div class="clear"></div>
                 </div>
             </div>
