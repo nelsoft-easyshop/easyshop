@@ -114,7 +114,8 @@
                                                                     <div class="form-group">
                                                                         <label for="subject" class="col-sm-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
                                                                         <div class="col-sm-10 col-text-area" style="margin-left: -10px;">
-                                                                            <textarea id="textareaReview<?=$value['id_review']; ?>" class="input-textarea" rows="7"></textarea>
+                                                                            <textarea id="textareaReview<?=$value['id_review']; ?>" class="input-textarea error-field-review" rows="7"></textarea>
+                                                                            <span class="error-label error-label-textarea" >Please provide a review message</span>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -191,7 +192,8 @@
                                                     <div class="form-group">
                                                         <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
                                                         <div class="col-xs-9">
-                                                            <input type="text" id="review-title" class="input-reply" id="subject" autocomplete="off">
+                                                            <input type="text" id="review-title" class="input-reply error-field-review" id="subject" autocomplete="off">
+                                                            <span class="error-label">Please provide a review subject</span>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -209,6 +211,7 @@
                                                                 <i data-count="5"  class="fa fa-star fa-star-rate js-rate"></i>
                                                                 <input type="hidden" readonly value="0" id="star-rate" />
                                                             </div>
+                                                            <span class="error-label">Please provide a review rating</span>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -221,7 +224,8 @@
                                                     <div class="form-group">
                                                         <label for="subject" class="col-md-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
                                                         <div class="col-md-10" style="margin-left: -10px;">
-                                                            <textarea id="review-comment" class="input-textarea-write" rows="7"></textarea>
+                                                            <textarea id="review-comment" class="input-textarea-write error-field-review" rows="7"></textarea>
+                                                             <span class="error-label error-label-textarea" >Please provide a review message</span>
                                                         </div>
                                                     </div>
                                                 </form>
