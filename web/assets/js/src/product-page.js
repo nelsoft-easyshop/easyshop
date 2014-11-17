@@ -127,14 +127,14 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                    $(".in-stock").html("Out of Stock");
+                    $(".in-stock").html("Out of Stock").css("color","#F2000");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
                     $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    $(".in-stock").html("In Stock");
+                    $(".in-stock").html("In Stock").css("color",'#24DF5A');
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
@@ -154,7 +154,7 @@
 
             $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
-            $(".in-stock").html("Out of Stock");
+            $(".in-stock").html("Out of Stock").css("color","#F2000");
         });
     }
 
