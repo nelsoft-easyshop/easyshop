@@ -64,19 +64,14 @@ class Kernel
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
-        $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
+        $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
-                  
             $em->getEventManager()->addEventListener(
-                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener($container['aws_uploader'], ENVIRONMENT)
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
             );
-            
             return $em;
         };
-  
-            
-        
 
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {

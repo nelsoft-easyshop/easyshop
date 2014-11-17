@@ -14,23 +14,17 @@ class ProductImageExistenceListener
      * @var string
      */
     private $environment;
+
  
-    /**
-     * Amazon S3 Service
-     *
-     * @var string
-     */
-    private $awsS3client;
- 
-    public function __construct($awsS3client, $environment)
+    public function __construct($environment)
     {
         $this->environment = $environment;
-        $this->awsS3client = $awsS3client;
     }
  
     /**
      * Post load event to check if the image exists in the appropriate asset directory
      *
+     * @param LifecycleEventArgs $event
      */
     public function postLoad(LifecycleEventArgs $event)
     {
@@ -46,18 +40,16 @@ class ProductImageExistenceListener
             $entity->setFilename(EsProductImage::DEFAULT_IMAGE_FILE);
         }
         else{
- 
-            if((strtolower($this->environment) ===  "development" &&  file_exists($productImagePath)) ||
-               (strtolower($this->environment) !==  "development" && $this->awsS3client->doesFileExist($productImagePath)))
-            {
+            if(strtolower($this->environment) ===  "development" && !file_exists($productImagePath)){
+                $entity->setDirectory(EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY);
+                $entity->setFilename(EsProductImage::IMAGE_UNAVAILABLE_FILE);
+            }
+            else{
                 $reversedPath = strrev($productImagePath);
                 $entity->setDirectory(substr($productImagePath,0,strlen($reversedPath)-strpos($reversedPath,'/')));
                 $entity->setFilename(substr($productImagePath,strlen($reversedPath)-strpos($reversedPath,'/'),strlen($reversedPath)));
             }
-            else{
-                $entity->setDirectory(EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY);
-                $entity->setFilename(EsProductImage::IMAGE_UNAVAILABLE_FILE);
-            }
+
         }                
     }
  
