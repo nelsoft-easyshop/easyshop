@@ -427,7 +427,7 @@
                     {
                         zoombigview.css({'top': '0px','width': img });
                         $('.zoomWrapperImage').css({'height': imgheight});
-                        $('.zoomPad').css("height", imgheight);
+                        $('.zoomPad').css({"height": imgheight, "width": imagewidth});
                     }
                 /*** end here ****/
                 
