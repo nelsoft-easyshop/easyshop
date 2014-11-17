@@ -831,6 +831,11 @@ class EsProductRepository extends EntityRepository
         return $result[0];
     }
 
+    /**
+     * Get shipping details of the given product
+     * @param  integer $productId
+     * @return mixed
+     */
     public function getProductShippingDetails($productId)
     {
         $em = $this->_em;

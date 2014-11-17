@@ -1364,6 +1364,10 @@ class productUpload extends MY_Controller
         echo json_encode($serverResponse);
     }
 
+    /**
+     * Product preview after uploading
+     * @return view
+     */
     public function finishProductPreview()
     {
         $productRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 

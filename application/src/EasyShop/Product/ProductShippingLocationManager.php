@@ -208,6 +208,11 @@ class ProductShippingLocationManager
         return $data;
     }
 
+    /**
+     * get product item attribute
+     * @param  integer $productId
+     * @return mixed
+     */
     public function getShippingAttribute($productId)
     {
         $productAttr = $this->em->getRepository('EasyShop\Entities\EsProductItem')
