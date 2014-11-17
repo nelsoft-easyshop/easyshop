@@ -99,11 +99,11 @@ $(document).ready(function(){
                 });
             }
             postData = csrfname+"="+csrftoken+"&paymentMethods="+paymentMethod;
-            action = config.base_url + "pay/pay";
+            action = "/pay/pay";
         }
         else{
             postData = csrfname+"="+csrftoken+"&paypal="+type;
-            action = config.base_url + "pay/setting/paypal";
+            action = "/pay/setting/paypal";
         }
 
         $.ajax({
@@ -171,11 +171,11 @@ $(document).ready(function(){
                 });
             }
             postData = csrfname+"="+csrftoken+"&paymentMethods="+paymentMethod;
-            action = config.base_url + "pay/pay";
+            action = "/pay/pay";
         }
         else{
             postData = csrfname+"="+csrftoken;
-            action = config.base_url + "payment/payDragonPay";
+            action = "/payment/payDragonPay";
         }
 
         if($('#chk_dp').is(':checked')){
@@ -223,7 +223,7 @@ $(document).ready(function(){
                 $(this).attr('disabled','disabled');
 
                 if(PAY_BY_GATEWAY){
-                    var action = config.base_url + "pay/pay"; 
+                    var action = "/pay/pay"; 
                     var pointAllocated = $('#pointsAllocated').val();
 
                     if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
@@ -294,7 +294,7 @@ $(document).ready(function(){
 // -- PESO PAY CC PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.pesopaycdb',function () {
-        var action = config.base_url + "payment/payPesoPay"; 
+        var action = "/payment/payPesoPay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
@@ -359,7 +359,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click','.changeAddressBtn',function () {
-        var action = config.base_url + "payment/changeAddress";
+        var action = "/payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
@@ -447,7 +447,7 @@ $(document).ready(function(){
         var slug = $(this).data('slug');
         var iid = $(this).data('iid');
         var pname = $(this).data('name');
-        var action = config.base_url + "payment/getLocation"; 
+        var action = "/payment/getLocation"; 
             $.ajax({
                 type: "POST",
                 url:  action, 

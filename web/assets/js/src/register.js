@@ -114,16 +114,7 @@ $(document).ready(function(){
 		}
 	  });
 
-	  /*
-	  $('#captcha_refresh').click(function(){
-		   $('#captcha_loading').css('display','inline');
-		   $.post(config.base_url+"register/recreate_captcha", function(data){
-			  $('#captcha_loading').css('display','none');
-			  $('#captcha_img').children().attr('src', data);
-		   });
-		   $('.red').html('');
-	  });
-	  */
+
 });
 
 /**********************************************************************************************/
@@ -268,7 +259,7 @@ function username_check(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	$('#username').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/username_check', {username: username, csrfname : csrftoken}, function(result){
+	$.post('/register/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
 			$('.username_availability').html('');
@@ -290,7 +281,7 @@ function email_check(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	$('#email').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/email_check', {email: email, csrfname : csrftoken}, function(result){
+	$.post('/register/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
 			$('.email_availability').html('');
