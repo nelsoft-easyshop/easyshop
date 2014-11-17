@@ -830,6 +830,33 @@ class EsProductRepository extends EntityRepository
 
         return $result[0];
     }
+
+    public function getProductShippingDetails($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('location_id', 'location_id');
+        $rsm->addScalarResult('price', 'price');
+        $rsm->addScalarResult('product_item_id', 'product_item_id');
+        $rsm->addScalarResult('location', 'location');
+        $query = $em->createNativeQuery("
+            SELECT 
+                location_id, price, product_item_id, location
+            FROM
+                es_product_shipping_head
+                    LEFT JOIN
+                es_product_shipping_detail ON es_product_shipping_head.id_shipping = es_product_shipping_detail.shipping_id
+                    LEFT JOIN
+                es_location_lookup ON es_location_lookup.id_location = es_product_shipping_head.location_id
+            WHERE product_id = :productId
+            GROUP BY price , location_id , product_item_id
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();
+
+        return $result;
+    }
 }
 
 

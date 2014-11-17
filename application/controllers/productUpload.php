@@ -1397,6 +1397,9 @@ class productUpload extends MY_Controller
                         'productAttributes' => $productAttributes,
                     ];
 
+                    $shippingDetails = $productRepository->getProductShippingDetails($productId);
+                    $shippingSummary = [];
+
             $mainViewData = [
                         'product' => $product,
                         'productBillingInfo' => $billingInfo,
@@ -1410,7 +1413,7 @@ class productUpload extends MY_Controller
             $this->load->view('templates/footer');
         }
         else{
-            show_404();
+            redirect('sell/step1', 'refresh');
         }
     }
     
