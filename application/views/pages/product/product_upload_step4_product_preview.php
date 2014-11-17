@@ -83,48 +83,47 @@
             <div class="clear"></div>
             <div class="col-md-12 prod-border-bttm"></div>
             <div class="clear"></div>
+            <?php if(count($productAttributes) > 0): ?>
             <div class="row pad-top-23">
                 <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
-                <div class="col-sm-12 col-md-6">
-                    <div class="prod-select-con ui-form-control">
-                        <select class="attribute-control">
-                            <option>Please Select</option>
-                            <option>first</option>
-                            <option>Second</option>
-                            <option>Third</option>
-                        </select>
+                <!-- Product attributes here -->
+                <?php foreach ($productAttributes as $head => $headValue): ?>
+                    <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
+                        <div class="prod-select-con ui-form-control">
+                            <select class="attribute-control" disabled="">
+                                <?php if(count($headValue) > 1): ?>
+                                <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
+                                <?php endif; ?>
+                                <?php foreach ($headValue as $key => $value):?>
+                                    <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-6">
-                    <div class="prod-select-con ui-form-control">
-                        <select class="attribute-control">
-                            <option>Please Select</option>
-                            <option>first</option>
-                            <option>Second</option>
-                            <option>Third</option>
-                        </select>
-                    </div>
-                </div>
+                <?php endforeach; ?> 
+                <!-- end of Product attributes -->
                 <div class="clear"></div>
             </div>
             <div class="col-md-12 prod-border-bttm pad-top-23"></div>
+            <?php endif; ?>
             <div class="clear"></div>
             <div class="row pad-top-23">
                 <div class="col-xs-12 col-sm-5 col-md-5">
                     <div class="prod-availability-container prod-border-right">
-                        <p>Availability: <span class="in-stock">In Stock</span></p>
+                        <p>Availability: <span class="in-stock">Select Combination</span></p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-7 col-md-7">
                     <p class="attr-title txt-shipment">Shipment Fee:</p>
-                    <div class="prod-select-con ui-form-control shipment-select">
-                        <select class="shiploc" id="shipment_locations">
-                            <option>Please Select</option>
-                            <option>first</option>
-                            <option>Second</option>
-                            <option>Third</option>
-                        </select>
-                    </div>
+                        <?php if(!$isFreeShippingNationwide): ?>
+                        <div class="prod-select-con ui-form-control shipment-select">
+                            <select class="shiploc" id="shipment_locations" disabled="">
+                                <option>Select Location</option>
+                            </select>
+                        </div>
+                        <?php else: ?>
+                        <span class="default">FREE SHIPPING NATIONWIDE</span> 
+                        <?php endif; ?>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -134,10 +133,8 @@
                 <div class="col-sm-12 col-md-5 prod-quantity-container">
                     <p class="attr-title">Quantity:</p>
                     <div class="prod-select-con ui-form-control quantity-select">
-                        <select id="control-quantity">
-                            <option value="0" selected=selected>0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                        <select id="control-quantity" disabled="">
+                            <option value="0">0</option>
                         </select>
                     </div>
                 </div>
@@ -215,26 +212,4 @@
         <div class="clear"></div>
     </div>
 </section>
-<script type="text/javascript">
-
-$(document).ready(function() {
-    var delay = (function(){
-      var timer = 0;
-      return function(callback, ms){
-        clearTimeout (timer);
-        timer = setTimeout(callback, ms);
-      };
-    })();
-
-    var $window = $(window);
-    $window.on('load resize', function() {
-         delay(function(){
-            var prod_con_gal= $(".prod_con_gal").width();
-            $(".prod_con_gal img").css("max-width", prod_con_gal);
-
-            var mobile_prod_gal= $(".owl-carousel div").width();
-            $(".owl-carousel div img").css("max-width", mobile_prod_gal);
-        }, 500);
-    });
-});
-</script>
+ 

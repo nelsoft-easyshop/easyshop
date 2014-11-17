@@ -1371,28 +1371,40 @@ class productUpload extends MY_Controller
 
         $stringUtility = $this->serviceContainer['string_utility'];
         $userManager = $this->serviceContainer['user_manager'];
+        $productManager = $this->serviceContainer['product_manager'];
+        $collectionHelper = $this->serviceContainer['collection_helper'];
 
         $productId = $this->input->post('prod_h_id');
-        $product = $productRepository->find($productId);
+        $productEntity = $productRepository->find($productId);
 
-        if($product){
-
-            $headerData =  $this->fill_view();
+        if($productEntity){
+            $headerData = $this->fill_view();
+            $product = $productManager->getProductDetails($productEntity);
             $productImages = $productImageRepository->getProductImages($productId);
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
             $billingInfo = $productRepository->getProductBillingInfo($product->getMember()->getIdMember(), $productId);
+            $isFreeShippingNationwide = $productManager->isFreeShippingNationwide($productId);
+            $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->getProductAttributeDetailByName($productId);
+            $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+
             $productPreviewData = [
                         'product' => $product,
                         'productDescription' => $stringUtility->purifyString($product->getDescription()),
                         'productImages' => $productImages,
                         'avatarImage' => $avatarImage,
+                        'isFreeShippingNationwide' => $isFreeShippingNationwide,
+                        'productAttributes' => $productAttributes,
                     ];
 
             $mainViewData = [
                         'product' => $product,
                         'productBillingInfo' => $billingInfo,
                         'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                        'shipping_summary' => $this->product_model->getShippingSummary($productId),
+                        'attr' => $this->product_model->getPrdShippingAttr($productId),
                     ];
+
             $this->load->view('templates/header', $headerData);
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
@@ -1447,7 +1459,6 @@ class productUpload extends MY_Controller
             $data = array_merge($data, $this->fill_view());
             
             $this->load->view('templates/header', $data);
-            $this->load->view('pages/product/product_upload_step4_view',$data);
             $this->load->view('pages/product/product_upload_step4_view',$data);
             $this->load->view('templates/footer');
         }

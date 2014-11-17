@@ -191,7 +191,7 @@
         <div class="col-sx-12 col-sm-12 col-md-12 text-center">
             <div class="pd-tb-20">
                 <a href="/sell/step1" target="_blank" class="orange_btn3 vrtcl-mid">Sell another Item</a>
-                <a href="/item/<?php echo $product['slug']?>" target="_blank" class="btn btn-default">View Product</a>
+                <a href="/item/<?=$product->getSlug();?>" target="_blank" class="btn btn-default">View Product</a>
             </div>
         </div>
     </div>

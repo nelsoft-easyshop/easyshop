@@ -118,7 +118,7 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productIds
      * @return array
      */
-    public function getAttributesByProductIds($productIds = array(),$filter = false,$additionalString = "",$parameters = array())
+    public function getAttributesByProductIds($productIds = [],$filter = false,$additionalString = "",$parameters = [])
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
