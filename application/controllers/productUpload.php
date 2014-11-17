@@ -27,9 +27,9 @@ class productUpload extends MY_Controller
     function fill_view()
     {
         $data = array(
-            'title' => 'Sell Product | Easyshop.ph',
+                    'title' => 'Sell Product | Easyshop.ph',
                     'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-            'render_searchbar' => false, 
+                    'render_searchbar' => false, 
                 );
         $data = array_merge($data, $this->fill_header());
 
