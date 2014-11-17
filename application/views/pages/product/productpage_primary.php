@@ -28,8 +28,10 @@
                 </h1>
                 <div>
                     By:
+                    <a href="/<?=$product->getMember()->getSlug();?>">
                         <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
+                    </a>
                 </div>
             </div>
         </div>
