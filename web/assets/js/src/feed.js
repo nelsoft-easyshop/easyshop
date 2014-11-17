@@ -94,7 +94,7 @@
         
         thisbtn.attr('disabled',true);
         thisbtn.val("Loading...");
-        $.post(config.base_url+"home/getMoreFeeds", $(form).serializeArray(), function(data){
+        $.post("/home/getMoreFeeds", $(form).serializeArray(), function(data){
             try{
                 var obj = jQuery.parseJSON(data);
             }

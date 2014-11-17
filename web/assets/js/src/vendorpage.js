@@ -316,7 +316,7 @@ function resetCoords(){
         var vendorLink = form.find('input[name="userlink"]').val();
         
         if( logInStatus === 'true' ){
-            $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+            $.post('/memberpage/vendorSubscription', $(form).serializeArray(), function(data){
                 try{
                     var obj = jQuery.parseJSON(data);
                 }
@@ -337,7 +337,7 @@ function resetCoords(){
         else{
             $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
-            window.location.href = config.base_url + 'login';
+            window.location.href = '/login';
         }
         
         return false;
@@ -381,7 +381,7 @@ $(function(){
 		
 		
 		
-		$.post(config.base_url+'memberpage/vendorStoreDesc', $(form).serializeArray(), function(data){
+		$.post('/memberpage/vendorStoreDesc', $(form).serializeArray(), function(data){
 			thisbtn.attr('disabled', false);
 			thisbtn.val('Save');
 			
@@ -455,7 +455,7 @@ $(function(){
             thisbtn.val('Saving...');
             btnSet.attr('disabled', true);
 
-            $.post(config.base_url+'memberpage/vendorStoreName', $(form).serializeArray(), function(data){
+            $.post('/memberpage/vendorStoreName', $(form).serializeArray(), function(data){
                 thisbtn.val('Save');
                 btnSet.attr('disabled', false);
                 
