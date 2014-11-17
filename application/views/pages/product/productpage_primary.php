@@ -104,13 +104,8 @@
                     <div class="col-md-12 col-lg-5">
                         <div class="prod-border-right mrgn-neg-10">
                             <div class="prod-availability-container">
-                                <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
+                                <p>Availability: <span class="availability-status">Select Combination</span></p>
                             </div>
-                            <?php if(trim($product->getShipsWithinDays()) !== ""): ?>
-                                <div class="">
-                                    <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> days</span>
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-7">
@@ -138,6 +133,11 @@
                                 <?php endif; ?>
                             <?php endif; ?>
                         <div class="shipping_fee"></div>
+                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
+                            <div class="">
+                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
+                            </div>
+                            <?php endif; ?>
                     </div>
                     <div class="clear"></div>
                 </div>

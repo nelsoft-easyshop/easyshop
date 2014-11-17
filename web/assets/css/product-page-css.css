@@ -1326,7 +1326,6 @@ div.vertical {
 
 .prod-availability-container {
     font-weight: 900;
-    height: 35px;
     text-transform: uppercase;
 }
 
@@ -1339,22 +1338,22 @@ div.vertical {
     text-transform: none;
 }
 
-.in-stock {
+.availability-status.in-stock {
     font-size: 18px;
     margin-left: 6px;
-    color: #24df5a !important;
+    color: #24df5a;
 }
 
-.out-of-stock {
+.availability-status.out-of-stock {
     font-size: 18px;
     margin-left: 6px;
-    color: #F20000 !important;
+    color: #F20000;
 }
 
-.availability-status{
+.availability-status {
     color: #FF6036;
+    display: inline-block;
     font-size: 18px;
-    margin-left: 6px;
 }
 
 .txt-shipment {
@@ -1799,6 +1798,14 @@ div.vertical {
 @media (min-width : 1200px) {
     .prod-border-right {
         border-right: 1px solid #e0e0e0;
+    }
+
+    .prod-availability-container {
+        min-height: 76px;
+    }
+
+    .availability-status.in-stock {
+        line-height: 76px;
     }
 }
 
