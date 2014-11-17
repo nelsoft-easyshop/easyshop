@@ -103,7 +103,7 @@
                 <div class="row pad-top-23">
                     <div class="col-xs-12 col-sm-5 col-md-5">
                         <div class="prod-availability-container prod-border-right">
-                            <p>Availability: <span class="in-stock">Select Combination</span></p>
+                            <p>Availability: <span class="availability-status">Select Combination</span></p>
                         </div>
                         <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
                             <div class=" prod-border-right">
