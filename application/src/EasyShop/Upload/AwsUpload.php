@@ -52,6 +52,18 @@ class AwsUpload
         ));
         return $result;
     }
+    
+    /**
+     * Checks if the file exists in the bucket
+     *
+     * @param string $sourceFileFullPath
+     * @return boolean
+     */
+    public function doesFileExist($sourceFileFullPath)
+    {
+        $doesExist = $this->awsS3Client->doesObjectExist( $this->s3Bucket, $sourceFileFullPath);
+        return $doesExist;
+    }
 
     
 }
