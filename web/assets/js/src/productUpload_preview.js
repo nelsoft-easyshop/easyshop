@@ -82,7 +82,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         jQuery.ajax({
             type: "POST",
-            url: config.base_url + 'memberpage/billing_info_u', 
+            url: '/memberpage/billing_info_u', 
             data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
@@ -136,7 +136,7 @@ $(document).ready(function(){
         
         jQuery.ajax({
             type: "POST",
-            url: config.base_url + 'memberpage/billing_info', 
+            url: '/memberpage/billing_info', 
             data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
@@ -292,7 +292,7 @@ $(document).ready(function(){
             if((prod_billing_id === 0)&&(!cod_only)){
                 jQuery.ajax({
                     type: "POST",
-                    url: config.base_url + 'memberpage/billing_info', 
+                    url: '/memberpage/billing_info', 
                     data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                     success: function(response) {
                             var obj = JSON.parse(response);

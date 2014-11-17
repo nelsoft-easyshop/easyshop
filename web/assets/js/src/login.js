@@ -43,7 +43,7 @@
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
-                    url: config.base_url + "login/authenticate",
+                    url: "/login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
                         if(data.timeoutLeft >= 1){

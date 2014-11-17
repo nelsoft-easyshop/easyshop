@@ -194,7 +194,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         jQuery.ajax({
             type: "POST",
-            url: config.base_url + 'memberpage/billing_info_u', 
+            url: '/memberpage/billing_info_u', 
             data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
@@ -248,7 +248,7 @@ $(document).ready(function(){
         
         jQuery.ajax({
             type: "POST",
-            url: config.base_url + 'memberpage/billing_info', 
+            url: '/memberpage/billing_info', 
             data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
@@ -710,7 +710,7 @@ $(function(){
         }
         // If data is complete, allow posting of data to server
         else{
-            $.post(config.base_url+"sell/step4", data, function(d){
+            $.post("/sell/step4", data, function(d){
                 thisbtn.attr('disabled', false);
                 try{
                     var obj = jQuery.parseJSON(d);
@@ -916,7 +916,7 @@ $(function(){
                                 namefield.attr('disabled',true);
                                 namefield.siblings('img.loading').show();
                                 
-                                $.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
+                                $.post('/productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
                                     namefield.siblings('img.loading').hide();
                                     namefield.attr('disabled',false);
                                     $('button.ui-button').attr('disabled',false);
@@ -983,7 +983,7 @@ $(function(){
         
         var r=confirm("Confirm delete?");
         if (r==true){
-            $.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
+            $.post('/productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
                 try{
                     var obj = jQuery.parseJSON(data);	
                 }

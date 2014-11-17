@@ -34,7 +34,7 @@
 
         ajaxRequest = $.ajax({
             type: "GET",
-            url: config.base_url+'home/getMoreFollowers',
+            url: '/home/getMoreFollowers',
             data: {page:page,vendorId:vendorId} ,
             beforeSend: function(){ 
                 $('#follower-container').hide(); 
@@ -87,7 +87,7 @@
                             </span>';
             }
             $.ajax({ 
-                url: config.base_url+"memberpage/vendorSubscription",
+                url: "/memberpage/vendorSubscription",
                 type: "POST",
                 dataType: "json",
                 data: {name: name,vendorlink:slug, csrfname: csrftoken},
@@ -101,7 +101,7 @@
                         }
                         else{
                             $.ajax({ 
-                                url: config.base_url+"home/getMoreRecommendToFollow",
+                                url: "/home/getMoreRecommendToFollow",
                                 type: "GET",
                                 dataType: "json",
                                 data: {vendorId:vendorId,ids:ids},
@@ -123,7 +123,7 @@
         else{
             $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', slug, {path: '/'});
-            window.location.href = config.base_url + 'login';
+            window.location.href = '/login';
         }
     });
 })( jQuery );

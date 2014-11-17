@@ -3,7 +3,7 @@
     var paymentToken = $('#paymentToken').val();
     $(document).ready(function () {
         $('#scratch-win-claim').hide();
-        var base_url = config.base_url;
+        var base_url = '/';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var img = '';
