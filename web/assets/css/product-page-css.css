@@ -1236,6 +1236,7 @@ div.vertical {
     display: inline-block;
     text-indent: -99999px;
     width: 53px;
+    filter: none !important;
 }
 
 .thumbnails-img-container .center #prev:hover {
@@ -1324,6 +1325,28 @@ div.vertical {
     width: 108%;
 }
 
+.prod-select-con select::-ms-expand {
+    display: none;
+}
+
+.ie9 .prod-select-con {
+    position: relative;
+}
+
+.ie9 .prod-select-con:before {
+    content: " ";
+    background: url(../images/sprites/select-dropdown-ie.jpg) no-repeat right -2px;
+    display: block;
+    width: 38px;
+    height: 32px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+
+
 .prod-availability-container {
     font-weight: 900;
     text-transform: uppercase;
@@ -1365,6 +1388,10 @@ div.vertical {
 .shipment-select select {
     padding-right: 36px;
     width: 111%;
+}
+
+.shipment-select select::-ms-expand {
+    display: none;
 }
 
 .txt-shipment + .default {
