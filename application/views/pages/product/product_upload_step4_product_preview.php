@@ -3,7 +3,7 @@
 
 
 <section class="product-main-top-content">
-    <div class="container">
+    <div class="pd-lr-10">
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1> 
@@ -20,7 +20,7 @@
     </div>
 </section>
 
-<div class="container">
+<div class="pd-lr-10">
     <div class="row pd-top-40">
         <div class="col-md-6">
             <div class="display-when-desktop" style="position: relative; z-index: 2;">
@@ -189,7 +189,7 @@
 </div>
 
 <section>
-    <div class="container">
+    <div class="pd-lr-10">
         <div class="prod-detail-main">
             <div class="div-prod-lower">
                 <div class="div-detail-nav">
