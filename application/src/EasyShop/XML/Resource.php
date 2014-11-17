@@ -113,11 +113,7 @@ class Resource
      */
     public function getTempHomeXMLfile()
     {
-        $xmlfile = 'local/new_home_page_temp';
-        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home_temp'))) > 0){
-            $xmlfile = $this->configurationService->getConfigValue('XML_home_temp');
-        }
-        
+        $xmlfile =  "local/new_home_page_temp";        
         return $xmlfile;
     
     }       
