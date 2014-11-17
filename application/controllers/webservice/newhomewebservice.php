@@ -1014,11 +1014,10 @@ class NewHomeWebService extends MY_Controller
             $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
             $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
             $this->fetchPreviewSlider();
-        } 
+        }
         else {
-            show_404();
-        }       
-               
+            return json_encode("error");
+        }
     }
 
     /**
