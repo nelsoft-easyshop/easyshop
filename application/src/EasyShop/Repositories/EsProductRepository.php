@@ -836,21 +836,22 @@ class EsProductRepository extends EntityRepository
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
-        $rsm->addScalarResult('location_id', 'location_id');
+        $rsm->addScalarResult('id_product_item', 'id_product_item');
+        $rsm->addScalarResult('id_location', 'id_location');
         $rsm->addScalarResult('price', 'price');
         $rsm->addScalarResult('product_item_id', 'product_item_id');
         $rsm->addScalarResult('location', 'location');
+        $rsm->addScalarResult('id_shipping_detail', 'id_shipping_detail');
         $query = $em->createNativeQuery("
-            SELECT 
-                location_id, price, product_item_id, location
-            FROM
-                es_product_shipping_head
-                    LEFT JOIN
-                es_product_shipping_detail ON es_product_shipping_head.id_shipping = es_product_shipping_detail.shipping_id
-                    LEFT JOIN
-                es_location_lookup ON es_location_lookup.id_location = es_product_shipping_head.location_id
-            WHERE product_id = :productId
-            GROUP BY price , location_id , product_item_id
+            SELECT pi.id_product_item, COALESCE(loc.id_location,'0') as id_location, loc.location, COALESCE(sh.price,'0') as price, sd.id_shipping_detail
+            FROM es_product_item pi
+            LEFT JOIN es_product_shipping_detail sd
+                ON sd.product_item_id = pi.id_product_item
+            LEFT JOIN es_product_shipping_head sh
+                ON sh.id_shipping = sd.shipping_id
+            LEFT JOIN es_location_lookup loc
+                ON sh.location_id = loc.id_location
+            WHERE pi.product_id = :productId
         ", $rsm);
         $query->setParameter('productId', $productId);
         $result = $query->execute();

@@ -1373,6 +1373,7 @@ class productUpload extends MY_Controller
         $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
+        $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
 
         $productId = $this->input->post('prod_h_id');
         $productEntity = $productRepository->find($productId);
@@ -1397,15 +1398,15 @@ class productUpload extends MY_Controller
                         'productAttributes' => $productAttributes,
                     ];
 
-                    $shippingDetails = $productRepository->getProductShippingDetails($productId);
-                    $shippingSummary = [];
+            $shippingDetails = $productShippingManager->getProductShippingSummary($productId);
+            $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
 
             $mainViewData = [
                         'product' => $product,
                         'productBillingInfo' => $billingInfo,
                         'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
-                        'shipping_summary' => $this->product_model->getShippingSummary($productId),
-                        'attr' => $this->product_model->getPrdShippingAttr($productId),
+                        'shipping_summary' => $shippingDetails,
+                        'attr' => $shippingAttribute,
                     ];
 
             $this->load->view('templates/header', $headerData);

@@ -131,13 +131,13 @@
                                             <div class="row col-sx-mrgn">
                                                 <div class="col-sx-12 col-sm-4 col-md-4">
                                                     <span>&#8369;</span>
-                                                    <div class="delivery-sub-box step4-price"><?php echo html_escape($price)?></div>
+                                                    <div class="delivery-sub-box step4-price"><?=html_escape($price)?></div>
                                                 </div>
                                                 <div class="col-sx-12 col-sm-8 col-md-8">
                                                     <span class="display-ib line-height">Locations:</span>
                                                     <div class="delivery-sub-box width-75p">
                                                         <?php foreach($locarr as $locID):?>
-                                                        <span class="delivery-sub-box-item"><?php echo $shipping_summary['location_lookup'][$locID]?></span>
+                                                        <span class="delivery-sub-box-item"><?=$shipping_summary['location_lookup'][$locID]?></span>
                                                         <?php endforeach;?>
                                                     </div>
                                                 </div>
