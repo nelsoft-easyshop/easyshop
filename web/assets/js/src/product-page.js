@@ -127,12 +127,14 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+                    $(".in-stock").html("Out of Stock");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
                     $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                    $(".in-stock").html("In Stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
@@ -152,6 +154,7 @@
 
             $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
+            $(".in-stock").html("Out of Stock");
         });
     }
 
@@ -196,6 +199,14 @@
         // sort array
         $arraySelected.sort(sortArrayNumber);
         checkCombination($arraySelected);
+
+
+        $(".attribute-control").each(function() {
+            if($(this).val() == 0){
+                $(".in-stock").html("Select Combination");
+                return false;
+            }
+        });
     });
     
     // add to cart
