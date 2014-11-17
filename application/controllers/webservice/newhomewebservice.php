@@ -849,13 +849,13 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSliderSection()  
     {
-        $map = simplexml_load_file($this->file);
+        $map = simplexml_load_file($this->tempHomefile);
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
         $string = $this->xmlCmsService->getString("sliderSection",$template, "", "", ""); 
         $index = $index == 0 ? 1 : $index + 1;  
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
         if($addXml === TRUE) {
             return $this->output
                     ->set_content_type('application/json')
