@@ -817,9 +817,9 @@ $string = '<typeNode>
      * @param boolean $isCategoryNavigationOnly
      * @return mixed
      */
-    public function getHomeData($isCategoryNavigationOnly = false, $isForCms = false)
+    public function getHomeData($isCategoryNavigationOnly = false, $doUseTemporaryFile = false)
     {
-        $homeXmlFile = (!$isForCms) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
+        $homeXmlFile = (!$doUseTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
         $homePageData = array();
