@@ -104,7 +104,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
-            url: config.base_url+'memberpage/'+'updateVendorDetails',
+            url: '/memberpage/'+'updateVendorDetails',
             data: "vendor_details=1&store_name="+storName+
                     "&mobile="+mobileNumber+
                     "&stateregion="+stateRegion+
@@ -188,7 +188,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             changeSlug = jQuery.ajax({
                 type: "GET",
                 dataType: "JSON",
-                url: config.base_url+'memberpage/'+'removeUserImage', 
+                url: '/memberpage/'+'removeUserImage', 
                 success: function(data){
                     window.reload();
                 }
@@ -345,7 +345,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         var vendorLink = form.find('input[name="vendorlink"]').val();
 
         if(isLoggedIn){
-            $.post(config.base_url+"memberpage/vendorSubscription", $(form).serializeArray(), function(data){
+            $.post("/memberpage/vendorSubscription", $(form).serializeArray(), function(data){
                 try{
                     var obj = jQuery.parseJSON(data);
                 }
@@ -366,7 +366,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         else{
             $.removeCookie('es_vendor_subscribe', {path: '/'});
             $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
-            window.location.href = config.base_url + 'login';
+            window.location.href = '/login';
         }
 
     });

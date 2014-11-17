@@ -21,12 +21,12 @@
                             
                                 <!--hover image-->
                                 <?PHP if ($secondaryImage) : ?>
-                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
                                         
                                     </div>
-                                    <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                    <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP else : ?>
-                                    <div class="div-rec-product-image" style="background: #fff  url(<?php echo $defaultImage->getDirectory().$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                    <div class="div-rec-product-image" style="background: #fff  url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                 <?PHP endif; ?>
                                 <!--main image-->
                                         

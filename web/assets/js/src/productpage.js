@@ -259,7 +259,7 @@
                 },
                 submitHandler: function(form) {
                 $('#load_submitreview').css('display','inline');
-                $.post(config.base_url+'product/submit_review', $(form).serializeArray(),
+                $.post('/product/submit_review', $(form).serializeArray(),
                     function(data){
                                 $('#review_container').css('display','none');
                                 $('#load_submitreview').css('display','none');
@@ -310,7 +310,7 @@
                 thisbtn.hide();
                 cancelbtn.hide();
                 loadingimg.show();
-                $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
+                $.post('/product/submit_reply',form.serialize(),function(data){
                     replydiv.fadeOut();
                     thisbtn.show();
                     loadingimg.hide();
@@ -337,7 +337,7 @@
                 thisbtn.hide();
                 cancelbtn.hide();
                 loadingimg.show();
-                $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
+                $.post('/product/submit_reply',form.serialize(),function(data){
                     replydiv.fadeOut();
                     thisbtn.show();
                     loadingimg.hide();
@@ -833,7 +833,7 @@
             $('#see_more_reviews').hide();
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
-            $.post(config.base_url+'product/get_more_reviews',{last_id:$('#lastreview').prop('value'), csrfname : csrftoken}, 
+            $.post('/product/get_more_reviews',{last_id:$('#lastreview').prop('value'), csrfname : csrftoken}, 
                 function(data){
                     $('#more_review_loading_img').hide();
                     $('#see_more_reviews').show();
@@ -849,10 +849,10 @@
                         
                         //GENERATE STAR RATINGS
                         for(i=value.rating;i>0;i--){
-                            on_star_html += "<img src='"+config.base_url+"assets/images/star-on.png' alt='*' title=''>";
+                            on_star_html += "<img src='/assets/images/star-on.png' alt='*' title=''>";
                         }
                         for(i=5-value.rating;i>0;i--){
-                            off_star_html += "<img src='"+config.base_url+"assets/images/star-off.png' alt='*' title=''>";
+                            off_star_html += "<img src='/assets/images/star-off.png' alt='*' title=''>";
                         }
                         
                         //CREATE NEW LEFT AND RIGHT DIV

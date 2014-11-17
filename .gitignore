@@ -21,7 +21,9 @@
 /web/assets/user/*
 !/web/assets/user/default
 
-/config.php
+
+config.php
+/application/config/param/controllers.php
 .DS_Store
 
 application/cache/*
