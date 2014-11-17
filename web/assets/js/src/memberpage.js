@@ -302,7 +302,7 @@ var memconf = {
                 closeOnEscape: false,
                 buttons:{
                     OK: function(){
-                        $.post(config.base_url+'memberpage/editUserSlug', $(form).serializeArray(), function(data){
+                        $.post('/memberpage/editUserSlug', $(form).serializeArray(), function(data){
                             try{
                                 var obj = jQuery.parseJSON(data);
                             }
@@ -360,7 +360,7 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
     
     memconf.ajaxStat = jQuery.ajax({
         type: "GET",
-        url: config.base_url+'memberpage/'+controller,
+        url: '/memberpage/'+controller,
         data: "s="+memconf[key].status+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
             "&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key+"&s2="+memconf[key].status2+
             "&bulkoption="+memconf[key].bulkoption,
@@ -583,7 +583,7 @@ $(document).ready(function(){
             thisbtn.attr('disabled', true);
             thisbtn.val('Saving...');
             
-            $.post(config.base_url+'memberpage/edit_personal',$(form).serializeArray(),
+            $.post('/memberpage/edit_personal',$(form).serializeArray(),
                 function(data){
                     thisbtn.attr('disabled', false);
                     thisbtn.val('Save');
@@ -752,7 +752,7 @@ $(document).ready(function(){
             Submit: function(){
                 var $dialog = $(this);
                 var val = $('#verifcode').val();
-                $.post(config.base_url+'memberpage/verify_mobilecode',{data:val, mobileverify:'true', csrfname : csrftoken}, function(data){
+                $.post('/memberpage/verify_mobilecode',{data:val, mobileverify:'true', csrfname : csrftoken}, function(data){
                     if(data == 1){
                         $('#mobilediv').find('span.doneverify').show();
                         $dialog.dialog( 'close' );
@@ -795,7 +795,7 @@ $(document).ready(function(){
         verifyspan.siblings('span.personal_contact_cont').hide();
         $('#ppm_btn').attr('disabled', true);
         
-        $.post(config.base_url+'memberpage/verify', {field:field, data:data, reverify:'true', csrfname : csrftoken}, function(data){
+        $.post('/memberpage/verify', {field:field, data:data, reverify:'true', csrfname : csrftoken}, function(data){
             loadingimg.hide();
             contdiv.show();
             $('#ppm_btn').attr('disabled', false);
@@ -857,7 +857,7 @@ $(document).ready(function(){
                 }
             }
             else
-                window.location.replace('<?php echo base_url();?>' + 'memberpage');
+                window.location.replace('/memberpage');
         });
     });
 });
@@ -879,7 +879,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         
         
-        $.post(config.base_url+"memberpage/deletePersonalInfo", {field : name, csrfname : csrftoken}, function(data){
+        $.post("/memberpage/deletePersonalInfo", {field : name, csrfname : csrftoken}, function(data){
             if(data == 1){
                 editprofilebtn.show();
                 parentinfocont.hide();
@@ -1069,7 +1069,7 @@ $(document).ready(function(){
         ignore: ":hidden:not(select)",
         submitHandler: function(form){
 
-            $.post(config.base_url+'memberpage/edit_address',$('#personal_profile_address').serializeArray(),
+            $.post('/memberpage/edit_address',$('#personal_profile_address').serializeArray(),
                 function(data){
                     $(form).find('input[type="submit"]').attr('disabled', false);
 
@@ -1207,7 +1207,7 @@ $(document).ready(function(){
         },
         submitHandler: function(form) {
 
-           $.post(config.base_url+'memberpage/edit_school',$('#personal_profile_school').serializeArray(),
+           $.post('/memberpage/edit_school',$('#personal_profile_school').serializeArray(),
                 function(data){
                     $(form).find('input[type="submit"]').attr('disabled', false);
                     
@@ -1348,7 +1348,7 @@ $(document).ready(function(){
         },
         submitHandler: function(form){
 
-            $.post(config.base_url+'memberpage/edit_work', $('#personal_profile_work').serializeArray(),
+            $.post('/memberpage/edit_work', $('#personal_profile_work').serializeArray(),
                 function(data){
 
                     $(form).find('input[type="submit"]').attr('disabled', false);
@@ -1461,7 +1461,7 @@ $(document).ready(function(){
         submitHandler: function(form) {
            $('#load_cdeliver_address').css('display', 'inline');
            var formdata = $(form).serializeArray();
-           $.post(config.base_url+'memberpage/edit_consignee_address',formdata,
+           $.post('/memberpage/edit_consignee_address',formdata,
                 function(data){
                     $('#c_deliver_address_btn').attr('disabled', false);
                     $('#load_cdeliver_address').css('display', 'none');
@@ -1609,7 +1609,7 @@ $(document).ready(function(){
                     else if(rating1 === '' || rating2 === '' || rating3 ==='')
                         econt.html('Please rate this user!');
                     else{
-                        $.post(config.base_url+'memberpage/addFeedback',form.serialize(),function(data){
+                        $.post('/memberpage/addFeedback',form.serialize(),function(data){
                             submitbtn.attr('disabled',false);
                             submitbtn.val('Submit');
                             if(data == 1){
@@ -1689,7 +1689,7 @@ $(document).ready(function(){
                     $('button.ui-button').attr('disabled', true);
                     loadingimg.show();
                     
-                    $.post(config.base_url+"memberpage/transactionResponse", data, function(data){
+                    $.post("/memberpage/transactionResponse", data, function(data){
                         loadingimg.hide();
                         try{
                             var serverResponse = jQuery.parseJSON(data);
@@ -1752,7 +1752,7 @@ $(document).ready(function(){
         var thisbtn = $(this);
         var origval = $(this).val();
         
-        $.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
+        $.post('/memberpage/transactionResponse', $(form).serializeArray(), function(data){
             try{
                 var obj = jQuery.parseJSON(data);
             }
@@ -1829,7 +1829,7 @@ $(document).ready(function(){
                             input.attr('disabled',false);
                             textarea.attr('disabled', false);
                             
-                            $.post(config.base_url+'memberpage/addShippingComment', $(form).serializeArray(), function(data){
+                            $.post('/memberpage/addShippingComment', $(form).serializeArray(), function(data){
                                 submitbtn.attr('disabled', false);
                                 submitbtn.val('Save');
                                 
@@ -1946,7 +1946,7 @@ $(document).ready(function(){
                         submitbtn.val('Sending...');
                         input.attr('disabled',false);
                         textarea.attr('disabled',false);
-                        $.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
+                        $.post('/memberpage/transactionResponse', $(form).serializeArray(), function(data){
                             submitbtn.val('Submit');
                             submitbtn.attr('disabled',false);
                             try{
@@ -1997,7 +1997,7 @@ $(document).ready(function(){
         var thisbtn = $(this);
         var thismethod = $(this).siblings('input[name="method"]');
         var status = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
-        $.post(config.base_url+'memberpage/rejectItem', $(form).serializeArray(), function(data){
+        $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data){
             try{
                 var obj = jQuery.parseJSON(data);
             }
@@ -2612,13 +2612,13 @@ $(document).ready(function(){
             var csrfname = $("meta[name='csrf-name']").attr('content');
             var bidval = $("#"+bid).val();              
             var currentRequest = null;
-            var redurl =  config.base_url+'memberpage/billing_info_f';
+            var redurl =  '/memberpage/billing_info_f';
             currentRequest = jQuery.ajax({
                 type: "POST",
                 url: redurl, 
                 data: {bi_id:bidval, csrfname:csrftoken},
                 success: function(data){
-                    window.location.href = config.base_url+'me?me=pmnt';
+                    window.location.href = '/me?me=pmnt';
                 }
             });     
         }
@@ -2768,13 +2768,13 @@ $(document).ready(function(){
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');     
             var currentRequest = null;
-            var redurl =  config.base_url+'memberpage/billing_info_d';
+            var redurl =  '/memberpage/billing_info_d';
             currentRequest = jQuery.ajax({
                 type: "POST",
                 url: redurl, 
                 data: {bi_id:bid, csrfname:csrftoken},
                 success: function(data){
-                    window.location.href = config.base_url+'me?me=pmnt';
+                    window.location.href = '/me?me=pmnt';
                 }
             });     
         }
@@ -2839,7 +2839,7 @@ $(document).ready(function(){
             var bidval = $("#"+bid).val();
             var bchval = $("#"+bch).val();      
             
-            var redurl = config.base_url+'memberpage/billing_info_u';
+            var redurl = '/memberpage/billing_info_u';
             if($("#ubi_"+bictr).valid()){   
                 currentRequest = jQuery.ajax({
                     type: "POST",
@@ -2924,7 +2924,7 @@ $(document).ready(function(){
                 
      });
          
-    var redurl =  config.base_url+'memberpage/billing_info';
+    var redurl =  '/memberpage/billing_info';
     $("#billing_info_btn").click(function() {
         if($("#billing_info").valid()){ 
             jQuery.ajax({
@@ -2937,7 +2937,7 @@ $(document).ready(function(){
                         $("#bi_err_add").show().delay(2000).fadeOut(800);                       
                     }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
                         $("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
-                        window.location.href = config.base_url+'me?me=pmnt';
+                        window.location.href = '/me?me=pmnt';
                     }else{
                         alert('Something went wrong. Please try again later.');
                     }

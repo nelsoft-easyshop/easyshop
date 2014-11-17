@@ -18,7 +18,8 @@ font-weight: bold;
 {
 font-family: Helvetica;
 src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
-font-weight: 900;
+font-weight: 600;
+
 }
 
 /*** global style ***/
@@ -202,7 +203,7 @@ textarea {
 .vendor-login-con {
     background-color: #4370cc;
     border-radius: 4px;
-    display: table;
+    display: inline-block;
     color: #fff;
     font-size: 12px;
     height: 33px;
@@ -210,15 +211,16 @@ textarea {
     margin: 0 auto;
     max-width: 200px;
     min-width: 125px;
-    padding: 0 10px;
+    padding: 0 35px 0px 10px;
     position: relative;
     text-align: left;
-    width: 70%;
+/*    width: 70%;*/
 }
 
 .vendor-login-con.vendor-out-con {
     max-width: 245px;
     margin-top: 1px;
+    padding: 0 9px;
     width: 100%; 
 }
 
@@ -241,7 +243,9 @@ textarea {
 
 .vendor-login-con a {
     color: #fff;
+    display: inline-block;
     font-weight: bold;
+/*    float: left;*/
     vertical-align: middle;
 }
 
@@ -251,19 +255,18 @@ textarea {
 }
 
 .user-login img {
-    display: table-cell;
-    vertical-align: middle;
-    padding-top: 5px;
+    display: inline-block;
     margin-right: 5px;
+/*    padding-top: 5px;*/
+    vertical-align: middle;
 }
 
-.vendor-login-name {
-    display: table-cell;
+.vendor-login-name span {
+    display: inline-block;
     font-weight: bold;
     height: 34px;
-    min-width: 85px;
-    max-width: 145px;
-    padding-right: 30px;
+    min-width: 67px;
+    max-width: 110px;
     overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
@@ -291,12 +294,14 @@ textarea {
 }
 
 .vendor-login-con .nav-dropdown {
+    position: absolute;
     right: 0px;
     width: 220px;
 }
 
 .vendor-login-con .nav-dropdown li a {
     color: #565656;
+    float: none;
 }
 
 .vendor-login-con .nav-dropdown li a:hover {
@@ -1818,6 +1823,23 @@ td.td-view.p-view2.color-default{
     .vendor-main {
         top: 44px;
     }*/
+
+    .user-nav-dropdown:after,
+    .nav-dropdown:after,
+    .user-nav-dropdown,
+    .user-nav-dropdown,
+    .nav-dropdown:before {
+      display: block;
+    }
+
+    ul.nav-dropdown {
+        border-radius: 4px;
+        display: none;
+    }
+
+    .msg_countr {
+        margin-left: 0;
+    }
     
 }
 

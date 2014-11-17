@@ -23,15 +23,24 @@ class PromoManager
      * @var mixed
      */
     private $promoConfig = array();
+    
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
 
     /**
      * Constructor
      *
-     * @param EasyShop\ConfigLoader\ConfigLoader ConfigLoader
+     * @param EasyShop\ConfigLoader\ConfigLoader $configLoader
+     * @param Doctrine\ORM\EntityManager $em
      */
-    public function __construct(ConfigLoader $configLoader)
+    public function __construct(ConfigLoader $configLoader, \Doctrine\ORM\EntityManager $em)
     {
         $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $this->em = $em;
     }
     
     /**
@@ -79,14 +88,58 @@ class PromoManager
             if(intval($product->getDiscount('discount')) > 0){
                 $regularDiscountPrice = $product->getPrice() * (1.0-($product->getDiscount()/100.0));
                 $product->setFinalPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
-            }  
+            }
         }
  
         $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
         $product->setDiscountPercentage($percentage); 
     }
-    
-    
+
+    /**
+     * Function to calculate the promo price quickly. This is designed for bulk operations within large loops
+     *
+     * @param integer $productId
+     * @return float
+     */
+    public function hydratePromoDataExpress($productId)
+    {
+        $productDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')->getRawProductPromoDetails($productId);
+        if(!$productDetails){
+            return NULL;
+        }
+        
+        $price = $productDetails['price'];
+        $discount = $productDetails['discount'];
+        $isPromote = $productDetails['is_promote'];
+        $startDate = $productDetails['startdate'];
+        $endDate = $productDetails['enddate'];
+        $promoType = $productDetails['promo_type'];
+
+        $startDate = date_create($startDate);
+        $endDate = date_create($endDate); 
+
+        $promoPrice = $price;
+        if (intval($isPromote) === 1) {
+            if (isset($this->promoConfig[$promoType])) {
+                if (isset($this->promoConfig[$promoType]['implementation']) &&
+                    trim($this->promoConfig[$promoType]['implementation']) !== ''
+                ) {
+                    $promoImplementation = $this->promoConfig[$promoType]['implementation'];
+                    $promo = $promoImplementation::getPromoData($price, $startDate, $endDate, $discount,$this->promoConfig[$promoType]['option']);
+                    $promoPrice = $promo['promoPrice'];
+                }
+            }
+        }
+        else {
+            if (intval($discount) > 0) {
+                $regularDiscountPrice = $price * (1.0-($discount/100.0));
+                $promoPrice = (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01;
+            }
+        }
+
+        return $promoPrice;
+    }
+
     /**
      * Returns the product checkout limit based on a promo.
      * This method does not take into consideration which user will buy the

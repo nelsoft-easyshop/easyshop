@@ -1,7 +1,11 @@
         <section class="footer-primary">
             <div class="container">
+                <div class="col-xs-12 tex-center footer-ac">
+                    <a href="">About Us</a>
+                    <a href="">Contact Us</a>
+                </div>
                 <div class="row-fluid">
-                    <div class="col-md-6">
+                    <div class="col-md-6 footer-top-con">
                         <div class="row">
                             <div class="col-md-6 col-xs-6">
                                 <h1>Help Center</h1>
@@ -17,7 +21,6 @@
                                 <h1>Information</h1>
                                 <ul>
                                     <li><a href="/cart">View Cart</a></li>
-                                    <li><a href="/about">About Us</a></li>
                                     <li><a href="/contact">Contact Us</a></li>
                                     <li><a href="/policy">Privacy Policy</a></li>
                                     <li><a href="/terms">Terms of Use</a></li>
@@ -25,15 +28,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 footer-newsletter">
                         <h1>Newsletter</h1>
                         <p>
                             Get the word out. Make sure you don't miss interesting events, sale, and more
                             by joining our newsletter program.
                         </p>
                         <div>
-                            <?php echo form_open('subscribe');?>
-                                <input type="text" class="subscribe_email ui-form-control" name="email">
+                            <?php echo form_open('/subscribe');?>
+                                <input type="text" class="subscribe_email ui-form-control" name="email" placeholder="Newsletter">
                                 <input type="submit" value="subscribe" class="subscribe_btn btn btn-default-4" name="subscribe_btn">
                             <?php echo form_close();?>
                         </div>
@@ -56,7 +59,7 @@
         <section class="footer-bottom-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 text-left">
+                    <div class="col-md-6 text-left footer-payment-opt">
                         <img src="/assets/images/img-visa.png" alt="Visa">
                         <img src="/assets/images/img-paypal.png" alt="Paypal">
                         <img src="/assets/images/img-mastercard.png" alt="Mastercard">

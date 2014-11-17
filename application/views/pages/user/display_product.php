@@ -63,7 +63,7 @@
                     <table width="100%">
                         <tr>
                             <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
-                                <a target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                     <div class="span-space">
                                         <?php if($percentage && $percentage > 0):?>
                                         <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
@@ -74,11 +74,11 @@
                             <td width="55%" class="td-list-item-info">
                                 <p class="p-list-item-name">
                                     <?php if(strlen($escapeName)>35): ?>
-                                        <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
+                                        <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo '/item/' . $productSlug?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
                                             <?php echo substr_replace( $escapeName, "...", 35);?>
                                         </a>
                                     <?php else: ?>
-                                        <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $productSlug?>">
+                                        <a class="color-default" target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                             <?php echo $escapeName;?>
                                         </a>
                                     <?php endif;?>

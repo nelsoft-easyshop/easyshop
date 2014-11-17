@@ -55,16 +55,39 @@ class SearchProduct
     private $httpRequest;
 
     /**
+     * Promo Manager Instance
+     *
+     * @var Easyshop\PromoManager
+     */
+    private $promoManager;
+
+    /**
+     * Config Loaded
+     *
+     * @var EasyShop\ConfigLoader\ConfigLoader
+     */
+    private $configLoader;
+
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$categoryManager,$httpRequest)
+    public function __construct($em,
+                                $collectionHelper,
+                                $productManager,
+                                $categoryManager,
+                                $httpRequest,
+                                $promoManager,
+                                $configLoader)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->categoryManager = $categoryManager;
         $this->httpRequest = $httpRequest;
+        $this->promoManager = $promoManager;
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -72,10 +95,9 @@ class SearchProduct
      * @param  string $string
      * @return array
      */
-    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = TRUE)
+    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = true)
     {
         if($storeKeyword){
-            // Insert into search keyword temp 
             $keywordTemp = new EsKeywordsTemp();
             $keywordTemp->setKeywords($queryString);
             $keywordTemp->setIpAddress($this->httpRequest->getClientIp());
@@ -85,22 +107,27 @@ class SearchProduct
         }
 
         $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-        $stringCollection = array();
-        $ids = $productIds; 
+        $stringCollection = [];
+        $ids = $productIds;
 
-        if(trim($clearString) != ""){
-            $explodedString = explode(' ', trim($clearString)); 
-            $stringCollection[0] = '+"'.implode('" +"', $explodedString) .'"';
-            $explodedString = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-            $stringCollection[1] = (implode('* +', $explodedString)  == "") ? "" : '+'.implode('* +', $explodedString) .'*'; 
-            $stringCollection[2] = '"'.trim($clearString).'"'; 
-            $boolean = (strlen($clearString) > 1) ? FALSE : TRUE;
+        if(trim($clearString)){
+            $explodedString = explode(' ', trim($clearString));
+            $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+
+            $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+            $wildCardString = !implode('* +', $explodedStringWithRegEx)
+                              ? "" 
+                              : '+'.implode('* +', $explodedStringWithRegEx) .'*';
+            $stringCollection[] = str_replace("+*", "", $wildCardString);
+            $stringCollection[] = '"'.trim($clearString).'"'; 
+
+            $isLimit = strlen($clearString) > 1;
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findByKeyword($stringCollection,$productIds,$boolean);
+                                 ->findByKeyword($stringCollection,$productIds,$isLimit);
 
             $ids = [];
-            foreach ($products as $key => $value) {
-                $ids[] = $value['idProduct']; 
+            foreach ($products as $product) {
+                $ids[] = $product['idProduct']; 
             }
         }
         
@@ -111,21 +138,20 @@ class SearchProduct
      * Search all product id within price given in parameter
      * @param  integer $minPrice 
      * @param  integer $maxPrice
-     * @param  array   $arrayItems
+     * @param  array   $productIds
      * @return array
      */
-    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
+    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$productIds = [])
     {
-        $productManager = $this->productManager;
+        $promoManager = $this->promoManager;
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
-
         $productIdsReturn = []; 
-        foreach ($arrayItems as $key => $value) {
-            $value = $productManager->getProductDetails($value);
-            $price = round(floatval($value->getFinalPrice()),2);
+        foreach ($productIds as $productId) {
+            $promoPrice = $promoManager->hydratePromoDataExpress($productId);
+            $price = round(floatval($promoPrice),2);
             if($price >= $minPrice && $price <= $maxPrice){ 
-                $productIdsReturn[] = $value->getIdProduct();
+                $productIdsReturn[] = $productId;
             } 
         }
 
@@ -137,28 +163,28 @@ class SearchProduct
      * @param  array  $productIds
      * @return array
      */
-    public function filterProductByAttributesParameter($parameter = array()
-                                                        ,$productIds = array())
+    public function filterProductByAttributesParameter($parameter = []
+                                                        ,$productIds = [])
     {
         // array of parameters that will disregard on filtering
-        $unsetParam = array(
-                            'q_str'
-                            ,'category'
-                            ,'condition'
-                            ,'startprice'
-                            ,'endprice'
-                            ,'brand'
-                            ,'seller'
-                            ,'location'
-                            ,'sort'
-                            ,'typeview'
-                            ,'page'
-                            ,'limit'
-                            ,'sortby'
-                            ,'sorttype'
-                        );
+        $unsetParam = [
+                        'q_str'
+                        ,'category'
+                        ,'condition'
+                        ,'startprice'
+                        ,'endprice'
+                        ,'brand'
+                        ,'seller'
+                        ,'location'
+                        ,'sort'
+                        ,'typeview'
+                        ,'page'
+                        ,'limit'
+                        ,'sortby'
+                        ,'sorttype'
+                      ];
 
-        $finalizedParamter = array();
+        $finalizedParamter = [];
         $addtionString = "";
         $counter = 0;
         $havingCounter = 0;
@@ -199,9 +225,9 @@ class SearchProduct
      * @param  array  $productIds 
      * @return integer[]
      */
-    public function filterProductByDefaultParameter($filterParameter,$productIds = array())
+    public function filterProductByDefaultParameter($filterParameter,$productIds = [])
     { 
-        $acceptableFilter = array(
+        $acceptableFilter = [
                                 'seller',
                                 'category',
                                 'brand',
@@ -209,19 +235,24 @@ class SearchProduct
                                 'location',
                                 'sortby',
                                 'sorttype',
-                            ); 
-        $notExplodableFilter = array(
+                            ]; 
+        $notExplodableFilter = [
                                 'seller'
                                 ,'category'
                                 ,'q_str'
                                 ,'sortby'
                                 ,'sorttype'
-                            );
+                            ];
 
-        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
-        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
+        $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
+        $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
+        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,false);
+        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter, $notExplodableFilter);
         $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->getProductByParameterFiltering($filteredArray,$productIds);
+                               ->getProductByParameterFiltering($filteredArray,
+                                                                $productIds,
+                                                                $excludePromo,
+                                                                $excludeProducts);
 
         return $productIds;
     }
@@ -231,16 +262,16 @@ class SearchProduct
      * @param  integer[] $productIds
      * @return mixed
      */
-    public function getProductAttributesByProductIds($products = array())
+    public function getProductAttributesByProductIds($products = [])
     {   
-        $finalizedProductIds = array();
-        $availableCondition = array();
-        $organizedAttribute = array();
+        $finalizedProductIds = [];
+        $availableCondition = [];
+        $organizedAttribute = [];
         if(!empty($products)){
             $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-            foreach ($products as $key => $value) {
-                array_push($finalizedProductIds, $value->getIdProduct());
-                array_push($availableCondition, $value->getCondition());
+            foreach ($products as $value) { 
+                $finalizedProductIds[] = $value->getIdProduct();
+                $availableCondition[] = $value->getCondition();
             }
 
             if(!empty($finalizedProductIds)){
@@ -266,65 +297,53 @@ class SearchProduct
      * @return mixed
      */
     public function getProductBySearch($parameters)
-    {       
-        // Prepare services
+    {
         $searchProductService = $this;
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
 
-        // Prepare Repository
-        $esProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):false;
+        $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):false;
+        $startPrice = isset($parameters['startprice']) && $parameters['startprice']?str_replace( ',', '', trim($parameters['startprice'])):false;
+        $endPrice = isset($parameters['endprice']) && $parameters['endprice']?str_replace( ',', '', trim($parameters['endprice'])):false; 
+        $pageNumber = isset($parameters['page']) && $parameters['page']?trim($parameters['page']):false;
+        $sortBy = isset($parameters['sortby']) && $parameters['sortby'] ?trim($parameters['sortby']):false;
+        $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
+        $storeKeyword = $pageNumber ? false:true;
 
-        // Prepare variables
-        $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
-        $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
-        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?str_replace( ',', '', trim($parameters['startprice'])):FALSE;
-        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?str_replace( ',', '', trim($parameters['endprice'])):FALSE; 
-        $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;
-        $sortBy = (isset($parameters['sortby']) && $parameters['sortby'])?trim($parameters['sortby']):FALSE;
-        $perPage = (isset($parameters['limit'])) ? $parameters['limit'] : self::PER_PAGE;
-        $storeKeyword = ($pageNumber) ? FALSE:TRUE;
-
-        // Search Filter 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+        $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
+        $productIds = $queryString && empty($productIds) ? [] : $productIds;
+        $originalOrder = $sortBy ? $productIds : $originalOrder;
 
-        // Search for Product Query String
-        $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
-        $productIds = ($queryString && empty($productIds)) ? array() : $productIds;
-        $originalOrder = ($sortBy) ? $productIds : $originalOrder;
-
-        if($startPrice){
-            // Get product object
-            $filteredProducts = $esProductRepository->findBy(['idProduct' => $productIds]);
-
-            // filter object remove product without in the range of the price
-            $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $filteredProducts) : $discountedProduct;
-        }
-        else{
-            $finalizedProductIds = $productIds;
-        }
-
+        $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
 
-        // total product count
         $totalCount = count($finalizedProductIds);
 
-        // Get product details
-        $filteredProducts = $esProductRepository->getProductDetailsByIds($finalizedProductIds,$pageNumber,$perPage);
-        
-        // Sort object by original order of product id to retain weight order
-        $data = new ArrayCollection($filteredProducts);
-        $iterator = $data->getIterator();
-        $iterator->uasort(function ($a, $b) use($finalizedProductIds) {
-            $position1 = array_search($a->getIdProduct(), $finalizedProductIds);
-            $position2 = array_search($b->getIdProduct(), $finalizedProductIds);
-            return $position1 - $position2;
-        });
-        $collection = new ArrayCollection(iterator_to_array($iterator));
+        $offset = (int) $pageNumber * (int) $perPage;
+
+        $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
+
+        $products = [];
+        foreach ($paginatedProductIds as $productId) {
+            $product = $productManager->getProductDetails($productId);
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                      ->getDefaultImage($productId);
+            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($productImage != NULL){
+                $product->directory = $productImage->getDirectory();
+                $product->imageFileName = $productImage->getFilename();
+            }
+
+            $products[] = $product;
+        }
 
         if($sortBy && strtolower($sortBy) == "price"){
-            $data = new ArrayCollection($filteredProducts);
+            $data = new ArrayCollection($products);
             $iterator = $data->getIterator();
             $sortString = "ASC";
             if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
@@ -335,32 +354,16 @@ class SearchProduct
                     return 0;
                 } 
                 if($sortString === "DESC"){
-                    return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1; 
-                }
-                else{ 
                     return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
                 }
+
+                return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
             });
-            $collection = new ArrayCollection(iterator_to_array($iterator));
-        }
-
-        // assign each image and image path of the product
-        foreach ($collection as $key => $value) {
-            $productId = $value->getIdProduct();
-            $value = $productManager->getProductDetails($value); 
-            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                      ->getDefaultImage($productId);
-            $value->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $value->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-            if($productImage != NULL){
-                $value->directory = $productImage->getDirectory();
-                $value->imageFileName = $productImage->getFilename();
-            }
+            $products = new ArrayCollection(iterator_to_array($iterator));
         }
 
         $returnArray = array(
-                    'collection' => $collection,
+                    'collection' => $products,
                     'count' => $totalCount,
                 );
 
@@ -376,27 +379,28 @@ class SearchProduct
     {
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
-        $subCategoryList = array();
-           
-        foreach ($subCategory as $key => $value) { 
+        $subCategoryList = [];
+
+        foreach ($subCategory as $value) {
             $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
-            $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
-            $popularProduct = $EsProductRepository->getProductDetailsByIds($popularProductId,0,1);
-            foreach ($popularProduct as $keyProduct => $valueProduct) {
-                $productId = $valueProduct->getIdProduct();
+            $popularProducts = $EsProductRepository->getPopularItemByCategory($subCategoryIds);
+            if(!empty($popularProducts)){ 
+                $productId = $popularProducts[0]->getIdProduct();
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getDefaultImage($productId);
-                $valueProduct->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $valueProduct->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+                                         ->getDefaultImage($productId);
+                $popularProducts[0]->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $popularProducts[0]->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
                 if($productImage != NULL){
-                    $valueProduct->directory = $productImage->getDirectory();
-                    $valueProduct->imageFileName = $productImage->getFilename();
+                    $popularProducts[0]->directory = $productImage->getDirectory();
+                    $popularProducts[0]->imageFileName = $productImage->getFilename();
                 }
-
             }
-            $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
-            $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
+            else{
+                $popularProducts[0] = [];
+            }
+            $subCategoryList[$value->getName()]['item'] = $popularProducts[0];
+            $subCategoryList[$value->getName()]['slug'] = $value->getSlug();
         }
 
         return $subCategoryList;

@@ -20,10 +20,10 @@
           <div class="border-left pd-lr-20">
             <h5>About</h5>
             <ul>
-              <li><a href="<?=base_url()?>contact">Contact Us</a></li>
-              <li><a href="<?=base_url()?>policy">Privacy Policy</a></li>
-              <li><a href="<?=base_url()?>terms">Terms &amp; Conditions</a></li>
-              <li><a href="<?=base_url()?>faq">F.A.Q.</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+              <li><a href="/policy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms &amp; Conditions</a></li>
+              <li><a href="/faq">F.A.Q.</a></li>
             </ul>
             <div class="clear"></div>
             <div class="footer_payment">
@@ -61,8 +61,8 @@
       <div class="copyright">
            <p style='font-weight:bold'>This page is best viewed with one of these browsers:
                 <span class="browser-lnk">
-                  <a href='https://www.google.com/intl/en/chrome/browser/' target="_blank"><img src='<?=base_url()?>assets/images/icon_browser_chrome.png'> <span>Chrome</span></a>
-                  <a href='http://www.mozilla.org/en-US/firefox/new/' target="_blank"><img src='<?=base_url()?>assets/images/icon_browser_firefox.png'> <span>Firefox</span></a>
+                  <a href='https://www.google.com/intl/en/chrome/browser/' target="_blank"><img src='/assets/images/icon_browser_chrome.png'> <span>Chrome</span></a>
+                  <a href='http://www.mozilla.org/en-US/firefox/new/' target="_blank"><img src='/assets/images/icon_browser_firefox.png'> <span>Firefox</span></a>
               </span>
            </p>
           <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>

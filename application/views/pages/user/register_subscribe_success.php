@@ -1,15 +1,15 @@
 <!DOCTYPE html>
     <head>
-        <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <meta property="og:title" content="EasyShop.ph" />
         <meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. The mission that EasyShop has is to provide its customer with a Fast and Easy Online shopping of different products available in the market. The up-to-date information provided by the Online Sellers gives a clear picture of the products and the key features, helping Online Buyers make the right purchasing decision. EasyShops’ goal is to be the first website you think about when buying online." />
         <meta property="og:image" content="http://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="/assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="/assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="/assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
         <title><?php echo $title;?></title>
         
         <!-- Google Analytics -->
@@ -38,32 +38,32 @@
         <div class = "container header_bg">
             <div class="row-fluid">
                 <div id="himg" class="text-center"> 
-                  <a href="<?=base_url();?>"><img src="<?=base_url()?>assets/images/landingpage/img_logo.png"></a>
+                  <a href="/"><img src="/assets/images/landingpage/img_logo.png"></a>
                   <div class="login_btn">
-                    <a href="<?=base_url()?>login" class="">Log In</a>
+                    <a href="/login" class="">Log In</a>
                   </div>
                 </div>
                
-                    <!-- <p class="text-center txt_success"></p>  -->
+                 
                     <p class="text-center p_success txt_success3 c_ylw">
-                       <!--  <img src="<?=base_url()?>assets/images/<?php echo $content; ?>">  -->
+                    
                        <?php echo $content; ?>
                     </p>
                     <p class="p_success txt_success2">
                         <?php echo $sub_content;?>
                     </p>
                     <p class="text-center">
-                      <span class="btn btn-warning btn-large"><a href="<?=base_url()?>sell/step1" style="color:#fff;">Sell Now</a></span>
+                      <span class="btn btn-warning btn-large"><a href="/sell/step1" style="color:#fff;">Sell Now</a></span>
                     </p>   
                     <p class="text-center txt_success">
                         Like us on and share
                     </p>
                     <p class="text-center img_social_media">
                         <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=http://easyshop.ph&amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png&amp;p[title]=EasyShop.ph" target="_blank">
-                            <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
+                            <img src="/assets/images/img_social_media_facebook.png" alt="facebook">
                         </a>
                         <a class="img_sc_2" href='<?php echo $twitter; ?>' target="_blank">
-                            <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
+                            <img src="/assets/images/img_social_media_twitter.png" alt="Twitter">
                         </a>
                     </p>
                     <br/>
@@ -79,9 +79,9 @@
     </body>
 
     
-    <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js" ></script>
-    <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage-bootstrap.min.js'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src='/assets/js/src/landingpage-bootstrap.min.js'></script>
     
     <!-- Form Plugins -->
 

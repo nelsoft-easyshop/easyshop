@@ -104,6 +104,12 @@ class EsCat
      */
     const CUSTOM_TYPE = 2;
 
+
+    /**
+     *  @var integer
+     */
+    const MAIN_PARENT_CATEGORY = 1;
+
     /**
      *  @var integer
      */

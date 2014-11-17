@@ -1,9 +1,10 @@
 .zoomPad{
-	position:relative;
-	float:center;
+  position:relative;
+  float:center;
   text-align: center;
-	z-index:0;
-	cursor:crosshair;
+  z-index:0;
+  cursor:crosshair;
+/*  height: 540px;*/
 }
 
 #product_content_gallery > div {
@@ -14,20 +15,35 @@
 }
 
 .prod_con_gal {
-    border: 1px solid #CECECE;
-    height: 400px;
-    width: 100%;
-	text-align: center;
+/*    border: 1px solid #e0e0e0;*/
+/*    display: table-cell;*/
+    display: block;
+/*    height: 542px;*/
+    overflow: hidden;
+    text-align: center;
     vertical-align: middle;
-	display: table-cell;
-	z-index: 9999;
+/*    width: 445px;*/
+    width: 100%;
+    z-index: 9999;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
 }
 
 .zoomPad img[src*="small"] {
-    max-width:400px;
-    max-height:400px;
+  max-height: 540px;
     width: auto;
     height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
 }
 
 .zoomPreload{
@@ -57,55 +73,55 @@
 
 
 .zoomPup{
-	overflow:hidden;
-	background-color: #FFF;
-	-moz-opacity:0.6;
-	opacity: 0.6;
-	filter: alpha(opacity = 60);
-	position:absolute;
-	border:1px solid #CCC;
+  overflow:hidden;
+  background-color: #FFF;
+  -moz-opacity:0.6;
+  opacity: 0.6;
+  filter: alpha(opacity = 60);
+  position:absolute;
+  border:1px solid #CCC;
   z-index:101;
   cursor:crosshair;
 }
 
 .zoomOverlay{
-	position:absolute;
-	left:0px;
-	top:0px;
-	background:#FFF;
-	/*opacity:0.5;*/
-	z-index:5000999;
-	width:100%;
-	height:100%;
-	display:none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  background:#FFF;
+  /*opacity:0.5;*/
+  z-index:5000999;
+  width:100%;
+  height:100%;
+  display:none;
   z-index:101;
 }
 
 .zoomWindow{
-	position:relative;
-	left:110%;
-	top:40px;
-	background:#FFF;
-	z-index:6000000;
-	height:auto;
+  position:relative;
+  left:110%;
+  top:40px;
+  background:#FFF;
+  z-index:6000000;
+  height:auto;
   z-index:10000;
   z-index:110;
 }
 .zoomWrapper{
-	position:relative;
-	border:1px solid #999;
+  position:relative;
+/*  border:1px solid #999;*/
   z-index:110;
 }
 .zoomWrapperTitle{
-	display:none !important;
-	background:#999;
-	color:#FFF;
-	height:18px;
-	line-height:18px;
-	width:100%;
+  display:none !important;
+  background:#999;
+  color:#FFF;
+  height:18px;
+  line-height:18px;
+  width:100%;
   overflow:hidden;
-	text-align:center;
-	font-size:10px;
+  text-align:center;
+  font-size:10px;
   position:absolute;
   top:0px;
   left:0px;
@@ -115,7 +131,7 @@
   filter: alpha(opacity = 60);
 }
 .zoomWrapperImage{
-	display:block;
+  display:block;
   position:relative;
   overflow:hidden;
   z-index:110;
@@ -182,6 +198,7 @@
 .jqzoom {
     display: table-cell;
     vertical-align: middle;
+    width: 445px;
 }
 
 /*********************************************************

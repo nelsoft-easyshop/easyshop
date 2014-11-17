@@ -1,170 +1,195 @@
 <?php     
-        $base_url= "https://www.easyshop.ph/";
+        $baseUrl= "https://www.easyshop.ph/";
 
         $filelocation = dirname(__FILE__).'/../../web/';
-
         $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
-        $conn = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
-
-        if ($conn->connect_error) {
-            exit('Database connection failed: '  . $conn->connect_error);
+        
+        try{
+            $connectionString = "mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'];
+            $dbConnection = new PDO($connectionString, $configDatabase['user'] , $configDatabase['password']);
         }
-                
-         $xml = new DOMDocument();
-         $xml_urlset = $xml->createElement("urlset");
-         $xml_urlset->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );     
-        
-         $xml_url = write_url_xml($xml, array('loc' => $base_url, 'priority' => 1, 'changefreq' => 'never'));
-         $xml_urlset->appendChild( $xml_url ); 
-        
-         $common_url = array('sell/step1','cart','login','register','faq','policy','terms','contact');
-         foreach($common_url as $url){
-            $xml_url = write_url_xml($xml, array('loc' => $base_url.$url, 'priority' => 0.5, 'changefreq' => 'never'));
-            $xml_urlset->appendChild( $xml_url );
-         }
+        catch(PDOException $e){
+            echo "Failed to connect to DB: " . $e->getMessage();
+            die;
+        }
 
-         $xml->appendChild( $xml_urlset );  
-         $xml->save($filelocation.'sitemap.xml');
+        $xml = new DOMDocument();
+        $xmlUrlSet = $xml->createElement("urlset");
+        $xmlUrlSet->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );     
+    
+        $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl, 'priority' => 1, 'changefreq' => 'never'));
+        $xmlUrlSet->appendChild( $xmlUrl ); 
+    
+        $commonURI = array('sell/step1','cart','login','register','faq','policy','terms','contact');
+        foreach($commonURI as $url){
+            $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.$url, 'priority' => 0.5, 'changefreq' => 'never'));
+            $xmlUrlSet->appendChild( $xmlUrl );
+        }
 
+        $xml->appendChild( $xmlUrlSet );  
+        $xml->save($filelocation.'sitemap.xml');
    
-        $sql="SELECT name, id_cat FROM es_cat WHERE parent_id = 1 AND id_cat != 1 AND is_main = 1";
-        $rs_cat=$conn->query($sql);
-        if($rs_cat === false) {
-            exit('SQL Query Error: '  . $conn->error);
-        } 
-        $main_categories = array();
-         
-        while($row = $rs_cat->fetch_assoc()){
-  
+        $preparedStatement = $dbConnection->prepare("SELECT name, id_cat FROM es_cat WHERE parent_id = 1 AND id_cat != 1 AND is_main = 1");
+        $preparedStatement->execute();
+        $mainCategories = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+        
+        foreach($mainCategories as $mainCategory){
+
             $xml = new DOMDocument();
-            $xml_urlset = $xml->createElement("urlset");
-            $xml_urlset->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
-            
-            $sql="SELECT CASE 
+            $xmlUrlSet = $xml->createElement("urlset");
+            $xmlUrlSet->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
+ 
+            $sql = "SELECT CASE 
                             WHEN `GetFamilyTree` (id_cat) = '' THEN '0,0' 
                             ELSE `GetFamilyTree` (id_cat) 
                         END as `catlist`
-                  FROM `es_cat` WHERE id_cat != 1 AND id_cat = ".$row['id_cat'];
-            $rs=$conn->query($sql);
-            if($rs === false) {
-                exit('SQL Query Error: '  . $conn->error);
-            } else {
-                $cat_list= $rs->fetch_assoc()['catlist'];
-            }
-          
-            $sql = "SELECT CONCAT('category/',slug) as url FROM es_cat WHERE id_cat IN (".$cat_list.")";
-            $rs=$conn->query($sql);
-            if($rs === false) {
-                exit('SQL Query Error: '  . $conn->error);
-            } 
-
-
-            while($x = $rs->fetch_assoc()){
-                $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
-                $xml_urlset->appendChild( $xml_url ); 
-            }
- 
-            $sql="SELECT CONCAT('item/',slug) as url FROM es_product WHERE cat_id IN (".$cat_list.") AND is_draft = 0 AND is_delete = 0";
-            $rs=$conn->query($sql);
-            if($rs === false) {
-                exit('SQL Query Error: '  . $conn->error);
-            } 
-            while($x = $rs->fetch_assoc()){
-                $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'weekly'));
-                $xml_urlset->appendChild( $xml_url );  
+                    FROM `es_cat` WHERE id_cat != 1 AND id_cat = :cat_id";
+                  
+            $preparedStatement = $dbConnection->prepare($sql);
+            $preparedStatement->bindParam(':cat_id', $mainCategory['id_cat'], PDO::PARAM_INT);
+            $preparedStatement->execute();
+            $subCategoryList = $preparedStatement->fetch(PDO::FETCH_ASSOC)['catlist'];      
+            $parameterArray = explode(",",  $subCategoryList);
+            $sql = "SELECT CONCAT('category/',slug) as url FROM es_cat WHERE id_cat IN ";
+            $qmarks = implode(',', array_fill(0, count($parameterArray), '?'));
+            $sql  = $sql.'('.$qmarks.')';
+            
+            $preparedStatement = $dbConnection->prepare($sql);
+            for($count = 0; $count < count($parameterArray) ; $count++ ){
+                $parameter =  $parameterArray[$count];
+                $index = $count + 1;
+                $preparedStatement->bindValue($index, $parameter, PDO::PARAM_INT);
             }
 
-             $xml->appendChild( $xml_urlset );  
-             $row['name'] = url_clean($row['name']);
-             $xml->save($filelocation.'sitemap-'.strtolower($row['name']).'.xml');
-             array_push($main_categories, strtolower($row['name']));
-             
-         }
-         #GENERATE VENDORS XML
-         $xml = new DOMDocument();
-         $xml_urlset = $xml->createElement("urlset");
-         $xml_urlset->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
-        
-         
-         
-        $sql="SELECT slug as url FROM es_member";
-        $rs=$conn->query($sql);
-        if($rs === false) {
-            exit('SQL Query Error: '  . $conn->error);
-        } 
-        while($x = $rs->fetch_assoc()){
-            $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
-            $xml_urlset->appendChild( $xml_url ); 
+            $preparedStatement->execute();
+            $subCategories = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach($subCategories as $subCategory){
+                $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.$subCategory['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
+                $xmlUrlSet->appendChild( $xmlUrl ); 
+            }
+
+            $sql="SELECT CONCAT('item/',slug) as url FROM es_product WHERE cat_id IN ";
+            $qmarks = implode(',', array_fill(0, count($parameterArray), '?'));
+            $sql  = $sql.'('.$qmarks.')  AND is_draft = 0 AND is_delete = 0';
+            $preparedStatement = $dbConnection->prepare($sql);
+            for($count = 0; $count < count($parameterArray) ; $count++ ){
+                $parameter =  $parameterArray[$count];
+                $index = $count + 1;
+                $preparedStatement->bindValue($index, $parameter, PDO::PARAM_INT);
+            }
+            $preparedStatement->execute();
+            $products = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($products as $product){
+                $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.$product['url'], 'priority' => 0.5, 'changefreq' => 'weekly'));
+                $xmlUrlSet->appendChild( $xmlUrl );
+            }
+       
+
+             $xml->appendChild( $xmlUrlSet );  
+             $mainCategory['name'] = url_clean($mainCategory['name']);
+             $xml->save($filelocation.'sitemap-'.strtolower($mainCategory['name']).'.xml');     
         }
-         
-         
-         $xml->appendChild( $xml_urlset );
-         $xml->save($filelocation.'sitemap-vendor.xml');
-         
-         $filelist = array();
-         
-         #GENERATE SITEMAP INDEX AND COMPRESS SITEMAPS
-         $xml = new DOMDocument();
-         $xml_urlset = $xml->createElement("urlset");
-         $xml_urlset->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
-         array_push($filelist, compress_gz($filelocation, 'sitemap.xml'));
 
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'sitemap.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
-         $xml_urlset->appendChild( $xml_url );  
-         array_push($filelist,compress_gz($filelocation, 'sitemap-vendor.xml'));
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'sitemap-vendor.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
-         $xml_urlset->appendChild( $xml_url );  
-         foreach($main_categories as $cat){
-            array_push($filelist,compress_gz($filelocation, 'sitemap-'.$cat.'.xml'));
-            $xml_url = write_url_xml($xml, array('loc' => $base_url.'sitemap-'.$cat.'.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
-            $xml_urlset->appendChild( $xml_url );  
-         }
-         
-         $xml->appendChild( $xml_urlset );
-         $xml->save($filelocation.'sitemap_index.xml');
-         array_push($filelist,'sitemap_index.xml');
-         
-         $content = '';
-         foreach($filelist as $file){
+        #GENERATE VENDORS XML
+        $xml = new DOMDocument();
+        $xmlUrlSet = $xml->createElement("urlset");
+        $xmlUrlSet->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
+        
+
+        $preparedStatement = $dbConnection->prepare("SELECT slug as url FROM es_member");
+        $preparedStatement->execute();
+        $users = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach($users as $user){
+            $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.$user['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
+            $xmlUrlSet->appendChild( $xmlUrl ); 
+        }
+   
+        $xml->appendChild( $xmlUrlSet );
+        $xml->save($filelocation.'sitemap-vendor.xml');
+        
+        $filelist = array();
+        
+        #GENERATE SITEMAP INDEX AND COMPRESS SITEMAPS
+        $xml = new DOMDocument();
+        $xmlUrlSet = $xml->createElement("urlset");
+        $xmlUrlSet->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );
+        array_push($filelist, compress_gz($filelocation, 'sitemap.xml'));
+
+        $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.'sitemap.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
+        $xmlUrlSet->appendChild( $xmlUrl );  
+        array_push($filelist,compress_gz($filelocation, 'sitemap-vendor.xml'));
+        $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.'sitemap-vendor.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
+        $xmlUrlSet->appendChild( $xmlUrl );  
+        
+        
+        foreach($mainCategories as $category){
+            $categoryFileName = strtolower(url_clean($category['name']));
+            array_push($filelist,compress_gz($filelocation, 'sitemap-'.$categoryFileName.'.xml'));
+            $xmlUrl = write_url_xml($xml, array('loc' => $baseUrl.'sitemap-'.$categoryFileName.'.xml.gz', 'priority' => 1, 'changefreq' => 'weekly'));
+            $xmlUrlSet->appendChild( $xmlUrl );  
+        }
+        
+        $xml->appendChild( $xmlUrlSet );
+        $xml->save($filelocation.'sitemap_index.xml');
+        array_push($filelist,'sitemap_index.xml');
+        
+        $content = '';
+        foreach($filelist as $file){
             $content = $content.$file.PHP_EOL;
-         }
-         
-         $fp = fopen($filelocation. "filelist.txt", "wb");
-         fwrite($fp,$content);
-         fclose($fp);
+        }
+        
+        $fp = fopen($filelocation. "filelist.txt", "wb");
+        fwrite($fp,$content);
+        fclose($fp);
 
-         echo 'Sitemap generation complete. The following files have been generated:';
-         foreach($filelist as $file){
-            echo '<br/>'.$file;
-         }
-         echo '<br/>filelist.txt';
-         
+        echo 'Sitemap generation complete. The following files have been generated:';
+        foreach($filelist as $file){
+            echo '<br/> '.$file;
+        }
+        echo '<br/> filelist.txt';
+        $dbConnection = null;
        
          
-           
-    function write_url_xml($xml, $data){
-        $xml_url = $xml->createElement("url");
-        $xml_loc = $xml->createElement("loc", htmlentities($data['loc']));
-        $xml_priority = $xml->createElement("priority", $data['priority']);
-        $xml_lastmod = $xml->createElement("lastmod", date('Y-m-d'));
-        $xml_changefreq = $xml->createElement("changefreq", $data['changefreq']);
-        $xml_url->appendChild( $xml_loc );
-        $xml_url->appendChild( $xml_priority );
-        $xml_url->appendChild($xml_lastmod);
-        $xml_url->appendChild($xml_changefreq);
-        return $xml_url;
+    /**
+     * Return the XML sitemap format based on http://www.sitemaps.org/protocol.html
+     *
+     * @param DOMDocument $xml
+     * @param mixed DOMDocument
+     * @return DOMElement
+     *
+     */
+    function write_url_xml($xml, $data)
+    {
+        $xmlUrl = $xml->createElement("url");
+        $xmlLoc = $xml->createElement("loc", htmlentities($data['loc']));
+        $xmlPriority = $xml->createElement("priority", $data['priority']);
+        $xmlLastmod = $xml->createElement("lastmod", date('Y-m-d'));
+        $xmlChangefreq = $xml->createElement("changefreq", $data['changefreq']);
+        $xmlUrl->appendChild( $xmlLoc );
+        $xmlUrl->appendChild( $xmlPriority );
+        $xmlUrl->appendChild($xmlLastmod);
+        $xmlUrl->appendChild($xmlChangefreq);
+        return $xmlUrl;
     }
     
-    function compress_gz($filelocation, $filename){
-        // Name of the gz file we are creating
+    /**
+     * Compresses a file using gzip 
+     * 
+     * @param string $filelocation
+     * @param  string $filename
+     * @return string
+     *
+     */
+    function compress_gz($filelocation, $filename)
+    {
         $gzfile = $filelocation.$filename.".gz";
-        // Open the gz file (w9 is the highest compression)
         $fp = gzopen ($gzfile, 'w9');
-        // Compress the file
         gzwrite ($fp, file_get_contents($filelocation.$filename));
-        // Close the gz file and we are done
         gzclose($fp);
-        // Delete original file
         if (is_file($filelocation.$filename)){
             unlink($filelocation.$filename);
         }
@@ -172,6 +197,12 @@
         
     }
     
+    /**
+     * Strips unwanted characters from a tring
+     * 
+     * @param string $string
+     * @return string
+     */
     function url_clean($string)
     {
         $string = preg_replace("/\s+/", " ", $string);
@@ -184,6 +215,6 @@
         $string = str_replace(' ', '-', $string); 
         $string = str_replace('--', '-', $string);  
         return preg_replace('/\s+/','-', $string);
-    }	
+    }
 
-?>
+

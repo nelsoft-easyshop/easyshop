@@ -66,6 +66,11 @@ class EsLocationLookup
     const DEFAULT_REGION = 39;
 
     /**
+     *  @var integer
+     */
+    const PHILIPPINES_LOCATION_ID = 1;
+
+    /**
      * Get idLocation
      *
      * @return integer 

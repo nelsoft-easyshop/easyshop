@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
     
 
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsCat as EsCat;
 
 class product_search extends MY_Controller {
     
@@ -44,7 +45,7 @@ class product_search extends MY_Controller {
                 $html .= "<ul>";
                 foreach ($keywords as $value) {
                     $showValue = $this->highlights($value,$stringData);
-                    $html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
+                    $html .= "<li><a href='/search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
 
                 }
                 $html .= "</ul>";
@@ -61,46 +62,33 @@ class product_search extends MY_Controller {
     public function advance()
     {
         header ('Content-type: text/html; charset=ISO-8859-1');
-        // Load Repository
+
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        // Load Service
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
+        $categoryId = $this->input->get('category') && count($this->input->get()) > 0
+                      ? trim($this->input->get('category'))
+                      : EsCat::MAIN_PARENT_CATEGORY;
         $memberId = $this->session->userdata('member_id');
 
         if(count($_GET)>0){
-
             $parameter = $this->input->get();
-
-            // getting all products
             $search = $searchProductService->getProductBySearch($parameter);
             $response['products'] = $search['collection']; 
-            // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
- 
-            // get total product Count
             $response['productCount'] = $search['count']; 
         }
 
-        // Load sub category to display
         $subCategory = $EsCatRepository->findBy(['parent' => $categoryId]);
-        $response['subCategory'] = $categoryManager->applyProtectedCategory($subCategory,FALSE);
-
-        // Load parent category to display
+        $response['subCategory'] = $categoryManager->applyProtectedCategory($subCategory,false);
         $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
-        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
-
-        // Load all location
+        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, false);
         $response['locatioList'] = $EsLocationLookupRepository->getLocation();
-
-        // Load all default condition
         $response['defaultCondition'] = $this->lang->line('product_condition');
 
-        // Load header data
         $data = array(
             'title' => 'Easyshop.com - Advanced Search',
             'render_searchbar' => false
@@ -114,23 +102,20 @@ class product_search extends MY_Controller {
 
     public function loadMoreProduct()
     {
-        // Load Repository
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        // Load Service
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
         $memberId = $this->session->userdata('member_id');
 
-        // getting all products
         $search = $searchProductService->getProductBySearch($this->input->get());
         $response['products'] = $search['collection']; 
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,true);
         $data['count'] = count($response['products']);
         echo json_encode($data);
     }
@@ -143,16 +128,13 @@ class product_search extends MY_Controller {
     { 
         header ('Content-type: text/html; charset=ISO-8859-1');
 
-        // Check if search is empty if true redirect to all category view
         if(trim($this->input->get('q_str')) === "" && intval(trim($this->input->get('category'))) <= 1){
             redirect('cat/all');
         }
 
-        // Load Repository
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        // Load Service
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
@@ -160,38 +142,33 @@ class product_search extends MY_Controller {
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
         $parameter = $this->input->get();
 
-        // getting all products 
         $search = $searchProductService->getProductBySearch($parameter);
         $response['products'] = $search['collection']; 
- 
-        // get total product Count 
         $response['productCount'] = $search['count']; 
-
-        // get all attributes to by products
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                             ->findBy(['parent' => 1]);
-        
-        // Apply protected category
-        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
-        
-        // Set image in every category
+
+        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
+
         $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
 
-        // category navigation of desktop version
         $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
-                array('parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'desktop'), TRUE );
+                [
+                    'parentCategory' =>  $response['parentCategory'],
+                    'environment' => 'desktop'
+                ], true );
 
-        // category navigation of mobile version
         $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
-                array('parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'mobile'), TRUE );
+                [
+                    'parentCategory' =>  $response['parentCategory'],
+                    'environment' => 'mobile'
+                ], true );
 
-        $data = array(
+        $data = [
                 'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
-                );
+                ];
 
         $data = array_merge($data, $this->fill_header());
 
