@@ -39,16 +39,16 @@ class ProductImageExistenceListener
         if ( ! $entity instanceOf EsProductImage ) { 
             return; 
         }
-
+        
         $productImagePath = $entity->getProductImagePath();        
         if(trim($productImagePath) === ''){
             $entity->setDirectory(EsProductImage::DEFAULT_IMAGE_DIRECTORY);
             $entity->setFilename(EsProductImage::DEFAULT_IMAGE_FILE);
         }
         else{
-            $productImagePathStrippedDot = strpos($productImagePath, '.') === 0 ? substr($productImagePath, 1) : $productImagePath; 
+ 
             if((strtolower($this->environment) ===  "development" &&  file_exists($productImagePath)) ||
-               (strtolower($this->environment) !==  "development" && $this->awsS3client->doesFileExist($productImagePathStrippedDot)))
+               (strtolower($this->environment) !==  "development" && $this->awsS3client->doesFileExist($productImagePath)))
             {
                 $reversedPath = strrev($productImagePath);
                 $entity->setDirectory(substr($productImagePath,0,strlen($reversedPath)-strpos($reversedPath,'/')));
