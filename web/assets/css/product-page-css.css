@@ -1329,7 +1329,19 @@ div.vertical {
 }
 
 .in-stock {
-    color: #24df5a;
+    font-size: 18px;
+    margin-left: 6px;
+    color: #24df5a !important;
+}
+
+.out-of-stock {
+    font-size: 18px;
+    margin-left: 6px;
+    color: #F20000 !important;
+}
+
+.availability-status{
+    color: #FF6036;
     font-size: 18px;
     margin-left: 6px;
 }
