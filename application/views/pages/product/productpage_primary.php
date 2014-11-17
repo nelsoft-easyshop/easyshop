@@ -159,7 +159,7 @@
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
                         <?php else: ?>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
-                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
+                                <a href="/<?=$product->getMember()->getSlug();?>/contact" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                             <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
                                 <!--Changed button tag-->
