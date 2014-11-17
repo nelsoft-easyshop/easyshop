@@ -101,17 +101,19 @@
                 <?php endif; ?>
 
                 <div class="row pad-top-23">
-                    <div class="col-xs-12 col-sm-5 col-md-5">
-                        <div class="prod-availability-container prod-border-right">
-                            <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
-                        </div>
-                        <?php if(trim($product->getShipsWithinDays()) !== ""): ?>
-                            <div class=" prod-border-right">
-                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> days</span>
+                    <div class="col-md-12 col-lg-5">
+                        <div class="prod-border-right mrgn-neg-10">
+                            <div class="prod-availability-container">
+                                <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
                             </div>
-                        <?php endif; ?>
+                            <?php if(trim($product->getShipsWithinDays()) !== ""): ?>
+                                <div class="">
+                                    <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> days</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 col-md-7">
+                    <div class="col-md-12 col-lg-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <span class="default" selected="" value="0">NOT AVAILABLE</span>
@@ -152,7 +154,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-7" align="center">
+                    <div class="col-sm-12 col-md-7" align="center">
                         <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
