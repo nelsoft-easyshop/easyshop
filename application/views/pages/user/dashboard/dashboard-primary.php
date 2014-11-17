@@ -1,7 +1,7 @@
 <link type="text/css" href='/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard-transaction.css' rel="stylesheet" media='screen'/>
@@ -14,7 +14,7 @@
                     <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
-                            <a href="#transactions"><li class="f-li">Transactions</li></a>
+                            <a href="#transactions"><li class="f-li ms-f">Transactions</li></a>
                             <a href="#setup"><li class="f-li">Store Setup</li></a>
                         </ul>
                     </div>
@@ -44,16 +44,15 @@
                     <div id="delivery-address">
                         <?php include("dashboard-delivery-address.php");?>
                     </div>
-                    <div id="account-settings">account settings</div>
+                    <div id="account-settings">
+                        <?php include("dashboard-account-settings.php");?>
+                    </div>
                 </div>
                 <div class="clear"></div>
             </div>
         </div>
     </div>
 </section>
-<br/>
-<br/>
-<br/>
 <br/>
 <br/>
 <br/>

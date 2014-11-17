@@ -50,6 +50,8 @@
     font-weight: 900;
 }
 
+.sales-title-total,
+.payout-title-total,
 .transaction-title-bought,
 .transaction-title-sold,
 .transaction-title-bought-completed,
@@ -67,6 +69,8 @@
     -webkit-border-radius: 4px;
 }
 
+.sales-title-total,
+.payout-title-total,
 .transaction-title-bought,
 .transaction-title-sold,
 .transaction-title-bought-completed,
@@ -74,6 +78,8 @@
     background:#f4f4f4 url(../images/sprites/dashboard-arrow.png) no-repeat right center;
 }
 
+.sales-title-total.active-bar,
+.payout-title-total.active-bar,
 .transaction-title-bought.active-bar,
 .transaction-title-sold.active-bar,
 .transaction-title-bought-completed.active-bar,
@@ -81,6 +87,8 @@
     background:#f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
 }
 
+.sales-title-total .trans-title,
+.payout-title-total .trans-title,
 .transaction-title-bought .trans-title,
 .transaction-title-sold .trans-title,
 .transaction-title-bought-completed .trans-title,

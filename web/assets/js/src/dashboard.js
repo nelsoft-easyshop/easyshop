@@ -1,5 +1,31 @@
 (function ($) {
+
+    $( "#dash" ).click(function() {
+        $( "#my-account-menu" ).slideUp();
+        var attr = $("i.m").attr("class");
+        if(attr == "m icon-control-up toggle-down pull-right"){
+            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+        }
+        
+        $( "#my-store-menu" ).slideUp();
+        var attr2 = $("i.a").attr("class");
+        if(attr2 == "a icon-control-up toggle-down pull-right"){
+            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
+            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
+            $( ".submenu-my-account" ).css("border-radius", "0px");
+            $( ".f-a" ).css("border-radius", "0px");
+        }
+    });
+    
     $( "#my-store-menu-trigger" ).click(function() {
+    $( "#my-account-menu" ).slideUp();
+     var attr4 = $("i.a").attr("class");
+    if(attr4 == "a icon-control-up toggle-down pull-right"){
+            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
+            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
+            $( ".submenu-my-account" ).css("border-radius", "0px");
+            $( ".f-a" ).css("border-radius", "0px");
+        }
         $( "#my-store-menu" ).slideToggle( "slow", function() {
             var attr = $("i.m").attr("class");
         if(attr == "m icon-control-down toggle-down pull-right"){
@@ -9,9 +35,15 @@
             $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
         }
         });
+        
     });
 
-     $( "#my-account-menu-trigger" ).click(function() {
+    $( "#my-account-menu-trigger" ).click(function() {
+        $( "#my-store-menu" ).slideUp();
+        var attr3 = $("i.m").attr("class");
+        if(attr3 == "m icon-control-up toggle-down pull-right"){
+            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+        }
         $( "#my-account-menu" ).slideToggle( "slow", function() {
             var attr = $("i.a").attr("class");
             if(attr == "a icon-control-down toggle-down pull-right"){
@@ -91,7 +123,21 @@
         $('.on-going-transaction-list-bought-completed').slideUp();
         $('.transaction-title-bought-completed').removeClass("active-bar");
     });
-
+    
+    $('.sales-title-total').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.sales-breakdown-container').slideToggle();
+        $('.payout-breakdown-container').slideUp();
+        $('.payout-title-total').removeClass("active-bar");
+    });
+    
+    $('.payout-title-total').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).next('.payout-breakdown-container').slideToggle();
+        $('.sales-breakdown-container').slideUp();
+       $('.sales-title-total').removeClass("active-bar");
+    });
+    
     $(".trans-item-info").click(function() {
         $(this).children("i").toggleClass("fa-minus-circle");
         $(this).next(".info-attributes").slideToggle();
@@ -309,6 +355,32 @@
             }
         });
     }
- 
+   
+   $( "#btn-edit-email" ).click(function() {
+      $( ".current-email" ).slideToggle( "slow" );
+      $( ".edit-email" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-edit-email" ).click(function() {
+        $( "#btn-edit-email" ).trigger( "click" );
+    });
+    
+    $( "#btn-edit-password" ).click(function() {
+      $( ".current-password" ).slideToggle( "slow" );
+      $( ".edit-password" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-edit-password" ).click(function() {
+        $( "#btn-edit-password" ).trigger( "click" );
+    });
+    
+    $( "#btn-edit-status" ).click(function() {
+      $( ".current-status" ).slideToggle( "slow" );
+      $( ".edit-status" ).slideToggle( "slow" );
+    });
+    
+    $( "#cancel-deact-status" ).click(function() {
+        $( "#btn-edit-status" ).trigger( "click" );
+    });
 }(jQuery));
 

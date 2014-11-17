@@ -14,10 +14,16 @@
             </div>
             <div class="on-going-transaction-list-bought">
                 <div class="mrgn-top-20 mrgn-bttm-25 row">
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                        <button class="btn btn-setting-edit-btn">
+                           <i class="icon-fax"></i> Print
+                        </button>
+                        <button class="btn btn-setting-edit-btn">
+                           <i class="icon-category"></i> Export CSV
+                        </button>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-3 text-right">
                         <span>Sort By:</span>
                         <select class="select-filter-item">
                             <option selected=selected>Last Modified</option>
@@ -27,6 +33,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
+                
                 <div class="transaction-item">
                     <div class="item-list-panel">
                         <table width="100%">
@@ -408,10 +415,16 @@
             </div>
             <div class="on-going-transaction-list-sold">
                 <div class="mrgn-top-20 mrgn-bttm-25 row">
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                        <button class="btn btn-setting-edit-btn">
+                           <i class="icon-fax"></i> Print
+                        </button>
+                        <button class="btn btn-setting-edit-btn">
+                           <i class="icon-category"></i> Export CSV
+                        </button>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-3 text-right">
                         <span>Sort By:</span>
                         <select class="select-filter-item">
                             <option selected=selected>Last Modified</option>
