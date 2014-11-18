@@ -282,7 +282,7 @@ class product extends MY_Controller
 
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
 
-            $productDescription = $stringUtility->purifyString($product->getDescription());
+            $productDescription = $stringUtility->purifyHTML($product->getDescription());
 
             $productReviews = $reviewProductService->getProductReview($productId);
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 

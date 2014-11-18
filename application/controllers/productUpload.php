@@ -1395,7 +1395,7 @@ class productUpload extends MY_Controller
 
             $productPreviewData = [
                         'product' => $product,
-                        'productDescription' => $stringUtility->purifyString($product->getDescription()),
+                        'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
                         'productImages' => $productImages,
                         'avatarImage' => $avatarImage,
                         'isFreeShippingNationwide' => $isFreeShippingNationwide,

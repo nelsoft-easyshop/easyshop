@@ -46,7 +46,7 @@
         <?php echo form_open('sell/edit/step2', array('id'=>'edit_step2'));?>
             <input type="hidden" name="p_id" id="p_id" value="<?=$product->getIdProduct();?>">
             <input type="hidden" name="hiddenattribute" value="<?=$product->getCat()->getIdCat();?>">
-            <input type="hidden" name="othernamecategory" value="<?=$product->getCatOtherName(); ?>">
+            <input type="hidden" name="othernamecategory" value="<?=html_escape($product->getCatOtherName()); ?>">
         <?php echo form_close();?>
 
         <?php echo form_open('sell/step3', array('id'=>'edit_step3'));?>
@@ -154,7 +154,7 @@
                                             <div class="step4_attr">
                                                 
                                                 <div class="col-sx-12 col-sm-12 col-md-12">
-                                                    <?php if( (int)$attr['has_attr']===0 ):?>
+                                                    <?php if( !$attr['has_attr'] ):?>
                                                         <p>&bull; All Combinations</p>
                                                     <?php else:?>
                                                         <?php foreach($garr['attr'] as $attrID): ?>

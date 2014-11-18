@@ -64,7 +64,7 @@ class StringUtility
         return preg_replace('/\s+/','-', $string);
     }
 
-    public function purifyString($string)
+    public function purifyHTML($string)
     {
         return  $this->htmlPurifier->purify($string);
     }

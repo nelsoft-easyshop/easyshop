@@ -219,7 +219,7 @@ class ProductShippingLocationManager
                                           ->getProductShippingAttribute($productId);
         $data = [];
         if(count($productAttr) === 1 && $productAttr[0]['id_product_item']){
-            $data['has_attr'] = 0;
+            $data['has_attr'] = false;
             $data['product_item_id'] = $productAttr[0]['id_product_item'];
             $data['attributes'][$productAttr[0]['id_product_item']] = [];
         }
@@ -232,10 +232,11 @@ class ProductShippingLocationManager
                     ];
                 }
             }
-            $data['has_attr'] = 1;
+            $data['has_attr'] = true;
         }
 
         return $data;
     }
 
 }
+
