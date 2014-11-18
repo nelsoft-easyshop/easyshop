@@ -56,10 +56,9 @@ class Memberpage extends MY_Controller
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
-        
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-
+        $this->session->unset_userdata('transaction_authentication_cache');
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
@@ -711,7 +710,6 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function transactionResponse(){
-        
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form'
@@ -736,20 +734,37 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($this->input->post('username'), 
-                                                                                                   $this->input->post('password'));
-
             $memberId = $this->session->userdata('member_id');
-            if( $authenticationResult['member'] === null || 
-                !empty($authenticationResult['errors']) ||  
-                (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
-            ){
-                $serverResponse = array(
-                    'result' => 'invalid',
-                    'error' => 'Incorrect password.'
-                );
-                echo json_encode($serverResponse);
-                exit;
+            
+            if($this->input->post('username') && $this->input->post('password')){
+                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($this->input->post('username'), 
+                if( $authenticationResult['member'] === null || 
+                    !empty($authenticationResult['errors']) ||  
+                    (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
+                ){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Incorrect password.'
+                    );
+
+                    echo json_encode($serverResponse);
+                    exit;
+                }
+                else{
+                    $this->session->set_userdata('transaction_authentication_cache', md5($authenticateData['username'].$authenticateData['password']));
+                }
+            }
+            else{   
+                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                                   ->findBy(['idMember' => $memberId ]);
+                if($member === null || ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Your session has expired. Please reload the page and try again.'
+                    );
+                    echo json_encode($serverResponse);
+                    exit;
+                }
             }
             
             // Check type of response ( if user or seller response )
