@@ -3,7 +3,7 @@
 
 
 <section class="product-main-top-content">
-    <div class="pd-lr-10">
+    <div class="container">
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1> 
@@ -20,7 +20,7 @@
     </div>
 </section>
 
-<div class="pd-lr-10">
+<div class="container">
     <div class="row pd-top-40">
         <div class="col-md-6">
             <div class="display-when-desktop" style="position: relative; z-index: 2;">
@@ -108,12 +108,12 @@
             <?php endif; ?>
             <div class="clear"></div>
             <div class="row pad-top-23">
-                <div class="col-xs-12 col-sm-5 col-md-5">
+                <div class="col-md-12 col-lg-5">
                     <div class="prod-availability-container prod-border-right">
                         <p>Availability: <span class="in-stock">Select Combination</span></p>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-7 col-md-7">
+                <div class="col-md-12 col-lg-7">
                     <p class="attr-title txt-shipment">Shipment Fee:</p>
                         <?php if(!$isFreeShippingNationwide): ?>
                         <div class="prod-select-con ui-form-control shipment-select">
@@ -189,7 +189,7 @@
 </div>
 
 <section>
-    <div class="pd-lr-10">
+    <div class="container">
         <div class="prod-detail-main">
             <div class="div-prod-lower">
                 <div class="div-detail-nav">
@@ -199,6 +199,19 @@
                 </div>
             </div>
         </div>
+        <div class="div-detail-nav-mobile">
+                <table width="100%" class="table-nav-prod">
+                    <tbody>
+                        <tr>
+                            <td class="td-detail active" width="50%" id="tdDetails">
+                                <a href="#details" id="prodDetails">
+                                    <p class="p-detail-a">Product Detail</p>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         <div class="tab-pane fade in active" id="details">
             <div class="div-detail-container ">
                 <div class="p-html-description">
@@ -213,3 +226,32 @@
     </div>
 </section>
 
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    var delay = (function(){
+      var timer = 0;
+      return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+
+    var $window = $(window);
+    $window.on('load resize', function() {
+         delay(function(){
+
+            var prodcongal= $(".prod_con_gal").width();
+            $(".prod_con_gal img").css("max-width", prodcongal);
+
+            var owlcarousel= $(".owl-carousel div").width();
+            var owlcarouselimg= $(".owl-carousel img");
+
+            owlcarouselimg.css({"max-width": owlcarousel});
+
+
+        }, 500);
+    });
+});
+</script>

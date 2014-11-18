@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <div class="container">
-    <div class="seller_product_content">
+    <div class="seller_product_content row">
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
                 <div class="sell_steps sell_steps4">
@@ -37,7 +37,8 @@
                 </div>
             <div class="clear"></div>
         </div>
-
+    </div>
+</div>
         <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
             <input type="hidden" name="p_id" id="p_id" value="<?=$product->getIdProduct();?>">
         <?php echo form_close();?>
@@ -52,8 +53,10 @@
             <input type="hidden" name="prod_h_id" id="p_id" value="<?=$product->getIdProduct();?>">
             <input type="hidden" name="is_edit" value="true">
         <?php echo form_close();?>
-        
-        <div class="step4_section mrgn-top-35">
+
+<div class="container step4_section mrgn-top-35">
+    <div class="seller_product_content">
+        <div class="row">
             <div class="step4_header col-xs-12">
                 <h5>How you will be paid</h5>
             </div>
@@ -87,8 +90,12 @@
             </div>
             <div class="clear"></div>
         </div>
-        
-        <div class="step4_section mrgn-top-35">
+    </div>
+</div>
+
+<div class="container step4_section mrgn-top-35">
+    <div class="seller_product_content">
+        <div class="row">
             <div class="step4_header col-xs-12">
                 <h5>Product Delivery</h5>
             </div>
@@ -171,31 +178,34 @@
             </div>
             <div class="clear"></div>
         </div>
-        
+    </div>
+</div>
+
         <div style="margin-top:3em;">
             <div>
-                <div style="max-height:100%; border:1px solid #CECECE;">
+                <div class="container step4_section" style="max-height:100%; border:1px solid #CECECE;padding:0 0 16px 0;">
                     <div class="step4_header col-xs-12">
                         <h5>Product Preview</h5>
                     </div>
-                    <div class="clear"></div>
                     <?=$productView; ?>
-                    <div class="clear"></div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="clear"></div>  
-    <div class="row">
-        <div class="col-sx-12 col-sm-12 col-md-12 text-center">
-            <div class="pd-tb-20">
-                <a href="/sell/step1" target="_blank" class="orange_btn3 vrtcl-mid">Sell another Item</a>
-                <a href="/item/<?=$product->getSlug();?>" target="_blank" class="btn btn-default">View Product</a>
+
+
+<div class="container">
+    <div class="seller_product_content">
+        <div class="row">
+            <div class="col-sx-12 col-sm-12 col-md-12 text-center">
+                <div class="pd-tb-20">
+                    <a href="/sell/step1" target="_blank" class="orange_btn3 vrtcl-mid">Sell another Item</a>
+                    <a href="/item/<?=$product->getSlug();?>" target="_blank" class="btn btn-default">View Product</a>
+                </div>
             </div>
         </div>
+        <div class="clear"></div>
     </div>
-    <div class="clear"></div>
 </div>
 
 
@@ -214,5 +224,5 @@
     $('#step3_link').on('click', function(){
         $('#edit_step3').submit();
     });
-    
+
 </script>
