@@ -104,7 +104,6 @@ class JbimagesUploader extends MY_Controller
                 $conf['allow_resize'] = FALSE;
             }
         }
-
         
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
@@ -120,14 +119,43 @@ class JbimagesUploader extends MY_Controller
                 $extension = image_type_to_extension(exif_imagetype($_FILES['userfile']['tmp_name']));
                 $resultImagePath = $conf['img_path'] . '/' . uniqid('description_').$extension;
 
+                $assetsDomain = $this->config->item('assetsBaseUrl', 'assets');
+                $assetsDomain = rtrim($assetsDomain, '/');
+                
+                $imageSize = getimagesize($_FILES['userfile']['tmp_name']);
+                
+                if ($conf['allow_resize'] && $conf['max_width'] > 0 && $conf['max_height'] > 0 && 
+                    (($imageSize['0'] > $conf['max_width']) || ($imageSize['1'] > $conf['max_height']))
+                ){
+                    $resizeParams = array(
+                        'source_image'  => $_FILES['userfile']['tmp_name'],
+                        'new_image'     => $_FILES['userfile']['tmp_name'],
+                        'width'         => $conf['max_width'],
+                        'height'        => $conf['max_height'],
+                        'image_library' => 'gd2',
+                        'maintain_ratio' => true,
+                    );
+
+                    $this->load->library('image_lib');
+                    $this->image_lib->initialize($resizeParams);  
+                    if(!$this->image_lib->resize()){
+                        var_dump( $this->image_lib->display_errors());
+                    }
+                    $this->image_lib->clear();
+                    
+                    var_dump($resizeParams);
+                    var_dump(getimagesize($_FILES['userfile']['tmp_name']));
+                }
+             
+                exit();
                 if($awsUploader->uploadFile($_FILES['userfile']['tmp_name'], $resultImagePath)){
                     $result['result']       = "file_uploaded";
                     $result['resultcode']   = 'ok';
                     $result['file_name']    = $resultImagePath;
-                    $result['base_url'] =  $this->config->item('assetsBaseUrl', 'assets');
+                    $result['base_url'] =  $assetsDomain;
                 }
                 else{
-                    $result['result']       = "AWS Upload unsuccessful";
+                    $result['result']       = "S3 upload unsuccessful";
                     $result['resultcode']   = 'failed';
                 }
                 
@@ -144,13 +172,19 @@ class JbimagesUploader extends MY_Controller
                             'width'         => $conf['max_width'],
                             'height'        => $conf['max_height']
                         );
-                        $this->load->library('image_lib', $resizeParams);
-                        $this->image_lib->resize();
+                        $this->load->library('image_lib');
+                        $this->image_lib->initialize($resizeParams);  
+                        $this->image_lib->resize(); 
+                        $this->image_lib->clear();
                     }
+                    
+                    $assetsDomain = base_url();
+                    $assetsDomain = rtrim($assetsDomain, '/');
+                    
                     $result['result']       = "file_uploaded";
                     $result['resultcode']   = 'ok';
                     $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
-                    $result['base_url'] =  base_url();
+                    $result['base_url'] =  $assetsDomain;
                 }
                 else {
                     $result['result']       = $this->upload->display_errors(' ', ' ');
