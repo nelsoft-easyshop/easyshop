@@ -86,37 +86,34 @@
                                     <tr>
                                         <td class="td-criteria">Item Quality: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$memberRating['rating1'] > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $memberRating['rating1']--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Communication: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$memberRating['rating2'] > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $memberRating['rating2']--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Shipment Time: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$memberRating['rating3'] > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $memberRating['rating3']--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Total Reviews: </td>
                                         <td class="td-total-review" align="center">
-                                            20
+                                            <?=$memberRating['count'] <= 0 ? "No Ratings Yet" : $memberRating['count']; ?>
                                         </td>
                                     </tr>
                                 </tbody>

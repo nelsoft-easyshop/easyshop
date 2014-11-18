@@ -1810,6 +1810,7 @@ class Memberpage extends MY_Controller
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
@@ -1860,6 +1861,7 @@ class Memberpage extends MY_Controller
                             ];
             $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
 
+            $memberRating = $esMemberFeedbackRepo->getAverageRatings($memberId); 
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
@@ -1875,6 +1877,7 @@ class Memberpage extends MY_Controller
                             'activeProductView' => $activeProductView,
                             'deletedProductView' => $deletedProductView,
                             'draftedProductView' => $draftedProductView,
+                            'memberRating' => $memberRating,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
