@@ -5,7 +5,8 @@
 <style type="text/css">
 
 .product-disable-nav {
-    display: none;
+/*    display: none;*/
+    opacity: 0;
 }
 
 </style>
@@ -27,8 +28,8 @@
         </div>
     </div>
 </section>
-
-<section class="product-main-top-content" id="scrollpoint">
+<div id="scrollpoint"></div>
+<section class="product-main-top-content">
     <div class="container">
         <div class="row">
             <div class="product-name-seller col-md-12">
