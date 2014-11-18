@@ -139,7 +139,7 @@
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
                         var $text = $("#locationID_"+val.location_id).data('text');
-                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' - PHP '+ parseFloat(val.price).toFixed(2)); 
+                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' - PHP '+ commaSeparateNumber(parseFloat(val.price).toFixed(2))); 
                     });
                 }
 
