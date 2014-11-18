@@ -146,6 +146,14 @@
                                 </div>
                             </div>
                             <div class="row">
+
+                                <div class="col-xs-12 col-message-2">
+                                    <div class="alert alert-danger hide" role="alert" id="feedback-star-error">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        Please rate this use in all available criteria.
+                                    </div>
+                                </div>
+                                    
                                 <center>
                                     <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
                                 </center>
@@ -167,6 +175,9 @@
     </div>
     
     <input type = 'hidden' id='memberid' value='<?php echo html_escape($member->getIdMember()); ?>'/> 
+    
+
+    
 </section>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
