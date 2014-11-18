@@ -67,7 +67,7 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
-        
+
         if( $data['logged_in'] && $view !== 'basic'){
             $this->load->view('templates/header', $data);
             $data = array_merge($data, $this->getFeed());            
@@ -92,10 +92,8 @@ class Home extends MY_Controller
                 $memberId = $this->session->userdata('member_id');
                 $data['logged_in'] = true;
                 $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                                ->find($memberId);
-                $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
-                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                        : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+                                                ->find($memberId);                          
+                $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');                
             }
             $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
