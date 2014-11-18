@@ -796,10 +796,13 @@ class Home extends MY_Controller
                                                            ->find(intval($this->input->post('userId')));
         $orderToReview = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
                                                            ->find(intval($this->input->post('feeback-order')));   
-             
+        $rating1 = (int) $this->input->post('rating1');
+        $rating2 = (int) $this->input->post('rating2');
+        $rating3 = (int) $this->input->post('rating3');
+        $areAllRatingsSet = $rating1 > 0 && $rating2 > 0 && $rating3 > 0;
         $message = $this->input->post('feedback-message');
                 
-        if($reviewer && $reviewee && $orderToReview && strlen($message) > 0){
+        if($reviewer && $reviewee && $orderToReview && strlen($message) > 0 && $areAllRatingsSet){
             if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
                 $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
             }
@@ -815,9 +818,9 @@ class Home extends MY_Controller
             $feedback->setOrder($orderToReview);
             $feedback->setFeedbMsg($message);
             $feedback->setDateadded(new DateTime('now'));
-            $feedback->setRating1(intval($this->input->post('rating1')));
-            $feedback->setRating2(intval($this->input->post('rating2')));
-            $feedback->setRating3(intval($this->input->post('rating3')));
+            $feedback->setRating1($rating1);
+            $feedback->setRating2($rating2);
+            $feedback->setRating3($rating3);
             $feedback->setFeedbKind($feedbackType);
             $em->persist($feedback);
             $em->flush();
