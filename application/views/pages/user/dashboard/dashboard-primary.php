@@ -37,7 +37,9 @@
                     <div id="transactions">
                         <?php include("dashboard-transactions.php");?>
                     </div>
-                    <div id="setup">setup</div>
+                    <div id="setup">
+                        <?php include("dashboard-store-setup.php");?>
+                    </div>
                     <div id="personal-information">
                         <?php include("dashboard-personal-info.php");?>
                     </div>
@@ -54,9 +56,8 @@
     </div>
 </section>
 <br/>
-<br/>
-<br/>
 <script src="/assets/js/src/jquery-1.8.2.js?ver=<?=ES_FILE_VERSION?>"></script>
 
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
