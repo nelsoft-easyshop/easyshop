@@ -223,14 +223,14 @@
                                 <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
                                 <span>Facebook</span>
                                 <div id="fb-root"></div>
-                                <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
+                                <div class="fb-share-button" data-href="/<?=$product->getSlug()?>" data-width="150"></div>
                             </div>
                         </a>
                         <span class="twitter-lnk">
                             <div class="ui-form-control share-twitter">
                                 <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
-                                <a class="twitter-share-button" data-url="<?=$url?>" data-related="twitterdev" data-size="large"
+                                <a class="twitter-share-button" data-url="/<?=$product->getSlug()?>" data-related="twitterdev" data-size="large"
                                     data-count="none">
                                     
                                 </a>
