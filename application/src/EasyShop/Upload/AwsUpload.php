@@ -16,15 +16,17 @@ class AwsUpload
     private $awsS3Client;
     
     /**
-     * The AWS S3 bucket
-     * @var string
+     * Assets config 
+     *
+     * @var string[]
      */
-    private $s3Bucket;
+    private $assetsConfig;
 
+    
     public function __construct($awsS3Client, $configLoader)
     {
         $this->awsS3Client = $awsS3Client;
-        $this->s3Bucket = $configLoader->getItem('assets')["bucket"];
+        $this->assetsConfig = $configLoader->getItem('assets');
     }
 
     /**
@@ -40,14 +42,21 @@ class AwsUpload
         if(!file_exists($sourceFilePath)){
             return false;
         }
-
-        $fileExtension = image_type_to_mime_type(exif_imagetype($sourceFilePath));
         
+        $mimeType = image_type_to_mime_type(exif_imagetype($sourceFilePath));
+        $fileExtension = explode('/', $mimeType)[1];
+        $allowedFileTypes = explode('|', $this->assetsConfig['allowed_types']);
+        $fileSizeByte = filesize($sourceFilePath) / 1024;
+        
+        if(!in_array($fileExtension, $allowedFileTypes) ||  $fileSizeByte > $this->assetsConfig['max_size'] ){
+            return false;
+        }
+ 
         $result = $this->awsS3Client->putObject(array(
-            'Bucket' => $this->s3Bucket,
+            'Bucket' => $this->assetsConfig['bucket'],
             'Key'    => $destinationFilePath,
             'SourceFile'  => $sourceFilePath,
-            'ContentType' => $fileExtension,
+            'ContentType' => $mimeType,
             'ACL'    => 'public-read',
         ));
         return $result;
@@ -62,7 +71,7 @@ class AwsUpload
     public function doesFileExist($sourceFileFullPath)
     {
         $cleanSourceFileFullPathClean = strpos($sourceFileFullPath, '.') === 0 ? substr($sourceFileFullPath, 1) : $sourceFileFullPath;
-        $doesExist = $this->awsS3Client->doesObjectExist( $this->s3Bucket, $cleanSourceFileFullPathClean);
+        $doesExist = $this->awsS3Client->doesObjectExist( $this->assetsConfig['bucket'], $cleanSourceFileFullPathClean);
         return $doesExist;
     }
 
