@@ -51,7 +51,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$value->getSlug(); ?>">
+                                <a class="btn btn-default-1 btn-add-cart" href="javascript:void(0);" data-slug="<?php echo $value->getSlug(); ?>" data-productid="<?php echo $value->getIdProduct(); ?>">
                                     <span class="icon-cart"></span> ADD TO CART
                                 </a>
                             </td>
