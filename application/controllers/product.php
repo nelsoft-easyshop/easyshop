@@ -323,7 +323,7 @@ class product extends MY_Controller
                             'recommendedView' => $recommendedView,
                             'noMoreSelection' => $noMoreSelection, 
                             'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                            'url' => '/item/' . $product->getSlug() 
+                            'url' => base_url() .'item/' . $product->getSlug()
                         ];
 
             if($this->session->userdata('member_id')) {
