@@ -15,14 +15,14 @@
                     </div>
                     <div class="col-xs-3 col-progress-text">
                         <div class="div-progress-container-text" align="right">
-                            Account Progress: 70%
+                            Account Progress: <?=$profilePercentage; ?>%
                         </div>
                     </div>
                     <div class="col-xs-4 col-progress-bar">
                         <div class="div-progress-bar-container" align="right">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                    <span class="sr-only">70% Complete</span>
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?=$profilePercentage; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                    <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
                                 </div>
                             </div>
                         </div>

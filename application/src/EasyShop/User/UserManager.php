@@ -727,21 +727,6 @@ class UserManager
      */
     public function getProfileCompletePercent($memberEntity)
     {
-        // profile picture
-        // banner picture
-
-        // name
-        // gender
-        // birthday
-        // mobile number
-        // email address 
-        // 
-        // consignee name
-        // mobile number
-        // telephone number
-        // address
-        // map location
-        
         $counter = 0;
 
         if($memberEntity->getFullname()){
@@ -760,19 +745,34 @@ class UserManager
             $counter++;
         }
 
-        if((int)$memberEntity->getIsEmailVerify() === 1){
+        if((boolean)$memberEntity->getIsEmailVerify()){
             $counter++;
         }
 
         $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
                                             ->findOneBy([
-                                                'idMember' => $memberId, 
+                                                'idMember' => $memberEntity->getIdMember(), 
                                                 'type' => EsAddress::TYPE_DELIVERY
                                             ]);
 
         if($addressEntity){
-            
+            $counter += 4;
         }
+
+        $imageURL = $memberEntity->getImgurl();
+        $isHide = (boolean)$memberEntity->getIsHideBanner();
+
+        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_NORMAL_SIZE) && !$isHide){
+            $counter++;
+        }
+
+        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_BANNER) && !$isHide){
+            $counter++;
+        }
+
+        $percentage = ceil($counter/12 * 100);
+
+        return $percentage;
     }
 
 }

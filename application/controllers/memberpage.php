@@ -1861,6 +1861,7 @@ class Memberpage extends MY_Controller
                             ];
             $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
 
+            $profilePercentage = $userManager->getProfileCompletePercent($member); 
             $memberRating = $esMemberFeedbackRepo->getAverageRatings($memberId); 
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
             $dashboardHomeData = [
@@ -1878,6 +1879,7 @@ class Memberpage extends MY_Controller
                             'deletedProductView' => $deletedProductView,
                             'draftedProductView' => $draftedProductView,
                             'memberRating' => $memberRating,
+                            'profilePercentage' => $profilePercentage,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
