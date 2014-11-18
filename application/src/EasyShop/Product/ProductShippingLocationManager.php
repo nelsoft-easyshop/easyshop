@@ -216,8 +216,10 @@ class ProductShippingLocationManager
     public function getShippingAttribute($productId)
     {
         $productAttr = $this->em->getRepository('EasyShop\Entities\EsProductItem')
-                                          ->getProductShippingAttribute($productId);
+                                ->getProductShippingAttribute($productId);
         $data = [];
+
+        // checking if the id product item is null
         if(count($productAttr) === 1 && $productAttr[0]['id_product_item']){
             $data['has_attr'] = false;
             $data['product_item_id'] = $productAttr[0]['id_product_item'];
