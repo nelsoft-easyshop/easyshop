@@ -108,11 +108,11 @@
             var max_qty = 1;
             $.ajax({
                 async:false,
-                url: "/cart/add_item",
+                url: "/cart/doAddItem",
                 type:"POST",
                 dataType:"JSON",
                 data:{
-                    id: i_id,
+                    productId: i_id,
                     qty: i_qty,
                     price: i_price,
                     opt: i_opt,
