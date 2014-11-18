@@ -826,9 +826,9 @@ class EsProductRepository extends EntityRepository
                            ->setParameter('product_id', $productId)
                            ->getQuery();
 
-        $result = $queryBuilder->getResult();
+        $result = $queryBuilder->getOneOrNullResult();
 
-        return $result[0];
+        return $result;
     }
 
     /**
