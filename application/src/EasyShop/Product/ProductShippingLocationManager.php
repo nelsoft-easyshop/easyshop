@@ -218,7 +218,7 @@ class ProductShippingLocationManager
         $productAttr = $this->em->getRepository('EasyShop\Entities\EsProductItem')
                                           ->getProductShippingAttribute($productId);
         $data = [];
-        if(count($productAttr) === 1 && !$productAttr[0]['id_product_item']){
+        if(count($productAttr) === 1 && $productAttr[0]['id_product_item']){
             $data['has_attr'] = 0;
             $data['product_item_id'] = $productAttr[0]['id_product_item'];
             $data['attributes'][$productAttr[0]['id_product_item']] = [];

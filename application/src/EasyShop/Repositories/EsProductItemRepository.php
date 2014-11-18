@@ -33,8 +33,9 @@ class EsProductItemRepository extends EntityRepository
         $rsm->addScalarResult('id_product_item', 'id_product_item'); 
         $rsm->addScalarResult('name', 'name');
         $rsm->addScalarResult('attr_value', 'attr_value');
+        $rsm->addScalarResult('product_id_item', 'product_id_item');
         $query = $em->createNativeQuery("
-            SELECT pitm.id_product_item, attr.name, pattr.attr_value
+            SELECT pitm.id_product_item, attr.name, pattr.attr_value, piattr.product_id_item
             FROM es_product_item pitm
             LEFT JOIN es_product_item_attr piattr
                 ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 0
@@ -46,7 +47,7 @@ class EsProductItemRepository extends EntityRepository
             
             UNION
             
-            SELECT pitm.id_product_item, oattrh.field_name, oattr.value_name
+            SELECT pitm.id_product_item, oattrh.field_name, oattr.value_name, piattr.product_id_item
             FROM es_product_item pitm
             LEFT JOIN es_product_item_attr piattr
                 ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 1
