@@ -41,6 +41,9 @@
         $( "#feedback-form" ).submit(function( event ) {
             $feedbackSelect = $('#feedback-select');
             $feedbackMessage = $('#feedback-message');
+            $rating1 = $("#input-rating-header1");
+            $rating2 = $("#input-rating-header2");
+            $rating3 = $("#input-rating-header3");
             var hasError = false;
             if($.trim($feedbackMessage.val()).length == 0){
                 $feedbackMessage.addClass("input-error");
@@ -50,6 +53,12 @@
             if($feedbackSelect.val() == 0){
                 $feedbackSelect.addClass("input-error");
                 $('#feedback-order-error-icon').show();
+                hasError = true;
+            }
+
+            if($rating1.val() == 0 || $rating2.val() == 0 || $rating3.val() == 0){
+                $('#feedback-star-error').removeClass('hide');
+                console.log('angular');
                 hasError = true;
             }
             
@@ -121,6 +130,7 @@
         $(this).addClass("star-active"); 
         $(this).prevAll().addClass("star-active"); 
         $(this).nextAll().removeClass("star-active");
+        $('#feedback-star-error').addClass('hide');
     });
     
 
