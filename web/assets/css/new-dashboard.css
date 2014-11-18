@@ -143,7 +143,7 @@ a{
     min-height: 300px;
     background: #f4f4f4;
     border-radius: 7px;
-    padding: 10px;
+    position: relative;
 }
 
 .div-img-cover{
@@ -152,6 +152,7 @@ a{
     border-radius: 7px 7px 0px 0px;
     padding: 29px 30px;
     background-size: 100%;
+    position: relative;
 }
 
 .vendor-follower-img{
@@ -164,22 +165,28 @@ a{
 }
 
 .img-follower-cover{
-    width: 842px;
-    height: 208px;
+    width: 100%;
+    height: auto;
+    max-height: 208px;
     position: absolute;
-    left: 21px;
+    left: 0;
     border-radius: 7px 7px 0px 0px;
-    top: 9px;
+    top: 0;
     z-index: 1;
+    filter: brightness(50%);
+	-webkit-filter: brightness(50%);
+	-moz-filter: brightness(50%);
+	-o-filter: brightness(50%);
+	-ms-filter: brightness(50%);
 }
 
 .cover-overlay{
-    width: 842px;
+    width: 100%;
     height: 208px;
     position: absolute;
-    left: 21px;
+    left: 0;
     border-radius: 7px 7px 0px 0px;
-    top: 9px;
+    top: 0;
     background: #000;
     opacity: 0.4;
     z-index: 2;
@@ -192,6 +199,7 @@ a{
 
 .div-stats{
     padding: 10px;
+    margin-top: 10px;
 }
 .div-top-name{
     border-bottom: solid #e2e2e2 1px;
@@ -213,6 +221,7 @@ a{
 
 .div-progress-container-text{
     margin-top: 4px;
+    text-align: left;
 }
 
 .div-progress-bar-container{
@@ -1106,4 +1115,69 @@ a{
 
 .div-cat{
     padding: 5px 10px 5px 0px;
+}
+
+@media only screen and (max-width: 991px){
+    .container-dashboard{
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    .col-sidebar{
+        padding: 0px;
+    }
+    
+    #dash,
+    #my-store-menu-trigger,
+    #my-account-menu-trigger{
+        display: inline;
+    }
+    
+    .div-dashboard-content {
+        min-height: 450px;
+        border-left: none;
+        margin-left: 0px;
+        padding-bottom: 5px;
+    }
+    
+    .col-content{
+        padding-right: 0px;
+    }
+    
+    .div-tab {
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+    
+    .row-fluid{
+        overflow: hidden;
+    }
+    
+    .div-img-cover,
+    .img-follower-cover{
+        border-radius: 0px;
+    }
+    
+    .div-feedback-stat{
+        padding-left: 0px;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-left: none;
+        border-top: solid #e2e2e2 1px;
+    }
+    
+    .table-stat-ratings{
+        display: none;
+    }
+    
+    .star-stat-mobile{
+        font-size: 13px;
+        color: #d3d3d3;
+    }
+    
+    .col-star-rate-mobile{
+        padding-right: 0px;
+        text-align: center;
+    }
 }
