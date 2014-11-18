@@ -4,7 +4,6 @@
         <div class="div-img-cover">
             <img src="/assets/images/img_cover_2.png" class="img-follower-cover"/>
             <img src="/assets/images/img_profile_pic.jpg" class="vendor-follower-img"/>
-            <div class="cover-overlay"></div>
         </div>
         <div class="clear"></div>
         <div class="div-stats">
@@ -13,16 +12,18 @@
                     <div class="col-xs-5">
                         <p class="p-username"><span class="icon-profile"> </span>Mang Pedring</p>
                     </div>
-                    <div class="col-xs-3 col-progress-text">
-                        <div class="div-progress-container-text" align="right">
-                            Account Progress: 70%
+                    <div class="col-xs-7">
+                        <div class="col-xs-5 col-progress-text">
+                            <div class="div-progress-container-text">
+                                Account Progress: 70%
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-4 col-progress-bar">
-                        <div class="div-progress-bar-container" align="right">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                    <span class="sr-only">70% Complete</span>
+                        <div class="col-xs-7 col-progress-bar">
+                            <div class="div-progress-bar-container" align="right">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                                        <span class="sr-only">70% Complete</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +32,7 @@
             </div>
             <div class="div-stats-numbers">
                 <div class="row">
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
@@ -76,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">
                                 Feedback:
@@ -121,6 +122,19 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="row">
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Item Quality : </span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
