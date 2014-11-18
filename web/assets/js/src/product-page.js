@@ -251,6 +251,44 @@
 
     });
 
+    /**
+     * Add to cart using the express button 
+     * 
+     */
+    $(".btn-add-cart").on("click", function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var $button = $(this);
+        var productId = $button.data('productid');
+        var slug = $button.data('slug');
+         
+        $.ajax({
+            type: "POST",
+            url: "/cart/doAddItem", 
+            dataType: "json",
+            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
+            success: function(result) {
+                if(!result.isLoggedIn){
+                    window.location.replace("/login");
+                }
+                else if(result.isSuccessful){
+                    window.location.replace("/cart");
+                }
+                else{
+                    window.location.replace("/item/"+slug);
+                }
+            }, 
+        });
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // review product
     $(document).on('click', '#submitReview', function(){
         var $this = $(this);
