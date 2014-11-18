@@ -2,15 +2,6 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
 <link rel="stylesheet" href="/assets/css/owl.carousel.css">
 
-<style type="text/css">
-
-.product-disable-nav {
-/*    display: none;*/
-    opacity: 0;
-}
-
-</style>
-
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
