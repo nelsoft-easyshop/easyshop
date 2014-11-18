@@ -150,7 +150,7 @@
                                 <div class="col-xs-12 col-message-2">
                                     <div class="alert alert-danger hide" role="alert" id="feedback-star-error">
                                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        Please rate this use in all available criteria.
+                                        Please rate this user in all available criteria.
                                     </div>
                                 </div>
                                     
