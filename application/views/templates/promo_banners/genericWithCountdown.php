@@ -1,3 +1,5 @@
+<?php if($product->getStartPromo()): ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -12,7 +14,6 @@
                         <div class="div-inline">
                             <div class="time-container">
                                 <p class="p-time-left">For more information, visit our <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448/?type=1">Facebook page</a></p>
-                                <?php if($product->getStartPromo()): ?>
                                 <table id="table-countdown" align="center">
                                     <tr>
                                         <td class="td-time-num">
@@ -33,7 +34,6 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="div-inline">
@@ -56,4 +56,4 @@
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
 <script src="/assets/js/src/promo/generic-with-countdown.js" type="text/javascript"></script> 
 
-
+<?php endif; ?>

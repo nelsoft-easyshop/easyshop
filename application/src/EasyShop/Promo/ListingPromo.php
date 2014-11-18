@@ -49,9 +49,9 @@ class ListingPromo extends AbstractPromo
         $promoDetails = array(
             'promoPrice' => $price,
             'isStartPromo' => false,
-            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
+            'isEndPromo' => ($dateToday > $endDateTime) ? true : false
         );
-
+    
         if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
             $promoDetails['isStartPromo'] = true;
         }

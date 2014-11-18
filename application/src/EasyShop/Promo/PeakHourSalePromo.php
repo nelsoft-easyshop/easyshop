@@ -50,13 +50,13 @@ class PeakHourSalePromo extends AbstractPromo
         $promoDetails = array(
             'promoPrice' => $price,
             'isStartPromo' => false,
-            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
+            'isEndPromo' => ($dateToday > $endDateTime) ? true : false
         );
 
         $Ymd = strtotime(date('Y-m-d', $dateToday));
         $His = strtotime(date('H:i:s', $dateToday));
-
-        if($Ymd === strtotime(date('Y-m-d',$startDateTime))) {
+        
+        if($Ymd >= strtotime(date('Y-m-d',$startDateTime))) {
             foreach ($option as $promoPeriod) {
                 if ((strtotime($promoPeriod['start']) <= $His) && (strtotime($promoPeriod['end']) > $His)) {
                     $promoDetails['isStartPromo'] = true;

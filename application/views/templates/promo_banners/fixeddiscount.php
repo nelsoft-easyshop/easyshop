@@ -1,3 +1,5 @@
+<?php if(!$product->getEndPromo()): ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -11,7 +13,9 @@
                         </div>
                         <div class="div-inline">
                             <div class="time-container">
-                              <?php if($product->getStartPromo()): ?> 
+
+                       
+                            <?php if($product->getStartPromo()): ?> 
                                     <p class="p-time-left">TIME REMAINING</p>
                                 <?php else: ?>  
                                     <p class="p-time-left">PROMO STARTS IN</p> 
@@ -58,3 +62,5 @@
 <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/promo/fixed-discount.js" type="text/javascript"></script> 
+<?php endif; ?>
+
