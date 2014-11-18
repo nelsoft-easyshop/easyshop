@@ -394,13 +394,19 @@ class NewHomeWebService extends MY_Controller
      */
     public function addAdds()
     {
+        $imgDimensions = array(
+            'x' => $this->input->get('x'),
+            'y' => $this->input->get('y'),
+            'w' => $this->input->get('w'),
+            'h' => $this->input->get('h')
+        );           
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
 
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/images';
+        $path_directory = 'assets/images/ads';
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -419,7 +425,14 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
+            $value = $path_directory."/".$filename.'.'.$file_ext; 
+            $this->config->load("image_path");            
+            $imgDirectory = $this->config->item('ads_img_directory').$filename.'.'.$file_ext;
+
+            if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
+                $this->cropImage($imgDirectory, $imgDimensions);
+            }
+
             $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
 
             $index = $index == 0 ? 1 : $index + 1;
@@ -869,6 +882,12 @@ class NewHomeWebService extends MY_Controller
      */
     public function editSubSlider()
     {
+        $imgDimensions = array(
+            'x' => $this->input->get('x'),
+            'y' => $this->input->get('y'),
+            'w' => $this->input->get('w'),
+            'h' => $this->input->get('h')
+        );   
         $index = (int)$this->input->get("index");
         $subIndex = (int)$this->input->get("subIndex");
         $target = $this->input->get("target");
@@ -898,6 +917,12 @@ class NewHomeWebService extends MY_Controller
             } 
             else {
                 $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
+                $this->config->load("image_path");            
+                $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
+
+                if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
+                    $this->cropImage($imgDirectory, $imgDimensions);
+                }                
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
                 $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
 
