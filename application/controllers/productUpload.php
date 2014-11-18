@@ -1393,6 +1393,13 @@ class productUpload extends MY_Controller
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
 
+            $paymentMethod = $this->config->item('Promo')[0]['payment_method']; 
+
+            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){ 
+                $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
+            }
+
+
             $productPreviewData = [
                         'product' => $product,
                         'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
@@ -1400,6 +1407,7 @@ class productUpload extends MY_Controller
                         'avatarImage' => $avatarImage,
                         'isFreeShippingNationwide' => $isFreeShippingNationwide,
                         'productAttributes' => $productAttributes,
+                        'paymentMethod' => $paymentMethod,
                     ];
 
             $shippingDetails = $productShippingManager->getProductShippingSummary($productId);

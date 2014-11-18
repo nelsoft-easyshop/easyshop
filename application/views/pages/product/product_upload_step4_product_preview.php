@@ -149,11 +149,22 @@
             <div class="row pad-top-23">
                 <div class="col-md-12 prod-payment-img-container">
                     <p class="attr-title">Payment:</p>
-                    <img src="/assets/images/img-mastercard-colored.png" alt="Mastercard">
-                    <img src="/assets/images/img-visa-colored.png" alt="Visa">
-                    <img src="/assets/images/img-dragonpay-colored.png" alt="Dragon Pay">
-                    <img src="/assets/images/img-paypal-colored.png" alt="Paypal">
-                    <img src="/assets/images/img-cod-colored.png" alt="Cash on Delivery">
+                    <?php if(isset($paymentMethod['cdb'])): ?> 
+                        <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
+                        <img src="/assets/images/img-visa-black.png" alt="Visa">
+                    <?php endif; ?>
+
+                    <?php if(isset($paymentMethod['dragonpay'])) : ?> 
+                        <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                    <?php endif; ?> 
+
+                    <?php if(isset($paymentMethod['paypal'])) : ?> 
+                        <img src="/assets/images/img-paypal-black.png" alt="Paypal">
+                    <?php endif; ?>
+
+                    <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
+                        <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="clear"></div>

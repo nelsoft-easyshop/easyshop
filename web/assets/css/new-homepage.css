@@ -653,6 +653,12 @@ header {
     display: none;
 }
 
+.persistent-header-wrapper {
+    min-height: 44px;
+    position: relative;
+    z-index: 999;
+}
+
 .sticky-header-nav {
     min-height: 44px;
 }
