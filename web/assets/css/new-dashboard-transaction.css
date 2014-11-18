@@ -55,7 +55,13 @@
 .transaction-title-bought,
 .transaction-title-sold,
 .transaction-title-bought-completed,
-.transaction-title-sold-completed {
+.transaction-title-sold-completed,
+.feedback-from-seller,
+.feedback-from-buyer,
+.feedback-for-seller,
+.feedback-for-buyer
+
+ {
     background-color: #f4f4f4;
     border-bottom: 3px solid #e2e2e2;
     border-radius: 4px;
@@ -74,7 +80,11 @@
 .transaction-title-bought,
 .transaction-title-sold,
 .transaction-title-bought-completed,
-.transaction-title-sold-completed {
+.transaction-title-sold-completed,
+.feedback-from-seller,
+.feedback-from-buyer,
+.feedback-for-seller,
+.feedback-for-buyer {
     background:#f4f4f4 url(../images/sprites/dashboard-arrow.png) no-repeat right center;
 }
 
@@ -83,7 +93,12 @@
 .transaction-title-bought.active-bar,
 .transaction-title-sold.active-bar,
 .transaction-title-bought-completed.active-bar,
-.transaction-title-sold-completed.active-bar {
+.transaction-title-sold-completed.active-bar,
+.feedback-from-seller.active-bar,
+.feedback-from-buyer.active-bar,
+.feedback-for-seller.active-bar,
+.feedback-for-buyer.active-bar
+ {
     background:#f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
 }
 
@@ -92,7 +107,11 @@
 .transaction-title-bought .trans-title,
 .transaction-title-sold .trans-title,
 .transaction-title-bought-completed .trans-title,
-.transaction-title-sold-completed .trans-title {
+.transaction-title-sold-completed .trans-title,
+.feedback-from-seller .trans-title,
+.feedback-from-buyer .trans-title,
+.feedback-for-seller .trans-title,
+.feedback-for-buyer .trans-title{
     font-size: 16px;
     font-weight: 900;
     padding-right: 18px;
@@ -101,7 +120,11 @@
 .transaction-title-bought .count,
 .transaction-title-sold .count,
 .transaction-title-bought-completed .count,
-.transaction-title-sold-completed .count {
+.transaction-title-sold-completed .count,
+.feedback-from-seller .count,
+.feedback-from-buyer .count,
+.feedback-for-seller .count,
+.feedback-for-buyer .count{
     background-color: #878787;
     border-radius: 90px;
     display: inline-block;
