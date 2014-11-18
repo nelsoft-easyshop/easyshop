@@ -236,15 +236,14 @@ class MY_Controller extends CI_Controller
                 $evaluate .= $value;
             }
         }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
 
-        $hash = $evaluate.$password["password"];
+        $em = $this->serviceContainer["entity_manager"];
+        $adminUser = $em->getRepository("EasyShop\Entities\EsAdminMember")
+                                        ->find($postedData["userid"]);
 
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-            exit($error);
-        }   
+        $hash = $evaluate.$adminUser->getPassword();
+
+        return $isAuthenticated = (sha1($hash) != $postedHash) ? false : true;
     }
 
 

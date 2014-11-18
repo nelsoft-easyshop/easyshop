@@ -1484,6 +1484,8 @@ class Memberpage extends MY_Controller
         $key = $deleteStatus === 0 ? 'active_products' : 'deleted_products';
         $data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $draftStatus, $start, $nf,$myof,$myosf, $itemPerPage);
         
+        $data['isBulkOptionActive'] = (int)$this->input->get('bulkoption') === 1 ? TRUE:FALSE;
+
         if($deleteStatus === 0){ #if active items
             $jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);
         }

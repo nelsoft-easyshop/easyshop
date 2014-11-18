@@ -104,7 +104,19 @@ class Resource
         
         return $xmlfile;
     
-    }      
+    }   
+
+    /**
+     * Returns the temp home xml file used by the application
+     *
+     * @return string
+     */
+    public function getTempHomeXMLfile()
+    {
+        $xmlfile =  "local/new_home_page_temp";        
+        return $xmlfile;
+    
+    }       
 
 }
 
