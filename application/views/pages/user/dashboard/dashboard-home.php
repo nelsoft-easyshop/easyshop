@@ -827,10 +827,10 @@
                 <!--<div class="jumbotron no-items">
                     <i class="icon-category"></i>No items for this category
                 </div>-->
-                <?php include("feedbacks.php");?>
+                <?php include("dashboard-feedbacks.php");?>
             </div>
             <div id="sales">
-            <?php include("sales.php");?>
+            <?php include("dashboard-sales.php");?>
                  <!--<div class="jumbotron no-items">
                     <i class="icon-category"></i>No items for this category
                 </div>-->
