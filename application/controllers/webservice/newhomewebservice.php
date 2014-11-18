@@ -1045,6 +1045,13 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSubSlider()
     {
+
+        $imgDimensions = array(
+            'x' => $this->input->get('x'),
+            'y' => $this->input->get('y'),
+            'w' => $this->input->get('w'),
+            'h' => $this->input->get('h')
+        );        
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
 
@@ -1053,9 +1060,11 @@ class NewHomeWebService extends MY_Controller
         $file_ext = strtolower(end($file_ext));  
         $path_directory = 'assets/images/homeslider';
         $map = simplexml_load_file($this->tempHomefile);
+
+        $this->load->library('image_lib');    
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
-            "overwrite" => FALSE, 
+            "overwrite" => TRUE, 
             "encrypt_name" => FALSE,
             "file_name" => $filename,
             "remove_spaces" => TRUE,
@@ -1071,6 +1080,13 @@ class NewHomeWebService extends MY_Controller
         } 
         else {
             $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
+            $this->config->load("image_path");            
+            $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
+
+            if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
+                $this->cropImage($imgDirectory, $imgDimensions);
+            }
+
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
             if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
                 $map->sliderSection->slide[$index]->image->path = $value;
@@ -1092,6 +1108,36 @@ class NewHomeWebService extends MY_Controller
                     ->set_output($this->json); 
             }   
         }
+    }
+
+    /**
+     *  Initiates the cropping functionality of image_lib
+     *  @param string $imgDirectory
+     *  @param array $imgDimensions
+     */
+    public function cropImage($imgDirectory, $imgDimensions = [])
+    {
+
+        $this->load->library('image_lib');
+
+        $img_config = array(
+            'source_image'      => $imgDirectory,
+            'new_image'         => $imgDirectory,
+            'maintain_ratio'    => false,
+            'width'             => $imgDimensions['w'],
+            'height'            => $imgDimensions['h'],
+            'x_axis'            => $imgDimensions['x'],
+            'y_axis'            => $imgDimensions['y']
+        );
+        $this->load->library('image_lib', $img_config);
+        $this->image_lib->resize();
+
+        // Now change the input file to the one that just got resized
+        $this->image_lib->clear();
+        $img_config['source_image'] = $imgDirectory;
+        $this->image_lib->initialize($img_config); 
+
+        $this->image_lib->crop();
     }
 
 
