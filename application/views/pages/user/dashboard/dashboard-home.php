@@ -113,7 +113,7 @@
                                     <tr>
                                         <td class="td-criteria">Total Reviews: </td>
                                         <td class="td-total-review" align="center">
-                                            <?=$memberRating['count'] <= 0 ? "No Ratings Yet" : $memberRating['count']; ?>
+                                            <?=$memberRating['count'] <= 0 ? "No Rating." : $memberRating['count']; ?>
                                         </td>
                                     </tr>
                                 </tbody>

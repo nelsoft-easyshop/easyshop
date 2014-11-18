@@ -1,4 +1,4 @@
-
+ 
 <div class="row">
     <div class="col-xs-2">
         <center>
@@ -76,11 +76,12 @@
         </div>
     </div>
 </div>
+ 
 <center>
     <ul class="pagination pagination-items" data-lastpage="1">
         <li data-page="1" class="extremes previous">
             <a href="javascript:void(0)">
-                <span> « </span>
+                <span> << </span>
             </a>
         </li>
         <li class="active individual" data-page="1">
@@ -90,7 +91,7 @@
         </li>
         <li data-page="1" class="extremes next">
             <a href="javascript:void(0)">
-                <span> » </span>
+                <span> >> </span>
             </a>
         </li>
     </ul>
