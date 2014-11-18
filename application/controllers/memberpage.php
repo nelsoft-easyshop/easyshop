@@ -736,13 +736,14 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $authenticateData = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'member_id' => $this->session->userdata('member_id')
-            );
-            
-            if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
+            $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($this->input->post('username'), 
+                                                                                                   $this->input->post('password'));
+
+            $memberId = $this->session->userdata('member_id');
+            if( $authenticationResult['member'] === null || 
+                !empty($authenticationResult['errors']) ||  
+                (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
+            ){
                 $serverResponse = array(
                     'result' => 'invalid',
                     'error' => 'Incorrect password.'
