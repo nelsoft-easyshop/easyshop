@@ -863,6 +863,39 @@ class EsProductRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * Get product reccomended based on category
+     * @param  integer $productId
+     * @param  integer $categoryId
+     * @param  integer $limit
+     * @return object
+     */
+    public function getRecommendedProducts($productId, $categoryId, $limit = null)
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $qbResult = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p')
+                                 ->where('p.cat = :category')
+                                 ->andWhere("p.idProduct != :productId")
+                                 ->andWhere("p.isDraft = :isDraft")
+                                 ->andWhere("p.isDelete = :isDelete")
+                                 ->setParameter('productId',$productId)
+                                 ->setParameter('category',$categoryId)
+                                 ->setParameter('isDraft',0)
+                                 ->setParameter('isDelete',0)
+                                 ->orderBy('p.clickcount', 'DESC')
+                                 ->getQuery();;
+
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $result = $qbResult->getResult(); 
+
+        return $result;
+    }
 }
 
 
