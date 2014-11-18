@@ -297,9 +297,9 @@ class product extends MY_Controller
 
             $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
             $recommendViewArray = [
-                                    'recommended'=> $recommendProducts,
-                                    'productCategorySlug' => $product->getCat()->getSlug(),
-                                  ];
+                                'recommended'=> $recommendProducts,
+                                'productCategorySlug' => $product->getCat()->getSlug(),
+                            ];
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 

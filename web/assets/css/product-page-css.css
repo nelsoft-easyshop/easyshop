@@ -473,6 +473,7 @@ body{
     border-radius: 3px;
     text-align: center;
     border: solid #e2e2e2 1px;
+    min-height: 423px;
 }
 
 .div-rec-product-image{
