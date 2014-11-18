@@ -221,7 +221,7 @@ a{
 
 .div-progress-container-text{
     margin-top: 4px;
-    text-align: left;
+    text-align: right;
 }
 
 .div-progress-bar-container{
@@ -1117,6 +1117,17 @@ a{
     padding: 5px 10px 5px 0px;
 }
 
+.row-mobile-rate{
+    display: none;
+}
+
+.feedback-from-seller-container,
+.feedback-from-buyer-container,
+.feedback-for-seller-container,
+.feedback-for-buyer-container{
+    display: none;
+}
+
 @media only screen and (max-width: 991px){
     .container-dashboard{
         width: 100%;
@@ -1172,12 +1183,17 @@ a{
     }
     
     .star-stat-mobile{
-        font-size: 13px;
+        font-size: 15px;
         color: #d3d3d3;
     }
     
     .col-star-rate-mobile{
-        padding-right: 0px;
         text-align: center;
+        margin-bottom: 10px;
     }
+    
+    .row-mobile-rate{
+        display: inline;
+    }
+    
 }
