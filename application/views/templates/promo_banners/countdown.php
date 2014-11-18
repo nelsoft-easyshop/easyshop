@@ -1,3 +1,5 @@
+<?php if(!$product->getEndPromo()): ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -62,3 +64,4 @@
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
 <script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
 
+<?php endif; ?>
