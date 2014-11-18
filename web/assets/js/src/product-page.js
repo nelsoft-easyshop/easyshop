@@ -133,7 +133,12 @@
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
-                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                    
+                    if($('.prod-add-to-cart-btn').attr('id') === 'send'){
+                        $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                    }
+                    
+                    
                     $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
