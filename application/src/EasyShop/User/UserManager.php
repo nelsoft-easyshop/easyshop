@@ -720,4 +720,59 @@ class UserManager
         return $data;
     }
 
+    /**
+     * Get Profile completeness percentage
+     * @param  object $memberEntity
+     * @return integer
+     */
+    public function getProfileCompletePercent($memberEntity)
+    {
+        // profile picture
+        // banner picture
+
+        // name
+        // gender
+        // birthday
+        // mobile number
+        // email address 
+        // 
+        // consignee name
+        // mobile number
+        // telephone number
+        // address
+        // map location
+        
+        $counter = 0;
+
+        if($memberEntity->getFullname()){
+            $counter++;
+        }
+
+        if($memberEntity->getGender() > 0){
+            $counter++;
+        }
+
+        if($memberEntity->getBirthday() === "0001-01-01"){
+            $counter++;
+        }
+
+        if($memberEntity->getContactno()){
+            $counter++;
+        }
+
+        if((int)$memberEntity->getIsEmailVerify() === 1){
+            $counter++;
+        }
+
+        $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                            ->findOneBy([
+                                                'idMember' => $memberId, 
+                                                'type' => EsAddress::TYPE_DELIVERY
+                                            ]);
+
+        if($addressEntity){
+            
+        }
+    }
+
 }
