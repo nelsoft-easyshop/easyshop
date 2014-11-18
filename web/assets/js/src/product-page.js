@@ -127,14 +127,14 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                    $(".in-stock").html("Out of Stock");
+                    $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
                     $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    $(".in-stock").html("In Stock");
+                    $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
@@ -154,13 +154,14 @@
 
             $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
-            $(".in-stock").html("Out of Stock");
+            $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
         });
     }
 
 
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
+    $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
 
     if($("#noMoreSelection").val() != ""){
         var $arraySelected = [];
@@ -203,7 +204,7 @@
 
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
-                $(".in-stock").html("Select Combination");
+                $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 return false;
             }
         });
@@ -257,9 +258,33 @@
         var $review = $("#review-comment").val();
         var $rate = $("#star-rate").val(); 
         if($review.trim() == "" || $review.length <= 0 || $title.trim() == "" || $title.length <= 0){
+
+            if($title.trim() == "" || $title.length <= 0){
+                $("#error-review-title").show();
+                $("#review-title").addClass("error-field-review");
+            }
+            else{ 
+                $("#error-review-title").hide();
+                $("#review-title").removeClass("error-field-review");
+            }
+
+            if($review.trim() == "" || $review.length <= 0){
+                $("#error-review-nessage").show();
+                $("#review-comment").addClass("error-field-review");
+            }
+            else{
+                $("#error-review-nessage").hide();
+                $("#review-comment").removeClass("error-field-review");
+            }
+
             return false;
         }
         else{
+            $("#error-review-title").hide();
+            $("#review-title").removeClass("error-field-review");
+            $("#error-review-nessage").hide();
+            $("#review-comment").removeClass("error-field-review");
+
             $this.prop('disabled', true);
             submitReviewAndReply(0,$review,$title,$rate,"review");
         }
@@ -279,11 +304,15 @@
         var $review = $("#textareaReview"+$parent).val(); 
 
         if($review.trim() == "" || $review.length <= 0){
+            $(".error-"+$parent).show();
+            $("#textareaReview"+$parent).addClass("error-field-review");
             return false;
         }
         else{
             $this.prop('disabled', true); 
             submitReviewAndReply($parent,$review,"",0,"reply");
+            $(".error-"+$parent).hide();
+            $("#textareaReview"+$parent).removeClass("error-field-review");
         }
     });
 
