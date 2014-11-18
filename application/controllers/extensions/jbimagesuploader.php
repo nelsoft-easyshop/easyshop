@@ -115,81 +115,47 @@ class JbimagesUploader extends MY_Controller
                 $_FILES['userfile'][$fieldname] = $fieldvalue[$i];
             }
             
-            if($useAws){
-                $extension = image_type_to_extension(exif_imagetype($_FILES['userfile']['tmp_name']));
-                $resultImagePath = $conf['img_path'] . '/' . uniqid('description_').$extension;
-
-                $assetsDomain = $this->config->item('assetsBaseUrl', 'assets');
-                $assetsDomain = rtrim($assetsDomain, '/');
-                
-                $imageSize = getimagesize($_FILES['userfile']['tmp_name']);
+            if ($this->upload->do_upload()) {
+                $result = $this->upload->data();
                 
                 if ($conf['allow_resize'] && $conf['max_width'] > 0 && $conf['max_height'] > 0 && 
-                    (($imageSize['0'] > $conf['max_width']) || ($imageSize['1'] > $conf['max_height']))
+                    (($result['image_width'] > $conf['max_width']) || ($result['image_height'] > $conf['max_height']))
                 ){
                     $resizeParams = array(
-                        'source_image'  => $_FILES['userfile']['tmp_name'],
-                        'new_image'     => $_FILES['userfile']['tmp_name'],
+                        'source_image'  => $result['full_path'],
+                        'new_image'     => $result['full_path'],
                         'width'         => $conf['max_width'],
-                        'height'        => $conf['max_height'],
-                        'image_library' => 'gd2',
-                        'maintain_ratio' => true,
+                        'height'        => $conf['max_height']
                     );
-
                     $this->load->library('image_lib');
                     $this->image_lib->initialize($resizeParams);  
-                    if(!$this->image_lib->resize()){
-                        var_dump( $this->image_lib->display_errors());
-                    }
+                    $this->image_lib->resize(); 
                     $this->image_lib->clear();
-                    
-                    var_dump($resizeParams);
-                    var_dump(getimagesize($_FILES['userfile']['tmp_name']));
-                }
-             
-                exit();
-                if($awsUploader->uploadFile($_FILES['userfile']['tmp_name'], $resultImagePath)){
-                    $result['result']       = "file_uploaded";
-                    $result['resultcode']   = 'ok';
-                    $result['file_name']    = $resultImagePath;
-                    $result['base_url'] =  $assetsDomain;
-                }
-                else{
-                    $result['result']       = "S3 upload unsuccessful";
-                    $result['resultcode']   = 'failed';
                 }
                 
-            }
-            else{
-                if ($this->upload->do_upload()) {
-                    $result = $this->upload->data();
-                    if ($conf['allow_resize'] && $conf['max_width'] > 0 && $conf['max_height'] > 0 && 
-                        (($result['image_width'] > $conf['max_width']) || ($result['image_height'] > $conf['max_height']))
-                    ){
-                        $resizeParams = array(
-                            'source_image'  => $result['full_path'],
-                            'new_image'     => $result['full_path'],
-                            'width'         => $conf['max_width'],
-                            'height'        => $conf['max_height']
-                        );
-                        $this->load->library('image_lib');
-                        $this->image_lib->initialize($resizeParams);  
-                        $this->image_lib->resize(); 
-                        $this->image_lib->clear();
+                $result['result']       = "file_uploaded";
+                $result['resultcode']   = 'ok';
+                $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
+                $result['base_url'] =  rtrim(base_url(), '/');
+                
+                if($useAws){
+                    if($awsUploader->uploadFile($result['full_path'],  $result['file_name'])){
+                        $result['base_url'] =   rtrim($this->config->item('assetsBaseUrl', 'assets'), '/');
                     }
-                    
-                    $assetsDomain = base_url();
-                    $assetsDomain = rtrim($assetsDomain, '/');
-                    
-                    $result['result']       = "file_uploaded";
-                    $result['resultcode']   = 'ok';
-                    $result['file_name']    = $conf['img_path'] . '/' . $result['file_name'];
-                    $result['base_url'] =  $assetsDomain;
+                    else{
+                        $result['result']       = "S3 upload unsuccessful";
+                        $result['resultcode']   = 'failed';
+                        unset($result['file_name']); 
+                        unset($result['base_url']);
+                    }
+                    chmod($result['file_name'], 0775);
+                    unlink( $result['file_name'] );
                 }
-                else {
-                    $result['result']       = $this->upload->display_errors(' ', ' ');
-                    $result['resultcode']   = 'failed';
-                }
+         
+            }
+            else {
+                $result['result']       = $this->upload->display_errors(' ', ' ');
+                $result['resultcode']   = 'failed';
             }
 
             if($i === $fileCount - 1 ){
