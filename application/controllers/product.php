@@ -330,9 +330,13 @@ class product extends MY_Controller
                 $headerData['user_details'] = $this->fillUserDetails();
             }
 
-            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
+            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
+            $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
             $headerData['homeContent'] = $this->fillCategoryNavigation();
+      
+            
             $headerData = array_merge($headerData, $this->fill_header());
 
             $socialMediaLinks = $this->getSocialMediaLinks();

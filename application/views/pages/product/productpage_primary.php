@@ -111,6 +111,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-12 col-lg-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
@@ -123,9 +124,9 @@
                                             <?php foreach($shiploc['area'] as $island=>$loc):?>
                                                 <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
                                                 <?php foreach($loc as $region=>$subloc):?>
-                                                    <option data-price="0" data-text="&nbsp;&nbsp;&nbsp;<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
+                                                    <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled><?=$region;?></option>
                                                     <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                        <option data-price="0" data-text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                                                        <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled><?=$cityprov;?></option>
                                                     <?php endforeach;?>
                                                 <?php endforeach;?>
                                             <?php endforeach;?>

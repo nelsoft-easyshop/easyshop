@@ -59,7 +59,7 @@
                     <div class="col-md-5">
                         <div class="form-group form-merge">
                             <p class="label-merge">
-                                If you believe you own this account, type in your email address to send a verification request to the registered email of username to update your account.
+                                If you believe you own this account, type in your email address to send a verification request to the registered email of this username to update your account.
                             </p>
                             <div class="row">
                                 <div class="col-md-7 col-check-1">

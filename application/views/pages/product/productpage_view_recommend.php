@@ -62,7 +62,7 @@
                                 </a>
                             </td>
                             <td class="td-logo-store" align="right">
-                                <a href="#">
+                                <a href="/<?php echo $value->getMember()->getslug() ?>">
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
