@@ -100,7 +100,7 @@ $config = array(
                     'purchase_limit' => 0
                 ),
              ),
-            'viewable_button_product_page' =>true,
+            'viewable_button_product_page' =>false,
         ),
         /* Scratch and win promo */
         '5' =>array(

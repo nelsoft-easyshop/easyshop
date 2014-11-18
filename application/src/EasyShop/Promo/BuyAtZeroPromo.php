@@ -17,7 +17,7 @@ class BuyAtZeroPromo extends AbstractPromo
         }
         $promoData = $this->getPromoData(
             $this->product->getPrice(),
-            $this->dateToday,
+            $this->startDateTime,
             $this->endDateTime,
             $this->product->getDiscount()
         );
