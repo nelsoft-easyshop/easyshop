@@ -330,6 +330,24 @@
         })
     });
 
+    function stickyMenualt() {
+        $(".sticky-header-nav").addClass("product-disable-nav");
+
+        $("html, body").delay(200).animate({
+            scrollTop: $('#scrollpoint').offset().top 
+        }, 200);
+    };
+
+    $(window).on('load', stickyMenualt);
+
+     $(window).scroll(function() {
+        var scroll = $(window).scrollTop();
+
+        if (scroll >= 200) {
+            $(".sticky-header-nav").removeClass("product-disable-nav");
+        } 
+    });
+
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;

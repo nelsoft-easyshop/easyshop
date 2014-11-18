@@ -1,6 +1,15 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
 <link rel="stylesheet" href="/assets/css/owl.carousel.css">
+
+<style type="text/css">
+
+.product-disable-nav {
+    display: none;
+}
+
+</style>
+
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
@@ -19,7 +28,7 @@
     </div>
 </section>
 
-<section class="product-main-top-content">
+<section class="product-main-top-content" id="scrollpoint">
     <div class="container">
         <div class="row">
             <div class="product-name-seller col-md-12">
