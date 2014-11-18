@@ -43,7 +43,7 @@
         if(attr3 == "m icon-control-up toggle-down pull-right"){
             $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
         }
-        $( "#my-account-menu" ).slideToggle( "slow", function() {
+            $( "#my-account-menu" ).slideToggle( "slow", function() {
             var attr = $("i.a").attr("class");
             if(attr == "a icon-control-down toggle-down pull-right"){
                 $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
@@ -56,7 +56,7 @@
                 $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
                 $( ".submenu-my-account" ).css("border-radius", "0px");
                 $( ".f-a" ).css("border-radius", "0px");
-            }
+            } 
         });
     });
 
@@ -381,7 +381,6 @@
     $( "#cancel-deact-status" ).click(function() {
         $( "#btn-edit-status" ).trigger( "click" );
     });
- 
     
     $( "#btn-edit-store-name" ).click(function() {
       $( ".current-store-name" ).slideToggle( "slow" );
@@ -532,6 +531,5 @@
     $(function() {
         $('.category_sort').sortable();
     });
-
 }(jQuery));
 
