@@ -757,7 +757,7 @@ class Memberpage extends MY_Controller
             else{   
                 $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                                    ->findBy(['idMember' => $memberId ]);
-                if($member === null && ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
+                if($member === null || ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
                     $serverResponse = array(
                         'result' => 'invalid',
                         'error' => 'Your session has expired. Please reload the page and try again.'
