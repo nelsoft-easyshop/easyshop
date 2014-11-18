@@ -1833,37 +1833,64 @@ class Memberpage extends MY_Controller
             $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userActiveProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
             $paginationData['lastPage'] = ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+
             $activeProductsData = [
                                 'products' => $userActiveProducts,
                                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                             ];
-            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
+            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
             $isDelete = [EsProduct::IS_DELETE_ON];
             $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
             $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userDeletedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft); 
             $paginationData['lastPage'] = ceil($userDeletedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+
             $deletedProductsData = [
                                 'products' => $userDeletedProducts,
                                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                             ];
-            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
 
+            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
             $isDelete = [EsProduct::IS_DELETE_OFF];
             $isDraft = [EsProduct::IS_DRAFT_ON];
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
             $userDraftedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
             $paginationData['lastPage'] = ceil($userDraftedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+
             $draftedProductsData = [
                                 'products' => $userDraftedProducts,
                                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                             ];
-            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
 
-            $profilePercentage = $userManager->getProfileCompletePercent($member); 
-            $memberRating = $esMemberFeedbackRepo->getAverageRatings($memberId); 
+            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
+            $profilePercentage = $userManager->getProfileCompletePercent($member);  
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
+            $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
+
+            $memberRating = [
+                            'rating1' => $allFeedbacks['rating1Summary'],
+                            'rating2' => $allFeedbacks['rating2Summary'],
+                            'rating3' => $allFeedbacks['rating3Summary'],
+                        ];
+
+            $limit = 4;
+            $asBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
+                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, 
+                                                                   $limit);
+
+            $asSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
+                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, 
+                                                                   $limit);
+
+            $asOtherSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
+                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
+                                                                   $limit);
+
+            $asOtherBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
+                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
+                                                                   $limit);
+
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
                             'bannerImage' => $userBannerImage,
@@ -1879,6 +1906,7 @@ class Memberpage extends MY_Controller
                             'deletedProductView' => $deletedProductView,
                             'draftedProductView' => $draftedProductView,
                             'memberRating' => $memberRating,
+                            'feedBackTotalCount' => $allFeedbacks['totalFeedbackCount'],
                             'profilePercentage' => $profilePercentage,
                         ];
 
