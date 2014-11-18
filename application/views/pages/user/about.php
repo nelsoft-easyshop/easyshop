@@ -104,7 +104,7 @@
                                 <div class="col-xs-12">
                                     <?php $count = 1; ?>
                                     <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                        <div class="col-xs-4" style="margin-bottom: 20px;">
+                                        <div class="col-xs-4 rating-header" style="margin-bottom: 20px;"  id='rating-header<?php echo $count?>'>
                                             <?php echo html_escape($ratingHeader); ?>
                                             <span class="span-rate feedback-ratings">
                                                 <?php for($i = 1; $i <= 5; $i++): ?>
