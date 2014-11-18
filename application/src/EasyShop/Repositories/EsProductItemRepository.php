@@ -43,7 +43,8 @@ class EsProductItemRepository extends EntityRepository
                 ON piattr.product_attr_id = pattr.id_product_attr
             LEFT JOIN es_attr attr
                 ON pattr.attr_id = attr.id_attr 
-            WHERE pitm.product_id = :productId
+            WHERE attr.name IS NOT NULL
+            AND pitm.product_id = :productId
             
             UNION
             
@@ -55,7 +56,8 @@ class EsProductItemRepository extends EntityRepository
                 ON piattr.product_attr_id = oattr.id_optional_attrdetail
             LEFT JOIN es_optional_attrhead oattrh
                 ON oattr.head_id = oattrh.id_optional_attrhead
-            WHERE pitm.product_id = :productId
+            WHERE oattrh.field_name IS NOT NULL
+            AND pitm.product_id = :productId
         ", $rsm);
         $query->setParameter('productId', $productId);
         $result = $query->execute();
