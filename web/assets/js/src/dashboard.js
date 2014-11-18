@@ -531,5 +531,49 @@
     $(function() {
         $('.category_sort').sortable();
     });
+    
+    $('.feedback-from-seller').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $('.feedback-from-seller-container').slideToggle();
+        $('.feedback-from-buyer-container').slideUp();
+        $('.feedback-for-buyer-container').slideUp();
+        $('.feedback-for-seller-container').slideUp();
+        $('.feedback-from-buyer').removeClass("active-bar");
+        $('.feedback-for-seller').removeClass("active-bar");
+        $('.feedback-for-buyer').removeClass("active-bar");
+    });
+    
+    $('.feedback-from-buyer').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $('.feedback-from-buyer-container').slideToggle();
+        $('.feedback-from-seller-container').slideUp();
+        $('.feedback-for-buyer-container').slideUp();
+        $('.feedback-for-seller-container').slideUp();
+        $('.feedback-from-seller').removeClass("active-bar");
+        $('.feedback-for-seller').removeClass("active-bar");
+        $('.feedback-for-buyer').removeClass("active-bar");
+    });
+    
+    $('.feedback-for-seller').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $('.feedback-for-seller-container').slideToggle();
+        $('.feedback-from-seller-container').slideUp();
+        $('.feedback-from-buyer-container').slideUp();
+        $('.feedback-for-buyer-container').slideUp();
+        $('.feedback-from-seller').removeClass("active-bar");
+        $('.feedback-from-buyer').removeClass("active-bar");
+        $('.feedback-for-buyer').removeClass("active-bar");
+    });
+    
+    $('.feedback-for-buyer').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $('.feedback-for-buyer-container').slideToggle();
+        $('.feedback-from-seller-container').slideUp();
+        $('.feedback-from-buyer-container').slideUp();
+        $('.feedback-for-seller-container').slideUp();
+        $('.feedback-from-seller').removeClass("active-bar");
+        $('.feedback-from-buyer').removeClass("active-bar");
+        $('.feedback-for-seller').removeClass("active-bar");
+    });
 }(jQuery));
 

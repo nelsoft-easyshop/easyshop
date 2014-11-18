@@ -4,7 +4,6 @@
         <div class="div-img-cover">
             <img src="<?=$bannerImage;?>" class="img-follower-cover"/>
             <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
-            <div class="cover-overlay"></div>
         </div>
         <div class="clear"></div>
         <div class="div-stats">
@@ -26,12 +25,13 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="div-stats-numbers">
                 <div class="row">
-                    <div class="col-xs-7">
+                    <div class="col-sm-7">
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-sm-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">
                                 Feedback:
@@ -118,6 +118,48 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="row-fluid row-mobile-rate">
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Item Quality</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Communication</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Item Shipment</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Total Reviews</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                        20
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
