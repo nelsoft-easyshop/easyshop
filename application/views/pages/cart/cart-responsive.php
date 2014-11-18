@@ -20,8 +20,8 @@
                            checked="checked" data="<?php echo $row['rowid'] ?>" name="checkbx[]">
                 </td>
                 <td width="7%">
-                    <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
-                       data-image="<?= base_url() ?><?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
+                    <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
+                       data-image="/<?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
                         <span class="cart-item-image-con">
                             <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
                         </span>
@@ -29,7 +29,7 @@
                 </td>
                 <td style="align:left;">
                     <a class="product_title"
-                       href="<?= base_url() . 'item/' . $row['slug']; ?>"> <?php echo html_escape($row['name']); ?></a>
+                       href="<?= '/item/' . $row['slug']; ?>"> <?php echo html_escape($row['name']); ?></a>
                     <br/>
                     <?php
                     if (!array_filter($row['options'])) {
@@ -110,12 +110,12 @@
                         <div class="row">
                             <div class="col-sm-1">
                                 <a class="product_title"
-                                   href="<?= base_url() . 'item/' . $row['slug']; ?>"> <?php echo html_escape($row['name']); ?></a>
+                                   href="<?= '/item/' . $row['slug']; ?>"> <?php echo html_escape($row['name']); ?></a>
 
                                 <table width="100%">
                                     <tr>
                                         <td width="50%">
-                                            <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
+                                            <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
                                                data-image="/<?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>">
                                                 <span class="cart-item-image-con">
                                                     <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
@@ -227,7 +227,7 @@
     <div class="display-when-mobile" style="margin-top: -20px !important;">
         <div class="may_cart_payment">
             <center>
-                <a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url() . 'product/categories_all'; ?>"
+                <a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/' . 'product/categories_all'; ?>"
                    class="continue">Continue Shopping</a>
             </center>
 

@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 
 <div class="clear"></div>
@@ -20,7 +20,7 @@
                             <?php if($item['is_sold_out'] || !$item['can_purchase'] ): ?>
                                 <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con">
                             <?php else: ?>
-                                <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con">
+                                <a href="<?= '/item/'.$item['slug'];?>" class="cd_link_con">
                             <?php endif; ?>
                         
                         
@@ -56,7 +56,7 @@
                                     </div>
 
                                     <span class="cd_prod_img_con">
-                                        <img src="<?= base_url().$item['path'].'categoryview/'.$item['file']; ?>">
+                                        <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
                                     </span>
 
                                     <h3>
@@ -92,7 +92,7 @@
                 <?php if($item['is_sold_out'] || !	$item['can_purchase']): ?>
                     <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con">
                 <?php else: ?>
-                    <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con">
+                    <a href="<?= '/item/'.$item['slug'];?>" class="cd_link_con">
                 <?php endif; ?>
                 
                             
@@ -126,7 +126,7 @@
                     </div>
 
                     <span class="cd_prod_img_con">
-                        <img src="<?= base_url().$item['path'].'categoryview/'.$item['file']; ?>">
+                        <img src="/<?= $item['path'].'categoryview/'.$item['file']; ?>">
                     </span>
 
                     <h3>
@@ -155,13 +155,13 @@
 
 </div>
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script>
     
     
     $(document).ready(function(){
-        var base_url = config.base_url;
+        var base_url = '/';
         var offset = 1;
         var request_ajax = true;
         var ajax_is_on = false;
@@ -181,7 +181,7 @@
                             data:{page_number:offset,csrfname : csrftoken},
                             type: 'post',
                             dataType: 'JSON',
-                            onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                            onLoading:jQuery(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
                             success: function(d) {
                                 if(d == "0"){
                                     ajax_is_on = true;

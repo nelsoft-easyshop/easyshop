@@ -71,6 +71,7 @@ function ReplaceNumberWithCommas(thisnumber){
     $('.tab_categories').on('click', function(){
         var divId = $(this).attr('data-link');
         var pagingDiv = $(divId).find('.product-paging');
+        var productCount = parseInt($(divId).attr('data-productcount'));
 
         $('.category-products').removeClass('active').hide();
         $(divId).addClass('active').show();
@@ -78,7 +79,7 @@ function ReplaceNumberWithCommas(thisnumber){
         $('.tab_categories').find('.selected-marker').hide();
         $(this).find('.selected-marker').show();
 
-        if(pagingDiv.length === 0){
+        if(pagingDiv.length === 0 && productCount !== 0){
             ItemListAjax($(divId), 1);
         }
         $('html,body').scrollTo(450); 
@@ -173,7 +174,7 @@ function ItemListAjax(CatDiv,page)
 
     memconf.ajaxStat = jQuery.ajax({
         type: "GET",
-        url: config.base_url+'memberpage/'+'vendorLoadProducts',
+        url: '/memberpage/'+'vendorLoadProducts',
         data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
             "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
             "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken,

@@ -11,12 +11,12 @@
     <div class="clear"></div>
     <section>
         <div class="wrapper profile_content">
-            <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="/"><span class="span_bg"></span></a> </div>
             <div class="profile_top_nav">               
             
                 <div>
                     <ul>
-                        <li><a href="<?=base_url()?>home">Home</a></li>
+                        <li><a href="/">Home</a></li>
                         <li>
                             <span>Setup</span>
                             <ul>
@@ -30,11 +30,11 @@
                                 <li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Settings</a></li>
                             </ul>
                         </li>
-                        <li><a href="<?=base_url()?>home/under_construction">News</a></li>
+                        <li><a href="/home/under_construction">News</a></li>
                     </ul>
                 </div>
                 <div class="member_srch_wrapper">
-                    <form method="get" action="<?=base_url()?>search/search.html">
+                    <form method="get" action="/search/search.html">
                     <input type="text" name="q_str" id="member_sch" autocomplete='off'  onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
                     
                     <input type="submit" class="span_bg" value="">
@@ -52,7 +52,7 @@
             
             <span><strong>Link to your store:</strong></span>
             <div class="disp_vendor_url">
-                <a href="<?php echo base_url() . $userslug?>" target="_blank">
+                <a href="/<?php echo $userslug?>" target="_blank">
                     <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                 </a>
                 <?php if( $render_userslug_edit ):?>
@@ -138,10 +138,10 @@
                         You have not received ratings yet.
                     <?php else:?>
                     <?php for($i = 0; $i < $allfeedbacks['rating1']; $i++):?>
-                    <img src="<?=base_url()?>assets/images/star-on.png">
+                    <img src="/assets/images/star-on.png">
                 <?php endfor;?>
                 <?php for($i = 0; $i < 5-$allfeedbacks['rating1']; $i++):?>
-                <img src="<?=base_url()?>assets/images/star-off.png">
+                <img src="/assets/images/star-off.png">
             <?php endfor;?>
         <?php endif;?>
     </span>
@@ -151,10 +151,10 @@
         You have not received ratings yet.
     <?php else:?>
     <?php for($i = 0; $i < $allfeedbacks['rating2']; $i++):?>
-    <img src="<?=base_url()?>assets/images/star-on.png">
+    <img src="/assets/images/star-on.png">
 <?php endfor;?>
 <?php for($i = 0; $i < 5-$allfeedbacks['rating2']; $i++):?>
-    <img src="<?=base_url()?>assets/images/star-off.png">
+    <img src="/assets/images/star-off.png">
 <?php endfor;?>
 <?php endif;?>
 </span>
@@ -165,10 +165,10 @@
         You have not received ratings yet.
     <?php else:?>
     <?php for($i = 0; $i < $allfeedbacks['rating3']; $i++):?>
-    <img src="<?=base_url()?>assets/images/star-on.png">
+    <img src="/assets/images/star-on.png">
 <?php endfor;?>
 <?php for($i = 0; $i < 5-$allfeedbacks['rating3']; $i++):?>
-    <img src="<?=base_url()?>assets/images/star-off.png">
+    <img src="/assets/images/star-off.png">
 <?php endfor;?>
 <?php endif;?>
 </span>
@@ -211,7 +211,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     
@@ -220,7 +220,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -232,7 +232,7 @@
                 <div class="post_item_img_table">
                                                                               
                 <span class="post_item_img_con">
-                    <img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+                    <img src="/<?php echo $active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
                 </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($active_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -250,7 +250,7 @@
     </div>
     <div class="post_item_content_right">
         <div class="product_title_container">
-            <p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
+            <p class="post_item_product_title fm1"><a href="/item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
             
             <div class="post_item_button">
                 <?php echo form_open('sell/edit/step2'); ?> 
@@ -369,7 +369,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     <?php if($deleted_count == 0):?>
@@ -377,7 +377,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top:50px;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -389,7 +389,7 @@
                 <div class="post_item_img_table">
 
                     <span class="post_item_img_con">
-                        <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+                        <img src="/<?php echo $deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                     </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -521,7 +521,7 @@
             <option value="5"># of Sold Items</option>
         </select>
         <span class="span_bg arrow_sort item_arrow_sort"></span>
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
     </div>
     
     
@@ -530,7 +530,7 @@
     <?php else:?>
     
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $pageNum = 0;?>
@@ -542,7 +542,7 @@
                 <div class="post_item_img_table">
 
                 <span class="post_item_img_con">
-                    <img src="<?php echo base_url().$draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
+                    <img src="/<?php echo $draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
                 </span>
                 </div>
                 <p><small>Last modified : <?php echo date_format(date_create($draft_product['lastmodifieddate']),'Y-m-d')?></small></p>
@@ -681,7 +681,7 @@
             <div>
                 <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
                 <?php foreach($tempafb as $key=>$afb):?>
-                <p>From: <a href="<?php echo base_url();?><?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+                <p>From: <a href="/<?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
                 <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
                 <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                     <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -739,7 +739,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>From: <a href="<?php echo base_url();?><?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>From: <a href="/<?php echo $afb['member_slug'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -793,7 +793,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>For: <a href="<?php echo base_url();?><?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>For: <a href="/<?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -847,7 +847,7 @@
         <div>
             <!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
             <?php foreach($tempafb as $afb):?>
-            <p>For: <a href="<?php echo base_url();?><?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
+            <p>For: <a href="/<?php echo $afb['for_memberslug'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
             <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
             <p><?php echo $this->lang->line('rating')[0].':'; ?> 
                 <?php for($i = 0; $i < $afb['rating1']; $i++):?>
@@ -1029,15 +1029,7 @@
                     <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
                     <input type="hidden" name="mobile_orig" value="<?php echo $contactno;?>">
                     <input type="hidden" name="is_contactno_verify" value="<?php echo $is_contactno_verify;?>">
-                    <!--
-                    <span class="verify toverify" style="<?php echo $is_contactno_verify == 0 && trim($contactno) !== ''?'':'display:none;'?>">
-                        <span class="verify_now">Verify</span>
-                        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
-                    </span>
-                    <span class="verify doneverify" style="<?php echo $is_contactno_verify == 0?'display:none;':''?>">
-                        <span class="span_bg chk_img"></span><span><strong>Verified</strong></span>
-                    </span>
-                    -->
+
                     
                     <span class="personal_contact_cont" style="<?php echo trim($contactno)!==''?'':'display:none;' ?>">
                         <span class="edit_personal_contact">
@@ -1070,7 +1062,7 @@
                     
                     <span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
                         <span class="verify_now">Verify Now</span>
-                        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+                        <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
                     </span>	
                     <span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
                         <span class="span_bg chk_img"></span><span style='font-size:14px; font-weight:bold; color:#1f4f98;'><strong>Verified</strong></span>
@@ -1459,7 +1451,7 @@
         <div class="clear"></div>
         <div class="bottom_save" style="text-align:left">
             <input type="button" name="billing_info_btn" id="billing_info_btn" class="orange_btn3" value="Save">
-            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+            <img src="/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
         </div>
         <?php echo form_close();?>			
     </div>
@@ -1535,7 +1527,7 @@
                                             
                                             <br/><br/>
                                             <?php foreach($billing_info['products'] as $x): ?>
-                                                <div style='width:auto;'><a href='<?=base_url()?>item/<?=$x['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($x['p_name']);?> - <?php echo date('m/d/Y', strtotime($x['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($x['p_briefdesc']), 60);?></a></div>
+                                                <div style='width:auto;'><a href='/item/<?=$x['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($x['p_name']);?> - <?php echo date('m/d/Y', strtotime($x['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($x['p_briefdesc']), 60);?></a></div>
                                             <?php endforeach; ?>
                                         </div>
                                    <?php endif; ?>
@@ -1627,7 +1619,7 @@
             <div id="c_defaddress_div" style="<?php echo $show_default_address ? '':'display:none;' ?>" >
                 <label></label>
                 <input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
-                <a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
+                <a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><span>Setting as default updates address in Personal Information</span></a>
             </div>
             
             
@@ -1670,7 +1662,7 @@
     <div class="clear"></div>
     <div class="bottom_save" style='text-align:left;'>
         <input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn" style="position: relative; left:40%;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
+        <img src="/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
     </div>	
     <?php echo form_close();?>
 
@@ -1752,7 +1744,7 @@
 
         
     <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+        <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
     </div>
     
     <?php $transac_counter = 0;$pageNum = 0;?>
@@ -1843,13 +1835,13 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+                                    <img src="/<?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
                                 <div class="title_top_transac_table">
                                     <span class="title_top_transac_col1">								
-                                        <a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+                                        <a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
                                     </span>
                                     <span class="title_top_transac_col2">
                                         Quantity: <span><?php echo $product['order_quantity']?></span>
@@ -1861,7 +1853,7 @@
                                 <div class="transac_bought_con tx_cont">
                                     <span class="transac_bought_con_col1">Bought from: </span>
                                     <span class="transac_bought_con_col2">
-                                        <a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>">
+                                        <a href="/<?php echo $product['seller_slug'];?>">
                                             <?php echo html_escape($product['seller']);?>
                                         </a>
                                     </span>
@@ -2058,7 +2050,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0; $pageNum = 0;?>
@@ -2077,7 +2069,7 @@
                             <span class="transac_title_date"><?php echo $transact['dateadded']?></span>
                         </div>
                         <div class="transac_title_col3">
-                            <strong>Sold to: </strong> <a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer']);?></a> <br />
+                            <strong>Sold to: </strong> <a href="/<?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer']);?></a> <br />
                             <span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
                             <div style="display:none;" class="transac_address_cont">
                                 <?php foreach($transact['users'] as $uk=>$user):?>
@@ -2137,13 +2129,13 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+                                    <img src="/<?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
                                 <div class="title_top_transac_table">
                                     <span class="title_top_transac_col1">
-                                        <a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+                                        <a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
                                     </span>
                                     <span class="title_top_transac_col2">
                                         Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -2355,7 +2347,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0; $pageNum = 0;?>
@@ -2383,13 +2375,13 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+                                    <img src="/<?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
                                 <div class="title_top_transac_table">
                                     <span class="title_top_transac_col1">
-                                        <a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+                                        <a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
                                     </span>
                                     <span class="title_top_transac_col2">
                                         Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -2400,7 +2392,7 @@
                                 </div>
                                 <div class="transac_bought_con">
                                     <span class="transac_bought_con_col1">Bought from: </span>
-                                    <span class="transac_bought_con_col2"><a href="<?php echo base_url();?><?php echo $product['seller_slug'];?>"><?php echo html_escape($product['seller']);?></a></span>
+                                    <span class="transac_bought_con_col2"><a href="/<?php echo $product['seller_slug'];?>"><?php echo html_escape($product['seller']);?></a></span>
                                     <span class="transac_bought_con_col3">
                                         Status:
                                         <?php if($product['status'] == 1):?>
@@ -2510,7 +2502,7 @@
         </div>
         
         <div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+            <img src="/assets/images/orange_loader_small.gif" class="loading_img"/>
         </div>
         
         <?php $transac_counter = 0;$pageNum=0;?>
@@ -2529,7 +2521,7 @@
                         </div>
                         <div class="transac_title_col3">
                             <strong>Sold to: </strong>
-                            <a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo $transact['buyer']?></a> <br />
+                            <a href="/<?php echo $transact['buyer_slug']?>"><?php echo $transact['buyer']?></a> <br />
                             <span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
                             <div style="display:none;" class="transac_address_cont">
                                 <?php foreach($transact['users'] as $uk=>$user):?>
@@ -2579,13 +2571,13 @@
                         <div class="transac_prod_first">
                             <div class="img_transac_prod_con">
                                 <span class="img_transac_prod">
-                                    <img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+                                    <img src="/<?php echo $product['product_image_path'];?>">
                                 </span>
                             </div>
                             <div class="info_transac_prod_con">
                                 <div class="title_top_transac_table">
                                     <span class="title_top_transac_col1">
-                                        <a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+                                        <a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
                                     </span>
                                     <span class="title_top_transac_col2">
                                         Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -2691,7 +2683,7 @@
                 <div>
                 
                     <div class="disp_vendor_url settings_vendordiv_css">
-                        <a href="<?php echo base_url() . $userslug?>" target="_blank">
+                        <a href="/<?php echo $userslug?>" target="_blank">
                             <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                         </a>
                         <?php if( $render_userslug_edit ):?>
@@ -2723,7 +2715,7 @@
 
                         <p>Login password</p>
                         <div>
-                            <p>****************** <a href="<?=base_url()?>chngepaswd" class="change_password">change password</a></p>
+                            <p>****************** <a href="/chngepaswd" class="change_password">change password</a></p>
                             <p>
                                 Having a strong password makes your account more secure. We recommend that you change your password regularly. For the best security, use a combination of numbers, letters and special characters.
                             </p>
@@ -2752,7 +2744,7 @@
         <script type="text/javascript">
                                        
                     var jsonCity = <?php echo $json_city;?>;
-                    
+
                     $(document).ready(function() { 
                         var srchdropcontent= $('#search_content');
                         $('#member_sch').focus(function() {

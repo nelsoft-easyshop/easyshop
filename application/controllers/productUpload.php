@@ -13,7 +13,7 @@ class productUpload extends MY_Controller
         $this->load->model("product_model");
         $this->load->helper('htmlpurifier');
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            redirect(base_url().'login', 'refresh');
+            redirect('/login', 'refresh');
         }
 
         $this->max_file_size_mb = 5;
@@ -22,6 +22,8 @@ class productUpload extends MY_Controller
         $this->img_dimension['small'] = array(400,535);
         $this->img_dimension['categoryview'] = array(220,200);
         $this->img_dimension['thumbnail'] = array(60,80);
+
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
     function fill_view()
@@ -1246,7 +1248,8 @@ class productUpload extends MY_Controller
         $this->load->model('memberpage_model');
         $memberID =  $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        
+        $shipWithinDays = trim($this->input->post('ship_within'));
+
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
@@ -1351,7 +1354,8 @@ class productUpload extends MY_Controller
             }
             // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
             if($myProceedVar){
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup);
+                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
+                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
                 $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
                 $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
             }
@@ -1359,57 +1363,72 @@ class productUpload extends MY_Controller
         
         echo json_encode($serverResponse);
     }
-    
+
     /**
-     * Render view for last upload tsep
-     *
+     * Product preview after uploading
+     * @return view
      */
-    public function finishProductUpload()
+    public function finishProductPreview()
     {
-        $this->load->model("memberpage_model");
-        
-        if( $this->input->post('prod_h_id') ){
-            $productID = $this->input->post('prod_h_id');
-            $memberID = $this->session->userdata('member_id');
-            $um = $this->serviceContainer['user_manager'];
-            
-            $product_row = $this->product_model->getProductById($productID, true);
-            if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberID))){
-                redirect('sell/step1', 'refresh');
+        $productRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $productImageRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
+
+        $stringUtility = $this->serviceContainer['string_utility'];
+        $userManager = $this->serviceContainer['user_manager'];
+        $productManager = $this->serviceContainer['product_manager'];
+        $collectionHelper = $this->serviceContainer['collection_helper'];
+        $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
+
+        $productId = $this->input->post('prod_h_id');
+        $productEntity = $productRepository->find($productId);
+
+        if($productEntity){
+            $headerData = $this->fill_view();
+            $product = $productManager->getProductDetails($productEntity);
+            $productImages = $productImageRepository->getProductImages($productId);
+            $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
+            $billingInfo = $productRepository->getProductBillingInfo($product->getMember()->getIdMember(), $productId);
+            $isFreeShippingNationwide = $productManager->isFreeShippingNationwide($productId);
+            $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->getProductAttributeDetailByName($productId);
+            $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+
+            $paymentMethod = $this->config->item('Promo')[0]['payment_method']; 
+
+            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){ 
+                $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
             }
-            $quantities = $this->product_model->getProductQuantity($productID);
-            $availability = "varies";
-         
-            foreach($quantities as $qty){
-                if(count($qty['product_attribute_ids'])===1){
-                    if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
-                        $availability = $qty['quantity'];
-                    }
-                }   
-            }
-            $product_options = $this->product_model->getProductAttributes($productID, 'NAME');
-            $product_options = $this->product_model->implodeAttributesByName($product_options);
-            
-            $data = array(
-                'product_id' => $productID,
-                'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-                'product' => $product_row,
-                'product_images' => $this->product_model->getProductImages($productID),
-                'product_options' => $product_options,
-                'availability' => $availability,
-                'shipping_summary' => $this->product_model->getShippingSummary($productID),
-                'attr' => $this->product_model->getPrdShippingAttr($productID),
-                'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID),
-                'avatarImage' => $um->getUserImage($memberID, "small")
-            );
-            $data = array_merge($data, $this->fill_view());
-            
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/product/product_upload_step4_view',$data);
+
+
+            $productPreviewData = [
+                        'product' => $product,
+                        'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
+                        'productImages' => $productImages,
+                        'avatarImage' => $avatarImage,
+                        'isFreeShippingNationwide' => $isFreeShippingNationwide,
+                        'productAttributes' => $productAttributes,
+                        'paymentMethod' => $paymentMethod,
+                    ];
+
+            $shippingDetails = $productShippingManager->getProductShippingSummary($productId);
+            $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
+
+            $mainViewData = [
+                        'product' => $product,
+                        'productBillingInfo' => $billingInfo,
+                        'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                        'shipping_summary' => $shippingDetails,
+                        'attr' => $shippingAttribute,
+                    ];
+
+            $this->load->view('templates/header', $headerData);
+            $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
         }
+        else{
+            redirect('sell/step1', 'refresh');
+        }
     }
-    
 }
 
 

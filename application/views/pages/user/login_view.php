@@ -113,7 +113,7 @@
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
                                         <a href="<?=$facebook_login_url?>">
-                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
+                                            <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
                                             <span class="text-center">Log In with Facebook</span>
                                         </a>
                                     </div>
@@ -125,7 +125,7 @@
                                 <div class="log-in-btn log-in-google">
                                     <div>
                                         <a href="<?=$google_login_url?>">
-                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
+                                            <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
                                             <span class="text-center">Log In with Google</span>
                                         </a>
                                     </div>

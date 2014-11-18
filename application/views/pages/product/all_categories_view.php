@@ -20,7 +20,7 @@
                     ?>
             
                         <?php $category_cnt = count($category['subcategories']); ?>
-                        <li><h3><a href="<?=base_url()?>category/<?php echo $category['slug']?>"><?php echo $category['name'];?></a></h3>
+                        <li><h3><a href="/category/<?php echo $category['slug']?>"><?php echo $category['name'];?></a></h3>
                             <?php
                                     $category_cnt = count($category['subcategories']);
                                     $category_quo = (int)($category_cnt/3);
@@ -34,7 +34,7 @@
                                             }
                                         $x++;
                             ?>
-                            <li><a href="<?=base_url()?>category/<?php echo $subcategory['slug']?>"><?php echo $subcategory['name'] /*.'('.$subcategory['product_count'].')' */ ;?></a></li>
+                            <li><a href="/category/<?php echo $subcategory['slug']?>"><?php echo $subcategory['name'] /*.'('.$subcategory['product_count'].')' */ ;?></a></li>
                                     <?php endforeach; ?>
                                     </ul>
                             </li>

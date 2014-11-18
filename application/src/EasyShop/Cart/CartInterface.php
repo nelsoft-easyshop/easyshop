@@ -22,4 +22,6 @@ interface CartInterface
     
     public function getSingleItem($cartId);
 
+    public function destroy();
+
 }

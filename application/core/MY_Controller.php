@@ -36,6 +36,16 @@ class MY_Controller extends CI_Controller
         /*  Load custom common functions */
         $this->load->helper('common_helper');
     }
+
+    /**
+     *  Return social media links
+     *  @return ARRAY
+     */
+    public function getSocialMediaLinks()
+    {
+        $this->config->load('social_media_links', TRUE);
+        return $this->config->config['social_media_links'];        
+    }
     
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
@@ -80,7 +90,7 @@ class MY_Controller extends CI_Controller
             );
         return $data;
     }
-    
+
     
     /**
      * Generates the category navigation
@@ -103,9 +113,7 @@ class MY_Controller extends CI_Controller
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
                                             ->find($memberId);
-            $userDetails->profileImage = ($userDetails->getImgurl() == "") 
-                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
             return $userDetails;
     }
     

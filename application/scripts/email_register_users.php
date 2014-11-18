@@ -21,11 +21,7 @@
      */
     $configQuery = array(
             'this_date' => date("Y-m-d H:i:s"),
-			'past_date' => date("Y-m-d H:i:s",strtotime("-7 days"))
-			
-            //'past_date' => date("Y-m-d H:i:s",strtotime("-1 days")),
-            //'this_date' => date("Y-m-d H:i:s", mktime(0,0,0,9,9,2015)),
-            //'past_date' => date("Y-m-d H:i:s", mktime(0,0,0,0,0,0)),
+            'past_date' => date("Y-m-d H:i:s",strtotime("-7 days"))
     );
 
     /**

@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
     <h2 class="checkout_title">Payment</h2>
@@ -186,11 +186,11 @@
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
                                             <br/> <br/>
-                                            <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                            <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                             <br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                <img src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+                                                <img src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
                                                 <span></span>
                                                 </a>
                                             </div>
@@ -221,7 +221,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="border-top: 0px;">
-                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                         </td>
                                                     </tr> 
                                                 <?php endforeach; ?>
@@ -243,7 +243,7 @@
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
                                             <br /> <br />
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                             <br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="1"  class="paypal">
@@ -278,7 +278,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="border-top: 0px;">
-                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href=/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                         </td>
                                                     </tr> 
                                                 <?php endforeach; ?>
@@ -294,12 +294,12 @@
                                 <div id="dragonpay" class="payment_inner_content">
                                     <?php if($dragonpaysuccess): ?>
                                         
-                                           <img src="<?php echo base_url()?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
+                                           <img src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
                                            <br><br><br>
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked id="chk_dp" name='chk_dp'>
                                                 <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's </label>
-                                                <a href="<?=base_url()?>policy" target='_blank'>
+                                                <a href="/policy" target='_blank'>
                                                     <span style='border-bottom:1px dotted'> Privacy Policy </span>
                                                 </a>.
                                             </p>
@@ -335,7 +335,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="4" style="border-top: 0px;">
-                                                        <?php echo ($value['dragonpay'] ? "<span style='color:green'>Available for Dragonpay</span>" : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                        <?php echo ($value['dragonpay'] ? "<span style='color:green'>Available for Dragonpay</span>" : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                     </td>
                                                 </tr> 
                                             <?php endforeach; ?>
@@ -354,7 +354,7 @@
                                         $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
                                         echo form_open('pay/directbank/', $attr);
                                         ?>
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
+                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
                                             <br/>
                                             <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
@@ -387,7 +387,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="4" style="border-top: 0px;">
-                                                    <?php echo ($value['directbank'] ? "<span style='color:green'>Available for Direct Bank Deposit</span>" : "<span style='color:red; font-weight:bold;'>Not available for Direct Bank Deposit</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                    <?php echo ($value['directbank'] ? "<span style='color:green'>Available for Direct Bank Deposit</span>" : "<span style='color:red; font-weight:bold;'>Not available for Direct Bank Deposit</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                 </td>
                                             </tr>
                                              
@@ -406,7 +406,7 @@
                                         $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
                                         echo form_open('pay/cashondelivery/', $attr);
                                         ?>
-                                        <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                        <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                        
                                         <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
                                         <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
@@ -439,14 +439,14 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="4" style="border-top: 0px;">
-                                                    <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                    <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                 </td>
                                             </tr>
                                             <?php if(!$value['availability']): ?>
                                             <tr>
                                                 <td style="color:red">
                                                   
-                                                      Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
+                                                      Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
                                                 </td>
                                             </tr>
                                              <?php endif; ?> 
@@ -459,7 +459,7 @@
     <!-- #### PESOPAY #### -->
                             <?php if($key == 'pesopaycdb'): ?>
                                 <div id="pesopaycdb" class="payment_inner_content">                          
-                                    <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
+                                    <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
                                     <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
                                 
                                     <?php if($pesopaysucess): ?>
@@ -469,7 +469,7 @@
                                         $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
                                         echo form_open('pay/directbank/', $attr);
                                         ?>
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
+                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
                                             <br/>
                                             <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
@@ -504,7 +504,7 @@
                                                 <td colspan="4" style="border-top: 0px;">
                                                     <?php echo ($value['pesopaycdb']) 
                                                             ? "<span style='color:green'>Available for Credit Card</span>" 
-                                                            : "<span style='color:red; font-weight:bold;'>Not available for Credit Card</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                            : "<span style='color:red; font-weight:bold;'>Not available for Credit Card</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                 </td>
                                             </tr>
                                              
@@ -562,10 +562,10 @@
                                                 <?php else: ?> 
                                                     <?php if($paypalsuccess): ?>
                                                         <br/> 
-                                                        <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's<a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                                        <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                            <img class="img-responsive" src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
+                                                            <img class="img-responsive" src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
                                                             <span></span>
                                                             </a>
                                                         </div>
@@ -598,7 +598,7 @@
                                                                     <td colspan="4" style="border-top: 0px;">
                                                                         <?php echo ($value['paypal']) 
                                                                                         ? "<span style='color:green'>Available for Cash on Delivery</span>" 
-                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                                     </td>
                                                                 </tr> 
                                                             <?php endforeach; ?>
@@ -620,7 +620,7 @@
                                                 <?php else: ?>
                                                     <?php if($paypalsuccess): ?>
                                                         <br />
-                                                        <p class="chck_privacy" style="font-size:12px;"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's<a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                                        <p class="chck_privacy" style="font-size:12px;"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                                         
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="1"  class="paypal">
@@ -657,7 +657,7 @@
                                                                     <td colspan="4" style="border-top: 0px;">
                                                                         <?php echo ($value['paypal']) 
                                                                                         ? "<span style='color:green'>Available for Cash on Delivery</span>" 
-                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                                     </td>
                                                                 </tr> 
                                                             <?php endforeach; ?>
@@ -672,9 +672,9 @@
                                         <?php if($key == 'dragonpay'): ?>
                                             <div id="dragonpay">
                                                 <?php if($dragonpaysuccess): ?>
-                                                    <img class="img-responsive" src="<?php echo base_url()?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
+                                                    <img class="img-responsive" src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
                                                     <br><br><br>
-                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_dp" name='chk_dp'> I acknowledge I have read and understood Easyshop.ph's <a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p>
+                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_dp" name='chk_dp'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p>
                                                   
                                                     <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                                                     <br>
@@ -708,7 +708,7 @@
                                                                 <td colspan="4" style="border-top: 0px;">
                                                                     <?php echo ($value['dragonpay']) 
                                                                                     ? "<span style='color:green'>Available for Dragonpay payment.</span>" 
-                                                                                    : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay payment.</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                                    : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay payment.</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                                 </td>
                                                             </tr> 
                                                         <?php endforeach; ?>
@@ -726,7 +726,7 @@
                                                     $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
                                                     echo form_open('pay/cashondelivery/', $attr);
                                                     ?>
-                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked  id="chk_cod" name='chk_cod'> I acknowledge I have read and understood Easyshop.ph's <a href="<?=base_url()?>policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked  id="chk_cod" name='chk_cod'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                                    
                                                     <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
                                                     <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
@@ -759,13 +759,13 @@
                                                         </tr>
                                                         <tr>
                                                             <td colspan="4" style="border-top: 0px;">
-                                                                <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                                <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                             </td>
                                                         </tr>
                                                         <?php if(!$value['availability']): ?>
                                                         <tr>
                                                             <td style="color:red">
-                                                                  Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
+                                                                  Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
                                                             </td>
                                                         </tr>
                                                          <?php endif; ?> 
@@ -918,7 +918,7 @@
     }
 </script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 

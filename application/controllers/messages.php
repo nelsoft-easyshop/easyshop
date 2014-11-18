@@ -53,10 +53,15 @@ class messages extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
             $this->load->view('pages/messages/inbox_view');
-            $this->load->view('templates/footer_full');
+
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $viewData['facebook'] = $socialMediaLinks["facebook"];
+            $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/footer_full', $viewData);
         }
         else {
-            redirect(base_url() . 'home', 'refresh');
+            redirect('/', 'refresh');
         }
     }
 
@@ -70,9 +75,14 @@ class messages extends MY_Controller
      */
     public function send_msg()
     {
+        $this->load->library('parser');
+        
         $sessionData = $this->session->all_userdata();
         $username = trim($this->input->post("recipient"));
         $qResult = $this->user_model->getUserByUsername($username);
+
+        $em = $this->serviceContainer['entity_manager'];
+        $emailService = $this->serviceContainer['email_notification'];
 
         if($qResult === false){
             $result['success'] = 0;
@@ -97,10 +107,41 @@ class messages extends MY_Controller
                 
                 $userPusher = $this->serviceContainer['user_pusher'];
                 $userPusher->push($qResult['id_member'], $dc);
+
+                # Queue email notification
+                $memberEntity = $em->find("EasyShop\Entities\EsMember", $sessionData['member_id']);
+                $emailRecipient = $qResult['email'];
+                $emailSubject = $this->lang->line('new_message_notif');
+                $imageArray = array(
+                    "/assets/images/landingpage/templates/header-img.png"
+                    , "/assets/images/appbar.home.png"
+                    , "/assets/images/appbar.message.png"
+                    , "/assets/images/landingpage/templates/facebook.png"
+                    , "/assets/images/landingpage/templates/twitter.png"
+                );
+
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $parseData = array(
+                    'user' => $memberEntity->getUsername()
+                    , 'recipient' => $qResult['username']
+                    , 'home_link' => base_url()
+                    , 'store_link' => base_url() . $memberEntity->getSlug()
+                    , 'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername()
+                    , 'msg' => $msg
+                    , 'facebook' => $socialMediaLinks["facebook"]
+                    , 'twitter' => $socialMediaLinks["twitter"]
+                );
+               
+                $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, TRUE);
+
+                $emailService->setRecipient($emailRecipient)
+                             ->setSubject($emailSubject)
+                             ->setMessage($emailMsg, $imageArray)
+                             ->queueMail();
             }
         }
 
-    echo json_encode($result);
+        echo json_encode($result);
     }
 
     /**

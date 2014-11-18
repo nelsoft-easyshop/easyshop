@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 
 class mobilePayment extends MY_Controller 
 {
@@ -77,7 +78,6 @@ class mobilePayment extends MY_Controller
         // Load controller
         $this->paymentController = $this->loadController('payment');
 
-        // update cart
         $mobileCartContents = json_decode($this->input->post('cartData'));
         $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
         $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
@@ -101,11 +101,16 @@ class mobilePayment extends MY_Controller
             $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
         }
 
+        $finalPaymentType = [];
+        foreach ($paymentType as $key => $value) {
+            $finalPaymentType[] = $value;
+        }
+
         $outputData = array(
             'cartData' => $formattedCartContents,
             'canContinue' => $canContinue,
             'errorMessage' => $errorMessage,
-            'paymentType' => $paymentType,
+            'paymentType' => $finalPaymentType,
         );
 
         print(json_encode($outputData,JSON_PRETTY_PRINT));
@@ -119,9 +124,14 @@ class mobilePayment extends MY_Controller
     {   
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
+
+        $this->paymentController = $this->loadController('payment');
+        $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+        $cartData = $dataCollection['cartData']; 
+        $check = $this->checkAvailableInPayment($cartData,$paymentType);
+
         if(!empty($cartData)){
-            unset($cartData['total_items'],$cartData['cart_total']);
-            $this->paymentController = $this->loadController('payment');
+            unset($cartData['total_items'],$cartData['cart_total']); 
             $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
             $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
             $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
@@ -147,7 +157,7 @@ class mobilePayment extends MY_Controller
         $returnUrl = "";
         $cancelUrl = "";
         $isSuccess = false;
-        $cartData = unserialize($this->member->getUserdata()); 
+        $cartData = unserialize($this->member->getUserdata());
         if(!empty($cartData) && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
@@ -157,8 +167,12 @@ class mobilePayment extends MY_Controller
             elseif($this->input->post('paymentType') == "dragonpay"){
                 $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
             }
-
+ 
             $this->paymentController = $this->loadController('payment');
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $cartData = $dataCollection['cartData']; 
+            $check = $this->checkAvailableInPayment($cartData,$paymentType);
+
             $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
             $urlReturn = ""; 
 
@@ -237,6 +251,11 @@ class mobilePayment extends MY_Controller
         if(!empty($cartData)){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
+
+            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $cartData = $dataCollection['cartData']; 
+            $check = $this->checkAvailableInPayment($cartData,$paymentType);
+
             $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
             $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
@@ -271,6 +290,75 @@ class mobilePayment extends MY_Controller
                         ),
                     );
 
+        $paymentProductDetails = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                ->findBy(['order' => $paymentDetails->getIdOrder()]);
+
+        foreach ($paymentProductDetails as $key => $value) {
+
+            $productDetails = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                                ->findOneBy(['idProductItem' => $value->getProductItemId()]);
+
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getDefaultImage($productDetails->getProduct()->getIdProduct());
+
+            $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($productImage != NULL){
+                $imageDirectory = $productImage->getDirectory();
+                $imageFileName = $productImage->getFilename();
+            }
+
+            $displayArray['products'][] = array(
+                                        'quantity' => $value->getOrderQuantity(),
+                                        'price' => $value->getTotal(),
+                                        'name' => $productDetails->getProduct()->getName(),
+                                        'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
+                                    );
+            
+        }
+
         echo json_encode($displayArray,JSON_PRETTY_PRINT);
+    }
+
+    private function checkAvailableInPayment($itemArray,$paymentType)
+    {
+        if($paymentType == EsPaymentMethod::PAYMENT_PAYPAL){
+            $keyString = "paypal";
+            $label = "Paypal";
+        }
+        elseif($paymentType == EsPaymentMethod::PAYMENT_DRAGONPAY){
+            $keyString = "dragonpay";
+            $label = "Dragonpay";
+        }
+        elseif($paymentType == EsPaymentMethod::PAYMENT_CASHONDELIVERY){
+            $keyString = "cash_delivery";
+            $label = "Cash on Delivery";
+        }
+
+        $error = 0;
+        foreach ($itemArray as $key => $value) {
+            $value['isAvailable'] = "true";
+            if(!$value[$keyString]){
+                $itemArray[$key]['isAvailable'] = "false";
+                $error++;
+            }
+        }
+
+        if($error > 0){
+            $returnArray = array(
+                    'isSuccess' => false, 
+                    'message' => 'One of you item is not avaialble in '.$label,
+                    'url' => '',
+                    'returnUrl' => '',
+                    'cancelUrl' => '',
+                    'cartData' => $this->serviceContainer['api_formatter']->formatCart($itemArray),
+                );
+            echo json_encode($returnArray,JSON_PRETTY_PRINT);
+            exit();
+        }
+
+
+        return $itemArray;
     }
 }

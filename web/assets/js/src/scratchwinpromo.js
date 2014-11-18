@@ -3,7 +3,7 @@
     var paymentToken = $('#paymentToken').val();
     $(document).ready(function () {
         $('#scratch-win-claim').hide();
-        var base_url = config.base_url;
+        var base_url = '/';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var img = '';
@@ -31,8 +31,8 @@
                 success: function (data) {
                     if (data.product) {
                         $('#claim_item').attr('data-code', codeValue);
-                        $(".claim-details h3").html(data.name);
-                        $(".claim-details .prod-description").html(data.brief);
+                        $(".claim-details h3").html(escapeHtml(data.product));
+                        $(".claim-details .prod-description").html(escapeHtml(data.brief));
                         $("#prod_image img").attr('src', data.product_image_path);
                         if(!data.can_purchase) {
                             $('.purchase-limit-error').slideDown().show();
@@ -108,11 +108,11 @@
             var max_qty = 1;
             $.ajax({
                 async:false,
-                url: "/cart/add_item",
+                url: "/cart/doAddItem",
                 type:"POST",
                 dataType:"JSON",
                 data:{
-                    id: i_id,
+                    productId: i_id,
                     qty: i_qty,
                     price: i_price,
                     opt: i_opt,

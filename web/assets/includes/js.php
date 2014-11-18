@@ -60,7 +60,7 @@
     
     function serverTime() { 
         var time = null; 
-        $.ajax({url: config.base_url + 'home/getServerTime', 
+        $.ajax({url: '/home/getServerTime', 
             async: false, dataType: 'text', 
             success: function(text) { 
                 time = new Date(text); 
