@@ -9,10 +9,11 @@
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-sm-5 col-xs-12">
                         <p class="p-username"><span class="icon-profile"> </span>Mang Pedring</p>
                     </div>
-                    <div class="col-xs-7">
+                    <div class="col-sm-7 col-xs-12">
+                        <div class="row">
                         <div class="col-xs-5 col-progress-text">
                             <div class="div-progress-container-text">
                                 Account Progress: 70%
@@ -26,6 +27,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -122,9 +124,9 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="row">
+                            <div class="row-fluid row-mobile-rate">
                                 <div class="col-xs-6 col-star-rate-mobile">
-                                    <span class="span-criteria-mobile">Item Quality : </span>
+                                    <span class="span-criteria-mobile">Item Quality</span>
                                     <br/>
                                     <span class="span-star-mobile">
                                             <i class="icon-star star-stat-mobile star-active"></i>
@@ -132,6 +134,35 @@
                                             <i class="icon-star star-stat-mobile star-active"></i>
                                             <i class="icon-star star-stat-mobile star-active"></i>
                                             <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Communication</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Item Shipment</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile star-active"></i>
+                                            <i class="icon-star star-stat-mobile"></i>
+                                    </span>
+                                </div>
+                                <div class="col-xs-6 col-star-rate-mobile">
+                                    <span class="span-criteria-mobile">Total Reviews</span>
+                                    <br/>
+                                    <span class="span-star-mobile">
+                                        20
                                     </span>
                                 </div>
                             </div>
