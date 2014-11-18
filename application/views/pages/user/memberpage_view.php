@@ -1685,6 +1685,9 @@
      
         <label for="tx_password">Enter your password:</label>
         <input type="password" id="tx_password" name="tx_password">
+        <input type="hidden" name="username" id="tx-username" value="<?php echo html_escape($username); ?>"/>
+        <input type="hidden" id="password-is-cached" value="false"/>
+        
         <span class="error red"></span>
         <img src="/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
     </div>
@@ -2747,55 +2750,8 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
         <script type="text/javascript">
-
                                        
                     var jsonCity = <?php echo $json_city;?>;
-                    var tx = {
-                        u:'<?php echo $username;?>',
-                        p:''
-                    };
-
-                    /*
-                    $(document).ready(function() {
-                        var currentRequest = null;
-                     
-                    $('#member_sch').on('input propertychange', function() {
-                        var searchQuery = $.trim( $(this).val());
-                        searchQuery = searchQuery.replace(/ +(?= )/g,'');
-                        var fulltext = searchQuery; 
-                            if(searchQuery != ""){
-                                currentRequest = $.ajax({
-                                    type: "GET",
-                                     url: '<?php echo base_url();?>search/suggest', 
-                                    cache: false,
-                                    data: "q="+fulltext, 
-                                    beforeSend: function(jqxhr, settings) { 
-                                        $("#search_content").empty();
-                                        if(currentRequest != null) {
-                                            currentRequest.abort();
-                                        }
-                                    },
-                                    success: function(html) {
-                                        $("#search_content").empty();
-
-
-                                        if(html==0){
-                                            $("#search_content").append('No result found');
-                                        }
-                                        else{
-                                            $("#search_content").append(html);
-                                            $("#search_content").show();
-                                        }
-                                    }
-                                });
-                            }else{
-                                $("#search_content").hide();
-                            }
-                        });
-                    });
-                    */
-
-                    
                     
                     $(document).ready(function() { 
                         var srchdropcontent= $('#search_content');

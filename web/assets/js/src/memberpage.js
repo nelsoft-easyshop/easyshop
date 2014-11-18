@@ -1592,20 +1592,19 @@ $(document).ready(function(){
         $(this).siblings('span.error').text('');
     });
     
+    
     $('.dashboard_table').on('click', '.transac_response_btn', function(){
         var txResponseBtn = $(this);
         var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
         // tx object located in view. contains username and password( requires once every memberpage load )
         var txDialog = $('#tx_dialog');
         var passCont = $('#tx_dialog_pass_cont');
-        
-        if( $.trim(tx.p).length > 0 ){
+        var hasPass = 'true' == $('#password-is-cached').val();
+        var loadingimg = passCont.find('img.loading_img');
+         
+        if( hasPass){
             passCont.hide();
             var loadingimg = $('#tx_dialog_loadingimg img');
-            var hasPass = true;
-        }else{
-            var loadingimg = passCont.find('img.loading_img');
-            var hasPass = false;
         }
         
         txDialog.children('p.msg').hide();
@@ -1628,16 +1627,19 @@ $(document).ready(function(){
                     var thisdialog = $(this);
                     var form = txResponseBtn.closest('form.transac_response');
                     var data = form.serializeArray();
+                    
                     if( !hasPass ){
                         var password = $('#tx_password').val();
                         if(password === ''){
                             $('#tx_password').effect('pulsate',{times:3},800);
                             return false;
                         }
-                    }else{
-                        var password = tx.p;
+                        else{
+                            var username = $('#tx-username').val();
+                            data.push({name:'password', value: password},{name:'username', value: username});
+                        }
                     }
-                    data.push({name:'password', value: password},{name:'username', value:tx.u});
+
                     var parentdiv = txResponseBtn.closest('div');
                     txResponseBtn.attr('disabled', true);
                     $('button.ui-button').attr('disabled', true);
@@ -1661,9 +1663,7 @@ $(document).ready(function(){
                             txResponseBtn.attr('disabled', false);
                         }else{
                             if(serverResponse.result === 'success'){
-                                if(!hasPass){
-                                    tx.p = password;
-                                }
+                                $('#password-is-cached').val('true');
                                 if(txResponseBtn.hasClass('tx_forward')){
                                     txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
                                 }else if(txResponseBtn.hasClass('tx_return')){
