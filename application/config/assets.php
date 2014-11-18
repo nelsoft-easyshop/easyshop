@@ -4,6 +4,8 @@ $awsConfig = require APPPATH . '/config/param/aws.php';
 
 $config = array(
     "bucket" => $awsConfig['s3']['bucket'],
+    "allowed_types" => $awsConfig['s3']['allowed_types'],
+    "max_size" => $awsConfig['s3']['max_size'],
 );
 
 if(ENVIRONMENT == 'production'){
