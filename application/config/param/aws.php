@@ -13,4 +13,8 @@ else{
     $config['s3']['bucket'] = "easyshop-staging";
 }
 
+$config['s3']['allowed_types'] = 'gif|jpg|png|jpeg';
+$config['s3']['max_size'] = 5000;
+
+
 return $config;
