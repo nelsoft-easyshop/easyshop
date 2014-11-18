@@ -484,28 +484,13 @@ class ProductManager
      */
     public function getRecommendedProducts($productId, $limit = null)
     {    
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
+        $productImageRepo =  $this->em->getRepository('EasyShop\Entities\EsProductImage');
+        $productRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $product = $productRepo->find($productId);
 
-        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->createQueryBuilder("p")
-                                ->select("p")
-                                ->where('p.cat = :category')
-                                ->andWhere("p.idProduct != :productId")
-                                ->andWhere("p.isDraft = :isDraft")
-                                ->andWhere("p.isDelete = :isDelete")
-                                ->setParameter('productId',$product->getIdProduct())
-                                ->setParameter('category',$product->getCat())
-                                ->setParameter('isDraft',0)
-                                ->setParameter('isDelete',0)
-                                ->orderBy('p.clickcount', 'DESC')
-                                ->getQuery();
-        if($limit){
-            $queryBuilder->setMaxResults($limit);
-        }
-
-        $products = $queryBuilder->getResult();
+        $products = $productRepo->getRecommendedProducts($productId, $product->getCat(), $limit);
         
+        $detailedProducts = [];
         foreach($products as $key => $product){ 
             $eachProduct = $this->getProductDetails($product->getIdProduct());
             $eachProduct->ownerAvatar = $this->userManager
@@ -517,12 +502,17 @@ class ProductManager
             if($eachProduct->getDefaultImage()){
                 $eachProduct->directory = $eachProduct->getDefaultImage()->getDirectory();
                 $eachProduct->imageFileName = $eachProduct->getDefaultImage()->getFilename();
+                $secondaryImage = $productImageRepo->getSecondaryImage($product->getIdProduct());
+
+                if($secondaryImage){
+                    $eachProduct->secondaryImage = $secondaryImage->getFilename(); 
+                }
             }
 
-            $products[$key] = $eachProduct;
+            $detailedProducts[$key] = $eachProduct;
         }
-        
-        return $products;
+
+        return $detailedProducts;
     }
 
     /**
