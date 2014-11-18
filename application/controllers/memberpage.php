@@ -50,12 +50,9 @@ class Memberpage extends MY_Controller
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
-        
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-        
         $this->session->unset_userdata('transaction_authentication_cache');
- 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
