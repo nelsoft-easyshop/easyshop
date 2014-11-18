@@ -77,6 +77,10 @@
                         <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankName']);?></div>
                     </div>
                 </div>
+                <?php else:?>
+                <div class="col-xs-12">
+                    <h4><p>No Bank Details.</p></h4> 
+                </div>
                 <?php endif;?>
                 <?php if( (int)$product->getIsCod() === 1 ):?>
                 <div class="step4-cod col-sx-12 col-sm-5 col-md-5">
