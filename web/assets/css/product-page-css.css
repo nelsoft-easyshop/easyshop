@@ -1417,7 +1417,7 @@ div.vertical {
 
 .shipment-select select {
     padding-right: 36px;
-    width: 111%;
+    width: 150%;
 }
 
 .shipment-select select::-ms-expand {
@@ -1762,7 +1762,7 @@ div.vertical {
 
     .prod-select-con.shipment-select {
         padding: 0 !important;
-        width: 50%;
+        width: 64%;
     }
 
     .prod-add-to-cart-btn {
