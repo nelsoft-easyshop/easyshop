@@ -26,8 +26,10 @@
          base_url: "<?php echo base_url(); ?>",
          badIE : badIE
     };
-
-   window.alert = function(message, detail){
+    
+    
+    if (typeof jQuery.ui != 'undefined') {
+        window.alert = function(message, detail){
         var detail = (typeof detail === "undefined") ? "" : '<hr/>'+detail;
         var html_content = '<b>'+message+'</b>'+detail;        
         $(document.createElement('div'))
@@ -40,7 +42,9 @@
                 modal: true,
                 resizable: false
             });
-   };
+        };
+    }
+
    
 
    var entityMap = {
@@ -60,7 +64,7 @@
     
     function serverTime() { 
         var time = null; 
-        $.ajax({url: config.base_url + 'home/getServerTime', 
+        $.ajax({url: '/home/getServerTime', 
             async: false, dataType: 'text', 
             success: function(text) { 
                 time = new Date(text); 

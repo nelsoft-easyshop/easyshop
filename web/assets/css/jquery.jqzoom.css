@@ -4,6 +4,7 @@
   text-align: center;
   z-index:0;
   cursor:crosshair;
+/*  height: 540px;*/
 }
 
 #product_content_gallery > div {
@@ -14,21 +15,35 @@
 }
 
 .prod_con_gal {
-    border: 1px solid #e0e0e0;
-    display: table-cell;
-    height: 542px;
+/*    border: 1px solid #e0e0e0;*/
+/*    display: table-cell;*/
+    display: block;
+/*    height: 542px;*/
     overflow: hidden;
     text-align: center;
     vertical-align: middle;
-    width: 445px;
+/*    width: 445px;*/
+    width: 100%;
     z-index: 9999;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
 }
 
 .zoomPad img[src*="small"] {
-    max-width:400px;
-    max-height:400px;
+  max-height: 540px;
     width: auto;
     height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
 }
 
 .zoomPreload{

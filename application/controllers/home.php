@@ -410,6 +410,17 @@ class Home extends MY_Controller
         }
 
     }
+    
+    /**
+     * Transition controller action for old vendor page
+     * Performs 301 redirect to new page. Needed for SEO purposes.
+     *
+     * @param string $vendorSlug
+     */
+    public function oldUserProfile($vendorSlug)
+    {
+        redirect('/'.$vendorSlug, 'location', 301);
+    }
 
     /**
      * Render users follower page

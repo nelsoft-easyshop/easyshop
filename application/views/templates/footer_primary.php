@@ -21,7 +21,6 @@
                                 <h1>Information</h1>
                                 <ul>
                                     <li><a href="/cart">View Cart</a></li>
-                                    <li><a href="/about">About Us</a></li>
                                     <li><a href="/contact">Contact Us</a></li>
                                     <li><a href="/policy">Privacy Policy</a></li>
                                     <li><a href="/terms">Terms of Use</a></li>
@@ -36,7 +35,7 @@
                             by joining our newsletter program.
                         </p>
                         <div>
-                            <?php echo form_open('subscribe');?>
+                            <?php echo form_open('/subscribe');?>
                                 <input type="text" class="subscribe_email ui-form-control" name="email" placeholder="Newsletter">
                                 <input type="submit" value="subscribe" class="subscribe_btn btn btn-default-4" name="subscribe_btn">
                             <?php echo form_close();?>

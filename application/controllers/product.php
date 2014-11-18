@@ -222,7 +222,6 @@ class product extends MY_Controller
      */
     public function item($itemSlug = '')
     {
-        header ('Content-type: text/html; charset=ISO-8859-1');
         $headerData = $this->fill_header(); 
 
         $productManager = $this->serviceContainer['product_manager'];
@@ -481,6 +480,27 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
+    /**
+     *  Function to handle isDelete field in es_product
+     *  Handles delete, restore, and remove (full delete) functions for products
+     *  in memberpage
+     *
+     *  @return JSON
+     */
+    public function bulkProductOptions()
+    {
+        if( $this->input->post('bulk_action') ){
+            $pm = $this->serviceContainer['product_manager'];
+
+            $arrProductId = json_decode($this->input->post('bulk_p_id'), true);
+            $memberId = $this->session->userdata('member_id');
+            $action = $this->input->post('bulk_action');
+
+            $pm->editBulkIsDelete($arrProductId, $memberId, $action);
+
+            redirect('me', 'refresh');
+        }
+    }
 
 }
 

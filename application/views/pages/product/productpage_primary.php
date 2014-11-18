@@ -24,7 +24,7 @@
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1 id="<?=$product->getIdProduct();?>"> 
-                    <span id="pname"> <?=htmlspecialchars($product->getName(),ENT_QUOTES,'ISO-8859-1');?> </span>
+                    <span id="pname"> <?=htmlspecialchars(iconv("cp1252", "utf-8", $product->getName()),ENT_IGNORE,'UTF-8',true);?> </span>
                 </h1>
                 <div>
                     By:
@@ -103,11 +103,11 @@
                 <div class="row pad-top-23">
                     <div class="col-xs-12 col-sm-5 col-md-5">
                         <div class="prod-availability-container prod-border-right">
-                            <p>Availability: <span class="in-stock"><?=(intval($product->getIsSoldOut()) === 0)?'In Stock':'Out Of Stock';?></span></p>
+                            <p>Availability: <span class="in-stock">Select Combination</span></p>
                         </div>
-                        <?php if(trim($product->getShippedWithinCount()) !== ""): ?>
+                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
                             <div class=" prod-border-right">
-                                <p class="attr-title txt-shipment">Shipped within:</p> <span class="default"><?=$product->getShippedWithinCount(); ?> days</span>
+                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
                             </div>
                         <?php endif; ?>
                     </div>
