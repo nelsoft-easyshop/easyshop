@@ -737,8 +737,10 @@ class Memberpage extends MY_Controller
             $memberId = $this->session->userdata('member_id');
             
             if($this->input->post('username') && $this->input->post('password')){
-                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($this->input->post('username'), 
-                                                                                                       $this->input->post('password'));
+                $authenticateData = ['username' => $this->input->post('username'),
+                                     'password' => $this->input->post('password')];
+                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($authenticateData['username'], 
+                                                                                                       $authenticateData['password']);
                 if( $authenticationResult['member'] === null || 
                     !empty($authenticationResult['errors']) ||  
                     (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
