@@ -138,7 +138,7 @@ class AssetsUploader
                     }
                     else{
                         copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
-                        rename($destinationDirectory.'/'.$object_value, $destinationDirectory.'/'.$newFileName);
+                        rename($destinationDirectory.'/'.$file, $destinationDirectory.'/'.$newFileName);
                     }
                 }
             }
