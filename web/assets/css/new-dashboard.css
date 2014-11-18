@@ -619,9 +619,24 @@ a{
     outline: none;
     transition: all 0.3s ease;
     color: #565656;
+    display: inline;
 }
 
-.text-info:focus{
+.text-info-url{
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: solid #e2e2e2 1px;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #565656;
+    display: inline;
+}
+
+.text-info:focus,
+.text-info-url:focus
+{
     outline: none;
     border: solid #868686 1px;
     color: #565656;
@@ -676,6 +691,14 @@ a{
     top: 8px;
 }
 
+.val-success-url{
+    color: #007c67;
+    font-size: 22px;
+    position: absolute;
+    right: 33px;
+    top: 8px;
+}
+
 .val-error-icon{
     color: #ff3e1d;
     font-size: 22px;
@@ -697,6 +720,14 @@ a{
     font-size: 22px;
     position: absolute;
     right: 21px;
+    top: 8px;
+}
+
+.val-error-icon-setup{
+    color: #ff3e1d;
+    font-size: 22px;
+    position: absolute;
+    right: 10px;
     top: 8px;
 }
 
@@ -769,7 +800,9 @@ a{
     margin-left: 20px;
 }
 
-.panel-setting-title{
+.panel-setting-title,
+.panel-setup-title
+{
     font-weight: 900;
     font-size: 15px;
     text-transform: uppercase;
@@ -838,6 +871,11 @@ a{
     margin-right: 20px;
 }
 
+.setting-edit-url{
+    font-size: 15px;
+    margin-right:1px;
+}
+
 .btn-setting-edit-btn > .icon-edit{
     margin-right: 5px;
 }
@@ -847,7 +885,8 @@ a{
     line-height: 20px;
 }
 
-.div-account-setting{
+.div-account-setting,
+.div-store-setup{
     width: 100%;
     border: solid #e2e2e2 1px;
     min-height: 200px;
@@ -887,7 +926,19 @@ a{
     padding-right: 0px;
 }
 
-.edit-email, .edit-password, .edit-status{
+.col-inline-btn-url{
+    padding-left: 0px;
+}
+
+.edit-email,
+.edit-password,
+.edit-status,
+.edit-store-name,
+.edit-store-url,
+.edit-store-theme,
+.edit-store-cat,
+.edit-store-cat-new
+{
     display: none;
 }
 
@@ -978,4 +1029,85 @@ a{
 
 .credit-date-label{
     font-weight: 900;
+}
+
+.current-color-choice,
+.current-color-drop
+{
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: -6px;
+    font-size: 15px;
+}
+
+.current-color-drop{
+    cursor: pointer;
+}
+
+.color-dropdown{
+    height: 200px;
+    width: 100%;
+    border: solid #e2e2e2 1px;
+    overflow-y: scroll !important;
+    border-radius: 4px;
+    display: none;
+}
+
+.current-color-drop > .icon-dropdown,
+.current-color-drop > .icon-dropup
+{
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.color-list > li{
+    display: block;
+    text-align: center;
+    color: #fff;
+    padding: 5px;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.div-cat{
+    font-size: 15px;
+}
+
+.category_sort{
+    margin-bottom: 20px;
+}
+
+.category_sort > li {
+    border: dotted #ff893a 1px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    cursor: move;
+}
+
+.category_sort > li.sortable-placeholder{
+    border: dotted #e2e2e2 1px !important;
+    margin-bottom: 5px !important;
+    padding: 5px 10px !important;
+    height: 34px !important;
+}
+
+.category_sort > li > .fa-sort{
+    margin-right: 5px;
+}
+
+.note-category{
+    margin-top: 20px;
+    margin: 0;
+}
+
+.div-cat{
+    padding: 5px 10px 5px 0px;
 }
