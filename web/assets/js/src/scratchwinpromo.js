@@ -31,8 +31,8 @@
                 success: function (data) {
                     if (data.product) {
                         $('#claim_item').attr('data-code', codeValue);
-                        $(".claim-details h3").html(data.name);
-                        $(".claim-details .prod-description").html(data.brief);
+                        $(".claim-details h3").html(escapeHtml(data.product));
+                        $(".claim-details .prod-description").html(escapeHtml(data.brief));
                         $("#prod_image img").attr('src', data.product_image_path);
                         if(!data.can_purchase) {
                             $('.purchase-limit-error').slideDown().show();
