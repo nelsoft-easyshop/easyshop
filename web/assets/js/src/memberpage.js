@@ -1662,10 +1662,8 @@ $(document).ready(function(){
                             errspan.text(serverResponse.error);
                             txResponseBtn.attr('disabled', false);
                         }else{
-
-                            $('#password-is-cached').val('true');
-
                             if(serverResponse.result === 'success'){
+                                $('#password-is-cached').val('true');
                                 if(txResponseBtn.hasClass('tx_forward')){
                                     txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
                                 }else if(txResponseBtn.hasClass('tx_return')){
