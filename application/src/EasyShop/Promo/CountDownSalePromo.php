@@ -82,7 +82,7 @@ class CountDownSalePromo extends AbstractPromo
         $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
-        $promoDetails['isEndPromo'] = ($startDateTime > $endDateTime) ? true : false;
+        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime) ? true : false;
 
         return $promoDetails;
     }
