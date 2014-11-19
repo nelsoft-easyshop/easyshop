@@ -5,3 +5,4 @@ $config = array(
 			'homeslider_img_directory' => 'assets/images/homeslider/',
 			'ads_img_directory' => 'assets/images/ads/',
 			);
+
