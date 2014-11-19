@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+
 <div class="container" id="rec">
     <div class="prod-detail-main">
         <div class="div-rec-title">
