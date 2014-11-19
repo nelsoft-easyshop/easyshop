@@ -1196,11 +1196,6 @@ class NewHomeWebService extends MY_Controller
             'x_axis'            => $imgDimensions['x'],
             'y_axis'            => $imgDimensions['y']
         );
-        $this->load->library('image_lib', $img_config);
-        $this->image_lib->resize();
-
-        // Now change the input file to the one that just got resized
-        $this->image_lib->clear();
         $img_config['source_image'] = $imgDirectory;
         $this->image_lib->initialize($img_config); 
 
