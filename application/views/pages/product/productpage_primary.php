@@ -112,8 +112,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-lg-7">
-                        <p class="attr-title txt-shipment">Shipment Fee:</p>
+                    <div class="col-md-12 col-lg-7 shipment-wrapper">
+                        <div class="shipment-fee-container">
+                            <p class="attr-title txt-shipment">Shipment Fee:</p>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <span class="default" selected="" value="0">NOT AVAILABLE</span>
                             <?php else: ?>
@@ -136,12 +137,12 @@
                                     <span class="default">FREE SHIPPING NATIONWIDE</span>
                                 <?php endif; ?>
                             <?php endif; ?>
-                        <div class="shipping_fee"></div>
-                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
-                            <div class="">
-                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
-                            </div>
+                            <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
+                                <div class="shipment-period">
+                                    <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
+                                </div>
                             <?php endif; ?>
+                        </div>
                     </div>
                     <div class="clear"></div>
                 </div>
