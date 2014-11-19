@@ -1101,17 +1101,13 @@ class NewHomeWebService extends MY_Controller
      */
     public function getTempContents() 
     {         
-        if(file_exists($this->tempHomefile)) {
-            $this->syncTempHomeFiles();
-        }       
-        else {
+        if(!file_exists($this->tempHomefile)) {
             copy($this->file, $this->tempHomefile);
-        }     
+        }    
         $this->output
             ->set_content_type('text/plain') 
             ->set_output(file_get_contents($this->tempHomefile));
     }     
-
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
@@ -1124,10 +1120,11 @@ class NewHomeWebService extends MY_Controller
         foreach ($map->sliderSection->slide as $key => $slider) {
             $sliders[] = $slider;
         }
-        if(!$this->input->get() === false) {
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);              
-        }
+        $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
+        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);   
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output($this->json);                        
           
     }
 
