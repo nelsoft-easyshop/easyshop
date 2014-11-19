@@ -16,7 +16,7 @@
             </span>
         </div>
          
-        <div id="recommended" class="owl-carousel owl-theme">
+        <div id="recommended" class="owl-carousel owl-theme" style="overflow: hidden;">
             <?php foreach ($recommended as $value): ?>
             <div class="item">
                     <a href="/item/<?=$value->getSlug(); ?>">
@@ -24,10 +24,14 @@
                         <?php if(isset($value->secondaryImage)): ?>
                             <div class="div-rec-product-image hover-prod-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->secondaryImage; ?>) center no-repeat; background-size: cover; "></div>
 
-                            <div class="div-rec-product-image main-prod-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;"></div>
+                            <div class="div-rec-product-image main-prod-image">
                         <?php else: ?>
-                            <div class="div-rec-product-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;"></div>
+                            <div class="div-rec-product-image">
                         <?php endif; ?>
+                                <div class="image-handler" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
+                                
+                                </div>
+                            </div>
                     </a>
                 
                 <?php if($value->getIsNew()): ?>
@@ -49,7 +53,7 @@
                         <s>P <?=number_format($value->getOriginalPrice(),2,'.',','); ?> </s>
                         <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
                     <?php else: ?>
-                        <br>
+                       
                         <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
                     <?php endif; ?>
                 </p>
