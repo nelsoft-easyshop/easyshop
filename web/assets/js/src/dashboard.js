@@ -431,5 +431,18 @@
         $('.feedback-from-buyer').removeClass("active-bar");
         $('.feedback-for-seller').removeClass("active-bar");
     });
+    //FOR MOBILE
+    $('.my-store-menu-mobile').click(function() {
+        $('.my-account-menu-mobile-cont').slideUp();
+        $('.my-store-menu-mobile-cont').slideToggle();
+    });
+    
+    $('.my-account-menu-mobile').click(function() {
+        $('.my-store-menu-mobile-cont').slideUp();
+        $('.my-account-menu-mobile-cont').slideToggle();
+    });
+    
+    
+    
 }(jQuery));
 
