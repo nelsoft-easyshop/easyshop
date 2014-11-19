@@ -162,10 +162,68 @@
             $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
         });
     }
+    
+    /**
+     * Same function in php in_array
+     * @param  valie  value
+     * @param  array  array
+     * @return boolean
+     */
+    function isInArray(value, array) {
+      return array.indexOf(value) > -1;
+    }
+
+    /**
+     * Same function in php array_unique
+     * @param  array
+     * @return array
+     */
+    function arrayUnique(array){
+        var $uniqueNames = [];
+        $.each(array, function(i, el){
+            if($.inArray(el, $uniqueNames) === -1) $uniqueNames.push(el);
+        });
+
+        return $uniqueNames;
+    }
+
+    function removeNoCombination()
+    { 
+        $selectedValues = [];
+        $acceptedCombination = [];
+        $(".attribute-control").each(function() {
+            $thisSelect = $(this);
+            var $selectValue = $thisSelect.val();
+            if($selectValue > 0){
+                $selectedValues.push($selectValue);
+            }
+        });
+        $.each($productCombQuantity, function(i, val) {
+               $.each($selectedValues, function(j, selVal) { 
+                    if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
+                        $.each(val.product_attribute_ids, function(k, idVal) {
+                            $selectedValues.push(idVal); 
+                        });
+                    }
+               });
+        });
+
+        $(".attribute-control > option").prop("disabled",false);
+        var $uniqueSelected = arrayUnique($selectedValues);
+        if($uniqueSelected != undefined && $uniqueSelected != null && $uniqueSelected.length != 0){
+            $(".attribute-control > option").prop("disabled",true);
+            $.each($uniqueSelected, function(i, val) {
+                $('.attribute-control > option[value="0"]').prop("disabled",false);
+                $('.attribute-control > option[value="' + val + '"]').prop("disabled",false);
+            });
+        }
+    }
 
 
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
+
+    removeNoCombination();
     $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
 
     if($("#noMoreSelection").val() != ""){
@@ -189,7 +247,7 @@
         if($imageid > 0){
             $("#image"+$imageid).trigger('click'); 
         }
-
+removeNoCombination();
         // get selected attributes
         $(".attribute-control").each(function() {
             $thisSelect = $(this);
