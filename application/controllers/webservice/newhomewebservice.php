@@ -399,14 +399,14 @@ class NewHomeWebService extends MY_Controller
             'y' => $this->input->get('y'),
             'w' => $this->input->get('w'),
             'h' => $this->input->get('h')
-        );           
+        );         
+        $this->config->load("image_path");             
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
-
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/images/ads';
+        $path_directory = $this->config->item('ads_img_directory');
         $map = simplexml_load_file($this->file);
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -425,13 +425,24 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = $path_directory."/".$filename.'.'.$file_ext; 
-            $this->config->load("image_path");            
-            $imgDirectory = $this->config->item('ads_img_directory').$filename.'.'.$file_ext;
+            $imageData = $this->upload->data();            
+            $value = $path_directory.$filename.'.'.$file_ext; 
+        
+            $imgDirectory = $path_directory.$filename.'.'.$file_ext;
 
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
+
+            if( $imageData['image_width'] > 372 || $imageData['image_height'] > 176 ){    
+                $this->load->library('image_lib');                
+                $config['new_image'] = $imgDirectory;
+                $config['width'] = 372;
+                $config['height'] = 176;
+                $this->image_lib->initialize($config);  
+                $this->image_lib->resize(); 
+            }
+
 
             $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
 
@@ -452,15 +463,21 @@ class NewHomeWebService extends MY_Controller
      */
     public function setAdsSection()
     {
+        $imgDimensions = array(
+            'x' => $this->input->get('x'),
+            'y' => $this->input->get('y'),
+            'w' => $this->input->get('w'),
+            'h' => $this->input->get('h')
+        );                   
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
         $map = simplexml_load_file($this->file);
-
+        $this->config->load("image_path"); 
         if(!empty($_FILES['myfile']['name'])) {
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/images';
+            $path_directory = $this->config->item('ads_img_directory');
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
                 "overwrite" => FALSE, 
@@ -477,7 +494,25 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = "/".$path_directory."/".$filename.'.'.$file_ext; 
+                $imageData = $this->upload->data();                             
+                $value = $path_directory.$filename.'.'.$file_ext; 
+            
+                $imgDirectory = $path_directory.$filename.'.'.$file_ext;
+
+                if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
+                    $this->cropImage($imgDirectory, $imgDimensions);
+                }
+
+                if( $imageData['image_width'] > 372 || $imageData['image_height'] > 176 ){    
+                    $this->load->library('image_lib');                
+                    $config['new_image'] = $imgDirectory;
+                    $config['width'] = 372;
+                    $config['height'] = 176;
+                    $this->image_lib->initialize($config);  
+                    $this->image_lib->resize(); 
+                }
+
+
                 $map->adSection->ad[$index]->img = $value;
                 $map->adSection->ad[$index]->target = $target;
  
@@ -1136,7 +1171,7 @@ class NewHomeWebService extends MY_Controller
     }
 
     /**
-     *  Initiates the cropping functionality of image_lib
+     *  Handles the cropping functionality
      *  @param string $imgDirectory
      *  @param array $imgDimensions
      */
