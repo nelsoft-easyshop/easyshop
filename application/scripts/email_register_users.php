@@ -33,59 +33,37 @@
             'from_email' => 'noreply@easyshop.ph',
             'from_name' => 'Easyshop.ph',
             'recipients' => array(
-                    'samgavinio@easyshop.ph',
+                    'samgavinio@easyshop.ph'
             )
     );
 
-    echo "Initializing database query...\n"; 
+    echo "Fetching newly registered users between " . $configQuery['past_date'] . " and " . $configQuery['this_date'] . " ...\n"; 
 
-    /** FETCH DATABASE USER DATA **/
-    $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);
+    $dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
 
+    $sql = "SELECT username, contactno, email, nickname, fullname, datecreated
+            FROM es_member
+            WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
+            
+            UNION
+            
+            SELECT '','',email,'','',datecreated
+            FROM es_subscribe
+            WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
+            
+            ORDER BY datecreated";
 
-    
-    //CONFIRM CONNECTION
-    if (mysqli_connect_errno()){
-            echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
-    }
-    else{
-            echo "Successfully connected to database! \n";
-    }
-
-    $rawResult = mysqli_query($link,
-                                    "SELECT username, contactno, email, nickname, fullname, datecreated
-                                    FROM es_member
-                                    WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
-                                    
-                                    UNION
-                                    
-                                    SELECT '','',email,'','',datecreated
-                                    FROM es_subscribe
-                                    WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
-                                    
-                                    ORDER BY datecreated"
-    );
-
-
- 
-
-    echo "SQL connection closed. Data fetched. \n";
-    echo "Preparing CSV data... \n";
+    echo "Generating CSV Data... \n";
 
     /**	Generate CSV Data	**/
     $csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;
 
-    
-    while($userData = $rawResult->fetch_assoc()){
+    foreach( $dbh->query($sql) as $userData){
 
         $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
                         ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
 
     }
-    
-    
-    mysqli_close($link);
-
 
     echo "Preparing email... \n";
 
@@ -111,3 +89,5 @@
     else{
             echo "Successfully sent " . $numSent . "emails!\n";
     }
+    
+    

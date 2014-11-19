@@ -17,107 +17,81 @@
     $configEmail = require(__DIR__ . "/../config/email_swiftmailer.php");
 
 
-
     echo "\nFetching queued emails...\n"; 
 
-    #FETCH DATABASE USER DATA
-    $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);
+    $dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
 
-    #CONFIRM CONNECTION
-    if (mysqli_connect_errno()){
-            echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
-    }
-    else{
-            echo "Successfully connected to database! \n";
-    }
+    $sql = "SELECT id_queue, data, type, date_created, date_executed, status
+            FROM es_queue
+            WHERE type = " . $configEmail['queue_type'] . " 
+                AND status = " . $configEmail['status']['queued'];
 
-    $rawResult = mysqli_query($link,
-                                    "SELECT id_queue, data, type, date_created, date_executed, status
-                                    FROM es_queue
-                                    WHERE type = " . $configEmail['queue_type'] . " 
-                                        AND status = " . $configEmail['status']['queued']
-    );
-
-    
-    mysqli_close($link);
-    
     $numSent = 0;
+    $emailCounter = 0;
     $failedRecipients = array();
-    
-    $emailCount = mysqli_num_rows($rawResult);
-    
-    if( $emailCount > 0 ){
-        echo $emailCount . " queued emails fetched! \n\n";
-        
-        while( $userData = $rawResult->fetch_assoc() ){
-        
-            $emailData = json_decode($userData['data'], TRUE);
 
-            if( count($emailData['recipient']) === 0 ){
-                echo "Queue id: " . $userData['id_queue'] . " has no email address indicated! \n";
-                continue;
-            }
-        
-            echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
-            
-            # SEND EMAIL
-            $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-              ->setUsername($configEmail['smtp_user'])
-              ->setPassword($configEmail['smtp_pass']);
-            
-            $mailer = Swift_Mailer::newInstance($transport);
-            
-            $message = Swift_Message::newInstance($emailData['subject'])
-              ->setFrom(array($configEmail['from_email'] => $configEmail['from_name']))
-              ->setTo($emailData['recipient']);
-            
-            // Embed Image
-            foreach($emailData["img"] as $imagePath){
-                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
-                if( strpos($emailData['msg'], $image) !== false ){
-                    $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
-                    $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
-                }
-            }
+    foreach($dbh->query($sql) as $userData){
 
-            $message->setBody($emailData['msg'], 'text/html');
-        
-            $result = $mailer->send($message, $failedRecipients);
-        
-            if($result){
-                echo "Email sent! \n";
-                $numSent += $result;
-                $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['sent'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
-            }
-            else{
-                echo "Email sending FAILED! \n";
-                $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['failed'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
-            }
-        
-            $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);
-            if (mysqli_connect_errno()){
-                    echo "ERROR : Failed to connect to update database! : " . mysqli_connect_error() . "\n\n";
-            }
-            else{
-                    echo "Successfully updated database! \n\n";
-            }
-            $r = mysqli_query($link, $query);
-            mysqli_close($link);
-        }
+        $emailCounter++;
 
-        echo "\nSuccessfully sent " . $numSent . " emails!\n";
-        
-        if( count($failedRecipients) > 0 ){
-            echo "\n\nFailed to send emails to the following users:\n";
-            foreach( $failedRecipients as $fr ){
-                echo "    " . $fr . "\n";
-            }
+        $emailData = json_decode($userData['data'], TRUE);
+
+        if( count($emailData['recipient']) === 0 ){
+            echo "Queue id: " . $userData['id_queue'] . " has no email address indicated! \n";
+            continue;
         }
     
+        echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
+        
+        # SEND EMAIL
+        $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+          ->setUsername($configEmail['smtp_user'])
+          ->setPassword($configEmail['smtp_pass']);
+        
+        $mailer = Swift_Mailer::newInstance($transport);
+        
+        $message = Swift_Message::newInstance($emailData['subject'])
+          ->setFrom(array($configEmail['from_email'] => $configEmail['from_name']))
+          ->setTo($emailData['recipient']);
+        
+        // Embed Image
+        foreach($emailData["img"] as $imagePath){
+            $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
+            if( strpos($emailData['msg'], $image) !== false ){
+                $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
+                $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
+            }
+        }
+
+        $message->setBody($emailData['msg'], 'text/html');
+    
+        $result = $mailer->send($message, $failedRecipients);
+    
+        if($result){
+            echo "Email sent! \n";
+            $numSent += $result;
+            $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['sent'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+        }
+        else{
+            echo "Email sending FAILED! \n";
+            $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['failed'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+        }
+
+        $dbhUpdate = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
+        $dbhUpdate->query($query);
+
     }
-    else{
-        echo "No queued emails at the moment. \n\n";
+
+    echo "\nFetched " . $emailCounter . " emails!\n";
+    echo "\nSuccessfully sent " . $numSent . " emails!\n";
+        
+    if( count($failedRecipients) > 0 ){
+        echo "\n\nFailed to send emails to the following users:\n";
+        foreach( $failedRecipients as $fr ){
+            echo "    " . $fr . "\n";
+        }
     }
+    
     
     
     
