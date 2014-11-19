@@ -9,17 +9,17 @@
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
-                    <div class="col-sm-5 col-xs-12">
+                    <div class="col-md-5 col-xs-12">
                         <p class="p-username"><span class="icon-profile"> </span>Mang Pedring</p>
                     </div>
-                    <div class="col-sm-7 col-xs-12">
+                    <div class="col-md-7 col-xs-12">
                         <div class="row">
-                        <div class="col-sm-5 col-progress-text">
+                        <div class="col-md-5 col-progress-text">
                             <div class="div-progress-container-text">
                                 Account Progress: 70%
                             </div>
                         </div>
-                        <div class="colsm-7 col-progress-bar">
+                        <div class="col-md-7 col-progress-bar">
                             <div class="div-progress-bar-container" align="right">
                                 <div class="progress progress-account">
                                     <span class="span-account-progress-text-small">Account Progress: 70%</span>
@@ -35,7 +35,7 @@
             </div>
             <div class="div-stats-numbers">
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-md-7">
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-md-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">
                                 Feedback:
