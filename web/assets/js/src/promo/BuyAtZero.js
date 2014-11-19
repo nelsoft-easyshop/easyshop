@@ -25,7 +25,7 @@
                     else if(data){
                         msg = "Congratulations! You now have the chance to win this  " + 
                             escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
-                            "announced on October 31, 2014. Stay tuned for more EasyShop.ph " +
+                            "announced on December 16, 2014. Stay tuned for more EasyShop.ph " +
                             "promotions. ";
                     }
                     else{

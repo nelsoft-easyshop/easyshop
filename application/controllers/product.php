@@ -233,7 +233,7 @@ class product extends MY_Controller
         $categoryManager = $this->serviceContainer['category_manager']; 
 
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                  ->findOneBy(['slug' => $itemSlug]);
+                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]);
 
         $viewerId =  $this->session->userdata('member_id');
 
@@ -283,7 +283,7 @@ class product extends MY_Controller
 
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
 
-            $productDescription = $stringUtility->purifyString($product->getDescription());
+            $productDescription = $stringUtility->purifyHTML($product->getDescription());
 
             $productReviews = $reviewProductService->getProductReview($productId);
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
@@ -298,9 +298,9 @@ class product extends MY_Controller
 
             $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
             $recommendViewArray = [
-                                    'recommended'=> $recommendProducts,
-                                    'productCategorySlug' => $product->getCat()->getSlug(),
-                                  ];
+                                'recommended'=> $recommendProducts,
+                                'productCategorySlug' => $product->getCat()->getSlug(),
+                            ];
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
@@ -324,16 +324,20 @@ class product extends MY_Controller
                             'recommendedView' => $recommendedView,
                             'noMoreSelection' => $noMoreSelection, 
                             'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                            'url' => '/item/' . $product->getSlug() 
+                            'url' => base_url() .'item/' . $product->getSlug()
                         ];
 
             if($this->session->userdata('member_id')) {
                 $headerData['user_details'] = $this->fillUserDetails();
             }
 
-            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
+            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
+            $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
             $headerData['homeContent'] = $this->fillCategoryNavigation();
+      
+            
             $headerData = array_merge($headerData, $this->fill_header());
 
             $socialMediaLinks = $this->getSocialMediaLinks();

@@ -114,7 +114,8 @@ class MY_Controller extends CI_Controller
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
                               ->find($memberId);
-            $userDetails->profileImage = $userManager->getUserImage($memberId,"small");
+            $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
+
             return $userDetails;
     }
     

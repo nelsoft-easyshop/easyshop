@@ -47,12 +47,12 @@
 
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
  
-    <link type="text/css" href='/assets/css/main-style.css' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     
-    <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 </head>
 <body>
 
@@ -166,11 +166,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
                                                                     <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?= html_escape($cartItemsReversed[$i]['name']); ?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
                                                                     <span>x <?=$cartItemsReversed[$i]['qty']?></span>
                                                                     <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                                                 </div>
@@ -215,207 +215,209 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div><!-- End .col-md-7 -->
                     </div><!-- End .row -->
                 </div><!-- End .container -->
-                <div class="sticky-header-nav">
-                    <div id="main-nav-container">
-                        <div class="container">
-                            <div  class="sticky-nav-logo-con">
-                                <div class="sticky-nav-logo">
-                                    <a href="">
-                                        <img src="/assets/images/img-sticky-logo.png" alt="Easyshop Logo">
-                                    </a>
+                <div class="persistent-header-wrapper">
+                    <div class="sticky-header-nav">
+                        <div id="main-nav-container">
+                            <div class="container">
+                                <div  class="sticky-nav-logo-con">
+                                    <div class="sticky-nav-logo">
+                                        <a href="">
+                                            <img src="/assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 clearfix">
-                                    
-                                    <div id="main-nav">
-                                        <div id="responsive-nav">
-                                            <div id="responsive-nav-button">
-                                                <span id="responsive-nav-button-icon"></span>
-                                            </div><!-- responsive-nav-button -->
-                                        </div>
-                                        <ul class="menu clearfix">
-                                            <li class="mega-menu-container drop-category">
-                                                <span class="category-icon"></span>
-                                                <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
-                                                <span class="drop-icon"></span>
-                                                <div class="mega-menu clearfix">
-                                                    <div class="col-md-80p border-right">                                                    
-                                                        <h2>popular categories</h2>
-                                                        <div class="mrgn-left-neg-14">
-                                                            <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
-                                                                <div class="col-md-3">
-                                                                    <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
-                                                                    <ul class="cat-sub-list">
-                                                                        <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
-                                                                            <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
-                                                                        <?PHP endforeach; ?>
-                                                                    </ul>
-                                                                </div><!-- End .col-5 -->
-                                                            <?PHP endforeach; ?>
+                                <div class="row">
+                                    <div class="col-md-12 clearfix">
+                                        
+                                        <div id="main-nav">
+                                            <div id="responsive-nav">
+                                                <div id="responsive-nav-button">
+                                                    <span id="responsive-nav-button-icon"></span>
+                                                </div><!-- responsive-nav-button -->
+                                            </div>
+                                            <ul class="menu clearfix">
+                                                <li class="mega-menu-container drop-category">
+                                                    <span class="category-icon"></span>
+                                                    <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
+                                                    <span class="drop-icon"></span>
+                                                    <div class="mega-menu clearfix">
+                                                        <div class="col-md-80p border-right">                                                    
+                                                            <h2>popular categories</h2>
+                                                            <div class="mrgn-left-neg-14">
+                                                                <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
+                                                                    <div class="col-md-3">
+                                                                        <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
+                                                                        <ul class="cat-sub-list">
+                                                                            <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
+                                                                                <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
+                                                                            <?PHP endforeach; ?>
+                                                                        </ul>
+                                                                    </div><!-- End .col-5 -->
+                                                                <?PHP endforeach; ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-20p">
-                                                        <h2>other categories</h2>
-                                                        <ul class="other-cat-con">
-                                                            <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
-                                                            <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
-                                                            <?PHP endforeach; ?>
-                                                        </ul>
-                                                    </div>    
-                                                </div><!-- End .mega-menu -->
-                                            </li>
-                                            
-                                            <li class="mobile-menu-nav-hide">
-                                                <a href="javascript:void(0)">NEW ARRIVALS</a>
-                                                <ul class="nav-2nd-level">
-                                                    <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
+                                                        <div class="col-md-20p">
+                                                            <h2>other categories</h2>
+                                                            <ul class="other-cat-con">
+                                                                <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
+                                                                <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
+                                                                <?PHP endforeach; ?>
+                                                            </ul>
+                                                        </div>    
+                                                    </div><!-- End .mega-menu -->
+                                                </li>
+                                                
+                                                <li class="mobile-menu-nav-hide">
+                                                    <a href="javascript:void(0)">NEW ARRIVALS</a>
+                                                    <ul class="nav-2nd-level">
+                                                        <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
 
-                                                        <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            </li>
-                                            <li class="mobile-menu-nav-hide">
-                                                <a href="javascript:void(0)">TOP PRODUCTS</a>
-                                                <ul class="nav-2nd-level">
-                                                    <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
-                                                        <?php if($topProduct): ?>
-                                                            <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            </li>
-                                            <li class="mobile-menu-nav-hide">
-                                                <a href="javascript:void(0)">TOP SELLERS</a>
-                                                <ul class="nav-2nd-level top-seller-list">
-                                                    <li>
-                                                        <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
-                                                            <?php if($topSeller['details']): ?>
-                                                                <a href="<?php echo $topSeller['details']->getSlug() ?>">
-                                                                    <div class="top-seller-profile-photo">
-                                                                        <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
-                                                                    </div>
-                                                                    <div class="top-seller-name">
-                                                                        <?php $storeName = $topSeller['details']->getStoreName(); ?>
-                                                                        <?php echo html_escape(($storeName && strlen(trim($storeName)) > 0) ? $storeName : $topSeller['details']->getUsername()); ?>
-                                                                    </div>
-
-                                                                </a>
+                                                            <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                </li>
+                                                <li class="mobile-menu-nav-hide">
+                                                    <a href="javascript:void(0)">TOP PRODUCTS</a>
+                                                    <ul class="nav-2nd-level">
+                                                        <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
+                                                            <?php if($topProduct): ?>
+                                                                <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
                                                             <?php endif; ?>
                                                         <?php endforeach; ?>
-                                                        
-                                                    </li>                                                    
-                                                </ul>
-                                            </li>
-                                            <li class="mobile-menu-nav-hide"><a href="/deals">EASY TREATS</a>
-                                            </li>
-                                        </ul>
-                                        
-                                        <div class="sticky-search-cart-wrapper">
-                                            <div class="sticky-search-wrapper">
-                                             <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
-                                                <input type="submit" value="" class="span_bg">
-                                            </form>
-                                            </div>
-                                            <div class="header-cart-container">
-                                                <a href="/cart" class="header-cart-wrapper">
-                                                    <span class="header-cart-items-con sticky-cart ui-form-control">
-                                                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
-                                                    </span>
-                                                    <span class="header-cart-icon-con span_bg cart-icon">
-                                                        <span class="cart-item-notif"><?=$cartSize?></span>
-                                                    </span>
-                                                </a>
-                                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
-                                            <?PHP else : ?>
-                                                <div class="sticky-header-cart-item-list">
-                                                    <p>Recently added item(s)</p>
-                                                    <?php for($i = 0 ; $i < 2; $i++): ?>
-                                                            <?php if(!isset($cartItemsReversed[$i])) break; ?>
-                                                            <div class="mrgn-bttm-15">
-                                                                <div class="header-cart-item-img">
-                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                    </ul>
+                                                </li>
+                                                <li class="mobile-menu-nav-hide">
+                                                    <a href="javascript:void(0)">TOP SELLERS</a>
+                                                    <ul class="nav-2nd-level top-seller-list">
+                                                        <li>
+                                                            <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
+                                                                <?php if($topSeller['details']): ?>
+                                                                    <a href="/<?php echo $topSeller['details']->getSlug() ?>">
+                                                                        <div class="top-seller-profile-photo">
+                                                                            <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
+                                                                        </div>
+                                                                        <div class="top-seller-name">
+                                                                            <?php $storeName = $topSeller['details']->getStoreName(); ?>
+                                                                            <?php echo html_escape(($storeName && strlen(trim($storeName)) > 0) ? $storeName : $topSeller['details']->getUsername()); ?>
+                                                                        </div>
+
                                                                     </a>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; ?>
+                                                            
+                                                        </li>                                                    
+                                                    </ul>
+                                                </li>
+                                                <li class="mobile-menu-nav-hide"><a href="/deals">EASY TREATS</a>
+                                                </li>
+                                            </ul>
+                                            
+                                            <div class="sticky-search-cart-wrapper">
+                                                <div class="sticky-search-wrapper">
+                                                 <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
+                                                    <input type="submit" value="" class="span_bg">
+                                                </form>
+                                                </div>
+                                                <div class="header-cart-container">
+                                                    <a href="/cart" class="header-cart-wrapper">
+                                                        <span class="header-cart-items-con sticky-cart ui-form-control">
+                                                            <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
+                                                        </span>
+                                                        <span class="header-cart-icon-con span_bg cart-icon">
+                                                            <span class="cart-item-notif"><?=$cartSize?></span>
+                                                        </span>
+                                                    </a>
+                                                <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
+                                                <?PHP else : ?>
+                                                    <div class="sticky-header-cart-item-list">
+                                                        <p>Recently added item(s)</p>
+                                                        <?php for($i = 0 ; $i < 2; $i++): ?>
+                                                                <?php if(!isset($cartItemsReversed[$i])) break; ?>
+                                                                <div class="mrgn-bttm-15">
+                                                                    <div class="header-cart-item-img">
+                                                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="header-cart-item-con">
+                                                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name']);?></span></a>
+                                                                        <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                                        <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                                                    </div>
+                                                                    <div class="clear"></div>
                                                                 </div>
-                                                                <div class="header-cart-item-con">
-                                                                    <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
-                                                                    <span>x <?=$cartItemsReversed[$i]['qty']?></span>
-                                                                    <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
-                                                                </div>
-                                                                <div class="clear"></div>
+                                                        <?php endfor; ?>
+                
+                                                        <div class="header-cart-lower-content">
+                                                            <div class="header-cart-shipping-total">
+                                                                <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                                                <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                                             </div>
-                                                    <?php endfor; ?>
-            
-                                                    <div class="header-cart-lower-content">
-                                                        <div class="header-cart-shipping-total">
-                                                            <p>Item(s) in cart: <span><?=$cartSize?></span></p>
-                                                            <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
+                                                            <div class="header-cart-buttons">
+                                                                <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                                                <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                                                            </div>
+                                                            <div class="clear"></div>
                                                         </div>
-                                                        <div class="header-cart-buttons">
-                                                            <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
-                                                            <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                                                    </div>
+                                                <?PHP endif; ?>
+                                                </div>
+                                                <div class="header-text-container pull-right">
+                                                <?php if(isset($logged_in) && $logged_in): ?>
+                                                    <div class="new-user-nav-dropdown">
+                                                        <div class="login-profile-con">
+                                                            <img src="/<?=$user_details->profileImage;?>">
                                                         </div>
+                                                        <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
+                                                            <?php echo html_escape($user_details->getUsername()) ;?>
+                                                        </a>
+                                                        <span class="default-nav-dropdown-arrow">Account Settings</span>
+                                                        <ul class="default-nav-dropdown">
+                                                            <li>
+                                                                <a href="/me">Dashboard</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/me?me=pending">On-going Transactions</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/?view=basic">Easyshop.ph</a>
+                                                            </li>
+                                                            <li class="nav-dropdown-border">
+                                                                <a href="/me?me=settings">Settings</a>
+                                                            </li>
+                                                            <li class="nav-dropdown-border pos-rel">
+                                                                <a href="/messages">Messages</a>
+                                                                <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                                        <?php echo $msgs['unread_msgs'];?>
+                                                                    </div>
+                                                                <?php endif;?>
+                                                            </li>
+                                                            <li class="nav-dropdown-border">
+                                                                <a class="prevent" href="/login/logout">Logout</a>
+                                                            </li>
+                                                        </ul>
                                                         <div class="clear"></div>
                                                     </div>
-                                                </div>
-                                            <?PHP endif; ?>
-                                            </div>
-                                            <div class="header-text-container pull-right">
-                                            <?php if(isset($logged_in) && $logged_in): ?>
-                                                <div class="new-user-nav-dropdown">
-                                                    <div class="login-profile-con">
-                                                        <img src="<?=$user_details->profileImage;?>">
+                                                <?php else: ?> 
+                                                    <div class="header-link">
+                                                        <img src="/assets/images/img-login-icon.png" alt="login">
+                                                        <a href="/login">login</a>&nbsp;or&nbsp;
+                                                        <a href="/register">create an account</a>
                                                     </div>
-                                                    <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
-                                                        <?php echo html_escape($user_details->getUsername()) ;?>
-                                                    </a>
-                                                    <span class="default-nav-dropdown-arrow">Account Settings</span>
-                                                    <ul class="default-nav-dropdown">
-                                                        <li>
-                                                            <a href="/me">Dashboard</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/me?me=pending">On-going Transactions</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/?view=basic">Easyshop.ph</a>
-                                                        </li>
-                                                        <li class="nav-dropdown-border">
-                                                            <a href="/me?me=settings">Settings</a>
-                                                        </li>
-                                                        <li class="nav-dropdown-border pos-rel">
-                                                            <a href="/messages">Messages</a>
-                                                            <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                                <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                    <?php echo $msgs['unread_msgs'];?>
-                                                                </div>
-                                                            <?php endif;?>
-                                                        </li>
-                                                        <li class="nav-dropdown-border">
-                                                            <a class="prevent" href="/login/logout">Logout</a>
-                                                        </li>
-                                                    </ul>
-                                                    <div class="clear"></div>                                            
+                                                <?php endif; ?>
                                                 </div>
-                                            <?php else: ?> 
-                                                <div class="header-link">
-                                                    <img src="/assets/images/img-login-icon.png" alt="login">
-                                                    <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
-                                                </div>
-                                            <?php endif; ?>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                </div><!-- End .col-md-12 -->
-                        </div><!-- End .row -->
-                        <div class="clear"></div> 
-                    </div><!-- End .container -->
+                                        
+                                    </div><!-- End .col-md-12 -->
+                            </div><!-- End .row -->
+                            <div class="clear"></div> 
+                        </div><!-- End .container -->
+                    </div>
                 </div>
-                    <div class="clear"></div> 
+                <div class="clear"></div> 
                 </div><!-- End #nav -->
                 <div class="clear"></div> 
             </div><!-- End #inner-header -->

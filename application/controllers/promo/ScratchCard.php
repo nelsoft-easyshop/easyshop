@@ -64,6 +64,9 @@ class ScratchCard extends MY_Controller
         if (!($this->input->get('code'))) {
             redirect('/Scratch-And-Win', 'refresh');
         }
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';

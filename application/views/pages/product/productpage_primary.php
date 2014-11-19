@@ -1,6 +1,7 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
-<link rel="stylesheet" href="/assets/css/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css?ver=<?=ES_FILE_VERSION?>">
+
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
@@ -18,7 +19,7 @@
         </div>
     </div>
 </section>
-
+<div id="scrollpoint"></div>
 <section class="product-main-top-content">
     <div class="container">
         <div class="row">
@@ -28,8 +29,10 @@
                 </h1>
                 <div>
                     By:
+                    <a href="/<?=$product->getMember()->getSlug();?>">
                         <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
+                    </a>
                 </div>
             </div>
         </div>
@@ -101,17 +104,15 @@
                 <?php endif; ?>
 
                 <div class="row pad-top-23">
-                    <div class="col-xs-12 col-sm-5 col-md-5">
-                        <div class="prod-availability-container prod-border-right">
-                            <p>Availability: <span class="in-stock">Select Combination</span></p>
-                        </div>
-                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
-                            <div class=" prod-border-right">
-                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
+                    <div class="col-md-12 col-lg-5">
+                        <div class="prod-border-right mrgn-neg-10">
+                            <div class="prod-availability-container">
+                                <p>Availability: <span class="availability-status">Select Combination</span></p>
                             </div>
-                        <?php endif; ?>
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 col-md-7">
+
+                    <div class="col-md-12 col-lg-7">
                         <p class="attr-title txt-shipment">Shipment Fee:</p>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <span class="default" selected="" value="0">NOT AVAILABLE</span>
@@ -123,9 +124,9 @@
                                             <?php foreach($shiploc['area'] as $island=>$loc):?>
                                                 <option data-price="0" data-text="<?=$island;?>" data-type="1" id="<?='locationID_'.$shiploc['islandkey'][$island];?>" value="<?=$shiploc['islandkey'][$island];?>" disabled><?=$island;?></option>
                                                 <?php foreach($loc as $region=>$subloc):?>
-                                                    <option data-price="0" data-text="&nbsp;&nbsp;&nbsp;<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?=$region;?></option>
+                                                    <option data-price="0" data-text="<?=$region;?>" data-type="2" id="<?='locationID_'.$shiploc['regionkey'][$region];?>" value="<?=$shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled><?=$region;?></option>
                                                     <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                        <option data-price="0" data-text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$cityprov;?></option>
+                                                        <option data-price="0" data-text="<?=$cityprov;?>" data-type="3" id="<?='locationID_'.$id_cityprov;?>" value="<?=$id_cityprov;?>" style="margin-left:30px;" disabled><?=$cityprov;?></option>
                                                     <?php endforeach;?>
                                                 <?php endforeach;?>
                                             <?php endforeach;?>
@@ -136,6 +137,11 @@
                                 <?php endif; ?>
                             <?php endif; ?>
                         <div class="shipping_fee"></div>
+                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
+                            <div class="">
+                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
+                            </div>
+                            <?php endif; ?>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -152,14 +158,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-7" align="center">
+                    <div class="col-sm-12 col-md-7" align="center">
                         <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
                         <?php else: ?>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
-                                <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
+                                <a href="/<?=$product->getMember()->getSlug();?>/contact" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                             <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
                                 <!--Changed button tag-->
@@ -184,29 +190,20 @@
                     <div class="col-md-12 prod-payment-img-container">
                         <p class="attr-title">Payment:</p>
 
-                        <?php if(isset($paymentMethod['cdb'])): ?>
-                            <img src="/assets/images/img-mastercard-colored.png" alt="Mastercard">
-                            <img src="/assets/images/img-visa-colored.png" alt="Visa">
-                        <?php else: ?>
+                        <?php if(isset($paymentMethod['cdb'])): ?> 
                             <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
                             <img src="/assets/images/img-visa-black.png" alt="Visa">
                         <?php endif; ?>
 
-                        <?php if(isset($paymentMethod['dragonpay'])) : ?>
-                            <img src="/assets/images/img-dragonpay-colored.png" alt="Dragon Pay">
-                        <?php else: ?>
+                        <?php if(isset($paymentMethod['dragonpay'])) : ?> 
                             <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
                         <?php endif; ?> 
 
-                        <?php if(isset($paymentMethod['paypal'])) : ?>
-                            <img src="/assets/images/img-paypal-colored.png" alt="Paypal">
-                        <?php else: ?>
+                        <?php if(isset($paymentMethod['paypal'])) : ?> 
                             <img src="/assets/images/img-paypal-black.png" alt="Paypal">
                         <?php endif; ?>
 
-                        <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?>
-                            <img src="/assets/images/img-cod-colored.png" alt="Cash on Delivery">
-                        <?php else: ?>
+                        <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
                             <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
                         <?php endif; ?>
 
@@ -271,12 +268,12 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
 <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/promo/scratch-and-win.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 

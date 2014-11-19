@@ -127,19 +127,24 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                    $(".in-stock").html("Out of Stock");
+                    $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
-                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    $(".in-stock").html("In Stock");
+                    
+                    if($('.prod-add-to-cart-btn').attr('id') === 'send'){
+                        $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
+                    }
+                    
+                    
+                    $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
                         var $text = $("#locationID_"+val.location_id).data('text');
-                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
+                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' - PHP '+ commaSeparateNumber(parseFloat(val.price).toFixed(2))); 
                     });
                 }
 
@@ -154,13 +159,14 @@
 
             $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
-            $(".in-stock").html("Out of Stock");
+            $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
         });
     }
 
 
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
+    $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
 
     if($("#noMoreSelection").val() != ""){
         var $arraySelected = [];
@@ -203,7 +209,7 @@
 
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
-                $(".in-stock").html("Select Combination");
+                $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 return false;
             }
         });
@@ -250,6 +256,44 @@
 
     });
 
+    /**
+     * Add to cart using the express button 
+     * 
+     */
+    $(".btn-add-cart").on("click", function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var $button = $(this);
+        var productId = $button.data('productid');
+        var slug = $button.data('slug');
+         
+        $.ajax({
+            type: "POST",
+            url: "/cart/doAddItem", 
+            dataType: "json",
+            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
+            success: function(result) {
+                if(!result.isLoggedIn){
+                    window.location.replace("/login");
+                }
+                else if(result.isSuccessful){
+                    window.location.replace("/cart");
+                }
+                else{
+                    window.location.replace("/item/"+slug);
+                }
+            }, 
+        });
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // review product
     $(document).on('click', '#submitReview', function(){
         var $this = $(this);
@@ -257,9 +301,33 @@
         var $review = $("#review-comment").val();
         var $rate = $("#star-rate").val(); 
         if($review.trim() == "" || $review.length <= 0 || $title.trim() == "" || $title.length <= 0){
+
+            if($title.trim() == "" || $title.length <= 0){
+                $("#error-review-title").show();
+                $("#review-title").addClass("error-field-review");
+            }
+            else{ 
+                $("#error-review-title").hide();
+                $("#review-title").removeClass("error-field-review");
+            }
+
+            if($review.trim() == "" || $review.length <= 0){
+                $("#error-review-nessage").show();
+                $("#review-comment").addClass("error-field-review");
+            }
+            else{
+                $("#error-review-nessage").hide();
+                $("#review-comment").removeClass("error-field-review");
+            }
+
             return false;
         }
         else{
+            $("#error-review-title").hide();
+            $("#review-title").removeClass("error-field-review");
+            $("#error-review-nessage").hide();
+            $("#review-comment").removeClass("error-field-review");
+
             $this.prop('disabled', true);
             submitReviewAndReply(0,$review,$title,$rate,"review");
         }
@@ -279,11 +347,15 @@
         var $review = $("#textareaReview"+$parent).val(); 
 
         if($review.trim() == "" || $review.length <= 0){
+            $(".error-"+$parent).show();
+            $("#textareaReview"+$parent).addClass("error-field-review");
             return false;
         }
         else{
             $this.prop('disabled', true); 
             submitReviewAndReply($parent,$review,"",0,"reply");
+            $(".error-"+$parent).hide();
+            $("#textareaReview"+$parent).removeClass("error-field-review");
         }
     });
 
@@ -329,6 +401,23 @@
             recommended.trigger('owl.prev');
         })
     });
+
+    function stickyMenualt() {
+        $("html, body").delay(200).animate({
+            scrollTop: $('#scrollpoint').offset().top 
+        }, 200);
+
+        $(".sticky-header-nav").delay(1000).addClass("product-disable-nav", 1000);
+    };
+
+    $(window).on('load', stickyMenualt);
+
+    function stickyMenualt2() {
+        $(".sticky-header-nav").removeClass("product-disable-nav");
+
+    };
+
+    $(document).on('scroll', stickyMenualt2);
 
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];

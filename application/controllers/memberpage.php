@@ -720,7 +720,6 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function transactionResponse(){
-        
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form'
@@ -745,19 +744,40 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $authenticateData = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'member_id' => $this->session->userdata('member_id')
-            );
+            $memberId = $this->session->userdata('member_id');
             
-            if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
-                $serverResponse = array(
-                    'result' => 'invalid',
-                    'error' => 'Incorrect password.'
-                );
-                echo json_encode($serverResponse);
-                exit;
+            if($this->input->post('username') && $this->input->post('password')){
+                $authenticateData = ['username' => $this->input->post('username'),
+                                     'password' => $this->input->post('password')];
+                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($authenticateData['username'], 
+                                                                                                       $authenticateData['password']);
+                if( $authenticationResult['member'] === null || 
+                    !empty($authenticationResult['errors']) ||  
+                    (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
+                ){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Incorrect password.'
+                    );
+
+                    echo json_encode($serverResponse);
+                    exit;
+                }
+                else{
+                    $this->session->set_userdata('transaction_authentication_cache', md5($authenticateData['username'].$authenticateData['password']));
+                }
+            }
+            else{   
+                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                                   ->findOneBy(['idMember' => $memberId ]);
+                if($member === null || ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Your session has expired. Please reload the page and try again.'
+                    );
+                    echo json_encode($serverResponse);
+                    exit;
+                }
             }
             
             // Check type of response ( if user or seller response )
@@ -1874,22 +1894,26 @@ class Memberpage extends MY_Controller
                             'rating3' => $allFeedbacks['rating3Summary'],
                         ];
 
-            $limit = 4;
+            $feedbackLimit = 4;
             $asBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, 
                                                                    $limit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer'])/$feedbackLimit);
 
             $asSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, 
                                                                    $limit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer'])/$feedbackLimit);
 
             $asOtherSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
                                                                    $limit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer'])/$feedbackLimit);
 
             $asOtherBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
                                                                    $limit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer'])/$feedbackLimit);
 
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
