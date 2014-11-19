@@ -14,14 +14,15 @@
                     </div>
                     <div class="col-sm-7 col-xs-12">
                         <div class="row">
-                        <div class="col-xs-5 col-progress-text">
+                        <div class="col-sm-5 col-progress-text">
                             <div class="div-progress-container-text">
                                 Account Progress: 70%
                             </div>
                         </div>
-                        <div class="col-xs-7 col-progress-bar">
+                        <div class="colsm-7 col-progress-bar">
                             <div class="div-progress-bar-container" align="right">
-                                <div class="progress">
+                                <div class="progress progress-account">
+                                    <span class="span-account-progress-text-small">Account Progress: 70%</span>
                                     <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
                                         <span class="sr-only">70% Complete</span>
                                     </div>
