@@ -430,15 +430,19 @@ class NewHomeWebService extends MY_Controller
         
             $imgDirectory = $path_directory.$filename.'.'.$file_ext;
 
+            $this->config->load('image_dimensions', TRUE);
+            $imageDimensionsConfig = $this->config->config['image_dimensions'];
+
+
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
 
-            if( $imageData['image_width'] > 372 || $imageData['image_height'] > 176 ){    
+            if( $imageData['image_width'] > $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] > $imageDimensionsConfig["adsImage"][1] ){    
                 $this->load->library('image_lib');                
                 $config['new_image'] = $imgDirectory;
-                $config['width'] = 372;
-                $config['height'] = 176;
+                $config['width'] = $imageDimensionsConfig["adsImage"][0];
+                $config['height'] = $imageDimensionsConfig["adsImage"][1];
                 $this->image_lib->initialize($config);  
                 $this->image_lib->resize(); 
             }
@@ -494,6 +498,9 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
+                $this->config->load('image_dimensions', TRUE);
+                $imageDimensionsConfig = $this->config->config['image_dimensions'];
+
                 $imageData = $this->upload->data();                             
                 $value = $path_directory.$filename.'.'.$file_ext; 
             
@@ -503,11 +510,11 @@ class NewHomeWebService extends MY_Controller
                     $this->cropImage($imgDirectory, $imgDimensions);
                 }
 
-                if( $imageData['image_width'] > 372 || $imageData['image_height'] > 176 ){    
+                if( $imageData['image_width'] > $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] > $imageDimensionsConfig["adsImage"][1] ){    
                     $this->load->library('image_lib');                
                     $config['new_image'] = $imgDirectory;
-                    $config['width'] = 372;
-                    $config['height'] = 176;
+                    $config['width'] = $imageDimensionsConfig["adsImage"][0];
+                    $config['height'] = $imageDimensionsConfig["adsImage"][1];
                     $this->image_lib->initialize($config);  
                     $this->image_lib->resize(); 
                 }
