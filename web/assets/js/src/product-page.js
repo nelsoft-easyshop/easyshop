@@ -188,25 +188,31 @@
     }
 
     function removeNoCombination()
-    { 
+    {
         $selectedValues = [];
-        $acceptedCombination = [];
+        $varTempValues = [];
+        $firstValue = 0;
+
         $(".attribute-control").each(function() {
             $thisSelect = $(this);
             var $selectValue = $thisSelect.val();
             if($selectValue > 0){
                 $selectedValues.push($selectValue);
+                $firstValue = $selectValue;
             }
         });
+        $selectedCount = $selectedValues.length;
         $.each($productCombQuantity, function(i, val) {
-               $.each($selectedValues, function(j, selVal) { 
+               $.each($selectedValues, function(j, selVal) {
                     if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
                         $.each(val.product_attribute_ids, function(k, idVal) {
-                            $selectedValues.push(idVal); 
+                            $varTempValues.push(idVal); 
                         });
                     }
                });
         });
+
+        $selectedValues = $selectedValues.concat($varTempValues); 
 
         $(".attribute-control > option").prop("disabled",false);
         var $uniqueSelected = arrayUnique($selectedValues);
@@ -217,6 +223,12 @@
                 $('.attribute-control > option[value="' + val + '"]').prop("disabled",false);
             });
         }
+
+        if($selectedCount == 1){
+            $('.attribute-control > option[value="' + $firstValue + '"]').parent().children("option").prop("disabled",false);
+        }
+
+        return $uniqueSelected;
     }
 
 
@@ -247,7 +259,6 @@
         if($imageid > 0){
             $("#image"+$imageid).trigger('click'); 
         }
-removeNoCombination();
         // get selected attributes
         $(".attribute-control").each(function() {
             $thisSelect = $(this);
@@ -263,7 +274,15 @@ removeNoCombination();
         // sort array
         $arraySelected.sort(sortArrayNumber);
         checkCombination($arraySelected);
-
+        $selectedReturn = removeNoCombination();
+        if($this.val() > 0){
+            $this.children("option").each(function(){
+                $thisOption = $(this);
+                if(isInArray($thisOption.val(),$selectedReturn)){
+                    $(this).prop("disabled",false);
+                }
+            });
+        }
 
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
