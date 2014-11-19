@@ -232,7 +232,7 @@ class product extends MY_Controller
         $categoryManager = $this->serviceContainer['category_manager']; 
 
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                  ->findOneBy(['slug' => $itemSlug]);
+                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]);
 
         $viewerId =  $this->session->userdata('member_id');
 
