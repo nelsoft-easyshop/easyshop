@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h5 class="merge-message" align="center">
-                            <i class="glyphicon glyphicon-exclamation-sign"></i> <strong>Hi <?= html_escape($username)?>, welcome to EasyShop.ph! Choose a username to begin using your social media account now. <br/>If you arleady have an EasyShop account, you can also choose to merge these two for your convenience. </strong> 
+                            <i class="glyphicon glyphicon-exclamation-sign"></i> <strong>Hi <a href="javascript:void(0);"><?= html_escape($username)?></a>, welcome to EasyShop.ph! Choose a username to begin using your social media account now. <br/>If you already have an EasyShop account, you can also choose to merge these two for your convenience. </strong> 
                         </h5>
                     </div>
                 </div>
