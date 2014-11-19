@@ -13,7 +13,7 @@
                         </div>
                         <div class="div-inline">
                             <div class="time-container">
-                                <p class="p-time-left">For more information, visit our <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/277834815759448/?type=1">Facebook page</a></p>
+                                <p class="p-time-left">For more information, visit our <a href="https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/295186540690942" target="_blank">Facebook page</a></p>
                                 <table id="table-countdown" align="center">
                                     <tr>
                                         <td class="td-time-num">
