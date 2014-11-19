@@ -1395,7 +1395,7 @@ class productUpload extends MY_Controller
 
             $paymentMethod = $this->config->item('Promo')[0]['payment_method']; 
 
-            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){ 
+            if((int) $product->getIsPromote() === \Easyshop\Entities\EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){ 
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
             }
 
