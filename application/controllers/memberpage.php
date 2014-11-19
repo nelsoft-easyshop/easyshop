@@ -489,9 +489,6 @@ class Memberpage extends MY_Controller
                 'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
             )
         );
-        print "<pre>";
-        print_r($data['transaction']['sell']);
-        print "</pre>";
 
         $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
         $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);

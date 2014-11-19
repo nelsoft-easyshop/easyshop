@@ -17,9 +17,10 @@ class EsOrderRepository extends EntityRepository
     /**
      * Returns sold transactions of users
      * @param int $userid
+     * @param int $orderStatus
      * @return object
      */   
-    public function getUserSoldTransactions($uid)
+    public function getUserSoldTransactions($uid, $orderStatus = 0)
     {
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
 
@@ -71,12 +72,14 @@ class EsOrderRepository extends EntityRepository
                                     )
                                 )
                             )    
-                        ->andWhere('o.orderStatus != 2')    
-                        ->andWhere('o.paymentMethod IN(:paymentMethodLists)')                                  
-                        ->orderBy('o.idOrder', "desc")    
+                        ->andWhere('o.orderStatus != 2')
+                        ->andWhere('o.orderStatus = :orderStatus')
+                        ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+                        ->orderBy('o.idOrder', "desc")
                         ->setParameter('sellerId', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT) 
-                        ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)                         
+                        ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+                        ->setParameter('orderStatus', $orderStatus)
                         ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods()))))                         
                         ->getQuery();
                         return $queryBuilder->getResult();
@@ -121,8 +124,8 @@ class EsOrderRepository extends EntityRepository
                         ->andWhere('o.orderStatus IN(0,99)')    
                         ->andWhere('o.buyer = :buyer_id')    
                         ->andWhere('o.paymentMethod IN(:paymentMethodLists)')      
-                        ->orderBy('o.idOrder', "desc")    
-                        ->setParameter('buyer_id', $uid) 
+                        ->orderBy('o.idOrder', "desc")
+                        ->setParameter('buyer_id', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT) 
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL) 
                         ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods())))) 
