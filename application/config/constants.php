@@ -44,7 +44,7 @@ if(ENVIRONMENT == 'development'){
     $fileVersion = date('Ymdhis');
 }
 else{
-    $fileVersion = '8.0.5';
+    $fileVersion = '8.0.7';
 }
 define('ES_FILE_VERSION',$fileVersion);
 
