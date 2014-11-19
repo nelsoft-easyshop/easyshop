@@ -1128,6 +1128,9 @@ a{
     display: none;
 }
 
+.span-account-progress-text-small{
+    display: none;
+}
 @media only screen and (max-width: 991px){
     .container-dashboard{
         width: 100%;
@@ -1196,4 +1199,27 @@ a{
         display: inline;
     }
     
+    .col-progress-text{
+        display: none;
+    }
+    
+    .col-progress-bar{
+        padding: 0px 15px;
+    }
+    
+    .progress-account{
+        margin-bottom: 0px;
+        position: relative
+    }
+    
+    .span-account-progress-text-small{
+        display: inline-block;
+        position: absolute;
+        left: 0px;
+        top: 2px;
+        text-align: center;
+        font-weight: 900;
+        color: #fff;
+        width: 100%;
+    }
 }
