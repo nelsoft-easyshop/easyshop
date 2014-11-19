@@ -1,6 +1,6 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
-<link rel="stylesheet" href="/assets/css/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css?ver=<?=ES_FILE_VERSION?>">
 
 <section class="breadcrumbs-bg">
     <div class="container">
