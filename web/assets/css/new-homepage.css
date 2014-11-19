@@ -1533,6 +1533,12 @@ header {
     padding-top:5px;
 }
 
+.item-meta-container > a,
+.item-meta-container > a >.item-name
+{
+    transition: all 0.3s ease;
+}
+
 .category-list-container .ratings-container {
     margin-bottom:10px;
 }
@@ -2951,6 +2957,12 @@ font-size: 15px;
     background: #fff;
 }
 
+.image-handler{
+    width: 100%; 
+    padding: 0px 20px; 
+    height: 228px;
+}
+
 .img-rec-product{
     width: auto;
     max-width: 100%;
@@ -2972,7 +2984,7 @@ h3 > b{
     position: absolute;
     left: 0;
     padding: 20px;
-    top: 41px;
+    top: 22px;
     -webkit-transition: opacity 0.3s ease-in-out;
     -moz-transition: opacity 0.3s ease-in-out;
     -o-transition: opacity 0.3s ease-in-out;
@@ -3480,6 +3492,15 @@ h3 > b{
         vertical-align: middle;
         text-align: center;
         background: #fff;
+    }
+    
+    .main-prod-image{
+        padding: 10px;
+        height: 100px;
+    }
+    
+    .image-handler{
+        height: 100px;
     }
 
     .span-me{
