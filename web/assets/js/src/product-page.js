@@ -419,6 +419,13 @@
 
     $(document).on('scroll', stickyMenualt2);
 
+    if ($(".shipment-period").length) {
+        $(".shipment-fee-container").css("margin", "0");
+    }
+    else {
+        $(".shipment-fee-container").css("margin", "auto");
+    };
+
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
