@@ -53,6 +53,8 @@
                 "max-width": prodcongalwidth
             });
 
+            $(".zoomPad").css("width", zoompadimg.width());
+            $(".zoomWindow").css("width", zoompadimg.width());
             }, 500);
         });
 

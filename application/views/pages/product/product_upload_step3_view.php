@@ -250,7 +250,7 @@
                 <div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
                         
                     <div class="pd-bttm-15">
-                        Shipped Within <input type="text" class="shipping-days form-control" name="ship_within" size=3 value="<?=$product['ships_within_days']; ?>" id="ship-within" onkeypress="return isNumberKey(event)" /> Days
+                        Ships within: <input type="text" class="shipping-days form-control" name="ship_within" size=3 value="<?=$product['ships_within_days']; ?>" id="ship-within" onkeypress="return isNumberKey(event)" /> Days
                     </div> 
 
                     <div class="pd-bottom-20 delivery-btn-con">

@@ -12,14 +12,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h5 class="merge-message" align="center">
-                            <i class="glyphicon glyphicon-exclamation-sign"></i> <strong>Ooooops!</strong> Your username <a href="#"><strong><?=$username?></strong></a> has already been taken. <br/>Please choose from the following options below.
+                            <i class="glyphicon glyphicon-exclamation-sign"></i> <strong>Hi <a href="javascript:void(0);"><?= html_escape($username)?></a>, welcome to EasyShop.ph! Choose a username to begin using your social media account now. <br/>If you already have an EasyShop account, you can also choose to merge these two for your convenience. </strong> 
                         </h5>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group form-merge-2">
-                            <label class="control-label">Type in your new username</label>
+                            <label class="control-label">Type in your username</label>
                             <input type="text" class="form-control input-merge" placeholder="New username" id="txt-username"/>
                             <div class="div-validation-container auto-height">
                                 <p class="span-validation-ok username-accepted" style="display: none">
@@ -59,7 +59,8 @@
                     <div class="col-md-5">
                         <div class="form-group form-merge">
                             <p class="label-merge">
-                                If you believe you own this account, type in your email address to send a verification request to the registered email of username to update your account.
+                                If you wish to merge an existing account with this one, type in the email address of the other account so we can send a merge verfification request to that email.
+                              
                             </p>
                             <div class="row">
                                 <div class="col-md-7 col-check-1">
@@ -73,11 +74,11 @@
                             <div class="div-validation-container">
                                 <p class="span-validation-ok email-accepted" style="display: none">
                                     <i class="glyphicon glyphicon-ok-sign"></i>
-                                    Email Address is available
+                                    E-mail address found
                                 </p>
                                  <p class="span-validation-error email-denied" style="display: none">
                                      <i class="glyphicon glyphicon-remove-sign"></i>
-                                     Email Address is not available
+                                     E-mail address not found
                                  </p>
                             </div>
                             <div class="div-search-merge-account div-result" id="available-result" style="display: none">
@@ -102,7 +103,7 @@
                                                     Username:
                                                 </td>
                                                 <td class="td-merge-detail" id="available-username">
-                                                    sampleUser
+                                                    
                                                 </td>
                                             </tr>
                                             <tr>
@@ -110,7 +111,7 @@
                                                     Email:
                                                 </td>
                                                 <td class="td-merge-detail" id="available-email">
-                                                    sampleUser@yahoo.com
+                                                    
                                                 </td>
                                             </tr>
                                             <tr>
@@ -118,7 +119,7 @@
                                                     Location:
                                                 </td>
                                                 <td class="td-merge-detail" id="available-location">
-                                                    Makina City
+                                                    
                                                 </td>
                                             </tr>
                                         </table>

@@ -484,28 +484,13 @@ class ProductManager
      */
     public function getRecommendedProducts($productId, $limit = null)
     {    
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
+        $productImageRepo =  $this->em->getRepository('EasyShop\Entities\EsProductImage');
+        $productRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $product = $productRepo->find($productId);
 
-        $queryBuilder = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->createQueryBuilder("p")
-                                ->select("p")
-                                ->where('p.cat = :category')
-                                ->andWhere("p.idProduct != :productId")
-                                ->andWhere("p.isDraft = :isDraft")
-                                ->andWhere("p.isDelete = :isDelete")
-                                ->setParameter('productId',$product->getIdProduct())
-                                ->setParameter('category',$product->getCat())
-                                ->setParameter('isDraft',0)
-                                ->setParameter('isDelete',0)
-                                ->orderBy('p.clickcount', 'DESC')
-                                ->getQuery();
-        if($limit){
-            $queryBuilder->setMaxResults($limit);
-        }
-
-        $products = $queryBuilder->getResult();
+        $products = $productRepo->getRecommendedProducts($productId, $product->getCat(), $limit);
         
+        $detailedProducts = [];
         foreach($products as $key => $product){ 
             $eachProduct = $this->getProductDetails($product->getIdProduct());
             $eachProduct->ownerAvatar = $this->userManager
@@ -517,12 +502,17 @@ class ProductManager
             if($eachProduct->getDefaultImage()){
                 $eachProduct->directory = $eachProduct->getDefaultImage()->getDirectory();
                 $eachProduct->imageFileName = $eachProduct->getDefaultImage()->getFilename();
+                $secondaryImage = $productImageRepo->getSecondaryImage($product->getIdProduct());
+
+                if($secondaryImage){
+                    $eachProduct->secondaryImage = $secondaryImage->getFilename(); 
+                }
             }
 
-            $products[$key] = $eachProduct;
+            $detailedProducts[$key] = $eachProduct;
         }
-        
-        return $products;
+
+        return $detailedProducts;
     }
 
     /**
@@ -780,6 +770,52 @@ class ProductManager
     }
 
     /**
+     *  Bulk Restore products in memberpage
+     *
+     *  @param array $arrProductId - product Ids
+     *  @param integer $memberId
+     *
+     *  @return boolean
+     */
+    public function editBulkIsDelete($arrProductId, $memberId, $selector = "restore")
+    {
+        $arrayProductId = is_array($arrProductId) ? $arrProductId : array($arrProductId);
+        $objMember = $this->em->find("EasyShop\Entities\EsMember", $memberId);
+
+        switch( $selector ){
+            case "restore":
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+            case "delete":
+                $isDeleteVal = EsProduct::DELETE;
+                break;
+            case "full_delete":
+                $isDeleteVal = EsProduct::FULL_DELETE;
+                break;
+            default:
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+        }
+
+        foreach($arrayProductId as $productId){
+            $objProduct = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                   ->findOneBy(array(
+                                        "idProduct" => $productId,
+                                        "member" => $objMember
+                                    ));
+
+            $objProduct->setIsDelete($isDeleteVal)
+                       ->setLastmodifieddate(date_create());
+
+            $this->em->persist($objProduct);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
+    
+    /*
      * Check if the product is free shipping nationwide
      * @param  integer  $productId
      * @return boolean

@@ -67,7 +67,7 @@ class Home extends MY_Controller
         );
 
         $data = array_merge($data, $this->fill_header());
-        
+
         if( $data['logged_in'] && $view !== 'basic'){
             $this->load->view('templates/header', $data);
             $data = array_merge($data, $this->getFeed());            
@@ -92,10 +92,8 @@ class Home extends MY_Controller
                 $memberId = $this->session->userdata('member_id');
                 $data['logged_in'] = true;
                 $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                                ->find($memberId);
-                $data['user_details']->profileImage = ($data['user_details']->getImgurl() == "") 
-                                        ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                        : $data['user_details']->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+                                                ->find($memberId);                          
+                $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');                
             }
             $parentCategory = $EsCatRepository->findBy(['parent' => 1]);
             $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
@@ -796,10 +794,13 @@ class Home extends MY_Controller
                                                            ->find(intval($this->input->post('userId')));
         $orderToReview = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
                                                            ->find(intval($this->input->post('feeback-order')));   
-             
+        $rating1 = (int) $this->input->post('rating1');
+        $rating2 = (int) $this->input->post('rating2');
+        $rating3 = (int) $this->input->post('rating3');
+        $areAllRatingsSet = $rating1 > 0 && $rating2 > 0 && $rating3 > 0;
         $message = $this->input->post('feedback-message');
                 
-        if($reviewer && $reviewee && $orderToReview && strlen($message) > 0){
+        if($reviewer && $reviewee && $orderToReview && strlen($message) > 0 && $areAllRatingsSet){
             if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
                 $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
             }
@@ -815,9 +816,9 @@ class Home extends MY_Controller
             $feedback->setOrder($orderToReview);
             $feedback->setFeedbMsg($message);
             $feedback->setDateadded(new DateTime('now'));
-            $feedback->setRating1(intval($this->input->post('rating1')));
-            $feedback->setRating2(intval($this->input->post('rating2')));
-            $feedback->setRating3(intval($this->input->post('rating3')));
+            $feedback->setRating1($rating1);
+            $feedback->setRating2($rating2);
+            $feedback->setRating3($rating3);
             $feedback->setFeedbKind($feedbackType);
             $em->persist($feedback);
             $em->flush();

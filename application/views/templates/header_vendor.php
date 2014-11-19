@@ -212,11 +212,11 @@
                                         <div class="mrgn-bttm-15">
                                             <div class="header-cart-item-img">
                                                 <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                                 </a>
                                             </div>
                                             <div class="header-cart-item-con">
-                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
                                                 <span>x <?=$cartItemsReversed[$i]['qty']?></span>
                                                 <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                             </div>

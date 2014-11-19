@@ -18,7 +18,7 @@ class ScratchAndWinPromo extends AbstractPromo
         }
         $promoData = $this->getPromoData(
             $this->product->getPrice(),
-            $this->dateToday,
+            $this->startDateTime,
             $this->endDateTime,
             $this->product->getDiscount()
         );
@@ -49,7 +49,7 @@ class ScratchAndWinPromo extends AbstractPromo
         $promoDetails = array(
             'promoPrice' => $price,
             'isStartPromo' => false,
-            'isEndPromo' => ($startDateTime > $endDateTime) ? true : false
+            'isEndPromo' => ($dateToday > $endDateTime) ? true : false
         );
 
         if($dateToday >= $startDateTime && $dateToday <= $endDateTime) {

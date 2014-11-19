@@ -232,7 +232,7 @@ class product extends MY_Controller
         $categoryManager = $this->serviceContainer['category_manager']; 
 
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                  ->findOneBy(['slug' => $itemSlug]);
+                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]);
 
         $viewerId =  $this->session->userdata('member_id');
 
@@ -282,7 +282,7 @@ class product extends MY_Controller
 
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
 
-            $productDescription = $stringUtility->purifyString($product->getDescription());
+            $productDescription = $stringUtility->purifyHTML($product->getDescription());
 
             $productReviews = $reviewProductService->getProductReview($productId);
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
@@ -297,9 +297,9 @@ class product extends MY_Controller
 
             $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
             $recommendViewArray = [
-                                    'recommended'=> $recommendProducts,
-                                    'productCategorySlug' => $product->getCat()->getSlug(),
-                                  ];
+                                'recommended'=> $recommendProducts,
+                                'productCategorySlug' => $product->getCat()->getSlug(),
+                            ];
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
@@ -323,16 +323,20 @@ class product extends MY_Controller
                             'recommendedView' => $recommendedView,
                             'noMoreSelection' => $noMoreSelection, 
                             'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                            'url' => '/item/' . $product->getSlug() 
+                            'url' => base_url() .'item/' . $product->getSlug()
                         ];
 
             if($this->session->userdata('member_id')) {
                 $headerData['user_details'] = $this->fillUserDetails();
             }
 
-            $headerData['metadescription'] = es_string_limit(html_escape($product->getBrief()), $productManager::PRODUCT_META_DESCRIPTION_LIMIT);
+            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
+            $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
             $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
             $headerData['homeContent'] = $this->fillCategoryNavigation();
+      
+            
             $headerData = array_merge($headerData, $this->fill_header());
 
             $socialMediaLinks = $this->getSocialMediaLinks();
@@ -479,6 +483,27 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
+    /**
+     *  Function to handle isDelete field in es_product
+     *  Handles delete, restore, and remove (full delete) functions for products
+     *  in memberpage
+     *
+     *  @return JSON
+     */
+    public function bulkProductOptions()
+    {
+        if( $this->input->post('bulk_action') ){
+            $pm = $this->serviceContainer['product_manager'];
+
+            $arrProductId = json_decode($this->input->post('bulk_p_id'), true);
+            $memberId = $this->session->userdata('member_id');
+            $action = $this->input->post('bulk_action');
+
+            $pm->editBulkIsDelete($arrProductId, $memberId, $action);
+
+            redirect('me', 'refresh');
+        }
+    }
 
 }
 
