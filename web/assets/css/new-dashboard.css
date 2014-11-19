@@ -1131,7 +1131,98 @@ a{
 .span-account-progress-text-small{
     display: none;
 }
+
+.mobile-dashboard-menu{
+    display: none;
+}
+
 @media only screen and (max-width: 991px){
+    .section-dashboard{
+        margin-top: 0px;
+    }
+    .mobile-dashboard-menu{
+        position: relative;
+        display: inline-block !important;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .col-dash-mobile{
+        padding-right: 0px;
+        padding-left:0px;
+        border-top: solid #e2e2e2 1px;
+        border-bottom: solid #e2e2e2 1px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    
+    .my-store-menu-mobile{
+        border-left: solid #e2e2e2 1px;
+        border-right: solid #e2e2e2 1px;
+        cursor: pointer;
+    }
+    
+    .my-store-menu-mobile-cont{
+        position:absolute;
+        z-index:555;
+        width: 100%;
+        padding: 0px 20px;
+        margin-top: 5px;
+        display: none;
+    }
+    
+    .my-account-menu-mobile-cont{
+        position:absolute;
+        z-index:555;
+        width: 100%;
+        padding: 0px 20px;
+        margin-top: 5px;
+        display: none;
+    }
+    
+    .my-store-menu-mobile-ul{
+        border-top: solid #ff893a 3px;
+        border-bottom: solid #ff893a 3px;
+    }
+    
+    .my-account-menu-mobile-ul{
+        border-top: solid #ff893a 3px;
+        border-bottom: solid #ff893a 3px;
+    }
+    
+    .my-store-menu-mobile-ul > a > li{
+        background: #fff;
+        padding: 10px 20px;
+        display: block;
+        width: 100%;
+        font-size:14px;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    
+    .my-account-menu-mobile-ul > a > li{
+        background: #fff;
+        padding: 10px 20px;
+        display: block;
+        width: 100%;
+        font-size:14px;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    
+    .m-menu-setup{
+        border-top: solid #e2e2e2 1px;
+    }
+    
+    .m-menu-delivery{
+        border-top: solid #e2e2e2 1px;
+        border-bottom: solid #e2e2e2 1px;
+    }
+    
+    .sidebar-dashboard{
+        display: none;
+    }
     .container-dashboard{
         width: 100%;
         margin: 0px;
@@ -1221,5 +1312,15 @@ a{
         font-weight: 900;
         color: #fff;
         width: 100%;
+    }
+    
+    .div-tab{
+        padding: 10px;
+    }
+    
+    .form-horizontal > .form-group > .col-sm-3,
+    .form-horizontal > .form-group > .col-sm-4
+        {
+        padding-left: 0px;
     }
 }
