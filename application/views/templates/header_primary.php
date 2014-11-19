@@ -292,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <li>
                                                             <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
                                                                 <?php if($topSeller['details']): ?>
-                                                                    <a href="<?php echo $topSeller['details']->getSlug() ?>">
+                                                                    <a href="/<?php echo $topSeller['details']->getSlug() ?>">
                                                                         <div class="top-seller-profile-photo">
                                                                             <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
                                                                         </div>
