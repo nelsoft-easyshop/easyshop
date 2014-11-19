@@ -855,24 +855,24 @@ class ProductManager
                                     ->getShippingDetailsByProductId($productId);
 
         $productCombinationAvailable = [];
-        foreach ($productInventory as $key => $value) {
+        foreach ($productInventory as $value) {
             if(!array_key_exists($value['id_product_item'],$productCombinationAvailable)){
 
                 $locationArray = [];
                 foreach ($shippingDetails as $shipKey => $shipValue) {
-                    if(intval($shipValue['product_item_id']) === intval($value['id_product_item'])){
-                        $locationArray[] = array(
+                    if((int)$shipValue['product_item_id'] === (int)$value['id_product_item']){
+                        $locationArray[] = [
                                 'location_id' => $shipValue['location_id'],
                                 'price' => $shipValue['price'],
-                            );
+                            ];
                     }
                 }
 
-                $productCombinationAvailable[$value['id_product_item']] = array(
+                $productCombinationAvailable[$value['id_product_item']] = [
                     'quantity' => $value['quantity'],
                     'product_attribute_ids' => [$value['product_attr_id']],
                     'location' => $locationArray,
-                );
+                ];
             }
             else{
                 $productCombinationAvailable[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
@@ -881,14 +881,15 @@ class ProductManager
 
         // check if combination available
         $noMoreSelection = "";
-        if(count($productInventory) === 1 && intval($productInventory[0]['product_attr_id']) === 0){
+        if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
+            || count($productCombinationAvailable) === 1 ){
             $noMoreSelection = $productInventory[0]['id_product_item'];
         }
 
-        return array(
+        return [
                 'noMoreSelection' => $noMoreSelection,
                 'productCombinationAvailable' => $productCombinationAvailable
-            );
+            ];
     }
 }
 
