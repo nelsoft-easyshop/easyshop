@@ -16,7 +16,11 @@ $config = array(
             'thumbnail' => array(
                             60,
                             80,
-            ),                  
+            ), 
+            'adsImage' => array(
+                            372,
+                            176,
+            ),                               
         );
         
 /* End of file image_dimensions.php */
