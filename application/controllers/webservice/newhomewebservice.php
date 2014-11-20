@@ -1096,7 +1096,7 @@ class NewHomeWebService extends MY_Controller
 
 
     /**
-     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  Method to display the contents of the new_home_files_temp.xml from the function call from Easyshop.ph.admin
      *  @return string
      */
     public function getTempContents() 
@@ -1110,7 +1110,7 @@ class NewHomeWebService extends MY_Controller
     }     
 
     /**
-     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  Method that handles synching sliderSection values from new_home_files.xml to new_home_files_temp.xml
      *  @return string
      */
     public function syncTempHomeFiles()
