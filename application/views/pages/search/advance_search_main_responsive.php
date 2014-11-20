@@ -13,11 +13,11 @@ function in_array_r($needle, $haystack, $strict = false) {
 }# checking end	
 
 ?>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/simple-sidebar.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/simple-sidebar.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <style type="text/css">
 .err{
 	-webkit-box-shadow: 0px 0px 2px 2px #FF0000;
@@ -173,7 +173,7 @@ function in_array_r($needle, $haystack, $strict = false) {
             for ($i = 0; $i < sizeof($items); $i++) {
       ?>
 				<div class="product-list"> 
-					<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+					<a href="<?php echo "/item/" . $items[$i]['slug']; ?>">
 						<span class="prod_img_wrapper">
 							<?php if((intval($items[$i]['is_promote']) == 1) && isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>					  
 							  <span class="cd_slide_discount">
@@ -182,12 +182,12 @@ function in_array_r($needle, $haystack, $strict = false) {
 							<?php endif; ?>
                             
 							<span class="prod_img_container">
-								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
+								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
 							</span>
 						</span>	
 					</a>
 					<h3>
-						<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+						<a href="<?php echo "/item/" . $items[$i]['slug']; ?>">
 							<?php echo html_escape($items[$i]['product_name']); ?>
 						</a>
 					</h3>
@@ -261,7 +261,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 									});
 						  </script>
 						</div>
-						<form method="post" action="<?= base_url() ?>">
+						<form method="post" action="/">
 						<div id="collapseOne" class="panel-collapse collapse <?php if(!empty($items)) { echo ""; }else{ echo "in"; }?>">
 							<div class="panel-body">
 								<table width="100%">
@@ -360,12 +360,12 @@ function in_array_r($needle, $haystack, $strict = false) {
 						<tr>
 							<td width="90px" class="v-align-top">
 								<span class="prod_img_container">
-									<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']. "small/" .$items[$i]['file']; ?>">
+									<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']. "small/" .$items[$i]['file']; ?>">
 								</span>
 							</td>
 							<td class="v-align-top">
 								<p class="p-item-name">
-									<a class="a-item-name" href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
+									<a class="a-item-name" href="/item/<?php echo $items[$i]['slug']; ?>">
 										<?php 
 											
 											$item_name_m = html_escape($items[$i]['product_name']); 
@@ -484,10 +484,10 @@ function in_array_r($needle, $haystack, $strict = false) {
 </div>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
 <?php echo form_close();?>
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script> 
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
 	$.scrollUp({

@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 
 <?php
@@ -14,7 +14,7 @@ $_SESSION['start'] = "0";
 <section class="top_margin">
     <div class="wrapper">
         <div class="prod_categories">
-            <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
+            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
             <?php echo $category_navigation; ?>
         </div>
         <div class="prob_cat_nav">  
@@ -22,7 +22,7 @@ $_SESSION['start'] = "0";
                 <ul>
                     <?php foreach ($main_categories as $category): ?>
                     <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat']) ? "active" : ""); ?>>
-                        <a href="<?= base_url() ?>category/<?php echo $category['slug']?>">
+                        <a href="/category/<?php echo $category['slug']?>">
                         <?php echo html_escape($category['name']); ?>
                         </a>
                     </li>
@@ -34,10 +34,10 @@ $_SESSION['start'] = "0";
         <div class="clear"></div>
         <div class="bread_crumbs">
             <ul>
-                <li class=""><a href="<?= base_url() ?>home">Home</a></li>
+                <li class=""><a href="/">Home</a></li>
                 <?php foreach ($breadcrumbs as $crumbs): ?>
                 <li>
-                    <a href="<?= base_url() ?>category/<?php echo $crumbs['slug'] ?>">
+                    <a href="/category/<?php echo $crumbs['slug'] ?>">
                         <?php echo html_escape($crumbs['name']); ?>
                     </a>
                 </li> 
@@ -131,11 +131,11 @@ $_SESSION['start'] = "0";
                 <div class="cc2">
                     <?PHP foreach ($subcategories as $rows): ?>
                     <div class="">
-                        <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['slug'];?>">
+                        <a class="cc2_title" href="/category/<?php echo $rows['slug'];?>">
                             <span><?php echo html_escape($rows['name']);?></span></a>
                             <?PHP if(count($rows['popular'])>0): ?>
-                            <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
-                            <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
+                            <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="/<?= $rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
+                            <div class="cc2_prod_name"><a href="<?PHP echo "/item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
                             <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
                             <?PHP endif; ?>
                         </div>
@@ -183,7 +183,7 @@ $_SESSION['start'] = "0";
                     }
                  ?>
                 <div class="<?php echo $typeOfView; ?>">
-                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
+                    <a href="/item/<?php echo $items[$i]['slug']; ?>">
                         <span class="prod_img_wrapper">
 			    <?php if((intval($items[$i]['is_promote']) === 1) && isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>
                             <span class="cd_slide_discount">
@@ -193,12 +193,12 @@ $_SESSION['start'] = "0";
 
 
                             <span class="prod_img_container">
-                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() .$items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
+                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="/<?php echo $items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
                             </span>
                         </span>
                     </a>
                     <h3>
-                        <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
+                        <a href="/item/<?php echo $items[$i]['slug']; ?>">
                             <?php echo html_escape($items[$i]['name']); ?>
                         </a>
                     </h3>
@@ -244,8 +244,8 @@ $_SESSION['start'] = "0";
 
 
 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
     $.scrollUp({
@@ -266,8 +266,8 @@ $(function () {
 });
 
 </script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 
 <?php
 $price1= "";
@@ -335,7 +335,7 @@ $(document).ready(function() {
     }
  
     // START OF INFINITE SCROLLING FUNCTION
-    var base_url = config.base_url;
+    var base_url = '/';
     var offset = 1;
     var request_ajax = true;
     var ajax_is_on = false;
@@ -363,7 +363,7 @@ $(document).ready(function() {
                         data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type, parameters:'<?php echo  json_encode($_GET); ?>', csrfname : csrftoken},
                         type: 'post',
                         dataType: 'JSON',
-                        onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                        onLoading:jQuery(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
                         success: function(d) {
                             if(d == "0"){
                                 ajax_is_on = true;

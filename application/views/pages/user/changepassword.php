@@ -36,8 +36,8 @@
                     <div class="field">
                           <label>Confirm New Password:</label>
                           <input id="cpassword" name="cpassword" type="password" maxlength="100" disabled="true">
-                          <img src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-                          <img src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+                          <img src="/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+                          <img src="/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
                           <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                           <input id="wsx" name="wsx" type="hidden" value="<?php echo $user["username"]; ?>"/>
                     </div>
@@ -56,7 +56,7 @@
 					<input type="hidden" value="<?php echo strtolower($user["username"]);?>" id="changepass_username">
                 <?php elseif($toggle_view == ""): ?>
                     <strong>
-						Password successfully updated. <br/><a href='<?=base_url()?>me' style="color: #0191C8">Click here </a> to return to your page.
+						Password successfully updated. <br/><a href='/me' style="color: #0191C8">Click here </a> to return to your page.
 					</strong>
 				<?php endif; ?>            
           </div>
@@ -66,7 +66,7 @@
 			  <div>
 				<strong>
 					<p>You are not currently signed-in. </p>
-					<p><a href='<?=base_url()?>login'>Click here to sign-in.</a> </p>
+					<p><a href='/login'>Click here to sign-in.</a> </p>
 				</strong> 
 			  </div>
 			</div>
@@ -75,13 +75,13 @@
       </div>
 </section>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+<script type='text/javascript' src='/assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
 
 <!-- password strength checker -->
 <?php if(($logged_in)&&($toggle_view == "1")):?>
-	<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script> 
-    <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
+	<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script> 
+    <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
 <?php endif; ?>
 

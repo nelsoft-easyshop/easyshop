@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberProdcat
  *
  * @ORM\Table(name="es_member_prodcat", indexes={@ORM\Index(name="fk_es_member_prodcat_1_idx", columns={"memcat_id"}), @ORM\Index(name="fk_es_member_prodcat_2_idx", columns={"product_id"})})
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberProdcatRepository")
+ * @ORM\Entity
  */
 class EsMemberProdcat
 {
@@ -20,6 +20,13 @@ class EsMemberProdcat
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idMemprod;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_date", type="datetime", nullable=false)
+     */
+    private $createdDate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsMemberCat
@@ -51,6 +58,29 @@ class EsMemberProdcat
     public function getIdMemprod()
     {
         return $this->idMemprod;
+    }
+
+    /**
+     * Set createdDate
+     *
+     * @param \DateTime $createdDate
+     * @return EsMemberProdcat
+     */
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createdDate
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedDate()
+    {
+        return $this->createdDate;
     }
 
     /**

@@ -8,7 +8,7 @@
     	<ul class="idTabs deals_tab">
     		<li>
     			<a href="#peak_hour_sale">
-    				<img src="<?=base_url()?>assets/images/img_promo1.jpg" alt="Peak Hour Promo" class="deals_tab_img">
+    				<img src="/assets/images/img_promo1.jpg" alt="Peak Hour Promo" class="deals_tab_img">
     				<div class="deals_tab_btn_con">
     					<span class="deals_tab_btn">Peak Hour Promo</span>
     				</div>
@@ -16,7 +16,7 @@
     		</li>
     		<li>
     			<a href="#easytreats">
-    				<img src="<?=base_url()?>assets/images/img_promo2.jpg" alt="Easy Treat Promo" class="deals_tab_img">
+    				<img src="/assets/images/img_promo2.jpg" alt="Easy Treat Promo" class="deals_tab_img">
     				<div class="deals_tab_btn_con">
     					<span class="deals_tab_btn">Easy Treat Promo</span>
     				</div>
@@ -29,5 +29,5 @@
 
 
 
-    <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
     

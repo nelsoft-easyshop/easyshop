@@ -137,6 +137,10 @@
     padding-top: 1.875em;
 }
 
+.pd-top-40 {
+    padding-top: 40px;
+}
+
 .pd-bttm-30 { /*** 30px **/
     padding-bottom: 1.875em;
 }

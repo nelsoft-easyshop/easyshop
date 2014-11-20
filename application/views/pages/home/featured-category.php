@@ -56,12 +56,14 @@
                                                 <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
                                                     
                                                 </div>
-                                                <div class="div-rec-product-image main-prod-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                                <div class="div-rec-product-image main-prod-image">
                                             <?PHP else : ?>
-                                                <div class="div-rec-product-image" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                                <div class="div-rec-product-image">
                                             <?PHP endif; ?>
                                             <!--main image-->
-                                                    
+                                                    <div class="image-handler" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                        
+                                                    </div>
                                                 </div>
                                                 
                                         </a>
@@ -73,11 +75,13 @@
                                         <span class="discount-circle-2"><?php echo number_format($product->getDiscountPercentage(), 0); ?>%</span>
                                     <?php endif; ?>
                                 <div class="item-meta-container" align="left">
-                                    <h3 class="item-name">
+                                    
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                            <h3 class="item-name">
+                                                <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                            </h3>
                                         </a>
-                                    </h3>
+                                    
                                     <div class="item-meta-inner-container clearfix">
                                         <div class="item-price-container">
                                             <?php if (floatval($product->getDiscountPercentage()) > 0): ?>

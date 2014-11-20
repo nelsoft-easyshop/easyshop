@@ -34,7 +34,7 @@ class Product extends MY_Controller {
         $id = $productRow['id_product'];
         $productCategoryId = $productRow['cat_id'];
 
-        $format = $this->serviceContainer['api_formatter']->formatItem($id);
+        $format = $this->serviceContainer['api_formatter']->formatItem($id,true);
 
         $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
         $formattedRelatedItems = array();
@@ -66,7 +66,7 @@ class Product extends MY_Controller {
                                                 ->formatDisplayItem($value->getIdProduct());
         }
 
-        print(json_encode(array('products'=>$formattedDeals),JSON_PRETTY_PRINT));
+        print(json_encode($formattedDeals,JSON_PRETTY_PRINT));
     }
 }
 

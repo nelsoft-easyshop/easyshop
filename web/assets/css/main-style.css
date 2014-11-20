@@ -18,7 +18,8 @@ font-weight: bold;
 {
 font-family: Helvetica;
 src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
-font-weight: 900;
+font-weight: 600;
+
 }
 
 /*** global style ***/
@@ -1738,6 +1739,7 @@ td.td-view.p-view2.color-default{
 }
 
 .footer-primary input[type="text"] {
+    font-weight: normal;
     height: 35px;
     max-width: 373px;
     vertical-align: middle;
@@ -1747,6 +1749,23 @@ td.td-view.p-view2.color-default{
 .footer-primary input[type="submit"] {
     font-weight: bold;
     text-transform: uppercase;
+}
+
+.footer-primary .ui-form-control::-webkit-input-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control:-moz-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control::-moz-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control:-ms-input-placeholder {
+    font-size: 16px;
+    font-weight: 900;
 }
 
 .social-media-wrapper a:first-child {

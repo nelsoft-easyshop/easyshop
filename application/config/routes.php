@@ -94,7 +94,9 @@ else {
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
     #ITEMS
-    $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
+    $route['(?i)item/(:any)'] = 'product/item/$1';
+    $route['(?i)product/submit-reply'] = 'product/submitReply';
+    $route['(?i)product/submit-review'] = 'product/submitReview';
 
 
     #SELL ITEM
@@ -103,7 +105,7 @@ else {
     $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
     $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
     $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
-    $route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
+    $route['(?i)sell/finishupload'] = 'productUpload/finishProductPreview'; #js
 
     # USER
     $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';

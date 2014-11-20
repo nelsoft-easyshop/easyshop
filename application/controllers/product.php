@@ -4,6 +4,9 @@ if (!defined('BASEPATH')){
     exit('No direct script access allowed');
 }
 
+use EasyShop\Entities\EsMember as EsMember; 
+use EasyShop\Entities\EsCat as EsCat; 
+
 class product extends MY_Controller 
 { 
 
@@ -24,13 +27,10 @@ class product extends MY_Controller
 
     public function loadMoreProductInCategory($categorySlug)
     {
-        // Loading Services
         $searchProductService = $this->serviceContainer['search_product'];
 
-        // Loading Repositories
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        // Getting category details by slug
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
         $getParameter = $this->input->get() ? $this->input->get() : array();
@@ -71,11 +71,8 @@ class product extends MY_Controller
 
             $subCategoryList = $searchProductService->getPopularProductOfCategory($subCategory);
 
-            // get all product available
             $search = $searchProductService->getProductBySearch($getParameter);
             $response['products'] = $search['collection'];
-            
-            // get all attributes to by products
             $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
@@ -84,18 +81,13 @@ class product extends MY_Controller
             $response['subCategoryList'] = $subCategoryList;
             $response['categorySlug'] = $categorySlug;
 
-            // Apply protected category
             $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
 
-             // Set image in every category
             $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-
-            // category navigation of desktop version
             $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
                         'environment' => 'desktop'), TRUE );
 
-            // category navigation of mobile version
             $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
                         'environment' => 'mobile'), TRUE );
@@ -110,7 +102,6 @@ class product extends MY_Controller
                 ); 
             $data = array_merge($data, $this->fill_header());
 
-            // Load view
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
             $this->load->view('templates/footer'); 
@@ -168,158 +159,6 @@ class product extends MY_Controller
         return json_encode( $jsonReviewSchemaData, JSON_UNESCAPED_SLASHES );
     }
 
-
-    /**
-     * Accepts product review data from post method and writes to es_product_review table.
-     *
-     * @return boolean
-     */
-    public function submit_review()
-    {
-        if(($this->input->post('review_form'))&&($this->form_validation->run('review_form'))){
-            $subject = html_purify($this->input->post('subject'));
-            $comment =  html_purify($this->input->post('comment'));
-            if((trim($subject) === '')||(trim($comment) === ''))
-                return false;
-            $rating = $this->input->post('score');
-            $productid = $this->session->userdata('product_id');
-            $rating = $rating===''?'0':$rating;
-            $memberid =  $this->session->userdata('member_id');
-            $this->product_model->addProductReview($memberid, $productid, $rating, $subject, $comment);
-            return true;
-        }
-        else
-            return false;
-    }
-
-    /** 
-     * Return the top 5 main reviews
-     * 
-     * @param integer $product_id
-     * @param inetger $sellerid
-     * @return array
-     */
-    public function getReviews($product_id, $sellerid)
-    {
-        $recent = array();
-        $recent = $this->product_model->getProductReview($product_id);
-        
-        if(count($recent)>0){
-            $retrieve = array();
-            foreach($recent as $data){
-                array_push($retrieve, $data['id_review']);
-            }
-            $replies = $this->product_model->getReviewReplies($retrieve, $product_id);
-            foreach($replies as $key=>$temp){
-                $temp['review'] = html_escape($temp['review']);
-            }
-            $i = 0;
-            $userid = $this->session->userdata('member_id');
-            foreach($recent as $review){
-                $recent[$i]['replies'] = array();
-                $recent[$i]['reply_count'] = 0;
-                if($userid === $review['reviewerid'])
-                    $recent[$i]['is_reviewer'] = 1;
-                else
-                    $recent[$i]['is_reviewer'] = 0;
-
-                foreach($replies as $reply){
-                    if($review['id_review'] == $reply['replyto']){
-                        array_push($recent[$i]['replies'], $reply);
-                        $recent[$i]['reply_count']++;
-                    }
-                }
-                $i++;
-            }
-        }
-        
-        return $recent;
-    }
-
-    
-    /**
-     * Retrieve more reviews from es_product_review_table
-     * 
-     * @return JSON
-     */
-    public function get_more_reviews()
-    {   
-        $reviews = $replies = array();
-        $lastreview_id = $this->input->post('last_id');
-        $id=$this->session->userdata('product_id');
-        $userid = $this->session->userdata('member_id');
-        $sellerid = '';
-
-        $reviews = $this->product_model->getProductReview($id, $lastreview_id);
-        if(count($reviews) > 0){
-            $retrieve = array();
-            foreach($reviews as $key=>$review)
-            {
-                $review['title']=html_escape($review['title']);
-                $review['review']=html_escape($review['review']);
-                $reviews[$key] = $review;
-
-                array_push($retrieve, $review['id_review']);
-            }
-            $replies = $this->product_model->getReviewReplies($retrieve, $id);
-            foreach($replies as $key=>$temp){
-                $temp['review'] = html_escape($temp['review']);
-                $replies[$key] = $temp;
-            }
-
-            $i = 0;
-            foreach($reviews as $review){
-                $reviews[$i]['replies'] = array();
-                $reviews[$i]['reply_count'] = 0;
-
-                if($userid === $review['reviewerid'])
-                    $reviews[$i]['is_reviewer'] = 1;
-                else
-                    $reviews[$i]['is_reviewer'] = 0;
-
-                foreach($replies as $reply){
-                    if($review['id_review'] == $reply['replyto']){
-                        array_push($reviews[$i]['replies'], $reply);
-                        $reviews[$i]['reply_count']++;
-                    }
-                }
-                $i++;
-            }
-            $sellerid = $this->product_model->getProductById($id)['sellerid'];
-        }
-
-        $data = array(
-            'reviews' => $reviews,
-            'is_seller' => $userid===$sellerid?'yes':'no',
-            'is_loggedin' => $this->session->userdata('usersession') !== '' ?'yes':'no'
-            );
-        
-        echo json_encode($data);
-    }
-
-    /**
-     * Submit a reply to a review
-     *
-     * @return integer
-     */
-    public function submit_reply()
-    {
-        $reply = html_purify($this->input->post('reply_field'));
-        if($this->input->post('p_reviewid') && trim($reply) !== ''){
-            $data = array(
-                'review' => $reply,
-                'p_reviewid' => $this->input->post('p_reviewid'),
-                'product_id' => $this->input->post('id_product'),
-                'member_id' => $this->session->userdata('member_id')
-                );
-            $this->product_model->addReply($data);
-            echo 1;
-        }
-        else
-            echo 2;
-    }
-
-    
     /**
      * Renders view for the list of all categories
      *
@@ -347,7 +186,12 @@ class product extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/all_categories_view', $data); 
-        $this->load->view('templates/footer_full');     
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/footer_full', $viewData);     
     }
 
     /**
@@ -370,99 +214,212 @@ class product extends MY_Controller
         redirect('me', 'refresh');
     }
 
-
     /**
-     * Displays the product page
+     * Renders product page view
      *  
-     * @param string $slug
      * @return View
      */
-    public function item($slug = '')
+    public function item($itemSlug = '')
     {
-        $this->load->model("user_model");
-        $this->load->config('promo', TRUE);
-        $uid = $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProductBySlug($slug);   
-        $data = $this->fill_header();
+        $headerData = $this->fill_header(); 
 
-        $um = $this->serviceContainer['user_manager'];
-        
-        if($product_row['o_success'] >= 1){
-            $id = $product_row['id_product'];
-            $product_options = $this->product_model->getProductAttributes($id, 'NAME');
-            $product_options = $this->product_model->implodeAttributesByName($product_options);
-            $this->session->set_userdata('product_id', $id);
-            $product_catid = $product_row['cat_id'];
+        $productManager = $this->serviceContainer['product_manager'];
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
+        $collectionHelper = $this->serviceContainer['collection_helper'];
+        $reviewProductService = $this->serviceContainer['review_product_service'];
+        $stringUtility = $this->serviceContainer['string_utility'];
+        $categoryManager = $this->serviceContainer['category_manager']; 
+
+        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]);
+
+        $viewerId =  $this->session->userdata('member_id');
+
+        if($productEntity){
+
+            $productId = $productEntity->getIdProduct();
+            $categoryId = $productEntity->getCat()->getIdCat();
+
+            $product = $productManager->getProductDetails($productEntity);
+            $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                    ->getParentCategoryRecursive($categoryId);
+
+            $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
             
-            $banner_view = '';
-            $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
+            $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                      ->getProductImages($productId);
+            $imagesView =  $this->load->view('pages/product/product_image_gallery',['images'=>$productImages],true);
+
+            $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->getProductAttributeDetailByName($productId);
+            $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                         ->getLocation();
+
+            $isFreeShippingNationwide = $productManager->isFreeShippingNationwide($productId);
+
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->getShippingDetailsByProductId($productId);
+
+            $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
+            $productCombination = $productCombinationAvailable['productCombinationAvailable'];
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
+            $additionalInformation = $filterAttributes['additionalInformation'];
+            $productAttributes = $filterAttributes['productOptions'];
+            $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
+            $needToSelect = $productCombinationAvailable['needToSelect'];
+            $bannerView = "";
+            $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if(intval($product_row['is_promote']) === 1 && (!$product_row['end_promo']) ){
-                $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
-                if(strlen(trim($bannerfile)) > 0){
-                    $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
+            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
+                $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
+                if($bannerfile){
+                    $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], true); 
                 }
-                $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
-                $isBuyButtonViewable = $this->config->item('Promo')[$product_row['promo_type']]['viewable_button_product_page'];
+                $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
+                $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
             }
 
-            
-            $data = array_merge($data,array( 
-                'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-                'product' => $product_row,
-                'product_options' => $product_options,
-                'product_images' => $this->product_model->getProductImages($id),
-                'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
-                'reviews' => $this->getReviews($id,$product_row['sellerid']),
-                'uid' => $uid,
-                'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
-                'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
-                //userdetails --- email/mobile verification info
-                'userdetails' => $this->user_model->getUserById($uid),
-                'product_quantity' => $this->product_model->getProductQuantity($id, false, false, $product_row['start_promo']),
-                'shipment_information' => $this->product_model->getShipmentInformation($id),
-                'shiploc' => $this->product_model->getLocation(),
-                'banner_view' => $banner_view,
-                'payment_method' => $payment_method_array,
-                'avatarImage' => $um->getUserImage($product_row['sellerid'], "small"),
-                'is_buy_button_viewable' => $isBuyButtonViewable,
-                ));
-            
-            $categoryManager = $this->serviceContainer['category_manager'];
-            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                        ->findBy(['parent' => 1]);
-            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
-            $parentCategories = $categoryManager->setCategoryImage($protectedCategory);
+            $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
 
-            
-            // category navigation of desktop version
-            $data['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
-                                                                    ['parentCategory' =>   $parentCategories,
-                                                                     'environment' => 'desktop']
-                                                   , TRUE );
+            $productDescription = $stringUtility->purifyHTML($product->getDescription());
 
-            // category navigation of mobile version
-            $data['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
-                                                                    ['parentCategory' =>   $parentCategories,
-                                                                     'environment' => 'mobile']
-                                                  , TRUE );
+            $productReviews = $reviewProductService->getProductReview($productId);
+            $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
 
-            $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
-            $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
-            $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
-            $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
-            $data['relCanonical'] = base_url().'item/'.$product_row['slug'];
+            $reviewDetailsData = [
+                        'productDetails' => $productDescription,
+                        'productReview' => $productReviews,
+                        'canReview' => $canReview,
+                        'additionalInformation' => $additionalInformation
+                    ];
+
+            $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
+
+            $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
+            $recommendViewArray = [
+                                'recommended'=> $recommendProducts,
+                                'productCategorySlug' => $product->getCat()->getSlug(),
+                            ];
+
+            $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
+
+            $viewData = [
+                            'product' => $product,
+                            'breadCrumbs' => $breadcrumbs,
+                            'ownerAvatar' => $avatarImage,
+                            'imagesView' => $imagesView,
+                            'productAttributes' => $productAttributes,
+                            'productCombinationQuantity' => json_encode($productCombination),
+                            'shippingInfo' => $shippingDetails,
+                            'shiploc' => $shippingLocation,
+                            'paymentMethod' => $paymentMethod,
+                            'isBuyButtonViewable' => $isBuyButtonViewable,
+                            'isLoggedIn' => $headerData['logged_in'],
+                            'viewerId' => $viewerId,
+                            'canPurchase' => $canPurchase,
+                            'userData' => $headerData['user'],
+                            'bannerView' => $bannerView, 
+                            'reviewDetailsView' => $reviewDetailsView,
+                            'recommendedView' => $recommendedView,
+                            'noMoreSelection' => $noMoreSelection, 
+                            'needToSelect' => $needToSelect,
+                            'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                            'url' => base_url() .'item/' . $product->getSlug()
+                        ];
+
+            if($this->session->userdata('member_id')) {
+                $headerData['user_details'] = $this->fillUserDetails();
+            }
+
+            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
+            $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
+            $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
+            $headerData['homeContent'] = $this->fillCategoryNavigation();
+      
             
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/productpage_view_responsive', $data);
-            $this->load->view('templates/footer_full');
+            $headerData = array_merge($headerData, $this->fill_header());
+
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $footerData['facebook'] = $socialMediaLinks["facebook"];
+            $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/header_primary', $headerData);
+            $this->load->view('pages/product/productpage_primary', $viewData);
+            $this->load->view('templates/footer_primary',$footerData);
         }
         else{
-           show_404();
+            show_404();
         }
-        
-    } 
+    }
+
+    /**
+     * Submit reply for review
+     *  
+     * @return JSON
+     */
+    public function submitReply()
+    {
+        $reviewProductService = $this->serviceContainer['review_product_service'];
+        $reviewerId =  $this->session->userdata('member_id');
+        $productId = trim($this->input->post('product_id'));
+        $isSuccess = FALSE;
+        $errorMessage = "";
+        if(trim($this->input->post('review'))){
+            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
+            if($canReview){
+                $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+                $response['html'] = $this->load->view('partials/review_reply', $reply, true);
+                $isSuccess = $isSuccess = TRUE; 
+            }
+            else{
+                $errorMessage = "You can't submit reply on this product.";
+            }
+        }
+        else{
+            $errorMessage = "Reply cannot be empty!";
+        }
+
+        $response['isSuccess'] = $isSuccess;
+        $response['error'] = $errorMessage;
+
+        echo json_encode($response);
+    }
+
+    /**
+     * Submit review for individual product
+     * @return JSON
+     */
+    public function submitReview()
+    {
+        $reviewProductService = $this->serviceContainer['review_product_service'];
+        $reviewerId =  $this->session->userdata('member_id');
+        $productId = trim($this->input->post('product_id'));
+        $isSuccess = FALSE;
+        $errorMessage = "";
+        if(trim($this->input->post('review'))){
+            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
+            if($canReview){
+                $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
+                $response['html'] = $this->load->view('partials/review_review', $reply, true);
+                $isSuccess = TRUE;
+            }
+            else{
+                $errorMessage = "You can't submit review on this product.";
+            }
+        }
+        else{
+            $errorMessage = "Reply cannot be empty!";
+        }
+
+        $response['isSuccess'] = $isSuccess;
+        $response['error'] = $errorMessage;
+
+        echo json_encode($response);
+    }
 
     /**
      * Renders view for the promo page
@@ -500,8 +457,13 @@ class product extends MY_Controller
     {
         $data = $this->fill_header();
         $data['title'] = 'Post and Win | Easyshop.ph';
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialData['facebook'] = $socialMediaLinks["facebook"];
+        $socialData['twitter'] = $socialMediaLinks["twitter"];
+
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/post_and_win_view');
+        $this->load->view('pages/promo/post_and_win_view', $socialData);
         $this->load->view('templates/footer');
     }
 

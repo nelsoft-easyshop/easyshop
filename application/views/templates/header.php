@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
-    <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -69,13 +69,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="top_nav">
                 <ul class="ul-li-fl-left">
                     <li class="top_nav_main pd-right-20">
-                        <a class="prevent" href="<?=base_url()?>sell/step1">
+                        <a class="prevent" href="/sell/step1">
                             <span class="span_bg icon_sell"></span>
                             <span class="txt_hide">Sell an Item</span>
                         </a>
                     </li>
                     <li class="top_nav_main">
-                        <a class="prevent" href="<?php echo base_url()."cart/"; ?>">
+                        <a class="prevent" href="/cart">
                             <?PHP if(!($cartSize) &&  !($logged_in)): ?>
                                 <span class="span_bg big_cart cart cart_zero"></span>
                             <?PHP else: ?>
@@ -94,24 +94,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <ul class="ul-li-fl-left">       
                     <?php #echo uri_string();?>
                     <?php if(!$logged_in): ?>
-                        <li><a href="<?=base_url()?>login" class="top_border prevent">Login</a></li> 
-                        <li><a href="<?=base_url()?>register" class="prevent">Register</a></li> 
+                        <li><a href="/login" class="top_border prevent">Login</a></li> 
+                        <li><a href="/register" class="prevent">Register</a></li> 
                         <li class="txt_res_hide">
-                            <a class="prevent" href="<?=base_url()?>guide/buy">
-                                <img src="<?=base_url()?>/assets/images/img_icon_shop.png">
+                            <a class="prevent" href="/guide/buy">
+                                <img src="/assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide">
-                            <a class="prevent" href="<?=base_url()?>guide/sell">
-                                <img src="<?=base_url()?>/assets/images/img_icon_sell.png">
+                            <a class="prevent" href="/guide/sell">
+                                <img src="/assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
 
                     <?php else: ?>
                         <li>
-                            <a href="<?=base_url()?>messages" class="msgs_link prevent">
+                            <a href="/messages" class="msgs_link prevent">
                                 <span class="span_bg img_msgs_cntr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'msg_icon_zero' : '';?>"></span>
                                 <span id="unread-messages-count" class="msg_countr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'unread-messages-count-hide' : '';?>">
                                     <?PHP echo $msgs['unread_msgs'];?>
@@ -122,14 +122,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </a>
                         </li>
                         <li class="txt_res_hide">
-                            <a class="prevent" href="<?=base_url()?>guide/buy">
-                                <img src="<?=base_url()?>/assets/images/img_icon_shop.png">
+                            <a class="prevent" href="/guide/buy">
+                                <img src="/assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide nav-menu-border">
-                            <a class="prevent" href="<?=base_url()?>guide/sell">
-                                <img src="<?=base_url()?>/assets/images/img_icon_sell.png">
+                            <a class="prevent" href="/guide/sell">
+                                <img src="/assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
@@ -167,14 +167,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="need_help_con">
             <div class="need_help_icons_con">
                 <p>
-                    <a class="prevent" href="<?=base_url()?>guide/buy">
-                        <img src="<?=base_url()?>/assets/images/img_icon_shop.png"><br />
+                    <a class="prevent" href="/guide/buy">
+                        <img src="/assets/images/img_icon_shop.png"><br />
                         <span>How to Shop</span>
                     </a>
                 </p>
                 <p>
-                    <a class="prevent" href="<?=base_url()?>guide/sell">
-                        <img src="<?=base_url()?>/assets/images/img_icon_sell.png"><br />
+                    <a class="prevent" href="/guide/sell">
+                        <img src="/assets/images/img_icon_sell.png"><br />
                         <span>How to Sell</span>
                     </a>
                 </p>
@@ -190,12 +190,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-<form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
+<form action="/search/search.html" name="search_form" method="get">
     <section>
         <div class="res_wrapper wrapper search_wrapper">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
-            <div class="logo"> <a href="<?=base_url()?>" class="prevent"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="/" class="prevent"><span class="span_bg"></span></a> </div>
         <?php endif; ?>
         
         <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
@@ -215,7 +215,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </option>
                     <?php endforeach;?>
                 </select>
-                <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
+                <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="/advsrch" class="adv_srch_lnk">Advance Search</a>
                 </div>
                 <div id="main_search_drop_content"></div> 
             </div>

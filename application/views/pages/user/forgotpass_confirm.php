@@ -25,8 +25,8 @@
                     <div class="field">
                           <label>Confirm New Password:</label>
                           <input id="cpassword" name="cpassword" type="password" maxlength="100" disabled="true">
-                          <img src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-                          <img src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+                          <img src="/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+                          <img src="/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
                           <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                     </div>
 					<div class="clear"></div>
@@ -37,12 +37,12 @@
                <?php elseif($toggle_view == "1"): ?>
                     <div style='margin-left: 50px;'>
                         <p><strong>Your password has been successfully updated. </strong></p>
-                        <p><a href='<?=base_url()?>home'>Return to the Home Page. </a>	</p>
+                        <p><a href='/'>Return to the Home Page. </a>	</p>
                     <div>
                <?php else: ?>
                     <div style='margin-left: 50px;'>
                         <p><b>Sorry, the link is invalid or is already expired.</b></p>
-                        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>	
+                        <p><a href=/'>Return to the Home Page.</a></p>	
                     </div>
                <?php endif; ?>  			           
           </div>
@@ -52,24 +52,24 @@
             <div style="margin-left:50px;">
                 <br/><br/>
                 <p>You are currently signed-in as <b><?php echo $user["username"]; ?></b>. </p>
-                <p>If you wish to continue, sign-out first by <a href='<?=base_url()?>login/logout' class="orange2">clicking here.</a> </p>
+                <p>If you wish to continue, sign-out first by <a href='/login/logout' class="orange2">clicking here.</a> </p>
                 <br/><br/><br/>
             </div>
         <?php endif; ?>
       </div>
       
-      <?php echo form_open('',array('id'=>'fp_complete', 'action' => base_url().'resetconfirm')); ?>
+      <?php echo form_open('',array('id'=>'fp_complete', 'action' => '/resetconfirm')); ?>
         <input type='hidden' value='' id='tgv' name='tgv'/>
       <?php form_close(); ?>
       
 </section>
 <!-- password strength checker -->
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script> 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script> 
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+<script type='text/javascript' src='/assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
 <?php if($toggle_view == ''): ?>
-    <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
 <?php endif; ?>
 
 <script type="text/javascript">
@@ -116,12 +116,12 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){ 
-	var redurl = '<?php echo base_url();?>login/resetconfirm?&tgv=';
+	var redurl = '/login/resetconfirm?&tgv=';
     $( "#forgotpass_btn" ).click(function() {
 		if($("#forgotpass").valid()){		
 			currentRequest = jQuery.ajax({
 				type: "POST",
-				url: '<?php echo base_url();?>login/xresetconfirm', 
+				url: '/login/xresetconfirm', 
 				data: $("#forgotpass").serialize(), 
 				beforeSend : function(){       
 				},

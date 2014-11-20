@@ -235,7 +235,7 @@ jQuery(document).ready(function(){
 			if( userfield.hasClass('pass') && emailfield.hasClass('pass') && !(mobilefield.hasClass('fail')) && !(mobilefield.hasClass('forSearch')) ){
 				jQuery('#register_form1_loadingimg').show().css('display','inline-block');
 				
-			 	jQuery.post(config.base_url + 'register/signup', jQuery(form).serializeArray(), function(data){
+			 	jQuery.post('/register/signup', jQuery(form).serializeArray(), function(data){
 					jQuery('#register_form1_loadingimg').hide();
 					thisbtn.attr('disabled', false);
 					try{
@@ -324,7 +324,7 @@ function username_check(trigger){
 	
 	field.addClass('exec');
 	
-	jQuery.post(config.base_url+'register/username_check', {username: username, csrfname : csrftoken}, function(result){
+	jQuery.post('/register/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#username'));
 			jQuery('.username_availability').html('');
@@ -355,7 +355,7 @@ function email_check(trigger){
 	
 	field.addClass('exec');
 	
-	jQuery.post(config.base_url+'register/email_check', {email: email, csrfname : csrftoken}, function(result){
+	jQuery.post('/register/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#email'));
 			jQuery('.email_availability').html('');
@@ -392,7 +392,7 @@ function mobile_check(trigger){
 	
 	field.addClass('exec');
 	
-	jQuery.post(config.base_url+'register/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
+	jQuery.post('/register/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#mobile'));
 			jQuery('.mobile_availability').html('');
@@ -439,7 +439,7 @@ jQuery(document).ready(function(){
 		 submitHandler: function(form){
 			jQuery('#subscribe_btn').attr('disabled', true);
 
-			jQuery.post(config.base_url + 'register/subscribe', jQuery(form).serializeArray(), function(data){
+			jQuery.post('/register/subscribe', jQuery(form).serializeArray(), function(data){
 				jQuery('#subscribe_loadingimg').hide();
 				jQuery('#subscribe_btn').attr('disabled', false);
 				if(data == 1){
