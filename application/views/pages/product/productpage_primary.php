@@ -170,12 +170,12 @@
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                             <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
                                 <!--Changed button tag-->
-                                <input type="button" id='send_registration' data-canpurchase="<?php $canPurchase ? 'true':'false'; ?>" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now" >
-                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
+                                <input type="button" id='send_registration' data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now" >
+                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</spadn>
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>
-                                <input type="button" id="send" data-canpurchase="<?php $canPurchase ? 'true':'false'; ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
                                 <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                             <?php endif; ?>
                         <?php endif;?>
