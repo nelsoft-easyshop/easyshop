@@ -23,18 +23,27 @@
 
     $sql = "SELECT id_queue, data, type, date_created, date_executed, status
             FROM es_queue
-            WHERE type = " . $configEmail['queue_type'] . " 
-                AND status = " . $configEmail['status']['queued'];
+            WHERE type = :queue 
+                AND status = :status";
+
+    $queueDbh = $dbh->prepare($sql);
+    $queueDbh->bindParam("queue", $configEmail['queue_type'], PDO::PARAM_INT);
+    $queueDbh->bindParam("status", $configEmail['status']['queued'], PDO::PARAM_INT);
+    $queueDbh->execute();
+    $rawData = $queueDbh->fetchAll(PDO::FETCH_ASSOC);
 
     $numSent = 0;
     $emailCounter = 0;
+    $emailCount = count($rawData);
     $failedRecipients = array();
 
-    foreach($dbh->query($sql) as $userData){
+    echo "Fetched " . $emailCount . " queued emails!\n\n";
+
+    foreach($rawData as $userData){
 
         $emailCounter++;
 
-        $emailData = json_decode($userData['data'], TRUE);
+        $emailData = json_decode($userData['data'], true);
 
         if( count($emailData['recipient']) === 0 ){
             echo "Queue id: " . $userData['id_queue'] . " has no email address indicated! \n";
@@ -45,14 +54,14 @@
         
         # SEND EMAIL
         $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-          ->setUsername($configEmail['smtp_user'])
-          ->setPassword($configEmail['smtp_pass']);
+                                        ->setUsername($configEmail['smtp_user'])
+                                        ->setPassword($configEmail['smtp_pass']);
         
         $mailer = Swift_Mailer::newInstance($transport);
         
         $message = Swift_Message::newInstance($emailData['subject'])
-          ->setFrom(array($configEmail['from_email'] => $configEmail['from_name']))
-          ->setTo($emailData['recipient']);
+                                ->setFrom([$configEmail['from_email'] => $configEmail['from_name']])
+                                ->setTo($emailData['recipient']);
         
         // Embed Image
         foreach($emailData["img"] as $imagePath){
@@ -70,15 +79,21 @@
         if($result){
             echo "Email sent! \n";
             $numSent += $result;
-            $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['sent'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+            $status = $configEmail['status']['sent'];
         }
         else{
             echo "Email sending FAILED! \n";
-            $query = "UPDATE es_queue SET `status` = " . $configEmail['status']['failed'] . ", `date_executed` = NOW() WHERE `id_queue` = " . $userData['id_queue'];
+            $status = $configEmail['status']['failed'];
         }
+        $exec_date = date("Y-m-d H:i:s");
 
+        $updateSql = "UPDATE es_queue SET `status` = :status, `date_executed` = :exec_date WHERE `id_queue` = :queue_id";
         $dbhUpdate = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
-        $dbhUpdate->query($query);
+        $queueUpdate = $dbhUpdate->prepare($updateSql);
+        $queueUpdate->bindParam("status", $status, PDO::PARAM_INT);
+        $queueUpdate->bindParam("exec_date", $exec_date);
+        $queueUpdate->bindParam("queue_id", $userData['id_queue'], PDO::PARAM_INT);
+        $queueUpdate->execute();
 
     }
 
