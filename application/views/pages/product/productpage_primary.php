@@ -112,8 +112,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-lg-7">
-                        <p class="attr-title txt-shipment">Shipment Fee:</p>
+                    <div class="col-md-12 col-lg-7 shipment-wrapper">
+                        <div class="shipment-fee-container">
+                            <p class="attr-title txt-shipment">Shipment Fee:</p>
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <span class="default" selected="" value="0">NOT AVAILABLE</span>
                             <?php else: ?>
@@ -136,12 +137,12 @@
                                     <span class="default">FREE SHIPPING NATIONWIDE</span>
                                 <?php endif; ?>
                             <?php endif; ?>
-                        <div class="shipping_fee"></div>
-                        <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
-                            <div class="">
-                                <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
-                            </div>
+                            <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
+                                <div class="shipment-period">
+                                    <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
+                                </div>
                             <?php endif; ?>
+                        </div>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -224,14 +225,14 @@
                                 <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
                                 <span>Facebook</span>
                                 <div id="fb-root"></div>
-                                <div class="fb-share-button" data-href="/<?=$product->getSlug()?>" data-width="150"></div>
+                                <div class="fb-share-button" data-href="<?=$url?>" data-width="150"></div>
                             </div>
                         </a>
                         <span class="twitter-lnk">
                             <div class="ui-form-control share-twitter">
                                 <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
                                 <span>Twitter</span>
-                                <a class="twitter-share-button" data-url="/<?=$product->getSlug()?>" data-related="twitterdev" data-size="large"
+                                <a class="twitter-share-button" data-url="<?=$url?>" data-related="twitterdev" data-size="large"
                                     data-count="none">
                                     
                                 </a>
@@ -275,5 +276,5 @@
 <script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/promo/scratch-and-win.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 

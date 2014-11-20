@@ -239,10 +239,16 @@ class SocialMediaController extends MY_Controller
                 'twitter' => $socialMediaLinks["twitter"]
 
             );
+            $images = array("/assets/images/landingpage/templates/facebook.png",
+                "/assets/images/landingpage/templates/twitter.png",
+                "/assets/images/appbar.home.png",
+                "/assets/images/appbar.message.png",
+                "/assets/images/landingpage/templates/header-img.png");
+
             $message = $this->parser->parse('emails/merge-account', $parseData, true);
             $this->emailNotification->setRecipient($member->getEmail());
             $this->emailNotification->setSubject($this->lang->line('merge_subject'));
-            $this->emailNotification->setMessage($message);
+            $this->emailNotification->setMessage($message, $images);
             $this->emailNotification->sendMail();
         }
 

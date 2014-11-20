@@ -7,7 +7,7 @@
             <div style="background-color: #013f94;">
                 <center>
                     <a href="https://www.easyshop.ph">
-                        <img src="https://local.easyshop/assets/images/landingpage/templates/header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
+                        <img src="header-img.png" style="display: block; max-width: 100%; height: auto;" alt="EasyShop.ph">
                     </a>
                 </center>
              </div>
@@ -53,12 +53,12 @@
                             <tr>
                                 <td>
                                     <a href="{facebook}">
-                                        <img src="https://local.easyshop/assets/images/landingpage/templates/facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="float: right; text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{twitter}">
-                                        <img src="https://local.easyshop/assets/images/landingpage/templates/twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
+                                        <img src="twitter.png" style="text-align:center; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>
