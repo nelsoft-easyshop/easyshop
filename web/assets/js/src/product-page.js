@@ -166,13 +166,15 @@
     $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
 
     if($("#noMoreSelection").val() != ""){
-        var $arraySelected = [];
+        if($("#needToSelect").val() == ""){
+            var $arraySelected = [];
 
-        $.each($productCombQuantity, function(i, val) {
-            $arraySelected = val.product_attribute_ids;
-        });
+            $.each($productCombQuantity, function(i, val) {
+                $arraySelected = val.product_attribute_ids;
+            });
 
-        checkCombination($arraySelected);
+            checkCombination($arraySelected);
+        }
     }
 
     // js code for base price line through
@@ -182,32 +184,43 @@
     }
 
     $(".attribute-control").bind('change',function(e){
-        var $this = $(this);
-        var $arraySelected = [];
-        var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
-        var $imageid = $this.children('option:selected').data('imageid');
 
-        if($imageid > 0){
-            $("#image"+$imageid).trigger('click'); 
+        if($("#noMoreSelection").val() != ""){
+            var $arraySelected = [];
+
+            $.each($productCombQuantity, function(i, val) {
+                $arraySelected = val.product_attribute_ids;
+            });
+
+            checkCombination($arraySelected);
         }
+        else{
+            var $this = $(this);
+            var $arraySelected = [];
+            var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+            var $imageid = $this.children('option:selected').data('imageid');
 
-        // get selected attributes
-        $(".attribute-control").each(function() {
-            $thisSelect = $(this);
-            var $selectValue = $thisSelect.val();
-            var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-            $baseFinalPrice += $additionalPrice;
-            $arraySelected.push($selectValue);
-        });
+            if($imageid > 0){
+                $("#image"+$imageid).trigger('click'); 
+            }
 
-        // update price 
-        $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+            // get selected attributes
+            $(".attribute-control").each(function() {
+                $thisSelect = $(this);
+                var $selectValue = $thisSelect.val();
+                var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
+                $baseFinalPrice += $additionalPrice;
+                $arraySelected.push($selectValue);
+            });
 
-        // sort array
-        $arraySelected.sort(sortArrayNumber);
-        checkCombination($arraySelected);
+            // update price 
+            $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
 
+            // sort array
+            $arraySelected.sort(sortArrayNumber);
+            checkCombination($arraySelected);
 
+        }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
