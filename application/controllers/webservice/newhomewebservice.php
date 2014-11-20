@@ -1105,8 +1105,8 @@ class NewHomeWebService extends MY_Controller
             copy($this->file, $this->tempHomefile);
         }    
         $this->output
-            ->set_content_type('text/plain') 
-            ->set_output(file_get_contents($this->tempHomefile));
+             ->set_content_type('text/plain') 
+             ->set_output(file_get_contents($this->tempHomefile));
     }     
 
     /**
@@ -1117,14 +1117,15 @@ class NewHomeWebService extends MY_Controller
     {
         $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection->slide as $key => $slider) {
+        foreach ($map->sliderSection->slide as $slider) {
             $sliders[] = $slider;
         }
-        $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);   
+        $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
+        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
+         
         return $this->output
-            ->set_content_type('application/json')
-            ->set_output($this->json);                        
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);                        
           
     }
 
