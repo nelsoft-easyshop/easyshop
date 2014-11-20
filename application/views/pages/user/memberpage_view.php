@@ -1933,7 +1933,7 @@
                                             $attr = array('class'=>'transac_response');
                                             echo form_open('',$attr);
                                         ?>							
-                                            <input type="button" value="Item received" class="transac_response_btn tx_forward transac_orange_btn">
+                                            <input type="button" value="Item received" class="transac_response_btn tx_forward transac_orange_btn enabled">
                                             <input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
                                             <input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
                                             <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -2219,7 +2219,7 @@
                                             $attr = array('class'=>'transac_response');
                                             echo form_open('',$attr);
                                         ?>
-                                        <input type="button" value="Cancel Order" class="transac_response_btn tx_return">
+                                        <input type="button" value="Cancel Order" class="transac_response_btn tx_return enabled">
                                         <input type="hidden" name="seller_response" value="<?php echo $opk;?>">
                                         <input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
                                         <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -2230,7 +2230,7 @@
                                             $attr = array('class'=>'transac_response');
                                             echo form_open('',$attr);
                                         ?>
-                                        <input type="button" value="Completed" class="transac_response_btn tx_cod">
+                                        <input type="button" value="Completed" class="transac_response_btn tx_cod enabled">
                                         <input type="hidden" name="cash_on_delivery" value="<?php echo $opk;?>">
                                         <input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
                                         <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
