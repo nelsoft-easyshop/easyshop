@@ -238,25 +238,25 @@
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
      
-        var $request = $.ajax({
-                            url: "/cart/doAddItem",
-                            type:"POST",
-                            dataType:"JSON",
-                            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
-                            success:function(data){
+        $.ajax({
+            url: "/cart/doAddItem",
+            type:"POST",
+            dataType:"JSON",
+            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
+            success:function(data){
 
-                                if(!data.isLoggedIn){
-                                    window.location.replace("/login");
-                                }
-                                
-                                if(data.isSuccessful){
-                                    window.location.replace("/cart");
-                                }
-                                else{
-                                    alert("We cannot process your request at this time. Please try again in a few moment");
-                                }
-                            }
-                        });
+                if(!data.isLoggedIn){
+                    window.location.replace("/login");
+                }
+                
+                if(data.isSuccessful){
+                    window.location.replace("/cart");
+                }
+                else{
+                    alert("We cannot process your request at this time. Please try again in a few moment");
+                }
+            }
+        });
 
     });
 
