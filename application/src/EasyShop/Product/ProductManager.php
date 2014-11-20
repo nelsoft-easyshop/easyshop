@@ -845,5 +845,36 @@ class ProductManager
                 'productCombinationAvailable' => $productCombinationAvailable
             ];
     }
+
+    /**
+     * Get prodcut additional information to display on product details based on attributes
+     * @param  array $productAttributes [description]
+     * @return array
+     */
+    public function getProductAdditionalInfo($productAttributes)
+    {
+        $additionalInformation = [];
+        foreach ($productAttributes as $headKey => $headValue) {
+            if(count($headValue) === 1){
+                $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
+                if((int)$headValue[0]['datatype_id'] === 5){
+                    unset($productAttributes[$headKey]);
+                }
+            }
+            else{
+                foreach ($headValue as $key => $value) {
+                    if((int)$value['datatype_id'] === 5){
+                        $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
+                        unset($productAttributes[$headKey][$key]);
+                    }
+                    if(empty($productAttributes[$headKey])){
+                        unset($productAttributes[$headKey]);
+                    }
+                }
+            }
+        }
+
+        return $additionalInformation;
+    }
 }
 

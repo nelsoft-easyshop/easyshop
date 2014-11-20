@@ -33,6 +33,10 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <?=$productDetails; ?>
+                            <?php foreach ($additionalInformation as $value): ?>
+                                <?=$value; ?>
+                                <br>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
