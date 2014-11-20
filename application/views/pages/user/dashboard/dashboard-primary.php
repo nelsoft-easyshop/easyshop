@@ -8,9 +8,10 @@
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">
-            <div class="col-md-3 col-sidebar">
-                <ul class="sidebar-dashboard idTabs" >
-                    <a href="#dashboard"><li id="dash"  class="mf-li">Dashboard</li></a>
+            <div class=" idTabs">
+            <div class="col-sm-3 col-sidebar">
+                <ul class="sidebar-dashboard" >
+                    <a href="#dashboard" class="selected"><li id="dash"  class="mf-li">Dashboard</li></a>
                     <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
@@ -29,7 +30,7 @@
                 </ul>
                 
             </div>
-            <div class="mobile-dashboard-menu idTabs">
+            <div class="mobile-dashboard-menu">
                 <div class="row-fluid">
                     <a href="#dashboard">
                         <div class="col-xs-4 col-dash-mobile">
@@ -39,11 +40,9 @@
                     <div class="col-xs-4 col-dash-mobile my-store-menu-mobile">
                         My Store
                     </div>
-                    <a href="#">
-                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile">
-                            My Account
-                        </div>
-                    </a>
+                    <div class="col-xs-4 col-dash-mobile my-account-menu-mobile">
+                        My Account
+                    </div>
                 </div>
                 <div class="my-store-menu-mobile-cont">
                     <ul class="my-store-menu-mobile-ul">
@@ -53,11 +52,12 @@
                 </div>
                 <div class="my-account-menu-mobile-cont">
                     <ul class="my-account-menu-mobile-ul">
-                        <a href="#"><li class="m-menu-personal">Personal Information</li></a>
-                        <a href="#"><li class="m-menu-delivery">Delivery Address</li></a>
-                        <a href="#"><li class="m-menu-setting">Account Settings</li></a>
+                        <a href="#personal-information"><li class="m-menu-personal">Personal Information</li></a>
+                        <a href="#delivery-address"><li class="m-menu-delivery">Delivery Address</li></a>
+                        <a href="#account-settings"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
+            </div>
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
