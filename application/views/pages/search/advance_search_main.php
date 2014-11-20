@@ -28,13 +28,13 @@
         <?php endif; ?>
         <?php if(isset($attributes)): ?>
             <?php foreach ($attributes as $attrName => $attrListValue):?>
-                <h3><?=$attrName?></h3>
+                <h3><?= html_escape($attrName); ?></h3>
                 <ul>
                 <?php foreach ($attrListValue as $key => $value):?>
                     <li style="border:0px">
-                        <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                        <a class="cbx" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                             <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" >
-                            <label for="cbx"><?=ucfirst($value);?></label>
+                            <label for="cbx"><?= html_escape(ucfirst($value)); ?></label>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -401,13 +401,13 @@
                 <?php endif; ?>
                 <?php if(isset($attributes)): ?>
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                        <p class="h3-cat-title"><?=$attrName?></p>
+                        <p class="h3-cat-title"><?= html_escape($attrName) ?></p>
                         <ul class="list-unstyled">
                         <?php foreach ($attrListValue as $key => $value):?>
                            <li>
-                                <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?=html_escape(strtolower($value))?>" >
                                     <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <label for="cbx"><?=ucfirst($value);?></label>
+                                    <label for="cbx"><?=html_escape(ucfirst($value));?></label>
                                 </a>
                             </li>
                         <?php endforeach; ?>
