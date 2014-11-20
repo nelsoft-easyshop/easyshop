@@ -29,9 +29,9 @@
                 </ul>
                 
             </div>
-            <div class="mobile-dashboard-menu">
+            <div class="mobile-dashboard-menu idTabs">
                 <div class="row-fluid">
-                    <a href="#personal-information">
+                    <a href="#dashboard">
                         <div class="col-xs-4 col-dash-mobile">
                             Dashboard
                         </div>
@@ -46,9 +46,9 @@
                     </a>
                 </div>
                 <div class="my-store-menu-mobile-cont">
-                    <ul class="my-store-menu-mobile-ul idTabs">
+                    <ul class="my-store-menu-mobile-ul">
                         <a href="#transactions" class=""><li class="m-menu-transactions">Transactions</li></a>
-                        <a href="#"><li class="m-menu-setup">Store Setup</li></a>
+                        <a href="#setup"><li class="m-menu-setup">Store Setup</li></a>
                     </ul>
                 </div>
                 <div class="my-account-menu-mobile-cont">
