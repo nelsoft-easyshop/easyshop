@@ -166,7 +166,7 @@ a{
 
 .img-follower-cover{
     width: 100%;
-    height: auto;
+    height: 208px;
     max-height: 208px;
     position: absolute;
     left: 0;
@@ -340,10 +340,10 @@ a{
 .submenu-ul > a > li{
     display: inline;
     border-bottom: transparent #ffffff 3px;
-    margin-right: 67px;
+    margin-right: 30px;
     font-size: 17px;
     font-weight: bold;
-    padding: 5px 0px;
+    padding: 6px 0px;
     margin-top:-1px;
     text-align: center;
 }
@@ -366,8 +366,11 @@ a{
     border-radius: 50%;
     padding-top: 4px;
     margin-left: 8px;
-    position: absolute;
     margin-top: -3px;
+}
+
+.submenu-ul > a.selected > li > .circle-total{
+    background: #ff893a;
 }
 
 .form-search-item{
@@ -1314,13 +1317,18 @@ a{
         width: 100%;
     }
     
-    .div-tab{
-        padding: 10px;
-    }
-    
     .form-horizontal > .form-group > .col-sm-3,
     .form-horizontal > .form-group > .col-sm-4
         {
         padding-left: 0px;
+    }
+    
+    .submenu-overflow{
+        white-space: nowrap;
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        height: 71px;
     }
 }
