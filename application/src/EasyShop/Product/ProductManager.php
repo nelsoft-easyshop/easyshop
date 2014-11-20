@@ -853,18 +853,17 @@ class ProductManager
      */
     public function getProductAdditionalInfo($productAttributes)
     {   
-        $esDataTypeRepo = $this->em->getRepository('EasyShop\Entities\EsDatatype');
         $additionalInformation = [];
         foreach ($productAttributes as $headKey => $headValue) {
             if(count($headValue) === 1){
                 $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
-                if((int)$headValue[0]['datatype_id'] === \Easyshop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                if((int)$headValue[0]['datatype_id'] === \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
                     unset($productAttributes[$headKey]);
                 }
             }
             else{
                 foreach ($headValue as $key => $value) {
-                    if((int)$value['datatype_id'] === \Easyshop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                    if((int)$value['datatype_id'] === \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
                         $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
                         unset($productAttributes[$headKey][$key]);
                     }
