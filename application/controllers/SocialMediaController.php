@@ -109,6 +109,7 @@ class SocialMediaController extends MY_Controller
             $esMember = $data['doesAccountExists'];
             $doesAccountMerged = $data['doesAccountMerged'];
             if ($esMember && $doesAccountMerged) {
+                $esMember = $this->socialMediaManager->fixSocialMediaEmail($esMember, $googleData->getEmail());
                 $this->login($esMember);
                 redirect('/', 'refresh');
             }
