@@ -434,6 +434,7 @@ a{
 
 .td-image-cont{
     width: 185px;
+    vertical-align: top;
 }
 
 .div-product-image{
@@ -491,10 +492,22 @@ a{
     padding-left: 5px;
 }
 
+.desc-item-mobile{
+    display:  none;
+}
+
+.td-desc-item-mobile{
+    display: none;
+}
+
 .td-item-actions{
     vertical-align: middle;
     text-align: center;
     padding: 0px 10px;
+}
+
+.row-action-mobile{
+    display: none;
 }
 
 .btn-action-delete{
@@ -1139,6 +1152,10 @@ a{
     display: none;
 }
 
+.div-feedback-total-mobile{
+    display: none;
+}
+
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1284,6 +1301,11 @@ a{
         color: #d3d3d3;
     }
     
+    .star-stat-mobile-2{
+        font-size: 12px;
+        color: #d3d3d3;
+    }
+    
     .col-star-rate-mobile{
         text-align: center;
         margin-bottom: 10px;
@@ -1330,5 +1352,72 @@ a{
         overflow-x: scroll;
         -webkit-overflow-scrolling: touch;
         height: 71px;
+    }
+    
+    .td-desc-item{
+        display: none;
+    }
+    
+    .td-item-actions{
+        display: none;
+    }
+    
+    .td-image-cont{
+        vertical-align: top !important;
+        padding-top: 5px;
+        width: 100px;
+    }
+    
+    .td-meta-info{
+        padding-right: 5px;
+    }
+    
+    .div-product-image{
+        width: 100px;
+        height: 100px;
+    }
+    
+    .sidebarTabs{
+        padding: 10px;
+    }
+    
+    .desc-item-mobile{
+        display: inline-block;
+        margin-bottom: 0px;
+    }
+    
+    .item-list-name,
+    .item-amount{
+        font-size: 15px;
+    }
+    
+    .col-stock{
+        margin-top: 10px !important;
+    }
+    
+    .row-action-mobile{
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    .div-feedback-total-mobile{
+        margin-top: 10px;
+        display: block !important;
+    }
+    
+    .tr-attributes-drop{
+        display: none;
+    }
+    
+    .input-search-item{
+        width: 100%;
+    }
+    
+    .label-sort{
+        display: none;
+    }
+    
+    .product-items{
+        margin-top: 5px;
     }
 }
