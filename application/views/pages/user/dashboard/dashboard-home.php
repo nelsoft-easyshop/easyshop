@@ -174,6 +174,7 @@
         </div>
     </div>
     <div class="sidebarTabs">
+        <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
                 <a href="#active-items"><li>Active Items<span class="circle-total">5</span></li></a>
@@ -182,6 +183,7 @@
                 <a href="#feedbacks"><li>Feedbacks<span class="circle-total">0</span></li></a>
                 <a href="#sales"><li>Sales</li></a>
             </ul>
+        </div>
         </div>
         <div class="product-items">
             <div id="active-items">
