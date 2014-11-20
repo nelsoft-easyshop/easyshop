@@ -394,12 +394,12 @@ class NewHomeWebService extends MY_Controller
      */
     public function addAdds()
     {
-        $imgDimensions = array(
+        $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
             'w' => $this->input->get('w'),
             'h' => $this->input->get('h')
-        );         
+        ];         
         $this->config->load("image_path");             
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
@@ -462,12 +462,12 @@ class NewHomeWebService extends MY_Controller
      */
     public function setAdsSection()
     {
-        $imgDimensions = array(
+        $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
             'w' => $this->input->get('w'),
             'h' => $this->input->get('h')
-        );                   
+        ];                   
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
         $map = simplexml_load_file($this->file);
@@ -913,12 +913,12 @@ class NewHomeWebService extends MY_Controller
      */
     public function editSubSlider()
     {
-        $imgDimensions = array(
+        $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
             'w' => $this->input->get('w'),
             'h' => $this->input->get('h')
-        );   
+        ];   
         $index = (int)$this->input->get("index");
         $subIndex = (int)$this->input->get("subIndex");
         $target = $this->input->get("target");
@@ -1118,12 +1118,12 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSubSlider()
     {
-        $imgDimensions = array(
+        $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
             'w' => $this->input->get('w'),
             'h' => $this->input->get('h')
-        );        
+        ];        
         $index = (int)$this->input->get("index");
         $target = $this->input->get("target");
 
@@ -1134,7 +1134,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->tempHomefile);
 
         $this->load->library('image_lib');    
-        $this->upload->initialize(array( 
+        $this->upload->initialize([ 
             "upload_path" => $path_directory,
             "overwrite" => TRUE, 
             "encrypt_name" => FALSE,
@@ -1142,7 +1142,7 @@ class NewHomeWebService extends MY_Controller
             "remove_spaces" => TRUE,
             "allowed_types" => "jpg|jpeg|png|gif", 
             "xss_clean" => FALSE
-        )); 
+        ]); 
         
 
         if ( ! $this->upload->do_upload("myfile")) {
@@ -1205,7 +1205,7 @@ class NewHomeWebService extends MY_Controller
      *  @param string $imgDirectory
      *  @param array $imgDimensions
      */
-    public function resizeImage($imgDirectory, $imgDimensions = [])
+    public function resizeImage($imgDirectory, $imgDimensions)
     {
 
         $this->load->library('image_lib');                
@@ -1221,7 +1221,7 @@ class NewHomeWebService extends MY_Controller
      *  @param string $imgDirectory
      *  @param array $imgDimensions
      */
-    public function cropImage($imgDirectory, $imgDimensions = [])
+    public function cropImage($imgDirectory, $imgDimensions)
     {
 
         $this->load->library('image_lib');
