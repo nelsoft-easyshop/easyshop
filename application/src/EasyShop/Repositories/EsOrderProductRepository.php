@@ -104,7 +104,7 @@ class EsOrderProductRepository extends EntityRepository
                                         tbl_op.idOrderProduct, tbl_p.idProduct, tbl_p.name, tbl_op.orderQuantity, tbl_op.total as price,tbl_ops.idOrderProductStatus, tbl_p.slug,
                                         tbl_psc.comment as shipping_comment, tbl_psc.courier, tbl_psc.trackingNum, tbl_psc.deliveryDate,
                                         tbl_psc.expectedDate, tbl_psc.datemodified, tbl_op.isReject, tbl_pi.productImagePath, tbl_opa.attrName,
-                                        tbl_opa.attrValue, tbl_m.idMember as seller_id, tbl_m.username as seller, COALESCE(tbl_m_recipient.idMember, 0) as for_memberid,
+                                        tbl_opa.attrValue, tbl_m.idMember as seller_id, tbl_m.username as seller, COALESCE(tbl_m_recipient.idMember, 0) as forMemberId,
                                         tbl_m.slug as sellerSlug
                                     ')
                                     ->from('EasyShop\Entities\EsOrderProduct', 'tbl_op')
@@ -113,7 +113,7 @@ class EsOrderProductRepository extends EntityRepository
                                     ->leftJoin('EasyShop\Entities\EsProductImage', 'tbl_pi', 'WITH', 'tbl_pi.product = tbl_op.product AND tbl_pi.isPrimary = 1')
                                     ->leftJoin('EasyShop\Entities\EsProductShippingComment', 'tbl_psc', 'WITH', 'tbl_psc.orderProduct = tbl_op.idOrderProduct')
                                     ->leftJoin('EasyShop\Entities\EsMember', 'tbl_m', 'WITH', 'tbl_m.idMember = tbl_op.seller')
-                                    ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'tbl_mf', 'WITH', 'tbl_mf.order = tbl_op.order AND tbl_mf.member = tbl_op.seller')
+                                    ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'tbl_mf', 'WITH', 'tbl_mf.order = tbl_op.order AND tbl_mf.forMemberid = tbl_op.seller')
                                     ->leftJoin('EasyShop\Entities\EsOrderProductStatus', 'tbl_ops', 'WITH', 'tbl_ops.idOrderProductStatus = tbl_op.status')
                                     ->leftJoin('EasyShop\Entities\EsMember', 'tbl_m_recipient', 'WITH', 'tbl_mf.forMemberid = tbl_m_recipient.idMember')
                                     ->where('tbl_op.order = :orderId')

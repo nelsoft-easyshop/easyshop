@@ -107,8 +107,9 @@ class EsOrderRepository extends EntityRepository
                                                             o.isFlag as isFlag, 
                                                             op.total as total, 
                                                             p.name as productname, 
-                                                            m.fullname as fullname, 
-                                                            op.orderQuantity as orderQuantity, 
+                                                            m.fullname as fullname,
+                                                            sm.idMember as sellerId,
+                                                            op.orderQuantity as orderQuantity,
                                                             IDENTITY(o.buyer) as buyerId, 
                                                             o.dateadded as dateadded, 
                                                             o.idOrder,
@@ -119,6 +120,7 @@ class EsOrderRepository extends EntityRepository
                         ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
                         ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
                         ->innerJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
+        ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
                         ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
                         ->where(
                                 $qb->expr()->not(
