@@ -135,10 +135,7 @@
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
 
-                    if($addToCartButton.data('canpurchase') == 'true'){
-                        $addToCartButton.removeClass("disabled").addClass("enabled");
-                    } 
-                  
+                    $addToCartButton.removeClass("disabled").addClass("enabled");
                     $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
@@ -221,6 +218,11 @@
     
     // add to cart
     $(document).on('click', '#send.enabled', function(){
+        var $button = $(this);
+        if(!$button.data('canpurchase') != 'true'){
+            alert('Sorry, this item is currently not available for purchase.');
+            return false;
+        }
 
         // token
         var $csrftoken = $("meta[name='csrf-token']").attr('content');
