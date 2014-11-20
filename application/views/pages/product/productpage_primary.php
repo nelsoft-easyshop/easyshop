@@ -86,10 +86,10 @@
                             <div class="prod-select-con ui-form-control">
                                 <select class="attribute-control">
                                     <?php if(count($headValue) > 1): ?>
-                                    <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
+                                    <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
                                     <?php endif; ?>
                                     <?php foreach ($headValue as $key => $value):?>
-                                        <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                        <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
