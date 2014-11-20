@@ -1204,6 +1204,7 @@ a{
         padding-top: 10px;
         padding-bottom: 10px;
         text-transform: uppercase;
+        cursor: pointer;
     }
     
     .my-store-menu-mobile{
@@ -1219,6 +1220,7 @@ a{
         padding: 0px 20px;
         margin-top: 5px;
         display: none;
+       
     }
     
     .my-account-menu-mobile-cont{
@@ -1228,16 +1230,19 @@ a{
         padding: 0px 20px;
         margin-top: 5px;
         display: none;
+        
     }
     
     .my-store-menu-mobile-ul{
         border-top: solid #ff893a 3px;
         border-bottom: solid #ff893a 3px;
+        box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
     .my-account-menu-mobile-ul{
         border-top: solid #ff893a 3px;
         border-bottom: solid #ff893a 3px;
+        box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
     .my-store-menu-mobile-ul > a > li{
@@ -1612,5 +1617,17 @@ a{
     
     .filter-feedbacks > option{
         text-align: center !important;
+    }
+    
+    .my-store-menu-mobile-ul > .selected > li,
+    .my-account-menu-mobile-ul > .selected > li
+        {
+        background: #ff893a;
+        color: #fff;
+    }
+    
+    .row-menu-mobile-res > .selected > .col-dash-mobile{
+        background: #ff893a;
+        color: #fff;
     }
 }
