@@ -801,8 +801,8 @@ class ProductManager
     public function getProductCombinationAvailable($productId)
     {
         // get combination quantity
-        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                     ->getProductInventoryDetail($productId);
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
 
          // get product shipping location
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
@@ -833,10 +833,20 @@ class ProductManager
             }
         }
 
+        $productAttributeDetails = $esProductRepo->getProductAttributeDetailByName($productId);
+        $productAttributes = $this->collectionHelper->organizeArray($productAttributeDetails,true,true);
+
+        $attrCount = 0;
+        foreach ($productAttributes as $attribute) {
+            if(count($attribute) === 1){
+                $attrCount ++;
+            }
+        }
+
         // check if combination available
         $noMoreSelection = "";
         if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
-            || count($productCombinationAvailable) === 1 ){
+            || (count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes))){
             $noMoreSelection = $productInventory[0]['id_product_item'];
         }
 

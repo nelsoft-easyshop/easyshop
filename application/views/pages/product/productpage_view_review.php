@@ -33,6 +33,12 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <?=$productDetails; ?>
+                            <?php foreach ($productAttributes as $head => $headValue): ?>
+                                <?php if(count($headValue) === 1): ?>
+                                    <?=ucfirst(html_escape($head)); ?> : <?=ucfirst(html_escape($headValue[0]['attr_value'])); ?>
+                                    <br>
+                                <?php endif;?>
+                            <?php endforeach; ?> 
                         </div>
                     </div>
                 </div>

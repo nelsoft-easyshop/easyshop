@@ -289,6 +289,7 @@ class product extends MY_Controller
 
             $reviewDetailsData = array(
                         'productDetails' => $productDescription,
+                        'productAttributes' => $productAttributes,
                         'productReview' => $productReviews,
                         'canReview' => $canReview,
                     );
@@ -304,27 +305,27 @@ class product extends MY_Controller
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
             $viewData = [
-                            'product' => $product,
-                            'breadCrumbs' => $breadcrumbs,
-                            'ownerAvatar' => $avatarImage,
-                            'imagesView' => $imagesView,
-                            'productAttributes' => $productAttributes,
-                            'productCombinationQuantity' => json_encode($productCombination),
-                            'shippingInfo' => $shippingDetails,
-                            'shiploc' => $shippingLocation,
-                            'paymentMethod' => $paymentMethod,
-                            'isBuyButtonViewable' => $isBuyButtonViewable,
-                            'isLoggedIn' => $headerData['logged_in'],
-                            'viewerId' => $viewerId,
-                            'canPurchase' => $canPurchase,
-                            'userData' => $headerData['user'],
-                            'bannerView' => $bannerView, 
-                            'reviewDetailsView' => $reviewDetailsView,
-                            'recommendedView' => $recommendedView,
-                            'noMoreSelection' => $noMoreSelection, 
-                            'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                            'url' => base_url() .'item/' . $product->getSlug()
-                        ];
+                    'product' => $product,
+                    'breadCrumbs' => $breadcrumbs,
+                    'ownerAvatar' => $avatarImage,
+                    'imagesView' => $imagesView,
+                    'productAttributes' => $productAttributes,
+                    'productCombinationQuantity' => json_encode($productCombination),
+                    'shippingInfo' => $shippingDetails,
+                    'shiploc' => $shippingLocation,
+                    'paymentMethod' => $paymentMethod,
+                    'isBuyButtonViewable' => $isBuyButtonViewable,
+                    'isLoggedIn' => $headerData['logged_in'],
+                    'viewerId' => $viewerId,
+                    'canPurchase' => $canPurchase,
+                    'userData' => $headerData['user'],
+                    'bannerView' => $bannerView, 
+                    'reviewDetailsView' => $reviewDetailsView,
+                    'recommendedView' => $recommendedView,
+                    'noMoreSelection' => $noMoreSelection, 
+                    'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                    'url' => base_url() .'item/' . $product->getSlug()
+                ];
 
             if($this->session->userdata('member_id')) {
                 $headerData['user_details'] = $this->fillUserDetails();
