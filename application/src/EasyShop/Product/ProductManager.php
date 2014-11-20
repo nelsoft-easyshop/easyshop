@@ -857,13 +857,13 @@ class ProductManager
         foreach ($productAttributes as $headKey => $headValue) {
             if(count($headValue) === 1){
                 $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
-                if((int)$headValue[0]['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                if((int)$headValue[0]['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $headValue[0]['type'] === "specific"){
                     unset($productAttributes[$headKey]);
                 }
             }
             else{
                 foreach ($headValue as $key => $value) {
-                    if((int)$value['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                    if((int)$value['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $value['type'] === "specific" ){
                         $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
                         unset($productAttributes[$headKey][$key]);
                     }
