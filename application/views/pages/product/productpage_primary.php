@@ -76,7 +76,7 @@
                 <div class="col-md-12 prod-border-bttm"></div>
 
                 <div class="clear"></div>
-                <?php if(count($productAttributes) > 0 && !$noMoreSelection): ?>
+                <?php if(count($productAttributes) > 0): ?>
                 <div class="row pad-top-23">
                     
                     <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
