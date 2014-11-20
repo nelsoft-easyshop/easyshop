@@ -439,7 +439,8 @@ class NewHomeWebService extends MY_Controller
             }
 
             if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
-                $this->resizeImage($imgDirectory,$imageDimensionsConfig["adsImage"]);
+                $imageUtility = $this->serviceContainer['image_utility'];     
+                $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"]);                           
             }
 
 
@@ -506,7 +507,8 @@ class NewHomeWebService extends MY_Controller
                 }
 
                 if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
-                    $this->resizeImage($imgDirectory,$imageDimensionsConfig["adsImage"]);
+                    $imageUtility = $this->serviceContainer['image_utility'];
+                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"]);
                 }
 
                 $map->adSection->ad[$index]->img = $value;
@@ -960,15 +962,15 @@ class NewHomeWebService extends MY_Controller
 
                 $this->config->load('image_dimensions', TRUE);
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
-
+                $imageUtility = $this->serviceContainer['image_utility'];
                 if($index > $subSliderCount) {
                     $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                    $this->resizeImage($imgDirectory, $tempDimensions);
+                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions);
                     reset($imageDimensionsConfig["mainSlider"]["$template"]);                
                 }
                 else {
                     $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$index];
-                    $this->resizeImage($imgDirectory, $tempDimensions);
+                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions);
                 }
 
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
@@ -1165,16 +1167,16 @@ class NewHomeWebService extends MY_Controller
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
             $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);
-
+            $imageUtility = $this->serviceContainer['image_utility'];
             if($subSliderCount > $defaultTemplateSliderCount) {
                 $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                $this->resizeImage($imgDirectory, $tempDimensions);
+                $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
                 reset($imageDimensionsConfig["mainSlider"]["$template"]);                
             }
             else {
 
                 $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$index];
-                $this->resizeImage($imgDirectory, $tempDimensions);
+                $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             }
 
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
