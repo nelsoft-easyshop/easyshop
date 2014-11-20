@@ -1,7 +1,7 @@
 <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="div-member-stats">
-        <div class="div-img-cover">
+        <div class="div-img-cover" style="background: url(/assets/images/img_cover_2.png) no-repeat center; background-size:cover;">
             <img src="/assets/images/img_cover_2.png" class="img-follower-cover"/>
             <img src="/assets/images/img_profile_pic.jpg" class="vendor-follower-img"/>
         </div>
