@@ -1096,38 +1096,36 @@ class NewHomeWebService extends MY_Controller
 
 
     /**
-     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  Method to display the contents of the new_home_files_temp.xml from the function call from Easyshop.ph.admin
      *  @return string
      */
     public function getTempContents() 
     {         
-        if(file_exists($this->tempHomefile)) {
-            $this->syncTempHomeFiles();
-        }       
-        else {
+        if(!file_exists($this->tempHomefile)) {
             copy($this->file, $this->tempHomefile);
-        }     
+        }    
         $this->output
-            ->set_content_type('text/plain') 
-            ->set_output(file_get_contents($this->tempHomefile));
+             ->set_content_type('text/plain') 
+             ->set_output(file_get_contents($this->tempHomefile));
     }     
 
-
     /**
-     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *  Method that handles synching sliderSection values from new_home_files.xml to new_home_files_temp.xml
      *  @return string
      */
     public function syncTempHomeFiles()
     {
         $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection->slide as $key => $slider) {
+        foreach ($map->sliderSection->slide as $slider) {
             $sliders[] = $slider;
         }
-        if(!$this->input->get() === false) {
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile,$this->file,$sliders);              
-        }
+        $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
+        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
+         
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);                        
           
     }
 
