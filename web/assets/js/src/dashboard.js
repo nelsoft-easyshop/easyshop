@@ -442,6 +442,16 @@
         $('.my-account-menu-mobile-cont').slideToggle();
     });
     
+    $('.dash-mobile-trigger').click(function() {
+        $('.my-store-menu-mobile-cont').slideUp("fast");
+        $('.my-account-menu-mobile-cont').slideUp("fast");
+    });
+    
+    $('.dash-mobile-trigger').click(function() {
+        $('.my-store-menu-mobile-cont').slideUp("fast");
+        $('.my-account-menu-mobile-cont').slideUp("fast");
+    });
+    
     
     
 }(jQuery));
