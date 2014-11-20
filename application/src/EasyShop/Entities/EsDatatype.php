@@ -28,7 +28,10 @@ class EsDatatype
      */
     private $name;
 
-
+    /**
+     * @var int
+     */
+    const CHECKBOX_DATA_TYPE = 5;
 
     /**
      * Get idDatatype

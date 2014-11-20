@@ -7,7 +7,7 @@ use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
 use EasyShop\Entities\EsProduct; 
-use EasyShop\Entities\EsProductShippingHead; 
+use EasyShop\Entities\EsProductShippingHead;
 
 use Easyshop\Entities\EsProductItem;
 
@@ -890,6 +890,40 @@ class ProductManager
                 'noMoreSelection' => $noMoreSelection,
                 'productCombinationAvailable' => $productCombinationAvailable
             ];
+    }
+
+    /**
+     * Get prodcut additional information to display on product details based on attributes
+     * @param  array $productAttributes [description]
+     * @return array
+     */
+    public function separateAttributesOptions($productAttributes)
+    {   
+        $additionalInformation = [];
+        foreach ($productAttributes as $headKey => $headValue) {
+            if(count($headValue) === 1){
+                $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
+                if((int)$headValue[0]['datatype_id'] === \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                    unset($productAttributes[$headKey]);
+                }
+            }
+            else{
+                foreach ($headValue as $key => $value) {
+                    if((int)$value['datatype_id'] === \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE){
+                        $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
+                        unset($productAttributes[$headKey][$key]);
+                    }
+                    if(empty($productAttributes[$headKey])){
+                        unset($productAttributes[$headKey]);
+                    }
+                }
+            }
+        }
+
+        return [
+            'additionalInformation'=> $additionalInformation,
+            'productOptions' => $productAttributes
+        ];
     }
 }
 
