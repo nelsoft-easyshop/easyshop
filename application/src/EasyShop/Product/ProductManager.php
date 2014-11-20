@@ -650,27 +650,6 @@ class ProductManager
     }
 
     /**
-     * Creates directories, checks if the passed image name exists in the admin folder
-     * @param int $imagesId
-     * @return JSONP
-     */ 
-    public function imageresize($imageDirectory, $newDirectory, $dimension)
-    {
-        
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $imageDirectory;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['new_image'] = $newDirectory;
-        $config['width'] = $dimension[0];
-        $config['height'] = $dimension[1]; 
-
-        $this->imageLibrary->initialize($config); 
-        $this->imageLibrary->resize();
-        $this->imageLibrary->clear();        
-    } 
-
-    /**
      * Generates slugs 
      * @param string $title
      * @return string
