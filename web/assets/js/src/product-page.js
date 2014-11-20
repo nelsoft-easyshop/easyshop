@@ -269,13 +269,31 @@
         $('.base-price').addClass('line-through');
     }
 
+    $(".attribute-control").bind('click',function(e){
+
+        var $this = $(this);
+        var $arraySelectedNoZero = [];
+
+        $(".attribute-control").each(function() { 
+            var $thisSelect = $(this);
+            var $selectValue = $thisSelect.val();
+            if($selectValue > 0){
+                $arraySelectedNoZero.push($selectValue);
+            }
+        });
+ 
+        var $indexSelected = $arraySelectedNoZero.indexOf($this.val());
+        if ($indexSelected > -1) {
+            $arraySelectedNoZero.splice($indexSelected, 1);
+        }
+        disabledSelection($arraySelectedNoZero);
+    });
+
     $(".attribute-control").bind('change',function(e){
         var $this = $(this);
         var $arraySelected = [];
-        var $arraySelectedNoZero = [];
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
         var $imageid = $this.children('option:selected').data('imageid');
-        var $selectedReturn = removeNoCombination();
 
         if($imageid > 0){
             $("#image"+$imageid).trigger('click'); 
@@ -286,10 +304,7 @@
             var $selectValue = $thisSelect.val();
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
             $baseFinalPrice += $additionalPrice;
-            $arraySelected.push($selectValue);
-            if($thisSelect.val() > 0){
-                $arraySelectedNoZero.push($selectValue);
-            }
+            $arraySelected.push($selectValue); 
         });
 
         // update price 
@@ -298,33 +313,18 @@
         // sort array
         $arraySelected.sort(sortArrayNumber);
         checkCombination($arraySelected);
-        if($this.val() > 0){
-            $this.children("option").each(function(){
-                var $thisOption = $(this);
-                if(isInArray($thisOption.val(),$selectedReturn)){
-                    $(this).prop("disabled",false);
-                }
-            });
-        }
 
-        var $indexSelected = $arraySelectedNoZero.indexOf($this.val());
-        if ($indexSelected > -1) {
-            $arraySelectedNoZero.splice($indexSelected, 1);
-        }
-
-        $this.children("option").each(function(){
-            var $thisOption = $(this);
-            if(isInArray($thisOption.val(),$selectedReturn)){
-                $(this).prop("disabled",false);
-            }
-        });
-        
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 return false;
             }
         });
+
+
+ 
+        
+
     });
     
     // add to cart
