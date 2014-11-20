@@ -28,12 +28,11 @@
                         </ul>
                     </div>
                 </ul>
-                
             </div>
             <div class="mobile-dashboard-menu">
-                <div class="row-fluid">
-                    <a href="#dashboard">
-                        <div class="col-xs-4 col-dash-mobile">
+                <div class="row-fluid row-menu-mobile-res">
+                    <a href="#dashboard" class="dash-mobile-trigger">
+                        <div class="col-xs-4 col-dash-mobile ">
                             Dashboard
                         </div>
                     </a>
@@ -46,15 +45,15 @@
                 </div>
                 <div class="my-store-menu-mobile-cont">
                     <ul class="my-store-menu-mobile-ul">
-                        <a href="#transactions" class=""><li class="m-menu-transactions">Transactions</li></a>
-                        <a href="#setup"><li class="m-menu-setup">Store Setup</li></a>
+                        <a href="#transactions" class="dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
+                        <a href="#setup" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
                     </ul>
                 </div>
                 <div class="my-account-menu-mobile-cont">
                     <ul class="my-account-menu-mobile-ul">
-                        <a href="#personal-information"><li class="m-menu-personal">Personal Information</li></a>
-                        <a href="#delivery-address"><li class="m-menu-delivery">Delivery Address</li></a>
-                        <a href="#account-settings"><li class="m-menu-setting">Account Settings</li></a>
+                        <a href="#personal-information" class="dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
+                        <a href="#delivery-address" class="dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
+                        <a href="#account-settings" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
             </div>
