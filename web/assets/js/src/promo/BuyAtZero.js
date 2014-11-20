@@ -9,9 +9,8 @@
                 alert('Please select the attributes you want for this item.');
                 return false;
             }
-            
-            console.log($button.data('canpurchase'));
-            if($button.data('canpurchase') != true){
+
+            if(!$button.data('canpurchase')){
                 alert('Sorry, this item is currently not available for purchase.');
                 return false;
             }

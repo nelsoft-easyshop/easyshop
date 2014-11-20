@@ -219,7 +219,7 @@
     // add to cart
     $(document).on('click', '#send.enabled', function(){
         var $button = $(this);
-        if($button.data('canpurchase') != true){
+        if(!$button.data('canpurchase')){
             alert('Sorry, this item is currently not available for purchase.');
             return false;
         }
