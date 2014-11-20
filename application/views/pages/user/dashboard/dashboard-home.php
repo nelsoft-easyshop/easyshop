@@ -174,6 +174,7 @@
         </div>
     </div>
     <div class="sidebarTabs">
+        <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
                 <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
@@ -183,17 +184,18 @@
                 <a href="#sales"><li>Sales</li></a>
             </ul>
         </div>
+        </div>
         <div class="product-items">
-            <div id="active-items">
+            <div id="active-items"> 
                 <?php if($activeProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-search-item">
                                 <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
                                 <span class="icon-search"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-filter">
                                 <label>Sort by:</label>
                                 <select class="select-filter-item search-filter">
@@ -208,7 +210,6 @@
                             <input type="hidden" class="request-type" value="active" />
                         </div>
                     </div>
-                    
                     <div id="active-product-container">
                     <?=$activeProductView;?>
                     </div>
@@ -224,13 +225,13 @@
             <div id="deleted-items"> 
                 <?php if($deletedProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-search-item">
                                 <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
                                 <span class="icon-search"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-filter">
                                 <label>Sort by:</label>
                                 <select class="select-filter-item search-filter">
@@ -259,13 +260,13 @@
             <div id="draft-items"> 
                 <?php if($draftedProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-search-item">
                                 <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
                                 <span class="icon-search"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-filter">
                                 <label>Sort by:</label>
                                 <select class="select-filter-item search-filter">

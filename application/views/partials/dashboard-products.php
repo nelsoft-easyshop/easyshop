@@ -9,14 +9,12 @@
                         <tr>
                             <td class="td-image-cont" width="20%" >
                                 <div class="div-product-image" style="background: url(/<?=$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
-                                    
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
                                         <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
                                     </div>
                                     <?php endif; ?>
                                 </div>
-                                
                             </td>
                             <td class="td-meta-info">
                                 <p class="item-list-name">
@@ -43,7 +41,7 @@
                                         <div class="col-xs-4">
                                             <span class="strong-label">Sold Item(s) : </span> <?=$product->soldCount; ?>
                                         </div>
-                                        <div class="col-xs-8">
+                                        <div class="col-xs-8 col-stock">
                                             <span class="strong-label">Available Stock(s) : </span> <?=$product->availableStock; ?>
                                         </div>
                                     </div>
@@ -54,7 +52,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <table>
+                                            <table width="100%">
                                                 <tr>
                                                     <td class="td-label-desc"><span class="strong-label">Description: </span></td>
                                                     <td class="td-desc-item">
@@ -67,9 +65,28 @@
                                                 </tr>
                                             </table>
                                         </div>
+                                    </div> 
+                                    <div class="row row-action-mobile">
+                                        <div class="col-md-12">
+                                            <?php if($product->getIsDelete() === 0): ?>
+                                            <button class="btn btn-action-edit btn-edit-product"
+                                            data-productid="<?=$product->getIdProduct(); ?>"
+                                            data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
+                                            data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                            >
+                                                <i class="icon-edit"></i>edit
+                                            </button>
+                                            <?php else: ?>
+                                            <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
+                                                <i class="icon-delete"></i>Restore
+                                            </button>
+                                            <?php endif; ?> 
+                                            <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
+                                                <i class="icon-delete"></i>delete
+                                            </button> 
+                                        </div>
                                     </div>
                                 </div>
-                                
                             </td>
                             <td class="td-item-actions" width="25%">
                                 <p>Last Modified: <?=$product->getLastmodifieddate()->format('M d, Y'); ?></p>
@@ -98,7 +115,7 @@
                                 </button> 
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="tr-attributes-drop">
                             <td></td>
                             <td colspan="2" class="td-attributes">
                                 <?php if(!empty($product->attributes)): ?>
