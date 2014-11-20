@@ -271,23 +271,27 @@
     }
 
     $(".attribute-control").bind('click',function(e){
-
-        var $this = $(this);
-        var $arraySelectedNoZero = [];
-
-        $(".attribute-control").each(function() { 
-            var $thisSelect = $(this);
-            var $selectValue = $thisSelect.val();
-            if($selectValue > 0){
-                $arraySelectedNoZero.push($selectValue);
-            }
-        });
- 
-        var $indexSelected = $arraySelectedNoZero.indexOf($this.val());
-        if ($indexSelected > -1) {
-            $arraySelectedNoZero.splice($indexSelected, 1);
+        if($("#noMoreSelection").val() != ""){
+            $(".attribute-control > option").prop("disabled",false);
         }
-        disabledSelection($arraySelectedNoZero);
+        else{
+            var $this = $(this);
+            var $arraySelectedNoZero = [];
+
+            $(".attribute-control").each(function() { 
+                var $thisSelect = $(this);
+                var $selectValue = $thisSelect.val();
+                if($selectValue > 0){
+                    $arraySelectedNoZero.push($selectValue);
+                }
+            });
+     
+            var $indexSelected = $arraySelectedNoZero.indexOf($this.val());
+            if ($indexSelected > -1) {
+                $arraySelectedNoZero.splice($indexSelected, 1);
+            }
+            disabledSelection($arraySelectedNoZero);
+        }
     });
 
     $(".attribute-control").bind('change',function(e){
