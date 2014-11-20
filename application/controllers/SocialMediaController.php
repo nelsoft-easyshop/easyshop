@@ -135,7 +135,7 @@ class SocialMediaController extends MY_Controller
                                             '~'.
                                             ''.
                                             '~'.
-                                            $googleData->getId()
+                                            $googleData->getEmail()
                                         );
                 redirect('SocialMediaController/register?h=' . $data, 'refresh');
             }
