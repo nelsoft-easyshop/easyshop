@@ -3,9 +3,15 @@
     
         $(document).on('click', '#send_registration', function() {
             $('#send_registration').html('Please wait');
+            
             var $button = $(this);
             if(!$button.hasClass('enabled')){
                 alert('Please select the attributes you want for this item.');
+                return false;
+            }
+            
+            if(!$button.data('canpurchase') != 'true'){
+                alert('Sorry, this item is currently not available for purchase.');
                 return false;
             }
             
