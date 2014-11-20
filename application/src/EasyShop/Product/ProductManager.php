@@ -854,7 +854,7 @@ class ProductManager
                                     ->getShippingDetailsByProductId($productId);
 
         $productCombinationAvailable = [];
-        foreach ($productInventory as $key => $value) {
+        foreach ($productInventory as $value) {
             if(!array_key_exists($value['id_product_item'],$productCombinationAvailable)){
 
                 $locationArray = [];
@@ -879,7 +879,9 @@ class ProductManager
         }
 
         $noMoreSelection = "";
-        if(count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0){
+
+        if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
+            || count($productCombinationAvailable) === 1 ){
             $noMoreSelection = $productInventory[0]['id_product_item'];
         }
 

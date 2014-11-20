@@ -167,33 +167,7 @@
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="clear"></div>
-            <div class="col-md-12 prod-border-bttm pad-top-23"></div>
-            <div class="clear"></div>
-
-            <div class="row pad-top-23">
-                <div class="col-md-12 prod-share-container">
-                    <p class="attr-title">Share with:</p>
-                    <a href="javascript:void(0)" class="facebook-lnk">
-                        <div class="ui-form-control share-facebook">
-                            <img src="/assets/images/img-facebook-prod.png" alt="Facebook"> 
-                            <span>Facebook</span>
-                        </div>
-                    </a>
-                    <a class="twitter-lnk">
-                        <div class="ui-form-control share-twitter">
-                            <img src="/assets/images/img-twitter-prod.png" alt="Twitter"> 
-                            <span>Twitter</span>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0);">
-                        <div class="ui-form-control share-googleplus">
-                            <img src="/assets/images/img-googleplus-prod.png" alt="Google+"> 
-                            <span>Google+</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            <div class="clear"></div> 
         </div>
         <div class="clear"></div>
     </div>

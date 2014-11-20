@@ -27,6 +27,13 @@ class Memberpage extends MY_Controller
     private $contentXmlFile;
 
     /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $feedBackPerPage = 1;
+
+    /**
      *  Class Constructor
      */
     public function __construct()
@@ -1821,6 +1828,10 @@ class Memberpage extends MY_Controller
 
     // new implementation starts here
     
+    /**
+     * display dashboard view
+     * @return view
+     */
     public function newMemberpage()
     {
         header ('Content-type: text/html; charset=ISO-8859-1');
@@ -1851,8 +1862,8 @@ class Memberpage extends MY_Controller
             $isDelete = [EsProduct::IS_DELETE_OFF];
             $isDraft = [EsProduct::IS_DRAFT_OFF];
             $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userActiveProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
-            $paginationData['lastPage'] = ceil($userActiveProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+            $userActiveProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft);
+            $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
 
             $activeProductsData = [
                                 'products' => $userActiveProducts,
@@ -1863,8 +1874,8 @@ class Memberpage extends MY_Controller
             $isDelete = [EsProduct::IS_DELETE_ON];
             $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
             $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userDeletedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft); 
-            $paginationData['lastPage'] = ceil($userDeletedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+            $userDeletedProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft); 
+            $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
 
             $deletedProductsData = [
                                 'products' => $userDeletedProducts,
@@ -1875,8 +1886,8 @@ class Memberpage extends MY_Controller
             $isDelete = [EsProduct::IS_DELETE_OFF];
             $isDraft = [EsProduct::IS_DRAFT_ON];
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userDraftedProducts = $productManager->getProductsByUser($memberId,$isDelete,$isDraft);
-            $paginationData['lastPage'] = ceil($userDraftedProductCount/$productManager::PRODUCT_COUNT_DASHBOARD);
+            $userDraftedProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft);
+            $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
 
             $draftedProductsData = [
                                 'products' => $userDraftedProducts,
@@ -1894,54 +1905,54 @@ class Memberpage extends MY_Controller
                             'rating3' => $allFeedbacks['rating3Summary'],
                         ];
 
-            $feedbackLimit = 1;
+            $feedbackLimit = $this->feedBackPerPage;
             $asBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, 
                                                                    $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer'])/$feedbackLimit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer']) / $feedbackLimit);
 
             $asBuyerViewData = [
                             'pagination' => $this->load->view('pagination/default', $paginationData, true),
                             'feedbacks' => $asBuyerFeedBack,
                         ];
 
-            $asBuyerView = $this->load->view('partials/dashboard-feedback',$asBuyerViewData,true);
+            $asBuyerView = $this->load->view('partials/dashboard-feedback', $asBuyerViewData, true);
 
             $asSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, 
-                                                                   $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_seller'])/$feedbackLimit);
+                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, 
+                                                                    $feedbackLimit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_seller']) / $feedbackLimit);
 
             $asSellerViewData = [
                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 'feedbacks' => $asSellerFeedBack,
             ];
 
-            $asSellerView = $this->load->view('partials/dashboard-feedback',$asSellerViewData,true);
+            $asSellerView = $this->load->view('partials/dashboard-feedback', $asSellerViewData, true);
 
             $asOtherSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
-                                                                   $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_seller'])/$feedbackLimit);
+                                                                         EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
+                                                                         $feedbackLimit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_seller']) / $feedbackLimit);
 
             $asOtherSellerData = [
                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 'feedbacks' => $asOtherSellerFeedBack,
             ];
 
-            $asOtherSellerView = $this->load->view('partials/dashboard-feedback',$asOtherSellerData,true);
+            $asOtherSellerView = $this->load->view('partials/dashboard-feedback', $asOtherSellerData, true);
 
             $asOtherBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
-                                                                   $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_buyer'])/$feedbackLimit);
+                                                                        EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
+                                                                        $feedbackLimit);
+            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_buyer']) / $feedbackLimit);
  
             $asOtherBuyerData = [
                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 'feedbacks' => $asOtherBuyerFeedBack,
             ];
 
-            $asOtherBuyerView = $this->load->view('partials/dashboard-feedback',$asOtherBuyerData,true);
+            $asOtherBuyerView = $this->load->view('partials/dashboard-feedback', $asOtherBuyerData, true);
 
             $allFeedBackViewData = [
                             'asBuyerView' => $asBuyerView,
@@ -1952,6 +1963,10 @@ class Memberpage extends MY_Controller
                             'asOtherSellerFeedbackCount' => count($allFeedbacks['youpost_seller']),
                             'asOtherBuyerView' => $asOtherBuyerView,
                             'asOtherBuyerFeedbackCount' => count($allFeedbacks['youpost_buyer']),
+                            'asBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
+                            'asSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
+                            'asOtherSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
+                            'asOtherBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER,
                         ];
             $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
 
@@ -1972,6 +1987,7 @@ class Memberpage extends MY_Controller
                             'memberRating' => $memberRating,
                             'feedBackTotalCount' => $allFeedbacks['totalFeedbackCount'],
                             'profilePercentage' => $profilePercentage,
+                            'allFeedBackViewData' => $allFeedBackViewData,
                             'allFeedBackView' => $allFeedBackView,
                         ];
 
@@ -2000,6 +2016,10 @@ class Memberpage extends MY_Controller
         }
     }
 
+    /**
+     * update product is_delete to 1 
+     * @return json
+     */
     public function softDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
@@ -2016,6 +2036,10 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
+    /**
+     * update product is_delete to 2
+     * @return json
+     */
     public function hardDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
@@ -2032,6 +2056,10 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
+    /**
+     * update product is_delete to 1
+     * @return json
+     */
     public function restoreProduct()
     {
         $memberId = $this->session->userdata('member_id');
@@ -2048,6 +2076,10 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
+    /**
+     * get next product set based on page number
+     * @return json
+     */
     public function productMemberPagePaginate()
     {
         $productManager = $this->serviceContainer['product_manager'];
@@ -2098,6 +2130,60 @@ class Memberpage extends MY_Controller
                 ];
 
         echo json_encode($responseArray);
+    }
+
+    /**
+     * get next set of feedbacks based on page number
+     * @return [type] [description]
+     */
+    public function feedbackMemberPagePaginate()
+    {
+        $userManager = $this->serviceContainer['user_manager'];
+        
+        $page = (int) $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $requestType = (int) trim($this->input->get('request'));
+        $memberId = $this->session->userdata('member_id');
+        $feedbackLimit = $this->feedBackPerPage;
+        $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
+
+
+        $feedbacks = $userManager->getFormattedFeedbacks($memberId,
+                                                         $requestType, 
+                                                         $feedbackLimit,
+                                                         $page);
+
+        $paginationData = [
+            'isHyperLink' => false
+            , 'currentPage' => $page
+        ];
+
+        switch($requestType){
+            case EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['otherspost_buyer']) / $feedbackLimit);
+                break;
+            case EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['otherspost_seller']) / $feedbackLimit);
+                break;
+            case EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['youpost_seller']) / $feedbackLimit);
+                break;
+            case EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['youpost_buyer']) / $feedbackLimit);
+                break;
+        }
+
+        $feedBackViewData = [
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                'feedbacks' => $feedbacks,
+            ];
+
+        $feedBackView = $this->load->view('partials/dashboard-feedback', $feedBackViewData, true);
+
+        $responseData = [
+                    'html' => $feedBackView
+                ];
+
+        echo json_encode($responseData);
     }
 }
 

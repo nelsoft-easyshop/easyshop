@@ -113,6 +113,7 @@ else {
     $route['(?i)me/product/delete-soft'] = 'memberpage/softDeleteProduct';
     $route['(?i)me/product/delete-hard'] = 'memberpage/hardDeleteProduct';
     $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
+    $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
     $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon

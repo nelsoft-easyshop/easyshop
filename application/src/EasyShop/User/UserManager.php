@@ -347,28 +347,28 @@ class UserManager
         if($type === EsMemberFeedback::TYPE_ALL){
             $feedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
                               ->getAllFeedback($memberId);
-            $data = array(
-                'youpost_buyer' => array(),
-                'youpost_seller' => array(),
-                'otherspost_seller' => array(),
-                'otherspost_buyer' => array(),
+            $data = [
+                'youpost_buyer' => [],
+                'youpost_seller' => [],
+                'otherspost_seller' => [],
+                'otherspost_buyer' => [],
                 'rating1Summary' => 0,
                 'rating2Summary' => 0,
                 'rating3Summary' => 0,
                 'reviewForSellerCount' => 0,
                 'totalFeedbackCount' => 0,
-            );
+            ];
     
             $memberId = intval($memberId);
             foreach($feedbacks as $feedback){
                 $feedBackKind = intval($feedback['feedbKind']);
-                $feedbackDetails = array(
-                                        'feedb_msg' => $feedback['feedbMsg'],
-                                        'dateadded' => $feedback['dateadded']->format('jS F, Y'),
-                                        'rating1' => $feedback['rating1'],
-                                        'rating2' => $feedback['rating2'],
-                                        'rating3' => $feedback['rating3'],
-                                        );
+                $feedbackDetails = [
+                            'feedb_msg' => $feedback['feedbMsg'],
+                            'dateadded' => $feedback['dateadded']->format('jS F, Y'),
+                            'rating1' => $feedback['rating1'],
+                            'rating2' => $feedback['rating2'],
+                            'rating3' => $feedback['rating3'],
+                        ];
                                                                                                 
                 if(intval($feedback['reviewerId']) === $memberId){
                     $feedbackDetails['for_memberId'] = $feedback['revieweeId'];

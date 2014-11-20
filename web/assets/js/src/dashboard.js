@@ -154,7 +154,7 @@
         $( ".map-container" ).slideToggle( "slow" );
     });
 
-    $("#active-items, #deleted-items, #draft-items").on('click',".individual",function () {
+    $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $parentContainer = $this.parent().parent().parent().parent();
@@ -281,12 +281,28 @@
         $("#editTextCategoryNamehala ").val($categoryName);
         $("#formEdit").submit();
     });
-    
+
+    $("#feedbacks").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $parentContainer = $this.parent().parent().parent().parent();
+        var $requestType = $parentContainer.find(".feedback-type").val();
+        var $containerId = $parentContainer.attr('class');
+        var $hiddenContainer = $parentContainer.find(".feedback-hidden-container").val();
+
+        if($("#hidden-feedback-container > #" + $hiddenContainer + " > #page-" + $page).length > 0){
+             $("."+$containerId +" > .feedbacks-container").html($("#hidden-feedback-container > #" + $hiddenContainer + " > #page-" + $page).html());
+        }
+        else{
+            requestFeedback($page, $requestType, $containerId, $hiddenContainer);
+        }
+    });
+
     var isAjaxRequestForProduct = function($page, $textInput, $filterInput, $requestType, $container)
     {
         if($container == "deleted-product-container"){
             if($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).length > 0){
-                $('#'+$container).empty().append($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).html());
+                $('#'+$container).html($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
                 requestProduct($page, $textInput, $filterInput, $requestType, $container);
@@ -294,7 +310,7 @@
         }
         else if($container == "drafted-product-container"){
             if($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).length > 0){ 
-                $('#'+$container).empty().append($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).html());
+                $('#'+$container).html($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
                 requestProduct($page, $textInput, $filterInput, $requestType, $container);
@@ -302,7 +318,7 @@
         }
         else{
             if($("#hidden-active-container-" + $filterInput + " > #page-"+$page).length > 0){
-                $('#'+$container).empty().append($("#hidden-active-container-" + $filterInput + " > #page-"+$page).html());
+                $('#'+$container).html($("#hidden-active-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
                 requestProduct($page, $textInput, $filterInput, $requestType, $container);
@@ -334,8 +350,8 @@
             beforeSend: function(){ 
                 $('#'+$container).hide();
             },
-            success: function(d){ 
-                var $response = $.parseJSON(d);
+            success: function(requestResponse){ 
+                var $response = $.parseJSON(requestResponse);
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
                 $('#'+$container).html($response.html);
                 $('#'+$container).show();
@@ -351,6 +367,30 @@
                         $("#hidden-active-container-" + $filterInput).append($appendString);
                     }
                 }
+            }
+        });
+    }
+
+    var requestFeedback = function($page, $requestType, $container, $hiddenContainer)
+    {
+        var $urlRequest = $('#feedback-request-url').val();
+        var $ajaxRequest = $.ajax({
+            type: "get",
+            url: $urlRequest,
+            data: {
+                    page:$page, 
+                    request:$requestType, 
+                } ,
+            beforeSend: function(){ 
+                $("."+$container +" > .feedbacks-container").hide();
+            },
+            success: function(requestResponse){
+                var $response = $.parseJSON(requestResponse); 
+                var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
+                $("."+$container +" > .feedbacks-container").html($response.html);
+                $("."+$container +" > .feedbacks-container").show();
+
+                $("#hidden-feedback-container > #" + $hiddenContainer).append($appendString);
             }
         });
     }

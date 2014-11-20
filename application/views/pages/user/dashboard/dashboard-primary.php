@@ -92,6 +92,7 @@
     <input type="hidden" id="request-url-soft-delete" value="/me/product/delete-soft" />
     <input type="hidden" id="request-url-hard-delete" value="/me/product/delete-hard" />
     <input type="hidden" id="request-url-resotre" value="/me/product/restore" />
+    <input type="hidden" id="feedback-request-url" value="/me/feedback/next" />
     <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
         <input type="hidden" id="editTextProductId" name="p_id" value="" />
         <input type="hidden" id="editTextCategoryId" name="hidden_attribute" value="" />
