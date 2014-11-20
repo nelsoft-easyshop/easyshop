@@ -86,27 +86,30 @@
                                     <tr>
                                         <td class="td-criteria">Item Quality: </td>
                                         <td class="td-star" align="right">
+                                        <?php $tempRating = $memberRating['rating1']; ?>
                                         <?php for ($i=0; $i < 5; $i++): ?>
-                                            <i class="icon-star star-stat <?=$memberRating['rating1'] > 0 ? 'star-active' : '' ?>"></i>
-                                            <?php $memberRating['rating1']--; ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
                                         <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Communication: </td>
                                         <td class="td-star" align="right">
+                                        <?php $tempRating = $memberRating['rating2']; ?>
                                         <?php for ($i=0; $i < 5; $i++): ?>
-                                            <i class="icon-star star-stat <?=$memberRating['rating2'] > 0 ? 'star-active' : '' ?>"></i>
-                                            <?php $memberRating['rating2']--; ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
                                         <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Shipment Time: </td>
                                         <td class="td-star" align="right">
+                                        <?php $tempRating = $memberRating['rating3']; ?>
                                         <?php for ($i=0; $i < 5; $i++): ?>
-                                            <i class="icon-star star-stat <?=$memberRating['rating3'] > 0 ? 'star-active' : '' ?>"></i>
-                                            <?php $memberRating['rating3']--; ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
                                         <?php endfor; ?>
                                         </td>
                                     </tr>
@@ -123,40 +126,40 @@
                                     <span class="span-criteria-mobile">Item Quality</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating1']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Communication</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating2']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Item Shipment</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating3']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Total Reviews</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                        20
+                                        <?=$feedBackTotalCount <= 0 ? "No Rating." : $feedBackTotalCount; ?>
                                     </span>
                                 </div>
                             </div>
@@ -172,7 +175,7 @@
                 <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
                 <a href="#deleted-items"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
                 <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
-                <a href="#feedbacks"><li>Feedbacks<span class="circle-total">0</span></li></a>
+                <a href="#feedbacks"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
                 <a href="#sales"><li>Sales</li></a>
             </ul>
         </div>
@@ -284,11 +287,8 @@
                 <?php endif;?>
             </div>
             
-            <div id="feedbacks">
-                <!--<div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
-                <?php include("dashboard-feedbacks.php");?>
+            <div id="feedbacks"> 
+                <?=$allFeedBackView; ?> 
             </div>
             <div id="sales">
             <?php include("dashboard-sales.php");?>
@@ -342,3 +342,25 @@
     </div>
 </div>
 
+<div id="hidden-feedback-container">
+    <div id="as-buyer">
+        <div id="page-1">
+            <?=$allFeedBackView['asBuyerView']; ?>
+        </div>
+    </div>
+    <div id="as-seller"> 
+        <div id="page-1">
+            <?=$allFeedBackView['asSellerView']; ?>
+        </div>
+    </div>
+    <div id="as-other-seller">
+        <div id="page-1">
+            <?=$allFeedBackView['asOtherSellerView']; ?>
+        </div>
+    </div>
+    <div id="as-other-buyer">
+        <div id="page-1">
+            <?=$allFeedBackView['asOtherBuyerView']; ?>
+        </div>
+    </div>
+</div>

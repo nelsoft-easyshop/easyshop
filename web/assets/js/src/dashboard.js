@@ -154,7 +154,7 @@
         $( ".map-container" ).slideToggle( "slow" );
     });
 
-    $(document.body).on('click',".individual",function () {
+    $("#active-items, #deleted-items, #draft-items").on('click',".individual",function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $parentContainer = $this.parent().parent().parent().parent();

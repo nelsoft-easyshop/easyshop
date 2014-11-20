@@ -72,7 +72,7 @@
                                 
                             </td>
                             <td class="td-item-actions" width="25%">
-                                <p>Last Modified: <?=$product->getLastmodifieddate()->format('Y-m-d'); ?></p>
+                                <p>Last Modified: <?=$product->getLastmodifieddate()->format('M d, Y'); ?></p>
                                 <div class="">
                                 <?php for ($i=0; $i < 5; $i++): ?>
                                     <i class="icon-star star-stat <?=$product->rating > 0 ? 'star-active' : '' ?>"></i>

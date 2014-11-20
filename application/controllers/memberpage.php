@@ -1894,7 +1894,7 @@ class Memberpage extends MY_Controller
                             'rating3' => $allFeedbacks['rating3Summary'],
                         ];
 
-            $feedbackLimit = 4;
+            $feedbackLimit = 1;
             $asBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, 
                                                                    $feedbackLimit);
@@ -1912,15 +1912,48 @@ class Memberpage extends MY_Controller
                                                                    $feedbackLimit);
             $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_seller'])/$feedbackLimit);
 
+            $asSellerViewData = [
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                'feedbacks' => $asSellerFeedBack,
+            ];
+
+            $asSellerView = $this->load->view('partials/dashboard-feedback',$asSellerViewData,true);
+
             $asOtherSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
                                                                    $feedbackLimit);
             $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_seller'])/$feedbackLimit);
 
+            $asOtherSellerData = [
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                'feedbacks' => $asOtherSellerFeedBack,
+            ];
+
+            $asOtherSellerView = $this->load->view('partials/dashboard-feedback',$asOtherSellerData,true);
+
             $asOtherBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
                                                                    $feedbackLimit);
             $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_buyer'])/$feedbackLimit);
+ 
+            $asOtherBuyerData = [
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                'feedbacks' => $asOtherBuyerFeedBack,
+            ];
+
+            $asOtherBuyerView = $this->load->view('partials/dashboard-feedback',$asOtherBuyerData,true);
+
+            $allFeedBackViewData = [
+                            'asBuyerView' => $asBuyerView,
+                            'asBuyerFeedbackCount' => count($allFeedbacks['otherspost_buyer']),
+                            'asSellerView' => $asSellerView,
+                            'asSellerFeedbackCount' => count($allFeedbacks['otherspost_seller']),
+                            'asOtherSellerView' => $asOtherSellerView,
+                            'asOtherSellerFeedbackCount' => count($allFeedbacks['youpost_seller']),
+                            'asOtherBuyerView' => $asOtherBuyerView,
+                            'asOtherBuyerFeedbackCount' => count($allFeedbacks['youpost_buyer']),
+                        ];
+            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
 
             $dashboardHomeData = [
                             'avatarImage' => $userAvatarImage,
@@ -1939,6 +1972,7 @@ class Memberpage extends MY_Controller
                             'memberRating' => $memberRating,
                             'feedBackTotalCount' => $allFeedbacks['totalFeedbackCount'],
                             'profilePercentage' => $profilePercentage,
+                            'allFeedBackView' => $allFeedBackView,
                         ];
 
             $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
