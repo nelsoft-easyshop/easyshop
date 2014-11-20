@@ -110,7 +110,7 @@
 
     function checkCombination($arraySelected)
     {            
-        $addToCartButton = $('.prod-add-to-cart-btn');        
+        var $addToCartButton = $('.prod-add-to-cart-btn');        
         // check possible combination
         $.each($productCombQuantity, function(i, val) {
             $arrayCombination = val.product_attribute_ids;
@@ -219,7 +219,7 @@
     // add to cart
     $(document).on('click', '#send.enabled', function(){
         var $button = $(this);
-        if(!$button.data('canpurchase') != 'true'){
+        if($button.data('canpurchase') != true){
             alert('Sorry, this item is currently not available for purchase.');
             return false;
         }

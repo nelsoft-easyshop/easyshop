@@ -10,7 +10,8 @@
                 return false;
             }
             
-            if(!$button.data('canpurchase') != 'true'){
+            console.log($button.data('canpurchase'));
+            if($button.data('canpurchase') != true){
                 alert('Sorry, this item is currently not available for purchase.');
                 return false;
             }
