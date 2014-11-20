@@ -320,11 +320,6 @@
                 return false;
             }
         });
-
-
- 
-        
-
     });
     
     // add to cart
