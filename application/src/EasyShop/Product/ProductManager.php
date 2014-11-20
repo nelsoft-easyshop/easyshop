@@ -874,7 +874,10 @@ class ProductManager
             }
         }
 
-        return $additionalInformation;
+        return [
+            'info'=> $additionalInformation,
+            'productAttributes' => $productAttributes
+        ];
     }
 }
 
