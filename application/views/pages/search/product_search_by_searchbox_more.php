@@ -13,7 +13,7 @@ foreach ($products as $key => $value):
     $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
 ?> 
     <div class="<?php echo $typeOfView; ?>"> 
-        <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+        <a href="<?php echo "/item/" . $productSlug; ?>">
             <span class="prod_img_wrapper">
                 <?php if(floatval($percentage) > 0):?>
                 <div>
@@ -24,12 +24,12 @@ foreach ($products as $key => $value):
                 <?php endif; ?>
             
                 <span class="prod_img_container">
-                        <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                        <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
                 </span>
             </span>
         </a>
         <h3>
-            <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+            <a href="/<?php echo "item/" . $productSlug; ?>">
                 <?php echo $productName; ?>
             </a>
         </h3>
@@ -83,14 +83,14 @@ foreach ($products as $key => $value):
             <tr>
                 <td width="90px" class="v-align-top">
                     <span class="prod_img_container">
-                         <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
-                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                         <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
+                            <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
                         </a>
                     </span>
                 </td>
                 <td class="v-align-top">
                     <p class="p-item-name"> 
-                        <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
+                        <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
                             <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
                         </a>
                     </p>

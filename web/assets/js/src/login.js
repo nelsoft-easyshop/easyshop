@@ -43,7 +43,7 @@
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
-                    url: config.base_url + "login/authenticate",
+                    url: "/login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
                         if(data.timeoutLeft >= 1){
@@ -71,21 +71,21 @@
                                 var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
 
                                 if( typeof vendorSubscriptionUri !== "undefined" ){
-                                    window.location = config.base_url + vendorSubscriptionUri;
+                                    window.location = '/' + vendorSubscriptionUri;
                                 }
                                 else if (first_uri_segment == 'promo') {
                                     var code = url.split("/");
-                                    window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
+                                    window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
                                 else{
                                     if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                        window.location = config.base_url+ url;
+                                        window.location = '/' + url;
                                     }
                                     else if(first_uri_segment == 'cart'){
-                                        window.location = config.base_url + first_uri_segment;
+                                        window.location = '/' + first_uri_segment;
                                     }
                                     else{
-                                        window.location = config.base_url;
+                                        window.location = '/';
                                     }                            
                                 }
                             }

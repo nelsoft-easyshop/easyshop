@@ -335,6 +335,34 @@ class EsProduct
      */
     private $maxAllowablePoint = '0.0000';
 
+    /**
+     *  @var integer
+     *
+     *  isDelete value for active items
+     */
+    const ACTIVE = 0;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for deleted items ( item can be restored )
+     */
+    const DELETE = 1;
+
+    /**
+     *  @var integer
+     *
+     *  isDelete value for fully deleted items ( item cannot be restored )
+     */
+    const FULL_DELETE = 2;
+
+    /*
+     * @var integer
+     *
+     * @ORM\Column(name="ships_within_days", type="integer", nullable=true)
+     */
+    private $shipsWithinDays;
+
     public function __construct() 
     {
         $this->images = new ArrayCollection();
@@ -1304,6 +1332,29 @@ class EsProduct
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Get shippedWithinCount
+     *
+     * @return integer 
+     */
+    public function getShipsWithinDays()
+    {
+        return $this->shipsWithinDays;
+    }
+    
+    /**
+     * Set promoType
+     *
+     * @param integer $shipsWithinDays
+     * @return EsProduct
+     */
+    public function setShipsWithinDays($shipsWithinDays)
+    {
+        $this->shipsWithinDays = $shipsWithinDays;
+
+        return $this;
     }
         
 }

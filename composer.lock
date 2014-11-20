@@ -317,7 +317,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -338,7 +338,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -414,7 +414,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -540,9 +540,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -596,7 +596,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -614,12 +614,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0"
+                "reference": "1a9dffa64e33fdc10f4b4c3f5d7230b74d4a1021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0",
-                "reference": "f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/1a9dffa64e33fdc10f4b4c3f5d7230b74d4a1021",
+                "reference": "1a9dffa64e33fdc10f4b4c3f5d7230b74d4a1021",
                 "shasum": ""
             },
             "require": {
@@ -664,7 +664,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2014-10-30 14:49:25"
+            "time": "2014-08-18 18:03:07"
         },
         {
             "name": "doctrine/orm",
@@ -875,16 +875,16 @@
         },
         {
             "name": "facebook/php-sdk-v4",
-            "version": "4.0.12",
+            "version": "4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/facebook-php-sdk-v4.git",
-                "reference": "0683838b6966446b2cbef841f01f1d447ae7a5f9"
+                "reference": "e2dc662c4ab4da680434b6b777d56461a9bd2563"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/0683838b6966446b2cbef841f01f1d447ae7a5f9",
-                "reference": "0683838b6966446b2cbef841f01f1d447ae7a5f9",
+                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/e2dc662c4ab4da680434b6b777d56461a9bd2563",
+                "reference": "e2dc662c4ab4da680434b6b777d56461a9bd2563",
                 "shasum": ""
             },
             "require": {
@@ -920,7 +920,7 @@
                 "facebook",
                 "sdk"
             ],
-            "time": "2014-10-30 23:02:36"
+            "time": "2014-08-25 18:58:37"
         },
         {
             "name": "google/apiclient",
@@ -1584,12 +1584,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "6b6a1dc0df014fedc00fdef04b8ccc666f34fcfa"
+                "reference": "2a4f54fb219af78037a07d8c5d494149762ce324"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/6b6a1dc0df014fedc00fdef04b8ccc666f34fcfa",
-                "reference": "6b6a1dc0df014fedc00fdef04b8ccc666f34fcfa",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/2a4f54fb219af78037a07d8c5d494149762ce324",
+                "reference": "2a4f54fb219af78037a07d8c5d494149762ce324",
                 "shasum": ""
             },
             "require": {
@@ -1623,7 +1623,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/console",
@@ -1903,12 +1903,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "3e3787845ec82533be5f505a9ad28bbee95f986d"
+                "reference": "7a8e0919b8b29b392bcdcebd81716fafe8fcecaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/3e3787845ec82533be5f505a9ad28bbee95f986d",
-                "reference": "3e3787845ec82533be5f505a9ad28bbee95f986d",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/7a8e0919b8b29b392bcdcebd81716fafe8fcecaa",
+                "reference": "7a8e0919b8b29b392bcdcebd81716fafe8fcecaa",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1958,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/framework-bundle",
@@ -2047,12 +2047,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "4cd6c807598e560db7b3da50c4330fdb4808cfa1"
+                "reference": "2f3efcba131a1275b5fb491bed9897ceaf7947e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/4cd6c807598e560db7b3da50c4330fdb4808cfa1",
-                "reference": "4cd6c807598e560db7b3da50c4330fdb4808cfa1",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/2f3efcba131a1275b5fb491bed9897ceaf7947e2",
+                "reference": "2f3efcba131a1275b5fb491bed9897ceaf7947e2",
                 "shasum": ""
             },
             "require": {
@@ -2091,7 +2091,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/http-kernel",
@@ -2424,12 +2424,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a"
+                "reference": "23a63ab4a89a4f720ee3a5c4acbb12b1538ab9df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a",
-                "reference": "cbc1e7b11e40e800390fc55fff8614d4d2fb8e0a",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/23a63ab4a89a4f720ee3a5c4acbb12b1538ab9df",
+                "reference": "23a63ab4a89a4f720ee3a5c4acbb12b1538ab9df",
                 "shasum": ""
             },
             "require": {
@@ -2489,7 +2489,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/security-bundle",
@@ -2713,12 +2713,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "fa54baa7d1de1ea25af139461cfa8055e0f813ec"
+                "reference": "cfc109fd644d34be8c9e420c7a42598a60361413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/fa54baa7d1de1ea25af139461cfa8055e0f813ec",
-                "reference": "fa54baa7d1de1ea25af139461cfa8055e0f813ec",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/cfc109fd644d34be8c9e420c7a42598a60361413",
+                "reference": "cfc109fd644d34be8c9e420c7a42598a60361413",
                 "shasum": ""
             },
             "require": {
@@ -2778,7 +2778,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/validator",
@@ -2787,12 +2787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "6e521cdbc963cef7daf9931a7bde48b56d67d10a"
+                "reference": "93485c1ac5a20042a725798e3a5e408426a518d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/6e521cdbc963cef7daf9931a7bde48b56d67d10a",
-                "reference": "6e521cdbc963cef7daf9931a7bde48b56d67d10a",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/93485c1ac5a20042a725798e3a5e408426a518d4",
+                "reference": "93485c1ac5a20042a725798e3a5e408426a518d4",
                 "shasum": ""
             },
             "require": {
@@ -2848,7 +2848,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "symfony/yaml",
@@ -2857,12 +2857,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "9da3813f36985a4089f7e83c601a1034d125ff69"
+                "reference": "4c0baf9a5b5c9e50ddd7a46f3c75cb85baf5d6c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/9da3813f36985a4089f7e83c601a1034d125ff69",
-                "reference": "9da3813f36985a4089f7e83c601a1034d125ff69",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4c0baf9a5b5c9e50ddd7a46f3c75cb85baf5d6c5",
+                "reference": "4c0baf9a5b5c9e50ddd7a46f3c75cb85baf5d6c5",
                 "shasum": ""
             },
             "require": {
@@ -2895,7 +2895,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-03 03:55:50"
+            "time": "2014-10-26 07:46:28"
         },
         {
             "name": "twig/twig",
@@ -2977,7 +2977,6 @@
         "google/apiclient": 10,
         "noiselabs/nusoap-bundle": 20
     },
-    "prefer-stable": false,
     "platform": [
 
     ],

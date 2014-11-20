@@ -52,29 +52,19 @@ class Memberpage extends MY_Controller
     {        
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
-            redirect('/home', 'refresh');
+            redirect('/', 'refresh');
         }
         $data['tab'] = $this->input->get('me');        
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
-        
-        if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fill_userDetails();
-        }
-        $data['homeContent'] = $this->fill_categoryNavigation();
-        $data = array_merge($data, $this->fill_header());
-
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
+        $this->session->unset_userdata('transaction_authentication_cache');
 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
-
-//        $this->load->view('templates/header_primary', $data);
-//        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-//        $this->load->view('templates/footer_primary');
     }
 
     /**
@@ -414,46 +404,6 @@ class Memberpage extends MY_Controller
     
     }
 
-    public function newPage()
-    {
-        $data = $this->fill_header();
-        if(!$this->session->userdata('member_id')){
-            redirect('/home', 'refresh');
-        }
-        $data['tab'] = $this->input->get('me');
-        $data = array_merge($data, $this->fill_view());
-        $data['render_logo'] = false;
-        $data['render_searchbar'] = false;
-
-        if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fill_userDetails();
-            $data['user_details2'] = $this->getMemberPageDetails();
-        }
-        $data['homeContent'] = $this->fill_categoryNavigation();
-        $data = array_merge($data, $this->fill_header());
-
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-        $this->load->view('templates/footer_primary');
-
-    }
-    public function getMemberPageDetails()
-    {
-        $memberId = $this->session->userdata('member_id');
-        $data['transaction'] = [
-            'ongoing' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId),
-                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId),
-            ],
-            'complete' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails(),
-                'sold' => '',
-            ]
-        ];
-
-        return $data;
-    }
-
     /**
      *  Fetch all data needed when displaying the Member page
      *  
@@ -542,10 +492,10 @@ class Memberpage extends MY_Controller
             echo "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
             if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
             }
             else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
             }
         }
         else{
@@ -763,7 +713,6 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function transactionResponse(){
-        
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form'
@@ -788,19 +737,40 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $authenticateData = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'member_id' => $this->session->userdata('member_id')
-            );
+            $memberId = $this->session->userdata('member_id');
             
-            if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
-                $serverResponse = array(
-                    'result' => 'invalid',
-                    'error' => 'Incorrect password.'
-                );
-                echo json_encode($serverResponse);
-                exit;
+            if($this->input->post('username') && $this->input->post('password')){
+                $authenticateData = ['username' => $this->input->post('username'),
+                                     'password' => $this->input->post('password')];
+                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($authenticateData['username'], 
+                                                                                                       $authenticateData['password']);
+                if( $authenticationResult['member'] === null || 
+                    !empty($authenticationResult['errors']) ||  
+                    (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
+                ){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Incorrect password.'
+                    );
+
+                    echo json_encode($serverResponse);
+                    exit;
+                }
+                else{
+                    $this->session->set_userdata('transaction_authentication_cache', md5($authenticateData['username'].$authenticateData['password']));
+                }
+            }
+            else{   
+                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                                   ->findOneBy(['idMember' => $memberId ]);
+                if($member === null || ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
+                    $serverResponse = array(
+                        'result' => 'invalid',
+                        'error' => 'Your session has expired. Please reload the page and try again.'
+                    );
+                    echo json_encode($serverResponse);
+                    exit;
+                }
             }
             
             // Check type of response ( if user or seller response )
@@ -830,6 +800,9 @@ class Memberpage extends MY_Controller
                 $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
                 $parseData['store_link'] = base_url() . $parseData['user_slug'];
                 $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $parseData['facebook'] = $socialMediaLinks["facebook"];
+                $parseData['twitter'] = $socialMediaLinks["twitter"];
 
                 $hasNotif = FALSE;
                 if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
@@ -983,6 +956,7 @@ class Memberpage extends MY_Controller
                     );
 
                     $parseData = $postData;
+                    $socialMediaLinks = $this->getSocialMediaLinks();
                     $parseData = array_merge($parseData, array(
                             "seller" => $memberEntity->getUsername(),
                             "store_link" => base_url() . $memberEntity->getSlug(),
@@ -991,7 +965,9 @@ class Memberpage extends MY_Controller
                             "invoice" => $orderEntity->getInvoiceNo(),
                             "product_name" => $orderProductEntity->getProduct()->getName(),
                             "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date']))
+                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
+                            "facebook" => $socialMediaLinks["facebook"],
+                            "twitter" => $socialMediaLinks["twitter"]
                         ));
                     $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
 
@@ -1166,7 +1142,7 @@ class Memberpage extends MY_Controller
         if(isset($result['error'])){
             print "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$data['userslug']."'},3000);</script>";
+            print "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$data['userslug']."'},3000);</script>";
         }
         else{
             redirect($data['userslug'] . "/" . $vendorLink);
@@ -1530,6 +1506,8 @@ class Memberpage extends MY_Controller
         $key = $deleteStatus === 0 ? 'active_products' : 'deleted_products';
         $data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $draftStatus, $start, $nf,$myof,$myosf, $itemPerPage);
         
+        $data['isBulkOptionActive'] = (int)$this->input->get('bulkoption') === 1 ? TRUE:FALSE;
+
         if($deleteStatus === 0){ #if active items
             $jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);
         }
@@ -1742,7 +1720,7 @@ class Memberpage extends MY_Controller
                 break;
             case 2:
                 $orderSearch = "NEW";
-                $orderBy = array("createddate" => $order);
+                $orderBy = array("lastmodifieddate" => $order);
                 break;
             case 3:
                 $orderSearch = "HOT";
@@ -1750,7 +1728,7 @@ class Memberpage extends MY_Controller
                 break;
             default:
                 $orderSearch = "NULL";
-                $orderBy = array("clickcount"=>$order);
+                $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }
 

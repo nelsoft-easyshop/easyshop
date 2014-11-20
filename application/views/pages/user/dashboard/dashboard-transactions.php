@@ -10,7 +10,7 @@
         <div class="row">
             <div class="transaction-title-bought">
                 <span class="trans-title">Bought</span> 
-                <span class="count"><?=count($user_details2['transaction']['ongoing']['bought'])?></span>
+                <span class="count"><?=count($transactionInfo['transaction']['ongoing']['bought'])?></span>
             </div>
             <div class="on-going-transaction-list-bought">
                 <div class="mrgn-top-20 mrgn-bttm-25 row">
@@ -28,7 +28,7 @@
                     <div class="clear"></div>
                 </div>
                 <div class="transaction-item">
-                    <?PHP foreach($user_details2['transaction']['ongoing']['bought'] as $key => $boughtTransactionDetails) : ?>
+                    <?PHP foreach($transactionInfo['transaction']['ongoing']['bought'] as $key => $boughtTransactionDetails) : ?>
                         <div class="item-list-panel">
                         <?PHP foreach($boughtTransactionDetails['product'] as $productKey => $product) : ?>
                                 <table width="100%">
@@ -150,7 +150,7 @@
             </div>
             <div class="transaction-title-sold mrgn-top-12">
                 <span class="trans-title">Sold</span> 
-                <span class="count"><?=count($user_details2['transaction']['ongoing']['sold'])?></span>
+                <span class="count"><?=count($transactionInfo['transaction']['ongoing']['sold'])?></span>
             </div>
             <div class="on-going-transaction-list-sold">
                 <div class="mrgn-top-20 mrgn-bttm-25 row">
@@ -168,7 +168,7 @@
                     <div class="clear"></div>
                 </div>
                 <div class="transaction-item">
-                <?PHP foreach($user_details2['transaction']['ongoing']['sold'] as $key => $soldTransactionDetails) : ?>
+                <?PHP foreach($transactionInfo['transaction']['ongoing']['sold'] as $key => $soldTransactionDetails) : ?>
                     <div class="item-list-panel">
                     <?PHP foreach($soldTransactionDetails['product'] as $productKey => $product) : ?>
                         <table width="100%">

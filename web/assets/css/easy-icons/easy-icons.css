@@ -191,10 +191,10 @@
 .icon-view-filter:before {
   content: "Y";
 }
-.icon-view-grid:before {
+.icon-view-grid:before, .fa-icon-view-grid:before {
   content: "Z";
 }
-.icon-view-list:before {
+.icon-view-list:before, .fa-icon-view-list:before {
   content: "0";
 }
 .icon-view-sort:before {

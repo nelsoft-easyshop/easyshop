@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="./assets/css/new-homepage.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
 
 <section class="content-404-bg">
 <div class="container content-404">
@@ -11,7 +11,7 @@
         <div class="col-xs-12 col-sm-12 col-md-6">
             <h1>OOOOOOPPPSSS!!!</h1>
             <h2>
-                The page that you were looking for has been abducted,... but have no fear, the search bar is here!
+                The page that you were looking for has been abducted... but have no fear, the search bar is here!
             </h2>
             <div class="row form-container-404">
                 <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
@@ -26,7 +26,7 @@
                 </form>
             </div>
             <div class="link-404">
-                <a href="/home">
+                <a href="/">
                     <img src="/assets/images/img-arrow-left.png" alt="return to homepage">Return to <strong>HOMEPAGE</strong>
                 </a>
             </div>

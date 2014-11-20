@@ -54,6 +54,66 @@ class CMS
         $this->userManager = $userManager;
         $this->urlUtility = $urlUtility;
     }
+  
+
+    /**
+     *  Syncs values from new_home_page.xml to new_home_page_temp.xml
+     *  @param string $tempHomeFile
+     *  @param string $homeFile
+     *  @param array $sliders
+     *  @param int $order
+     */
+    public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0)
+    {
+
+        $map = simplexml_load_file($tempHomeFile);        
+  
+        foreach ($sliders as $key => $value) {  
+            $map->sliderSection->slide[$key]->template = $value->template;
+            $map->asXML($tempHomeFile);                
+            $string = $this->getString("sliderSection", "", "", "", "");       
+            $this->addXmlFormatted($map,$string,'/map/sliderSection/slide[last()]',"\t\t","\n\n", true, true);   
+        }
+
+        foreach($sliders as $key => $value) {
+
+            $this->syncSliderValues($tempHomeFile, $value->image, "", $key, $key );
+        }
+    }
+
+
+    /**
+     *  Handles the re-ordering of sliderSection parent node
+     *  @param string $image
+     *  @param string $template
+     *  @param int $index
+     *  @param int $order
+     *  @param int $subIndex
+     */
+    public function syncSliderValues($file,$image, $template, $index, $order, $subIndex = 0)
+    {
+        $map = simplexml_load_file($file);
+
+        foreach($image as $key => $insertImages) {
+            if(count($image) == 1) {    
+                $map->sliderSection->slide[$index]->image[$subIndex]->path = $insertImages->path;
+                $map->sliderSection->slide[$index]->image[$subIndex]->target = $insertImages->target;
+                $map->asXML($file);                
+            }
+            else {
+                if($subIndex == 0 ) {
+                    $map->sliderSection->slide[$index]->image[$subIndex]->path = $insertImages->path;
+                    $map->sliderSection->slide[$index]->image[$subIndex]->target = $insertImages->target;
+                }
+                else {
+                    $string = $this->getString("subSliderSection", $insertImages->path, "", "", $insertImages->target);      
+                    $this->addXmlFormatted($map,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n", true, true);           
+                } 
+            }
+        $map->asXML($file);
+        $subIndex++;  
+        }        
+    }     
 
     /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
@@ -66,7 +126,7 @@ class CMS
      *
      *  @return string
      */
-    public function getString($nodeName, $value, $type, $coordinate, $target) 
+    public function getString($nodeName, $value = null, $type = null, $coordinate = null, $target = null) 
     {
         if($nodeName == "addBrands") {
              $string = '
@@ -136,7 +196,7 @@ class CMS
             </image>
 
         </slide>'; 
-        }
+        }       
         if($nodeName == "categorySubSlug") {
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
@@ -286,10 +346,33 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index, $subIndex) 
+    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null) 
     {
 
-        if($nodeName == "mainSliderSection"){
+        if($nodeName == "tempHomeSlider"){
+            $index = 0;
+            $map = simplexml_load_file($file);
+            $tempSliderCount = count($map->sliderSection->slide);
+
+            foreach ($map->sliderSection->slide as $key => $value) {
+                if( $tempSliderCount> 1) {
+                    $this->removeXmlNode($file, "mainSliderSection",1);
+                    $tempSliderCount--;
+                }
+                else {
+                    $imageCount = count($value->image);
+                    foreach($value->image as $images) {
+                        if($imageCount > 1) {
+                            $this->removeXmlNode($file, "subSliderSection",1,1);
+                            $imageCount--;   
+                        }
+                     }
+                }
+                $index++;                
+            }  
+            return true;          
+        }
+        else if($nodeName == "mainSliderSection"){
             $referred = "/map/sliderSection/slide[".$index."]"; 
 
             $doc = new \SimpleXMLElement(file_get_contents($file));
@@ -576,17 +659,20 @@ $string = '<typeNode>
      *
      *  @return boolean
      */
-    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true) 
+    public function addXmlFormatted($file,$xml_string,$target_node,$tabs,$newLines,$move = true, $isSimpleXmlLoaded = false) 
     {        
-        $sxe = new \SimpleXMLElement(file_get_contents($file));
+        $sxe = (!$isSimpleXmlLoaded) ? new \SimpleXMLElement(file_get_contents($file)) : $file;
         $insert = new \SimpleXMLElement($xml_string);
         $target = current($sxe->xpath($target_node));
 
         $this->simplexml_insert_formatted($insert, $target,$tabs,$newLines,$move);
-        if($sxe->asXml($file)) {
-            return true;
 
+        if(!$isSimpleXmlLoaded) {
+            if($sxe->asXml($file)) {
+                return true;
+            }        
         }
+
     }
 
     /**
@@ -717,62 +803,27 @@ $string = '<typeNode>
         return $result;
     }
     
+
     
     /**
      * Returns the home page data
-     *
      * 
+     * @param boolean $isCategoryNavigationOnly
+     * @return mixed
      */
-    public function getHomeData()
+    /**
+     * Returns the home page data
+     * 
+     * @param boolean $isCategoryNavigationOnly
+     * @return mixed
+     */
+    public function getHomeData($isCategoryNavigationOnly = false, $doUseTemporaryFile = false)
     {
-        $homeXmlFile = $this->xmlResourceGetter->getHomeXMLfile();
+        $homeXmlFile = (!$doUseTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
         $homePageData = array();
-        $homePageData['categorySection'] = array(); 
-        
-        if(isset($xmlContent['categorySection']['categorySlug'])){
-            $temporary = $xmlContent['categorySection'];
-            $xmlContent['categorySection'] = array();
-            array_push($xmlContent['categorySection'], $temporary);
-        }
-        
-        foreach($xmlContent['categorySection'] as $categorySection){
-            $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);
-            $sectionData['subHeaders'] = $categorySection['sub'];
-            foreach($categorySection['productPanel'] as $idx=>$product){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $product['slug']]);
-                if($product){
-                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());   
-                }
-            }
-            array_push($homePageData['categorySection'], $sectionData);
-        }
-        
-        $homePageData['adSection'] = $xmlContent['adSection']['ad'];
-        $sliderTemplates = $xmlContent['sliderTemplate'];
-        $homePageData['slider'] = $xmlContent['sliderTemplate']['slide'];
-        foreach($homePageData['slider'] as $idx => $slide){
-            $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
-            $template = 'partials/homesliders/'.$template;
-            $homePageData['slider'][$idx]['template'] = $template;            
-            if(isset($homePageData['slider'][$idx]['image']['path'])){
-                $temporary = $homePageData['slider'][$idx]['image'];
-                $homePageData['slider'][$idx]['image'] = array();
-                array_push($homePageData['slider'][$idx]['image'], $temporary);
-            }
-            
-            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
-                $target = $sliderImage['target'];
-                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
-            }
-            
-            
-        }
-        
+        $homePageData['categorySection'] = array();
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
         $homePageData['menu']['topProducts']  = array();
         $homePageData['menu']['topSellers']  = array();
@@ -798,66 +849,159 @@ $string = '<typeNode>
             }
         }
         
-        //Get Category Navigation
+
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
 
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
-            $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                ->findOneBy(['slug' => $subCategory]);
+                $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
+                                                                                              ->findOneBy(['slug' => $subCategory]);
             }
         }
 
         foreach ($xmlContent['categoryNavigation']['otherCategories']['categorySlug'] as $key => $category) {
-        $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
+            $featuredCategory['otherCategory'][$key] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
+        if($isCategoryNavigationOnly) {
+            return $homePageData;
+        }
+        //End Get Category Navigation
+        
+        if(isset($xmlContent['categorySection']['categorySlug'])){
+            $temporary = $xmlContent['categorySection'];
+            $xmlContent['categorySection'] = array();
+            array_push($xmlContent['categorySection'], $temporary);
+        }
+   
+        foreach($xmlContent['categorySection'] as $categorySection){
+            $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+           
+            if(!isset($categorySection["sub"])){
+                $categorySection["sub"] = [];
+            }
+            
+            
+            if(isset($categorySection['sub']['text'])){
+                $subTemporary = $categorySection['sub'];
+                $categorySection['sub'] = [ $subTemporary ];
+            }   
+            $sectionData['subHeaders'] = $categorySection['sub'];
+            
+            if(isset($categorySection['productPanel']['slug'])){
+                $productPanelTemporary = $categorySection['productPanel'];
+                $categorySection['productPanel'] = [ $productPanelTemporary ];
+            }   
+
+            $sectionData['products'] = [];
+            if(!isset($categorySection['productPanel'])){
+                $categorySection['productPanel'] = array();
+            }
+
+            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
+                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
+                if($product){
+                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
+                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                ->getSecondaryImage($product->getIdProduct());
+                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
+                }
+            }
+            array_push($homePageData['categorySection'], $sectionData);
+        }
+        
+        $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
+       
+        if(isset($homePageData['adSection']['img'])){
+            $temporaryAdSection = $homePageData['adSection'];
+            $homePageData['adSection'] = [ $temporaryAdSection ] ;
+        }
+
+        $sliderTemplates = array();
+        foreach($xmlContent['sliderTemplate']['template'] as $template){
+            array_push($sliderTemplates, $template['templateName']);
+        }
+
+        $homePageData['slider'] = $xmlContent['sliderSection']['slide'];
+        foreach($homePageData['slider'] as $idx => $slide){
+            $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
+            $template = 'partials/homesliders/'.$template;
+            $homePageData['slider'][$idx]['template'] = $template;            
+            if(isset($homePageData['slider'][$idx]['image']['path'])){
+                $temporary = $homePageData['slider'][$idx]['image'];
+                $homePageData['slider'][$idx]['image'] = array();
+                array_push($homePageData['slider'][$idx]['image'], $temporary);
+            }
+            
+            foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
+                $target = $sliderImage['target'];
+                $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
+            }
+        }
 
         //Get feature vendor details
-        $featuredVendor['name'] = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
+        $featuredVendor['memberEntity'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                   ->findOneBy(['slug' => $xmlContent['sellerSection']['sellerSlug']]);
         $featuredVendor['vendor_image'] = array();
-        if($featuredVendor['name']){
-            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['name']->getIdMember());
+        $featuredSellerId = 0;
+        if($featuredVendor['memberEntity']){
+            $featuredVendor['vendor_image'] = $this->userManager->getUserImage($featuredVendor['memberEntity']->getIdMember());
+            $featuredSellerId = $featuredVendor['memberEntity']->getIdmember();
         }
         $featuredVendor['banner'] = $xmlContent['sellerSection']['sellerBanner'];
         $featuredVendor['logo'] = $xmlContent['sellerSection']['sellerLogo'];
 
+        if(!isset($xmlContent['sellerSection']['productPanel'])){
+            $xmlContent['sellerSection']['productPanel'] = array();
+        }
         shuffle($xmlContent['sellerSection']['productPanel']);    
+        $featuredVendor['product'] = [];
+          
         foreach ($xmlContent['sellerSection']['productPanel'] as $key => $product) {
+        
+            $productSlug = isset($product['slug']) ? $product['slug'] : $product;        
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findOneBy(['slug' => $product['slug']]);
+                                    ->findOneBy(['slug' => $productSlug, 'member' => $featuredSellerId]);
             if($productData){
                 $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
-                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                    ->getDefaultImage($productData->getIdProduct());
-                $featuredVendor['product'][$key]['image']['directory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $featuredVendor['product'][$key]['image']['imageFileName'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-                if ($productImage != NULL) {
-                    $featuredVendor['product'][$key]['image']['directory'] = $productImage->getDirectory();
-                    $featuredVendor['product'][$key]['image']['imageFileName'] = $productImage->getFilename();
-                }
+                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                  ->getSecondaryImage($productData->getIdProduct());
+                $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;                     
             }
         }
         $homePageData['seller'] = $featuredVendor;
-
+        
         //Get Popular Brands
-        foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
-            $popularCategory['popularBrand'][$key]['brand'] = $this->em->getRepository('EasyShop\Entities\EsBrand')
-                                            ->findOneBy(['idBrand' => $brandId]);
-            $popularCategory['popularBrand'][$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
-            $popularCategory['popularBrand'][$key]['image']['file'] = $popularCategory['popularBrand'][$key]['brand'] ?
-                                                                      $popularCategory['popularBrand'][$key]['brand']->getImage() : 
-                                                                      EsBrand::IMAGE_UNAVAILABLE_FILE;
+        $popularBrands = [];
+        if(isset($xmlContent['brandSection']['brandId'])){
+            if(!is_array($xmlContent['brandSection']['brandId'])){
+                $temporaryBrandId = $xmlContent['brandSection']['brandId'];
+                $xmlContent['brandSection']['brandId'] = [ $temporaryBrandId ];
+            }
+            foreach ($xmlContent['brandSection']['brandId'] as $key => $brandId) {
+                $brandObject =  $this->em->getRepository('EasyShop\Entities\EsBrand')
+                                         ->findOneBy(['idBrand' => $brandId]);
+                if($brandObject){
+                    $popularBrands[$key]['brand'] = $brandObject;
+                    $popularBrands[$key]['image']['directory'] = EsBrand::IMAGE_DIRECTORY;
+                    $popularBrands[$key]['image']['file'] = $popularBrands[$key]['brand'] && trim($popularBrands[$key]['brand']->getImage())  !== ""  ?
+                                                                            $popularBrands[$key]['brand']->getImage() : EsBrand::IMAGE_UNAVAILABLE_FILE;
+                }
+            }
         }
-        $homePageData['popularCategory'] = $popularCategory;
+
+        $homePageData['popularBrands'] = $popularBrands;
 
         return $homePageData;
     }
     
+    
+
     /**
      * Returns the mobile home page data
      * @return array
@@ -982,6 +1126,7 @@ $string = '<typeNode>
 
         return $display;
     }
+
 }
 
 

@@ -1501,8 +1501,8 @@ class memberpage_model extends CI_Model
                     'child_cat' => array(),
                     'products' => array(),
                     'count' => 0,
-                    'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $vendorCategory['parent_cat'],
-                    'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
+                    'loadmore_link' => '/advsrch?_us=' . $username . '&_cat=' . $vendorCategory['parent_cat'],
+                    'cat_link' => '/category/' . $vendorCategory['p_cat_slug'],
                     'cat_img' => $categoryImage
                 );
             }
@@ -1554,7 +1554,7 @@ class memberpage_model extends CI_Model
                 'child_cat' => $temp,
                 'products' => array(),
                 'count' => $otherCount,
-                'loadmore_link' => base_url() . 'advsrch?_us=' . $username,
+                'loadmore_link' => '/advsrch?_us=' . $username,
                 'cat_link' => '',
                 'cat_img' => $defaultCatImg
             ));

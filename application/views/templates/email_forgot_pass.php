@@ -2,7 +2,7 @@
       <thead>
         <tr>
           <td style="height:60px;text-align:center;">
-            <a href="<?=base_url()?>home"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph"></a>
+            <a href="<?=base_url()?>"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph"></a>
           </td>
         </tr>
       </thead>

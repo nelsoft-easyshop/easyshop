@@ -181,9 +181,9 @@ class Login extends MY_Controller
         $this->session->sess_destroy();
         $referrer = $this->input->get('referrer');
         if(trim($referrer))
-            redirect(base_url().$referrer);
+            redirect('/'.$referrer);
         else
-            redirect(base_url().'login');		
+            redirect('/login');		
     }
 
     public function identify(){

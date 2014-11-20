@@ -91,6 +91,11 @@ class EsOrderProductRepository extends EntityRepository
         return intval($result['bought_count']);
     }
 
+    /**
+     * Returns the Product transaction details
+     * @param $orderId
+     * @return array
+     */
     public function getOrderProductTransactionDetails($orderId)
     {
         $this->em =  $this->_em;
@@ -119,4 +124,29 @@ class EsOrderProductRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * Returns the number of purchases by a user for a given product
+     *
+     * @param integer $memberId
+     * @param integer $productId
+     * @return integer
+     */
+    public function getProductBuyCountByUser($memberId,$productId)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder()
+                       ->select('COALESCE(COUNT(op.idOrderProduct),0) as total_count')
+                       ->from('EasyShop\Entities\EsOrderProduct','op')
+                       ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
+                       ->where('o.buyer = :memberId')
+                       ->andWhere('op.product = :productId')  
+                       ->setParameter('memberId', $memberId)
+                       ->setParameter('productId', $productId)
+                       ->getQuery(); 
+        $result = $qb->getOneOrNullResult();
+
+        return intval($result['total_count']);
+    }
+    
 }
