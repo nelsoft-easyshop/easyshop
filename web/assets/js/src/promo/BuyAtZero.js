@@ -1,8 +1,14 @@
 
     (function($) {
-
+    
         $(document).on('click', '#send_registration', function() {
             $('#send_registration').html('Please wait');
+            var $button = $(this);
+            if(!$button.hasClass('enabled')){
+                alert('Please select the attributes you want for this item.');
+                return false;
+            }
+            
             var $productId = $("#productId").val();
             var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
             var msg = 'Kindly login to qualify for this promo.';
