@@ -109,7 +109,8 @@
     }
 
     function checkCombination($arraySelected)
-    {
+    {            
+        $addToCartButton = $('.prod-add-to-cart-btn');        
         // check possible combination
         $.each($productCombQuantity, function(i, val) {
             $arrayCombination = val.product_attribute_ids;
@@ -126,19 +127,18 @@
 
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
-                    $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+                    $addToCartButton.removeClass("enabled").addClass("disabled");
                     $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
-                    
-                    if($('.prod-add-to-cart-btn').attr('id') === 'send'){
-                        $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    }
-                    
-                    
+
+                    if($addToCartButton.data('canpurchase') == 'true'){
+                        $addToCartButton.removeClass("disabled").addClass("enabled");
+                    } 
+                  
                     $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
@@ -157,7 +157,7 @@
                 $(this).empty().append($(this).data('text'));
             });
 
-            $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+            $addToCartButton.removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
             $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
         });
