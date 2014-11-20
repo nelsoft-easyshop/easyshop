@@ -66,18 +66,16 @@ class FeedWebService extends MY_Controller
     {
 
         $index =  $this->input->get("index");
-        $nodeName =  $this->input->get("nodename");    
-
+        $nodeName = $this->input->get("nodename");    
         $doc = new SimpleXMLElement(file_get_contents($this->file));
         $count =  count(current($doc->xpath($nodeName)));
+
         if($count > 1){
-      
-            $file = $this->file;
-            $jsonFile = $this->json;
-            $this->xmlCmsService->removeXML($file,$nodeName,$index);
-            return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($jsonFile);              
+            if($this->xmlCmsService->removeXML($this->file,$nodeName."/product",$index)) {
+                return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);              
+            }                        
         }    
 
 

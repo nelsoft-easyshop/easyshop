@@ -254,7 +254,6 @@ class product extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
-
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                          ->getLocation();
 
@@ -265,8 +264,11 @@ class product extends MY_Controller
 
             $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
             $productCombination = $productCombinationAvailable['productCombinationAvailable'];
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
+            $additionalInformation = $filterAttributes['additionalInformation'];
+            $productAttributes = $filterAttributes['productOptions'];
             $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
-
+            $needToSelect = $productCombinationAvailable['needToSelect'];
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
@@ -287,12 +289,13 @@ class product extends MY_Controller
             $productReviews = $reviewProductService->getProductReview($productId);
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
 
-            $reviewDetailsData = array(
+            $reviewDetailsData = [
                         'productDetails' => $productDescription,
                         'productAttributes' => $productAttributes,
                         'productReview' => $productReviews,
                         'canReview' => $canReview,
-                    );
+                        'additionalInformation' => $additionalInformation
+                    ];
 
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
 
@@ -305,27 +308,28 @@ class product extends MY_Controller
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
             $viewData = [
-                    'product' => $product,
-                    'breadCrumbs' => $breadcrumbs,
-                    'ownerAvatar' => $avatarImage,
-                    'imagesView' => $imagesView,
-                    'productAttributes' => $productAttributes,
-                    'productCombinationQuantity' => json_encode($productCombination),
-                    'shippingInfo' => $shippingDetails,
-                    'shiploc' => $shippingLocation,
-                    'paymentMethod' => $paymentMethod,
-                    'isBuyButtonViewable' => $isBuyButtonViewable,
-                    'isLoggedIn' => $headerData['logged_in'],
-                    'viewerId' => $viewerId,
-                    'canPurchase' => $canPurchase,
-                    'userData' => $headerData['user'],
-                    'bannerView' => $bannerView, 
-                    'reviewDetailsView' => $reviewDetailsView,
-                    'recommendedView' => $recommendedView,
-                    'noMoreSelection' => $noMoreSelection, 
-                    'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                    'url' => base_url() .'item/' . $product->getSlug()
-                ];
+                            'product' => $product,
+                            'breadCrumbs' => $breadcrumbs,
+                            'ownerAvatar' => $avatarImage,
+                            'imagesView' => $imagesView,
+                            'productAttributes' => $productAttributes,
+                            'productCombinationQuantity' => json_encode($productCombination),
+                            'shippingInfo' => $shippingDetails,
+                            'shiploc' => $shippingLocation,
+                            'paymentMethod' => $paymentMethod,
+                            'isBuyButtonViewable' => $isBuyButtonViewable,
+                            'isLoggedIn' => $headerData['logged_in'],
+                            'viewerId' => $viewerId,
+                            'canPurchase' => $canPurchase,
+                            'userData' => $headerData['user'],
+                            'bannerView' => $bannerView, 
+                            'reviewDetailsView' => $reviewDetailsView,
+                            'recommendedView' => $recommendedView,
+                            'noMoreSelection' => $noMoreSelection, 
+                            'needToSelect' => $needToSelect,
+                            'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                            'url' => base_url() .'item/' . $product->getSlug()
+                        ];
 
             if($this->session->userdata('member_id')) {
                 $headerData['user_details'] = $this->fillUserDetails();
