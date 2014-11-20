@@ -181,7 +181,9 @@
     function arrayUnique(array){
         var $uniqueNames = [];
         $.each(array, function(i, el){
-            if($.inArray(el, $uniqueNames) === -1) $uniqueNames.push(el);
+            if($.inArray(el, $uniqueNames) === -1){
+                $uniqueNames.push(el)
+            }
         });
 
         return $uniqueNames;
@@ -189,27 +191,46 @@
 
     function removeNoCombination()
     {
-        $selectedValues = [];
-        $varTempValues = [];
-        $firstValue = 0;
+        var $selectedValues = [];
+        var $varTempValues = [];
+        var $firstValue = 0;
 
         $(".attribute-control").each(function() {
-            $thisSelect = $(this);
+            var $thisSelect = $(this);
             var $selectValue = $thisSelect.val();
             if($selectValue > 0){
                 $selectedValues.push($selectValue);
                 $firstValue = $selectValue;
             }
         });
-        $selectedCount = $selectedValues.length;
+        var $selectedCount = $selectedValues.length;
+
+        $uniqueSelected = disabledSelection($selectedValues);
+
+        if($selectedCount == 1){
+            $('.attribute-control > option[value="' + $firstValue + '"]').parent().children("option").prop("disabled",false);
+        }
+
+        return $uniqueSelected;
+    }
+
+    function disabledSelection($selectedValues)
+    { 
+        var $varTempValues = [];
+        var $selectedCount = $selectedValues.length;
+
         $.each($productCombQuantity, function(i, val) {
-               $.each($selectedValues, function(j, selVal) {
-                    if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
-                        $.each(val.product_attribute_ids, function(k, idVal) {
-                            $varTempValues.push(idVal); 
-                        });
-                    }
-               });
+            $successCount = 0;
+            $.each($selectedValues, function(j, selVal) {
+                if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
+                    $successCount ++;
+                }
+            });
+            if($successCount == $selectedCount){
+               $.each(val.product_attribute_ids, function(k, idVal) {
+                    $varTempValues.push(idVal); 
+                });
+            }
         });
 
         $selectedValues = $selectedValues.concat($varTempValues); 
@@ -224,10 +245,6 @@
             });
         }
 
-        if($selectedCount == 1){
-            $('.attribute-control > option[value="' + $firstValue + '"]').parent().children("option").prop("disabled",false);
-        }
-
         return $uniqueSelected;
     }
 
@@ -240,11 +257,9 @@
 
     if($("#noMoreSelection").val() != ""){
         var $arraySelected = [];
-
         $.each($productCombQuantity, function(i, val) {
             $arraySelected = val.product_attribute_ids;
         });
-
         checkCombination($arraySelected);
     }
 
@@ -257,19 +272,24 @@
     $(".attribute-control").bind('change',function(e){
         var $this = $(this);
         var $arraySelected = [];
+        var $arraySelectedNoZero = [];
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
         var $imageid = $this.children('option:selected').data('imageid');
+        var $selectedReturn = removeNoCombination();
 
         if($imageid > 0){
             $("#image"+$imageid).trigger('click'); 
         }
         // get selected attributes
         $(".attribute-control").each(function() {
-            $thisSelect = $(this);
+            var $thisSelect = $(this);
             var $selectValue = $thisSelect.val();
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
             $baseFinalPrice += $additionalPrice;
             $arraySelected.push($selectValue);
+            if($thisSelect.val() > 0){
+                $arraySelectedNoZero.push($selectValue);
+            }
         });
 
         // update price 
@@ -278,16 +298,27 @@
         // sort array
         $arraySelected.sort(sortArrayNumber);
         checkCombination($arraySelected);
-        $selectedReturn = removeNoCombination();
         if($this.val() > 0){
             $this.children("option").each(function(){
-                $thisOption = $(this);
+                var $thisOption = $(this);
                 if(isInArray($thisOption.val(),$selectedReturn)){
                     $(this).prop("disabled",false);
                 }
             });
         }
 
+        var $indexSelected = $arraySelectedNoZero.indexOf($this.val());
+        if ($indexSelected > -1) {
+            $arraySelectedNoZero.splice($indexSelected, 1);
+        }
+
+        $this.children("option").each(function(){
+            var $thisOption = $(this);
+            if(isInArray($thisOption.val(),$selectedReturn)){
+                $(this).prop("disabled",false);
+            }
+        });
+        
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
@@ -300,8 +331,7 @@
     $(document).on('click', '#send.enabled', function(){
 
         // token
-        var $csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
         var $productId = $("#productId").val();
         var $quantity = $("#control-quantity").val();
         var $optionsObject = {};
