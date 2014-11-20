@@ -1062,7 +1062,7 @@ a{
     font-weight: 900;
     color: #fff;
     text-transform: uppercase;
-    margin-top: -6px;
+    margin-top: 0px;
     font-size: 15px;
 }
 
@@ -1156,6 +1156,35 @@ a{
     display: none;
 }
 
+.col-feedback-user{
+    text-align: center;
+}
+
+.user-image-container{
+    width: 100%;
+    display: block;
+}
+
+.table-feed-mobile{
+    display: none;
+}
+
+.feedback-cat-title{
+    font-weight: 900;
+    font-size: 15px;
+}
+
+.col-item-message{
+    min-height: 123px;
+}
+
+.user-feeder{
+    padding-top: 20px;
+}
+
+.p-date-feedback{
+    font-size: 10px;
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1419,5 +1448,169 @@ a{
     
     .product-items{
         margin-top: 5px;
+    }
+    
+    .panel-feedback-item{
+        padding: 10px;
+    }
+    
+    .col-item-message{
+        margin-left: 10px;
+        margin-right: 10px;
+        border-left: none;
+        border-top: solid #e2e2e2 1px;
+        padding: 10px 5px;
+    }
+    
+    .div-user-image{
+        text-align: left;
+    }
+    
+    .user-image-container{
+        display: inline;
+    }
+    
+    .img-follower-cover{
+        display: none;
+    }
+    
+    .center-image{
+        text-align: left;
+    }
+    
+    .star-feed{
+        font-size: 13px;
+    }
+    
+    .user-feeder{
+        display: none;
+    }
+    
+    .table-feed-mobile{
+        margin-bottom: 20px;
+        display: inline;
+    }
+    
+    .table-feed-mobile > tbody > tr > td{
+        padding-left: 5px;
+        vetical-align: bottom;
+        text-align: left;
+        padding-bottom: 10px;
+    }
+    
+    .td-info-mobile{
+        padding-left: 10px !important;
+    }
+    
+    .col-item-message{
+        min-height: 10px;
+    }
+    
+    .col-inline-textbtn{
+        padding-right: 15px;
+    }
+    
+    .val-success,
+    .val-error-icon-setup,
+    .val-error-icon{
+        right: 21px;
+    }
+    
+    .div-tab-inner{
+        padding: 10px;
+    }
+    
+    .col-action-buttons{
+        margin-top: 10px;
+    }
+    
+    .btn-setting-save-btn,
+    .btn-setting-cancel-btn{
+        width: 49%;
+    }
+    
+    .btn-setting-edit-btn{
+        display: block;
+        margin-top: 10px;
+        width: 100%;
+    }
+    
+    .div-account-setting, .div-store-setup{
+        padding: 10px 10px;
+    }
+    
+    .text-info-url{
+        display: block;
+        margin-top: 5px;
+        width: 100%;
+    }
+    
+    .val-success-url{
+        right: 23px;
+        top: 32px;
+    }
+    
+    .col-inline-btn-url{
+        padding-left: 15px;
+        margin-top: 10px;
+    }
+    
+    .form-horizontal > .form-group > .col-sm-3{
+        padding-left: 15px !important;
+    }
+    
+    .form-group{
+        margin-bottom: 0px;
+    }
+    
+    .btn-color-save,
+    .btn-color-cancel{
+        margin-top: 10px;
+    }
+    
+    .div-personal-info{
+        padding: 10px;
+    }
+    .form-horizontal > .form-group > .col-sm-4,
+    .div-personal-info .col-sm-4,
+    .div-personal-info .col-sm-8{
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .text-info{
+        margin-bottom: 10px;
+    }
+    
+    .div-personal-info .form-group{
+        margin-bottom: 20px;
+    }
+    
+    .btn-save-dashboard{
+        width: 100%;
+    }
+    
+    .text-address{
+        margin-bottom: 0px;
+    }
+    
+    .col-city{
+        margin-top: 20px;
+    }
+    
+    .form-group > .col-sm-5{
+        margin-bottom: 15px;
+    }
+    
+    .btn-easydeal-btn{
+        width: 100%;
+    }
+    
+    .filter-feedbacks{
+        width: 100%;
+    }
+    
+    .filter-feedbacks > option{
+        text-align: center !important;
     }
 }
