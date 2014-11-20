@@ -268,6 +268,7 @@ class product extends MY_Controller
             $additionalInformation = $filterAttributes['additionalInformation'];
             $productAttributes = $filterAttributes['productOptions'];
             $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
+            $needToSelect = $productCombinationAvailable['needToSelect'];
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
@@ -324,6 +325,7 @@ class product extends MY_Controller
                             'reviewDetailsView' => $reviewDetailsView,
                             'recommendedView' => $recommendedView,
                             'noMoreSelection' => $noMoreSelection, 
+                            'needToSelect' => $needToSelect,
                             'isFreeShippingNationwide' => $isFreeShippingNationwide, 
                             'url' => base_url() .'item/' . $product->getSlug()
                         ];
