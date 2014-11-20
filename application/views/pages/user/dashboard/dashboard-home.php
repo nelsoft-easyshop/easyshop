@@ -9,19 +9,23 @@
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-md-5 col-xs-12">
                         <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
                     </div>
-                    <div class="col-xs-3 col-progress-text">
-                        <div class="div-progress-container-text" align="right">
-                            Account Progress: <?=$profilePercentage; ?>%
+                    <div class="col-md-7 col-xs-12">
+                        <div class="row">
+                        <div class="col-md-5 col-progress-text">
+                            <div class="div-progress-container-text">
+                                Account Progress: <?=$profilePercentage; ?>%
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-4 col-progress-bar">
-                        <div class="div-progress-bar-container" align="right">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="<?=$profilePercentage; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
-                                    <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
+                        <div class="col-md-7 col-progress-bar">
+                            <div class="div-progress-bar-container" align="right">
+                                <div class="progress progress-account">
+                                    <span class="span-account-progress-text-small">Account Progress: <?=$profilePercentage; ?>%</span>
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                        <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +35,7 @@
             </div>
             <div class="div-stats-numbers">
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-md-7">
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
@@ -76,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-md-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">
                                 Feedback:
