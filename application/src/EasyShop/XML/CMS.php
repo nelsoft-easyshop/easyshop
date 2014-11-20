@@ -559,20 +559,15 @@ $string = '<typeNode>
      */
     public function removeXML($file,$nodeName,$index) 
     {
-        $referred = "//".$nodeName.'['.$index.']';
+        $referred = $nodeName.'['.$index.']';
         $doc = new \SimpleXMLElement(file_get_contents($file));
         if($target = current($doc->xpath($referred))) {
             $dom = dom_import_simplexml($target);
 
             $dom->parentNode->removeChild($dom);
-            $doc->asXml($file);
-
-
+            return ($doc->asXml($file)) ? true : false;
         }
-        else {
-                return false;
-        }
-        
+
     }
 
 

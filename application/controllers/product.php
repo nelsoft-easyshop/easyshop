@@ -254,7 +254,6 @@ class product extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
-
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                          ->getLocation();
 
@@ -265,8 +264,10 @@ class product extends MY_Controller
 
             $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
             $productCombination = $productCombinationAvailable['productCombinationAvailable'];
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
+            $additionalInformation = $filterAttributes['additionalInformation'];
+            $productAttributes = $filterAttributes['productOptions'];
             $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
-
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
@@ -287,11 +288,12 @@ class product extends MY_Controller
             $productReviews = $reviewProductService->getProductReview($productId);
             $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
 
-            $reviewDetailsData = array(
+            $reviewDetailsData = [
                         'productDetails' => $productDescription,
                         'productReview' => $productReviews,
                         'canReview' => $canReview,
-                    );
+                        'additionalInformation' => $additionalInformation
+                    ];
 
             $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
 
