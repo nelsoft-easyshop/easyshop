@@ -264,9 +264,9 @@ class product extends MY_Controller
 
             $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
             $productCombination = $productCombinationAvailable['productCombinationAvailable'];
-            $filterAttributes = $productManager->getProductAdditionalInfo($productAttributes);
-            $additionalInformation = $filterAttributes['info'];
-            $productAttributes = $filterAttributes['productAttributes'];
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
+            $additionalInformation = $filterAttributes['additionalInformation'];
+            $productAttributes = $filterAttributes['productOptions'];
             $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
             $bannerView = "";
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];

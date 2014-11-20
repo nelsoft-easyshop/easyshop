@@ -851,7 +851,7 @@ class ProductManager
      * @param  array $productAttributes [description]
      * @return array
      */
-    public function getProductAdditionalInfo($productAttributes)
+    public function separateAttributesOptions($productAttributes)
     {   
         $additionalInformation = [];
         foreach ($productAttributes as $headKey => $headValue) {
@@ -875,8 +875,8 @@ class ProductManager
         }
 
         return [
-            'info'=> $additionalInformation,
-            'productAttributes' => $productAttributes
+            'additionalInformation'=> $additionalInformation,
+            'productOptions' => $productAttributes
         ];
     }
 }
