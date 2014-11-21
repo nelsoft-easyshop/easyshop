@@ -1205,22 +1205,6 @@ class NewHomeWebService extends MY_Controller
     }
 
     /**
-     *  Handles the image resize functionality
-     *  @param string $imgDirectory
-     *  @param array $imgDimensions
-     */
-    public function resizeImage($imgDirectory, $imgDimensions)
-    {
-
-        $this->load->library('image_lib');                
-        $config['new_image'] = $imgDirectory;
-        $config['width'] = $imgDimensions[0];
-        $config['height'] = $imgDimensions[1];
-        $this->image_lib->initialize($config);  
-        $this->image_lib->resize(); 
-    }
-
-    /**
      *  Handles the cropping functionality
      *  @param string $imgDirectory
      *  @param array $imgDimensions
