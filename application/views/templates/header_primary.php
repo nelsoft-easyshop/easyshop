@@ -246,7 +246,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-left-neg-14">
                                                                 <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
                                                                     <div class="col-md-3">
-                                                                        <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
+                                                                        <a href="/category/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                         <ul class="cat-sub-list">
                                                                             <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
                                                                                 <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
