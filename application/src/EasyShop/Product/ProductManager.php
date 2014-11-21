@@ -551,7 +551,6 @@ class ProductManager
                                              ->countNotCustomCategorizedProducts($memberId, $arrCatId);
                     break;
             }            
-            $isAllProductIds = FALSE;
         }
         else{
             switch( $catType ){
@@ -561,12 +560,23 @@ class ProductManager
                     break;
                 default:
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId);
+                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition);
                     break;
             }
-            $isAllProductIds = TRUE;
+
+            foreach ($categoryProductIds as $key => $prodId) {
+                $discountedPrice = $this->promoManager->hydratePromoDataExpress($prodId);
+                $lprice = ($lprice !== "") ? $lprice : 0;
+                $uprice = ($uprice !== "") ? $uprice : 0;
+                if($discountedPrice >= $lprice && $discountedPrice <= $uprice) {
+                    $categoryProductIds[] = $prodId;
+                }
+                else {
+                    unset($categoryProductIds[$key]);
+                }
+            }
         }
-        
+
         // Fetch product object and append image
         foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
@@ -582,64 +592,8 @@ class ProductManager
             }
             $categoryProducts[] = $product;
         }
+        $productCount = count($categoryProductIds);
 
-        // IF FILTER CONDITIONS ARE PROVIDED
-        if($isAllProductIds){
-            // Flag for triggering andWhere in criteria
-            $hasWhere = FALSE;
-
-            $arrCollectionProducts = new ArrayCollection($categoryProducts);
-            $criteria = new Criteria();
-
-            // Start appending filter conditions
-            if($condition !== ""){
-                $criteria->where(Criteria::expr()->eq("condition", $condition));
-                $hasWhere = TRUE;
-            }
-
-            if($lprice !== ""){
-                if(!$hasWhere){
-                    $criteria->where(Criteria::expr()->gte("finalPrice", $lprice));
-                    $hasWhere = TRUE;
-                }
-                else{
-                    $criteria->andWhere(Criteria::expr()->gte("finalPrice", $lprice));
-                }
-            }
-
-            if($uprice !== ""){
-                if(!$hasWhere){
-                    $criteria->where(Criteria::expr()->lte("finalPrice", $uprice));
-                    $hasWhere = TRUE;
-                }
-                else{
-                    $criteria->andWhere(Criteria::expr()->lte("finalPrice", $uprice));
-                }   
-            }
-
-            // Generate orderby criteria - Implemented to handle multiple conditions
-            $criteriaOrderBy = array();
-            foreach($orderBy as $sortBy=>$sort){
-                if($sort === "ASC"){
-                    $criteriaOrderBy[$sortBy] = Criteria::ASC;
-                }
-                else{
-                    $criteriaOrderBy[$sortBy] = Criteria::DESC;
-                }
-            }
-            $criteria->orderBy($criteriaOrderBy);
-
-            // Count product result after filtering
-            $productCount = count($arrCollectionProducts->matching($criteria));
-
-            // Filter number of results (pagination)
-            $criteria->setFirstResult($page)
-                    ->setMaxResults($productLimit);
-
-            // Push products to be displayed
-            $categoryProducts = $arrCollectionProducts->matching($criteria);
-        }
-        
         // Generate result array
         $result = array(
             'products' => $categoryProducts,
