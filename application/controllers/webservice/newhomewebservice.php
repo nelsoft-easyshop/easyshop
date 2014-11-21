@@ -657,7 +657,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("categorySubSlug",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("categorySubSlug",$value); 
         $index = $index == 0 ? 1 : $index + 1;  
         $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/categoryNavigation/category['.$index.']/sub/categorySubSlug[last()]');    
         if($addXml === true) {
@@ -730,7 +730,7 @@ class NewHomeWebService extends MY_Controller
     {
         $map = simplexml_load_file($this->file);
         $value = $this->input->get("value");  
-        $string = $this->xmlCmsService->getString("categorySectionAdd",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("categorySectionAdd",$value); 
         $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection[last()]',"\t","\n");    
         if($addXml === true) {
             return $this->output
@@ -850,8 +850,9 @@ class NewHomeWebService extends MY_Controller
         else {
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
-            $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/images/';
+            $file_ext = strtolower(end($file_ext)); 
+            $this->config->load("image_path");                 
+            $path_directory = $this->config->item('assets_images_directory');
 
             $this->upload->initialize([ 
                 "upload_path" => $path_directory,
@@ -899,7 +900,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template, "", "", ""); 
+        $string = $this->xmlCmsService->getString("sliderSection",$template); 
         $index = $index == 0 ? 1 : $index + 1;  
         $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
         if($addXml === true) {
@@ -931,7 +932,7 @@ class NewHomeWebService extends MY_Controller
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/images/homeslider';
+            $path_directory = $this->config->item('homeslider_img_directory');
 
             $this->upload->initialize([ 
                 "upload_path" => $path_directory,
@@ -949,8 +950,8 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
                 $this->config->load("image_path");            
+                $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
                 $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
                 if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
@@ -1132,7 +1133,8 @@ class NewHomeWebService extends MY_Controller
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/images/homeslider';
+        $this->config->load("image_path");            
+        $path_directory = $this->config->item('homeslider_img_directory');
         $map = simplexml_load_file($this->tempHomefile);
 
         $this->load->library('image_lib');    
@@ -1154,8 +1156,8 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $value = "/assets/images/homeslider/".$filename.'.'.$file_ext; 
-            $this->config->load("image_path");            
+            $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
+        
             $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
