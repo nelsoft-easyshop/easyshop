@@ -127,9 +127,9 @@ class ApiFormatter
         $productAttributes = $this->collectionHelper->organizeArray($productAttributes,true);
 
         // get product specification
-        $productSpecification = array() ; $productCombinationAttributes = array(); 
+        $productSpecification = [] ; $productCombinationAttributes = []; 
         foreach ($productAttributes as $key => $productOption) {
-            $newArrayOption = array(); 
+            $newArrayOption = []; 
 
             for ($i=0; $i < count($productOption) ; $i++) {
                 $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
@@ -185,7 +185,7 @@ class ApiFormatter
 
         $productQuantity = [];
         foreach ($temporaryArray as $key => $valuex) { 
-            $newCombinationKey = array();
+            $newCombinationKey = [];
             $totalPrice = 0;
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
@@ -218,19 +218,19 @@ class ApiFormatter
 
     public function formatCart($cartData)
     { 
-        $formattedCartContents = array();
-        $finalCart = array();
+        $formattedCartContents = [];
+        $finalCart = [];
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['idProduct' => $cartItem['id']]);
+                                ->findOneBy(['idProduct' => $cartItem['id']]);
 
             if($product){
                 $productId = $product->getIdProduct();
                 $member = $product->getMember();
                 $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->getAttributesByProductIds($productId);
+                                       ->getAttributesByProductIds($productId);
 
-                $mappedAttributes = array();
+                $mappedAttributes = [];
                 foreach($attributes as $attribute){
                     $isSelected = "false";
                     $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
@@ -247,14 +247,14 @@ class ApiFormatter
                         }
                     }
 
-                    array_push($mappedAttributes, array(
+                    $mappedAttributes[] = [
                         'id' => $optionalIdentifier.$attribute['detail_id'],
                         'value' => $attribute['value'],
                         'name' => $attribute['head'],
                         'price' => $attribute['price'],
                         'imageId' => $attribute['image_id'],
                         'isSelected' => $isSelected,
-                    ));
+                    ];
                 }
 
                 $formattedCartContents[$rowId] = [
@@ -308,7 +308,7 @@ class ApiFormatter
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
 
-            $options = array();
+            $options = [];
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
                 if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
                     $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
