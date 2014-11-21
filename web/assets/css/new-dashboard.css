@@ -153,6 +153,11 @@ a{
     padding: 29px 30px;
     background-size: 100%;
     position: relative;
+    -webkit-filter: brightness(50%);
+	-moz-filter: brightness(50%);
+	-o-filter: brightness(50%);
+	-ms-filter: brightness(50%);
+    z-index:2;
 }
 
 .vendor-follower-img{
@@ -162,6 +167,11 @@ a{
     z-index: 3;
     position: absolute;
     background: #ffffff;
+    -webkit-filter: brightness(100%) !important;
+	-moz-filter: brightness(100%) !important;
+	-o-filter: brightness(100%) !important;
+	-ms-filter: brightness(100%) !important;
+	filter: brightness(100%) !important;
 }
 
 .img-follower-cover{
@@ -1185,6 +1195,31 @@ a{
 .p-date-feedback{
     font-size: 10px;
 }
+
+..dashboard-breadcrumb{
+    display: none;
+}
+
+.dashboard-breadcrumb > ul > li{
+    display: none;
+}
+
+.star-feed{
+    font-size: 14px;
+}
+
+.td-feedback-star{
+    padding-left: 5px;
+}
+
+.td-feedback-criteria{
+    padding-right: 0px;
+    font-weight: bold;
+}
+
+.feedback-whom > a{
+    font-weight: 900;
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1205,6 +1240,8 @@ a{
         padding-bottom: 10px;
         text-transform: uppercase;
         cursor: pointer;
+        font-size: 11px;
+        font-weight: bold;
     }
     
     .my-store-menu-mobile{
@@ -1620,8 +1657,7 @@ a{
     }
     
     .my-store-menu-mobile-ul > .selected > li,
-    .my-account-menu-mobile-ul > .selected > li
-        {
+    .my-account-menu-mobile-ul > .selected > li{
         background: #ff893a;
         color: #fff;
     }
@@ -1629,5 +1665,20 @@ a{
     .row-menu-mobile-res > .selected > .col-dash-mobile{
         background: #ff893a;
         color: #fff;
+    }
+    
+    .dashboard-breadcrumb{
+        display: inline-block;
+        padding: 5px 10px;
+        background: #e2e2e2;
+        width: 100%;
+    }
+    
+    .dashboard-breadcrumb > ul > li{
+        display: inline;
+    }
+    
+    .bc-arrow > i{
+        margin-right: 5px;
     }
 }
