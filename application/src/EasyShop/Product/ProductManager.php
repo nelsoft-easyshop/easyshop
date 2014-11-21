@@ -550,7 +550,8 @@ class ProductManager
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
                                              ->countNotCustomCategorizedProducts($memberId, $arrCatId);
                     break;
-            }            
+            }        
+            $isFiltered = false;    
         }
         else{
             switch( $catType ){
@@ -569,16 +570,15 @@ class ProductManager
                 $lprice = ($lprice !== "") ? $lprice : 0;
                 $uprice = ($uprice !== "") ? $uprice : 0;
                 if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                    $categoryProductIds[] = $prodId;
-                }
-                else {
-                    unset($categoryProductIds[$key]);
+                    $filteredProducts[] = $prodId;
                 }
             }
+            $isFiltered = true;               
         }
+        $productArr = ($isFiltered) ? $filteredProducts : $categoryProductIds;
 
         // Fetch product object and append image
-        foreach($categoryProductIds as $productId){
+        foreach($productArr as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
@@ -595,6 +595,7 @@ class ProductManager
         $productCount = count($categoryProductIds);
 
         // Generate result array
+
         $result = array(
             'products' => $categoryProducts,
             'filtered_product_count' => $productCount
