@@ -434,25 +434,61 @@
     //FOR MOBILE
     $('.my-store-menu-mobile').click(function() {
         $('.my-account-menu-mobile-cont').slideUp();
-        $('.my-store-menu-mobile-cont').slideToggle();
+        $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
+            var attr_ms = $("i.ms").attr("class");
+            if(attr_ms == "ms fa fa-angle-down"){
+                $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
+            }
+            else if(attr_ms == "ms fa fa-angle-up"){
+                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            }
+            
+            var attr_ma2 = $("i.ma").attr("class");
+            if(attr_ma2 == "ma fa fa-angle-up"){
+                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+            }
+        });
     });
     
     $('.my-account-menu-mobile').click(function() {
         $('.my-store-menu-mobile-cont').slideUp();
-        $('.my-account-menu-mobile-cont').slideToggle();
+        $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
+            var attr_ma = $("i.ma").attr("class");
+            if(attr_ma == "ma fa fa-angle-down"){
+                $('i.ma').removeClass("ma fa fa-angle-down").addClass("ma fa fa-angle-up");
+            }
+            else if(attr_ma == "ma fa fa-angle-up"){
+                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+            }
+            
+            var attr_ms2 = $("i.ms").attr("class");
+            if(attr_ms2 == "ms fa fa-angle-up"){
+                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            }
+        });
     });
     
     $('.dash-mobile-trigger').click(function() {
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
+        
+        var attr_ms3 = $("i.ms").attr("class");
+        if(attr_ms3 == "ms fa fa-angle-up"){
+            $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+        }
+        
+        
+        var attr_ma3 = $("i.ma").attr("class");
+        if(attr_ma3 == "ma fa fa-angle-up"){
+            $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+        }
     });
     
+   
     $('.dash-mobile-trigger').click(function() {
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-    
     
 }(jQuery));
 
