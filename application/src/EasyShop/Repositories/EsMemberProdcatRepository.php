@@ -86,7 +86,7 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatId)
+    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition)
     {
         $productIds = array();
 
@@ -100,10 +100,15 @@ class EsMemberProdcatRepository extends EntityRepository
                     AND m.idMember = :member_id
                     AND p.isDelete = 0
                     AND p.isDraft = 0";
-
+        if($condition !== "") {
+            $dql .= "AND p.condition = :condition";
+        }
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_id', $memcatId);
+        if($condition !== "") {
+            $query->setParameter("condition", $condition);
+        }                    
 
         $result = $query->getResult();
 
