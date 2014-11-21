@@ -658,6 +658,7 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param array $catId
+     *  @param string $condition
      *
      *  @return array
      */

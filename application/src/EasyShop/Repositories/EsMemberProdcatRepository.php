@@ -84,6 +84,10 @@ class EsMemberProdcatRepository extends EntityRepository
     /**
      *  Get all custom categorized product ids
      *
+     *  @param integer $memberId
+     *  @param array $memcatId
+     *  @param string $condition
+     *
      *  @return array - array of product ids
      */
     public function getAllCustomCategoryProducts($memberId, $memcatId, $condition)
