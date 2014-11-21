@@ -592,7 +592,7 @@ class ProductManager
             }
             $categoryProducts[] = $product;
         }
-        $productCount = count($categoryProductIds);
+        $productCount = count($productArr);
 
         // Generate result array
 
