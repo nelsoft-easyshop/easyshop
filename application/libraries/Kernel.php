@@ -279,6 +279,10 @@ class Kernel
                                                         $userManager);
         };
 
+        $container['image_utility'] = function ($c) use ($container){
+            $imageLibrary = new \CI_Image_lib();            
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };            
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
