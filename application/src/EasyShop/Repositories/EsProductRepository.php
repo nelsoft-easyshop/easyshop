@@ -658,10 +658,11 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param array $catId
+     *  @param string $condition
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId){
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition){
         $em = $this->_em;
         $result = array();
 
@@ -688,8 +689,15 @@ class EsProductRepository extends EntityRepository
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
 
+        if($condition !== "") {
+            $dql .= "AND p.condition = :condition";
+        }
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
+
+        if($condition !== "") {
+            $query->setParameter("condition", $condition);
+        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
