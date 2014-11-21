@@ -62,58 +62,69 @@
         <div class="col-md-10 col-feedback-container" style="padding-left: 0px;">
             <div class="panel panel-default panel-feedback-item">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <p class="feedback-cat-title">Feedback as seller</p>
-                        <table>
-                            <tr>
-                                <td class="td-feedback-criteria">Item quality</td>
-                                <td>
-                                    <span>
-                                        <?php for($i = 0; $i < 5; $i++): ?>
-                                            <i class="fa fa-star star-feed star-active"></i>
-                                        <?php endfor; ?>
-                                        
-                                        <?php for($i = 0; $i < 5 - 5; $i++): ?>
-                                            <i class="fa fa-star star-feed"></i>
-                                        <?php endfor; ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <table>
+                                    <tr>
+                                        <td class="td-feedback-criteria">Item quality</td>
+                                        <td class="td-feedback-star">
+                                            <span>
+                                                <?php for($i = 0; $i < 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                <?php endfor; ?>
+                                                
+                                                <?php for($i = 0; $i < 5 - 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed"></i>
+                                                <?php endfor; ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-4">
+                                <table>
+                                    <tr>
+                                        <td class="td-feedback-criteria">Communication</td>
+                                        <td class="td-feedback-star">
+                                            <span>
+                                                <?php for($i = 0; $i < 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                <?php endfor; ?>
+                                                
+                                                <?php for($i = 0; $i < 5 - 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed"></i>
+                                                <?php endfor; ?>
 
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td-feedback-criteria">Communication</td>
-                                <td>
-                                    <span>
-                                        <?php for($i = 0; $i < 5; $i++): ?>
-                                            <i class="fa fa-star star-feed star-active"></i>
-                                        <?php endfor; ?>
-                                        
-                                        <?php for($i = 0; $i < 5 - 5; $i++): ?>
-                                            <i class="fa fa-star star-feed"></i>
-                                        <?php endfor; ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="td-feedback-criteria">Shipment time</td>
-                                <td>
-                                    <span>
-                                        <?php for($i = 0; $i < 4; $i++): ?>
-                                            <i class="fa fa-star star-feed star-active"></i>
-                                        <?php endfor; ?>
-                                        
-                                        <?php for($i = 0; $i < 5 - 4; $i++): ?>
-                                            <i class="fa fa-star star-feed"></i>
-                                        <?php endfor; ?>
-
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6 col-item-message">
-                        Test tets
-                    </div>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-4">
+                                <table>
+                                    <tr>
+                                        <td class="td-feedback-criteria">Item shipment</td>
+                                        <td class="td-feedback-star">
+                                            <span>
+                                                <?php for($i = 0; $i < 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                <?php endfor; ?>
+                                                
+                                                <?php for($i = 0; $i < 5 - 5; $i++): ?>
+                                                    <i class="fa fa-star star-feed"></i>
+                                                <?php endfor; ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                         <p class="feedback-content"><i>"cxvxcv"</i></p>
+                         <p class="feedback-whom">&mdash; from <a href="#">mangpending</a></p>
+                   </div>
+                    
                 </div>
             </div>
         </div>
