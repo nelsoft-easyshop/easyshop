@@ -204,7 +204,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                           <div class="search-container">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -315,7 +315,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
                                                  <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
+                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                                     <input type="submit" value="" class="span_bg">
                                                 </form>
                                                 </div>
