@@ -1906,6 +1906,10 @@ class Memberpage extends MY_Controller
                                                                       EasyShop\Entities\EsMemberFeedback::TYPE_ALL,
                                                                       $feedbackLimit);
 
+            foreach ($feedbacks as $key => $feedback) {
+                $feedbacks[$key]['avatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+            }
+
             $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
             $feedbacksData = [
                         'feedbacks' => $feedbacks,
@@ -1915,6 +1919,7 @@ class Memberpage extends MY_Controller
 
             $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
             $allFeedBackViewData = [
+                            'allFeedBackConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_ALL,
                             'asBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
                             'asSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
                             'asOtherSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
@@ -1944,10 +1949,10 @@ class Memberpage extends MY_Controller
                             'allFeedBackView' => $allFeedBackView,
                         ];
 
-            $dashboarHomedView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
+            $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
 
             $dashboardData = [
-                        'dashboardHomeView' => $dashboarHomedView
+                        'dashboardHomeView' => $dashboardHomeView
                     ];
 
             $headerData['metadescription'] = "";
@@ -2087,28 +2092,27 @@ class Memberpage extends MY_Controller
 
     /**
      * get next set of feedbacks based on page number
-     * @return [type] [description]
+     * @return json
      */
     public function feedbackMemberPagePaginate()
     {
         $userManager = $this->serviceContainer['user_manager'];
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         
-        $page = (int) $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $page = (int) ($this->input->get('page')) ? trim($this->input->get('page')) : 1;
         $requestType = (int) trim($this->input->get('request'));
         $memberId = $this->session->userdata('member_id');
         $feedbackLimit = $this->feedBackPerPage;
         $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
-
-
-        $feedbacks = $userManager->getFormattedFeedbacks($memberId,
-                                                         $requestType, 
-                                                         $feedbackLimit,
-                                                         $page);
-
         $paginationData = [
             'isHyperLink' => false
             , 'currentPage' => $page
         ];
+
+        $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
+                                                                  $requestType,
+                                                                  $feedbackLimit,
+                                                                  $page - 1);
 
         switch($requestType){
             case EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER: 
@@ -2123,14 +2127,22 @@ class Memberpage extends MY_Controller
             case EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER: 
                 $paginationData['lastPage'] =  ceil(count($allFeedbacks['youpost_buyer']) / $feedbackLimit);
                 break;
+            default:
+                $paginationData['lastPage'] =  ceil($allFeedbacks['totalFeedbackCount'] / $feedbackLimit);
+                break;
         }
 
-        $feedBackViewData = [
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                'feedbacks' => $feedbacks,
-            ];
+        foreach ($feedbacks as $key => $feedback) {
+            $feedbacks[$key]['avatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+        }
 
-        $feedBackView = $this->load->view('partials/dashboard-feedback', $feedBackViewData, true);
+        $feedbacksData = [
+                    'feedbacks' => $feedbacks,
+                    'memberId' => $memberId,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+
+        $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
 
         $responseData = [
                     'html' => $feedBackView

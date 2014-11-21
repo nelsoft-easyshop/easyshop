@@ -348,5 +348,17 @@
 </div>
 
 <div id="hidden-feedback-container">
- 
+    <div id="feedback-<?=$allFeedBackConstant;?>">
+        <div id="page-1">
+            <?=$feedBackView; ?>
+        </div>
+    </div>
+    <div id="feedback-<?=$asBuyerConstant;?>"> 
+    </div>
+    <div id="feedback-<?=$asSellerConstant;?>"> 
+    </div>
+    <div id="feedback-<?=$asOtherSellerConstant;?>"> 
+    </div>
+    <div id="feedback-<?=$asOtherBuyerConstant;?>"> 
+    </div>
 </div>

@@ -285,16 +285,26 @@
     $("#feedbacks").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
-        var $parentContainer = $this.parent().parent().parent().parent();
-        var $requestType = $parentContainer.find(".feedback-type").val();
-        var $containerId = $parentContainer.attr('class');
-        var $hiddenContainer = $parentContainer.find(".feedback-hidden-container").val();
+        var $requestType = $("#select-feedback-filter").val();
 
-        if($("#hidden-feedback-container > #" + $hiddenContainer + " > #page-" + $page).length > 0){
-             $("."+$containerId +" > .feedbacks-container").html($("#hidden-feedback-container > #" + $hiddenContainer + " > #page-" + $page).html());
+        if($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).length > 0){
+             $("#feedback-view-container").html($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).html());
         }
         else{
-            requestFeedback($page, $requestType, $containerId, $hiddenContainer);
+            requestFeedback($page, $requestType);
+        }
+    });
+
+    $("#feedbacks").on('change','#select-feedback-filter',function () {
+        var $this = $(this);
+        var $requestType = $this.val();
+        var $page = 1;
+
+        if($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).length > 0){
+             $("#feedback-view-container").html($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).html());
+        }
+        else{
+            requestFeedback($page, $requestType);
         }
     });
 
@@ -371,7 +381,7 @@
         });
     }
 
-    var requestFeedback = function($page, $requestType, $container, $hiddenContainer)
+    var requestFeedback = function($page, $requestType)
     {
         var $urlRequest = $('#feedback-request-url').val();
         var $ajaxRequest = $.ajax({
@@ -382,15 +392,15 @@
                     request:$requestType, 
                 } ,
             beforeSend: function(){ 
-                $("."+$container +" > .feedbacks-container").hide();
+                $("#feedback-view-container").hide();
             },
             success: function(requestResponse){
                 var $response = $.parseJSON(requestResponse); 
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
-                $("."+$container +" > .feedbacks-container").html($response.html);
-                $("."+$container +" > .feedbacks-container").show();
+                $("#feedback-view-container").html($response.html);
+                $("#feedback-view-container").show();
 
-                $("#hidden-feedback-container > #" + $hiddenContainer).append($appendString);
+                $("#hidden-feedback-container > #feedback-" + $requestType).append($appendString);
             }
         });
     }
@@ -618,25 +628,61 @@
     //FOR MOBILE
     $('.my-store-menu-mobile').click(function() {
         $('.my-account-menu-mobile-cont').slideUp();
-        $('.my-store-menu-mobile-cont').slideToggle();
+        $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
+            var attr_ms = $("i.ms").attr("class");
+            if(attr_ms == "ms fa fa-angle-down"){
+                $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
+            }
+            else if(attr_ms == "ms fa fa-angle-up"){
+                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            }
+            
+            var attr_ma2 = $("i.ma").attr("class");
+            if(attr_ma2 == "ma fa fa-angle-up"){
+                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+            }
+        });
     });
     
     $('.my-account-menu-mobile').click(function() {
         $('.my-store-menu-mobile-cont').slideUp();
-        $('.my-account-menu-mobile-cont').slideToggle();
+        $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
+            var attr_ma = $("i.ma").attr("class");
+            if(attr_ma == "ma fa fa-angle-down"){
+                $('i.ma').removeClass("ma fa fa-angle-down").addClass("ma fa fa-angle-up");
+            }
+            else if(attr_ma == "ma fa fa-angle-up"){
+                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+            }
+            
+            var attr_ms2 = $("i.ms").attr("class");
+            if(attr_ms2 == "ms fa fa-angle-up"){
+                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            }
+        });
     });
     
     $('.dash-mobile-trigger').click(function() {
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
+        
+        var attr_ms3 = $("i.ms").attr("class");
+        if(attr_ms3 == "ms fa fa-angle-up"){
+            $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+        }
+        
+        
+        var attr_ma3 = $("i.ma").attr("class");
+        if(attr_ma3 == "ma fa fa-angle-up"){
+            $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+        }
     });
     
+   
     $('.dash-mobile-trigger').click(function() {
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-    
     
 }(jQuery));
 

@@ -15,7 +15,7 @@
                     <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
-                            <a href="#transactions" class="id-transactions-trigger"><li class="f-li ms-f">Transactions</li></a>
+                            <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
                             <a href="#setup"><li class="f-li">Store Setup</li></a>
                         </ul>
                     </div>
@@ -37,10 +37,10 @@
                         </div>
                     </a>
                     <div class="col-xs-4 col-dash-mobile my-store-menu-mobile">
-                        My Store
+                        My Store <i class="ms fa fa-angle-down"></i>
                     </div>
                     <div class="col-xs-4 col-dash-mobile my-account-menu-mobile">
-                        My Account
+                        My Account <i class="ma fa fa-angle-down"></i>
                     </div>
                 </div>
                 <div class="my-store-menu-mobile-cont">
