@@ -296,16 +296,17 @@ class Register extends MY_Controller
         if(($username) && ($this->form_validation->run('changepass'))){  
         
             $dataval = array('login_username' => $username, 'login_password' => $cur_password);
-            $row = $this->user_model->verify_member($dataval);
+            $this->accountManager = $this->serviceContainer['account_manager'];            
+            $row = $this->accountManager->authenticateMember($username, $cur_password);
 
-            if ($row['o_success'] >= 1){
+            if (!empty($row["member"])){
                 $data = array(
                     'username' => $username,
                     'cur_password' => $cur_password,
                     'password' => $password
                 );
                 
-                $result = $this->register_model->changepass($data);       
+                $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);                      
                 if($result){
                     $temp['toggle_view'] = "";
                 }
