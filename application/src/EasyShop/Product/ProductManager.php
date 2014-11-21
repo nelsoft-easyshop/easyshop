@@ -564,21 +564,27 @@ class ProductManager
                                                    ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition);
                     break;
             }
-            $lprice = ($lprice !== "") ? $lprice : 0;
-            $uprice = ($uprice !== "") ? $uprice : 0;
-            foreach ($categoryProductIds as $key => $prodId) {
-                $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
 
-                if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                    $filteredProducts[] = $prodId;
+            if($lprice !== "" && $uprice !== "") {
+                foreach ($categoryProductIds as $key => $prodId) {
+                    $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
+
+                    if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
+                        $filteredProducts[] = $prodId;
+                    }
                 }
+                $isFiltered = true;  
             }
-            $isFiltered = true;               
+            else {
+                $isFiltered = false;
+            }
+
+             
         }
-        $productArr = ($isFiltered) ? $filteredProducts : $categoryProductIds;
+        $categoryIds = ($isFiltered) ? $filteredProducts : $categoryProductIds;
 
         // Fetch product object and append image
-        foreach($productArr as $productId){
+        foreach($categoryIds as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
@@ -592,7 +598,7 @@ class ProductManager
             }
             $categoryProducts[] = $product;
         }
-        $productCount = count($productArr);
+        $productCount = count($categoryIds);
 
         // Generate result array
 
