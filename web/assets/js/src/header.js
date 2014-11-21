@@ -5,7 +5,6 @@
         
         $('.main-search-input').on('keyup', function(){
             var searchString = $(this).val();
-            console.log(searchString);
             $('.main-search-input').val(searchString);
         });
         
