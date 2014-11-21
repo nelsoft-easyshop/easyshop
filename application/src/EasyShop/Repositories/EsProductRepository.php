@@ -136,6 +136,8 @@ class EsProductRepository extends EntityRepository
             $rsm->addScalarResult('is_other', 'is_other');
             $rsm->addScalarResult('price', 'price');
             $rsm->addScalarResult('image_id', 'image_id');
+            $rsm->addScalarResult('type', 'type');
+            $rsm->addScalarResult('datatype_id', 'datatype_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -149,6 +151,8 @@ class EsProductRepository extends EntityRepository
                     , '0' as is_other
                     , a.attr_price as price
                     , '0' as image_id
+                    ,'specific' as 'type'
+                    , b.datatype_id as 'datatype_id'
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -167,6 +171,8 @@ class EsProductRepository extends EntityRepository
                     , '1' as is_other
                     , b.value_price as price
                     , b. product_img_id as price
+                    , 'option' as 'type'
+                    , '0' as 'datatype_id'
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
