@@ -49,11 +49,5 @@
 </div>
 
 <!-- Load JS -->
-<!-- <script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.carousel.js "></script> -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.jcarousel.min.js "></script>
 <script type="text/javascript" src="/assets/js/src/product-page-image-gallery.js "></script>
-
-<!--<script type="text/javascript">
-     $.fn.cycle.defaults.autoSelector = '.slideshow';
-</script>-->
