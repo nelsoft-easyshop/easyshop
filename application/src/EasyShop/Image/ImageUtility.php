@@ -11,13 +11,14 @@ class ImageUtility
 {
 
     /**
-     * User Manager Instance
+     * CI_Image_lib Instance
      *
      * @var CI_Image_lib
      */
-    private $imageLibrary;    
+    private $imageLibrary;  
+
     /**
-     * Constructor. Retrieves Entity Manager instance
+     * Constructor. Retrieves Image Libraryss instance
      * 
      */
     public function __construct($imageLibrary)
@@ -27,10 +28,12 @@ class ImageUtility
 
     /**
      * Resizes images
+     *
      * @param string $imageDirectory
      * @param string $newDirectory
      * @param array $dimension
      * @param bool $isRatioMainted
+     *
      * @return JSONP
      */ 
     public function imageResize($imageDirectory, $newDirectory, $dimension, $isRatioMainted = true)
