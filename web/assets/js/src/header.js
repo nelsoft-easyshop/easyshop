@@ -3,8 +3,9 @@
     $(document).ready(function() {
         
         
-        $('.main-search-input').on('change', function(){
+        $('.main-search-input').on('keyup', function(){
             var searchString = $(this).val();
+            console.log(searchString);
             $('.main-search-input').val(searchString);
         });
         
