@@ -1906,63 +1906,9 @@ class Memberpage extends MY_Controller
                         ];
 
             $feedbackLimit = $this->feedBackPerPage;
-            $asBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                   EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, 
-                                                                   $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_buyer']) / $feedbackLimit);
-
-            $asBuyerViewData = [
-                            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                            'feedbacks' => $asBuyerFeedBack,
-                        ];
-
-            $asBuyerView = $this->load->view('partials/dashboard-feedback', $asBuyerViewData, true);
-
-            $asSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                    EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, 
-                                                                    $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['otherspost_seller']) / $feedbackLimit);
-
-            $asSellerViewData = [
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                'feedbacks' => $asSellerFeedBack,
-            ];
-
-            $asSellerView = $this->load->view('partials/dashboard-feedback', $asSellerViewData, true);
-
-            $asOtherSellerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                         EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, 
-                                                                         $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_seller']) / $feedbackLimit);
-
-            $asOtherSellerData = [
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                'feedbacks' => $asOtherSellerFeedBack,
-            ];
-
-            $asOtherSellerView = $this->load->view('partials/dashboard-feedback', $asOtherSellerData, true);
-
-            $asOtherBuyerFeedBack = $userManager->getFormattedFeedbacks($memberId,
-                                                                        EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, 
-                                                                        $feedbackLimit);
-            $paginationData['lastPage'] = ceil(count($allFeedbacks['youpost_buyer']) / $feedbackLimit);
- 
-            $asOtherBuyerData = [
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-                'feedbacks' => $asOtherBuyerFeedBack,
-            ];
-
-            $asOtherBuyerView = $this->load->view('partials/dashboard-feedback', $asOtherBuyerData, true);
+            
 
             $allFeedBackViewData = [
-                            'asBuyerView' => $asBuyerView,
-                            'asBuyerFeedbackCount' => count($allFeedbacks['otherspost_buyer']),
-                            'asSellerView' => $asSellerView,
-                            'asSellerFeedbackCount' => count($allFeedbacks['otherspost_seller']),
-                            'asOtherSellerView' => $asOtherSellerView,
-                            'asOtherSellerFeedbackCount' => count($allFeedbacks['youpost_seller']),
-                            'asOtherBuyerView' => $asOtherBuyerView,
-                            'asOtherBuyerFeedbackCount' => count($allFeedbacks['youpost_buyer']),
                             'asBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
                             'asSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
                             'asOtherSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,

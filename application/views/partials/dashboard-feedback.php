@@ -1,27 +1,54 @@
 
-<?php foreach ($feedbacks as $feedback): ?>
     <div class="row">
-        <div class="col-xs-2">
-            <center>
-                <div class="div-user-image">
-                    <a href="/<?=$feedback['userslug']; ?>">
-                        <img src="<?=$feedback['userImage']; ?>" class="img-user-image"/>
-                    <a/>
+        <div class="col-md-2 col-feedback-user">
+            <div class="user-feeder">
+                <div class="user-image-container">
+                    <center class="center-image">
+                        <div class="div-user-image">
+                            <a href="/<?=$feedback['userslug']; ?>">
+                                <img src="<?=$feedback['userImage']; ?>" class="img-user-image"/>
+                            <a/>
+                        </div>
+                    </center>
                 </div>
                 <p class="p-user-name">
-                    <a href="/<?=$feedback['userslug']; ?>">
+                    <a href="/justineduazo">
                         <?=html_escape($feedback['username']); ?>
                     </a>
                 </p>
-                <p class="p-date-feedback"> 
+                <p class="p-date-feedback">
                     <?=$feedback['dateadded']->format('M d, Y  h:i a'); ?> 
                 </p>
-            </center>
+            </div>
+            <table class="table-feed-mobile">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="div-user-image">
+                                <a href="/<?=$feedback['userslug']; ?>">
+                                    <img src="<?=$feedback['userImage']; ?>" class="img-user-image"/>
+                                <a/>
+                            </div>
+                        </td>
+                        <td class="td-info-mobile">
+                            <p class="p-user-name">
+                                <a href="/justineduazo">
+                                    <?=html_escape($feedback['username']); ?>
+                                </a>
+                            </p>
+                            <p class="p-date-feedback">
+                                <?=$feedback['dateadded']->format('M d, Y  h:i a'); ?> 
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="col-xs-10 col-feedback-container" style="padding-left: 0px;">
+        <div class="col-md-10 col-feedback-container" style="padding-left: 0px;">
             <div class="panel panel-default panel-feedback-item">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
+                        <p class="feedback-cat-title">Feedback as seller</p>
                         <table>
                             <tr>
                                 <td class="td-feedback-criteria">Item quality</td>
@@ -67,17 +94,16 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-xs-6 col-item-message">
+                    <div class="col-md-6 col-item-message">
                         <?=html_escape($feedback['feedbMsg']); ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<?php endforeach; ?>
 
-<center>
-    <?=$pagination; ?>
-</center>
-<br/>
+    <center>
+        <?=$pagination; ?>
+    </center>
+    <br/>
 
