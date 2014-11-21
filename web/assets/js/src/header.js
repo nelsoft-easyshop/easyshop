@@ -1,8 +1,16 @@
 (function ($) {
     
     $(document).ready(function() {
+        
+        
+        $('.main-search-input').on('change', function(){
+            var searchString = $(this).val();
+            $('.main-search-input').val(searchString);
+        });
+        
+        
     
-    //Sort random function
+        //Sort random function
         function random(owlSelector){
             owlSelector.children().sort(function(){
                 return Math.round(Math.random()) - 0.5;
@@ -285,7 +293,7 @@
             }
         });
  
-
+        
 
 
 }(jQuery));
