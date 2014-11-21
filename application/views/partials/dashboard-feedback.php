@@ -1,19 +1,19 @@
-
+<?php foreach ($feedbacks as $feedback): ?>
     <div class="row">
         <div class="col-md-2 col-feedback-user">
             <div class="user-feeder">
                 <div class="user-image-container">
                     <center class="center-image">
                         <div class="div-user-image">
-                            <a href="/<?=$feedback['userslug']; ?>">
-                                <img src="<?=$feedback['userImage']; ?>" class="img-user-image"/>
+                            <a href="/<?=$feedback['reviewerSlug']; ?>">
+                                <img src="" class="img-user-image"/>
                             <a/>
                         </div>
                     </center>
                 </div>
                 <p class="p-user-name">
-                    <a href="/justineduazo">
-                        <?=html_escape($feedback['username']); ?>
+                    <a href="/<?=$feedback['reviewerSlug']; ?>">
+                        <?=html_escape($feedback['reviewerUsername']); ?>
                     </a>
                 </p>
                 <p class="p-date-feedback">
@@ -25,15 +25,15 @@
                     <tr>
                         <td>
                             <div class="div-user-image">
-                                <a href="/<?=$feedback['userslug']; ?>">
-                                    <img src="<?=$feedback['userImage']; ?>" class="img-user-image"/>
+                                <a href="/<?=$feedback['reviewerSlug']; ?>">
+                                    <img src="" class="img-user-image"/>
                                 <a/>
                             </div>
                         </td>
                         <td class="td-info-mobile">
                             <p class="p-user-name">
-                                <a href="/justineduazo">
-                                    <?=html_escape($feedback['username']); ?>
+                                <a href="/<?=$feedback['reviewerSlug']; ?>">
+                                    <?=html_escape($feedback['reviewerUsername']); ?>
                                 </a>
                             </p>
                             <p class="p-date-feedback">
@@ -48,7 +48,19 @@
             <div class="panel panel-default panel-feedback-item">
                 <div class="row">
                     <div class="col-md-6">
+                        <?php if( (int)$feedback['feedbKind'] === 1 
+                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
                         <p class="feedback-cat-title">Feedback as seller</p>
+                        <?php elseif( (int)$feedback['feedbKind'] === 1 
+                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
+                        <p class="feedback-cat-title">Feedback as seller</p>
+                        <?php elseif( (int)$feedback['feedbKind'] === 0 
+                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
+                        <p class="feedback-cat-title">Feedback as seller</p>
+                        <?php elseif( (int)$feedback['feedbKind'] === 0 
+                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
+                        <p class="feedback-cat-title">Feedback as seller</p>
+                        <?php endif; ?>
                         <table>
                             <tr>
                                 <td class="td-feedback-criteria">Item quality</td>
@@ -101,7 +113,7 @@
             </div>
         </div>
     </div>
-
+<?php endforeach; ?>
     <center>
         <?=$pagination; ?>
     </center>

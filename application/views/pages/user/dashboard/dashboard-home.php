@@ -348,24 +348,5 @@
 </div>
 
 <div id="hidden-feedback-container">
-    <div id="as-buyer">
-        <div id="page-1">
-            <?=$allFeedBackViewData['asBuyerView']; ?>
-        </div>
-    </div>
-    <div id="as-seller"> 
-        <div id="page-1">
-            <?=$allFeedBackViewData['asSellerView']; ?>
-        </div>
-    </div>
-    <div id="as-other-seller">
-        <div id="page-1">
-            <?=$allFeedBackViewData['asOtherSellerView']; ?>
-        </div>
-    </div>
-    <div id="as-other-buyer">
-        <div id="page-1">
-            <?=$allFeedBackViewData['asOtherBuyerView']; ?>
-        </div>
-    </div>
+ 
 </div>

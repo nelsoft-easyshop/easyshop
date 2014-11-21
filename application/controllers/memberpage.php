@@ -1899,20 +1899,27 @@ class Memberpage extends MY_Controller
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
             $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
 
-            $memberRating = [
-                            'rating1' => $allFeedbacks['rating1Summary'],
-                            'rating2' => $allFeedbacks['rating2Summary'],
-                            'rating3' => $allFeedbacks['rating3Summary'],
-                        ];
-
             $feedbackLimit = $this->feedBackPerPage;
-            
+            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
+            $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
+            $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
+                                                                      EasyShop\Entities\EsMemberFeedback::TYPE_ALL,
+                                                                      $feedbackLimit);
 
+            $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
+            $feedbacksData = [
+                        'feedbacks' => $feedbacks,
+                        'memberId' => $memberId,
+                        'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                    ];
+
+            $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
             $allFeedBackViewData = [
                             'asBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
                             'asSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
                             'asOtherSellerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
                             'asOtherBuyerConstant' => EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER,
+                            'feedBackView' => $feedBackView,
                         ];
             $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
 
@@ -1931,7 +1938,7 @@ class Memberpage extends MY_Controller
                             'deletedProductView' => $deletedProductView,
                             'draftedProductView' => $draftedProductView,
                             'memberRating' => $memberRating,
-                            'feedBackTotalCount' => $allFeedbacks['totalFeedbackCount'],
+                            'feedBackTotalCount' => $feedBackTotalCount,
                             'profilePercentage' => $profilePercentage,
                             'allFeedBackViewData' => $allFeedBackViewData,
                             'allFeedBackView' => $allFeedBackView,
