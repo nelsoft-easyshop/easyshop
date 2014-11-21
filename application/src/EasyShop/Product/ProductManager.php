@@ -564,11 +564,11 @@ class ProductManager
                                                    ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition);
                     break;
             }
-
+            $lprice = ($lprice !== "") ? $lprice : 0;
+            $uprice = ($uprice !== "") ? $uprice : 0;
             foreach ($categoryProductIds as $key => $prodId) {
                 $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-                $lprice = ($lprice !== "") ? $lprice : 0;
-                $uprice = ($uprice !== "") ? $uprice : 0;
+
                 if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
                     $filteredProducts[] = $prodId;
                 }
