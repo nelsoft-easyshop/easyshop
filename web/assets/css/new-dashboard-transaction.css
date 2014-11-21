@@ -2,6 +2,15 @@
     margin-top: 12px;
 }
 
+.padding-reset {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pd-top-10 {
+    padding-top: 10px;
+}
+
 .btn-loadmore {
     background-color: #e2e2e2;
     border: none;
@@ -15,6 +24,24 @@
 
 .btn-loadmore {
     background-color: #c2c2c2;
+}
+
+.btn.btn-cancel {
+    border-bottom: 
+}
+
+.btn.btn-inc,
+.btn.btn-inc:hover {
+    background-color: #878787;
+    border-bottom: 2px solid #878787;
+}
+
+.trans-status-cod {
+    color: #00a388;
+}
+
+.trans-status-pending {
+    color: #ff6137;
 }
 
 .transaction-tabs ul {
@@ -142,7 +169,7 @@
     background: url(../images/img_search2.png) no-repeat 7px center;
     max-width: 300px;
     padding-left: 35px !important;
-    width: 100%;
+    width: 53%;
 }
 
 .on-going-transaction-list-bought,
@@ -152,13 +179,65 @@
     display: none;
 }
 
+.transac-title {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e2e2e2;
+    padding: 14px 12px;
+}
+
+.transac-title div {
+    display: inline-block;
+    margin-right: 20px;
+}
+
 .transaction-item .item-list-panel {
     margin-bottom: 15px;
 }
 
+.trans-left-panel .div-product-image {
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    margin: 0 auto;
+}
+
+.trans-left-panel .info-main-cont {
+    border-bottom: 1px solid #e2e2e2;
+}
+
 .transaction-right-content {
-    padding-top: 12px;
     padding-bottom: 12px;
+    padding-top: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.trans-circle {
+    border-radius: 90px;
+    display: inline-block;
+    height: 25px;
+    margin-left: 20px;
+    text-align: center;
+    width: 25px;
+}
+
+.trans-circle span {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.trans-circle-inc {
+    color: #878787;
+    border: 2px solid #878787;
+}
+
+.trans-circle-com {
+    background-color: #00a388;
+    border: 2px solid #00a388;
+    color: #fff;
+}
+
+.trans-btn-wrapper button:first-child {
+    margin-bottom: 6px;
 }
 
 .transaction-right-content button {
@@ -171,7 +250,7 @@
     border-left: 0;
     border-top: 0;
     border-right: 0;
-    margin-bottom: 6px;
+    padding: 9px 12px;
 }
 
 .img-completed,
@@ -180,18 +259,17 @@
     background-repeat: no-repeat;
     display: inline-block;
     margin-right: 5px;
-    height: 21px;
+    height: 18px;
     vertical-align: bottom;
     width: 20px;
-    
 }
 
 .img-completed {
-    background-position: -7px 0px;
+    background-position: -7px -2px;
 }
 
 .img-give-feedback {
-    background-position: -30px 0px;
+    background-position: -30px -2px;
 }
 
 .btn.btn-default-1:hover .img-give-feedback {
@@ -206,7 +284,7 @@
     background-color: #f4f4f4;
     border-radius: 4px;
     margin-bottom: 12px;
-    padding: 14px 0;
+    padding: 14px 8px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
 }
@@ -245,9 +323,11 @@
 
 .transac-item-consignee-name {
     display: inline-block;
-    text-overflow: ellipsis;
-    max-width: 145px;
+    font-weight: 900;
+    max-width: 130px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
     white-space: nowrap;
     width: 100%;
 }
@@ -282,7 +362,8 @@
     text-align: left;
     top: 25px;
     right: 0;
-    width: 390px;
+    max-width: 390px;
+    width: 100%;
 }
 
 .view-delivery-details strong {
@@ -301,4 +382,144 @@
 
 .view-delivery-details .col-md-6 span {
     width: 49%;
+}
+
+.item-list-last-prod .info-main-cont {
+    border-bottom: none;
+}
+
+/** ----------- Responsive CSS style ------------**/
+@media screen and (min-width: 768px) {
+    .view-delivery-details {
+        min-width: 390px;
+    }
+
+}
+
+@media (min-width: 991px) and (max-width: 1200px) {
+    .trans-left-panel .div-product-image {
+        height: 145px;
+        width: 145px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .trans-left-panel .div-product-image {
+        height: 185px;
+        width: 185px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 66%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 76%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .trans-left-panel {
+        margin-top: 120px;
+    }
+    .trans-right-panel {
+        position: absolute;
+    }
+
+    .transaction-profile-wrapper {
+        float: left;
+        width: 50%;
+    }
+
+    .trans-left-panel .info-main-cont {
+        margin-top: 0;
+    }
+
+    .trans-btn-wrapper {
+        float: left;
+        padding: 0 5%;
+        width: 50%;
+    }
+
+    .transaction-right-content .view-delivery-details {
+        left: 0;
+    }
+
+    .transaction-right-content .view-delivery-details:before {
+        left: 40%;
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .trans-left-panel {
+        margin-top: 180px;
+    }
+
+    .transac-title div {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .transac-title div:last-child {
+        margin-bottom: 0px;
+    }
+
+    .transac-title span {
+        display: inline-block;
+        width: 115px;
+    }
+
+    .transaction-profile-wrapper {
+        float: none;
+        width: 100%;
+    }
+
+    .trans-left-panel .div-product-image {
+        height: 75px;
+        width: 75px;
+    }
+
+    .trans-btn-wrapper {
+        float: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    .trans-btn-wrapper button.btn {
+        float: left;
+        width: 48%;
+    }
+
+    .trans-btn-wrapper button:first-child {
+        margin-right: 4%;
+    }
+
+    .transaction-right-content .view-delivery-details {
+        right: 0;
+        margin: auto;
+    }
+
+    .transaction-right-content .view-delivery-details:before {
+        left: 50%;
+    }
+
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 66%;
+    }
 }
