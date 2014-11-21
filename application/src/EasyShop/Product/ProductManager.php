@@ -565,10 +565,10 @@ class ProductManager
             }
 
             foreach ($categoryProductIds as $key => $prodId) {
-                $discountedPrice = $this->promoManager->hydratePromoDataExpress($prodId);
+                $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
                 $lprice = ($lprice !== "") ? $lprice : 0;
                 $uprice = ($uprice !== "") ? $uprice : 0;
-                if($discountedPrice >= $lprice && $discountedPrice <= $uprice) {
+                if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
                     $categoryProductIds[] = $prodId;
                 }
                 else {
