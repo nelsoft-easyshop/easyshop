@@ -1216,27 +1216,53 @@ body{
 }
 
 .thumbnails-img-container {
-    margin-left: -35px;
+    margin-left: -15px;
 }
 
-.slideshow {
-    height: 502px !important;
+.jcarousel {
+    height: 490px !important;
     margin: auto;
     overflow: hidden;
     position: relative;
 }
 
-.slideshow a {
-    border:1px solid #e0e0e0;
-    margin-bottom: 10px;
-    height: 118px;
-    width: 110px;
-    position: relative !important;
+#thumblist {
+    clear:both;
+    list-style: none;
+    position: absolute;
+    right: 0;
 }
 
-.slideshow img {
+#thumblist li {
+    background-color: #FFFFFF;
+    float: none;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 118px;
+    width: 80px;
+}
+
+#thumblist li a {
+    border:1px solid #e0e0e0;
+    display: block;
+    height: 118px;
+    margin-bottom: 10px;
+    position: relative !important;
+    width: 80px;
+}
+
+#thumblist li a:hover {
+    border:1px solid #909090;
+}
+
+#thumblist li a.zoomThumbActive {
+    border:1px solid #909090;
+}
+
+#thumblist li a img {
     max-height: 116px;
-    max-width: 108px;
+    max-width: 76px;
     width: auto;
     height: auto;
     position: absolute;
@@ -1247,30 +1273,18 @@ body{
     margin: auto;
 }
 
-.cycle-pager {
-    position: static;
-    margin-top: 5px;
-}
-
-.cycle-carousel-wrap {
-    left: 4px !important;
-}
-
-div.vertical {
-    width: 118px;
-}
-
-.thumbnails-img-container .center {
+.carousel-nav-btn-wrapper {
     border-radius: 4px;
-    border:1px solid #e2e2e2;
+    border: 1px solid #e2e2e2;
     height: 31px;
     line-height: 30px;
     margin: 10px auto;
-    width: 110px;
+    width: 80px;
 }
 
-.thumbnails-img-container .center #prev,
-.thumbnails-img-container .center #next {
+.jcarousel-control-prev,
+.jcarousel-control-next {
+    cursor: pointer;
     opacity: 1;
     -webkit-transition: none;
     -moz-transition:    none;
@@ -1278,28 +1292,33 @@ div.vertical {
      transition:        none;
 }
 
-.thumbnails-img-container .center #prev {
+.jcarousel-control-prev {
     border-right:1px solid #e2e2e2;
-    background: url(../images/sprites/sprite.png) no-repeat 3px -418px;
+    background: url(../images/sprites/sprite.png) no-repeat -3px -418px;
     display: inline-block;
     text-indent: -99999px;
-    width: 53px;
+    width: 40px;
     filter: none !important;
 }
 
-.thumbnails-img-container .center #prev:hover {
-    background-position: -81px -418px;
+.jcarousel-control-prev:hover {
+    background-position: -87px -418px;
 }
 
-.thumbnails-img-container .center #next {
-    background: url(../images/sprites/sprite.png) no-repeat -37px -418px;
+.jcarousel-control-next {
+    background: url(../images/sprites/sprite.png) no-repeat -45px -418px;
     display: inline-block;
     text-indent: -99999px;
-    width: 50px;
+    width: 33px;
 }
 
-.thumbnails-img-container .center #next:hover {
-    background-position: -121px -418px;
+.jcarousel-control-next:hover {
+    background-position: -129px -418px;
+}
+
+.jcarousel-control-prev.inactive,
+.jcarousel-control-next.inactive {
+    cursor: default;
 }
 
 /** ---- slider css --- **/
@@ -1392,8 +1411,6 @@ div.vertical {
     right: 0;
     z-index: 9999;
 }
-
-
 
 .prod-availability-container {
     font-weight: 900;
@@ -1643,11 +1660,11 @@ div.vertical {
 }
 
 #mobile-product-gallery .owl-wrapper-outer.autoHeight {
+    border:1px solid #e2e2e2;
     z-index: 9;
 }
 
 #mobile-product-gallery .owl-wrapper .owl-item  div {
-    border:1px solid #e2e2e2;
     text-align: center;
 }
 
@@ -1852,6 +1869,39 @@ div.vertical {
 }
 
 @media (min-width : 1200px) {
+    #thumblist li {
+        width: 110px;
+    }
+
+    #thumblist li a {
+        width: 110px;
+    }
+
+    #thumblist li a img {
+        max-width: 108px;
+    }
+
+    .carousel-nav-btn-wrapper {
+        width: 110px;
+    }
+
+    .jcarousel-control-prev {
+        background-position: 3px -418px;
+        width: 53px;
+    }
+    .jcarousel-control-prev:hover {
+        background-position: -81px -418px;
+    }
+
+    .jcarousel-control-next {
+        background: url(../images/sprites/sprite.png) no-repeat -37px -418px;
+        width: 50px;
+    }
+
+    .jcarousel-control-next:hover {
+        background-position: -121px -418px;
+    }
+
     .prod-border-right {
         border-right: 1px solid #e0e0e0;
     }
