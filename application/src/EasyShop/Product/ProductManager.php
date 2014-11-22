@@ -567,6 +567,7 @@ class ProductManager
             }
 
             if($lprice !== "" && $uprice !== "") {
+
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
 
@@ -596,7 +597,31 @@ class ProductManager
             }
             $categoryProducts[] = $product;
         }
-        $productCount = ($isFiltered) ? count($categoryProducts) : $productCount;
+
+        if($isFiltered) {
+            $arrCollectionProducts = new ArrayCollection($categoryProducts);
+            $criteria = new Criteria();  
+            // Generate orderby criteria - Implemented to handle multiple conditions
+            $criteriaOrderBy = array();
+            foreach($orderBy as $sortBy=>$sort){
+                if($sort === "ASC"){
+                    $criteriaOrderBy[$sortBy] = Criteria::ASC;
+                }
+                else{
+                    $criteriaOrderBy[$sortBy] = Criteria::DESC;
+                }
+            }
+            $criteria->orderBy($criteriaOrderBy);
+            // Count product result after filtering
+            $productCount = count($arrCollectionProducts->matching($criteria));
+
+            // Filter number of results (pagination)
+            $criteria->setFirstResult($page)
+                    ->setMaxResults($productLimit);
+
+            // Push products to be displayed
+            $categoryProducts = $arrCollectionProducts->matching($criteria);                                  
+        }
 
         // Generate result array
 
