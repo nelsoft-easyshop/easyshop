@@ -548,16 +548,17 @@ class ProductManager
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
                                                    ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);
+                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
                     break;
             }        
             $isFiltered = false;    
         }
         else{
+              
             switch( $catType ){
                 case "custom":
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId);
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition);
                     break;
                 default:
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
@@ -572,19 +573,16 @@ class ProductManager
                     if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
                         $filteredProducts[] = $prodId;
                     }
+                    else {
+                        unset($categoryProductIds[$prodId]);
+                    }
                 }
-                $isFiltered = true;  
             }
-            else {
-                $isFiltered = false;
-            }
-
-             
+            $isFiltered = true;  
         }
-        $categoryIds = ($isFiltered) ? $filteredProducts : $categoryProductIds;
 
         // Fetch product object and append image
-        foreach($categoryIds as $productId){
+        foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
                                 ->getDefaultImage($productId);
@@ -598,7 +596,7 @@ class ProductManager
             }
             $categoryProducts[] = $product;
         }
-        $productCount = count($categoryIds);
+        $productCount = ($isFiltered) ? count($categoryProducts) : $productCount;
 
         // Generate result array
 
