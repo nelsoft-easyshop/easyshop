@@ -567,19 +567,20 @@ class ProductManager
                     break;
             }
 
-            if($lprice !== "" && $uprice !== "") {
 
-                foreach ($categoryProductIds as $key => $prodId) {
-                    $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
 
-                    if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                        continue;
-                    }
-                    else {
-                        unset($categoryProductIds[$key]);
-                    }
+            foreach ($categoryProductIds as $key => $prodId) {
+                $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
+                $isForlPrice = (bool) ($discountedPrice >= floatval($lprice));
+                $isForuPrice = (bool) ($discountedPrice <= floatval($uprice));
+
+                $isWithinRange = ($lprice !== "" && $uprice !== "") ? (($isForlPrice && $isForuPrice) ? true : false) : 
+                                                                    (($lprice !== "") ? ($isForlPrice ? true : false) : ($isForuPrice ? true : false));
+                if(!$isWithinRange) {
+                    unset($categoryProductIds[$key]);
                 }
             }
+
             $isFiltered = true;  
         }
 
