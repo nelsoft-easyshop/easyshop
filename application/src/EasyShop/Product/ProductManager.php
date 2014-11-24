@@ -567,14 +567,14 @@ class ProductManager
                     break;
             }
 
-            if($lprice !== "" && $uprice) {
+            if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
                     $isForlPrice = (bool) ($discountedPrice >= floatval($lprice));
                     $isForuPrice = (bool) ($discountedPrice <= floatval($uprice));
 
                     $isWithinRange = ($lprice !== "" && $uprice !== "") ? (($isForlPrice && $isForuPrice) ? true : false) : 
-                                                                        (($lprice !== "") ? ($isForlPrice ? true : false) : ($isForuPrice ? true : false));
+                                                                        (($lprice !== "") ? ($isForlPrice ? $isForlPrice : false) : ($isForuPrice ? $isForuPrice : false));
                     if(!$isWithinRange) {
                         unset($categoryProductIds[$key]);
                     }
