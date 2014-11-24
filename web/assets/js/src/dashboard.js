@@ -490,5 +490,17 @@
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
     
+    
+    $('.hide-date').click(function() {
+        $('#th-date').toggle();
+        $('.td-date').toggle();
+    });
+    
+    $(function() {
+        $( "#birthday-picker" ).datepicker({
+            changeMonth: true,
+			changeYear: true
+        });
+    });
 }(jQuery));
 
