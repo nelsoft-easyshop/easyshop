@@ -489,7 +489,7 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
- 
+    
     $('.hide-date').click(function() {
         $('#th-date').toggle();
         $('.td-date').toggle();
@@ -501,12 +501,10 @@
 			changeYear: true
         });
     });
-
+    
     $('#give-feedback').click(function (e) {
         $('#feedback-modal').modal();
         $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
         return false;
     });
-
 }(jQuery));
-
