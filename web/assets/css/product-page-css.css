@@ -1389,7 +1389,7 @@ body{
     border: none;
     cursor: pointer;
     padding: 7px 12px;
-    width: 108%;
+    width: 110%;
 }
 
 .prod-select-con select::-ms-expand {
@@ -1615,6 +1615,10 @@ body{
     width: 100%;
 }
 
+.prod-share-container .ui-form-control img {
+    vertical-align: top;
+}
+
 .prod-share-container .ui-form-control span {
     display: inline-block;
     line-height: 33px;
@@ -1788,6 +1792,7 @@ body{
     }
 
     .prod-select-con.shipment-select {
+        float: left;
         padding: 0 !important;
         width: 73%;
     }
@@ -1820,7 +1825,14 @@ body{
         width: 100%;
     }
 
+    .txt-shipment {
+        float: none;
+    }
+
     /**product footer **/
+    .footer-primary .footer-ac {
+        display: block;
+    }
     .footer-primary.footer-secondary {
         padding: 43px 0 35px 0;
     }
@@ -1839,9 +1851,18 @@ body{
     .footer-secondary + .footer-bottom-content  {
         display: none;
     }
+
+    .col-xs-12.tex-center.footer-ac {
+        padding: 0;
+    }
+
+    .col-md-6.footer-newsletter {
+        display: inline-block;
+        padding: 0;
+    }
 }
 
-@media (min-width : 410px) {
+@media (min-width : 430px) {
     .prod-share-container a,
     .prod-share-container .twitter-lnk {
         display: inline-block;
@@ -1946,6 +1967,10 @@ body{
     .pad-top-23{
         padding-top:5px !important;
     }
+
+    .footer-secondary .footer-ac a {
+        font-size: 20px;
+    }
 }
 
 @media screen and (max-width : 480px) {
@@ -1954,7 +1979,7 @@ body{
     }
 }
 
-@media screen and (max-width : 409px) {
+@media screen and (max-width : 430px) {
     .prod-share-container .ui-form-control {
         border: none;
         border-radius: 40px;
@@ -2004,4 +2029,14 @@ body{
         padding-right: 46px;
     }
 
+}
+
+@media (min-width: 991px) and (max-width: 1200px) {
+    .ui-form-control {
+        font-size: 12px;
+    }
+
+    .prod-share-container .ui-form-control span {
+        width: 65%;
+    }
 }
