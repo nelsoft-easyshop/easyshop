@@ -1,3 +1,5 @@
+<link type="text/css" href='/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<link type="text/css" href='/assets/css/jquery-ui.theme.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
         <ul>
@@ -31,8 +33,9 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Birthday : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info" id="datepicker" placeholder="Pick the date of your birthday here">
+                        <input type="text" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
                     </div>
+
                 </div>
                 
                 <div class="form-group">
