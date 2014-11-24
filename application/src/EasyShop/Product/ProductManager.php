@@ -529,8 +529,8 @@ class ProductManager
         $categoryProducts = array();
 
         // Condition parameters passed
-        $currentPage = int($page) <= 0 ? 0 : (int($page)-1);
-        $page = int($page) <= 0 ? 0 : (int($page)-1) * $productLimit;
+        $currentPage = (int) $page <= 0 ? 0 : $page-1;
+        $page = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
         $condition = strval($condition);
 
         $lprice = str_replace(",", "", (string)$lprice);
