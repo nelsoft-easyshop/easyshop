@@ -559,11 +559,11 @@ class ProductManager
             switch( $catType ){
                 case "custom":
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition,  $productLimit, $page, $orderBy);
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
                 default:
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $productLimit, $page, $orderBy);
+                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
             }
 
