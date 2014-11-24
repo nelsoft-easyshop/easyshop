@@ -128,7 +128,7 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id,type,datatype_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
             $rsm->addScalarResult('head_id', 'head_id');
@@ -151,8 +151,8 @@ class EsProductRepository extends EntityRepository
                     , '0' as is_other
                     , a.attr_price as price
                     , '0' as image_id
-                    ,'specific' as 'type'
-                    , b.datatype_id as 'datatype_id'
+                    ,'specific' as type
+                    , b.datatype_id as datatype_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -171,8 +171,8 @@ class EsProductRepository extends EntityRepository
                     , '1' as is_other
                     , b.value_price as price
                     , b. product_img_id as price
-                    , 'option' as 'type'
-                    , '0' as 'datatype_id'
+                    , 'option' as type
+                    , '0' as datatype_id
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
