@@ -90,7 +90,7 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $prodLimit, $page = 0, $orderBy = array("idProduct" => "DESC"))
+    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = array("idProduct" => "DESC"))
     {
         $productIds = array();
 

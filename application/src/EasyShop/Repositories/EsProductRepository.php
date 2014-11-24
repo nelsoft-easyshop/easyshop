@@ -662,7 +662,7 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC"))
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
     {
         $em = $this->_em;
         $result = array();
