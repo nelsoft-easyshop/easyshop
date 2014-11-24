@@ -500,12 +500,32 @@
             changeMonth: true,
 			changeYear: true
         });
+        
+        $( "#sales-end-date" ).datepicker({
+            changeMonth: true,
+			changeYear: true
+        });
+        
+        $( "#sales-start-date" ).datepicker({
+            changeMonth: true,
+			changeYear: true
+        });
+        
+        $( "#payout-end-date" ).datepicker({
+            changeMonth: true,
+			changeYear: true
+        });
+        
+        $( "#payout-start-date" ).datepicker({
+            changeMonth: true,
+			changeYear: true
+        });
     });
     $('#give-feedback').click(function (e) {
         $('#feedback-modal').modal();
         $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
         return false;
     });
-
+    
 }(jQuery));
 
