@@ -529,8 +529,8 @@ class ProductManager
         $categoryProducts = array();
 
         // Condition parameters passed
-        $splicedPages = intval($page) <= 0 ? 0 : (intval($page)-1);
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $productLimit;
+        $currentPage = int($page) <= 0 ? 0 : (int($page)-1);
+        $page = int($page) <= 0 ? 0 : (int($page)-1) * $productLimit;
         $condition = strval($condition);
 
         $lprice = str_replace(",", "", (string)$lprice);
@@ -587,7 +587,7 @@ class ProductManager
             $productCount = count($categoryProductIds);
             if(!empty($categoryProductIds)) {
                 $filteredCategoryProducts = array_chunk($categoryProductIds, $productLimit);            
-                $categoryProductIds = $filteredCategoryProducts[$splicedPages];
+                $categoryProductIds = $filteredCategoryProducts[$currentPage];
             }
         }
         // Fetch product object and append image
