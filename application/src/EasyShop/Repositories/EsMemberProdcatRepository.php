@@ -90,9 +90,16 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition)
+    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = array("idProduct" => "DESC"))
     {
         $productIds = array();
+
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
 
         $em = $this->_em;
         $dql = "SELECT pc,p
@@ -105,8 +112,9 @@ class EsMemberProdcatRepository extends EntityRepository
                     AND p.isDelete = 0
                     AND p.isDraft = 0";
         if($condition !== "") {
-            $dql .= "AND p.condition = :condition";
+            $dql .= "AND p.condition = :condition ";
         }
+        $dql .= "ORDER BY ".$orderCondition;
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_id', $memcatId);

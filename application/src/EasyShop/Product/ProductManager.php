@@ -529,7 +529,8 @@ class ProductManager
         $categoryProducts = array();
 
         // Condition parameters passed
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $productLimit;
+        $currentPage = int($page) <= 0 ? 0 : (int($page)-1);
+        $page = int($page) <= 0 ? 0 : (int($page)-1) * $productLimit;
         $condition = strval($condition);
 
         $lprice = str_replace(",", "", (string)$lprice);
@@ -558,11 +559,11 @@ class ProductManager
             switch( $catType ){
                 case "custom":
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition);
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
                 default:
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition);
+                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
             }
 
@@ -572,16 +573,23 @@ class ProductManager
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
 
                     if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                        $filteredProducts[] = $prodId;
+                        continue;
                     }
                     else {
-                        unset($categoryProductIds[$prodId]);
+                        unset($categoryProductIds[$key]);
                     }
                 }
             }
             $isFiltered = true;  
         }
 
+        if($isFiltered) {
+            $productCount = count($categoryProductIds);
+            if(!empty($categoryProductIds)) {
+                $filteredCategoryProducts = array_chunk($categoryProductIds, $productLimit);            
+                $categoryProductIds = $filteredCategoryProducts[$currentPage];
+            }
+        }
         // Fetch product object and append image
         foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
@@ -598,33 +606,7 @@ class ProductManager
             $categoryProducts[] = $product;
         }
 
-        if($isFiltered) {
-            $arrCollectionProducts = new ArrayCollection($categoryProducts);
-            $criteria = new Criteria();  
-            // Generate orderby criteria - Implemented to handle multiple conditions
-            $criteriaOrderBy = array();
-            foreach($orderBy as $sortBy=>$sort){
-                if($sort === "ASC"){
-                    $criteriaOrderBy[$sortBy] = Criteria::ASC;
-                }
-                else{
-                    $criteriaOrderBy[$sortBy] = Criteria::DESC;
-                }
-            }
-            $criteria->orderBy($criteriaOrderBy);
-            // Count product result after filtering
-            $productCount = count($arrCollectionProducts->matching($criteria));
-
-            // Filter number of results (pagination)
-            $criteria->setFirstResult($page)
-                    ->setMaxResults($productLimit);
-
-            // Push products to be displayed
-            $categoryProducts = $arrCollectionProducts->matching($criteria);                                  
-        }
-
         // Generate result array
-
         $result = array(
             'products' => $categoryProducts,
             'filtered_product_count' => $productCount
