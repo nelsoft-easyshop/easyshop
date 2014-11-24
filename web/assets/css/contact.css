@@ -422,7 +422,7 @@ section {
 
 .fa-star-rate,.fa-star-rate-static{
     color: #d4d4d4;
-    font-size: 23px;
+    font-size: 20px;
     transition: all 0.5s ease;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -444,7 +444,7 @@ section {
 .td-title-1{
     border-right: solid #e2e2e2 1px;
     vertical-align:middle;
-    width: 150px;
+    width: 165px;
 }
 .td-title-2{
     border-right: solid #e2e2e2 1px;
@@ -497,6 +497,10 @@ section {
    border-radius: 4px !important;
 }
 
+.row-rating{
+    margin-top: 20px;
+}
+
 .td-feedback-criteria{
     padding-right: 22px;
     padding-bottom: 6px;
@@ -504,7 +508,7 @@ section {
 }
 
 .star-feed{
-    font-size: 24px;
+    font-size: 20px;
     padding-right: 0px;
 }
 

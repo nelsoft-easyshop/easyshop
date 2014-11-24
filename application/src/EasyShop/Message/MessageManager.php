@@ -36,7 +36,6 @@ class MessageManager {
         $message->setFrom($senderObj);
         $message->setMessage($userMessage);
         $message->setTimeSent(new DateTime('now'));
-        $message->setOpened(0);
 
         $this->em->persist($message);
         $this->em->flush();

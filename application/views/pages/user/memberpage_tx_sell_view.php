@@ -12,7 +12,7 @@
 							<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 						</div>
 						<div class="transac_title_col3">
-							<strong>Sold to: </strong> <a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo $transact['buyer']?></a> <br />
+							<strong>Sold to: </strong> <a href="/<?php echo $transact['buyer_slug']?>"><?php echo $transact['buyer']?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
@@ -72,13 +72,13 @@
 						<div class="transac_prod_first">
 							<div class="img_transac_prod_con">
 								<span class="img_transac_prod">
-									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+									<img src="/<?php echo $product['product_image_path'];?>">
 								</span>
 							</div>
 							<div class="info_transac_prod_con">
 								<div class="title_top_transac_table">
 									<span class="title_top_transac_col1">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+										<a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 									</span>
 									<span class="title_top_transac_col2">
 										Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -162,7 +162,7 @@
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
 										?>
-										<input type="button" value="Cancel Order" class="transac_response_btn tx_return">
+										<input type="button" value="Cancel Order" class="transac_response_btn tx_return enabled">
 										<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -173,7 +173,7 @@
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
 										?>
-										<input type="button" value="Completed" class="transac_response_btn tx_cod">
+										<input type="button" value="Completed" class="transac_response_btn tx_cod enabled">
 										<input type="hidden" name="cash_on_delivery" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">

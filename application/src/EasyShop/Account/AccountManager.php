@@ -239,7 +239,7 @@ class AccountManager
         $hashedPassword = $this->hashMemberPassword($username, $password);
 
         if($member->getUsername() === $username && $member->getPassword() === $hashedPassword) {
-            $this->migrateMemberPasswordToBcrypt($member->getIdMember(), $this->bcryptEncoder->encodePassword($password));
+            $this->updatePassword($member->getIdMember(), $password);
             $isAuthenticated = true;
         }
         else {
@@ -255,12 +255,13 @@ class AccountManager
      * @param int $memberId
      * @param string $bCryptPassword
      */
-    public function migrateMemberPasswordToBcrypt($memberId, $bCryptPassword)
+    public function updatePassword($memberId, $password)
     {   
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                         ->findOneBy(['idMember' => $memberId]);
-        $member->setPassword($bCryptPassword);
+        $member->setPassword($this->bcryptEncoder->encodePassword($password));
         $this->em->flush();
+        return true;
     }
 
     /**

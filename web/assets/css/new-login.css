@@ -150,11 +150,11 @@ strong > a{
 }
 
 .form-merge{
-    margin-top: 56px;
+    margin-top: 4px;
 }
 
 .form-merge-2{
-    margin-top: 77px;
+    margin-top: 4px;
 }
 
 .label-merge{
@@ -186,15 +186,12 @@ strong > a{
 }
 
 .div-search-merge-account{
-    display: none;
     border: solid #c9c9c9 1px;
-    margin: 10px 0px;
+    margin: 0px 0px;
+    margin-bottom: 20px;
     padding: 10px;
-    position: absolute;
-    top: 162px;
     background: #fff;
-    width: 92%;
-    left: 17px;
+    width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -301,9 +298,17 @@ strong > a{
     margin-top: 10px;
 }
 
+.check-availability{
+    margin-top: 5px;
+}
+
+.col-check-1{
+    padding-right: 0px;
+}
+
 @media only screen and (max-width: 992px) {
     .form-merge, .form-merge-2{
-        margin-top: 10px;
+        margin-top: 0px;
     }
 
     .border-hr{
@@ -316,11 +321,7 @@ strong > a{
     .border-vr{
         display: none;
     }
-
-    .div-search-merge-account{
-        top: 82px;
-    }
-
+    
     .merge-message{
         margin-top: 15px;
     }
@@ -329,6 +330,9 @@ strong > a{
         margin-top: 0px !important;
     }
 
+    .col-check-1{
+        padding-right: 15px;
+    }
 }
 @media only screen and (max-width: 768px) {
     .modal-text-content{
@@ -346,10 +350,20 @@ strong > a{
     .div-merge-container{
         padding: 10px;
     }
-}
 
-@media only screen and (max-width: 510px) {
-    .div-search-merge-account{
-        top: 106px !important;
+    .merge-message{
+        font-size: 14px;
     }
+}
+.username-restrictions{
+    display: none;
+}
+.username-restrictions h5, ul{
+    color: #e3604b;
+    font-weight: 900;
+    margin-top: 4px;
+}
+.auto-height{
+    height: auto !important;
+    margin-top: 1%;
 }

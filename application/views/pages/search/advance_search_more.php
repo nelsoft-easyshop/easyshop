@@ -11,7 +11,7 @@
 		for ($i=0; $i < sizeof($items); $i++): 
 ?>
 			<div class="<?php echo $class;?>"> 
-				<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+				<a href="<?php echo "/item/" . $items[$i]['slug']; ?>">
 					<span class="prod_img_wrapper">
 						<?php if((intval($items[$i]['is_promote']) == 1) && isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>					  
 						      <span class="cd_slide_discount">
@@ -20,12 +20,12 @@
 						<?php endif; ?>
 					
 						<span class="prod_img_container">
-							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']."categoryview/" . $items[$i]['file']; ?>">
+							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="/<?php echo $items[$i]['path']."categoryview/" . $items[$i]['file']; ?>">
 						</span>
 					</span>	
 				</a>
 				<h3>
-					<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+					<a href="<?php echo "/item/" . $items[$i]['slug']; ?>">
 						<?php echo html_escape($items[$i]['product_name']); ?>
 					</a>
 				</h3>

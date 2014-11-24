@@ -1,5 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,700,300);
 @font-face
 {
 font-family: Helvetica;
@@ -18,13 +18,15 @@ font-weight: bold;
 {
 font-family: Helvetica;
 src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
-font-weight: 900;
+font-weight: 600;
+
 }
 
 /*** global style ***/
 html, body{
-    font-family: 'Helvetica', Arial, Calibri;
+    font-family: 'Helvetica', 'Open Sans', Arial, Calibri;
     background: #ebedf0;
+    letter-spacing: 0.5px;
 }
 
 section {
@@ -201,7 +203,7 @@ textarea {
 .vendor-login-con {
     background-color: #4370cc;
     border-radius: 4px;
-    display: table;
+    display: inline-block;
     color: #fff;
     font-size: 12px;
     height: 33px;
@@ -209,15 +211,16 @@ textarea {
     margin: 0 auto;
     max-width: 200px;
     min-width: 125px;
-    padding: 0 10px;
+    padding: 0 35px 0px 10px;
     position: relative;
     text-align: left;
-    width: 70%;
+/*    width: 70%;*/
 }
 
 .vendor-login-con.vendor-out-con {
-    max-width: 230px;
+    max-width: 245px;
     margin-top: 1px;
+    padding: 0 9px;
     width: 100%; 
 }
 
@@ -240,7 +243,9 @@ textarea {
 
 .vendor-login-con a {
     color: #fff;
+    display: inline-block;
     font-weight: bold;
+/*    float: left;*/
     vertical-align: middle;
 }
 
@@ -250,19 +255,18 @@ textarea {
 }
 
 .user-login img {
-    display: table-cell;
-    vertical-align: middle;
-    padding-top: 5px;
+    display: inline-block;
     margin-right: 5px;
+/*    padding-top: 5px;*/
+    vertical-align: middle;
 }
 
-.vendor-login-name {
-    display: table-cell;
+.vendor-login-name span {
+    display: inline-block;
     font-weight: bold;
     height: 34px;
-    min-width: 85px;
-    max-width: 145px;
-    padding-right: 30px;
+    min-width: 67px;
+    max-width: 110px;
     overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
@@ -290,12 +294,14 @@ textarea {
 }
 
 .vendor-login-con .nav-dropdown {
+    position: absolute;
     right: 0px;
     width: 220px;
 }
 
 .vendor-login-con .nav-dropdown li a {
     color: #565656;
+    float: none;
 }
 
 .vendor-login-con .nav-dropdown li a:hover {
@@ -863,7 +869,7 @@ textarea {
 .sticky-nav li:nth-child(3) input,
 .search-container input {
     border-radius: 0 4px 4px 0;
-    font-size: 12px;
+    font-size: 14px;
     height: 34px;
     padding: 4px 12px;
     vertical-align: middle;
@@ -1245,7 +1251,7 @@ td.td-view.p-view2.color-default{
 }
 
 .input-filter-price{
-    width: 108px;
+    width: 105px;
     padding: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -1733,6 +1739,7 @@ td.td-view.p-view2.color-default{
 }
 
 .footer-primary input[type="text"] {
+    font-weight: normal;
     height: 35px;
     max-width: 373px;
     vertical-align: middle;
@@ -1742,6 +1749,23 @@ td.td-view.p-view2.color-default{
 .footer-primary input[type="submit"] {
     font-weight: bold;
     text-transform: uppercase;
+}
+
+.footer-primary .ui-form-control::-webkit-input-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control:-moz-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control::-moz-placeholder {
+    font-size: 16px;
+    font-weight: 900;
+}
+.footer-primary .ui-form-control:-ms-input-placeholder {
+    font-size: 16px;
+    font-weight: 900;
 }
 
 .social-media-wrapper a:first-child {
@@ -1817,6 +1841,23 @@ td.td-view.p-view2.color-default{
     .vendor-main {
         top: 44px;
     }*/
+
+    .user-nav-dropdown:after,
+    .nav-dropdown:after,
+    .user-nav-dropdown,
+    .user-nav-dropdown,
+    .nav-dropdown:before {
+      display: block;
+    }
+
+    ul.nav-dropdown {
+        border-radius: 4px;
+        display: none;
+    }
+
+    .msg_countr {
+        margin-left: 0;
+    }
     
 }
 

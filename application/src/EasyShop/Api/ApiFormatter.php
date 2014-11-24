@@ -35,33 +35,39 @@ class ApiFormatter
     private $productManager;
 
     /**
+     * The review product service
+     *
+     * @var EasyShop\Review\ReviewProduct
+     */
+    private $reviewProductService;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$cartManager)
+    public function __construct($em,$collectionHelper,$productManager,$cartManager,$reviewProductService)
     {
         $this->em = $em;  
         $this->collectionHelper = $collectionHelper;
         $this->productManager = $productManager;
         $this->cartManager = $cartManager;
         $this->cartImplementation = $cartManager->getCartObject();
+        $this->reviewProductService = $reviewProductService;
     }
 
-    public function formatItem($productId)
+    public function formatItem($productId,$isItemView = false)
     {
-      
-
         $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = array(
-                'name' => $product->getName(),
+                'name' => utf8_encode($product->getName()),
                 'slug' => $product->getSlug(),
                 'description' => $product->getDescription(),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
                 'price' => floatval($product->getFinalPrice()),
-                'original_price' => floatval($product->getFinalPrice()),
+                'original_price' => floatval($product->getOriginalPrice()),
             );
 
         // get product images
@@ -69,9 +75,14 @@ class ApiFormatter
         $prodImgObj = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                     ->findBy(['product' => $productId]);
 
+        $imageType = 'categoryview/';
+        if($isItemView){
+            $imageType = '';
+        }
+
         foreach ($prodImgObj as $key => $value) {
             $productImages[] = array(
-                                'product_image_path' => $value->getProductImagePath(),
+                                'product_image_path' => $value->getDirectory().$imageType.$value->getFilename(),
                                 'id' => $value->getIdProductImage(),
                             );
         }
@@ -148,11 +159,11 @@ class ApiFormatter
         }
 
         // get product quantity
-        $productQuantityObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->getProductInventoryDetail($productId);
+        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                     ->getProductInventoryDetail($productId);
 
         $temporaryArray = [];
-        foreach ($productQuantityObject as $key => $value) {
+        foreach ($productInventory as $key => $value) {
              if(!array_key_exists($value['id_product_item'],$temporaryArray)){
                 $temporaryArray[$value['id_product_item']] = array(
                                                             'quantity' => $value['quantity'],
@@ -192,48 +203,7 @@ class ApiFormatter
         }
 
         // get reviews 
-        $recentReview = []; 
-        $productReviewObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
-                                    ->getProductReview($productId);
-        if($productReviewObject){
-            $retrieve = array();
-            foreach ($productReviewObject as $key => $value) {
-                $retrieve[] = $value->getIdReview();
-            }
-
-            $productRepliesObject = $this->em->getRepository('EasyShop\Entities\EsProductReview')
-                                                ->getReviewReplies($productId,$retrieve);
-
-            foreach($productRepliesObject as $key=>$temp){
-                $temp->setReview(html_escape($temp->getReview()));
-            }
-
-            $i = 0;
-            foreach ($productReviewObject as $key => $value) { 
-                $recentReview[$i]['id_review'] = $value->getIdReview();
-                $recentReview[$i]['title'] = $value->getTitle();
-                $recentReview[$i]['review'] = $value->getReview();
-                $recentReview[$i]['rating'] = $value->getRating();
-                $recentReview[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
-                $recentReview[$i]['reviewer'] = $value->getMember()->getUsername();
-                $recentReview[$i]['replies'] = array();
-                $recentReview[$i]['reply_count'] = 0;
-
-                foreach($productRepliesObject as $reply){ 
-                    if($value->getIdReview() == $reply->getPReviewid()){  
-                        $recentReview[$i]['replies'][] = array(
-                                                    'id_review' => $reply->getIdReview(),
-                                                    'review' => $reply->getReview(),
-                                                    'rating' => $reply->getRating(),
-                                                    'datesubmitted' => $reply->getDatesubmitted()->format('Y-m-d H:i:s'),
-                                                    'reviewer' => $reply->getMember()->getUsername(),
-                                                );
-                        $recentReview[$i]['reply_count']++;
-                    }
-                }
-                $i++;
-            } 
-        }
+        $recentReview = $this->reviewProductService->getProductReview($productId);
 
         return array(
                 'productDetails' => $productDetails,
@@ -292,7 +262,7 @@ class ApiFormatter
                     'productId' =>  $cartItem['id'],
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
-                    'name' => $cartItem['name'],
+                    'name' => utf8_encode($cartItem['name']),
                     'quantity' => $cartItem['qty'], 
                     'originalPrice' => $cartItem['original_price'],
                     'finalPrice' => $cartItem['price'],  
@@ -323,7 +293,7 @@ class ApiFormatter
         }
 
         return array(
-                    'name' => $product->getName(), 
+                    'name' => utf8_encode($product->getName()), 
                     'slug' => $product->getSlug(),
                     'condition' => $product->getCondition(),
                     'discount' => floatval($product->getDiscountPercentage()),

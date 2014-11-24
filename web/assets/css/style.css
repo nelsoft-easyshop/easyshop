@@ -230,6 +230,36 @@ p {
     border:1px solid #a90020;
 }
 
+.btn {
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+
+.btn.btn-default-3 {
+    border-bottom: 2px solid #007c67 !important;
+    background-color: #00a388 !important;
+    color: #fff;
+}
+
+.btn.btn-default-3:hover {
+    border-bottom: 2px solid #006655 !important;
+    background-color: #02846f !important;
+    color: #fff;
+}
+
+.btn.btn-default-1 {
+    border: 2px solid #565656 !important;
+    background-color: #fff !important;
+    color: #565656 !important;
+}
+
+.btn.btn-default-1:hover {
+    background-color: #585a59 !important;
+    color: #fff !important;
+}
 
 /****** Font sizes ******/
 .f36 {
@@ -4240,7 +4270,7 @@ a:hover.tooltips span {
 }
 
 .post_item_srch_container {
-    margin:10px 0;
+    margin:16px 0;
 }
 
 .post_item_srch_container input[type="text"] {
@@ -5555,10 +5585,21 @@ div.sold_prod_container {
 /*	min-width: 185px;*/
 /*	margin-left: 20px;*/
 }
+
+
 .transac_response_btn:hover, .reject_btn:hover {
--webkit-box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
--moz-box-shadow:    inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
-box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
+    -moz-box-shadow:    inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
+    box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
+}
+
+
+.transac_response_btn.loading {
+    background-color: #4370cc;
+}
+
+.transac_response_btn.loading:hover {
+    background-color: #4370cc;
 }
 
 .dp_container {
@@ -7678,4 +7719,19 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     height:1em;
     font-size:0.85em;
     text-decoration: line-through;
+}
+
+.bulk_options.head{
+    display:inline-block;
+    float:right;
+    padding-top:10px;
+}
+
+.bulk_options > *{
+    cursor:pointer;
+}
+
+.shipping-days {
+    display: inline !important;
+    width: inherit !important;
 }
