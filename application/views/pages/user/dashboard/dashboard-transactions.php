@@ -434,7 +434,7 @@
                                     </div>
                                     <div class="trans-btn-wrapper">
                                          <button class="btn btn-default-1">Cancel order</button>
-                                        <button class="btn btn-default-1">Ship Item</button>
+                                        <button class="btn btn-default-1" id="ship-item">Ship Item</button>
                                     </div>
                                 </div>
                             </div>
@@ -1783,6 +1783,58 @@
         <span class="simplemodal-close btn btn-default-1">Cancel</span>
         <button class="btn btn-default-3">Submit</button>
     </div>
+</div>
+
+<div id="shipping-details">
+    <div class="shipping-details-wrapper">
+        <h1>Shipping details</h1>
+    </div>
+    <div class="col-xs-12 text-right">
+        20th November 2014
+    </div>
+    <div class="col-xs-12 pd-bttm-10"></div>
+    <div class="col-xs-12 shipping-details-con">
+        <div class="col-md-4">
+            Shipped by:
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="ui-form-control">
+        </div>
+        <div class="col-xs-12 pd-bttm-10"></div>
+        <div class="col-md-4">
+            Tracking Number:
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="ui-form-control">
+        </div>
+        <div class="col-xs-12 pd-bttm-10"></div>
+        <div class="col-md-4">
+            Delivery Date:
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="ui-form-control">
+        </div>
+        <div class="col-xs-12 pd-bttm-10"></div>
+        <div class="col-md-4">
+            Expected Date of Arrival:
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="ui-form-control">
+        </div>
+        <div class="col-xs-12">
+            <textarea placeholder="Write your comment..."></textarea>
+        </div>
+        <div class="clear"></div>
+        <div class="shipping-border"></div>
+        <div class="shipping-btns">
+            <div class="col-xs-12 padding-reset">
+                <span class="simplemodal-close btn btn-default-1">Edit</span>
+                <button class="btn btn-default-3">Save</button>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
 </div>
 
 

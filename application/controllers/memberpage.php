@@ -62,9 +62,14 @@ class Memberpage extends MY_Controller
         $data['homeContent'] = $this->fillCategoryNavigation();
         $data = array_merge($data, $this->fill_header());
         
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $footerData['facebook'] = $socialMediaLinks["facebook"];
+        $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-        $this->load->view('templates/footer_primary');
+        $this->load->view('templates/footer_primary', $footerData);
     }
 
     /**

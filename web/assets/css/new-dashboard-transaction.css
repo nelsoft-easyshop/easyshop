@@ -172,7 +172,8 @@
 
 #on-going-transaction .btn,
 #completed-transaction .btn,
-.feedback-btns .btn {
+.feedback-btns .btn,
+.shipping-btns .btn {
     border-left: none;
     border-right: none;
     border-top: none;
@@ -400,8 +401,17 @@
     max-height: 400px;
 }
 
-#feedback-modal {
+.shipping-details-container {
+    max-height: 550px;
+}
+
+#feedback-modal,
+#shipping-details {
     display: none;
+}
+
+#shipping-details .col-md-4 {
+    line-height: 34px;
 }
 
 .feedback-content {
@@ -410,7 +420,8 @@
     text-align: center;
 }
 
-.feedback-content h1 {
+.feedback-content h1,
+.shipping-details-container h1 {
     font-size: 24px;
     font-weight: bold;
     margin: 30px 0;
@@ -436,46 +447,65 @@
     vertical-align: middle;
 }
 
-.feedback-content textarea {
+.shipping-details-container .ui-form-control {
+    width: 100%;
+}
+
+.feedback-content textarea,
+.shipping-details-container textarea {
     background-color: #ececec;
     border: 1px solid #fff;
     border-radius: 4px;
     height: 130px;
-    margin: 30px 0;
     width: 100%;
 }
 
-.feedback-content textarea:focus {
+.feedback-content textarea {
+    margin: 30px 0;
+}
+
+.shipping-details-container textarea {
+    margin: 15px 0;
+}
+
+.feedback-content textarea:focus,
+.shipping-details-container textarea:focus {
     background-color: #fff;
     border: 1px solid #ececec;
 }
 
-.feedback-content textarea::-webkit-input-placeholder {
+.feedback-content textarea::-webkit-input-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
     font-size: 16px;
     text-transform: uppercase;
 }
 
-.feedback-content textarea:-moz-placeholder {
+.feedback-content textarea:-moz-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
     font-size: 16px;
     text-transform: uppercase;
 }
 
-.feedback-content textarea::-moz-placeholder {
+.feedback-content textarea::-moz-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
     font-size: 16px;
     text-transform: uppercase;
 }
 
-.feedback-content textarea:-ms-input-placeholder {
+.feedback-content textarea:-ms-input-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
     font-size: 16px;
     text-transform: uppercase;
 }
 
-.feedback-btns {
+.feedback-btns,
+.shipping-btns {
     margin-top: 30px;
     text-align: center;
 }
 
-.feedback-btns .btn {
+.feedback-btns .btn,
+.shipping-btns .btn {
     font-size: 15px;
     font-weight: 900;
     padding: 8px 12px;
@@ -483,8 +513,13 @@
     width: 100%;
 }
 
-.feedback-btns span {
+.feedback-btns span,
+.shipping-btns span {
     margin-right: 10px;
+}
+
+.shipping-border {
+    border-bottom: 1px solid #cecece;
 }
 
 /** ----------- Responsive CSS style ------------**/
@@ -503,6 +538,12 @@
     .feedback-container {
         min-width: 783px;
     }
+
+    .shipping-details-container {
+        min-width: 550px;
+        max-width: 550px;
+    }
+
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {
@@ -541,6 +582,11 @@
         margin-right: 0px;
         margin-bottom: 10px;
         text-align: left;
+    }
+
+    .shipping-details-con {
+        overflow-y: scroll;
+        height: 415px; 
     }
 }
 
