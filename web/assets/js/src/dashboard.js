@@ -489,6 +489,12 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-}(jQuery));
+
+    $('#give-feedback').click(function (e) {
+        $('#feedback-modal').modal();
+        $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
+        return false;
+    });
+
+    }(jQuery));
 

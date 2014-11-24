@@ -26,14 +26,10 @@
     background-color: #c2c2c2;
 }
 
-.btn.btn-cancel {
-    border-bottom: 
-}
-
 .btn.btn-inc,
 .btn.btn-inc:hover {
-    background-color: #878787;
-    border-bottom: 2px solid #878787;
+    background-color: #878787 !important;
+    border-bottom: 2px solid #878787 !important;
 }
 
 .trans-status-cod {
@@ -168,8 +164,18 @@
 .transaction-search {
     background: url(../images/img_search2.png) no-repeat 7px center;
     max-width: 300px;
+    margin-right: 12px;
     padding-left: 35px !important;
+    vertical-align: middle;
     width: 53%;
+}
+
+#on-going-transaction .btn,
+#completed-transaction .btn,
+.feedback-btns .btn {
+    border-left: none;
+    border-right: none;
+    border-top: none;
 }
 
 .on-going-transaction-list-bought,
@@ -388,12 +394,115 @@
     border-bottom: none;
 }
 
+/** ---------------- modal css ------------------**/
+
+.feedback-container {
+    max-height: 400px;
+}
+
+#feedback-modal {
+    display: none;
+}
+
+.feedback-content {
+    border-bottom: 1px solid #cecece;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.feedback-content h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 30px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.star-rating-wrapper {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.star-rating-wrapper:last-child {
+    margin-right: 0;
+}
+
+.feedback-content .star-label {
+    font-size: 13px;
+}
+
+.feedback-content .star-active,
+.feedback-content .star-stat {
+    vertical-align: middle;
+}
+
+.feedback-content textarea {
+    background-color: #ececec;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    height: 130px;
+    margin: 30px 0;
+    width: 100%;
+}
+
+.feedback-content textarea:focus {
+    background-color: #fff;
+    border: 1px solid #ececec;
+}
+
+.feedback-content textarea::-webkit-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea:-moz-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea::-moz-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea:-ms-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-btns {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.feedback-btns .btn {
+    font-size: 15px;
+    font-weight: 900;
+    padding: 8px 12px;
+    max-width: 136px;
+    width: 100%;
+}
+
+.feedback-btns span {
+    margin-right: 10px;
+}
+
 /** ----------- Responsive CSS style ------------**/
+
 @media screen and (min-width: 768px) {
     .view-delivery-details {
         min-width: 390px;
     }
 
+    .feedback-container {
+        min-width: 650px;
+    }
+}
+
+@media screen and (min-width: 991px) {
+    .feedback-container {
+        min-width: 783px;
+    }
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {
@@ -421,6 +530,17 @@
     .view-delivery-details .col-md-6 span,
     .view-delivery-details .col-md-12 span {
         width: 76%;
+    }
+
+    .feedback-container {
+        max-height: 460px;
+    }
+
+    .star-rating-wrapper {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
+        text-align: left;
     }
 }
 
@@ -463,6 +583,7 @@
         left: 40%;
         right: 0;
     }
+
 }
 
 @media screen and (max-width: 480px) {
