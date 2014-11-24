@@ -662,7 +662,8 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition){
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC"))
+    {
         $em = $this->_em;
         $result = array();
 
@@ -673,6 +674,12 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
             SELECT p.idProduct
@@ -692,6 +699,8 @@ class EsProductRepository extends EntityRepository
         if($condition !== "") {
             $dql .= "AND p.condition = :condition";
         }
+            $dql .= " ORDER BY ". $orderCondition;
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
 
