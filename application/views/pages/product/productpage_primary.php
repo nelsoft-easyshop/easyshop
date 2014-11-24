@@ -86,10 +86,10 @@
                             <div class="prod-select-con ui-form-control">
                                 <select class="attribute-control">
                                     <?php if(count($headValue) > 1): ?>
-                                    <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
+                                    <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
                                     <?php endif; ?>
                                     <?php foreach ($headValue as $key => $value):?>
-                                        <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                        <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -159,6 +159,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-sm-12 col-md-7" align="center">
                         <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
@@ -168,14 +169,14 @@
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <a href="/<?=$product->getMember()->getSlug();?>/contact" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
-                            <?php elseif($product->getPromoType() == 6 && $product->getStartPromo() == 1): ?>
+                            <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromo::BUY_AT_ZERO && $product->getStartPromo() == 1): ?>
                                 <!--Changed button tag-->
-                                <input type="button" id='<?=$canPurchase?'send':'' ?>_registration' value="Buy Now" class="prod-add-to-cart-btn btn-buy-now" >
-                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
+                                <input type="button" id='send_registration' data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
+                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</spadn>
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>
-                                <input type="button" id="<?=$canPurchase?'send':'' ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
                                 <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                             <?php endif; ?>
                         <?php endif;?>
@@ -261,6 +262,7 @@
     <input id="isFreeShippingNationwide" type="hidden" value="<?=$isFreeShippingNationwide;?>">
     <input id="submitReplyUrl" type="hidden" value="/product/submit-reply">
     <input id="submitReviewUrl" type="hidden" value="/product/submit-review">
+    <input id="needToSelect" type="hidden" value="<?=$needToSelect; ?>">
 </div>
 
 <!-- display view for product details and review -->
@@ -276,5 +278,9 @@
 <script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
+
+<?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromo::BUY_AT_ZERO ):?>
+    <script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
+<?php endif; ?>
+
 

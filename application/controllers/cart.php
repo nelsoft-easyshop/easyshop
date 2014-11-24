@@ -91,7 +91,7 @@ class Cart extends MY_Controller
             $quantity = 1;
         }
         else{
-            $options = $this->input->post('options');
+            $options = $this->input->post('options') ? $this->input->post('options') : array();
             $quantity = $this->input->post('quantity');
         }
         $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
