@@ -12,7 +12,7 @@
 						</div>
 						<div class="transac_title_col3">
 							<strong>Sold to: </strong>
-							<a href="<?php echo base_url();?><?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer'])?></a> <br />
+							<a href="/<?php echo $transact['buyer_slug']?>"><?php echo html_escape($transact['buyer'])?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
@@ -62,13 +62,13 @@
 						<div class="transac_prod_first">
 							<div class="img_transac_prod_con">
 								<span class="img_transac_prod">
-									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+									<img src="/<?php echo $product['product_image_path'];?>">
 								</span>
 							</div>
 							<div class="info_transac_prod_con">
 								<div class="title_top_transac_table">
 									<span class="title_top_transac_col1">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+										<a href="/item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 									</span>
 									<span class="title_top_transac_col2">
 										Quantity:<span><?php echo $product['order_quantity']?></span>

@@ -1,6 +1,6 @@
 <div class="wrapper electronics_gadgets_section">
        <div class="home_cat_product_title <?php echo $section['category_detail']['css_class']?>">
-            <a href="<?=base_url().$section['category_detail']['url']?>">
+            <a href="/<?= $section['category_detail']['url']?>">
                 <?PHP if(strlen(trim($section['category_detail']['imagepath'])) > 0): ?>
                     <img src="/assets/<?php echo substr($section['category_detail']['imagepath'], 0, strpos($section['category_detail']['imagepath'],'.'))?>_small<?php echo substr($section['category_detail']['imagepath'], strpos($section['category_detail']['imagepath'],'.'))?>" >
                 <?PHP else: ?>
@@ -17,7 +17,7 @@
 
                         <?php if(isset($section['category_detail']['subcategory'][$count])):?>
                             <?php $subcategory = $section['category_detail']['subcategory'][$count]; ?>
-                            <li><a href="<?=base_url()?>category/<?php echo $subcategory['slug']?>"><?php echo html_escape($subcategory['name']);?></a></li>
+                            <li><a href="/category/<?php echo $subcategory['slug']?>"><?php echo html_escape($subcategory['name']);?></a></li>
                        <?php endif;?>
                     <?php endfor; ?>
                 </ul>
@@ -30,7 +30,7 @@
             <div class="home_cat_item2_con border_btm">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -40,7 +40,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -52,7 +52,7 @@
             <div class="home_cat_item1_con">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -62,7 +62,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -74,7 +74,7 @@
             <div class="home_cat_item1_con border_btm">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -84,7 +84,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -94,7 +94,7 @@
             <div class="home_cat_item2_con">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -104,7 +104,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -117,7 +117,7 @@
             <div class="home_cat_item2_con border_btm">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -127,7 +127,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -139,7 +139,7 @@
             <div class="home_cat_item1_con">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -149,7 +149,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -162,7 +162,7 @@
             <div class="home_cat_item1_con border_btm">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -172,7 +172,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>
@@ -181,7 +181,7 @@
             <div class="home_cat_item2_con">
                 <?PHP $product = $section['product_panel'][$count++];?>
                 <div class="home_cat_item_link">
-                    <a href="<?=base_url()."item/".$product['slug']; ?>">
+                    <a href="<?= "/item/".$product['slug']; ?>">
                         <div>                            
                             <p><?php echo html_escape($product['product_name']);?> </p>
                             <p class="orange">PHP<?PHP echo number_format($product['price'], 2, '.', ',');?></p>                            
@@ -191,7 +191,7 @@
                         </div>
                     </a>
                 </div>
-                <a href="<?=base_url()."item/".$product['slug']; ?>">
+                <a href="<?= "/item/".$product['slug']; ?>">
                     <span>
                         <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                     </span>

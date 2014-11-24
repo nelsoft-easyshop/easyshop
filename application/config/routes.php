@@ -67,14 +67,13 @@ else{
 }
 
 
-if ($enable_splash && ($bypass_IP !== $clientIP) ){
+if ($enable_splash && ($bypass_IP !== $clientIP)){
     $route['default_controller'] = "home/splash";
-    $route['404_override'] = 'home/pagenotfound';
+    $route['404_override'] = 'home/splash';
     $route['(:any)'] = "home/splash";   
 }
 else {
     $route['default_controller'] = "home";
-    #$route['404_override'] = 'home/pagenotfound';
     $route['404_override'] = 'home/userprofile';
     
     # CATEGORY
@@ -95,7 +94,9 @@ else {
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
     #ITEMS
-    $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
+    $route['(?i)item/(:any)'] = 'product/item/$1';
+    $route['(?i)product/submit-reply'] = 'product/submitReply';
+    $route['(?i)product/submit-review'] = 'product/submitReview';
 
 
     #SELL ITEM
@@ -104,9 +105,10 @@ else {
     $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
     $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
     $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
-    $route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
+    $route['(?i)sell/finishupload'] = 'productUpload/finishProductPreview'; #js
 
     # USER
+    $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';
     $route['(?i)me'] = 'memberpage'; # janz
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon

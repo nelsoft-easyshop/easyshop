@@ -44,18 +44,28 @@
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
                             <?php $sellerimage = $productSection['userimage']; ?>
+                            <?php $secondaryImage = $productSection['productSecondaryImage']; ?>
                             <?php $productSlug = $product->getSlug(); ?>
                             <div class="item">
                                 <?php $defaultImage = $product->getDefaultImage(); ?>
                                     <center>
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <div class="div-rec-product-image">
-                                                <center>
-                                                    <span class="span-me">
-                                                        <img src="<?php echo $defaultImage->getDirectory().'categoryview/'.$defaultImage->getFilename() ?>" class="img-rec-product">
-                                                    </span>
-                                                </center>
-                                            </div>
+
+                                            <!--hover image-->
+                                            <?php if($secondaryImage): ?>
+                                                <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                                    
+                                                </div>
+                                                <div class="div-rec-product-image main-prod-image">
+                                            <?PHP else : ?>
+                                                <div class="div-rec-product-image">
+                                            <?PHP endif; ?>
+                                            <!--main image-->
+                                                    <div class="image-handler" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                        
+                                                    </div>
+                                                </div>
+                                                
                                         </a>
                                     </center>
                                     <?php if ($product->getIsNew()): ?>
@@ -65,11 +75,13 @@
                                         <span class="discount-circle-2"><?php echo number_format($product->getDiscountPercentage(), 0); ?>%</span>
                                     <?php endif; ?>
                                 <div class="item-meta-container" align="left">
-                                    <h3 class="item-name">
+                                    
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                            <h3 class="item-name">
+                                                <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                            </h3>
                                         </a>
-                                    </h3>
+                                    
                                     <div class="item-meta-inner-container clearfix">
                                         <div class="item-price-container">
                                             <?php if (floatval($product->getDiscountPercentage()) > 0): ?>

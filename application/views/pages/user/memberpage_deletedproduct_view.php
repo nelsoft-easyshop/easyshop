@@ -1,10 +1,15 @@
 <?php foreach($deleted_products as $deleted_product):?>
 	<div class="post_items_content content-paging">
+
+		<div class="bulk_options selection" style="display:<?php echo $isBulkOptionActive ? '' : 'none'?>">
+            <input class="bulk_checkbox_selection" type="checkbox" value="<?php echo $deleted_product['id_product'];?>"> Include in bulk command
+        </div>
+
 		<div class="post_item_content_left">
             <div class="post_item_img_table">
             
                 <span class="post_item_img_con">
-                   <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+                   <img src="/<?php echo $deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                 </span>
             </div>
 			<p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>

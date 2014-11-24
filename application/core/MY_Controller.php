@@ -36,6 +36,16 @@ class MY_Controller extends CI_Controller
         /*  Load custom common functions */
         $this->load->helper('common_helper');
     }
+
+    /**
+     *  Return social media links
+     *  @return ARRAY
+     */
+    public function getSocialMediaLinks()
+    {
+        $this->config->load('social_media_links', TRUE);
+        return $this->config->config['social_media_links'];        
+    }
     
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
@@ -81,24 +91,40 @@ class MY_Controller extends CI_Controller
         return $data;
     }
 
-    public function fill_categoryNavigation()
+    
+    /**
+     * Generates the category navigation
+     * 
+     * @return mixed
+     */
+    public function fillCategoryNavigation()
     {
-        return $this->serviceContainer['xml_cms']->getHomeData();
+        return $this->serviceContainer['xml_cms']->getHomeData(true);
     }
 
-    public function fill_userDetails()
+    /**
+     * Generates the user data for the header
+     * 
+     * @return mixed
+     */
+    public function fillUserDetails()
     {
             $em = $this->serviceContainer["entity_manager"];
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
                                             ->find($memberId);
-            $userDetails->profileImage = ($userDetails->getImgurl() == "") 
-                                    ? EsMember::DEFAULT_IMG_PATH.'/'.EsMember::DEFAULT_IMG_SMALL_SIZE 
-                                    : $userDetails->getImgurl().'/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
+            $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
             return $userDetails;
     }
     
-    function check_cookie(){
+    
+    /**
+     * Authenticates the user based on the remember-me cookie
+     *
+     * @return boolean
+     */
+    public function check_cookie()
+    {
         $this->load->model("cart_model");
         $this->load->model("user_model");
         $cookieval = get_cookie('es_usr');
@@ -125,10 +151,12 @@ class MY_Controller extends CI_Controller
     }
     
 
-    /*
+    /**
      *  Displays navigation categories
+     *
      */
-    function getcat(){
+    public function getcat()
+    {
         $this->load->model("product_model");
         $rows = $this->product_model->getCategoriesNavigation();
         $data = array();
@@ -202,19 +230,18 @@ class MY_Controller extends CI_Controller
             if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
                  continue;               
             }
-
-            else
+            else{
                 $evaluate .= $value;
+            }
         }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
 
-        $hash = $evaluate.$password["password"];
+        $em = $this->serviceContainer["entity_manager"];
+        $adminUser = $em->getRepository("EasyShop\Entities\EsAdminMember")
+                                        ->find($postedData["userid"]);
 
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-                    exit($error);
-        }   
+        $hash = $evaluate.$adminUser->getPassword();
+
+        return $isAuthenticated = (sha1($hash) != $postedHash) ? false : true;
     }
 
 

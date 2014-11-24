@@ -1,5 +1,4 @@
-<link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="canonical" href="<?php echo base_url()?>login"/>
+<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 
 <div class="clear mrgn-top-35 display-ib"></div>
 
@@ -114,7 +113,7 @@
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
                                         <a href="<?=$facebook_login_url?>">
-                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-fb.png"></span>
+                                            <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
                                             <span class="text-center">Log In with Facebook</span>
                                         </a>
                                     </div>
@@ -126,7 +125,7 @@
                                 <div class="log-in-btn log-in-google">
                                     <div>
                                         <a href="<?=$google_login_url?>">
-                                            <span class="log-in-img"><img src="<?=base_url()?>assets/images/img-log-in-google.png"></span>
+                                            <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
                                             <span class="text-center">Log In with Google</span>
                                         </a>
                                     </div>

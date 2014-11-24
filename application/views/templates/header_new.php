@@ -14,11 +14,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
     <meta name="keywords" content=""/>
-    <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php if(isset($relCanonical)): ?>
+        <link rel="canonical" href="<?php echo $relCanonical ?>"/>
+    <?php endif; ?>
+    
     
     <!--[if lt IE 9]>
     <script>
@@ -88,10 +92,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </span>
                     <span class="header-cart-icon-con span_bg cart-icon"></span>
                 </a>
+                <?PHP if ((intval(sizeof($cartItems))) !== 0 ) : ?>
                 <div class="header-cart-item-list">
-                    <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
-                        <p>You have no item in your cart</p>
-                    <?PHP else : ?>
                         <p>Recently added item(s)</p>
                         <?php $cartItemsReversed = array_reverse($cartItems); ?>
                         <?php for($i = 0 ; $i < 2; $i++): ?>
@@ -99,11 +101,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="mrgn-bttm-15">
                                     <div class="header-cart-item-img">
                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=$cartItemsReversed[$i]['name']?>"></span>
+                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                         </a>
                                     </div>
                                     <div class="header-cart-item-con">
-                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=$cartItemsReversed[$i]['name']?></span></a>
+                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
                                         <span>x <?=$cartItemsReversed[$i]['qty']?></span>
                                         <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
                                     </div>
@@ -122,8 +124,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                             <div class="clear"></div>
                         </div>
-                    <?PHP endif;?>
                 </div>
+                <?PHP endif;?>
             </div>
         </div>
         

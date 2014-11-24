@@ -2,6 +2,8 @@
 
 namespace EasyShop\Promo;
 
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class CountDownSalePromo extends AbstractPromo
 {
 
@@ -10,14 +12,14 @@ class CountDownSalePromo extends AbstractPromo
      * @var float
      *
      */
-    private $maxHourDifferential = 49.5;
+    private static $maxHourDifferential = 49.5;
 
     /**
      * The percentage discount per hour
      * @var float
      *
      */
-    private $percentagePerHour = 2.00;
+    private static $percentagePerHour = 2.00;
     
     /**
      * Applies the count down sale calculations
@@ -29,32 +31,60 @@ class CountDownSalePromo extends AbstractPromo
         if(!isset($this->product)){
             return null;
         }
-        
-        $this->dateToday = $this->dateToday->getTimestamp();
-        $this->startDateTime = $this->startDateTime->getTimestamp();
-        $this->endDateTime = $this->endDateTime->getTimestamp();
-        
-        if(($this->dateToday < $this->startDateTime) || ($this->endDateTime < $this->dateToday)) {
-            $diffHours = 0;
-        }
-        else if($this->dateToday > $this->endDateTime){
-            $diffHours = $this->maxHourDifferential;
-            $this->isStartPromo = true;
-        }
-        else{
-            $diffHours = floor(($this->dateToday - $this->startDateTime) / 3600.0);
-            $this->isStartPromo = true;
-        }
-        
-        $this->promoPrice = $this->product->getPrice() - (($diffHours * $this->percentagePerHour / 100.0) * $this->product->getPrice());
-        $this->promoPrice = ($this->promoPrice <= 0) ? 0.01 : $this->promoPrice;
-        $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
-        
-        $this->persist();        
-        
+        $promoData = $this->getPromoData(
+            $this->product->getPrice(),
+            $this->startDateTime,
+            $this->endDateTime,
+            $this->product->getDiscount()
+        );
+
+        $this->promoPrice = $promoData['promoPrice'];
+        $this->isStartPromo = $promoData['isStartPromo'];
+        $this->isEndPromo = $promoData['isEndPromo'];
+        $this->persist();
+
         return $this->product;
     }
 
-    
-}
+    /**
+     * Calculates Promo Price and Checks if promo has started and if promo promo has ended.
+     * @param $price
+     * @param $startDate
+     * @param $endDate
+     * @param $discount
+     * @param $option
+     * @return array
+     */
+    public static function getPromoData($price, $startDate, $endDate, $discount, $option = array())
+    {
+        $date = new \DateTime;
+        $dateToday = $date->getTimestamp();
+        $startDateTime = $startDate->getTimestamp();
+        $endDateTime = $endDate->getTimestamp();
+        $promoDetails = array(
+            'isStartPromo' => false,
+            'isEndPromo' => false,
+            'promoPrice' => $price
+        );
 
+        if (($dateToday < $startDateTime) || ($endDateTime < $dateToday)) {
+            $diffHours = 0;
+        }
+        else if ($dateToday > $endDateTime) {
+            $diffHours = self::$maxHourDifferential;
+            $promoDetails['isStartPromo'] = true;
+        }
+        else {
+            $diffHours = floor(($dateToday - $startDateTime) / 3600.0);
+            $promoDetails['isStartPromo'] = true;
+        }
+
+        $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
+        $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
+        $promoDetails['promoPrice'] = $promoPrice;
+        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime) ? true : false;
+
+        return $promoDetails;
+    }
+
+}

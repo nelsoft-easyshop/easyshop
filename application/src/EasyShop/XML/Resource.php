@@ -81,8 +81,8 @@ class Resource
     public function getMobileXMLfile()
     {
         $xmlfile = 'page/mobile_home_files';
-        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_home'))) > 0){
-            $xmlfile = $this->configurationService->getConfigValue('XML_home');
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_mobile_home'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_mobile_home');
         }
         
         return $xmlfile;
@@ -104,7 +104,19 @@ class Resource
         
         return $xmlfile;
     
-    }      
+    }   
+
+    /**
+     * Returns the temp home xml file used by the application
+     *
+     * @return string
+     */
+    public function getTempHomeXMLfile()
+    {
+        $xmlfile =  "local/new_home_page_temp";        
+        return $xmlfile;
+    
+    }       
 
 }
 

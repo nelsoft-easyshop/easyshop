@@ -8,7 +8,7 @@
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
             <p>
-                Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won the following item:
+                Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
             </p>
             <div class="claim-bg ">
                 <div id="prod_image">
@@ -26,7 +26,7 @@
             </div>
             <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
             <p>
-                You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
+                You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
                 <br>
                 Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
             </p>
@@ -196,7 +196,7 @@
                     Your code did not match any of the promo's valid codes. Try your luck with another scratch card.
                 </p>
                 <p>
-                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
+                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
                     <br>
                     Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
                 </p>
@@ -204,7 +204,7 @@
             <div class="scratch-win-error purchase-limit-error">
                 <h2>Sorry</h2>
                 <p>
-                    Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won the following item:
+                    Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
                 </p>
                 <div class="claim-bg error-claim">
                     <div id="prod_image">
@@ -225,7 +225,7 @@
                 </div>
                 <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
                 <p>
-                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
+                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
                     <br>
                     Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
                 </p>
@@ -236,7 +236,7 @@
                     This code has already been claimed. Try your luck again with another scratch card.
                 </p>
                 <p>
-                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="https://www.facebook.com/EasyShopPhilippines">Facebook</a> and be updated of future promotions
+                    You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
                     <br>
                     Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
                 </p>

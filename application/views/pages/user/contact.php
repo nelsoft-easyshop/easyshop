@@ -39,7 +39,7 @@
                     <?PHP else : ?>
                         <div class="jumbotron no-feedback-list">
                             <center>
-                                <strong><span class="fa fa-ban"></span>You are not allowed to send a message to your self.</strong>
+                                <strong><span class="fa fa-ban"></span> You are not allowed to send a message to your self.</strong>
                             </center>
                         </div>
                     <?PHP endif; ?>
