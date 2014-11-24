@@ -167,22 +167,22 @@ class SocialMediaManager
     public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
         $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->findOneBy(array(
-                                        'email' => $email
-                                    ));
+                                ->findOneBy([
+                                    'email' => $email
+                                 ]);
         $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
-                                            ->findOneBy(array(
-                                                'socialMediaId' => $oauthId,
-                                                'socialMediaProvider' => $oauthProvider
-                                            ));
+                                        ->findOneBy([
+                                            'socialMediaId' => $oauthId,
+                                            'socialMediaProvider' => $oauthProvider
+                                        ]);
         if ($socialMediaAccount) {
             $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                     ->find($socialMediaAccount->getMember());
         }
-        $response = array(
+        $response = [
             'getMember' => $getMember,
             'doesAccountMerged' => $socialMediaAccount ? true : false
-        );
+        ];
 
         return $response;
     }
@@ -205,7 +205,7 @@ class SocialMediaManager
         $rules = $this->formValidation->getRules('register');
         $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
             ->setMethod('POST')
-            ->add('username', 'text', array('constraints' => $rules['username']))
+            ->add('username', 'text', ['constraints' => $rules['username']])
             ->getForm();
 
         $form->submit([ 'username' => $username]);
