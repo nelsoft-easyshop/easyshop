@@ -57,9 +57,9 @@ class Memberpage extends MY_Controller
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
         if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fill_userDetails();
+            $data['user_details'] = $this->fillUserDetails();
         }
-        $data['homeContent'] = $this->fill_categoryNavigation();
+        $data['homeContent'] = $this->fillCategoryNavigation();
         $data = array_merge($data, $this->fill_header());
         
         $this->load->view('templates/header_primary', $data);
