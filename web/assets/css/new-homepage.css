@@ -3361,11 +3361,6 @@ h3 > b{
 }
 
 @media only screen and (max-width: 479px) {
-    #header-top .row {
-        margin-right: -30px;
-        margin-left: -30px;
-    }
-
     #top-links li {
         margin-right: 0;
     }
@@ -3560,6 +3555,10 @@ h3 > b{
 }
 
 @media only screen and (max-width: 991px) {
+    .col-xs-6.col-sm-6.col-md-6.top-header-left {
+        padding: 0;
+    }
+
     .sticky-nav-fixed .mobile-menu-nav-hide {
         display: block;
     }
@@ -3776,6 +3775,17 @@ h3 > b{
 }
 
 @media (max-width: 767px) {
+    #header-top .col-md-12,
+    #header-top .row .col-md-12 .top-header-right {
+        padding: 0;
+    }
+
+    .default-nav-dropdown:after,
+    .default-nav-dropdown:before,
+    .default-nav-dropdown {
+        right: 0;
+    }
+
     .sticky-search-cart-wrapper {
         width: 93%;
     }
