@@ -158,6 +158,12 @@ class mobilePayment extends MY_Controller
         $cancelUrl = "";
         $isSuccess = false;
         $cartData = unserialize($this->member->getUserdata());
+
+        $this->load->config('payment', true);
+        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
+                         ? $this->config->item('production', 'payment')
+                         : $this->config->item('testing', 'payment');
+
         if(!empty($cartData) && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
@@ -193,7 +199,7 @@ class mobilePayment extends MY_Controller
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
                     $message = "";
-                    $returnUrl = base_url().'payment/dragonPayReturn'; 
+                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['return_url'];
                 }
                 else{
                     $message = $requestData['m'];
