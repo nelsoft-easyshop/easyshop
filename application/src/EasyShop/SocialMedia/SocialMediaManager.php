@@ -166,22 +166,22 @@ class SocialMediaManager
      */
     public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
-        $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->findOneBy(array(
-                                    'email' => $email
-                                ));
-        $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
+        $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(array(
-                                        'socialMediaId' => $oauthId,
-                                        'socialMediaProvider' => $oauthProvider
+                                        'email' => $email
                                     ));
+        $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
+                                            ->findOneBy(array(
+                                                'socialMediaId' => $oauthId,
+                                                'socialMediaProvider' => $oauthProvider
+                                            ));
         if ($socialMediaAccount) {
-            $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
+            $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
                                     ->find($socialMediaAccount->getMember());
         }
         $response = array(
-            'doesAccountExists' => $doesEmailExists,
-            'doesAccountMerged' => $socialMediaAccount
+            'getMember' => $getMember,
+            'doesAccountMerged' => $socialMediaAccount ? true : false
         );
 
         return $response;
