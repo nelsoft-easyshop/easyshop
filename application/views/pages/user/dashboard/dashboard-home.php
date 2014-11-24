@@ -296,7 +296,7 @@
                 <?=$allFeedBackView; ?> 
             </div>
             <div id="sales">
-            <?php include("dashboard-sales.php");?>
+                <?=$salesView;?>
                  <!--<div class="jumbotron no-items">
                     <i class="icon-category"></i>No items for this category
                 </div>-->
