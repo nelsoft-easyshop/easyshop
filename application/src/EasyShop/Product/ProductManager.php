@@ -575,7 +575,7 @@ class ProductManager
                         $filteredProducts[] = $prodId;
                     }
                     else {
-                        unset($categoryProductIds[$prodId]);
+                        unset($categoryProductIds[$key]);
                     }
                 }
             }
