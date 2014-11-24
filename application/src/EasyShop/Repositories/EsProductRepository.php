@@ -525,7 +525,7 @@ class EsProductRepository extends EntityRepository
                     break;
                 case "HOT":
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
-                                        ->addOrderBy(' p.clickcount',$order);
+                                         ->addOrderBy(' p.clickcount',$order);
                     break;
                 case "NAME":
                     $qbResult = $qbResult->orderBy('p.name', $order);
@@ -658,10 +658,12 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param array $catId
+     *  @param string $condition
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId){
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    {
         $em = $this->_em;
         $result = array();
 
@@ -672,6 +674,12 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
             SELECT p.idProduct
@@ -688,8 +696,17 @@ class EsProductRepository extends EntityRepository
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
 
+        if($condition !== "") {
+            $dql .= "AND p.condition = :condition";
+        }
+            $dql .= " ORDER BY ". $orderCondition;
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
+
+        if($condition !== "") {
+            $query->setParameter("condition", $condition);
+        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
