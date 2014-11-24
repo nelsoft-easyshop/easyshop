@@ -1830,6 +1830,9 @@ body{
     }
 
     /**product footer **/
+    .footer-primary .footer-ac {
+        display: block;
+    }
     .footer-primary.footer-secondary {
         padding: 43px 0 35px 0;
     }
