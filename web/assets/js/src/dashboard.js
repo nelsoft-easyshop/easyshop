@@ -496,5 +496,11 @@
         return false;
     });
 
+    $('#ship-item').click(function (e) {
+        $('#shipping-details').modal();
+        $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
+        return false;
+    });
+
     }(jQuery));
 
