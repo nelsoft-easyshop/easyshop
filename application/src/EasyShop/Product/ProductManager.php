@@ -567,19 +567,16 @@ class ProductManager
                     break;
             }
 
-            if($lprice !== "" && $uprice !== "") {
-
+            if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-
-                    if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                        continue;
-                    }
-                    else {
+                    if( bccomp($discountedPrice, $lprice) === -1 || bccomp($discountedPrice, $uprice) === 1) {
                         unset($categoryProductIds[$key]);
                     }
-                }
-            }
+                }   
+            }             
+            
+
             $isFiltered = true;  
         }
 
