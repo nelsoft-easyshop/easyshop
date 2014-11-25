@@ -140,7 +140,6 @@ class EsOrderProductRepository extends EntityRepository
                                                        ->andWhere('op.status = :status')
                                                        ->setParameter('memberId', $memberId)
                                                        ->setParameter('status', $orderProductStatus);
-
         if($dateFrom != null && $dateTo != null){
             $queryBuilder = $queryBuilder->andWhere('o.dateadded BETWEEN :dateFrom AND :dateTo')
                                          ->setParameter('dateFrom', $dateFrom)

@@ -312,12 +312,8 @@
                 <?=$activeProductView;?>
             </div>
         </div>
-        <div id="hidden-active-container-lastmodified">
-            
-        </div>
-        <div id="hidden-active-container-new">
-            
-        </div>
+        <div id="hidden-active-container-lastmodified"></div>
+        <div id="hidden-active-container-new"></div>
     </div>
     <div id="hidden-deleted-container">
         <div id="hidden-deleted-container-default">
@@ -325,12 +321,8 @@
                 <?=$deletedProductView;?>
             </div>
         </div>
-        <div id="hidden-deleted-container-lastmodified">
-            
-        </div>
-        <div id="hidden-deleted-container-new">
-            
-        </div>
+        <div id="hidden-deleted-container-lastmodified"></div>
+        <div id="hidden-deleted-container-new"></div>
     </div>
     <div id="hidden-drafted-container">
         <div id="hidden-drafted-container-default">
@@ -338,27 +330,29 @@
                 <?=$draftedProductView;?>
             </div>
         </div>
-        <div id="hidden-drafted-container-lastmodified">
-            
-        </div>
-        <div id="hidden-drafted-container-new">
-            
-        </div>
+        <div id="hidden-drafted-container-lastmodified"></div>
+        <div id="hidden-drafted-container-new"></div>
     </div>
 </div>
 
 <div id="hidden-feedback-container">
-    <div id="feedback-<?=$allFeedBackConstant;?>">
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>">
         <div id="page-1">
             <?=$feedBackView; ?>
         </div>
     </div>
-    <div id="feedback-<?=$asBuyerConstant;?>"> 
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER;?>"> </div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER;?>"></div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER;?>"></div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER;?>"></div>
+</div>
+
+<div id="hidden-sales-container">
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>">
+        <div id="page-1"><?=$currentSales;?></div>
     </div>
-    <div id="feedback-<?=$asSellerConstant;?>"> 
-    </div>
-    <div id="feedback-<?=$asOtherSellerConstant;?>"> 
-    </div>
-    <div id="feedback-<?=$asOtherBuyerConstant;?>"> 
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>">
+        <div id="page-1"><?=$historySales;?></div>
     </div>
 </div>
+

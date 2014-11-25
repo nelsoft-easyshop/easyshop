@@ -94,7 +94,7 @@ class ProductManager
     /**
      * User Manager Instance
      *
-     * @var CI_Image_lib
+     * @var Easyshop\User\UserManager
      */
     private $userManager;
 
