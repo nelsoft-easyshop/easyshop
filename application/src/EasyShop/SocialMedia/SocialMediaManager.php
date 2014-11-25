@@ -181,7 +181,7 @@ class SocialMediaManager
         }
         $response = [
             'getMember' => $getMember,
-            'doesAccountMerged' => $socialMediaAccount ? true : false
+            'doesAccountMerged' => (bool) $socialMediaAccount
         ];
 
         return $response;
@@ -203,7 +203,7 @@ class SocialMediaManager
     {
         $member = false;
         $rules = $this->formValidation->getRules('register');
-        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
             ->setMethod('POST')
             ->add('username', 'text', ['constraints' => $rules['username']])
             ->getForm();
