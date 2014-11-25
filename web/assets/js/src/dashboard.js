@@ -741,12 +741,111 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
+    
+    $('#sc-selection-trigger').click(function() {
+        $('.hide-selection-cont').slideToggle("fast");
+        
+    });
 
-    $('.hide-date').click(function() {
+    
+   
+    
+    $('#hide-date').click(function() {
         $('#th-date').toggle();
         $('.td-date').toggle();
     });
- 
+    
+    $('#hide-trans').click(function() {
+        $('#th-trans').toggle();
+        $('.td-trans').toggle();
+    });
+    
+    $('#hide-base-price').click(function() {
+        $('#th-base-price').toggle();
+        $('.td-base-price').toggle();
+    });
+    
+    $('#hide-quantity').click(function() {
+        $('#th-quantity').toggle();
+        $('.td-quantity').toggle();
+    });
+    
+    $('#hide-handling').click(function() {
+        $('#th-handling').toggle();
+        $('.td-handling').toggle();
+    });
+    
+    $('#hide-total').click(function() {
+        $('#th-total').toggle();
+        $('.td-total').toggle();
+    });
+    
+    $('#hide-es-charge').click(function() {
+        $('#th-es-charge').toggle();
+        $('.td-es-charge').toggle();
+    });
+    
+    $('#hide-payment').click(function() {
+        $('#th-payment').toggle();
+        $('.td-payment').toggle();
+    });
+    
+    $('#hide-net').click(function() {
+        $('#th-net').toggle();
+        $('.td-net').toggle();
+    });
+    
+    $('#sc-p-selection-trigger').click(function() {
+        $('.hide-p-selection-cont').slideToggle("fast");
+        
+    });
+    
+    $('#hide-p-date').click(function() {
+        $('#th-p-date').toggle();
+        $('.td-p-date').toggle();
+    });
+    
+    $('#hide-p-trans').click(function() {
+        $('#th-p-trans').toggle();
+        $('.td-p-trans').toggle();
+    });
+    
+    $('#hide-p-base-price').click(function() {
+        $('#th-p-base-price').toggle();
+        $('.td-p-base-price').toggle();
+    });
+    
+    $('#hide-p-quantity').click(function() {
+        $('#th-p-quantity').toggle();
+        $('.td-p-quantity').toggle();
+    });
+    
+    $('#hide-p-handling').click(function() {
+        $('#th-p-handling').toggle();
+        $('.td-p-handling').toggle();
+    });
+    
+    $('#hide-p-total').click(function() {
+        $('#th-p-total').toggle();
+        $('.td-p-total').toggle();
+    });
+    
+    $('#hide-p-es-charge').click(function() {
+        $('#th-p-es-charge').toggle();
+        $('.td-p-es-charge').toggle();
+    });
+    
+    $('#hide-p-payment').click(function() {
+        $('#th-p-payment').toggle();
+        $('.td-p-payment').toggle();
+    });
+    
+    $('#hide-p-net').click(function() {
+        $('#th-p-net').toggle();
+        $('.td-p-net').toggle();
+    });
+    
+    
     $(function() {
         $( "#birthday-picker" ).datepicker({
             changeMonth: true,
@@ -768,6 +867,7 @@
             changeYear: true
         });
     });
+    
     $('#give-feedback').click(function (e) {
         $('#feedback-modal').modal();
         $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
