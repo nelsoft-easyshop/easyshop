@@ -309,7 +309,7 @@
     $("#sales").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
-        var $mainContainer = $this.parent().parent().parent();
+        var $mainContainer = $this.parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $dateFrom = $("#"+$container).find(".date-from").val();
         var $dateTo = $("#"+$container).find(".date-to").val();
@@ -437,6 +437,7 @@
 
     var requestSales = function($page, $requestType, $container, $dateFrom, $dateTo)
     {
+        console.log($container);
         var $urlRequest = $('#sales-request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
