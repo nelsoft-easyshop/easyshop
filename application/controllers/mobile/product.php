@@ -64,7 +64,7 @@ class Product extends MY_Controller {
         $formattedDeals = [];
         foreach ($dealsItems as $item) {
             $formattedDeals[] = $this->serviceContainer['api_formatter']
-                                     ->formatDisplayItem($value->getIdProduct());
+                                     ->formatDisplayItem($item->getIdProduct());
         }
 
         print(json_encode($formattedDeals,JSON_PRETTY_PRINT));
