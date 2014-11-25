@@ -8,74 +8,61 @@
     4. show product list
 -->
 <map>
-
-
-
     <mainSlide>
-        <value>assets/images/mainslide/140309010304.jpg</value>
+        <value>assets/images/homeslider/mobile/mobile1.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352.00000000000006</coordinate>
-            <target>item/lg-optimus-g-pro-e985</target>
+            <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/295186540690942</target>
         </imagemap>
-        <actionType>show product details</actionType>
+        <actionType>go to site</actionType>
     </mainSlide>
 
     <mainSlide>
-        <value>assets/images/mainslide/140309010304.jpg</value>
+        <value>assets/images/homeslider/mobile/mobile2.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352.00000000000006</coordinate>
-            <target>item/lg-optimus-g-pro-e985</target>
+            <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/282248678651395</target>
         </imagemap>
-        <actionType>show product details</actionType>
-    </mainSlide>
-
-    <mainSlide>
-        <value>assets/images/mainslide/140309010304.jpg</value>
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,352.00000000000006</coordinate>
-            <target>item/lg-optimus-g-pro-e985</target>
-        </imagemap>
-        <actionType>show product details</actionType>
+        <actionType>go to site</actionType>
     </mainSlide>
 
     <section>
-        <name>health-beauty</name>
-        <bgcolor>#FFFFF</bgcolor>
+        <name>electronics-gadgets</name>
+        <bgcolor>#fc6142</bgcolor>
         <type>theme 1</type>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
+            <value>apple-iphone-5c-32gb</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
+            <value>beats-mixr-on-ear-headphone-red</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
+            <value>kj-star-wireless-mobile-phone-monopod</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
+            <value>gmate-18000mah-powerbank</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent> 
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
+            <value>action-camcorder-hd-720p</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
@@ -84,63 +71,63 @@
     </section>
  
     <section>
-        <name>health-beauty</name>
-        <bgcolor>#FFFFF</bgcolor>
+        <name>clothing-accessories</name>
+        <bgcolor>#565656</bgcolor>
         <type>theme 2</type>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>nature-cover-up-beach-dress</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>sweet-candy-stripe-two-piece-bikini-with-dress</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>two-piece-lace-floral-dress</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
     </section>
 
     <section>
         <name>health-beauty</name>
-        <bgcolor>#FFFFF</bgcolor>
+        <bgcolor>#18a288</bgcolor>
         <type>theme 3</type>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>motives-foundation</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>the-make-up-of-make-up-artists</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>milea-mineral-powder-blusher-2g-rose</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
-            <value>n9-super-smart-watch-phone</value>
-            <type>category</type>
+            <value>nova-2-in-1-hair-beauty-set</value>
+            <type>product</type>
             <target></target>
-            <actionType>go to site</actionType>
+            <actionType>show product details</actionType>
         </boxContent>
     </section>
 </map>
