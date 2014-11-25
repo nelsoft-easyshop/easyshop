@@ -120,11 +120,6 @@ class AssetsUploader
     {    
         $sourceDirectory = rtrim($sourceDirectory,'/');
         $destinationDirectory = rtrim($destinationDirectory,'/');
-
-      
-        $this->environment = 'staging';
-        
-        
         if(strtolower($this->environment) === 'development'){
             //creating the destination directory
             if(!is_dir($destinationDirectory)){
@@ -141,13 +136,6 @@ class AssetsUploader
                     $explodedFilename[0] = $productId;
                     $newFileName = implode('_', $explodedFilename);
                     if(strtolower($this->environment) !== 'development'){
-                        /*
-                        session_start();
-                        $fileSize =  $_SESSION['bytes_uploaded_to_s3'];
-                        $fileSize += filesize(getcwd()."/".$sourceDirectory."/".$file);
-                        $_SESSION['bytes_uploaded_to_s3'] =  $fileSize;
-                        session_write_close();
-                        */
                         $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
                     }
                     else{

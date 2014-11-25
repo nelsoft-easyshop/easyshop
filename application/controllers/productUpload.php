@@ -25,27 +25,7 @@ class productUpload extends MY_Controller
 
         $this->em = $this->serviceContainer['entity_manager']; 
     }
-    
-    public function iframe()
-    {
-        session_start();
-        $totalFileSize = $_SESSION['bytes_total'];
-        $uploadedBytes = $_SESSION['bytes_uploaded_to_s3'];
-        session_write_close();
 
-        $percentage = 0;
-        if($totalFileSize && $uploadedBytes){
-            $percentage = $uploadedBytes / $totalFileSize * 100;
-        }
-
-        echo json_encode(['percentage' => $percentage], JSON_FORCE_OBJECT);
-    }
-    
-    public function generateIframe()
-    {
-        $percentage = 0;
-        echo $this->load->view('iframe', ['percentage' => $percentage], true);
-    }
 
 
     function fill_view()
@@ -765,15 +745,7 @@ class productUpload extends MY_Controller
                 #end of other 
  
                 if(!count($arraynameoffiles) <= 0){ 
-                    /*
-                    session_start();
-                    $_SESSION['bytes_uploaded_to_s3'] = 0;
-                    $_SESSION['bytes_total'] =  $this->serviceContainer["assets_uploader"]->GetDirectorySize($tempDirectory);
-                    session_write_close();
-                    */
-                    
                     $this->serviceContainer["assets_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
-                    
                 }
 
                 #saving combination
