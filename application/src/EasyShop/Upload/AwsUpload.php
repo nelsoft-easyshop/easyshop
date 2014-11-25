@@ -2,6 +2,9 @@
 
 namespace Easyshop\Upload;
 
+use Aws\Common\Exception\MultipartUploadException;
+use Aws\S3\Model\MultipartUpload\UploadBuilder;
+
 /**
  * Amazon S3 Client Class Consumer
  *
@@ -51,7 +54,9 @@ class AwsUpload
         if(!in_array($fileExtension, $allowedFileTypes) ||  $fileSizeByte > $this->assetsConfig['max_size'] ){
             return false;
         }
- 
+        
+        $destinationFilePath = ltrim($destinationFilePath , '.');
+
         $result = $this->awsS3Client->putObject(array(
             'Bucket' => $this->assetsConfig['bucket'],
             'Key'    => $destinationFilePath,
@@ -59,6 +64,7 @@ class AwsUpload
             'ContentType' => $mimeType,
             'ACL'    => 'public-read',
         ));
+            
         return $result;
     }
     

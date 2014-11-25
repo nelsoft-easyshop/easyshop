@@ -77,11 +77,18 @@ class AssetsUploader
      */
     private $imageLibrary;
     
+
+    
     /**
      * Inject dependencies
      * @param \EasyShop\Upload\AwsUpload $awsUploader
      */
-    public function __construct($em, $awsUploader, $configLoader, $uploadLibrary, $imageLibrary, $environment = 'DEVELOPMENT')
+    public function __construct($em, 
+                                $awsUploader, 
+                                $configLoader, 
+                                $uploadLibrary, 
+                                $imageLibrary, 
+                                $environment = 'DEVELOPMENT')
     {
         $this->awsUploader = $awsUploader;
         $this->environment = $environment;
@@ -113,18 +120,18 @@ class AssetsUploader
     {    
         $sourceDirectory = rtrim($sourceDirectory,'/');
         $destinationDirectory = rtrim($destinationDirectory,'/');
+
+      
+        $this->environment = 'staging';
         
-        if(strtolower($this->environment) !== 'development'){
-            $sourceDirectory = ltrim($sourceDirectory,'.');
-            $destinationDirectory = ltrim($destinationDirectory,'.');
-        }
-        else{
+        
+        if(strtolower($this->environment) === 'development'){
             //creating the destination directory
             if(!is_dir($destinationDirectory)){
                 mkdir($destinationDirectory, 0777, true);
             }
-        } 
-        
+        }
+
         $directoryMap = directory_map($sourceDirectory);
         foreach($directoryMap as $key => $file)
         {
@@ -134,6 +141,13 @@ class AssetsUploader
                     $explodedFilename[0] = $productId;
                     $newFileName = implode('_', $explodedFilename);
                     if(strtolower($this->environment) !== 'development'){
+                        /*
+                        session_start();
+                        $fileSize =  $_SESSION['bytes_uploaded_to_s3'];
+                        $fileSize += filesize(getcwd()."/".$sourceDirectory."/".$file);
+                        $_SESSION['bytes_uploaded_to_s3'] =  $fileSize;
+                        session_write_close();
+                        */
                         $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
                     }
                     else{
@@ -341,6 +355,23 @@ class AssetsUploader
         }
         $result['member'] = $member;
         return $result;
+    }
+    
+    
+    function GetDirectorySize($path){
+        $bytestotal = 0;
+        $path = realpath($path);
+        if($path!==false){
+            foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path,\FilesystemIterator::SKIP_DOTS)) as $object){
+                try{
+                    $bytestotal += $object->getSize();
+                }
+                catch(\Exception $e){
+                    //do not increment
+                }
+            }
+        }
+        return $bytestotal;
     }
     
 }

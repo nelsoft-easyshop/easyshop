@@ -1470,55 +1470,40 @@ li.brand_result:hover{
 /*****	STEP 4 DESIGN	*******/
 
 .step4_section{
-	border: 1px solid #CECECE;
-	margin-bottom: 1em;
+    border: 1px solid #CECECE;
+    margin-bottom: 1em;
 }
 
-/*.step4_section > div{
-	padding: 5px;
-}*/
+
 
 .step4_header{
-	background-color: #E5E5E5;
+    background-color: #E5E5E5;
 }
 
-/*.step4_content > div{
-	padding: 10px;
-}
 
-.step4_paysel > div{
-	display:inline-block;
-	margin: 0px 3em 0px 10px;
-	vertical-align:top;
-	height:150px;
-}
-
-.step4_bankdetails h4{
-	margin: 5px 3px;
-}*/
-
-/*.step4_bankdetails span{
-	display:inline-block;
-	width: 150px;
-	margin-left: 1em;
-}*/
-
-/*.step4_delivery {
-	padding-left:10px;
-}*/
-
-/*.step4_delivery_sub > div{
-	display: inline-block;
-	border: 1px solid #B6B6B6;
-	border-radius:3px;
-}
-
-.step4_attr, .step4_priceloc{
-	float:left;
-	vertical-align: middle;
-	margin: 5px 10px;
-}
-*/
 .step4-cod{
-	text-align:center;
+    text-align:center;
 }
+
+/**** Iframe for progress upload ****/
+
+.loader-iframe{
+    display: none;
+    width: 100%;
+}
+
+#progress_completed{
+    position: relative;
+    background: url('/assets/images/orange_loader.gif');
+    width: 150px;
+    min-height: 34px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#progress_completed span{
+   line-height: 34px; 
+}
+
+

@@ -98,8 +98,7 @@
                     );
                 echo isset($is_edit)?form_open('sell/edit/processing', $attr):form_open('sell/processing', $attr);
                 echo isset($p_id) ? '<input type="hidden" name="p_id" id="p_id" value="'.$p_id.'">' : '';
-                ?>
-        
+                ?>                    
                     <input type="hidden" name="otherCategory" id="otherCategory" value="<?php echo $otherCategory;?>">
                     <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles"> 
                     <input type="hidden" name="id" value="<?=$id;?>">
@@ -484,11 +483,23 @@
 
                         <div class="add_category_submit">
                             <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
+                            
+                            
+                                                 
+                            <iframe id="upload_frame" class="loader-iframe" name="upload_frame" frameborder="0" border="0" src="" scrolling="no" scrollbar="no" >
+                                
+                            </iframe> 
+                            
+                            <!--
+                            
                             <div class="loader_div" style="display:none">
                                 <img src='<?php echo getAssetsDomain(); ?>assets/images/orange_loader.gif'>
                                 <div class="percentage"></div>
-                            </div>                            
+                            </div>
+                            -->
                         </div> 
+                        
+                        
                     </div>
                 </form>
             </div>

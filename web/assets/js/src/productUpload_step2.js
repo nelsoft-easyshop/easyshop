@@ -320,6 +320,14 @@ function checkOptionValue(selector,id,value,evt)
 
 function proceedStep3(url)
 {
+    /*
+    $('#upload_frame').show(); 
+    function set () { 
+        $('#upload_frame').attr('src','/productUpload/generateIframe'); 
+    } 
+    setTimeout(set); 
+    */
+
     $('#form_product').ajaxForm({
         url: url,
         dataType: "json",
@@ -896,9 +904,15 @@ var previous,editSelectedValue,editSelectedId;
                 var used = {}; 
               
                 $(this).find(".div2").find('span').find('#'+editSelectedId).each(function () {
-                    var selectedValue = $(this).children('option:selected').data('value');
+                    var $choosenSelect = $(this);
+                    var selectedValue = $choosenSelect.children('option:selected').data('value');
                     if( validSelection[selectedValue] === undefined ) { 
-                        $(this).children('option:selected').remove();
+                        $choosenSelect.children('option').remove();
+
+                       $(".select-control-panel-option > .div2 > .spanSelect"+editSelectedId + " > #"+editSelectedId + " > option").each(function () {
+                            $choosenSelect.append($(this).clone());
+                        });
+
                     }
                     else{
                         $(this).children('option:selected').data('price',validSelection[selectedValue]['price']);
@@ -909,8 +923,7 @@ var previous,editSelectedValue,editSelectedId;
                 });
             });
 
-            if(optionString == "")
-            {
+            if(optionString == ""){
                 $('.spanSelect'+cleanString).remove();
                 if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                     $('.list-choosen-combination-div,.select-control-panel-option ').empty();
