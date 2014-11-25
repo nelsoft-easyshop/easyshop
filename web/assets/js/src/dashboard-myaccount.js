@@ -1,13 +1,19 @@
 (function ($) {
 
+    
+    /************* Personal Information **************/
+    var formPersonalInfo = $("#formPersonalInfo");
     formPersonalInfo.find( "#birthday-picker" ).datepicker({ dateFormat: "yy-mm-dd" });
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
+        $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
-        var fullname = formPersonalInfo.find("#fname").val().trim() + " " + formPersonalInfo.find("#lname").val().trim();
+        var isEmailVerified = formPersonalInfo.find("#is_email_verify").val().trim();
+        var fullname = formPersonalInfo.find("#fullname").val().trim();
         var gender = formPersonalInfo.find('input:radio[name=gender]:checked').val();        
         var bday = formPersonalInfo.find("#birthday-picker").val();
         var mobileNumber = formPersonalInfo.find("#mobileNumber").val();
+        var originalEmail = formPersonalInfo.find("#email_orig").val();
         var email = formPersonalInfo.find("#emailAddress").val();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -16,15 +22,62 @@
             data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, email:email, csrfname : csrftoken},
             url: "/memberpage/edit_personal",
             success: function(data) {
+                    $("#savePersonalInfo").text("SAVE CHANGES");
                     var obj = jQuery.parseJSON(data);
-                    console.log(obj);
-
-                   
+                    if(obj.result !== "success") {
+                        $("#verifiedEmail, #verifyEmail").css("display","none");
+                        if(obj.error.mobile) {
+                            $("#errorIndicatorMobileNumber").css("display","block");
+                            $("#errorTextMobile").text(obj.error.mobile);
+                        }
+                        if(obj.error.email) {
+                            $("#errorIndicatoreEmailAddress").css("display","block");
+                            $("#errorTextEmail").text(obj.error.email);
+                        }                        
+                    }
+                    else {
+                        if(email !== originalEmail) {
+                            $("#verifyEmail").css("display","block");
+                            $("#verifiedEmail").css("display","none");                            
+                        }
+                    }
             },
         });     
-        console.log(fname + lname + gender + bday + mobileNumber + email);
-
     });
+
+
+
+    $(document.body).on('click','#verifyEmailAction',function (e) {
+
+        var data = $("#emailAddress").val();
+        var field = $("#emailAddress").attr('name');
+        var loadingimg = $('img.verify_img'); 
+        var verifyspan = $('#verifyEmail');  
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');               
+        verifyspan.hide();
+        loadingimg.show();
+
+        $.ajax({
+            type: 'post',
+            data: {field:field, data:data, reverify:'true', csrfname : csrftoken},
+            url: "/memberpage/verify",
+            success: function(data) {
+                var obj = jQuery.parseJSON(data);   
+                loadingimg.hide();
+                $("#verifyEmail").css("display","none");    
+                if(obj === "success") {
+                    $("#verifiedEmail").css("display","block");                     
+                    $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
+                }
+                else {
+                    $("#errorIndicatoreEmailAddress").css("display","block");
+                    $("#errorTextEmail").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
+                }
+ 
+            },
+        });             
+    });    
 
 
 }(jQuery));
