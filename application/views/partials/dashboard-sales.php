@@ -44,6 +44,8 @@
         </tbody>
     </table>
 </div>
+<center>
 <?=$pagination; ?>
+</center>
 
 
