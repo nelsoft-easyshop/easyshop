@@ -33,13 +33,6 @@ class Memberpage extends MY_Controller
      *
      * @var integer
      */
-    public $feedBackPerPage = 1;
-
-    /**
-     * Number of feeds item per page
-     *
-     * @var integer
-     */
     public $salesPerPage = 1;
 
     /**
@@ -1827,7 +1820,7 @@ class Memberpage extends MY_Controller
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
-        $feedbackLimit = $this->feedBackPerPage;
+        $feedbackLimit = $feedbackUserManager::FEEDBACK_PER_PAGE;
         $salesPerPage = $this->salesPerPage;
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -1908,6 +1901,7 @@ class Memberpage extends MY_Controller
             $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
             $currentSalesViewData  = [
                 'sales' => $currentSales,
+                'type' => EsOrderProductStatus::FORWARD_SELLER,
                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
             ];
             $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
@@ -1922,6 +1916,7 @@ class Memberpage extends MY_Controller
             $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
             $historySalesViewData = [
                 'sales' => $historySales,
+                'type' => EsOrderProductStatus::PAID_FORWARDED,
                 'pagination' => $this->load->view('pagination/default', $paginationData, true),
             ];
             $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
@@ -2102,7 +2097,7 @@ class Memberpage extends MY_Controller
         $page = (int) ($this->input->get('page')) ? trim($this->input->get('page')) : 1;
         $requestType = (int) trim($this->input->get('request'));
         $memberId = $this->session->userdata('member_id');
-        $feedbackLimit = $this->feedBackPerPage;
+        $feedbackLimit = $feedbackUserManager::FEEDBACK_PER_PAGE;
         $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
         $paginationData = [
             'isHyperLink' => false,
@@ -2184,6 +2179,7 @@ class Memberpage extends MY_Controller
 
         $salesViewData  = [
             'sales' => $sales,
+            'type' => $requestType,
             'pagination' => $this->load->view('pagination/default', $paginationData, true),
             'dateFrom' => $dateFrom,
             'dateTo' => $dateTo,
