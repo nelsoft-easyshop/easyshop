@@ -217,5 +217,56 @@ class PromoManager
 
         return (bool) $isAccountRegistered;
     }
+
+    /**
+     * validates code and returns the details needed for scratch and win promo
+     * @param $code
+     * @return array
+     */
+    public function validateCodeForScratchAndWin($code)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tblProduct.idProduct, tblPromo.memberId AS c_member_id, tblProductImage.productImagePath as path')
+            ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+            ->leftJoin('EasyShop\Entities\EsProduct', 'tblProduct', 'WITH', 'tblProduct.idProduct = tblPromo.productId')
+            ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
+            ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
+            ->setParameter('code', $code)
+            ->setParameter('promoType', EsPromo::SCRATCH_AND_WIN)
+            ->getQuery();
+        $result = $query->getResult();
+
+        if ($result) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
+            $this->hydratePromoData($product);
+            $result = [
+                'id_product'=> $product->getIdProduct(),
+                'price'=> $product->getPrice(),
+                'product' => $product->getName(),
+                'brief' => $product->getBrief(),
+                'c_id_code' => $result[0]['c_member_id'],
+                'can_purchase' => $this->getPromoQuantityLimit($product),
+                'product_image_path' => $result[0]['path']
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update member id
+     * @param $memberId
+     * @param $code
+     * @return bool
+     */
+    public function tieUpCodeToMemberForScratchAndWin($memberId, $code)
+    {
+        $promo = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['code' => $code]);
+        $promo->setMemberId($memberId);
+        $this->em->persist($promo);
+        $this->em->flush();
+
+        return (int) $memberId === (int) $promo->getMemberId() ? true : false;
+    }
 }
 

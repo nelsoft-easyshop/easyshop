@@ -10,6 +10,8 @@ class ScratchCard extends MY_Controller
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
         $this->load->library('session');
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->promoManager = $this->serviceContainer['promo_manager'];
     }
 
     /**
@@ -40,7 +42,7 @@ class ScratchCard extends MY_Controller
      * @param code
      * @return json
      */
-    public function validateScratchCardCode()
+    public function validateScratchCardCode2()
     {
         $result = $this->product_model->validateScratchCardCode($this->input->post('code'));
         $result['logged_in'] = true;
@@ -49,6 +51,23 @@ class ScratchCard extends MY_Controller
         }
 
         echo json_encode(!$result ? false : $result);
+    }
+
+    /**
+     * checks if the code exist
+     *
+     * @param code
+     * @return json
+     */
+    public function validateScratchCardCode()
+    {
+        $result = $this->promoManager->validateCodeForScratchAndWin($this->input->post('code'));
+        $result['logged_in'] = true;
+        if (!$this->session->userdata('usersession') && !$this->check_cookie()) {
+            $result['logged_in'] = false;
+        }
+
+        echo json_encode($result);
     }
 
     /**
@@ -71,7 +90,7 @@ class ScratchCard extends MY_Controller
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
-        $viewData['product'] = $this->product_model->validateScratchCardCode($this->input->get('code'));
+        $viewData['product'] = $this->promoManager->validateCodeForScratchAndWin($this->input->get('code'));
         $viewData['code'] = $this->input->get('code');
         if (!$viewData['product']) {
             redirect('/Scratch-And-Win', 'refresh');
@@ -108,13 +127,13 @@ class ScratchCard extends MY_Controller
      */
     public function tieUpMemberToCode()
     {
-        $result = $this->product_model->tieUpMemberToCode(
+        $result = $this->promoManager->tieUpCodeToMemberForScratchAndWin(
             $this->session->userdata('member_id'),
             $this->input->post('code')
         );
+
         echo json_encode($result);
     }
-
 
     /**
      * ajax - update fullname
