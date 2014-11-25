@@ -164,7 +164,7 @@
                     else {
                         if(email !== originalEmail) {
                             $("#verifyEmail").css("display","block");
-                            $("#verifiedEmail").css("display","none");                            
+                            $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
                         }
                     }
             },
