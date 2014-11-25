@@ -15,21 +15,32 @@
                 $catObj = $objProduct->getCat();
                 $immediateCat = $catObj->getIdCat() === 1 ? html_escape($objProduct->getCatOtherName()) : html_escape($catObj->getName());
             ?>
-                <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                <div class="col-lg-3 col-md-3 col-xs-3 thumb">
                     <div class="panel-item">
                         <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                             <div class="div-item">
+                                <!-- PUT THE SECONDARY PRODUCT IMAGE HERE-->
                                 <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
-                                    <?php if($percentage && $percentage > 0):?>
-                                    <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
-                                    <?php endif; ?>
                                     <center>
                                         <div class="span-img-container">
                                         </div>
                                     </center>
                                 
-                            </span>
-                        </div>
+                                </span>
+                                
+                                <!-- PUT THE PRODUCT PRIMARY IMAGE HERE. REMOVE THE image-hover-none class if there is no secondary image -->
+                                <div class="image-hover-none main-image" style="background: url(/assets/images/img_cd_prod1.jpg) no-repeat center; background-size: cover;">
+                                    <center>
+                                        <div class="span-img-container">
+                                        </div>
+                                    </center>
+                                </div>
+                                <?php if($percentage && $percentage > 0):?>
+                                <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                <?php endif; ?>
+                                    
+                                
+                            </div>
                         </a>
                         <div class="div-item-info">
                             <p class="p-item-name">
@@ -62,14 +73,28 @@
                 <div class="panel panel-default panel-list-item">
                     <table width="100%">
                         <tr>
-                            <td width="20%" class="td-list-image" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
-                                <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
-                                    <div class="span-space">
-                                        <?php if($percentage && $percentage > 0):?>
-                                        <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
-                                        <?php endif;?>
+                            <td width="20%" class="td-list-image" style="">
+                                <div style="position: relative; height: 100%; width: 100%;">
+                                    <!-- PUT THE SECONDARY PRODUCT IMAGE HERE-->
+                                    <div style="background: url(<?=$productImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
+                                        <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
+                                            <div class="span-space">
+                                                
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                    <!-- PUT THE PRODUCT PRIMARY IMAGE HERE. REMOVE THE image-hover-none class if there is no secondary image -->
+                                    <div class="image-hover-none main-image-list" style="background: url(/assets/images/img_cd_prod1.jpg) center no-repeat; background-size: cover;">
+                                        <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
+                                            <div class="span-space">
+                                            
+                                            </div>
+                                        </a>
+                                    </div>
+                                     <?php if($percentage && $percentage > 0):?>
+                                        <span class="span-discount-pin-list" style="z-index: 999"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                    <?php endif;?>
+                                </div>
                             </td>
                             <td width="55%" class="td-list-item-info">
                                 <p class="p-list-item-name">
