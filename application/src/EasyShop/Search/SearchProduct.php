@@ -312,10 +312,10 @@ class SearchProduct
         $storeKeyword = $pageNumber ? false:true;
 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
-        $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+        $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
         $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
-        $originalOrder = $sortBy ? $productIds : $originalOrder;
+        $originalOrder = $sortBy ? $sortOrder : $originalOrder;
 
         $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
@@ -363,10 +363,10 @@ class SearchProduct
             $products = new ArrayCollection(iterator_to_array($iterator));
         }
 
-        $returnArray = array(
+        $returnArray = [
                     'collection' => $products,
                     'count' => $totalCount,
-                );
+                ];
 
         return $returnArray;
     }
