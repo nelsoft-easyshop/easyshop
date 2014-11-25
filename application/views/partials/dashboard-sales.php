@@ -3,6 +3,7 @@
 <span class="credit-date-label">From: </span> <span class="credit-date"><?=$dateFrom; ?></span>
 <span class="credit-date-label">To: </span> <span class="credit-date"><?=$dateTo; ?></span>
 <?php endif; ?>
+<?php if(count($sales) > 0): ?>
 <div style="overflow-y:no-scroll;overflow-x:scroll; height:auto; height: auto;">
     <table class="table table-total-sales table-striped"> 
         <thead>
@@ -21,7 +22,7 @@
         </thead>
 
         <tbody>
-            <?php if(count($sales) > 0): ?>
+            
                 <?php foreach ($sales as $transaction): ?>
                 <tr>
                     <th width="250px"><?=htmlspecialchars(utf8_encode($transaction->getProduct()->getName()),ENT_QUOTES,'ISO-8859-1'); ?></td>
@@ -36,14 +37,14 @@
                     <td width="250px" align="right" class="<?=$type === EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER ? 'td-net' : 'td-p-net'?>">&#8369; <?=number_format($transaction->getNet(),2,'.',','); ?></td>
                 </tr> 
                 <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="8" align="center">No data available</td>
-                </tr>
-            <?php endif; ?>
         </tbody>
     </table>
 </div>
+<?php else: ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>No data available
+    </div>
+<?php endif; ?>
 <center>
 <?=$pagination; ?>
 </center>
