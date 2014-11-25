@@ -3,7 +3,7 @@ a, li, input, textarea, button, .span-nav-next, .span-nav-prev{
 }
 
 .product-disable-nav {
-    opacity: 0;
+    display: none;
 }
 
 a:hover{

@@ -69,7 +69,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <header class="new-header-con">
     <div class="main-container">
-        <div>
+        <div class="vendor-img-logo-con">
             <a href="/">
                 <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
             </a>

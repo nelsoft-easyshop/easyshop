@@ -540,8 +540,8 @@ header {
 }
 
 #inner-header {
-    background-color: #fff;
-    padding-top:35px;
+    background: #fff url(../images/img-snow.jpg) no-repeat top center;
+    padding-top:30px;
 }
 
 #inner-header .logo-container,
