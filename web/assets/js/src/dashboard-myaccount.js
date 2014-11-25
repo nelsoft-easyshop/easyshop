@@ -1,5 +1,36 @@
 (function ($) {
 
+    /************** Delivery Address ***************************/
+
+    $('.address_dropdown, .disabled_country').chosen({width:'200px'});
+    $('.stateregionselect').on('change', function(){
+
+        var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+        cityselect.val(0);
+        cityFilter( $(this), cityselect );
+    });
+
+
+    function cityFilter(stateregionselect,cityselect){
+        var stateregionID = stateregionselect.find('option:selected').attr('value');
+        var optionclone = cityselect.find('option.optionclone').clone();
+        optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
+
+        cityselect.find('option.echo').remove();
+        
+        if(stateregionID in jsonCity){
+            jQuery.each(jsonCity[stateregionID], function(k,v){
+                //optionclone.attr('value', k).html(v).show();
+                optionclone.attr('value', k).html(v).css('display', 'block');
+                cityselect.append(optionclone.clone());
+            });
+        }
+        
+        cityselect.trigger('chosen:updated');
+        
+    }
+    
+    /************** End Delivery Address ***************************/
     
     /************* Personal Information **************/
     var formPersonalInfo = $("#formPersonalInfo");
@@ -78,6 +109,9 @@
             },
         });             
     });    
+
+
+    /**************** END PERSONAL INFORMATION ******************/
 
 
 }(jQuery));

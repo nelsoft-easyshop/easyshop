@@ -3,6 +3,7 @@
 <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard-transaction.css' rel="stylesheet" media='screen'/>
@@ -89,8 +90,13 @@
 <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type="text/javascript">
+    var jsonCity = <?php echo $json_city;?>;
+</script>
 

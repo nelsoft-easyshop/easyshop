@@ -49,16 +49,23 @@
                  <div class="form-group">
                     <label class="col-sm-3 control-label">Address : </label>
                     <div class="col-sm-4">
-                        <select class="text-info text-address">
-                            <option>--Select State/Region--</option>
-                            <option>Bataan</option>
+                        <select class="text-info text-address address_dropdown stateregionselect" id="deliver_stateregion" data-status="<?php echo $c_stateregionID?>">
+                            <option value="0">--Select State/Region--</option>
+                            <?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
+                                <option class="echo" value="<?php echo $srkey?>" <?php echo $c_stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
+                            <?php endforeach;?>
                         </select>
                         <span class="span-label-address">State/Region</span>
                     </div>
                     <div class="col-sm-4 col-city">
-                        <select class="text-info  text-address">
-                            <option>--City--</option>
-                            <option>Mariveles</option>
+                        <select class="text-info text-address address_dropdown cityselect" id="delivery_city" data-status="<?php echo $c_cityID?>">
+                            <option value="0">--- Select City ---</option>
+                            <option class="optionclone" value="" style="display:none;" disabled></option>
+                            <?php if($c_cityID != '' && $c_stateregionID != ''):?>
+                                <?php foreach($city_lookup[$c_stateregionID] as $lockey=>$city):?>
+                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </select>
                         <span class="span-label-address">City</span>
                     </div>
