@@ -1,5 +1,101 @@
 (function ($) {
 
+
+    /**************** GOOGLE MAPS ******************************/
+
+    $(".refresh_map").click(function(){     
+        var stateregion = $('#delivery_stateregion').find('option:selected').text();
+        var city = $('#delivery_city').find('option:selected').text();
+        var type = "delivery";
+
+        
+        var address = stateregion + " " + city + " PH";
+        console.log(address);
+        if(address === " --- Select City --- PH") {
+            alert('Please specify a valid address.');            
+            $( ".map-container" ).slideToggle( "slow" );
+        }
+        else {
+            codeAddress(address, type);
+        }            
+        
+    });
+
+    function codeAddress(address, type) {
+        $("#delivery_mapcanvas").css("display","block");
+      geocoder = new google.maps.Geocoder();
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+
+            google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
+        }
+      });
+    }  
+    
+    //all DOM elements accessed via id
+    function initialize(myLatlng, type) {
+        var mapOptions = {
+          center:myLatlng,
+          zoom: 15
+        };
+
+        var templat = $('#temp_clat');
+        var templng = $('#temp_clng');
+        mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),mapOptions);
+        markerDelivery = new google.maps.Marker({
+            position: myLatlng,
+            map: mapDelivery,
+            title:"I'm here!",
+            draggable: true
+        });
+        google.maps.event.addListener(markerDelivery, 'dragend', function(evt){
+            templat.val(evt.latLng.lat());
+            templng.val(evt.latLng.lng());
+            
+            window.setTimeout(function(){
+                mapDelivery.panTo(markerDelivery.getPosition());
+            }, 500);
+        });
+        google.maps.event.addListenerOnce(mapDelivery, 'idle', function(){
+            google.maps.event.trigger(mapDelivery, 'resize');
+            window.setTimeout(function(){
+                mapDelivery.panTo(markerDelivery.getPosition());
+            }, 500);
+        });
+        
+        templat.val(myLatlng.lat());
+        templng.val(myLatlng.lng());
+    }      
+
+    $('.map-trigger').click(function () {
+        var maplat = $(this).siblings('input[name="map_lat"]').val();
+        var maplng = $(this).siblings('input[name="map_lng"]').val();
+        var refreshmapbtn = $('.refresh_map');
+        var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
+        var type = this.name;
+        
+        if (maplat == 0 && maplng == 0){
+            refreshmapbtn.trigger('click');
+        }else{
+            var myLatlng =  new google.maps.LatLng(maplat,maplng);
+            if(mapcanvas.hasClass('map_canvas')){
+                if( type === 'personal' ){
+                    mapPersonal.setCenter(myLatlng);
+                    markerPersonal.setPosition(myLatlng);
+                }
+                else if( type === 'delivery' ){
+                    mapDelivery.setCenter(myLatlng);
+                    markerDelivery.setPosition(myLatlng);
+                }
+            }else{
+                google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
+            }
+        }   
+                  
+    });
+
+    /**************** END GOOGLE MAPS ******************************/
+
     /************** Delivery Address ***************************/
 
     $('.address_dropdown, .disabled_country').chosen({width:'200px'});
@@ -9,7 +105,6 @@
         cityselect.val(0);
         cityFilter( $(this), cityselect );
     });
-
 
     function cityFilter(stateregionselect,cityselect){
         var stateregionID = stateregionselect.find('option:selected').attr('value');
@@ -29,7 +124,7 @@
         cityselect.trigger('chosen:updated');
         
     }
-    
+
     /************** End Delivery Address ***************************/
     
     /************* Personal Information **************/
