@@ -297,9 +297,6 @@
             </div>
             <div id="sales">
                 <?=$salesView;?>
-                 <!--<div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
             </div>
         </div>
     </div>
