@@ -3,6 +3,9 @@
 namespace EasyShop\Promo;
 
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
+use EasyShop\Entities\EsPromo;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * PromoManager Class
@@ -185,6 +188,34 @@ class PromoManager
         }
 
         return $promoQuantityLimit;
+    }
+
+    /**
+     * Register member for buy at zero promo
+     * @param $productId
+     * @param $memberId
+     * @return bool
+     */
+    public function registerMemberForBuyAtZero($productId, $memberId)
+    {
+        $isAccountRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                            ->findOneBy([
+                                                'productId' => $productId,
+                                                'memberId' => $memberId,
+                                                'promoType' => EsPromo::BUY_AT_ZERO
+                                            ]);
+        if (!$isAccountRegistered) {
+            $promo = new EsPromo();
+            $promo->setMemberId($memberId);
+            $promo->setProductId($productId);
+            $promo->setPromoType(EsPromo::BUY_AT_ZERO);
+            $promo->setCreatedAt(new \DateTime('now'));
+
+            $this->em->persist($promo);
+            $this->em->flush();
+        }
+
+        return (bool) $isAccountRegistered;
     }
 }
 

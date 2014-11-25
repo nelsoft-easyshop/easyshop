@@ -21,33 +21,31 @@ class EsPromo
      * @var integer
      */
     const COUNTDOWN_SALE = 1;
-    
+
     /**
      * @var integer
      */
     const FIXED_DISCOUNT = 2;
-    
+
     /**
      * @var integer
      */
     const PEAK_HOUR_SALE = 3;
-    
+
     /**
      * @var integer
      */
     const LISTING_PROMO = 4;
-    
+
     /**
      * @var integer
      */
     const SCRATCH_AND_WIN = 5;
-    
-        
+
     /**
      * @var integer
      */
     const BUY_AT_ZERO = 6;
-    
 
     /**
      * @var integer
@@ -80,9 +78,9 @@ class EsPromo
     private $code = '0';
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="promo_type", type="boolean", nullable=true)
+     * @ORM\Column(name="promo_type", type="integer", nullable=true)
      */
     private $promoType = '0';
 
@@ -98,7 +96,7 @@ class EsPromo
     /**
      * Get idPromo
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdPromo()
     {
@@ -121,7 +119,7 @@ class EsPromo
     /**
      * Get memberId
      *
-     * @return integer 
+     * @return integer
      */
     public function getMemberId()
     {
@@ -144,7 +142,7 @@ class EsPromo
     /**
      * Get productId
      *
-     * @return integer 
+     * @return integer
      */
     public function getProductId()
     {
@@ -167,7 +165,7 @@ class EsPromo
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -177,7 +175,7 @@ class EsPromo
     /**
      * Set promoType
      *
-     * @param boolean $promoType
+     * @param integer $promoType
      * @return EsPromo
      */
     public function setPromoType($promoType)
@@ -190,7 +188,7 @@ class EsPromo
     /**
      * Get promoType
      *
-     * @return boolean 
+     * @return integer
      */
     public function getPromoType()
     {
@@ -213,7 +211,7 @@ class EsPromo
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
