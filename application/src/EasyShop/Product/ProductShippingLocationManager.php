@@ -107,10 +107,7 @@ class ProductShippingLocationManager
                         $intersectArray = [];
  
                         foreach( $arr2 as $attr2=>$t2 ){
-                            if( $attr1 === $attr2 ){
-                                continue;
-                            }
-                            else{ 
+                            if( $attr1 !== $attr2 ){
                                 $temp1 = array_intersect_assoc($t1, $t2); 
                                 if( count($temp1) > 0 ){
                                     $isFound = true;
