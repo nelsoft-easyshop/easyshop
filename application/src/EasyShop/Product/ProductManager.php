@@ -570,12 +570,7 @@ class ProductManager
             if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-                    $isOutOfRange = false;
                     if(($lprice !== "" && bccomp($discountedPrice, $lprice) === -1) || ($uprice !== "" && bccomp($discountedPrice, $uprice) === 1)) {
-                            $isOutOfRange = true;
-                    }
-
-                    if($isOutOfRange){
                         unset($categoryProductIds[$key]);
                     }
                 }   
