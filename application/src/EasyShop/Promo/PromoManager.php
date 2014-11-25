@@ -238,6 +238,7 @@ class PromoManager
 
         if ($result) {
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
+            $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['memberId' => $result[0]['c_member_id']]);
             $this->hydratePromoData($product);
             $result = [
                 'id_product'=> $product->getIdProduct(),
@@ -245,7 +246,7 @@ class PromoManager
                 'product' => $product->getName(),
                 'brief' => $product->getBrief(),
                 'c_id_code' => $result[0]['c_member_id'],
-                'can_purchase' => $this->getPromoQuantityLimit($product),
+                'can_purchase' => (bool) $isMemberRegistered ? false : true,
                 'product_image_path' => $result[0]['path']
             ];
         }
