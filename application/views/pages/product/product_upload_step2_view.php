@@ -485,18 +485,17 @@
                             <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
                             
                             
-                                                 
+                             <!--                    
                             <iframe id="upload_frame" class="loader-iframe" name="upload_frame" frameborder="0" border="0" src="" scrolling="no" scrollbar="no" >
                                 
                             </iframe> 
-                            
-                            <!--
-                            
+                            -->
+                       
                             <div class="loader_div" style="display:none">
                                 <img src='<?php echo getAssetsDomain(); ?>assets/images/orange_loader.gif'>
                                 <div class="percentage"></div>
                             </div>
-                            -->
+                   
                         </div> 
                         
                         
