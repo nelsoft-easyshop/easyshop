@@ -11,7 +11,10 @@
     <div class="clear"></div>
     <section>
         <div class="wrapper profile_content">
-            <div class="logo"> <a href="/"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="/">
+                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                <!-- <span class="span_bg"></span> -->
+            </a> </div>
             <div class="profile_top_nav">               
             
                 <div>

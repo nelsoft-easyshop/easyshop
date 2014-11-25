@@ -1,4 +1,7 @@
 /** <!--Member page CSS Janz--> **/
+#member_page_body {
+    margin-top: -80px;
+}
 
 #tx_dialog_pass_cont input{
     width: 240px;
@@ -6,7 +9,7 @@
     margin-left: 5px;
 }
 
-#tx_dialog_pass_cont lbl-tx-password{
+#tx_dialog_pass_cont .lbl-tx-password{
     width: 140px;
 }
 
