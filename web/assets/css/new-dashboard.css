@@ -1422,6 +1422,9 @@ a{
     text-align: left;
 }
 
+.col-button-searc-hist{
+    padding-left: 0px;
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1906,5 +1909,9 @@ a{
     .green-tip,
     .red-tip{
         top: -21px;
+    }
+    
+    .col-button-searc-hist{
+        padding-left: 15px;
     }
 }
