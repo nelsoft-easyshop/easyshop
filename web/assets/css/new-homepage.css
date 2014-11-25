@@ -540,6 +540,11 @@ header {
 }
 
 #inner-header {
+    background-color: #fff;
+    padding-top:35px;
+}
+
+#inner-header.christmas-theme {
     background: #fff url(../images/img-snow.jpg) no-repeat top center;
     padding-top:30px;
 }

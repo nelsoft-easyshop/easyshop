@@ -1,6 +1,10 @@
 /** <!--Member page CSS Janz--> **/
-#member_page_body {
+.memberpage-christmas-theme {
     margin-top: -80px;
+}
+
+.header-old-christmas-logo {
+    margin-right: 65px;
 }
 
 #tx_dialog_pass_cont input{
