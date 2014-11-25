@@ -92,7 +92,6 @@ class Memberpage extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                     ->setMethod('POST')
-                    ->add('nickname', 'text')
                     ->add('fullname', 'text')
                     ->add('gender', 'text')
                     ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
@@ -101,8 +100,7 @@ class Memberpage extends MY_Controller
                     ->getForm();
 
         $form->submit([
-            'nickname' => $this->input->post('nickname')
-            , 'fullname' => $this->input->post('fullname')
+             'fullname' => $this->input->post('fullname')
             , 'gender' => $this->input->post('gender')
             , 'dateofbirth' => $this->input->post('dateofbirth')
             , 'mobile' => $this->input->post('mobile')
@@ -111,19 +109,16 @@ class Memberpage extends MY_Controller
 
         if($form->isValid()){
             $formData = $form->getData();
-            $validNickname = (string)$formData['nickname'];
             $validFullname = (string)$formData['fullname'];
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $validEmail = (string)$formData['email'];
-
             $um->setUser($memberId)
                ->setMobile($validMobile)
                ->setEmail($validEmail)
                ->setMemberMisc([
-                    'setNickname' => $validNickname
-                    , 'setFullname' => $validFullname
+                     'setFullname' => $validFullname
                     , 'setGender' => $validGender
                     , 'setBirthday' => new DateTime($validDateOfBirth)
                     , 'setLastmodifieddate' => new DateTime('now')
@@ -1185,10 +1180,11 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function verify(){
+
         if($this->input->post('reverify') === 'true'){
             $uid = $this->session->userdata('member_id');
-
             $data = $this->register_model->get_verifcode($uid);
+
 
             if($this->input->post('field') === 'mobile' && $this->input->post('data') == $data['contactno'])
             {
@@ -1219,6 +1215,7 @@ class Memberpage extends MY_Controller
             }
             else if($this->input->post('field') === 'email' && $this->input->post('data') == $data['email'])
             {
+
                 //GENERATE NEW HASH FOR EMAIL VERIFICATION
                 $hash = sha1($this->session->userdata('session_id').time());
                 $confirmation_code = $data['mobilecode'];
