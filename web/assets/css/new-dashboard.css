@@ -1074,9 +1074,11 @@ a{
     border-radius: 4px;
     background: #e2e2e2;
     width: 100%;
+    cursor: pointer;
 }
 
-.hide-selection-cont{
+.hide-selection-cont,
+.hide-p-selection-cont{
     border: solid #e2e2e2 1px;
     padding: 10px;
     margin-top: 10px;
@@ -1086,10 +1088,11 @@ a{
     border-radius: 4px;
     background: #fff;
     display: none;
-    
+    z-index: 998;
 }
 
-.hide-selection-cont input[type="checkbox"]{
+.hide-selection-cont input[type="checkbox"],
+.hide-p-selection-cont input[type="checkbox"]{
     height: 10px;
     margin-right: 10px;
 }
@@ -1303,6 +1306,38 @@ a{
     position: absolute;
     top: 8px;
     left: 25px;
+}
+
+.ui-datepicker-prev {
+    background: url("/assets/images/img_arrow_left.png") no-repeat center;
+}
+
+ .ui-datepicker-prev-hover{
+   background: url("/assets/images/img_arrow_left.png") no-repeat center!important;
+   border: none !important;
+  
+}
+
+.ui-datepicker-next {
+    background: url("/assets/images/img_arrow_left.png") no-repeat center;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+ .ui-datepicker-next-hover{
+   background: url("/assets/images/img_arrow_left.png") no-repeat center!important;
+   border: none !important;
+   -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+  
 }
 
 @media only screen and (max-width: 991px){
