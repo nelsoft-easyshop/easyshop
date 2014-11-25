@@ -31,7 +31,7 @@ class ProductShippingLocationManager
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->getProductShippingDetails($productId);
 
-          $data = [
+        $data = [
             'has_shippingsummary' => false,
             'is_freeshipping' => false,
             'location_lookup' => [],
@@ -56,7 +56,7 @@ class ProductShippingLocationManager
             if( !isset($data['shipping_locations'][$pid]) ){
                 $data['shipping_locations'][$pid] = [];
             }
-            $data['location_lookup'][$detail['id_location']] = $detail['location'];
+            $data['location_lookup'][$locid] = $detail['location'];
 
             if( $locid === 0 && $price === 0 ){
                 $deliveryCount++;
