@@ -7,6 +7,9 @@ namespace EasyShop\Feedback;
  */
 class FeedbackUserManager
 {
+
+    const FEEDBACK_PER_PAGE = 10;
+
     /**
      * Entity Manager instance
      *

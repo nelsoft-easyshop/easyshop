@@ -746,9 +746,6 @@
         $('.hide-selection-cont').slideToggle("fast");
         
     });
-
-    
-   
     
     $('#hide-date').click(function() {
         $('#th-date').toggle();
