@@ -1249,6 +1249,12 @@ a{
     background: #ee4315;
 }
 
+@-moz-document url-prefix() {
+    .pin-cat{
+        margin-top: -3px;
+    }
+}
+
 .orange-tip{
     position: absolute;
     display: inline;
