@@ -570,11 +570,35 @@ class ProductManager
             if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-                    $isForlPrice = (bool) ($discountedPrice >= floatval($lprice));
-                    $isForuPrice = (bool) ($discountedPrice <= floatval($uprice));
+                    $isForlPrice = bccomp($discountedPrice, floatval($lprice));
+                    $isForuPrice = bccomp($discountedPrice, floatval($uprice));
+                    if($lprice !== "" && $uprice !== "") {
+                        if(($isForlPrice == 1 || $isForlPrice == 0) && ($isForuPrice == -1 || $isForuPrice == 0)) {
+                            $isWithinRange = true;
+                        }
+                        else {
+                            $isWithinRange = false;
+                        }
+                    }
+                    else {
+                        if($lprice !== "") {
+                            if($isForlPrice == 1 || $isForlPrice == 0) {
+                                $isWithinRange = true;
+                            }
+                            else {
+                                $isWithinRange = false;
+                            }
+                        }
+                        else {
+                            if($isForuPrice == -1 || $isForuPrice == 0) {
+                                $isWithinRange = true;
+                            }
+                            else {
+                                $isWithinRange = false;
+                            }
+                        }
+                    }
 
-                    $isWithinRange = ($lprice !== "" && $uprice !== "") ? (($isForlPrice && $isForuPrice) ? true : false) : 
-                                                                        (($lprice !== "") ? ($isForlPrice ? $isForlPrice : false) : ($isForuPrice ? $isForuPrice : false));
                     if(!$isWithinRange) {
                         unset($categoryProductIds[$key]);
                     }
