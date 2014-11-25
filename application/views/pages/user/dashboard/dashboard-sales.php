@@ -57,13 +57,10 @@
                         <input type="checkbox" id="hide-handling"/><label class="control-label" for="hide-handling">Hide handling fee</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="hide-handling"/><label class="control-label" for="hide-handling">Hide total amount</label>
+                        <input type="checkbox" id="hide-total"/><label class="control-label" for="hide-total">Hide total amount</label>
                     </div>
                     <div>
                         <input type="checkbox" id="hide-es-charge"/><label class="control-label" for="hide-es-charge">Hide EasyShop charge</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="hide-payment"/><label class="control-label" for="hide-payment">Hide payment charge</label>
                     </div>
                     <div>
                         <input type="checkbox" id="hide-payment"/><label class="control-label" for="hide-payment">Hide payment charge</label>
@@ -140,13 +137,10 @@
                         <input type="checkbox" id="hide-p-handling"/><label class="control-label" for="hide-p-handling">Hide handling fee</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="hide-p-handling"/><label class="control-label" for="hide-p-handling">Hide total amount</label>
+                        <input type="checkbox" id="hide-p-total"/><label class="control-label" for="hide-p-total">Hide total amount</label>
                     </div>
                     <div>
                         <input type="checkbox" id="hide-p-es-charge"/><label class="control-label" for="hide-p-es-charge">Hide EasyShop charge</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="hide-p-payment"/><label class="control-label" for="hide-p-payment">Hide payment charge</label>
                     </div>
                     <div>
                         <input type="checkbox" id="hide-p-payment"/><label class="control-label" for="hide-p-payment">Hide payment charge</label>

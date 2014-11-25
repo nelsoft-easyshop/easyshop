@@ -154,10 +154,6 @@ a{
     padding: 29px 30px;
     background-size: 100%;
     position: relative;
-    -webkit-filter: brightness(50%);
-	-moz-filter: brightness(50%);
-	-o-filter: brightness(50%);
-	-ms-filter: brightness(50%);
     z-index:2;
 }
 
@@ -1236,6 +1232,75 @@ a{
 .feedback-cat-title{
     font-weight: 900;
     font-size: 15px;
+    display: inline-block;
+    color: #fff;
+    padding: 5px 10px;
+    margin-top: -25px;
+    position: relative;
+}
+
+.as-buyer{
+    background: #ff893a;
+}
+
+.as-seller{
+    background: #00a388;
+}
+
+.for-seller{
+    background: #4370cd;
+}
+
+.for-buyer{
+    background: #ee4315;
+}
+
+.orange-tip{
+    position: absolute;
+    display: inline;
+    top: -25px;
+    margin-left: 0px;
+    border-width: 10px 0 0 10px;
+     width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent transparent transparent #ff5003;
+}
+
+.green-tip{
+    position: absolute;
+    display: inline;
+    top: -25px;
+    margin-left: 0px;
+    border-width: 10px 0 0 10px;
+     width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent transparent transparent #007c67;
+}
+
+.blue-tip{
+    position: absolute;
+    display: inline;
+    top: -25px;
+    margin-left: 0px;
+    border-width: 10px 0 0 10px;
+     width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent transparent transparent #355ba9;
+}
+
+.red-tip{
+    position: absolute;
+    display: inline;
+    top: -25px;
+    margin-left: 0px;
+    border-width: 10px 0 0 10px;
+     width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent transparent transparent #ce360c;
 }
 
 .col-item-message{
@@ -1344,6 +1409,11 @@ a{
     filter: FlipH;
     -ms-filter: "FlipH";
   
+}
+
+.feedback-content-dashboard{
+    padding: 0 0px;
+    text-align: left;
 }
 
 @media only screen and (max-width: 991px){
@@ -1810,5 +1880,25 @@ a{
     
     .hide-selection-box{
         margin-top: 10px;
+    }
+    
+    .total-sale-amount,
+    .payout-sale-amount{
+        display: none;
+    }
+    
+    .pin-cat{
+        float: right;
+    }
+    
+    .feedback-cat-title{
+        margin-top: -21px;
+    }
+    
+    .orange-tip,
+    .blue-tip,
+    .green-tip,
+    .red-tip{
+        top: -21px;
     }
 }

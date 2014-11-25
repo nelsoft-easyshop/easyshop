@@ -48,20 +48,21 @@
             <div class="panel panel-default panel-feedback-item">
                 <div class="row">
                     <div class="col-md-12"> 
-
-                        <?php if( (int)$feedback['feedbKind'] === 0 
-                                  && (int)$memberId === $feedback['revieweeId'] ): ?>
-                        <p class="feedback-cat-title">Feedback as seller</p>
-                        <?php elseif( (int)$feedback['feedbKind'] === 1 
-                                  && (int)$memberId === $feedback['revieweeId'] ): ?>
-                        <p class="feedback-cat-title">Feedback as buyer</p>
-                        <?php elseif( (int)$feedback['feedbKind'] === 1 
-                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
-                        <p class="feedback-cat-title">Feedback for seller</p>
-                        <?php elseif( (int)$feedback['feedbKind'] === 0 
-                                  && (int)$memberId === $feedback['reviewerId'] ): ?>
-                        <p class="feedback-cat-title">Feedback for buyer</p>
-                        <?php endif; ?>
+                        <div class="pin-cat">
+                            <?php if( (int)$feedback['feedbKind'] === 0 
+                                      && (int)$memberId === $feedback['revieweeId'] ): ?>
+                            <p class="feedback-cat-title as-seller">Feedback as seller<div class="green-tip"></div></p>
+                            <?php elseif( (int)$feedback['feedbKind'] === 1 
+                                      && (int)$memberId === $feedback['revieweeId'] ): ?>
+                            <p class="feedback-cat-title as-buyer">Feedback as buyer<div class="orange-tip"></div></p>
+                            <?php elseif( (int)$feedback['feedbKind'] === 1 
+                                      && (int)$memberId === $feedback['reviewerId'] ): ?>
+                            <p class="feedback-cat-title for-seller">Feedback for seller<div class="blue-tip"></div></p>
+                            <?php elseif( (int)$feedback['feedbKind'] === 0 
+                                      && (int)$memberId === $feedback['reviewerId'] ): ?>
+                            <p class="feedback-cat-title for-buyer">Feedback for buyer<div class="red-tip"></div></p>
+                            <?php endif; ?>
+                        </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <table>
