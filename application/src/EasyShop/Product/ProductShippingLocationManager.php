@@ -40,7 +40,6 @@ class ProductShippingLocationManager
                 ''=> [
                     'location' => [ '' => [''=>''] ],
                     'attr' => [''=>''],
-                    'disable_lookup' => []
                 ]
             ]
         ];
@@ -185,21 +184,16 @@ class ProductShippingLocationManager
                 }
 
                 foreach( $finalarr as $fkey=>$farr ){
-                    $locPriceFilter = [];
-                    $disablearr = [];
+                    $locPriceFilter = []; 
                     foreach($farr['location'] as $locid=>$price){
                         if( !isset($locPriceFilter[$price]) ){
                             $locPriceFilter[$price] = [];
                         }
                         if( !in_array($locid, $locPriceFilter[$price]) ){
                             $locPriceFilter[$price][] = $locid;
-                        }
-                        if( !in_array($locid,$disablearr) ){
-                            $disablearr[] = $locid;
-                        }
+                        } 
                     }
-                    $finalarr[$fkey]['location'] = $locPriceFilter;
-                    $finalarr[$fkey]['disable_lookup'] = $disablearr;
+                    $finalarr[$fkey]['location'] = $locPriceFilter; 
                 }
                 $data['shipping_display'] = $finalarr;
             }
