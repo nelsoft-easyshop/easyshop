@@ -14,26 +14,24 @@
     </span>
 
     <div class="row">
-        <div class="col-sm-7 col-xs-12">
+        <div class="col-sm-9 col-xs-12">
             <div class="row">
-                <div class="col-xs-6" style="padding-right:0px;">
+                <div class="col-sm-5 col-xs-6" style="padding-right:0px;">
                     <div class="form-search-item">
                     <input type="text" class="input-date-sales date-picker-sales date-from" placeholder="Start Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-sm-5 col-xs-6">
                     <div class="form-search-item">
                     <input type="text" class="input-date-sales date-picker-sales date-to" placeholder="End Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
-                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>" data-container="current-sales-container" class="filter-sales" value="Search" />
+                <div class="col-sm-2 col-xs-12 col-button-searc-hist">
+                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>" data-container="current-sales-container" class="filter-sales btn-block btn-setting-edit-btn" value="Search" />
                 </div>
             </div>
-        </div>
-        <div class="col-sm-2">
         </div>
         <div class="col-sm-3 col-xs-12" >
             <div style="position: relative; width: 100%;">
@@ -94,26 +92,24 @@
     </span>
 
     <div class="row">
-        <div class="col-sm-7 col-xs-12">
+        <div class="col-sm-9 col-xs-12">
             <div class="row">
-                <div class="col-xs-6" style="padding-right:0px;">
+                <div class="col-sm-5 col-xs-6" style="padding-right:0px;">
                     <div class="form-search-item">
                     <input type="text" class="input-date-sales date-picker-sales date-from" placeholder="Start Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-sm-5 col-xs-6">
                     <div class="form-search-item">
                     <input type="text" class="input-date-sales date-picker-sales date-to" placeholder="End Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
-                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>" data-container="history-sales-container" class="filter-sales" value="Search" />
+                <div class="col-sm-2 col-xs-12 col-button-searc-hist">
+                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>" data-container="history-sales-container" class="filter-sales btn-block btn-setting-edit-btn" value="Search" />
                 </div>
             </div>
-        </div>
-        <div class="col-sm-2">
         </div>
         <div class="col-sm-3 col-xs-12" >
             <div style="position: relative; width: 100%;">
