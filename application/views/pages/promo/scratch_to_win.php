@@ -8,7 +8,7 @@
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
             <p>
-                Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won the following item:
+                Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
             </p>
             <div class="claim-bg ">
                 <div id="prod_image">
@@ -204,7 +204,7 @@
             <div class="scratch-win-error purchase-limit-error">
                 <h2>Sorry</h2>
                 <p>
-                    Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won the following item:
+                    Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
                 </p>
                 <div class="claim-bg error-claim">
                     <div id="prod_image">

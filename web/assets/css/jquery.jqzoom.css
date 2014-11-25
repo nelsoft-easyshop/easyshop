@@ -4,6 +4,7 @@
   text-align: center;
   z-index:0;
   cursor:crosshair;
+  margin: auto;
 /*  height: 540px;*/
 }
 
@@ -153,48 +154,6 @@
   display:block;
 }
 
-#thumblist {
-  clear:both;
-  list-style: none;
-}
-
-#thumblist li {
-  float: left;
-  margin:5px;
-}
-
-/*#thumblist li img {
-  height: 60px;
-  width:60px;
-}*/
-
-#thumblist li {
-    background-color: #FFFFFF;
-    display: inline-block;
-}
-
-#thumblist li a {
-    border: 1px solid #E5E5E5;
-    display: table-cell;
-    height: 70px;
-    vertical-align: middle;
-    width: 70px;
-}
-
-#thumblist li a:hover {
-  border:1px solid #f18200; 
-}
-
-#thumblist li a.zoomThumbActive {
-  border:1px solid #f18200;
-}
-
-#thumblist li a img {
-    height: auto;
-    max-height: 70px;
-    max-width: 70px;
-    width: auto;
-}
 .jqzoom {
     display: table-cell;
     vertical-align: middle;

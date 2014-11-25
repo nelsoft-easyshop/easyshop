@@ -1,8 +1,20 @@
 
     (function($) {
-
+    
         $(document).on('click', '#send_registration', function() {
             $('#send_registration').html('Please wait');
+            
+            var $button = $(this);
+            if(!$button.hasClass('enabled')){
+                alert('Please select the attributes you want for this item.');
+                return false;
+            }
+
+            if(!$button.data('canpurchase')){
+                alert('Sorry, this item is currently not available for purchase.');
+                return false;
+            }
+            
             var $productId = $("#productId").val();
             var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
             var msg = 'Kindly login to qualify for this promo.';
@@ -25,7 +37,7 @@
                     else if(data){
                         msg = "Congratulations! You now have the chance to win this  " + 
                             escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
-                            "announced on October 31, 2014. Stay tuned for more EasyShop.ph " +
+                            "announced on December 16, 2014. Stay tuned for more EasyShop.ph " +
                             "promotions. ";
                     }
                     else{

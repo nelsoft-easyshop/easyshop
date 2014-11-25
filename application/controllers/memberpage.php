@@ -58,10 +58,8 @@ class Memberpage extends MY_Controller
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
-        
         $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
@@ -416,6 +414,7 @@ class Memberpage extends MY_Controller
         $user_product_count = $this->memberpage_model->getUserItemCount($uid);
         $um = $this->serviceContainer['user_manager'];
 
+        
         $data = array(
             'title' => 'Easyshop.ph - Member Profile',
             'image_profile' => $um->getUserImage($uid),
@@ -704,7 +703,6 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function transactionResponse(){
-        
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form'
@@ -729,21 +727,8 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $authenticateData = array(
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'member_id' => $this->session->userdata('member_id')
-            );
-            
-            if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
-                $serverResponse = array(
-                    'result' => 'invalid',
-                    'error' => 'Incorrect password.'
-                );
-                echo json_encode($serverResponse);
-                exit;
-            }
-            
+            $memberId = $this->session->userdata('member_id');
+
             // Check type of response ( if user or seller response )
             if( $this->input->post('buyer_response') ){
                 $data['order_product_id'] = $this->input->post('buyer_response');

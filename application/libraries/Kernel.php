@@ -456,6 +456,13 @@ class Kernel
                             );
         };
 
+        // Product Shipping Manager
+        $container['product_shipping_location_manager'] = function ($c) use ($container) {
+            return new \EasyShop\Product\ProductShippingLocationManager(
+                            $container['entity_manager']
+                        );
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

@@ -1,6 +1,8 @@
 
 (function($) {
-
+    
+    stickyMenualt();
+    
     /**
      * Function call by .sort of the jquery
      * @param  {integer} a
@@ -109,7 +111,8 @@
     }
 
     function checkCombination($arraySelected)
-    {
+    {            
+        var $addToCartButton = $('.prod-add-to-cart-btn');        
         // check possible combination
         $.each($productCombQuantity, function(i, val) {
             $arrayCombination = val.product_attribute_ids;
@@ -126,20 +129,21 @@
 
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
-                    $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
-                    $(".in-stock").html("Out of Stock");
+                    $addToCartButton.removeClass("enabled").addClass("disabled");
+                    $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
                     };
-                    $('.prod-add-to-cart-btn').removeClass("disabled").addClass("enabled");
-                    $(".in-stock").html("In Stock");
+
+                    $addToCartButton.removeClass("disabled").addClass("enabled");
+                    $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }
                 if($("#isFreeShippingNationwide").val() == ""){
                     $.each($combinationLocation,function(i, val){
                         var $text = $("#locationID_"+val.location_id).data('text');
-                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' -'+val.price); 
+                        $("#locationID_"+val.location_id).prop('disabled', false).empty().append($text+' - PHP '+ commaSeparateNumber(parseFloat(val.price).toFixed(2))); 
                     });
                 }
 
@@ -152,20 +156,27 @@
                 $(this).empty().append($(this).data('text'));
             });
 
-            $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
+            $addToCartButton.removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
-            $(".in-stock").html("Out of Stock");
+            $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
         });
     }
 
 
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
+    $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
 
     if($("#noMoreSelection").val() != ""){
-        var $arraySelected = [];
-        $arraySelected.push("0"); 
-        checkCombination($arraySelected);
+        if($("#needToSelect").val() == ""){
+            var $arraySelected = [];
+
+            $.each($productCombQuantity, function(i, val) {
+                $arraySelected = val.product_attribute_ids;
+            });
+
+            checkCombination($arraySelected);
+        }
     }
 
     // js code for base price line through
@@ -175,35 +186,46 @@
     }
 
     $(".attribute-control").bind('change',function(e){
-        var $this = $(this);
-        var $arraySelected = [];
-        var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
-        var $imageid = $this.children('option:selected').data('imageid');
 
-        if($imageid > 0){
-            $("#image"+$imageid).trigger('click'); 
+        if($("#noMoreSelection").val() != ""){
+            var $arraySelected = [];
+
+            $.each($productCombQuantity, function(i, val) {
+                $arraySelected = val.product_attribute_ids;
+            });
+
+            checkCombination($arraySelected);
         }
+        else{
+            var $this = $(this);
+            var $arraySelected = [];
+            var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+            var $imageid = $this.children('option:selected').data('imageid');
 
-        // get selected attributes
-        $(".attribute-control").each(function() {
-            $thisSelect = $(this);
-            var $selectValue = $thisSelect.val();
-            var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-            $baseFinalPrice += $additionalPrice;
-            $arraySelected.push($selectValue);
-        });
+            if($imageid > 0){
+                $("#image"+$imageid).trigger('click'); 
+            }
 
-        // update price 
-        $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+            // get selected attributes
+            $(".attribute-control").each(function() {
+                $thisSelect = $(this);
+                var $selectValue = $thisSelect.val();
+                var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
+                $baseFinalPrice += $additionalPrice;
+                $arraySelected.push($selectValue);
+            });
 
-        // sort array
-        $arraySelected.sort(sortArrayNumber);
-        checkCombination($arraySelected);
+            // update price 
+            $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
 
+            // sort array
+            $arraySelected.sort(sortArrayNumber);
+            checkCombination($arraySelected);
 
+        }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
-                $(".in-stock").html("Select Combination");
+                $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 return false;
             }
         });
@@ -211,6 +233,11 @@
     
     // add to cart
     $(document).on('click', '#send.enabled', function(){
+        var $button = $(this);
+        if(!$button.data('canpurchase')){
+            alert('Sorry, this item is currently not available for purchase.');
+            return false;
+        }
 
         // token
         var $csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -228,28 +255,58 @@
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
      
-        var $request = $.ajax({
-                            url: "/cart/doAddItem",
-                            type:"POST",
-                            dataType:"JSON",
-                            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
-                            success:function(data){
+        $.ajax({
+            url: "/cart/doAddItem",
+            type:"POST",
+            dataType:"JSON",
+            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
+            success:function(data){
 
-                                if(!data.isLoggedIn){
-                                    window.location.replace("/login");
-                                }
-                                
-                                if(data.isSuccessful){
-                                    window.location.replace("/cart");
-                                }
-                                else{
-                                    alert("We cannot process your request at this time. Please try again in a few moment");
-                                }
-                            }
-                        });
+                if(!data.isLoggedIn){
+                    window.location.replace("/login");
+                }
+                
+                if(data.isSuccessful){
+                    window.location.replace("/cart");
+                }
+                else{
+                    alert("We cannot process your request at this time. Please try again in a few moment");
+                }
+            }
+        });
 
     });
 
+    /**
+     * Add to cart using the express button 
+     * 
+     */
+    $(".btn-add-cart").on("click", function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var $button = $(this);
+        var productId = $button.data('productid');
+        var slug = $button.data('slug');
+         
+        $.ajax({
+            type: "POST",
+            url: "/cart/doAddItem", 
+            dataType: "json",
+            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
+            success: function(result) {
+                if(!result.isLoggedIn){
+                    window.location.replace("/login");
+                }
+                else if(result.isSuccessful){
+                    window.location.replace("/cart");
+                }
+                else{
+                    window.location.replace("/item/"+slug);
+                }
+            }, 
+        });
+    });
+    
     // review product
     $(document).on('click', '#submitReview', function(){
         var $this = $(this);
@@ -257,9 +314,33 @@
         var $review = $("#review-comment").val();
         var $rate = $("#star-rate").val(); 
         if($review.trim() == "" || $review.length <= 0 || $title.trim() == "" || $title.length <= 0){
+
+            if($title.trim() == "" || $title.length <= 0){
+                $("#error-review-title").show();
+                $("#review-title").addClass("error-field-review");
+            }
+            else{ 
+                $("#error-review-title").hide();
+                $("#review-title").removeClass("error-field-review");
+            }
+
+            if($review.trim() == "" || $review.length <= 0){
+                $("#error-review-nessage").show();
+                $("#review-comment").addClass("error-field-review");
+            }
+            else{
+                $("#error-review-nessage").hide();
+                $("#review-comment").removeClass("error-field-review");
+            }
+
             return false;
         }
         else{
+            $("#error-review-title").hide();
+            $("#review-title").removeClass("error-field-review");
+            $("#error-review-nessage").hide();
+            $("#review-comment").removeClass("error-field-review");
+
             $this.prop('disabled', true);
             submitReviewAndReply(0,$review,$title,$rate,"review");
         }
@@ -279,11 +360,15 @@
         var $review = $("#textareaReview"+$parent).val(); 
 
         if($review.trim() == "" || $review.length <= 0){
+            $(".error-"+$parent).show();
+            $("#textareaReview"+$parent).addClass("error-field-review");
             return false;
         }
         else{
             $this.prop('disabled', true); 
             submitReviewAndReply($parent,$review,"",0,"reply");
+            $(".error-"+$parent).hide();
+            $("#textareaReview"+$parent).removeClass("error-field-review");
         }
     });
 
@@ -330,18 +415,30 @@
         })
     });
 
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=711804058875446&version=v2.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    function stickyMenualt() {
+        $("html, body").delay(500).animate({
+            scrollTop: $('#scrollpoint').offset().top 
+        }, 500);
 
-    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];
-        if(d.getElementById(id)){return}js=d.createElement(s);
-        js.id=id;js.src="https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+        $(".sticky-header-nav").delay(1000).addClass("product-disable-nav", 1000);
+    };
+
+
+    $(document).on('scroll', stickyMenualt2);
+    
+    function stickyMenualt2() {
+        $(".sticky-header-nav").removeClass("product-disable-nav");
+
+    };
+
+   
+
+    if ($(".shipment-period").length) {
+        $(".shipment-fee-container").css("margin", "0");
+    }
+    else {
+        $(".shipment-fee-container").css("margin", "auto");
+    };
 
 })(jQuery);
 

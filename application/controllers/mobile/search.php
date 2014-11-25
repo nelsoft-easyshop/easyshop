@@ -26,29 +26,24 @@ class search extends MY_Controller
         $searchProductService = $this->serviceContainer['search_product'];
 
         $parameter = $this->input->get();
-        $arrayDisplay = array(
+        $arrayDisplay = [
                 'products' => [],
                 'attributes' => [],
                 'sort_available' => [],
-            ); 
+            ]; 
 
         if($parameter){ 
-
-            // Get all product
-            // 
             $search = $searchProductService->getProductBySearch($parameter); 
             $response['products'] = $search['collection'];
-
-            // product display
-            $productArray = array();
+            $productArray = [];
 
             foreach ($response['products'] as $key => $value) {
                 $productArray[] = $this->serviceContainer['api_formatter']
-                                                    ->formatDisplayItem($value->getIdProduct());
+                                       ->formatDisplayItem($value->getIdProduct());
             }
 
             $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
-            $sortType = array('name','price');
+            $sortType = ['name','price'];
 
             $specialFilter = ['filterprice' => 
                                 [
@@ -70,12 +65,12 @@ class search extends MY_Controller
                                     ]
                                 ]
                             ];
-            $arrayDisplay = array(
-                                'products' => $productArray,
-                                'filter' => $attributes,
-                                'specialFilter' => $specialFilter,
-                                'sort_available' => $sortType,
-                            ); 
+            $arrayDisplay = [
+                        'products' => $productArray,
+                        'filter' => $attributes,
+                        'specialFilter' => $specialFilter,
+                        'sort_available' => $sortType,
+                    ]; 
         }
 
 

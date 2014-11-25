@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
-
+<link type="text/css" href="/assets/css/jcarousel.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
 
 <section style="color-gray display-when-desktop">
     <div class="container container-responsive">

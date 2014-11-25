@@ -7,16 +7,21 @@
 
     <div class="col-md-3 thumbnails_container">
         <div class="thumbnails-img-container">
-            <div class="slideshow vertical" data-cycle-allow-wrap='false' data-cycle-fx="carousel" data-cycle-timeout="0" data-cycle-carousel-visible="4" data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-carousel-vertical=true>
-                <?php foreach($images as $image): ?>
-                    <a href="javascript:void(0);" id="image<?=$image->getIdProductImage();?>" data-imageid="<?=$image->getIdProductImage();?>" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
-                        <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
-                    </a>
-                <?php endforeach;?>
+            <div class="jcarousel">
+                <ul id="thumblist">
+                    <?php foreach($images as $image): ?>
+                        <li>
+                            <a href="javascript:void(0);" id="image<?=$image->getIdProductImage();?>" data-imageid="<?=$image->getIdProductImage();?>" rel="{gallery: 'gal1', smallimage: '/<?=$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>',largeimage: '/<?=$image->getDirectory(); ?><?=$image->getFilename(); ?>'}">
+                                <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
+                            </a>
+                        </li>
+                    <?php endforeach;?>
+                </ul>
             </div>
-            <div class="center">
-                <a href="#" id="prev">&lt;&lt; Prev </a>
-                <a href="#" id="next"> Next &gt;&gt; </a>
+            <!-- Controls -->
+            <div class="carousel-nav-btn-wrapper">
+                <a href="javascript:void(0)" class="jcarousel-control-prev inactive">&lsaquo;</a>
+                <a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
             </div>
         </div>
     </div>
@@ -44,10 +49,5 @@
 </div>
 
 <!-- Load JS -->
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.cycle2.carousel.js "></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.jcarousel.min.js "></script>
 <script type="text/javascript" src="/assets/js/src/product-page-image-gallery.js "></script>
-
-<script type="text/javascript">
-     $.fn.cycle.defaults.autoSelector = '.slideshow';
-</script>

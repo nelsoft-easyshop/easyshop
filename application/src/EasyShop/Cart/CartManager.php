@@ -341,8 +341,8 @@ class CartManager
         $product = $this->productManager->getProductDetails($cartItem['id']);
         $cartItem['qty'] = $quantity;
 
-        if (intval($product->getIsPromote()) === 1){
-            $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product->getIdProduct());
+        if ((int)$product->getIsPromote() === 1 && (int)$product->getStartPromo() === 1){
+            $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
             if($quantity > $promoQuantityLimit){
                 $cartItem['qty'] = $promoQuantityLimit;
             }

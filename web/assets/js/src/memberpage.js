@@ -1592,111 +1592,53 @@ $(document).ready(function(){
         $(this).siblings('span.error').text('');
     });
     
-    $('.dashboard_table').on('click', '.transac_response_btn', function(){
+    
+    $('.dashboard_table').on('click', '.transac_response_btn.enabled', function(){        
+        var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
+        if(!isConfirmed){
+            return false;
+        }
+        
         var txResponseBtn = $(this);
+        var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
-        // tx object located in view. contains username and password( requires once every memberpage load )
-        var txDialog = $('#tx_dialog');
-        var passCont = $('#tx_dialog_pass_cont');
+        var data = form.serializeArray();
         
-        if( $.trim(tx.p).length > 0 ){
-            passCont.hide();
-            var loadingimg = $('#tx_dialog_loadingimg img');
-            var hasPass = true;
-        }else{
-            var loadingimg = passCont.find('img.loading_img');
-            var hasPass = false;
-        }
-        
-        txDialog.children('p.msg').hide();
-        if(txResponseBtn.hasClass('tx_forward')){
-            txDialog.children('p.forward').show();
-        }else if(txResponseBtn.hasClass('tx_return')){
-            txDialog.children('p.return').show();
-        }else if(txResponseBtn.hasClass('tx_cod')){
-            txDialog.children('p.cod').show();
-        }
-        
-        txDialog.dialog({
-            modal:true,
-            resizable:false,
-            draggable:false,
-            width:500,
-            height:230,
-            buttons:{
-                OK:function(){
-                    var thisdialog = $(this);
-                    var form = txResponseBtn.closest('form.transac_response');
-                    var data = form.serializeArray();
-                    if( !hasPass ){
-                        var password = $('#tx_password').val();
-                        if(password === ''){
-                            $('#tx_password').effect('pulsate',{times:3},800);
-                            return false;
-                        }
-                    }else{
-                        var password = tx.p;
-                    }
-                    data.push({name:'password', value: password},{name:'username', value:tx.u});
-                    var parentdiv = txResponseBtn.closest('div');
-                    txResponseBtn.attr('disabled', true);
-                    $('button.ui-button').attr('disabled', true);
-                    loadingimg.show();
-                    
-                    $.post("/memberpage/transactionResponse", data, function(data){
-                        loadingimg.hide();
-                        try{
-                            var serverResponse = jQuery.parseJSON(data);
-                        }
-                        catch(e){
-                            alert('An error was encountered while processing your data. Please try again later.');
-                            //window.location.reload(true);
-                            return false;
-                        }
-                        
-                        //if invalid password
-                        if(serverResponse.result === 'invalid' && !hasPass){
-                            var errspan = passCont.children('span');
-                            errspan.text(serverResponse.error);
-                            txResponseBtn.attr('disabled', false);
-                        }else{
-                            if(serverResponse.result === 'success'){
-                                if(!hasPass){
-                                    tx.p = password;
-                                }
-                                if(txResponseBtn.hasClass('tx_forward')){
-                                    txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
-                                }else if(txResponseBtn.hasClass('tx_return')){
-                                    txStatus.replaceWith('<span class="trans_alert trans_red">Order Canceled</span>');
-                                }else if(txResponseBtn.hasClass('tx_cod')){
-                                    txStatus.replaceWith('<span class="trans_alert trans_green">Completed</span>');
-                                }
-                                
-                                txResponseBtn.closest('div.tx_btns').find('input[type="button"]').hide();
-                                
-                            }else if(serverResponse.result === 'fail'){
-                                txResponseBtn.replaceWith('<span class="trans_alert trans_red">Failed to update status.</span>');
-                            }
-                            if(serverResponse.error.length > 0){
-                                alert(serverResponse.error);
-                            }
-                            thisdialog.dialog('close');
-                        }
-                        $('button.ui-button').attr('disabled', false);
-                    });
-                },
-                Cancel:function(){
-                    $(this).dialog('close');
-                }
-            },
-            open: function(event,ui){
-                if( !hasPass ){
-                    passCont.children('input[type="password"]').val('');
-                    passCont.children('span').text('');
-                }
+        var buttonText = txResponseBtn.val();
+        txResponseBtn.addClass('loading');
+        txResponseBtn.removeClass('enabled');
+        txResponseBtn.val('Please wait..');
+        $.post("/memberpage/transactionResponse", data, function(data){
+            try{
+                var serverResponse = jQuery.parseJSON(data);
             }
+            catch(e){
+                alert('An error was encountered while processing your data. Please try again later.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+                return false;
+            }
+            
+            if(serverResponse.result !== 'success'){
+                alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+            }
+            else{
+                if(txResponseBtn.hasClass('tx_forward')){
+                    txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
+                }else if(txResponseBtn.hasClass('tx_return')){
+                    txStatus.replaceWith('<span class="trans_alert trans_red">Order Canceled</span>');
+                }else if(txResponseBtn.hasClass('tx_cod')){
+                    txStatus.replaceWith('<span class="trans_alert trans_green">Completed</span>');
+                }
+                txResponseBtn.val('Successful.');
+                txResponseBtn.closest('div.tx_btns').find('input[type="button"]').fadeOut(1000);
+            }
+            txResponseBtn.addClass('enabled'); 
         });
-        return false;
+        
+      
     });
     
     

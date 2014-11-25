@@ -118,7 +118,7 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productIds
      * @return array
      */
-    public function getAttributesByProductIds($productIds = array(),$filter = false,$additionalString = "",$parameters = array())
+    public function getAttributesByProductIds($productIds = [],$filter = false,$additionalString = "",$parameters = [])
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -525,7 +525,7 @@ class EsProductRepository extends EntityRepository
                     break;
                 case "HOT":
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
-                                        ->addOrderBy(' p.clickcount',$order);
+                                         ->addOrderBy(' p.clickcount',$order);
                     break;
                 case "NAME":
                     $qbResult = $qbResult->orderBy('p.name', $order);
@@ -658,10 +658,12 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param array $catId
+     *  @param string $condition
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId){
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    {
         $em = $this->_em;
         $result = array();
 
@@ -672,6 +674,12 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
             SELECT p.idProduct
@@ -688,8 +696,17 @@ class EsProductRepository extends EntityRepository
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
 
+        if($condition !== "") {
+            $dql .= "AND p.condition = :condition";
+        }
+            $dql .= " ORDER BY ". $orderCondition;
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
+
+        if($condition !== "") {
+            $query->setParameter("condition", $condition);
+        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
@@ -800,7 +817,102 @@ class EsProductRepository extends EntityRepository
         return isset($result[0]) ? $result[0] : NULL;
     }
     
-    
+    /**
+     * Get product bank and billing information
+     * @param  integer $memberId
+     * @param  integer $productId
+     * @return object
+     */
+    public function getProductBillingInfo($memberId, $productId)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $queryBuilder = $qb->select('bi.bankAccountName,
+                                     bi.bankAccountNumber,
+                                     bank.bankName')
+                           ->from('EasyShop\Entities\EsProduct','p') 
+                           ->innerJoin('EasyShop\Entities\EsBillingInfo', 'bi', 'WITH',
+                                $qb->expr()->andX(
+                                    $qb->expr()->eq('p.billingInfoId', 'bi.idBillingInfo'),
+                                    $qb->expr()->eq('bi.member', ':member_id'),
+                                    $qb->expr()->eq('p.idProduct', ':product_id')
+                                )
+                            )
+                           ->innerJoin('EasyShop\Entities\EsBankInfo', 'bank', 'WITH', 'bi.bankId = bank.idBank')
+                           ->setParameter('member_id', $memberId) 
+                           ->setParameter('product_id', $productId)
+                           ->getQuery();
+
+        $result = $queryBuilder->getOneOrNullResult();
+
+        return $result;
+    }
+
+    /**
+     * Get shipping details of the given product
+     * @param  integer $productId
+     * @return mixed
+     */
+    public function getProductShippingDetails($productId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('id_product_item', 'id_product_item');
+        $rsm->addScalarResult('id_location', 'id_location');
+        $rsm->addScalarResult('price', 'price');
+        $rsm->addScalarResult('product_item_id', 'product_item_id');
+        $rsm->addScalarResult('location', 'location');
+        $rsm->addScalarResult('id_shipping_detail', 'id_shipping_detail');
+        $query = $em->createNativeQuery("
+            SELECT pi.id_product_item, COALESCE(loc.id_location,'0') as id_location, loc.location, COALESCE(sh.price,'0') as price, sd.id_shipping_detail
+            FROM es_product_item pi
+            LEFT JOIN es_product_shipping_detail sd
+                ON sd.product_item_id = pi.id_product_item
+            LEFT JOIN es_product_shipping_head sh
+                ON sh.id_shipping = sd.shipping_id
+            LEFT JOIN es_location_lookup loc
+                ON sh.location_id = loc.id_location
+            WHERE pi.product_id = :productId
+        ", $rsm);
+        $query->setParameter('productId', $productId);
+        $result = $query->execute();
+
+        return $result;
+    }
+
+    /**
+     * Get product reccomended based on category
+     * @param  integer $productId
+     * @param  integer $categoryId
+     * @param  integer $limit
+     * @return object
+     */
+    public function getRecommendedProducts($productId, $categoryId, $limit = null)
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $qbResult = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p')
+                                 ->where('p.cat = :category')
+                                 ->andWhere("p.idProduct != :productId")
+                                 ->andWhere("p.isDraft = :isDraft")
+                                 ->andWhere("p.isDelete = :isDelete")
+                                 ->setParameter('productId',$productId)
+                                 ->setParameter('category',$categoryId)
+                                 ->setParameter('isDraft',0)
+                                 ->setParameter('isDelete',0)
+                                 ->orderBy('p.clickcount', 'DESC')
+                                 ->getQuery();;
+
+        if($limit){
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $result = $qbResult->getResult(); 
+
+        return $result;
+    }
 }
 
 

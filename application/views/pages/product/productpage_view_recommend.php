@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+
 <div class="container" id="rec">
     <div class="prod-detail-main">
         <div class="div-rec-title">
@@ -16,13 +16,22 @@
             </span>
         </div>
          
-        <div id="recommended" class="owl-carousel owl-theme">
+        <div id="recommended" class="owl-carousel owl-theme" style="overflow: hidden;">
             <?php foreach ($recommended as $value): ?>
             <div class="item">
                     <a href="/item/<?=$value->getSlug(); ?>">
-                        <div class="div-rec-product-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
-                            
-                        </div>
+                     
+                        <?php if(isset($value->secondaryImage)): ?>
+                            <div class="div-rec-product-image hover-prod-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->secondaryImage; ?>) center no-repeat; background-size: cover; "></div>
+
+                            <div class="div-rec-product-image main-prod-image">
+                        <?php else: ?>
+                            <div class="div-rec-product-image">
+                        <?php endif; ?>
+                                <div class="image-handler" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
+                                
+                                </div>
+                            </div>
                     </a>
                 
                 <?php if($value->getIsNew()): ?>
@@ -44,6 +53,7 @@
                         <s>P <?=number_format($value->getOriginalPrice(),2,'.',','); ?> </s>
                         <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
                     <?php else: ?>
+                       
                         <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
                     <?php endif; ?>
                 </p>
@@ -51,12 +61,12 @@
                     <tbody>
                         <tr>
                             <td>
-                                <a class="btn btn-default-1 btn-add-cart" target="_blank" href="/item/<?=$value->getSlug(); ?>">
+                                <a class="btn btn-default-1 btn-add-cart" href="javascript:void(0);" data-slug="<?php echo $value->getSlug(); ?>" data-productid="<?php echo $value->getIdProduct(); ?>">
                                     <span class="icon-cart"></span> ADD TO CART
                                 </a>
                             </td>
                             <td class="td-logo-store" align="right">
-                                <a href="#">
+                                <a href="/<?php echo $value->getMember()->getslug() ?>">
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">

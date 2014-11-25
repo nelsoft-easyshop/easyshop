@@ -33,6 +33,10 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <?=$productDetails; ?>
+                            <?php foreach ($additionalInformation as $value): ?>
+                                <?=$value; ?>
+                                <br>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -114,7 +118,8 @@
                                                                     <div class="form-group">
                                                                         <label for="subject" class="col-sm-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
                                                                         <div class="col-sm-10 col-text-area" style="margin-left: -10px;">
-                                                                            <textarea id="textareaReview<?=$value['id_review']; ?>" class="input-textarea" rows="7"></textarea>
+                                                                            <textarea id="textareaReview<?=$value['id_review']; ?>" class="input-textarea " rows="7"></textarea>
+                                                                            <span class="error-label error-label-textarea error-<?=$value['id_review']; ?>" >Please provide a review message</span>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -192,6 +197,7 @@
                                                         <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
                                                         <div class="col-xs-9">
                                                             <input type="text" id="review-title" class="input-reply" id="subject" autocomplete="off">
+                                                            <span id="error-review-title" class="error-label">Please provide a review subject</span>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -208,7 +214,7 @@
                                                                 <i data-count="4"  class="fa fa-star fa-star-rate js-rate"></i>
                                                                 <i data-count="5"  class="fa fa-star fa-star-rate js-rate"></i>
                                                                 <input type="hidden" readonly value="0" id="star-rate" />
-                                                            </div>
+                                                            </div> 
                                                         </div>
                                                     </div>
                                                 </form>
@@ -221,7 +227,8 @@
                                                     <div class="form-group">
                                                         <label for="subject" class="col-md-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
                                                         <div class="col-md-10" style="margin-left: -10px;">
-                                                            <textarea id="review-comment" class="input-textarea-write" rows="7"></textarea>
+                                                            <textarea id="review-comment" class="input-textarea-write " rows="7"></textarea>
+                                                            <span id="error-review-nessage" class="error-label error-label-textarea" >Please provide a review message</span>
                                                         </div>
                                                     </div>
                                                 </form>
