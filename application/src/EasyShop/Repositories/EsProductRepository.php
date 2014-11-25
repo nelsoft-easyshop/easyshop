@@ -897,8 +897,8 @@ class EsProductRepository extends EntityRepository
     public function getRecommendedProducts($productId, $categoryId, $limit = null)
     {
         $this->em =  $this->_em;
-        $queryBuilder = $this->em->createQueryBuilder();
-        $qbResult = $queryBuilder->select('p')
+        $queryBuilder = $this->em->createQueryBuilder()
+                                 ->select('p')
                                  ->from('EasyShop\Entities\EsProduct','p')
                                  ->where('p.cat = :category')
                                  ->andWhere("p.idProduct != :productId")
@@ -912,10 +912,10 @@ class EsProductRepository extends EntityRepository
                                  ->getQuery();;
 
         if($limit){
-            $queryBuilder->setMaxResults($limit);
+            $queryBuilder = $queryBuilder->setMaxResults($limit);
         }
-
-        $result = $qbResult->getResult(); 
+ 
+        $result = $queryBuilder->getResult(); 
 
         return $result;
     }
