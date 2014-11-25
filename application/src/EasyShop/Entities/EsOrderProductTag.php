@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsOrderProductTag
  *
- * @ORM\Table(name="es_order_product_tag", indexes={@ORM\Index(name="fk_es_order_product_tag_1_idx", columns={"tag_type_id"}), @ORM\Index(name="fk_es_order_product_tag_order_product_idx", columns={"order_product_id"}), @ORM\Index(name="fk_es_order_product_tag_admin_member_id_idx", columns={"admin_member_id"})})
+ * @ORM\Table(name="es_order_product_tag", indexes={@ORM\Index(name="fk_es_order_product_tag_1_idx", columns={"tag_type_id"}), @ORM\Index(name="fk_es_order_product_tag_order_product_idx", columns={"order_product_id"}), @ORM\Index(name="fk_es_order_product_tag_admin_member_id_idx", columns={"admin_member_id"}), @ORM\Index(name="fk_es_order_product_tag_seller_id_idx", columns={"seller_id"})})
  * @ORM\Entity
  */
 class EsOrderProductTag
@@ -29,14 +29,14 @@ class EsOrderProductTag
     private $dateUpdated = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \EasyShop\Entities\EsTagType
+     * @var \EasyShop\Entities\EsAdminMember
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsTagType")
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsAdminMember")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tag_type_id", referencedColumnName="id_tag_type")
+     *   @ORM\JoinColumn(name="admin_member_id", referencedColumnName="id_admin_member")
      * })
      */
-    private $tagType;
+    private $adminMember;
 
     /**
      * @var \EasyShop\Entities\EsOrderProduct
@@ -49,14 +49,24 @@ class EsOrderProductTag
     private $orderProduct;
 
     /**
-     * @var \EasyShop\Entities\EsAdminMember
+     * @var \EasyShop\Entities\EsMember
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsAdminMember")
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="admin_member_id", referencedColumnName="id_admin_member")
+     *   @ORM\JoinColumn(name="seller_id", referencedColumnName="id_member")
      * })
      */
-    private $adminMember;
+    private $seller;
+
+    /**
+     * @var \EasyShop\Entities\EsTagType
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsTagType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tag_type_id", referencedColumnName="id_tag_type")
+     * })
+     */
+    private $tagType;
 
 
 
@@ -94,26 +104,26 @@ class EsOrderProductTag
     }
 
     /**
-     * Set tagType
+     * Set adminMember
      *
-     * @param \EasyShop\Entities\EsTagType $tagType
+     * @param \EasyShop\Entities\EsAdminMember $adminMember
      * @return EsOrderProductTag
      */
-    public function setTagType(\EasyShop\Entities\EsTagType $tagType = null)
+    public function setAdminMember(\EasyShop\Entities\EsAdminMember $adminMember = null)
     {
-        $this->tagType = $tagType;
+        $this->adminMember = $adminMember;
 
         return $this;
     }
 
     /**
-     * Get tagType
+     * Get adminMember
      *
-     * @return \EasyShop\Entities\EsTagType 
+     * @return \EasyShop\Entities\EsAdminMember 
      */
-    public function getTagType()
+    public function getAdminMember()
     {
-        return $this->tagType;
+        return $this->adminMember;
     }
 
     /**
@@ -140,25 +150,48 @@ class EsOrderProductTag
     }
 
     /**
-     * Set adminMember
+     * Set seller
      *
-     * @param \EasyShop\Entities\EsAdminMember $adminMember
+     * @param \EasyShop\Entities\EsMember $seller
      * @return EsOrderProductTag
      */
-    public function setAdminMember(\EasyShop\Entities\EsAdminMember $adminMember = null)
+    public function setSeller(\EasyShop\Entities\EsMember $seller = null)
     {
-        $this->adminMember = $adminMember;
+        $this->seller = $seller;
 
         return $this;
     }
 
     /**
-     * Get adminMember
+     * Get seller
      *
-     * @return \EasyShop\Entities\EsAdminMember 
+     * @return \EasyShop\Entities\EsMember 
      */
-    public function getAdminMember()
+    public function getSeller()
     {
-        return $this->adminMember;
+        return $this->seller;
+    }
+
+    /**
+     * Set tagType
+     *
+     * @param \EasyShop\Entities\EsTagType $tagType
+     * @return EsOrderProductTag
+     */
+    public function setTagType(\EasyShop\Entities\EsTagType $tagType = null)
+    {
+        $this->tagType = $tagType;
+
+        return $this;
+    }
+
+    /**
+     * Get tagType
+     *
+     * @return \EasyShop\Entities\EsTagType 
+     */
+    public function getTagType()
+    {
+        return $this->tagType;
     }
 }
