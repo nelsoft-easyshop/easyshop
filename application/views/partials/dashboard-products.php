@@ -146,8 +146,10 @@
 <?php endforeach; ?>
 
 <?php if(isset($pagination)): ?>
-<div class="pagination-section">
-    <?=$pagination;?>
-</div>
+<center>
+    <div class="pagination-section">
+        <?=$pagination;?>
+    </div>
+</center>
 <?php endif; ?>
 
