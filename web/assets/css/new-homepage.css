@@ -1578,9 +1578,9 @@ header {
 .item-name {
     font:700 16px 'Helvetica', 'Open Sans', sans-serif;
     margin:0 0 5px;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;
     white-space:nowrap;
-    overflow:hidden;
+    overflow:hidden;*/
     margin-top: 5px;
 }
 
@@ -2993,6 +2993,50 @@ h3 > b{
 
 .main-prod-image:hover{
     opacity: 0;
+}
+
+.tooltip-home 
+{
+    position: absolute;
+    width: 100%;
+    /* height: 120px; */
+    padding: 0px;
+    background: #003e91;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 10px;
+    bottom: 24px;
+    font-size: 12px;
+    color: #fff;
+    display: none;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    text-align:center;
+}
+
+.tooltip-home:after 
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 20px 22px 0;
+    border-color: #003e91 transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    bottom: -9px;
+    left: 39%;-webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+.item-name:hover .tooltip-home{
+    display: inline-block;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
 }
 
 @media (min-width: 1380px) {
