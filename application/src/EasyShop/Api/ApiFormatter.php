@@ -87,6 +87,7 @@ class ApiFormatter
                 'discount' => $product->getDiscountPercentage(),
                 'price' => floatval($product->getFinalPrice()),
                 'original_price' => floatval($product->getOriginalPrice()),
+                'isFreeShipping' => $product->getIsFreeShipping(),
             ];
 
         // get product images
@@ -322,7 +323,8 @@ class ApiFormatter
             'discount' => floatval($product->getDiscountPercentage()),
             'price' => floatval($product->getFinalPrice()),
             'original_price' => floatval($product->getOriginalPrice()),
-            'product_image' => $imageDirectory.'categoryview/'.$imageFileName
+            'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
+                'isFreeShipping' => $product->getIsFreeShipping(),
         ];
     }
 
