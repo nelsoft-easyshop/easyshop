@@ -15,7 +15,7 @@
                 <input type="hidden"/>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Real Name : </label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-8">
                         <input type="text" class="text-info" value="<?php echo html_escape($fullname)?>" name ="fname" id="fullname" placeholder="First Name">
                     </div>
                 </div>
@@ -48,29 +48,6 @@
                         
                         <!--DISPLAY WHEN OK
                         <span class="val-success"><i class="fa fa-check"></i></span>-->
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Email Address : </label>
-                     <div class="col-sm-8">
-                        <input type="text" id="emailAddress" value="<?php echo html_escape($email);?>" name="email" class="text-info text-required" placeholder="Enter your email address here">
-                        <input type="hidden" name="email_orig" id="email_orig" value="<?php echo $email;?>">
-                        <input type="hidden" name="is_email_verify" id="is_email_verify" value="<?php echo $is_email_verify;?>">                        
-                        <div id="errorIndicatoreEmailAddress" style="display:none;">
-                            <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
-                            <span class="val-error" id="errorTextEmail"></span>
-                        </div>
-                        <div id="verifyEmail" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>"  <?php echo (trim($email)==''?'':'disabled');?>>
-                            <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
-                        </div>
-                        <div id="verifiedEmail" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
-                            <span class="val-success"><i class="fa fa-check"></i></span>
-                            <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
-                        </div>                        
-
-                        <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
-                      
                     </div>
                 </div>
                 
