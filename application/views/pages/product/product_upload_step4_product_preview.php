@@ -26,16 +26,21 @@
             <div class="display-when-desktop" style="position: relative; z-index: 2;">
                 <div class="col-md-3">
                     <div class="thumbnails-img-container">
-                        <div class="slideshow">
-                            <?php foreach($productImages as $image): ?>
-                                <a href="javascript:void(0);">
-                                    <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
-                                </a>
-                            <?php endforeach;?>
+                        <div class="thumb-list-container">
+                            <ul id="thumblist">
+                                <?php foreach($productImages as $image): ?>
+                                    <li>
+                                        <a href="javascript:void(0);">
+                                            <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
+                                        </a>
+                                    </li>
+                                <?php endforeach;?>
+                            </ul>
                         </div>
-                        <div class="center disable-buttons">
-                            <a href="javascript:void(0);" id="prev">&lt;&lt; Prev </a>
-                            <a href="javascript:void(0);" id="next"> Next &gt;&gt; </a>
+
+                        <div class="carousel-nav-btn-wrapper">
+                            <a href="javascript:void(0);" id="prev" class="jcarousel-control-prev inactive">&lt;&lt; Prev </a>
+                            <a href="javascript:void(0);" id="next" class="jcarousel-control-next inactive"> Next &gt;&gt; </a>
                         </div>
                     </div>
                 </div>
