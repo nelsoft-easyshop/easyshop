@@ -324,7 +324,7 @@ class ApiFormatter
             'price' => floatval($product->getFinalPrice()),
             'original_price' => floatval($product->getOriginalPrice()),
             'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
-                'isFreeShipping' => $product->getIsFreeShipping(),
+            'isFreeShipping' => $product->getIsFreeShipping(),
         ];
     }
 
