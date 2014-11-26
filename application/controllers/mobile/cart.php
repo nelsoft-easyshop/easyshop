@@ -62,11 +62,8 @@ class cart extends MY_Controller
     function __construct() 
     {
         parent::__construct();
-
-        $this->cartManager = $this->serviceContainer['cart_manager'];
-        $this->productManager = $this->serviceContainer['product_manager'];
-        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
-        $this->cartImplementation = $this->cartManager->getCartObject();
+  
+        $this->oauthServer =  $this->serviceContainer['oauth2_server']; 
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
 
