@@ -11,24 +11,34 @@
             <p class="panel-setting-title">Email Address</p>
             <div class="div-setting-content">
                 <div class="current-email">
-                <span class="setting-current-email">mangpedring@yahoo.com</span> 
+                <span class="setting-current-email" id="currentEmail"><?php echo html_escape($email); ?></span> 
                 <button class="btn btn-setting-edit-btn" id="btn-edit-email">
                    <i class="icon-edit"></i> Edit
                 </button>
+                <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+                <div id="verifyEmail" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>"  <?php echo (trim($email)==''?'':'disabled');?>>
+                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
+                </div>
+                <div id="verifiedEmail" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
+                    <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
+                </div>                                   
+                <div id="errorIndicatoreVerify" style="display:none;">
+                    <span class="val-error" id="errorTextVerify"></span>
+                 </div>
                 </div>
                 <div class="edit-email">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="mangpedring@yahoo.com"/>
-                            <!-- DISPLAY WHEN ERROR 
-                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            -->
+                            <input type="text" class="text-info text-required" id="emailAddressEdit" value="<?php echo html_escape($email);?>"/>
+                            <div id="errorIndicatoreEmailAddress" style="display:none;">
+                                <span class="val-error" id="errorTextEmail"></span>
+                            </div>
                             <!--DISPLAY WHEN OK-->
                             <span class="val-success"><i class="fa fa-check"></i></span>
                         </div>
                         <div class="col-md-5">
-                            <button class="btn btn-setting-save-btn">
+                            <img src="/assets/images/orange_loader_small.gif" class="changeEmailLoader" style="display:none"/>
+                            <button class="btn btn-setting-save-btn" id="changeEmailBtn">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-email">
