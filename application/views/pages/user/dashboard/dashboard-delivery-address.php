@@ -9,18 +9,19 @@
     <div class="div-tab-inner">
         <div class="div-personal-info">
             <p class="panel-dashboard-title">Delivery Address</p>
+            <input type="hidden" name="c_country" value="<?php echo $country_id?>">
             <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Consignee Name : </label>
                     <div class="col-sm-4">
-                        <input type="text" id="consigneeName" name="consignee" value="Inon Baguio"  class="text-info" placeholder="Consignee name">
+                        <input type="text" id="consigneeName" name="consignee" value="<?php echo html_escape($consignee)?>"  class="text-info" placeholder="Consignee name">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="09176287011" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
+                        <input type="text" class="text-info text-required" value="<?php echo html_escape($c_mobile)?>" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
                         <!-- DISPLAY WHEN ERROR -->
                         <span class="val-error-icon"><i class="fa fa-times"></i></span>
                         <span class="val-error">Please enter at least 11 characters</span>
@@ -33,7 +34,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Telephone Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="3681471" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
+                        <input type="text" class="text-info text-required" value="<?php echo html_escape($c_telephone)?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
                         <!-- DISPLAY WHEN ERROR 
                         <span class="val-error-icon"><i class="fa fa-times"></i></span>
                         <span class="val-error">Please enter at least 11 characters</span>
@@ -56,7 +57,7 @@
                         <span class="span-label-address">State/Region</span>
                     </div>
                     <div class="col-sm-4 col-city">
-                        <select class="text-info text-address address_dropdown cityselect" id="delivery_city" name="c_city" data-status="<?php echo $c_cityID?>">
+                        <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $c_cityID?>">
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
                             <?php if($c_cityID != '' && $c_stateregionID != ''):?>
@@ -68,6 +69,9 @@
                         <input type="hidden" name="ccity_orig" value="<?php echo $c_cityID?>">                        
                         <span class="span-label-address">City</span>
                     </div>
+                    <div class="col-sm-4 col-city">
+                        <input type="hidden" name="c_country" value="<?php echo $country_id?>">                        
+                    </div>                    
                 </div>
                 
                 <div class="form-group">
