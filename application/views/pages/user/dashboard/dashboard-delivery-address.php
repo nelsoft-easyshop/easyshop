@@ -15,6 +15,10 @@
                     <label class="col-sm-3 control-label">Consignee Name : </label>
                     <div class="col-sm-4">
                         <input type="text" id="consigneeName" name="consignee" value="<?php echo html_escape($consignee)?>"  class="text-info" placeholder="Consignee name">
+                        <div id="errorsDivConsignee" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextConsignee"></span>
+                        </div>
                     </div>
                 </div>
                 
@@ -22,12 +26,10 @@
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
                         <input type="text" class="text-info text-required" value="<?php echo html_escape($c_mobile)?>" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
-                        <!-- DISPLAY WHEN ERROR -->
-                        <span class="val-error-icon"><i class="fa fa-times"></i></span>
-                        <span class="val-error">Please enter at least 11 characters</span>
-                        
-                        <!--DISPLAY WHEN OK
-                        <span class="val-success"><i class="fa fa-check"></i></span>-->
+                        <div id="errorsDivMobile" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextMobile"></span>
+                        </div>
                     </div>
                 </div>
                 
@@ -35,12 +37,8 @@
                     <label class="col-sm-3 control-label">Telephone Number : </label>
                      <div class="col-sm-8">
                         <input type="text" class="text-info text-required" value="<?php echo html_escape($c_telephone)?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
-                        <!-- DISPLAY WHEN ERROR 
-                        <span class="val-error-icon"><i class="fa fa-times"></i></span>
-                        <span class="val-error">Please enter at least 11 characters</span>
-                        -->
                         <!--DISPLAY WHEN OK-->
-                        <span class="val-success"><i class="fa fa-check"></i></span>
+                        <!-- <span class="val-success"><i class="fa fa-check"></i></span> -->
                     </div>
                 </div>
                 
@@ -80,6 +78,10 @@
                         <input type="text" class="text-info text-address" id="deliveryAddress" value="Brgy. San Roque, Evergreen Village" name="c_address" placeholder="Enter your street address here">
                         <span class="span-label-address">Street Address</span>
                         <input type="hidden" name="caddress_orig" value="<?php echo html_escape($c_address)?>">
+                        <div id="errorsDivStreetAddress" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextStreetAddress"></span>
+                        </div>
                     </div>
                 </div>
                 
