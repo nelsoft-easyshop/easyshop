@@ -721,6 +721,7 @@ header {
 .sticky-search-wrapper input[type="text"] {
     vertical-align: middle;
     margin-right: 10px;
+    padding-left: 12px !important;
     width: 84.5%;
 }
 
