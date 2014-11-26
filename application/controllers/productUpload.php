@@ -590,8 +590,8 @@ class productUpload extends MY_Controller
         $member_id =  $this->session->userdata('member_id');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $date = date("Ymd");
-        $fulldate = date("YmdGis"); 
-        $savingAsDraft = ($this->input->post('savedraft'))?'1':'0';
+        $fulldate = date("YmdGis");
+        $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
         if(intval($brand_id,10) == 1){
             $brand_valid = true;
@@ -609,9 +609,19 @@ class productUpload extends MY_Controller
             $otherBrand = '';
         } 
         
-        if($savingAsDraft == 0){
+        if($isNotSavingAsDraft){
             if (!in_array($product_condition, $this->lang->line('product_condition'))){
                 die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+            }
+        }
+
+        if($isNotSavingAsDraft){
+            $currentCombination = [];
+            foreach ($combination as $value) {
+                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+            }
+            if(count($currentCombination) !== count(array_unique($currentCombination))){
+                die('{"e":"0","d":"Same combination is not allowed!"}');
             }
         }
 
@@ -619,7 +629,7 @@ class productUpload extends MY_Controller
             || $product_title == "" 
             || strlen(trim($product_price)) == 0 
             || $product_price <= 0 
-            || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
+            || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
@@ -627,7 +637,7 @@ class productUpload extends MY_Controller
             
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
             $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
-            if($savingAsDraft == 0){
+            if($isNotSavingAsDraft){
                 if(count($arraynameoffiles) <= 0){ 
                     die('{"e":"0","d":"Please select at least one photo for your listing."}');
                 }
@@ -666,7 +676,7 @@ class productUpload extends MY_Controller
                 $arrayNameOnly[$key] = $temp;
             }
 
-            if($savingAsDraft == 0){
+            if($isNotSavingAsDraft){
                 if(count($arraynameoffiles) <= 0){ 
                     die('{"e":"0","d":"Please select at least one photo for your listing."}');
                 }
@@ -797,23 +807,33 @@ class productUpload extends MY_Controller
         $brand_id =  $this->input->post('prod_brand'); 
         $keyword = trim($this->input->post('prod_keyword'));
         $style_id = 1;
-        $brand_valid = FALSE;
+        $brand_valid = false;
         $otherBrand = ""; $primaryName ="";
         $username = $this->user_model->getUserById($memberId)['username'];
         $dir = './assets/product/'; 
         $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
-        $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
+        $tempDirectory = $this->session->userdata('tempDirectory');
+        $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
+
+        if($isNotSavingAsDraft){
+            $currentCombination = [];
+            foreach ($combination as $value) {
+                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+            }
+            if(count($currentCombination) !== count(array_unique($currentCombination))){
+                die('{"e":"0","d":"Same combination is not allowed!"}');
+            }
+        }
 
         // Loading Combinations
-        $newItemQuantityArray = array();
+        $newItemQuantityArray = [];
         $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);   
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
             || strlen(trim($product_price)) == 0 
             || $product_price <= 0 
-            || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
+            || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
         }
@@ -864,7 +884,7 @@ class productUpload extends MY_Controller
             } 
         }
 
-        if($brand_valid === FALSE){ 
+        if($brand_valid === false){ 
             $brand_id = 1;
             $otherBrand = "";
         }
@@ -876,9 +896,9 @@ class productUpload extends MY_Controller
         $search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
  
         $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
-        $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
+        $arraynameoffiles = count($arraynameoffiles) > 0 ? $arraynameoffiles : [];
 
-        if($savingAsDraft == 0){
+        if($isNotSavingAsDraft){
             if(count($arraynameoffiles) <= 0){ 
                 die('{"e":"0","d":"Please select at least one photo for your listing."}');
             }
@@ -886,7 +906,7 @@ class productUpload extends MY_Controller
 
         $removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
         $primaryId = $this->input->post('primaryPicture'); 
-        $arrayNameOnly = array();
+        $arrayNameOnly = [];
 
         foreach($arraynameoffiles as $key => $value ) {
             $nameOfFile = explode('||', $value)[0];
@@ -914,7 +934,7 @@ class productUpload extends MY_Controller
             $arrayNameOnly[$key] = $temp;
         }
 
-        if($savingAsDraft == 0){
+        if($isNotSavingAsDraft){
             if(count($arraynameoffiles) <= 0){ 
                 die('{"e":"0","d":"Please select at least one photo for your listing."}');
             }
