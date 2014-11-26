@@ -608,6 +608,16 @@ class productUpload extends MY_Controller
             }
         }
 
+        if((int)$savingAsDraft === 0){
+            $currentCombination = [];
+            foreach ($combination as $value) {
+                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+            }
+            if(count($currentCombination) !== count(array_count_values($currentCombination))){
+                die('{"e":"0","d":"Same combination is not allowed!"}');
+            }
+        }
+
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
             || strlen(trim($product_price)) == 0 
@@ -790,16 +800,26 @@ class productUpload extends MY_Controller
         $brand_id =  $this->input->post('prod_brand'); 
         $keyword = trim($this->input->post('prod_keyword'));
         $style_id = 1;
-        $brand_valid = FALSE;
+        $brand_valid = false;
         $otherBrand = ""; $primaryName ="";
         $username = $this->user_model->getUserById($memberId)['username'];
         $dir = './assets/product/'; 
         $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
         $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
+        $savingAsDraft = $this->input->post('savedraft') ?'1':'0'; 
+
+        if((int)$savingAsDraft === 0){
+            $currentCombination = [];
+            foreach ($combination as $value) {
+                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+            }
+            if(count($currentCombination) !== count(array_count_values($currentCombination))){
+                die('{"e":"0","d":"Same combination is not allowed!"}');
+            }
+        }
 
         // Loading Combinations
-        $newItemQuantityArray = array();
+        $newItemQuantityArray = [];
         $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);   
         
         if((strlen(trim($product_title)) == 0 
@@ -857,7 +877,7 @@ class productUpload extends MY_Controller
             } 
         }
 
-        if($brand_valid === FALSE){ 
+        if($brand_valid === false){ 
             $brand_id = 1;
             $otherBrand = "";
         }
@@ -869,7 +889,7 @@ class productUpload extends MY_Controller
         $search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
  
         $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
-        $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
+        $arraynameoffiles = count($arraynameoffiles) > 0 ? $arraynameoffiles : [];
 
         if($savingAsDraft == 0){
             if(count($arraynameoffiles) <= 0){ 
@@ -879,7 +899,7 @@ class productUpload extends MY_Controller
 
         $removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
         $primaryId = $this->input->post('primaryPicture'); 
-        $arrayNameOnly = array();
+        $arrayNameOnly = [];
 
         foreach($arraynameoffiles as $key => $value ) {
             $nameOfFile = explode('||', $value)[0];
