@@ -46,7 +46,7 @@
                 <div class="clear"></div>
                 <a href="/item/<?=$value->getSlug(); ?>">
                     <p class="p-rec-product-name">
-                    <?=html_escape(utf8_encode( $value->getName()));?>
+                    <?=html_escape( $value->getName());?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">

@@ -25,7 +25,7 @@
             
                 <?php foreach ($sales as $transaction): ?>
                 <tr>
-                    <th width="250px"><?=html_escape(utf8_encode($transaction->getProduct()->getName())); ?></td>
+                    <th width="250px"><?=html_escape($transaction->getProduct()->getName()); ?></td>
                     <td width="250px" align="center" class="<?=$type === EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER ? 'td-date' : 'td-p-date'?>"><?=$transaction->getOrder()->getDateadded()->format('M/d/Y');?></td>
                     <td width="250px" align="center" class="<?=$type === EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER ? 'td-trans' : 'td-p-trans'?>"><?=$transaction->getOrder()->getTransactionId();?></td>
                     <td width="250px" align="center" class="<?=$type === EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER ? 'td-base-price' : 'td-p-base-price'?>">&#8369; <?=number_format($transaction->getPrice(),2,'.',',');?></td>

@@ -2,7 +2,7 @@
 <?php 
 foreach ($products as $key => $value):
     $productEntity = $value;
-    $productName = html_escape(utf8_encode($productEntity->getName()));
+    $productName = html_escape($productEntity->getName());
     $productSlug = $productEntity->getSlug();
     $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
     $productCondition = html_escape($productEntity->getCondition());
@@ -67,7 +67,7 @@ foreach ($products as $key => $value):
     <?php foreach ($products as $key => $value): ?>
     <?php
         $productEntity = $value;
-        $productName = html_escape(utf8_encode($productEntity->getName()));
+        $productName = html_escape($productEntity->getName());
         $productSlug = $productEntity->getSlug();
         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
         $productCondition = html_escape($productEntity->getCondition());

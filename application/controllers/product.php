@@ -336,7 +336,7 @@ class product extends MY_Controller
 
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
             $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
-            $headerData['title'] = html_escape(utf8_encode($product->getName())). " | Easyshop.ph";
+            $headerData['title'] = html_escape($product->getName()). " | Easyshop.ph";
             $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
             $headerData['homeContent'] = $this->fillCategoryNavigation();
       
