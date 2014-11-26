@@ -9,6 +9,7 @@ use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsOrderStatus as orderStatus;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsPaymentMethod;
+use DateTime;
 
 class EsOrderRepository extends EntityRepository
 {
@@ -227,7 +228,7 @@ class EsOrderRepository extends EntityRepository
 
         return $qbResult;   
     }
-    
+
     public function updatePaymentIfComplete($id, $data, $tid, $paymentType, $orderStatus = 99, $flag = 0)
     {
         $order = $this->_em->getRepository('EasyShop\Entities\EsOrder')
@@ -251,7 +252,21 @@ class EsOrderRepository extends EntityRepository
         return $order;
     }
 
+    /**
+     * Update Order status
+     * @param $esOrder
+     * @param $orderStatus
+     * @return esOrder
+     */
+    public function updateOrderStatus($esOrder, $orderStatus)
+    {
+        $esOrder->setOrderStatus($orderStatus);
+        $esOrder->setDatemodified(new DateTime('now'));
 
+        $this->_em->flush();
+
+        return $esOrder;
+    }
 }
 
 

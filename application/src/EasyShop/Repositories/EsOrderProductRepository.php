@@ -148,5 +148,19 @@ class EsOrderProductRepository extends EntityRepository
 
         return intval($result['total_count']);
     }
-    
+
+    /**
+     * Update order product status
+     * @param $esOrderProductStatus
+     * @param $esOrderProduct
+     * @return esOrderProduct
+     */
+    public function updateOrderProductStatus($esOrderProductStatus, $esOrderProduct)
+    {
+        $esOrderProduct->setStatus($esOrderProductStatus);
+        $esOrderProduct->setIsReject(0);
+        $this->_em->flush();
+
+        return $esOrderProduct;
+    }
 }

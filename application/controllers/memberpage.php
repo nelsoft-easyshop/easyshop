@@ -756,7 +756,6 @@ class Memberpage extends MY_Controller
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
             $memberId = $this->session->userdata('member_id');
 
-            // Check type of response ( if user or seller response )
             if( $this->input->post('buyer_response') ){
                 $data['order_product_id'] = $this->input->post('buyer_response');
                 $data['status'] = 1;
@@ -776,11 +775,13 @@ class Memberpage extends MY_Controller
              *  Also checks for data accuracy
              *  Returns o_success, o_message
              */
-            $result = $this->payment_model->updateTransactionStatus($data);
+#            $result = $this->payment_model->updateTransactionStatus($data);
+            $result = $this->transactionManager->updateTransactionStatus($data['status'], $data['order_product_id'], $data['transaction_num'], $data['invoice_num'], $data['member_id']);
 
             if( $result['o_success'] >= 1 ){
                 // Get order product transaction details
-                $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
+#                $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
+                $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $data['order_product_id'], $data['member_id'], $data['invoice_num'], $data['status']);
                 $parseData['store_link'] = base_url() . $parseData['user_slug'];
                 $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
                 $socialMediaLinks = $this->getSocialMediaLinks();
@@ -788,10 +789,10 @@ class Memberpage extends MY_Controller
                 $parseData['twitter'] = $socialMediaLinks["twitter"];
 
                 $hasNotif = FALSE;
-                if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
+                if ( (int) $data['status'] === 1 || (int) $data['status'] === 2 || (int) $data['status'] === 3 ) {
                     $hasNotif = TRUE;
                 }
-                switch($data['status']){
+                switch ($data['status']) {
                     case 1: // Forward to seller
                         $emailSubject = $this->lang->line('notification_forwardtoseller');
                         $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
@@ -827,7 +828,7 @@ class Memberpage extends MY_Controller
          *  DRAGONPAY HANDLER
          */
         }
-        else if( $this->input->post('dragonpay') ){
+        else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
             
             // Fetch transaction data
