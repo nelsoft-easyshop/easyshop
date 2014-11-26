@@ -1835,10 +1835,10 @@ class Memberpage extends MY_Controller
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
 
-            $isDelete = [EsProduct::IS_DELETE_OFF];
-            $isDraft = [EsProduct::IS_DRAFT_OFF];
-            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userActiveProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft);
+            $deleteConditions = [EsProduct::IS_DELETE_OFF];
+            $draftConditions = [EsProduct::IS_DRAFT_OFF];
+            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userActiveProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
             $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
             $activeProductsData = [
                 'products' => $userActiveProducts,
@@ -1846,10 +1846,10 @@ class Memberpage extends MY_Controller
             ];
             $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
-            $isDelete = [EsProduct::IS_DELETE_ON];
-            $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
-            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userDeletedProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft); 
+            $deleteConditions = [EsProduct::IS_DELETE_ON];
+            $draftConditions = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userDeletedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions); 
             $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
             $deletedProductsData = [
                 'products' => $userDeletedProducts,
@@ -1857,10 +1857,10 @@ class Memberpage extends MY_Controller
             ];
             $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
             
-            $isDelete = [EsProduct::IS_DELETE_OFF];
-            $isDraft = [EsProduct::IS_DRAFT_ON];
-            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft);
-            $userDraftedProducts = $productManager->getProductsByUser($memberId, $isDelete, $isDraft);
+            $deleteConditions = [EsProduct::IS_DELETE_OFF];
+            $draftConditions = [EsProduct::IS_DRAFT_ON];
+            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userDraftedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
             $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
             $draftedProductsData = [
                 'products' => $userDraftedProducts,
@@ -1976,8 +1976,7 @@ class Memberpage extends MY_Controller
     public function softDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
-        $productId = $this->input->get('product_id');
-        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_ON);
 
@@ -1996,8 +1995,7 @@ class Memberpage extends MY_Controller
     public function hardDeleteProduct()
     {
         $memberId = $this->session->userdata('member_id');
-        $productId = $this->input->get('product_id');
-        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_HARD_ON);
 
@@ -2016,8 +2014,7 @@ class Memberpage extends MY_Controller
     public function restoreProduct()
     {
         $memberId = $this->session->userdata('member_id');
-        $productId = $this->input->get('product_id');
-        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
         $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_OFF);
 
@@ -2044,22 +2041,25 @@ class Memberpage extends MY_Controller
         $sortType = trim($this->input->get('sort'));
         $searchString = trim($this->input->get('search_string'));
  
-        $isDelete = [EsProduct::IS_DELETE_OFF];
-        $isDraft = [EsProduct::IS_DRAFT_OFF];
+        $deleteConditions = [EsProduct::IS_DELETE_OFF];
+        $draftConditions = [EsProduct::IS_DRAFT_OFF];
 
         if(strtolower($requestType) === "deleted"){ 
-            $isDelete = [EsProduct::IS_DELETE_ON];
-            $isDraft = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::IS_DELETE_ON];
+            $draftConditions = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
         }
         elseif (strtolower($requestType) === "drafted"){ 
-            $isDelete = [EsProduct::IS_DELETE_OFF];
-            $isDraft = [EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::IS_DELETE_OFF];
+            $draftConditions = [EsProduct::IS_DRAFT_ON];
         }
 
-        $userProductCount = $esProductRepo->getUserProductCount($memberId, $isDelete, $isDraft, $searchString);
+        $userProductCount = $esProductRepo->getUserProductCount($memberId,
+                                                                $deleteConditions, 
+                                                                $draftConditions, 
+                                                                $searchString);
         $userProducts = $productManager->getProductsByUser($memberId,
-                                                           $isDelete,
-                                                           $isDraft,
+                                                           $deleteConditions,
+                                                           $draftConditions,
                                                            $productManager::PRODUCT_COUNT_DASHBOARD*($page-1),
                                                            $searchString,
                                                            $sortType); 
