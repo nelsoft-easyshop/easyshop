@@ -2,7 +2,7 @@
 /* =============================================
 -----------------  General -------------
 ==============================================*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
 @font-face {
     font-family: Helvetica;
@@ -656,7 +656,6 @@ header {
 .persistent-header-wrapper {
     min-height: 44px;
     position: relative;
-    z-index: 999;
 }
 
 .sticky-header-nav {
@@ -722,6 +721,7 @@ header {
 .sticky-search-wrapper input[type="text"] {
     vertical-align: middle;
     margin-right: 10px;
+    padding-left: 12px !important;
     width: 84.5%;
 }
 
@@ -736,7 +736,7 @@ header {
 }
 
 .sticky-nav-fixed .header-text-container {
-    font-size: 14px;
+    font-size: 13px;
     margin-left: 18px;
     width: 24%;
 }
@@ -3008,8 +3008,8 @@ h3 > b{
 
     .sticky-nav-logo {
         background-color: #4370cc;
-        height: 50px;
-        padding-top: 5px;
+        height: 46px;
+        padding-top: 3px;
         position: absolute;
         top: 0px;
         right: 0;
@@ -3362,11 +3362,6 @@ h3 > b{
 }
 
 @media only screen and (max-width: 479px) {
-    #header-top .row {
-        margin-right: -30px;
-        margin-left: -30px;
-    }
-
     #top-links li {
         margin-right: 0;
     }
@@ -3561,6 +3556,10 @@ h3 > b{
 }
 
 @media only screen and (max-width: 991px) {
+    .col-xs-6.col-sm-6.col-md-6.top-header-left {
+        padding: 0;
+    }
+
     .sticky-nav-fixed .mobile-menu-nav-hide {
         display: block;
     }
@@ -3777,6 +3776,17 @@ h3 > b{
 }
 
 @media (max-width: 767px) {
+    #header-top .col-md-12,
+    #header-top .row .col-md-12 .top-header-right {
+        padding: 0;
+    }
+
+    .default-nav-dropdown:after,
+    .default-nav-dropdown:before,
+    .default-nav-dropdown {
+        right: 0;
+    }
+
     .sticky-search-cart-wrapper {
         width: 93%;
     }

@@ -36,7 +36,7 @@ class SocialMediaController extends MY_Controller
         if ($facebookData->getProperty('email')) {
             $data = $this->socialMediaManager
                             ->authenticateAccount($facebookData->getId(), $facebookType, $facebookData->getProperty('email'));
-            $esMember = $data['doesAccountExists'];
+            $esMember = $data['getMember'];
             $doesAccountMerged = $data['doesAccountMerged'];
             if ($esMember && $doesAccountMerged) {
                 $this->login($esMember);
@@ -106,7 +106,7 @@ class SocialMediaController extends MY_Controller
             $googleData = $this->socialMediaManager->getAccount($googleType);
             $data = $this->socialMediaManager
                             ->authenticateAccount($googleData->getId(), $googleType, $googleData->getEmail());
-            $esMember = $data['doesAccountExists'];
+            $esMember = $data['getMember'];
             $doesAccountMerged = $data['doesAccountMerged'];
             if ($esMember && $doesAccountMerged) {
                 $esMember = $this->socialMediaManager->fixSocialMediaEmail($esMember, $googleData->getEmail());

@@ -332,7 +332,7 @@ class Home extends MY_Controller
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
-                    $parameter['seller'] = "seller:".$vendorSlug;
+                    $parameter['seller'] = "seller:".$memberEntity->getUsername();
                     $parameter['limit'] = 12;
                     
                     // getting all products

@@ -1,6 +1,8 @@
 
 (function($) {
-
+    
+    stickyMenualt();
+    
     /**
      * Function call by .sort of the jquery
      * @param  {integer} a
@@ -414,21 +416,22 @@
     });
 
     function stickyMenualt() {
-        $("html, body").delay(200).animate({
+        $("html, body").delay(500).animate({
             scrollTop: $('#scrollpoint').offset().top 
-        }, 200);
+        }, 500);
 
         $(".sticky-header-nav").delay(1000).addClass("product-disable-nav", 1000);
     };
 
-    $(window).on('load', stickyMenualt);
 
+    $(document).on('scroll', stickyMenualt2);
+    
     function stickyMenualt2() {
         $(".sticky-header-nav").removeClass("product-disable-nav");
 
     };
 
-    $(document).on('scroll', stickyMenualt2);
+   
 
     if ($(".shipment-period").length) {
         $(".shipment-fee-container").css("margin", "0");
