@@ -2453,7 +2453,9 @@ class product_model extends CI_Model
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         $promo = $this->config->item('Promo')[$type];
-
+        if(!$promo){
+            $promo = $this->config->item('Promo','promo')[$type];
+        }
         if(($result[0]['cnt'] >= $promo['purchase_limit']) ||
             (!$promo['is_buyable_outside_promo'] && !$start_promo)){
             return false;
