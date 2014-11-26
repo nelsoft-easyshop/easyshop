@@ -912,7 +912,7 @@ class EsProductRepository extends EntityRepository
                                  ->getQuery();;
 
         if($limit){
-            $queryBuilder = $queryBuilder->setMaxResults($limit);
+            $queryBuilder->setMaxResults($limit);
         }
  
         $result = $queryBuilder->getResult(); 
