@@ -88,6 +88,7 @@
 </section>
 <br/>
 <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
 <script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
