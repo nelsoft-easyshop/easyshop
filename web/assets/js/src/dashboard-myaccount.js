@@ -98,6 +98,7 @@
 
     /************** Delivery Address ***************************/
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
+        $("#saveDeliverAddressBtn").attr("value","Saving..");
         var postData = $("#deliverAddressForm").serializeArray()
         postData.push({ name: this.name, value: this.value });
         e.preventDefault();
@@ -106,6 +107,35 @@
             data: postData,
             url: "/memberpage/edit_consignee_address",
             success: function(data) {
+                $("#saveDeliverAddressBtn").attr("value","Save Changes");                
+                var obj = jQuery.parseJSON(data);
+                if(obj.errors) {
+                    if(typeof(obj.errors.consignee) !== "undefined") {
+                        $("#errorsDivConsignee").css("display","block");
+                        $("#errorTextConsignee").text(obj.errors.consignee[0]);
+                    }
+                    else {
+                        $("#errorsDivConsignee").css("display","none");
+                    }
+                    if(typeof(obj.errors.mobile_number) !== "undefined") {
+                        $("#errorsDivMobile").css("display","block");
+                        $("#errorsDivMobile #errorTextMobile").text(obj.errors.mobile_number[0]);              
+                    }
+                    else {
+                        $("#errorsDivMobile").css("display","none");                        
+                    }
+                    if( typeof(obj.errors.street_address) !== "undefined") {
+                        $("#errorsDivStreetAddress").css("display","block");
+                        $("#errorTextStreetAddress").text(obj.errors.street_address[0]);                   
+                    }                    
+                    else {
+                        $("#errorsDivStreetAddress").css("display","none");                                                
+                    }
+                }
+                else {
+                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+                }
+
 /*                    $("#savePersonalInfo").text("SAVE CHANGES");
                     var obj = jQuery.parseJSON(data);
                     if(obj.result !== "success") {
@@ -193,10 +223,16 @@
                             $("#errorIndicatorMobileNumber").css("display","block");
                             $("#errorTextMobile").text(obj.error.mobile);
                         }
+                        else {
+                            $("#errorIndicatorMobileNumber").css("display","none");                            
+                        }
                         if(obj.error.email) {
                             $("#errorIndicatoreEmailAddress").css("display","block");
                             $("#errorTextEmail").text(obj.error.email);
-                        }                        
+                        }       
+                        else {
+                            $("#errorIndicatorMobileNumber").css("display","none");                            
+                        }                 
                     }
                     else {
                         if(email !== originalEmail) {
