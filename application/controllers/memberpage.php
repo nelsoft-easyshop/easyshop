@@ -70,6 +70,50 @@ class Memberpage extends MY_Controller
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
         $this->load->view('templates/footer_primary', $footerData);
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];        
+    }
+
+    public function edit_email()
+    {
+        $um = $this->serviceContainer['user_manager'];
+        $memberId = $this->session->userdata('member_id');
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('email', 'text', array('constraints' => $rules['email']))
+                    ->getForm();    
+        $form->submit([
+            'email' => $this->input->post('email')
+        ]);        
+
+        if($form->isValid()){
+            $formData = $form->getData();
+            $validEmail = (string)$formData['email'];
+            $um->setUser($memberId)
+               ->setEmail($validEmail);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult ? 'success' : 'error'
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => 'fail'
+                , 'error' => $formErrorHelper->getFormErrors($form)
+            );
+        }
+
+        echo json_encode($serverResponse);                          
     }
 
     /**
@@ -96,7 +140,6 @@ class Memberpage extends MY_Controller
                     ->add('gender', 'text')
                     ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
                     ->add('mobile', 'text', array('constraints' => $rules['mobile']))
-                    ->add('email', 'text', array('constraints' => $rules['email']))
                     ->getForm();
 
         $form->submit([
@@ -104,7 +147,6 @@ class Memberpage extends MY_Controller
             , 'gender' => $this->input->post('gender')
             , 'dateofbirth' => $this->input->post('dateofbirth')
             , 'mobile' => $this->input->post('mobile')
-            , 'email' => $this->input->post('email')
         ]);
 
         if($form->isValid()){
@@ -113,10 +155,8 @@ class Memberpage extends MY_Controller
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
-            $validEmail = (string)$formData['email'];
             $um->setUser($memberId)
                ->setMobile($validMobile)
-               ->setEmail($validEmail)
                ->setMemberMisc([
                      'setFullname' => $validFullname
                     , 'setGender' => $validGender
