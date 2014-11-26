@@ -219,7 +219,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div><!-- End .container -->
                 <div class="persistent-header-wrapper">
                     <div class="sticky-header-nav">
-                        <div id="main-nav-container">
+                   <!-- <div id="main-nav-container"> -->
+                        <div id="main-nav-container" class="persistent-christmas-theme">
                             <div class="container">
                                 <div  class="sticky-nav-logo-con">
                                     <div class="sticky-nav-logo">

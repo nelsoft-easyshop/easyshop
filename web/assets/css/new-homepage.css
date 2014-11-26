@@ -672,6 +672,10 @@ header {
     z-index: 99999;
 }
 
+.sticky-nav-fixed #main-nav-container.persistent-christmas-theme {
+    background: #fff url(../images/img-snow.jpg) no-repeat bottom center;
+}
+
 .sticky-nav-fixed #main-nav-container {
     background-color: rgba(255,255,255,0.95);
 }

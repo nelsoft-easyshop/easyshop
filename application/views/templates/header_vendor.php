@@ -148,7 +148,8 @@
     </div>
 </section>
 <section class="sticky-nav-bg">
-    <div class="vendor-sticky-nav">
+<!--     <div class="vendor-sticky-nav"> -->
+    <div class="vendor-sticky-nav persistent-christmas-theme">
         <div class="main-container">
             <ul class="vendor-nav">
                 <?php
