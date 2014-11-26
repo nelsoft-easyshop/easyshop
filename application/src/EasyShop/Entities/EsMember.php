@@ -193,13 +193,13 @@ class EsMember
      * @var string
      * @ORM\Column(name="oauth_id", type="string", length=255, nullable=false)
      */
-    private $oauthId;
+    private $oauthId = '0';
 
     /**
      * @var string
      * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
      */
-    private $oauthProvider;
+    private $oauthProvider = '';
     /**
      * @var integer
      *
