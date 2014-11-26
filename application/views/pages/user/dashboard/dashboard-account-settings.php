@@ -73,14 +73,11 @@
                     </button>
                 </div>
                 <div class="edit-password">
-                     <form class="form-horizontal">
+                     <form class="form-horizontal" id="changePassForm">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Current Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your current password here">
-                                <!-- DISPLAY WHEN ERROR -->
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
+                                <input type = "password" id="currentPassword" name="currentPassword" class="text-info text-required" placeholder="Type your current password here">
                                 
                                 <!--DISPLAY WHEN OK
                                 <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
@@ -89,33 +86,27 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">New Password : </label>
                             <div class="col-sm-5">
-                            <input type="text" id="password" name="password" class="text-info text-required" placeholder="Type your new password here">
-
+                                <input type="password" id="password" name="password" class="text-info text-required" placeholder="Type your new password here">
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label class="col-sm-4 control-label text-required">Confirm New Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info" placeholder="Confirm your new password here">
-                                <!-- DISPLAY WHEN ERROR 
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                -->
-                                <!--DISPLAY WHEN OK-->
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here">
                             </div>
                         </div>
-                        
+                        <input id="username" name="wsx" type="hidden" value="<?php echo $user["username"]; ?>"/>
                         <div class="form-group">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-5">
-                            <button class="btn btn-setting-save-btn">
-                                Save changes
-                            </button>
-                            <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
-                                Cancel
-                            </span>
+                    
+                            <div class="col-sm-4" style='text-align:center;'>
+                                <img src="/assets/images/orange_loader_small.gif" class="changePasswordLoader" style="display:none"/>
+                            </div>
+                            <div class="col-sm-5" id="actionGroupChangePass">
+                                <input type="submit" class="btn btn-setting-save-btn" id="changePassBtn" name="changePassBtn"  value="Save Changes">
+                                <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
+                                    Cancel
+                                </span>
                             </div>
                         </div>
                     </form>
