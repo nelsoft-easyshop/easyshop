@@ -30,7 +30,7 @@
                 <div>
                     By:
                     <a href="/<?=$product->getMember()->getSlug();?>">
-                        <span class="product-profile-photo"><img src="<?=$ownerAvatar?>"></span>
+                        <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$ownerAvatar?>"></span>
                         <?=html_escape($product->getMember()->getStoreName());?>
                     </a>
                 </div>
