@@ -25,8 +25,8 @@
                     <div id="my-account-menu">
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
-                            <a href="#delivery-address" class="selected"><li class="m-li">Delivery Address</li></a>
-                            <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
+                            <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
+                            <a href="#account-settings" class="selected"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>
                 </ul>
