@@ -157,7 +157,7 @@
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
-        var $parentContainer = $this.parent().parent().parent().parent();
+        var $parentContainer = $this.parent().parent().parent().parent().parent();
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
