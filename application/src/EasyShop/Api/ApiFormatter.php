@@ -42,10 +42,22 @@ class ApiFormatter
     private $reviewProductService;
 
     /**
+     * StringUtility
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$collectionHelper,$productManager,$cartManager,$reviewProductService)
+    public function __construct($em,
+                                $collectionHelper,
+                                $productManager,
+                                $cartManager,
+                                $reviewProductService,
+                                $stringUtility)
     {
         $this->em = $em;  
         $this->collectionHelper = $collectionHelper;
@@ -53,27 +65,34 @@ class ApiFormatter
         $this->cartManager = $cartManager;
         $this->cartImplementation = $cartManager->getCartObject();
         $this->reviewProductService = $reviewProductService;
+        $this->stringUtility = $stringUtility;
     }
 
-    public function formatItem($productId,$isItemView = false)
+    /**
+     * Format item array to display on mobile api
+     * @param  integer $productId  [description]
+     * @param  boolean $isItemView [description]
+     * @return array
+     */
+    public function formatItem($productId, $isItemView = false)
     {
         $product = $this->productManager->getProductDetails($productId);
 
-        $productDetails = array(
+        $productDetails = [
                 'name' => utf8_encode($product->getName()),
                 'slug' => $product->getSlug(),
-                'description' => $product->getDescription(),
+                'description' => $this->stringUtility->purifyHTML($product->getDescription()),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
                 'discount' => $product->getDiscountPercentage(),
                 'price' => floatval($product->getFinalPrice()),
                 'original_price' => floatval($product->getOriginalPrice()),
-            );
+            ];
 
         // get product images
         $productImages = [];
         $prodImgObj = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                    ->findBy(['product' => $productId]);
+                               ->findBy(['product' => $productId]);
 
         $imageType = 'categoryview/';
         if($isItemView){
@@ -81,39 +100,30 @@ class ApiFormatter
         }
 
         foreach ($prodImgObj as $key => $value) {
-            $productImages[] = array(
-                                'product_image_path' => $value->getDirectory().$imageType.$value->getFilename(),
-                                'id' => $value->getIdProductImage(),
-                            );
+            $productImages[] = [
+                            'product_image_path' => $value->getDirectory().$imageType.$value->getFilename(),
+                            'id' => $value->getIdProductImage(),
+                        ];
         }
 
         // get user rating
         $userRating = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                            ->findOneBy(['forMemberid' => $product->getMember()->getIdMember()]);
-        $rateDescription = array(
-                    'rateCount' => 0,
-                    'rateDescription' => array(
-                                'Item quality' => 0,
-                                'Communication' => 0,
-                                'Shipment time' => 0,
-                            )
-                );
-        if($userRating){
-        $rateDescription = array(
-                    'rateCount' => count($userRating),
-                    'rateDescription' => array(
-                            'Item quality' => $userRating->getRating1(),
-                            'Communication' => $userRating->getRating2(),
-                            'Shipment time' => $userRating->getRating3(),
-                        )
-                );
-        }
-        $sellerDetails = array(
-                            'sellerName' => $product->getMember()->getUsername(),
-                            'sellerRating' => $rateDescription,
-                            'sellerContactNumber' => "0".$product->getMember()->getContactno(),
-                            'sellerEmail' => $product->getMember()->getEmail(),
-                        );
+                               ->getAverageRatings($product->getMember()->getIdMember());
+
+        $rateDescription = [
+                    'rateCount' => $userRating['count'],
+                    'rateDescription' => [
+                            'Item quality' => $userRating['rating1'],
+                            'Communication' => $userRating['rating2'],
+                            'Shipment time' => $userRating['rating3'],
+                        ]
+                ];
+        $sellerDetails = [
+                    'sellerName' => $product->getMember()->getUsername(),
+                    'sellerRating' => $rateDescription,
+                    'sellerContactNumber' => $product->getMember()->getContactno() ? "0".$product->getMember()->getContactno() : "N/A",
+                    'sellerEmail' => $product->getMember()->getEmail(),
+                ];
 
         // get product combination
         $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -134,22 +144,21 @@ class ApiFormatter
             for ($i=0; $i < count($productOption) ; $i++) {
                 $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$productAttributes[$key][$i]['attr_id'];
-                $newArrayOption[] = array(
-                                    'value' => $productOption[$i]['attr_value'],
-                                    'price'=> $productOption[$i]['attr_price'],
-                                    'img_id'=> $productImages[0]['id'],
-                                    'name'=> $productOption[$i]['attr_name'],
-                                    'id'=> $newKey
-                                ); 
+                $newArrayOption[] = [
+                                'value' => $productOption[$i]['attr_value'],
+                                'price'=> $productOption[$i]['attr_price'],
+                                'img_id'=> $productImages[0]['id'],
+                                'name'=> $productOption[$i]['attr_name'],
+                                'id'=> $newKey
+                            ]; 
             }
- 
 
             if(count($productOption)>1){
                 $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
             }
             elseif((count($productOption) === 1)
-                        &&(($productOption[0]['datatype_id'] === '5'))
-                        ||($productOption[0]['type'] === 'option')){ 
+                        &&(((int)$productOption[0]['datatype_id'] === 5))
+                        ||((string)$productOption[0]['type'] === 'option')){ 
                 $productCombinationAttributes = array_merge($productCombinationAttributes,$newArrayOption);
                 $productSpecification[] = $newArrayOption[0];
             }
@@ -165,21 +174,21 @@ class ApiFormatter
         $temporaryArray = [];
         foreach ($productInventory as $key => $value) {
              if(!array_key_exists($value['id_product_item'],$temporaryArray)){
-                $temporaryArray[$value['id_product_item']] = array(
-                                                            'quantity' => $value['quantity'],
-                                                            'product_attribute_ids' => array(
-                                                                            array(
-                                                                                'id' => $value['product_attr_id'],
-                                                                                'is_other' => $value['is_other'],
-                                                                            )
-                                                                        ),
-                                                        );
+                $temporaryArray[$value['id_product_item']] = [
+                                                        'quantity' => $value['quantity'],
+                                                        'product_attribute_ids' => [
+                                                                        [
+                                                                'id' => $value['product_attr_id'],
+                                                                'is_other' => $value['is_other'],
+                                                            ]
+                                                        ],
+                                                    ];
              }
              else{ 
-                $temporaryArray[$value['id_product_item']]['product_attribute_ids'][] =array( 
+                $temporaryArray[$value['id_product_item']]['product_attribute_ids'][] = [
                                                                                 'id' => $value['product_attr_id'],
                                                                                 'is_other' => $value['is_other'],
-                                                                            );
+                                                                            ];
              }
         }
 
@@ -188,8 +197,8 @@ class ApiFormatter
             $newCombinationKey = [];
             $totalPrice = 0;
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
-                $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
-                array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
+                $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
+                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
                 if(isset($productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']])){
                     $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
                 }
@@ -205,7 +214,7 @@ class ApiFormatter
         // get reviews 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 
-        return array(
+        return [
                 'productDetails' => $productDetails,
                 'productImages' => $productImages,
                 'sellerDetails' => $sellerDetails,
@@ -213,9 +222,14 @@ class ApiFormatter
                 'productSpecification' => $productSpecification,
                 'productQuantity' => $productQuantity,
                 'reviews' => $recentReview,
-            );
+            ];
     }
 
+    /**
+     * Format cart array to display on mobile api
+     * @param  array $cartData
+     * @return array
+     */
     public function formatCart($cartData)
     { 
         $formattedCartContents = [];
@@ -233,28 +247,32 @@ class ApiFormatter
                 $mappedAttributes = [];
                 foreach($attributes as $attribute){
                     $isSelected = "false";
-                    $optionalIdentifier = intval($attribute['is_other']) === 0 ? 'a_' : 'b_';
+                    $optionalIdentifier = (int)$attribute['is_other'] === 0 ? 'a_' : 'b_';
 
-                    foreach($cartItem['options'] as $head => $option){
-                        $explodedOption = explode('~',$option);
-                        $fieldValue = $explodedOption[0];
-                        $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
-                        if(strtolower($attribute['head']) == strtolower($head) &&
-                            strtolower($attribute['value']) == strtolower($fieldValue) &&
-                            strtolower($attribute['price']) == strtolower($fieldPrice)){
-                            $isSelected = "true";
-                            break;
+                    if( (int)$attribute['datatype_id'] === 5 
+                        || (string) $attribute['type'] === 'option' ){
+
+                        foreach($cartItem['options'] as $head => $option){
+                            $explodedOption = explode('~',$option);
+                            $fieldValue = $explodedOption[0];
+                            $fieldPrice = isset($explodedOption[1]) ? $explodedOption[1] : 0;
+                            if(strtolower($attribute['head']) == strtolower($head) &&
+                                strtolower($attribute['value']) == strtolower($fieldValue) &&
+                                strtolower($attribute['price']) == strtolower($fieldPrice)){
+                                $isSelected = "true";
+                                break;
+                            }
                         }
-                    }
 
-                    $mappedAttributes[] = [
-                        'id' => $optionalIdentifier.$attribute['detail_id'],
-                        'value' => $attribute['value'],
-                        'name' => $attribute['head'],
-                        'price' => $attribute['price'],
-                        'imageId' => $attribute['image_id'],
-                        'isSelected' => $isSelected,
-                    ];
+                        $mappedAttributes[] = [
+                            'id' => $optionalIdentifier.$attribute['detail_id'],
+                            'value' => $attribute['value'],
+                            'name' => $attribute['head'],
+                            'price' => $attribute['price'],
+                            'imageId' => $attribute['image_id'],
+                            'isSelected' => $isSelected,
+                        ];
+                    }
                 }
 
                 $formattedCartContents[$rowId] = [
@@ -278,11 +296,16 @@ class ApiFormatter
         return $finalCart;
     }
 
+    /**
+     * Format display item array 
+     * @param  integer $idProduct
+     * @return array
+     */
     public function formatDisplayItem($idProduct)
     {
         $product = $this->productManager->getProductDetails($idProduct);
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                            ->getDefaultImage($idProduct);
+                                 ->getDefaultImage($idProduct);
 
         $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
         $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -292,18 +315,24 @@ class ApiFormatter
             $imageFileName = $productImage->getFilename();
         }
 
-        return array(
-                    'name' => utf8_encode($product->getName()), 
-                    'slug' => $product->getSlug(),
-                    'condition' => $product->getCondition(),
-                    'discount' => floatval($product->getDiscountPercentage()),
-                    'price' => floatval($product->getFinalPrice()),
-                    'original_price' => floatval($product->getOriginalPrice()),
-                    'product_image' => $imageDirectory.'categoryview/'.$imageFileName
-                );
+        return [
+            'name' => utf8_encode($product->getName()), 
+            'slug' => $product->getSlug(),
+            'condition' => $product->getCondition(),
+            'discount' => floatval($product->getDiscountPercentage()),
+            'price' => floatval($product->getFinalPrice()),
+            'original_price' => floatval($product->getOriginalPrice()),
+            'product_image' => $imageDirectory.'categoryview/'.$imageFileName
+        ];
     }
 
-    public function updateCart($mobileCartContents,$memberId)
+    /**
+     * Update Cart data and format cart item array
+     * @param  array $mobileCartContents
+     * @param  integer $memberId
+     * @return array
+     */
+    public function updateCart($mobileCartContents, $memberId)
     {
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
@@ -322,7 +351,6 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
-		
     }
 }
  

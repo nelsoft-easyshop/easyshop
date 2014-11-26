@@ -1,4 +1,5 @@
 
+<?php if(count($recommended) > 0): ?>
 <div class="container" id="rec">
     <div class="prod-detail-main">
         <div class="div-rec-title">
@@ -84,4 +85,5 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 
