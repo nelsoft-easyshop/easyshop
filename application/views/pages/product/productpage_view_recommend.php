@@ -46,7 +46,7 @@
                 <div class="clear"></div>
                 <a href="/item/<?=$value->getSlug(); ?>">
                     <p class="p-rec-product-name">
-                    <?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
+                    <?=html_escape(utf8_encode( $value->getName()));?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">

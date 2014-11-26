@@ -1807,8 +1807,6 @@ class Memberpage extends MY_Controller
      */
     public function newMemberpage()
     {
-        header ('Content-type: text/html; charset=ISO-8859-1');
-
         $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $feedbackUserManager = $this->serviceContainer['feedback_user_manager'];

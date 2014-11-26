@@ -76,6 +76,8 @@ class ApiFormatter
      */
     public function formatItem($productId, $isItemView = false)
     {
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+
         $product = $this->productManager->getProductDetails($productId);
 
         $productDetails = [
@@ -107,11 +109,12 @@ class ApiFormatter
         }
 
         // get user rating
-        $userRating = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                               ->getAverageRatings($product->getMember()->getIdMember());
+        $userRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($product->getMember()->getIdMember());
+
+        $userRatingCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($product->getMember()->getIdMember());
 
         $rateDescription = [
-                    'rateCount' => $userRating['count'],
+                    'rateCount' => $userRatingCount,
                     'rateDescription' => [
                             'Item quality' => $userRating['rating1'],
                             'Communication' => $userRating['rating2'],

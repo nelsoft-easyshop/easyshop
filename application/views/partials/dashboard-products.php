@@ -21,9 +21,9 @@
                                     <?php if($product->getName()): ?>
                                     <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
                                         <?php if(strlen($product->getName()) > 40): ?>
-                                            <?=substr_replace( htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1'), "...", 40); ?>
+                                            <?=substr_replace( html_escape(utf8_encode($product->getName())), "...", 40); ?>
                                         <?php else: ?>
-                                            <?=htmlspecialchars(utf8_encode($product->getName()),ENT_QUOTES,'ISO-8859-1');?>
+                                            <?=html_escape(utf8_encode($product->getName()));?>
                                         <?php endif; ?>
                                     </a>
                                     <?php else: ?>
