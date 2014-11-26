@@ -1397,19 +1397,12 @@ body{
 }
 
 .ie9 .prod-select-con {
+    background: #fff;
     position: relative;
 }
 
-.ie9 .prod-select-con:before {
-    content: " ";
-    background: url(../images/sprites/select-dropdown-ie.jpg) no-repeat right -2px;
-    display: block;
-    width: 38px;
-    height: 32px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 9999;
+.ie9 .prod-select-con select {
+    width: 100%;
 }
 
 .prod-availability-container {
@@ -1454,8 +1447,16 @@ body{
     padding-right: 50px;
 }
 
+.ie9 .shipment-select select {
+    padding-right: 12px;
+}
+
 .shipment-select select::-ms-expand {
     display: none;
+}
+
+.shipment-period {
+    clear: both;
 }
 
 .txt-shipment + .default {
@@ -1480,6 +1481,10 @@ body{
 
 .prod-quantity-container .quantity-select select {
     width: 117%;
+}
+
+.ie9 .prod-quantity-container .quantity-select select {
+    width: 100%;
 }
 
 .prod-add-to-cart-btn {

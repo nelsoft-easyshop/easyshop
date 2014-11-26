@@ -404,11 +404,13 @@ class Kernel
             $productManager = $container['product_manager'];
             $cartManager = $container['cart_manager'];
             $reviewProductService = $container['review_product_service'];
+            $stringUtility = $container['string_utility'];
             return new \EasyShop\Api\ApiFormatter($em,
                                                   $collectionHelper,
                                                   $productManager,
                                                   $cartManager,
-                                                  $reviewProductService);
+                                                  $reviewProductService,
+                                                  $stringUtility);
         }; 
 
         // Notification Services

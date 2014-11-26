@@ -75,30 +75,34 @@ class mobilePayment extends MY_Controller
      */
     public function doPaymentReview()
     { 
+        $apiFormatter = $this->serviceContainer['api_formatter'];
+
         // Load controller
         $this->paymentController = $this->loadController('payment');
 
         $mobileCartContents = json_decode($this->input->post('cartData'));
-        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
-        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
+        $mobileCartContents = $mobileCartContents ? $mobileCartContents : [];
+        $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
 
         // refresh member object to get update cart content
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->member->getIdMember());
         
         $cartData = unserialize($this->member->getUserdata()); 
-        $formattedCartContents = array();
+        $formattedCartContents = [];
         $canContinue = false;
-        $errorMessage = "You have no item in you cart";
-        $paymentType = array();
-
-        if(!empty($cartData)){
-            unset($cartData['total_items'],$cartData['cart_total']);
-            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
-            $cartData = $dataCollection['cartData']; 
-            $canContinue = $dataCollection['canContinue'];
-            $errorMessage = $dataCollection['errMsg'];
-            $paymentType = $dataCollection['paymentType'];
-            $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
+        $paymentType = [];
+        $errorMessage = "Please verify your email address.";
+        if((int)$this->member->getIsEmailVerify() > 0){
+            $errorMessage = "You have no item in you cart";
+            if(!empty($cartData)){
+                unset($cartData['total_items'],$cartData['cart_total']);
+                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+                $cartData = $dataCollection['cartData']; 
+                $canContinue = $dataCollection['canContinue'];
+                $errorMessage = $dataCollection['errMsg'];
+                $paymentType = $dataCollection['paymentType'];
+                $formattedCartContents = $apiFormatter->formatCart($cartData);
+            }
         }
 
         $finalPaymentType = [];
@@ -297,15 +301,15 @@ class mobilePayment extends MY_Controller
                     );
 
         $paymentProductDetails = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                                ->findBy(['order' => $paymentDetails->getIdOrder()]);
+                                          ->findBy(['order' => $paymentDetails->getIdOrder()]);
 
-        foreach ($paymentProductDetails as $key => $value) {
+        foreach ($paymentProductDetails as $value) {
 
             $productDetails = $this->em->getRepository('EasyShop\Entities\EsProductItem')
-                                                ->findOneBy(['idProductItem' => $value->getProductItemId()]);
+                                       ->findOneBy(['idProductItem' => $value->getProductItemId()]);
 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                            ->getDefaultImage($productDetails->getProduct()->getIdProduct());
+                                     ->getDefaultImage($productDetails->getProduct()->getIdProduct());
 
             $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
