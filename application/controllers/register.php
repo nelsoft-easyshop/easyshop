@@ -278,47 +278,29 @@ class Register extends MY_Controller
      */
     public function changepass()
     {
-        $data = array(
-            'title' => 'Change Password | Easyshop.com',
-            'render_searchbar' => false,
-        );
-        $data = array_merge($data, $this->fill_header());
-        
-        $this->load->view('templates/header', $data);
-        $temp['toggle_view'] = "1";
-        $temp['err'] = "";
-        $result = true;
-
+        $result = false;
         $username = $this->input->post('wsx');
         $cur_password = $this->input->post('cur_password');
         $password = $this->input->post('password');			
         
         if(($username) && ($this->form_validation->run('changepass'))){  
-        
             $dataval = array('login_username' => $username, 'login_password' => $cur_password);
             $this->accountManager = $this->serviceContainer['account_manager'];            
             $row = $this->accountManager->authenticateMember($username, $cur_password);
 
             if (!empty($row["member"])){
-                $data = array(
-                    'username' => $username,
-                    'cur_password' => $cur_password,
-                    'password' => $password
-                );
-                
-                $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);                      
-                if($result){
-                    $temp['toggle_view'] = "";
-                }
-            }else{
-                $temp['toggle_view'] = "1";
-                $temp['err'] = "69";
+                $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
+            }
+            else {
+                $result = false;
             }
         }
-        
-        $temp['result'] = $result;
-        $this->load->view('pages/user/changepassword', $temp);
-        $this->load->view('templates/footer');		
+
+        $serverResponse = array(
+            'result' => $result ? 'success' : 'error'
+            , 'error' => $result ? '' : 'Invalid password'
+        );
+        echo json_encode($serverResponse);
     }
     
     function email_verification(){
