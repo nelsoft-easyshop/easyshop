@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
 @font-face
 {
@@ -1742,6 +1742,7 @@ td.td-view.p-view2.color-default{
     font-weight: normal;
     height: 35px;
     max-width: 373px;
+    padding-left: 12px !important;
     vertical-align: middle;
     width: 54%;
 }
