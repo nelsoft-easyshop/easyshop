@@ -352,14 +352,12 @@ class Payment extends MY_Controller{
      * @param  integer $memberId
      * @return mixed
      */
-    private function checkPurchaseLimitAndPaymentType($itemArray,$memberId)
+    private function checkPurchaseLimitAndPaymentType($itemArray, $memberId)
     {   
-        $this->load->config('promo', true);
-        $configPromo = $this->config->item('Promo','promo');
+        $configPromo = $this->serviceContainer['config_loader']->getItem('promo','Promo');
         $purchaseLimit = true;
         $soloRestriction = true;
         $paymentType = $configPromo[0]['payment_method'];
-
         /*  
          *   Changed code to be able to adopt for any promo type
          */
