@@ -201,7 +201,6 @@
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
-        var isEmailVerified = formPersonalInfo.find("#is_email_verify").val().trim();
         var fullname = formPersonalInfo.find("#fullname").val().trim();
         var gender = formPersonalInfo.find('input:radio[name=gender]:checked').val();        
         var bday = formPersonalInfo.find("#birthday-picker").val();
@@ -212,7 +211,7 @@
         var csrfname = $("meta[name='csrf-name']").attr('content');
         $.ajax({
             type: 'post',
-            data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, email:email, csrfname : csrftoken},
+            data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, csrfname : csrftoken},
             url: "/memberpage/edit_personal",
             success: function(data) {
                     $("#savePersonalInfo").text("SAVE CHANGES");
@@ -225,33 +224,68 @@
                         }
                         else {
                             $("#errorIndicatorMobileNumber").css("display","none");                            
-                        }
-                        if(obj.error.email) {
-                            $("#errorIndicatoreEmailAddress").css("display","block");
-                            $("#errorTextEmail").text(obj.error.email);
-                        }       
-                        else {
-                            $("#errorIndicatorMobileNumber").css("display","none");                            
                         }                 
                     }
                     else {
-                        if(email !== originalEmail) {
-                            $("#verifyEmail").css("display","block");
-                            $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
-                        }
+                        $("#errorIndicatorMobileNumber").css("display","none");
+                        
                     }
             },
         });     
     });
 
 
+    $(document.body).on('click','#changeEmailBtn',function (e) {
+
+        email = $("#emailAddressEdit").val().trim();
+        var loadingimg = $('img.changeEmailLoader'); 
+        var verifyspan = $('#changeEmailBtn');  
+        var currentEmail =  $("#currentEmail").text();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');               
+        verifyspan.hide();
+        loadingimg.show();
+
+        $.ajax({
+            type: 'post',
+            data: {email:email, csrfname : csrftoken},
+            url: "/memberpage/edit_email",
+            success: function(data) {
+              
+                var obj = jQuery.parseJSON(data);   
+                loadingimg.hide();
+                verifyspan.show();
+                $("#verifyEmail").css("display","none");    
+                    if(obj.result !== "success") {
+                        if(obj.error.email) {
+                            $("#errorIndicatoreEmailAddress").css("display","block");
+                            $("#errorTextEmail").text(obj.error.email);
+                        }                    
+                    }
+                    else {
+                        $("#currentEmail").text(email);                       
+                        $( "#btn-edit-email" ).trigger( "click" );                          
+                        if(email !== currentEmail) {
+                            $("#verifyEmail").css("display","block");
+                            $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
+                        }                        
+                    }
+
+            },
+        });             
+    });   
+
+
+
+
+
 
     $(document.body).on('click','#verifyEmailAction',function (e) {
-
-        var data = $("#emailAddress").val();
-        var field = $("#emailAddress").attr('name');
+        $( "#btn-edit-email" ).prop("disabled", true);
+        var data = $("#currentEmail").text();
+        var field = "email";
         var loadingimg = $('img.verify_img'); 
-        var verifyspan = $('#verifyEmail');  
+        var verifyspan = $('#verifyEmailAction');  
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');               
         verifyspan.hide();
@@ -262,16 +296,18 @@
             data: {field:field, data:data, reverify:'true', csrfname : csrftoken},
             url: "/memberpage/verify",
             success: function(data) {
+                $( "#btn-edit-email" ).prop("disabled", false);
                 var obj = jQuery.parseJSON(data);   
                 loadingimg.hide();
+                verifyspan.show();
                 $("#verifyEmail").css("display","none");    
                 if(obj === "success") {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
                 else {
-                    $("#errorIndicatoreEmailAddress").css("display","block");
-                    $("#errorTextEmail").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
+                    $("#errorIndicatoreVerify").css("display","block");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
                 }
  
             },
