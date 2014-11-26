@@ -86,25 +86,11 @@
                                 <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
                             </div>
                         </div>
-                        
                         <div class="form-group">
                             <label class="col-sm-4 control-label">New Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your new password here">
-                                <div class="progress" style="height: 10px; margin-top: 5px; margin-bottom: 0px;">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%; background: #00a388 !important;">
-                                        
-                                    </div>
-                                </div>
-                                <span class="password-label-strength">
-                                    Password Strength: <b>Good</b>
-                                </span>
-                                <!-- DISPLAY WHEN ERROR 
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                -->
-                                <!--DISPLAY WHEN OK-->
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>
+                            <input type="text" id="password" name="password" class="text-info text-required" placeholder="Type your new password here">
+
                             </div>
                         </div>
                         

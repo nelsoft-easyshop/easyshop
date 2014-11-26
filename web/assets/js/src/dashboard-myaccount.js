@@ -1,5 +1,7 @@
 (function ($) {
-
+    $(".pass-container").css("display","block");
+    $("div.pass-container").css("margin-left","0px");
+    $("div.pass-container").css("width","100%");
 
     /**************** GOOGLE MAPS ******************************/
 
