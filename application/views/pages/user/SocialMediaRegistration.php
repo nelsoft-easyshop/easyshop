@@ -160,5 +160,5 @@
 </section>
 <br/>
 <br/>
-<script src='/assets/js/src/SocialMediaRegistration.js' type='text/javascript'></script>
+<script src='/assets/js/src/SocialMediaRegistration.js?ver=<?php echo ES_FILE_VERSION ?>' type='text/javascript'></script>
 <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
