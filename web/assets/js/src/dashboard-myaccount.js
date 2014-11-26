@@ -3,6 +3,129 @@
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
 
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');  
+
+
+
+
+    /********************* START CHANGE PASSWORD ***********************/
+
+
+     $("#changePassForm").validate({
+         rules: {
+            currentPassword: {
+                required: true,
+                minlength: 6,
+                maxlength:25
+                },
+            password: {
+                required: true,
+                minlength: 6,
+                maxlength:25
+                },
+            confirmPassword: {
+                required: true,
+                minlength: 6,
+                maxlength:25,
+                equalTo: '#password'
+                }
+         },
+         messages:{
+            confirmPassword:{
+                equalTo: 'The password you have entered does not match your new one'
+            },
+         },
+        success: function(label){
+            $(label).css("display","none");
+        },
+         errorElement: "span",
+         errorPlacement: function(error, element) {
+            error.addClass("val-error");
+            error.appendTo(element.parent());
+            var added_span = $('<span/>',{'class':"val-error-icon-pass"});
+            added_span.insertAfter(element.next());    
+            var icon = $('<i/>',{'class':"fa fa-times"});        
+            icon.appendTo(added_span);
+                      
+         },
+         submitHandler: function(form){
+            event.preventDefault();
+            $.ajax({
+                type: 'post',
+                data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+                url: "/register/changepass",
+                success: function(data) {
+                    actionGroupChangePass.show();
+                    loadingimg.hide();
+
+                },
+            });   
+
+        }
+     });
+
+    /********************* END CHANGE PASSWORD ***********************/
+
+
+
+    $("#password").on('input paste keyup', function(){
+        if($.trim($(this).val()).length >= 6){
+           $('#cpassword').attr("disabled", false);
+          
+        }
+    });
+    // $("#changePassForm").on('click','#changePassBtn',function (e) {
+    //     e.preventDefault();
+
+    //     var hasNoErrors = true;
+    //     var newPassword = $("#password").val();
+    //     var confirmPassword = $("#confirmPassword").val();
+    //     var currentPassword = $("#currentPassword").val();
+    //     var username = $("#username").val();
+    //     // if((confirmPassword !== newPassword)) {
+    //     //     $("#errorNewPasswordDiv, #errorConfirmPasswordDiv").css("display","block");
+    //     //     $("#errorConfirmText").text("The password you have entered does not match your new one");
+    //     //     hasNoErrors = false;
+    //     // }
+    //     // else if(currentPassword === "") {
+    //     //     hasNoErrors = false;
+
+    //     // }
+
+    //     var loadingimg = $('img.changePasswordLoader'); 
+    //     var actionGroupChangePass = $('#actionGroupChangePass'); 
+     
+    //     if(hasNoErrors === true) {
+    //         actionGroupChangePass.hide();
+    //         loadingimg.show();               
+    //         $.ajax({
+    //             type: 'post',
+    //             data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+    //             url: "/register/changepass",
+    //             success: function(data) {
+    //                 actionGroupChangePass.show();
+    //                 loadingimg.hide();
+    //                 // $( "#btn-edit-email" ).prop("disabled", false);
+    //                 // var obj = jQuery.parseJSON(data);   
+    //                 // loadingimg.hide();
+    //                 // verifyspan.show();
+    //                 // $("#verifyEmail").css("display","none");    
+    //                 // if(obj === "success") {
+    //                 //     $("#verifiedEmail").css("display","block");                     
+    //                 //     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
+    //                 // }
+    //                 // else {
+    //                 //     $("#errorIndicatoreVerify").css("display","block");
+    //                 //     $("#errorTextVerify").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
+    //                 // }
+     
+    //             },
+    //         });   
+    //     }
+  
+    // });
+
     /**************** GOOGLE MAPS ******************************/
 
     $(".refresh_map").click(function(){     
@@ -12,7 +135,6 @@
 
         
         var address = stateregion + " " + city + " PH";
-        console.log(address);
         if(address === " --- Select City --- PH") {
             alert('Please specify a valid address.');            
             $( ".map-container" ).slideToggle( "slow" );
@@ -25,10 +147,9 @@
 
     function codeAddress(address, type) {
         $("#delivery_mapcanvas").css("display","block");
-      geocoder = new google.maps.Geocoder();
-      geocoder.geocode( { 'address': address}, function(results, status) {
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-
             google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
         }
       });
@@ -37,8 +158,8 @@
     //all DOM elements accessed via id
     function initialize(myLatlng, type) {
         var mapOptions = {
-          center:myLatlng,
-          zoom: 15
+            center:myLatlng,
+            zoom: 15
         };
 
         var templat = $('#temp_clat');
@@ -209,8 +330,6 @@
         var mobileNumber = formPersonalInfo.find("#mobileNumber").val();
         var originalEmail = formPersonalInfo.find("#email_orig").val();
         var email = formPersonalInfo.find("#emailAddress").val();
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
         $.ajax({
             type: 'post',
             data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, csrfname : csrftoken},
@@ -243,8 +362,6 @@
         var loadingimg = $('img.changeEmailLoader'); 
         var verifyspan = $('#changeEmailBtn');  
         var currentEmail =  $("#currentEmail").text();
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');               
         verifyspan.hide();
         loadingimg.show();
 
@@ -288,8 +405,6 @@
         var field = "email";
         var loadingimg = $('img.verify_img'); 
         var verifyspan = $('#verifyEmailAction');  
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');               
         verifyspan.hide();
         loadingimg.show();
 
