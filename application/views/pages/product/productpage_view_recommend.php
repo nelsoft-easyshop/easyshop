@@ -43,12 +43,18 @@
                 <?php endif;?>
 
                 <div class="clear"></div>
-                <a href="/item/<?=$value->getSlug(); ?>">
-                    <p class="p-rec-product-name">
-                    <?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
+                <div class="item-name2" style="position: relative; width: 100%;">
+                    
+                    <div class="tooltip-home">
+                       <?php echo htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
+                     </div>
+                     
+                     <p class="p-rec-product-name">
+                    <a href="/item/<?=$value->getSlug(); ?>"><?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?></a>
                     </p>
-                </a>
+                </div>
                 <p class="p-rec-product-price">
+                    
                     <?php if(floatval($value->getDiscountPercentage()) > 0):?>
                         <s>P <?=number_format($value->getOriginalPrice(),2,'.',','); ?> </s>
                         <span>P<?=number_format($value->getFinalPrice(),2,'.',',');?> </span>
