@@ -29,9 +29,14 @@
                         <?php $count = 0; ?>
                         <?php foreach($categorySection['subHeaders'] as $subheader): ?>
                             <a href="<?php echo $subheader['target']; ?>">
-                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>">
+                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" rel="tooltip" data-toggle="tooltip" data-placement="top" title="sample">
                                     <?php echo html_escape($subheader['text']); ?>
                                 </button>
+                                <script type="text/javascript">
+                                    jQuery(function () {
+                                        $("[rel='tooltip']").tooltip();
+                                    });
+                                </script>
                             </a>
                             <?php $count++; ?>
                         <?php endforeach; ?>
@@ -77,8 +82,28 @@
                                 <div class="item-meta-container" align="left">
                                     
                                         <a href="/item/<?php echo $productSlug ?>">
-                                            <h3 class="item-name">
-                                                <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                            <h3 class="item-name" style="position: relative;">
+                                                <?php
+                                                    if(strlen($product->getName())>20){
+                                                ?>
+                                                 <div class="tooltip-home">
+                                                   <?php echo html_escape($product->getName())?>
+                                                 </div>
+                                                 <?php
+                                                    }
+                                                 ?>
+                                                 <?php
+                                                    if(strlen($product->getName())>20){
+                                                ?>
+                                                <span style="width: 100%; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                                                <?php }
+                                                    else{?>
+                                                        <span>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                        <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                                    </span>
                                             </h3>
                                         </a>
                                     
