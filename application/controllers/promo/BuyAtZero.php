@@ -22,7 +22,7 @@ class BuyAtZero extends MY_Controller
     {
         $productId = $this->input->post('id');
         if (!$this->session->userdata('member_id')) {
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['product' => $productId]);
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->find($productId);
             $this->session->set_userdata('uri_string', 'item/'.$product->getSlug());
             $data = 'not-logged-in';
         }

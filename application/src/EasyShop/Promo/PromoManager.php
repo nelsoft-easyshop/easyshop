@@ -227,13 +227,13 @@ class PromoManager
     {
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tblProduct.idProduct, tblPromo.memberId AS c_member_id, tblProductImage.productImagePath as path')
-            ->from('EasyShop\Entities\EsPromo', 'tblPromo')
-            ->leftJoin('EasyShop\Entities\EsProduct', 'tblProduct', 'WITH', 'tblProduct.idProduct = tblPromo.productId')
-            ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
-            ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
-            ->setParameter('code', $code)
-            ->setParameter('promoType', EsPromo::SCRATCH_AND_WIN)
-            ->getQuery();
+                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+                    ->leftJoin('EasyShop\Entities\EsProduct', 'tblProduct', 'WITH', 'tblProduct.idProduct = tblPromo.productId')
+                    ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
+                    ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
+                    ->setParameter('code', $code)
+                    ->setParameter('promoType', EsPromo::SCRATCH_AND_WIN)
+                    ->getQuery();
         $result = $query->getResult();
 
         if ($result) {
@@ -267,7 +267,7 @@ class PromoManager
         $this->em->persist($promo);
         $this->em->flush();
 
-        return (int) $memberId === (int) $promo->getMemberId() ? true : false;
+        return (int) $memberId === (int) $promo->getMemberId();
     }
 }
 
