@@ -10,12 +10,6 @@ class Product extends MY_Controller {
     {
         parent::__construct();
 
-        //Loading Helpers
-        $this->load->helper('htmlpurifier');
-
-        //Loading Models
-        $this->load->model('product_model');   
-
         //Making response json type
         header('Content-type: application/json');
 
@@ -30,21 +24,28 @@ class Product extends MY_Controller {
      */
     public function item($slug = '')
     {
-        $productRow = $this->product_model->getProductBySlug($slug);  
-        $id = $productRow['id_product'];
-        $productCategoryId = $productRow['cat_id'];
+        $productManager = $this->serviceContainer['product_manager'];
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->findOneBy(['slug' => $slug]);
 
-        $format = $this->serviceContainer['api_formatter']->formatItem($id,true);
+        if($product){
+            $productId = $product->getIdProduct();
+            $productCategoryId = $product->getCat()->getIdCat();
 
-        $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
-        $formattedRelatedItems = array();
-        foreach ($relatedItems as $key => $value) {
-            $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
-                                                ->formatDisplayItem($value['id_product']);
+            $format = $this->serviceContainer['api_formatter']->formatItem($productId,true);
+            $relatedItems = $productManager->getRecommendedProducts($productId, 10);
+            $formattedRelatedItems = [];
+            foreach ($relatedItems as $item) {
+                $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
+                                                ->formatDisplayItem($item->getIdProduct());
+            }
+            $format = array_merge($format,['relatedItems' => $formattedRelatedItems]);
+
+            print(json_encode($format,JSON_PRETTY_PRINT));
         }
-        $format = array_merge($format,array('relatedItems'=>$formattedRelatedItems));  
-
-        print(json_encode($format,JSON_PRETTY_PRINT));
+        else{
+            print(json_encode('product not exist!',JSON_PRETTY_PRINT));
+        }
     }
 
     /**
@@ -53,17 +54,17 @@ class Product extends MY_Controller {
      */
     public function deals()
     {   
-        $arrayFilter = array(
-                        'isDelete' => 0,
-                        'isDraft' => 0,
-                        'cat' => 1000,
-                    );
+        $arrayFilter = [
+            'isDelete' => 0,
+            'isDraft' => 0,
+            'cat' => 1000,
+        ];
         $dealsItems = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findBy($arrayFilter);
-        $formattedDeals = array();
-        foreach ($dealsItems as $key => $value) {
+                               ->findBy($arrayFilter);
+        $formattedDeals = [];
+        foreach ($dealsItems as $item) {
             $formattedDeals[] = $this->serviceContainer['api_formatter']
-                                                ->formatDisplayItem($value->getIdProduct());
+                                     ->formatDisplayItem($item->getIdProduct());
         }
 
         print(json_encode($formattedDeals,JSON_PRETTY_PRINT));

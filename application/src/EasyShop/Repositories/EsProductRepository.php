@@ -128,7 +128,7 @@ class EsProductRepository extends EntityRepository
             $selectString = 'COUNT(*) as cnt,product_id';
         }
         else{
-            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id';
+            $selectString = 'name,attr_value,head_id,detail_id,is_other,price,image_id,type,datatype_id';
             $rsm->addScalarResult('name', 'head');
             $rsm->addScalarResult('attr_value', 'value');
             $rsm->addScalarResult('head_id', 'head_id');
@@ -136,6 +136,8 @@ class EsProductRepository extends EntityRepository
             $rsm->addScalarResult('is_other', 'is_other');
             $rsm->addScalarResult('price', 'price');
             $rsm->addScalarResult('image_id', 'image_id');
+            $rsm->addScalarResult('type', 'type');
+            $rsm->addScalarResult('datatype_id', 'datatype_id');
         }
 
         $query = $this->em->createNativeQuery("
@@ -149,6 +151,8 @@ class EsProductRepository extends EntityRepository
                     , '0' as is_other
                     , a.attr_price as price
                     , '0' as image_id
+                    ,'specific' as type
+                    , b.datatype_id as datatype_id
                   FROM
                     `es_product_attr` a
                     , `es_attr` b 
@@ -167,6 +171,8 @@ class EsProductRepository extends EntityRepository
                     , '1' as is_other
                     , b.value_price as price
                     , b. product_img_id as price
+                    , 'option' as type
+                    , '0' as datatype_id
                 FROM
                     es_optional_attrhead a
                     , es_optional_attrdetail b 
@@ -525,7 +531,7 @@ class EsProductRepository extends EntityRepository
                     break;
                 case "HOT":
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
-                                        ->addOrderBy(' p.clickcount',$order);
+                                         ->addOrderBy(' p.clickcount',$order);
                     break;
                 case "NAME":
                     $qbResult = $qbResult->orderBy('p.name', $order);
@@ -658,10 +664,12 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param array $catId
+     *  @param string $condition
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId){
+    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    {
         $em = $this->_em;
         $result = array();
 
@@ -672,6 +680,12 @@ class EsProductRepository extends EntityRepository
             $arrCatParam[] = ":i" . $i;
         }
         $catInCondition = implode(',',$arrCatParam);
+        // Generate Order by condition
+        $orderCondition = "";
+        foreach($orderBy as $column=>$order){
+            $orderCondition .= "p." . $column . " " . $order . ", ";
+        }
+        $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
             SELECT p.idProduct
@@ -688,8 +702,17 @@ class EsProductRepository extends EntityRepository
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
 
+        if($condition !== "") {
+            $dql .= "AND p.condition = :condition";
+        }
+            $dql .= " ORDER BY ". $orderCondition;
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
+
+        if($condition !== "") {
+            $query->setParameter("condition", $condition);
+        }
 
         for($i=1;$i<=$catCount;$i++){
             $query->setParameter('i'.$i, $catId[$i-1]);
@@ -874,8 +897,8 @@ class EsProductRepository extends EntityRepository
     public function getRecommendedProducts($productId, $categoryId, $limit = null)
     {
         $this->em =  $this->_em;
-        $queryBuilder = $this->em->createQueryBuilder();
-        $qbResult = $queryBuilder->select('p')
+        $queryBuilder = $this->em->createQueryBuilder()
+                                 ->select('p')
                                  ->from('EasyShop\Entities\EsProduct','p')
                                  ->where('p.cat = :category')
                                  ->andWhere("p.idProduct != :productId")
@@ -891,8 +914,8 @@ class EsProductRepository extends EntityRepository
         if($limit){
             $queryBuilder->setMaxResults($limit);
         }
-
-        $result = $qbResult->getResult(); 
+ 
+        $result = $queryBuilder->getResult(); 
 
         return $result;
     }
