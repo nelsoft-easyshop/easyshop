@@ -97,6 +97,43 @@
     /**************** END GOOGLE MAPS ******************************/
 
     /************** Delivery Address ***************************/
+    $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
+        var postData = $("#deliverAddressForm").serializeArray()
+        postData.push({ name: this.name, value: this.value });
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            data: postData,
+            url: "/memberpage/edit_consignee_address",
+            success: function(data) {
+/*                    $("#savePersonalInfo").text("SAVE CHANGES");
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.result !== "success") {
+                        $("#verifiedEmail, #verifyEmail").css("display","none");
+                        if(obj.error.mobile) {
+                            $("#errorIndicatorMobileNumber").css("display","block");
+                            $("#errorTextMobile").text(obj.error.mobile);
+                        }
+                        if(obj.error.email) {
+                            $("#errorIndicatoreEmailAddress").css("display","block");
+                            $("#errorTextEmail").text(obj.error.email);
+                        }                        
+                    }
+                    else {
+                        if(email !== originalEmail) {
+                            $("#verifyEmail").css("display","block");
+                            $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
+                        }
+                    }*/
+            },
+        });            
+
+    });
+
+    $('#consigneeMobile, #consigneeLandLine').on('keypress',function(e){
+        var code = e.keyCode || e.which;
+        return (code != 46);
+    });
 
     $('.address_dropdown, .disabled_country').chosen({width:'200px'});
     $('.stateregionselect').on('change', function(){
