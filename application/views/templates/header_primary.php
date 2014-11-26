@@ -204,7 +204,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                           <div class="search-container">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
+                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -246,7 +246,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-left-neg-14">
                                                                 <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
                                                                     <div class="col-md-3">
-                                                                        <a href="/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
+                                                                        <a href="/category/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                         <ul class="cat-sub-list">
                                                                             <?PHP foreach($popularCategory['subCategory'] as $subCategory) : ?>
                                                                                 <li><a href="/category/<?=$subCategory->getSlug()?>"><?=$subCategory->getName()?></a></li>
@@ -315,7 +315,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
                                                  <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control">
+                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                                     <input type="submit" value="" class="span_bg">
                                                 </form>
                                                 </div>
@@ -427,5 +427,5 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="clear"></div>        
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 
-<script src="/assets/js/src/header.js" type="text/javascript"></script>
+<script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 

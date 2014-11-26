@@ -23,6 +23,13 @@ class Dashboard extends MY_Controller
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
         }
+        $data['homeContent'] = $this->fillCategoryNavigation();
+        $data = array_merge($data, $this->fill_header());
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $footerData['facebook'] = $socialMediaLinks["facebook"];
+        $footerData['twitter'] = $socialMediaLinks["twitter"];
+
         if($data['logged_in']){
             $memberId = $this->session->userdata('member_id');
             $data['logged_in'] = true;
@@ -33,7 +40,7 @@ class Dashboard extends MY_Controller
 
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-        $this->load->view('templates/footer_primary');
+        $this->load->view('templates/footer_primary', $footerData);
     }
 
     public function getMemberPageDetails()

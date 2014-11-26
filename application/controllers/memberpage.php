@@ -65,6 +65,22 @@ class Memberpage extends MY_Controller
         $this->load->view('templates/header', $data);
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
+//=======
+//        if($this->session->userdata('member_id')) {
+//            $data['user_details'] = $this->fillUserDetails();
+//        }
+//        $data['homeContent'] = $this->fillCategoryNavigation();
+//        $data = array_merge($data, $this->fill_header());
+//
+//        $socialMediaLinks = $this->getSocialMediaLinks();
+//        $footerData['facebook'] = $socialMediaLinks["facebook"];
+//        $footerData['twitter'] = $socialMediaLinks["twitter"];
+//
+//
+//        $this->load->view('templates/header_primary', $data);
+//        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
+//        $this->load->view('templates/footer_primary', $footerData);
+//>>>>>>> issue-1451
     }
 
     /**
@@ -415,6 +431,7 @@ class Memberpage extends MY_Controller
         $user_product_count = $this->memberpage_model->getUserItemCount($uid);
         $um = $this->serviceContainer['user_manager'];
 
+        
         $data = array(
             'title' => 'Easyshop.ph - Member Profile',
             'image_profile' => $um->getUserImage($uid),
@@ -738,41 +755,7 @@ class Memberpage extends MY_Controller
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
             $memberId = $this->session->userdata('member_id');
-            
-            if($this->input->post('username') && $this->input->post('password')){
-                $authenticateData = ['username' => $this->input->post('username'),
-                                     'password' => $this->input->post('password')];
-                $authenticationResult = $this->serviceContainer['account_manager']->authenticateMember($authenticateData['username'], 
-                                                                                                       $authenticateData['password']);
-                if( $authenticationResult['member'] === null || 
-                    !empty($authenticationResult['errors']) ||  
-                    (int)$authenticationResult['member']->getIdMember() !==  (int)$memberId
-                ){
-                    $serverResponse = array(
-                        'result' => 'invalid',
-                        'error' => 'Incorrect password.'
-                    );
 
-                    echo json_encode($serverResponse);
-                    exit;
-                }
-                else{
-                    $this->session->set_userdata('transaction_authentication_cache', md5($authenticateData['username'].$authenticateData['password']));
-                }
-            }
-            else{   
-                $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                                   ->findOneBy(['idMember' => $memberId ]);
-                if($member === null || ! md5($member->getUsername(), $member->getPassword()) === $this->session->userdata('transaction_authentication_cache')){
-                    $serverResponse = array(
-                        'result' => 'invalid',
-                        'error' => 'Your session has expired. Please reload the page and try again.'
-                    );
-                    echo json_encode($serverResponse);
-                    exit;
-                }
-            }
-            
             // Check type of response ( if user or seller response )
             if( $this->input->post('buyer_response') ){
                 $data['order_product_id'] = $this->input->post('buyer_response');

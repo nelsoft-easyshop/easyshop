@@ -8,9 +8,9 @@
     */
     /*width: 635px;*/
     /*width: 600px;*/
-    height: 320px;
-    border:1px solid #cecece;
-    margin-left: 40px;
+    height: 480px;
+    /*border:1px solid #cecece;
+    margin-left: 40px;*/
 }
 
 .jcarousel .product_sub_category {
@@ -53,17 +53,17 @@
     -webkit-box-shadow: 0 0 2px #999;
     -moz-box-shadow: 0 0 2px #999;
     box-shadow: 0 0 2px #999;
-    top:450px;
+    top:500px;
 }
 
 .jcarousel-control-prev {
 /*    left: 440px;*/
-    margin-left: -3px;
+    margin-left: 0px;
 }
 
 .jcarousel-control-next {
 /*    right: 187px;*/
-    margin-left: 645px;
+    margin-left: 45px;
 }
 
 .jcarousel-control-prev:hover span,

@@ -7,7 +7,7 @@ use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
 use EasyShop\Entities\EsProduct; 
-use EasyShop\Entities\EsProductShippingHead; 
+use EasyShop\Entities\EsProductShippingHead;
 
 use Easyshop\Entities\EsProductItem;
 
@@ -650,27 +650,6 @@ class ProductManager
     }
 
     /**
-     * Creates directories, checks if the passed image name exists in the admin folder
-     * @param int $imagesId
-     * @return JSONP
-     */ 
-    public function imageresize($imageDirectory, $newDirectory, $dimension)
-    {
-        
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $imageDirectory;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['new_image'] = $newDirectory;
-        $config['width'] = $dimension[0];
-        $config['height'] = $dimension[1]; 
-
-        $this->imageLibrary->initialize($config); 
-        $this->imageLibrary->resize();
-        $this->imageLibrary->clear();        
-    } 
-
-    /**
      * Generates slugs 
      * @param string $title
      * @return string
@@ -846,11 +825,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
-        // get combination quantity
-        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                     ->getProductInventoryDetail($productId);
-
-         // get product shipping location
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
+ 
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
@@ -879,17 +856,67 @@ class ProductManager
             }
         }
 
+        $productAttributeDetails = $esProductRepo->getProductAttributeDetailByName($productId);
+        $productAttributes = $this->collectionHelper->organizeArray($productAttributeDetails,true,true);
+
+        $attrCount = 0;
+        foreach ($productAttributes as $attribute) {
+            if(count($attribute) === 1){
+                $attrCount ++;
+            }
+        }
+
         // check if combination available
         $noMoreSelection = "";
         if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
-            || count($productCombinationAvailable) === 1 ){
+            || (count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes))){
             $noMoreSelection = $productInventory[0]['id_product_item'];
+        }
+
+        $needToSelect = false;
+        if(count($productCombinationAvailable) === 1 && $attrCount !== count($productAttributes)){
+            $needToSelect = true;
         }
 
         return [
                 'noMoreSelection' => $noMoreSelection,
-                'productCombinationAvailable' => $productCombinationAvailable
+                'productCombinationAvailable' => $productCombinationAvailable,
+                'needToSelect' => $needToSelect,
             ];
+    }
+
+    /**
+     * Get prodcut additional information to display on product details based on attributes
+     * @param  array $productAttributes [description]
+     * @return array
+     */
+    public function separateAttributesOptions($productAttributes)
+    {   
+        $additionalInformation = [];
+        foreach ($productAttributes as $headKey => $headValue) {
+            if(count($headValue) === 1){
+                $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
+                if((int)$headValue[0]['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $headValue[0]['type'] === "specific"){
+                    unset($productAttributes[$headKey]);
+                }
+            }
+            else{
+                foreach ($headValue as $key => $value) {
+                    if((int)$value['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $value['type'] === "specific" ){
+                        $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
+                        unset($productAttributes[$headKey][$key]);
+                    }
+                    if(empty($productAttributes[$headKey])){
+                        unset($productAttributes[$headKey]);
+                    }
+                }
+            }
+        }
+
+        return [
+            'additionalInformation'=> $additionalInformation,
+            'productOptions' => $productAttributes
+        ];
     }
 }
 

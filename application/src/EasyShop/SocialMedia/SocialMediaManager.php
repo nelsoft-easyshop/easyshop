@@ -270,7 +270,25 @@ class SocialMediaManager
         $date =  new DateTime('now');
         return sha1($memberId + $date->format('Y-m-d H:i:s'));
     }
-    
+
+    /**
+     * Updates email if current saved email is incorrect.
+     * @param $esMember
+     * @param $socialMedialEmail
+     * @return EsMember
+     */
+    public function fixSocialMediaEmail($esMember, $socialMedialEmail)
+    {
+        $newEsMember = $esMember;
+        if (stripos($esMember->getEmail(), '@') === false)
+        {
+            $newEsMember->setEmail($socialMedialEmail);
+            $this->em->persist($newEsMember);
+            $this->em->flush();
+        }
+
+        return $newEsMember;
+    }
         
     /**
      * Returns the facebook type constant
