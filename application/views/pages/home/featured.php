@@ -21,7 +21,7 @@
                             
                                 <!--hover image-->
                                 <?PHP if ($secondaryImage) : ?>
-                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo  getAssetsDomain().$secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
                                         
                                     </div>
                                     <div class="div-rec-product-image main-prod-image">
@@ -29,8 +29,8 @@
                                     <div class="div-rec-product-image">
                                 <?PHP endif; ?>
                                 <!--main image-->
-                                        <div class="image-handler" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
-                                        
+                                        <div class="image-handler" style="background: #fff url(<?php echo  getAssetsDomain().$defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                   
                                         </div>
                                     </div>
                                 </a>
