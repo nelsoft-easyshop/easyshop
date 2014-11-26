@@ -491,11 +491,6 @@ class productUpload extends MY_Controller
             }
         }
         else{
-            for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                if (file_exists($pathDirectory.$filenames_ar[$i])) {
-                    unlink($pathDirectory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
-                }
-            }
             $text = $this->upload->display_errors();
             if($text == '<p>The uploaded file exceeds the maximum allowed size in your PHP configuration file.</p>'){
                 $text ='File is too large. Please select another image';

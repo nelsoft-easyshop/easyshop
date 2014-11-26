@@ -763,9 +763,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productInventory = $esProductRepo->getProductInventoryDetail($productId);
- 
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
