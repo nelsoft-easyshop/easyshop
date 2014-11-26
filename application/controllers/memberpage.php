@@ -545,63 +545,22 @@ class Memberpage extends MY_Controller
      */
     public function edit_consignee_address()
     {
-        if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-            $uid = $this->session->userdata('member_id');
-            $result = array(false,false);
 
-            $postdata = array(
-                'consignee' => $this->input->post('consignee'),
-                'mobile' => ltrim($this->input->post('c_mobile'), '0'),
-                'telephone' => $this->input->post('c_telephone'),
-                'stateregion' => $this->input->post('c_stateregion'),
-                'city' => $this->input->post('c_city'),
-                'address' => $this->input->post('c_address'),
-                'country' => $this->input->post('c_country'),
-                'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng'),
-                'addresstype' => 1
-            );
-
-            $temp = array(
-                'stateregion' => $this->input->post('cstateregion_orig'),
-                'city' => $this->input->post('ccity_orig'),
-                'address' => $this->input->post('caddress_orig'),
-                'map_lat' => $this->input->post('map_lat'),
-                'map_lng' => $this->input->post('map_lng')
-            );
-
-            if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
-                && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
-                $postdata['lat'] = 0;
-                $postdata['lng'] = 0;
-            }
-
-            $addressID = $this->memberpage_model->getAddress($uid,1)['id_address'];
-            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-
-            if($this->input->post('c_def_address')){
-                $addressID = $this->memberpage_model->getAddress($uid,0)['id_address'];
-                $postdata['addresstype'] = 0;
-                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-                $data['default_add'] = $this->input->post('c_def_address');
-            }
-            else{
-                $result[1] = true;
-                $data['default_add'] = 'off';
-            }
-
-            $data['result'] = $result[0] && $result[1] ? 'success':'fail';
-            $data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
-
-            $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-
+        if($this->input->post('c_deliver_address_btn')) {
+            $userMgr = $this->serviceContainer['user_manager'];
+            $result = $userMgr->setAddress(
+                    $this->input->post('c_address'),
+                    $this->input->post('c_stateregion'),
+                    $this->input->post('c_city'),
+                    $this->session->userdata('member_id'),
+                    $this->input->post('consignee'),
+                    $this->input->post('c_mobile'),
+                    $this->input->post('c_telephone'),
+                    $this->input->post('temp_lat'),
+                    $this->input->post('temp_lng')
+                );
+            echo json_encode($result);
         }
-        else{
-            $data['result'] = 'fail';
-            $data['errmsg'] = 'Failed to validate form.';
-        }
-
-        $this->output->set_output(json_encode($data));
     }
 
     /**
