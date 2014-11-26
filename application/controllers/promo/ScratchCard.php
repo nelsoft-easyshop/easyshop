@@ -36,22 +36,6 @@ class ScratchCard extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-    /**
-     * checks if the code exist
-     *
-     * @param code
-     * @return json
-     */
-    public function validateScratchCardCode2()
-    {
-        $result = $this->product_model->validateScratchCardCode($this->input->post('code'));
-        $result['logged_in'] = true;
-        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            $result['logged_in'] = false;
-        }
-
-        echo json_encode(!$result ? false : $result);
-    }
 
     /**
      * checks if the code exist
