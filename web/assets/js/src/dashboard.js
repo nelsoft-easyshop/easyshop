@@ -492,17 +492,21 @@
     });
     
     $( "#btn-edit-store-name" ).click(function() {
-        $( ".current-store-name" ).slideToggle( "slow" );
-        $( ".edit-store-name" ).slideToggle( "slow" );
+        $( ".current-store-name" ).slideToggle( "fast" );
+        $( ".edit-store-name" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-name" ).click(function() {
         $( "#btn-edit-store-name" ).trigger( "click" );
+        $('#input-store-name').val($('#store-name-display').html())
+        $("#fail-message-store-name").css('display', 'none');
+        $("#fail-icon-store-name").css('display', 'none');
+
     });
 
     $( "#btn-edit-store-url" ).click(function() {
-        $( ".current-store-url" ).slideToggle( "slow" );
-        $( ".edit-store-url" ).slideToggle( "slow" );
+        $( ".current-store-url" ).slideToggle( "fast" );
+        $( ".edit-store-url" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-url" ).click(function() {

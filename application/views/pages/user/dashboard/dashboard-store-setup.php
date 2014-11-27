@@ -11,7 +11,7 @@
             <p class="panel-setup-title">Store Name</p>
             <div class="div-setup-content">
                 <div class="current-store-name">
-                    <span class="setting-current-email"><?php echo html_escape( $member->validatedStoreName ) ?></span> 
+                    <span class="setting-current-email" id="store-name-display"><?php echo html_escape( $member->validatedStoreName ) ?></span> 
                     <button class="btn btn-setting-edit-btn" id="btn-edit-store-name">
                        <i class="icon-edit"></i> Edit
                     </button>
@@ -61,12 +61,11 @@
                         <div class="col-md-6 col-inline-textbtn">
                              <span class="setting-edit-url"><?php echo base_url(); ?></span> 
                              <input type="text" class="text-info-url text-required" value="<?php echo html_escape($member->getSlug()); ?>"/>
+                          
                             <!-- DISPLAY WHEN ERROR 
                             <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
                             <span class="val-error">Please enter at least 6 characters.</span>
                             -->
-                            <!--DISPLAY WHEN OK-->
-                            <span class="val-success-url"><i class="fa fa-check"></i></span>
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
                             <button class="btn btn-setting-save-btn save-store-setting">
