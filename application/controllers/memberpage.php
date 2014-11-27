@@ -11,6 +11,13 @@ if (!defined('BASEPATH'))
  *  @author Rain Jorque
  *
  */
+
+use EasyShop\Entities\EsMember as EsMember;
+use EasyShop\Entities\EsCat as EsCat;
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
+
 class Memberpage extends MY_Controller
 {
 
@@ -20,6 +27,20 @@ class Memberpage extends MY_Controller
      * @var string
      */
     private $contentXmlFile;
+
+    /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $salesPerPage = 10;
+
+    /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $feedbackLimit = 10;
 
     /**
      *  Class Constructor
@@ -35,6 +56,7 @@ class Memberpage extends MY_Controller
         // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
     public function sample()
@@ -1913,6 +1935,7 @@ class Memberpage extends MY_Controller
                 'historySales' => $historySalesView,
                 'historyTotalSales' => $historyTotalSales,
             ];
+
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
             $member->validatedStoreName = $member->getStoreName() !== null && trim($member->getStoreName()) !== "" 
                                          ? $member->getStoreName() : $member->getUsername();
@@ -2184,7 +2207,7 @@ class Memberpage extends MY_Controller
 
         echo json_encode($responseData);
     }
-    
+
     
     /**
      * Updated the store setting

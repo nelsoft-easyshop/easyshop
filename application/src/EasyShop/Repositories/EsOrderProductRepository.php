@@ -114,5 +114,115 @@ class EsOrderProductRepository extends EntityRepository
 
         return intval($result['total_count']);
     }
+
+    /**
+     * Get all current sales of user that is not yet payout
+     * @param  integer $memberId
+     * @param  integer $page
+     * @param  integer $limit
+     * @param  integer $orderProductStatus
+     * @param  date object $dateFrom
+     * @param  date object $dateTo
+     * @return object
+     */
+    public function getOrderProductTransaction($memberId,
+                                               $orderProductStatus,
+                                               $limit,
+                                               $page = 0,
+                                               $dateFrom = null, 
+                                               $dateTo = null)
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder()->select('op')
+                                                       ->from('EasyShop\Entities\EsOrderProduct','op')
+                                                       ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
+                                                       ->where('op.seller = :memberId')
+                                                       ->andWhere('op.status = :status')
+                                                       ->setParameter('memberId', $memberId)
+                                                       ->setParameter('status', $orderProductStatus);
+        if($dateFrom != null && $dateTo != null){
+            $queryBuilder->andWhere('o.dateadded BETWEEN :dateFrom AND :dateTo')
+                         ->setParameter('dateFrom', $dateFrom)
+                         ->setParameter('dateTo', $dateTo);
+        }
+
+        $qbResult = $queryBuilder->orderBy('op.idOrderProduct', "DESC")
+                                 ->setFirstResult($page)
+                                 ->setMaxResults($limit)
+                                 ->getQuery();
+        $result = $qbResult->getResult();
+
+        return $result;
+    }
+
+    /**
+     * Get Total Sum of order product per user by status
+     * @param  integer $memberId
+     * @param  integer $orderProductStatus
+     * @param  date object $dateFrom
+     * @param  date object $dateTo
+     * @return float
+     */
+    public function getSumOrderProductTransaction($memberId, 
+                                                  $orderProductStatus,
+                                                  $dateFrom = null, 
+                                                  $dateTo = null)
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder()
+                                 ->select('COALESCE(SUM(op.net),0) as net_amount')
+                                 ->from('EasyShop\Entities\EsOrderProduct','op')
+                                 ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
+                                 ->where('op.seller = :memberId')
+                                 ->andWhere('op.status = :status')
+                                 ->setParameter('memberId', $memberId)
+                                 ->setParameter('status', $orderProductStatus);
+
+        if($dateFrom != null && $dateTo != null){
+            $queryBuilder->andWhere('o.dateadded BETWEEN :dateFrom AND :dateTo')
+                         ->setParameter('dateFrom', $dateFrom)
+                         ->setParameter('dateTo', $dateTo);
+        }
+
+        $result = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return (float) $result['net_amount'];
+    }
+
+    /**
+     * Get total Count of all order product per user by status
+     * @param  integer $memberId
+     * @param  integer $orderProductStatus
+     * @param  date object $dateFrom
+     * @param  date object $dateTo
+     * @return integer
+     */
+    public function getCountOrderProductTransaction($memberId, 
+                                                     $orderProductStatus,
+                                                     $dateFrom = null, 
+                                                     $dateTo = null)
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder()
+                                 ->select('COUNT(op.idOrderProduct) as total_count')
+                                 ->from('EasyShop\Entities\EsOrderProduct','op')
+                                 ->leftJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder') 
+                                 ->where('op.seller = :memberId')
+                                 ->andWhere('op.status = :status')
+                                 ->setParameter('memberId', $memberId)
+                                 ->setParameter('status', $orderProductStatus);
+
+        if($dateFrom != null && $dateTo != null){
+            $queryBuilder->andWhere('o.dateadded BETWEEN :dateFrom AND :dateTo')
+                         ->setParameter('dateFrom', $dateFrom)
+                         ->setParameter('dateTo', $dateTo);
+        }
+
+        $result = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return (int) $result['total_count'];
+    }
+
+
     
 }

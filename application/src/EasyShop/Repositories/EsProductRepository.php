@@ -4,7 +4,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use EasyShop\Entities\EsProduct; 
+use EasyShop\Entities\EsProduct as EsProduct; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -822,6 +822,208 @@ class EsProductRepository extends EntityRepository
         $result = $query->execute();  
         return isset($result[0]) ? $result[0] : NULL;
     }
+
+    /**
+     * Return count users product
+     * @param  integer $memberId  
+     * @param  integer $isDelete
+     * @param  integer $isDraft
+     * @param  string  $searchString
+     * @return integer
+     */
+    public function getUserProductCount($memberId,
+                                        $isDelete = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
+                                        $isDraft = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
+                                        $searchString = "")
+    {
+        $this->em = $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('COUNT(p.idProduct)')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where('p.member = :member_id')
+                     ->setParameter('member_id', $memberId)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        );
+
+        if($searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
+
+        $resultCount = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return $resultCount;
+    }
+
+    /**
+     * Return sold item count of a specific user
+     * @param  integer $memberId
+     * @return integer
+     */
+    public function getUserSoldProductCount($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+            SELECT COUNT(product_id) as count
+            FROM es_order_product
+            WHERE seller_id = :memberId
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    /**
+     * Get all active products of specific user
+     * @param  integer  $memberId
+     * @param  integer $offset
+     * @param  integer $perPage
+     * @return object
+     */
+    public function getUserProducts($memberId,
+                                    $isDelete,
+                                    $isDraft,
+                                    $offset = 0,
+                                    $perPage = 10,
+                                    $searchString = "",
+                                    $orderByField = "p.idProduct")
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('p')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        )
+                     ->andWhere('p.member = :member_id')
+                     ->setParameter('member_id', $memberId);
+
+        if($searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
+
+        $queryBuilder->orderBy($orderByField,"DESC");
+        $qbStatement = $queryBuilder->setFirstResult($offset)
+                                    ->setMaxResults($perPage)
+                                    ->getQuery();
+        $resultSet = $qbStatement->getResult();
+
+        return $resultSet;
+    }
+
+    /**
+     * Return product average rating of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductAverageRating($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('rating', 'rating');
+
+        $sql = "
+            SELECT AVG(rating) as rating
+            FROM es_product_review
+            WHERE product_id = :product_id
+            AND p_reviewid  = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['rating'];
+    }
+
+    /**
+     * Return total review of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductReviewCount($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+            SELECT COUNT(id_review) as count
+            FROM es_product_review
+            WHERE product_id = :product_id
+            AND p_reviewid  = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    /**
+     * Return product available stock count
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductAvailableStocks($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('quantity', 'quantity');
+
+        $sql = "
+            SELECT SUM(quantity) as quantity
+            FROM es_product_item
+            WHERE product_id = :product_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['quantity'];
+    }
+
+    /**
+     * Return sold count of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getSoldProductCount($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('quantity', 'quantity');
+
+        $sql = "
+            SELECT SUM(order_quantity) as quantity
+            FROM es_order_product
+            WHERE product_id = :product_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['quantity'];
+    }
     
     /**
      * Get product bank and billing information
@@ -920,5 +1122,6 @@ class EsProductRepository extends EntityRepository
         return $result;
     }
 }
+
 
 

@@ -128,14 +128,16 @@
                                 <div class="color-dropdown">
                                     <ul class="color-list">
                                         <li style="background: #FF893A" id="color-item-1">EASYSHOP <i class="fa fa-check pull-right"></i></li>
-                                        <li style="background: #D24D57" id="color-item-2">Chestnut Rose</li>
+                                        <li style="background: #F89406" id="color-item-2">CALIFORNIA</li>
                                         <li style="background: #F22613" id="color-item-3">POMEGRANATE</li>
-                                        <li style="background: #FF0000" id="color-item-4">RED</li>
-                                        <li style="background: #D91E18" id="color-item-5">THUNDERBIRD</li>
-                                        <li style="background: #EF4836" id="color-item-6">FLAMINGO</li>
-                                        <li style="background: #C0392B" id="color-item-7">TALL POPPY</li>
-                                        <li style="background: #CF000F" id="color-item-8">MONZA</li>
-                                        <li style="background: #E74C3C" id="color-item-9">CINNABAR</li>
+                                        <li style="background: #F62459" id="color-item-4">RADICAL RED</li>
+                                        <li style="background: #674172" id="color-item-5">HONEY FLOWER</li>
+                                        <li style="background: #336E7B" id="color-item-6">MING</li>
+                                        <li style="background: #446CB3" id="color-item-7">SAN MARINO</li>
+                                        <li style="background: #2574A9" id="color-item-8">JELLY BEAN</li>
+                                        <li style="background: #1E824C" id="color-item-9">SALEM</li>
+                                        <li style="background: #6C7A89" id="color-item-10">LYNCH</li>
+                                        
                                     </ul>
                                 </div>
                             </div>
