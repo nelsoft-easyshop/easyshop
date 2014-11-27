@@ -26,7 +26,7 @@
                     <span class="val-error" id="errorTextVerify"></span>
                  </div>
                 </div>
-                <div class="edit-email">
+                <div class="edit-email" id="editEmailPanel">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
                             <input type="text" class="text-info text-required" id="emailAddressEdit" value="<?php echo html_escape($email);?>"/>
@@ -38,12 +38,14 @@
                         </div>
                         <div class="col-md-5">
                             <img src="/assets/images/orange_loader_small.gif" class="changeEmailLoader" style="display:none"/>
-                            <button class="btn btn-setting-save-btn" id="changeEmailBtn">
-                                Save changes
-                            </button>
-                            <button class="btn btn-setting-cancel-btn" id="cancel-edit-email">
-                                Cancel
-                            </button>
+                             <div id="changeEmailBtnAction">   
+                                <button class="btn btn-setting-save-btn" id="changeEmailBtn">
+                                    Save changes
+                                </button>
+                                <button class="btn btn-setting-cancel-btn" id="cancel-edit-email">
+                                    Cancel
+                                </button>
+                        </div>                                
                         </div>
                     </div>
                 </div>
