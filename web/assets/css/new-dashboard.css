@@ -663,7 +663,8 @@ a{
     outline: none;
     transition: all 0.3s ease;
     color: #565656;
-    display: inline;
+    display: inline-block;
+    width: 100%;
 }
 
 .text-info:focus,
@@ -727,7 +728,7 @@ a{
     color: #007c67;
     font-size: 22px;
     position: absolute;
-    right: 33px;
+    right: 7px;
     top: 8px;
 }
 
@@ -956,12 +957,17 @@ a{
     height: 25px;
 }
 
+.div-input-url-cont{
+
+    position: relative;
+}
+
 .col-inline-textbtn{
     padding-right: 0px;
 }
 
 .col-inline-btn-url{
-    padding-left: 0px;
+    padding-left: 34px;
 }
 
 .edit-email,
@@ -1842,10 +1848,6 @@ a{
         width: 100%;
     }
     
-    .val-success-url{
-        right: 23px;
-        top: 32px;
-    }
     
     .col-inline-btn-url{
         padding-left: 15px;
