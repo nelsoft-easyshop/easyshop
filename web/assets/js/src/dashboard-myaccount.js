@@ -1,4 +1,8 @@
 (function ($) {
+
+
+
+
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
@@ -83,7 +87,6 @@
         var city = $('#delivery_city').find('option:selected').text();
         var type = "delivery";
 
-        
         var address = stateregion + " " + city + " PH";
         if(address === " --- Select City --- PH") {
             alert('Please specify a valid address.');            
@@ -95,6 +98,61 @@
         
     });
  
+    $('.map-trigger').click(function () {
+        var maplat = $(this).siblings('input[name="map_lat"]').val();
+        var maplng = $(this).siblings('input[name="map_lng"]').val();
+        var refreshmapbtn = $('.refresh_map');
+        var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
+        var type = this.name;
+        
+        if (maplat == 0 && maplng == 0){
+            refreshmapbtn.trigger('click');
+        }else{
+            var myLatlng =  new google.maps.LatLng(maplat,maplng);
+            if(mapcanvas.hasClass('map_canvas')){
+                if( type === 'personal' ){
+                    mapPersonal.setCenter(myLatlng);
+                    markerPersonal.setPosition(myLatlng);
+                }
+                else{
+                    mapDelivery.setCenter(myLatlng);
+                    markerDelivery.setPosition(myLatlng);
+                }
+            }else{
+                google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
+            }
+        }    
+    });
+
+    $('.span-current-location').click(function () {
+        var maplat = $("#current_lat").val();
+        var maplng = $("#current_lang").val();
+        $("#temp_clat").val(maplat);
+        $("#temp_clng").val(maplng);
+        var refreshmapbtn = $('.refresh_map');
+        var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
+        var type = this.name;
+        
+        if (maplat == 0 && maplng == 0){
+            refreshmapbtn.trigger('click');
+        }else{
+            var myLatlng =  new google.maps.LatLng(maplat,maplng);
+            if(mapcanvas.hasClass('map_canvas')){
+                if( type === 'personal' ){
+                    mapPersonal.setCenter(myLatlng);
+                    markerPersonal.setPosition(myLatlng);
+                }
+                else{
+                    mapDelivery.setCenter(myLatlng);
+                    markerDelivery.setPosition(myLatlng);
+                }
+            }else{
+                google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
+            }
+        }   
+                  
+    });
+
 
     $('.map-trigger').click(function () {
         var maplat = $(this).siblings('input[name="map_lat"]').val();
@@ -321,6 +379,9 @@
         if (status == google.maps.GeocoderStatus.OK) {
             google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
         }
+        else {
+            alert('Please specify a valid address.');
+        }
       });
     }  
     
@@ -356,7 +417,31 @@
         
         templat.val(myLatlng.lat());
         templng.val(myLatlng.lng());
-    }         
+    }      
+    /*********************** LOCATION ACCESOR ******************************/
+
+    function GEOprocess(position) {
+        $("#current_lat").val(position.coords.latitude);
+        $("#current_lang").val(position.coords.longitude);
+        // alert("Latitude: " + position.coords.latitude + "Longitude: " +  position.coords.longitude);
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(GEOprocess);
+    }
+
+    if (window.XMLHttpRequest) {
+        xmlHttp = new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    function GEOajax(url) {
+        xmlHttp.open("GET", url, true);
+        xmlHttp.onreadystatechange = updatePage;
+        xmlHttp.send(null);
+    }
+
 
 
 }(jQuery));
