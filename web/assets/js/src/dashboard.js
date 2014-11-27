@@ -634,8 +634,8 @@
     });
 
     $( "#btn-edit-store-cat" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-cat" ).click(function() {
@@ -643,8 +643,8 @@
     });
 
     $( "#btn-edit-store-cat-new" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat-new" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat-new" ).slideToggle( "fast" );
     });
 
     $( "#cancel-store-cat-new" ).click(function() {
@@ -915,9 +915,9 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response.isSuccessful == 'true'){
-                        $('.edit-'+field).slideToggle( "slow" );
+                        $('.edit-'+field).slideToggle( "fast" );
                         var currentSettingContainer = $('.current-'+field);
-                        currentSettingContainer.slideToggle( "slow" );
+                        currentSettingContainer.slideToggle( "fast" );
                         currentSettingContainer.find('span').html(response.updatedValue);
                     }
                     else{
