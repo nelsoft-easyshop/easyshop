@@ -33,7 +33,7 @@ class Product extends MY_Controller {
             $productCategoryId = $product->getCat()->getIdCat();
 
             $format = $this->serviceContainer['api_formatter']->formatItem($productId,true);
-            $relatedItems = $productManager->getRecommendedProducts($productId,5);
+            $relatedItems = $productManager->getRecommendedProducts($productId, 10);
             $formattedRelatedItems = [];
             foreach ($relatedItems as $item) {
                 $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
@@ -64,7 +64,7 @@ class Product extends MY_Controller {
         $formattedDeals = [];
         foreach ($dealsItems as $item) {
             $formattedDeals[] = $this->serviceContainer['api_formatter']
-                                     ->formatDisplayItem($value->getIdProduct());
+                                     ->formatDisplayItem($item->getIdProduct());
         }
 
         print(json_encode($formattedDeals,JSON_PRETTY_PRINT));

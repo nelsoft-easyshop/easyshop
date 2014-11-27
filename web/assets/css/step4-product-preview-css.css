@@ -11,19 +11,28 @@
     text-decoration: line-through;
 }
 
-.center.disable-buttons a {
-    cursor: default;
+.thumb-list-container {
+    height: 492px;
+    margin-left: -15px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
-.center.disable-buttons #prev:hover {
-    background-position: 3px -418px;
+.jcarousel-control-prev, .jcarousel-control-next {
+    top: 0;
 }
 
-.center.disable-buttons #next:hover {
-    background-position: -37px -418px;
+.jcarousel-control-next {
+    margin-left: 0;
+}
+
+.carousel-nav-btn-wrapper {
+    margin: 10px 0;
 }
 
 .thumbnails-img-container {
+    display: block;
     margin-right: 0;
 }
 
@@ -93,6 +102,10 @@
 
 .prod-availability-container span {
     display: block;
+}
+
+.prod-detail-main {
+    padding: 10px 0;
 }
 
 
