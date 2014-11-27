@@ -9,7 +9,7 @@
     <div class="div-tab-inner">
         <div class="div-personal-info">
             <p class="panel-dashboard-title">Delivery Address</p>
-            <input type="hidden" name="c_country" value="<?php echo html_escape($country_id) ?>">
+            <input type="hidden" name="c_country" value="<?php echo html_escape($countryId) ?>">
             <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Consignee Name : </label>
@@ -45,21 +45,21 @@
                  <div class="form-group">
                     <label class="col-sm-3 control-label">Address : </label>
                     <div class="col-sm-4">
-                        <select class="text-info text-address address_dropdown stateregionselect" id="deliver_stateregion" name="c_stateregion" data-status="<?php echo $c_stateregionID?>">
+                        <select class="text-info text-address address_dropdown stateregionselect" id="deliver_stateregion" name="c_stateregion" data-status="<?php echo $consigneeStateRegionId?>">
                             <option value="0">--Select State/Region--</option>
-                            <?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
-                                <option class="echo" value="<?php echo $srkey?>" <?php echo $c_stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
+                            <?php foreach($stateRegionLists as $srkey=>$stateregion):?>
+                                <option class="echo" value="<?php echo $srkey?>" <?php echo $consigneeStateRegionId == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" name="cstateregion_orig" value="<?php echo $c_stateregionID?>">
+                        <input type="hidden" name="cstateregion_orig" value="<?php echo $consigneeStateRegionId?>">
                         <span class="span-label-address">State/Region</span>
                     </div>
                     <div class="col-sm-4 col-city">
                         <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $consigneeCityId?>">
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
-                            <?php if($c_cityID != '' && $c_stateregionID != ''):?>
-                                <?php foreach($city_lookup[$c_stateregionID] as $lockey=>$city):?>
+                            <?php if($c_cityID != '' && $consigneeStateRegionId != ''):?>
+                                <?php foreach($cities[$consigneeStateRegionId] as $lockey=>$city):?>
                                     <option class="echo" value="<?php echo $lockey?>" <?php echo $consigneeCityId == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                                 <?php endforeach;?>
                             <?php endif;?>
@@ -68,7 +68,7 @@
                         <span class="span-label-address">City</span>
                     </div>
                     <div class="col-sm-4 col-city">
-                        <input type="hidden" name="c_country" value="<?php echo $country_id?>">                        
+                        <input type="hidden" name="c_country" value="<?php echo $countryId?>">                        
                     </div>                    
                 </div>
                 
@@ -77,7 +77,7 @@
                     <div class="col-sm-8">
                         <input type="text" class="text-info text-address" id="deliveryAddress" value="Brgy. San Roque, Evergreen Village" name="c_address" placeholder="Enter your street address here">
                         <span class="span-label-address">Street Address</span>
-                        <input type="hidden" name="caddress_orig" value="<?php echo html_escape($c_address)?>">
+                        <input type="hidden" name="caddress_orig" value="<?php echo html_escape($consigneeAddress)?>">
                         <div id="errorsDivStreetAddress" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextStreetAddress"></span>
@@ -99,10 +99,10 @@
                     <label class="col-sm-3 control-label">Map Location : </label>
                     <div class="col-sm-8 col-map">
                         <span>Location not marked</span> <span class="map-trigger">Mark on map <i class="fa fa-caret-down"></i></span>
-                        <input type="hidden" name="map_lat" id="map_clat" value="<?php echo $c_lat;?>">
-                        <input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">
-                        <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo $c_lat;?>">
-                        <input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo $c_lng;?>">
+                        <input type="hidden" name="map_lat" id="map_clat" value="<?php echo $latitude;?>">
+                        <input type="hidden" name="map_lng" id="map_clng" value="<?php echo $longitude;?>">
+                        <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo $latitude;?>">
+                        <input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo $longitude;?>">
                         <input type="hidden" name="current_lat" id="current_lat" value="">
                         <input type="hidden" name="current_lang" id="current_lang" value="">
                         <div class="map-container">

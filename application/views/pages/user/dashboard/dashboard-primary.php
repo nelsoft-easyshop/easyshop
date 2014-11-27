@@ -122,7 +122,7 @@
 <script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type="text/javascript">
-    var jsonCity = <?php echo $json_city;?>;
+    var jsonCity = <?php echo $cities;?>;
 </script>
 
 
