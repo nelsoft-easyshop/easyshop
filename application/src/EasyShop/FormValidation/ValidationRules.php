@@ -159,8 +159,12 @@ class ValidationRules
                                                        'max' => '60']),],
                     'shop_slug' => [
                                 new Assert\NotBlank(),
-                    ],
-            ]
+                                new CustomAssert\ContainsAlphanumericUnderscore(),
+                                new Assert\Length(['min' => '3',
+                                                   'max' => '25']),
+                                ],
+        
+            ],
         );
     }
 
