@@ -282,23 +282,22 @@ class Register extends MY_Controller
         $username = $this->input->post('wsx');
         $cur_password = $this->input->post('cur_password');
         $password = $this->input->post('password');			
-        
-        if(($username) && ($this->form_validation->run('changepass'))){  
-            $dataval = array('login_username' => $username, 'login_password' => $cur_password);
-            $this->accountManager = $this->serviceContainer['account_manager'];            
-            $row = $this->accountManager->authenticateMember($username, $cur_password);
 
-            if (!empty($row["member"])){
-                $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
-            }
-            else {
-                $result = false;
-            }
+        $dataval = array('login_username' => $username, 'login_password' => $cur_password);
+        $this->accountManager = $this->serviceContainer['account_manager'];            
+        $row = $this->accountManager->authenticateMember($username, $cur_password);
+
+        if (!empty($row["member"])){
+            $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
         }
+        else {
+            $result = false;
+        }
+
 
         $serverResponse = array(
             'result' => $result ? 'success' : 'error'
-            , 'error' => $result ? '' : 'Invalid password'
+            , 'error' => $result ? '' : 'Invalid current password'
         );
         echo json_encode($serverResponse);
     }
