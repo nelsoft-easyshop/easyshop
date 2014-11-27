@@ -18,6 +18,7 @@ use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsAddress as EsAddress;
 
 class Memberpage extends MY_Controller
 {
@@ -1822,6 +1823,8 @@ class Memberpage extends MY_Controller
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
@@ -1830,7 +1833,13 @@ class Memberpage extends MY_Controller
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
-
+        $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
+        $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
+        $stateRegionId = $address[0]->getCountry()->getIdLocation();
+        $cityId = $address[0]->getCity()->getIdLocation();
+        $consigneAddress = $address[0]->getAddress();
+        $cLat = $address[0]->getLat();
+        $cLng = $address[0]->getLng();
         if($member){
             $paginationData['isHyperLink'] = false;
 
@@ -1936,11 +1945,20 @@ class Memberpage extends MY_Controller
                 'historyTotalSales' => $historyTotalSales,
             ];
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
-
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
                 'bannerImage' => $userBannerImage,
+                'country_id' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                'json_city' => $locationLookup["json_city"],
+                'stateregion_lookup' => $locationLookup["stateRegionLookup"],
+                'city_lookup' => $locationLookup["cityLookup"],
+                'c_address' => $consigneAddress,
+                'address' => $address[0],
+                'c_lat' => $cLat,
+                'c_lng' => $cLng,
+                'c_stateregionID' => $stateRegionId,
+                'c_cityID' => $cityId,
                 'followerCount' => $userFollowers['count'],
                 'followingCount' => $userFollowing['count'],
                 'productCount' => $userProductCount,
