@@ -241,6 +241,15 @@ class EsMember
      * @ORM\Column(name="is_hide_banner", type="boolean", nullable=false)
      */
     private $isHideBanner = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_slug_changed", type="boolean", nullable=false)
+     */
+    private $isSlugChanged = '0';
+
 
     /**
      *  @var string
@@ -1073,4 +1082,26 @@ class EsMember
         return $this->isHideBanner;
     }
 
+    /**
+     * Set isSlugChanged
+     *
+     * @param bool $isSlugChanged
+     */
+    public function setIsSlugChanged($isSlugChanged)
+    {
+        $this->isSlugChanged = $isSlugChanged;
+    }
+    
+    /**
+     * Get isSlugChanged
+     *
+     * @return bool 
+     */
+    public function getIsSlugChanged()
+    {
+        return $this->isSlugChanged;
+    }
+    
+
+    
 }
