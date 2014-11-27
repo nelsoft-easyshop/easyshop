@@ -70,7 +70,7 @@ class EsLocationLookupRepository extends EntityRepository
         return $locationLookup->getParent();
     }
  
-    public function getLocationLookup()
+    public function getLocationLookup($isJsonReturn = false)
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -101,6 +101,9 @@ class EsLocationLookupRepository extends EntityRepository
             }
         }
 
+        if($isJsonReturn) {
+            $data['json_city'] = json_encode($data['cityLookup'], JSON_FORCE_OBJECT); 
+        }
         return $data;
     }
  
