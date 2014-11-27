@@ -61,8 +61,8 @@
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
-                    <div id="dashboard">
-                        <?php include("dashboard-home.php");?>
+                    <div class="" id="dashboard">
+                        <?=$dashboardHomeView; ?>
                     </div>
                     <div id="transactions">
                         <?php include("dashboard-transactions.php");?>
@@ -86,8 +86,21 @@
     </div>
 </section>
 <br/>
+
+<div>
+    <input type="hidden" id="request-url" value="/me/product/next" />
+    <input type="hidden" id="request-url-soft-delete" value="/me/product/delete-soft" />
+    <input type="hidden" id="request-url-hard-delete" value="/me/product/delete-hard" />
+    <input type="hidden" id="request-url-resotre" value="/me/product/restore" />
+    <input type="hidden" id="feedback-request-url" value="/me/feedback/next" />
+    <input type="hidden" id="sales-request-url" value="/me/sales/next" />
+    <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
+        <input type="hidden" id="editTextProductId" name="p_id" value="" />
+        <input type="hidden" id="editTextCategoryId" name="hidden_attribute" value="" />
+        <input type="hidden" id="editTextCategoryName" name="othernamecategory" value="" />"
+    <?=form_close();?> 
+</div>
 <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>

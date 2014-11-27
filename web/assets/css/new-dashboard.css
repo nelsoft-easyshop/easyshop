@@ -809,6 +809,12 @@ a{
     margin-top: 10px;
 }
 
+#hidden-product-container,
+#hidden-feedback-container,
+#hidden-sales-container{
+    display: none;
+}
+
 .map-trigger{
     border-left: solid #e2e2e2 1px;
     margin-left:10px;
@@ -1466,6 +1472,9 @@ a{
     margin-top:-20px;
 }
     
+.col-button-searc-hist{
+    padding-left: 0px;
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1950,5 +1959,9 @@ a{
     .green-tip,
     .red-tip{
         top: -21px;
+    }
+    
+    .col-button-searc-hist{
+        padding-left: 15px;
     }
 }

@@ -1,34 +1,37 @@
 <div class="sales-title-total">
-    <span class="trans-title">TOTAL SALES</span> 
-    <span class="total-sale-amount">&#8369; 25, 000.00</span> 
+    <span class="trans-title">CURRENT SALES</span> 
+    <span class="total-sale-amount">&#8369; <?=number_format($currentTotalSales,2,'.',',');?></span> 
 </div>
 
-<div class="sales-breakdown-container">
+<div id="current-sales-container" class="sales-breakdown-container">
+    <input id="request-type-container" type="hidden" value="<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>" /> 
     <span class="p-label-stat">
         Total Amount : 
     </span>
+
     <span class="p-stat-total">
-        &#8369; 25, 000.00
+        &#8369; <?=number_format($currentTotalSales,2,'.',',');?>
     </span>
+
     <div class="row">
-        <div class="col-sm-7 col-xs-12">
+        <div class="col-sm-9 col-xs-12">
             <div class="row">
-                <div class="col-xs-6" style="padding-right:0px;">
+                <div class="col-sm-5 col-xs-6" style="padding-right:0px;">
                     <div class="form-search-item">
-                    <input type="text" class="input-date-sales" id="sales-start-date" placeholder="Start Date" />
+                    <input type="text" class="input-date-sales date-picker-sales date-from" placeholder="Start Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-sm-5 col-xs-6">
                     <div class="form-search-item">
-                    <input type="text" class="input-date-sales" id="sales-end-date" placeholder="End Date" />
+                    <input type="text" class="input-date-sales date-picker-sales date-to" placeholder="End Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
+                </div>
+                <div class="col-sm-2 col-xs-12 col-button-searc-hist">
+                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>" data-container="current-sales-container" class="filter-sales btn-block btn-setting-edit-btn" value="Search" />
                 </div>
             </div>
-        </div>
-        <div class="col-sm-2">
-            
         </div>
         <div class="col-sm-3 col-xs-12" >
             <div style="position: relative; width: 100%;">
@@ -67,82 +70,46 @@
             </div>
         </div>
     </div>
-    <div style="overflow-y:no-scroll;overflow-x:scroll; height:auto; height: auto;">
-        <table class="table table-total-sales table-striped"> 
-            <thead>
-                <tr class="tr-orange">
-                    <th width="250px">Product Name</th>
-                    <th width="100px" align="center" id="th-date">Date Bought</th>
-                    <th width="250px" align="center" id="th-trans">Transaction ID</th>
-                    <th width="250px" align="center" id="th-base-price">Base Price</th>
-                    <th width="100px" align="center" id="th-quantity">Quantity</th>
-                    <th width="250px" align="center" id="th-handling">Handling Fee</th>
-                    <th width="250px" align="center" id="th-total">Total</th>
-                    <th width="250px" align="center" id="th-es-charge">Easyshop Charge</th>
-                    <th width="27px" align="center" id="th-payment">Payment Method Charge</th>
-                    <th width="250px" align="right" style="text-align: right;" id="th-net">Net Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td width="250px">Samsung Galaxy S5 </td>
-                    <td width="150px" align="center" class="td-date">11/24/2014</td>
-                    <td width="250px" align="center" class="td-trans">111111-1111-111111</td>
-                    <td width="250px" align="center" class="td-base-price">&#8369; 24, 000.00</td>
-                    <td width="100px" align="center" class="td-quantity">1</td>
-                    <td width="250px" align="center" class="td-handling">&#8369; 100.00</td>
-                    <td width="250px" align="center" class="td-total">&#8369; 25 000.00</td>
-                    <td width="250px" align="center" class="td-es-charge">&#8369; 20.00</td>
-                    <td width="270px" align="center" class="td-payment">&#8369; 20.00</td>
-                    <td width="250px" align="right" class="td-net">&#8369; 24 440.00</td>
-                </tr>
-                
-                
-                <!-- DISPLAY THIS WHEN NO DATA RESULT
-                <tr>
-                    <td colspan="8" align="center">No data available</td>
-                </tr>-->
-            </tbody>
-        </table>
+    <br/>
+    <div class="sales-container ">
+        <?=$currentSales; ?>
     </div>
 </div>
 <br/>
 <div class="payout-title-total">
-    <span class="trans-title">NEXT PAYOUT SALES</span> 
-    <span class="payout-sale-amount">&#8369; 0.00</span> 
+    <span class="trans-title">HISTORY OF SALES</span> 
+    <span class="payout-sale-amount">&#8369; <?=number_format($historyTotalSales,2,'.',',');?></span> 
 </div>
 
-<div class="payout-breakdown-container">
+<div id="history-sales-container" class="payout-breakdown-container">
+    <input id="request-type-container" type="hidden" value="<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>" /> 
     <span class="p-label-stat">
         Payout Amount : 
     </span>
+
     <span class="p-stat-total">
-        &#8369; 0.00
+        &#8369; <?=number_format($historyTotalSales,2,'.',',');?>
     </span>
-    <br/>
-    <span class="credit-date-label">To be credited on: </span> <span class="credit-date">2014-11-20</span>
-    <span class="credit-date-label">From: </span> <span class="credit-date">2014-11-01 00:00:00</span>
-    <span class="credit-date-label">To: </span> <span class="credit-date">2014-11-15 23:59:59</span>
-    
+
     <div class="row">
-        <div class="col-sm-7 col-xs-12">
+        <div class="col-sm-9 col-xs-12">
             <div class="row">
-                <div class="col-xs-6" style="padding-right:0px;">
+                <div class="col-sm-5 col-xs-6" style="padding-right:0px;">
                     <div class="form-search-item">
-                    <input type="text" class="input-date-sales" id="payout-start-date" placeholder="Start Date" />
+                    <input type="text" class="input-date-sales date-picker-sales date-from" placeholder="Start Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-sm-5 col-xs-6">
                     <div class="form-search-item">
-                    <input type="text" class="input-date-sales" id="payout-end-date" placeholder="End Date" />
+                    <input type="text" class="input-date-sales date-picker-sales date-to" placeholder="End Date" />
                     <span class="fa fa-calendar"></span>
                     </div>
+                </div>
+                <div class="col-sm-2 col-xs-12 col-button-searc-hist">
+                    <input type="button" data-request="<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>" data-container="history-sales-container" class="filter-sales btn-block btn-setting-edit-btn" value="Search" />
                 </div>
             </div>
-        </div>
-        <div class="col-sm-2">
-            
         </div>
         <div class="col-sm-3 col-xs-12" >
             <div style="position: relative; width: 100%;">
@@ -181,43 +148,8 @@
             </div>
         </div>
     </div>
-    <div style="overflow-y:no-scroll;overflow-x:scroll; height:auto; height: auto;">
-        
-        <table class="table table-total-sales table-striped"> 
-            <thead>
-                <tr class="tr-orange">
-                    <th width="250px">Product Name</th>
-                    <th width="250px" align="center" id="th-p-date">Date Bought</th>
-                    <th width="250px" align="center" id="th-p-trans">Transaction ID</th>
-                    <th width="250px" align="center" id="th-p-base-price">Base Price</th>
-                    <th width="250px" align="center" id="th-p-quantity">Quantity</th>
-                    <th width="250px" align="center" id="th-p-handling">Handling Fee</th>
-                    <th width="250px" align="center" id="th-p-total">Total</th>
-                    <th width="250px" align="center" id="th-p-es-charge">Easyshop Charge</th>
-                    <th width="27px" align="center" id="th-p-payment">Payment Method Charge</th>
-                    <th width="250px" align="right" style="text-align: right;" id="th-p-net">Net Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td width="250px">Samsung Galaxy S5 dasdsadsadas asdasdasd </td>
-                    <td width="250px" align="center" class="td-p-date">11/24/2014</td>
-                    <td width="250px" align="center" class="td-p-trans">111111-1111-111111</td>
-                    <td width="250px" align="center" class="td-p-base-price">&#8369; 24, 000.00</td>
-                    <td width="250px" align="center" class="td-p-quantity">1</td>
-                    <td width="250px" align="center" class="td-p-handling">&#8369; 100.00</td>
-                    <td width="250px" align="center" class="td-p-total">&#8369; 25 000.00</td>
-                    <td width="250px" align="center" class="td-p-es-charge">&#8369; 20.00</td>
-                    <td width="270px" align="center" class="td-p-payment">&#8369; 20.00</td>
-                    <td width="250px" align="right" class="td-p-net">&#8369; 24 440.00</td>
-                </tr>
-                
-                
-                <!-- DISPLAY THIS WHEN NO DATA RESULT
-                <tr>
-                    <td colspan="8" align="center">No data available</td>
-                </tr>-->
-            </tbody>
-        </table>
+    <br/>
+    <div class="sales-container ">
+        <?=$historySales; ?>
     </div>
 </div>

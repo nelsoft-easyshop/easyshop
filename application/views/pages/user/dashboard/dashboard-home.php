@@ -1,30 +1,30 @@
 <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="div-member-stats">
-        <div class="div-img-cover" style="background: url(/assets/images/img_cover_2.png) no-repeat center; background-size:cover;">
-            <a href="/assets/images/img_cover_2.png" class="lightbox_trigger"><img src="/assets/images/img_cover_2.png" class="img-follower-cover " /></a>
-            <img src="/assets/images/img_profile_pic.jpg" class="vendor-follower-img"/>
+        <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
+            <a href="/assets/images/img_cover_2.png" class="lightbox_trigger"><img src="<?=$bannerImage;?>" class="img-follower-cover " /></a>
+            <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
         </div>
         <div class="clear"></div>
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
                     <div class="col-md-5 col-xs-12">
-                        <p class="p-username"><span class="icon-profile"> </span>Mang Pedring</p>
+                        <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
                     </div>
                     <div class="col-md-7 col-xs-12">
                         <div class="row">
                         <div class="col-md-5 col-progress-text">
                             <div class="div-progress-container-text">
-                                Account Progress: 70%
+                                Account Progress: <?=$profilePercentage; ?>%
                             </div>
                         </div>
                         <div class="col-md-7 col-progress-bar">
                             <div class="div-progress-bar-container" align="right">
                                 <div class="progress progress-account">
-                                    <span class="span-account-progress-text-small">Account Progress: 70%</span>
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                        <span class="sr-only">70% Complete</span>
+                                    <span class="span-account-progress-text-small">Account Progress: <?=$profilePercentage; ?>%</span>
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                        <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                             Shop Link: 
                         </p>
                         <div class="form-shop-link">
-                            <input type="text" class="input-shop-link" value="https://easyshop.ph/mangpedring"/>
+                            <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?=$member->getSlug();?>"/>
                             <span class="icon-web"></span>
                         </div>
                         <div class="div-stat-summary">
@@ -50,7 +50,7 @@
                                         Followers
                                     </p>
                                     <p class="p-stat-total">
-                                        15
+                                        <?=$followerCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -58,7 +58,7 @@
                                         Following
                                     </p>
                                     <p class="p-stat-total">
-                                        25
+                                        <?=$followingCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -66,7 +66,7 @@
                                         Item(s)
                                     </p>
                                     <p class="p-stat-total">
-                                        10
+                                        <?=$productCount; ?>
                                     </p>
                                 </div>
                                 <div class="col-xs-3" align="center">
@@ -74,7 +74,7 @@
                                         Sold
                                     </p>
                                     <p class="p-stat-total">
-                                        5
+                                        <?=$soldProductCount; ?>
                                     </p>
                                 </div>
                             </div>
@@ -90,37 +90,37 @@
                                     <tr>
                                         <td class="td-criteria">Item Quality: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php $tempRating = $memberRating['rating1']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Communication: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php $tempRating = $memberRating['rating2']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Shipment Time: </td>
                                         <td class="td-star" align="right">
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat star-active"></i>
-                                            <i class="icon-star star-stat"></i>
+                                        <?php $tempRating = $memberRating['rating3']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="td-criteria">Total Reviews: </td>
                                         <td class="td-total-review" align="center">
-                                            20
+                                            <?=$feedBackTotalCount <= 0 ? "No Rating." : $feedBackTotalCount; ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -130,40 +130,40 @@
                                     <span class="span-criteria-mobile">Item Quality</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating1']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Communication</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating2']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Item Shipment</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile star-active"></i>
-                                            <i class="icon-star star-stat-mobile"></i>
+                                        <?php $tempRating = $memberRating['rating3']; ?>
+                                        <?php for ($i=0; $i < 5; $i++): ?>
+                                            <i class="icon-star star-stat-mobile <?=$tempRating > 0 ? 'star-active' : '' ?>"></i>
+                                            <?php $tempRating--; ?>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <div class="col-xs-6 col-star-rate-mobile">
                                     <span class="span-criteria-mobile">Total Reviews</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                        20
+                                        <?=$feedBackTotalCount <= 0 ? "No Rating." : $feedBackTotalCount; ?>
                                     </span>
                                 </div>
                             </div>
@@ -177,933 +177,179 @@
         <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
-                <a href="#active-items"><li>Active Items<span class="circle-total">5</span></li></a>
-                <a href="#deleted-items"><li>Deleted Items<span class="circle-total">4</span></li></a>
-                <a href="#draft-items"><li>Draft Items<span class="circle-total">0</span></li></a>
-                <a href="#feedbacks"><li>Feedbacks<span class="circle-total">0</span></li></a>
+                <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
+                <a href="#deleted-items"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
+                <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
+                <a href="#feedbacks"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
                 <a href="#sales"><li>Sales</li></a>
             </ul>
         </div>
         </div>
         <div class="product-items">
-            <div id="active-items">
-                <!--DISPLAY IF THERE ARE NO AVAILABLE ITEMS
-                <div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-search-item">
-                            <input type="text" class="input-search-item" placeholder="Search product from list..."/>
-                            <span class="icon-search"></span>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-filter">
-                            <label class="label-sort">Sort by:</label>
-                            <select class="select-filter-item">
-                                <option>last modified</option>
-                                <option>new</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="items-list-container">
+            <div id="active-items"> 
+                <?php if($activeProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-search-item">
+                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                <span class="icon-search"></span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!--ITEM 2-->
-                 <div class="items-list-container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-filter">
+                                <label>Sort by:</label>
+                                <select class="select-filter-item search-filter">
+                                    <option value="default">default sorting</option>
+                                    <option value="lastmodified">last modified</option>
+                                    <option value="new">new</option>
+                                </select>
                             </div>
                         </div>
+                        <div>
+                            <input type="hidden" class="container-id" value="active-product-container" />
+                            <input type="hidden" class="request-type" value="active" />
+                        </div>
                     </div>
-                </div>
+                    <div id="active-product-container">
+                    <?=$activeProductView;?>
+                    </div>
+                <?php else:?> 
+                    <div class="jumbotron no-items">
+                        <i class="icon-category"></i>No items for this category
+                    </div>
+                <?php endif;?>
+
             </div>
             
 
-            <div id="deleted-items">
-                <!--DISPLAY IF THERE ARE NO AVAILABLE ITEMS
-                <div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-search-item">
-                            <input type="text" class="input-search-item" placeholder="Search product from list..."/>
-                            <span class="icon-search"></span>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-filter">
-                            <label class="label-sort">Sort by:</label>
-                            <select class="select-filter-item">
-                                <option>last modified</option>
-                                <option>new</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-               <div class="items-list-container">
+            <div id="deleted-items"> 
+                <?php if($deletedProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-search-item">
+                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                <span class="icon-search"></span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!--ITEM 2-->
-                <div class="items-list-container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-filter">
+                                <label>Sort by:</label>
+                                <select class="select-filter-item search-filter">
+                                    <option value="default">default sorting</option>
+                                    <option value="lastmodified">last modified</option>
+                                    <option value="new">new</option>
+                                </select>
                             </div>
                         </div>
+                        <div>
+                            <input type="hidden" class="container-id" value="deleted-product-container" />
+                            <input type="hidden" class="request-type" value="deleted" />
+                        </div>
                     </div>
-                </div>
-               
+                    
+                    <div id="deleted-product-container">
+                    <?=$deletedProductView; ?>
+                    </div>
+               <?php else:?> 
+                    <div class="jumbotron no-items">
+                        <i class="icon-category"></i>No items for this category
+                    </div>
+                <?php endif;?>
             </div>
             
-            <div id="draft-items">
-                <!--DISPLAY IF THERE ARE NO AVAILABLE ITEMS
-                <div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-search-item">
-                            <input type="text" class="input-search-item" placeholder="Search product from list..."/>
-                            <span class="icon-search"></span>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-filter">
-                            <label class="label-sort">Sort by:</label>
-                            <select class="select-filter-item">
-                                <option>last modified</option>
-                                <option>new</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="items-list-container">
+            <div id="draft-items"> 
+                <?php if($draftedProductCount > 0): ?>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-search-item">
+                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                <span class="icon-search"></span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!--ITEM 2-->
-                <div class="items-list-container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="item-list-panel">
-                                <table width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-image-cont" width="20%" >
-                                                <div class="div-product-image" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-cover: cover; background-size: 90%;">
-                                                    <div class="pin-discount">
-                                                        13%
-                                                    </div>
-                                                </div>
-                                                <div class="div-feedback-total-mobile" align="center">
-                                                    <p>Last Modified: 2014-01-21</p>
-                                                    <div class="">
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2 star-active"></i>
-                                                        <i class="icon-star star-stat-mobile-2"></i>
-                                                    </div>
-                                                    <p>Total Reviews : 20</p>
-                                                </div>
-                                            </td>
-                                            <td class="td-meta-info">
-                                                <p class="item-list-name">
-                                                    <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
-                                                        Samsung Galaxy S5
-                                                    </a>
-                                                </p>
-                                                <p class="item-amount">
-                                                    <span class="item-original-amount">P34,000.00</span>
-                                                    <span class="item-current-amount">P24,000.00</span>
-                                                </p>
-                                                <div class="div-meta-description">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <span class="strong-label">Sold Item(s) : </span> 20
-                                                        </div>
-                                                        <div class="col-sm-8 col-stock">
-                                                            <span class="strong-label">Available Stock(s) : </span> 2
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <span class="strong-label">Category : </span> Special Promo
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td class="td-label-desc">
-                                                                        <span class="strong-label">Description: </span>
-                                                                        <p class="desc-item-mobile"><?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 50);
-                                                                        ?>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td class="td-desc-item">
-                                                                        <?php 
-                                                                            $dummytext = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.";
-                                                                            echo substr_replace( $dummytext, "...", 100);
-                                                                        ?>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row-action-mobile">
-                                                        <div class="col-md-12">
-                                                            <button class="btn btn-action-edit">
-                                                            <i class="icon-edit"></i>edit
-                                                        </button>
-                                                        
-                                                        <button class="btn btn-action-delete">
-                                                            <i class="icon-delete"></i>delete
-                                                        </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            </td>
-                                            <td class="td-item-actions" width="25%">
-                                                <p>Last Modified: 2014-01-21</p>
-                                                <div class="">
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat star-active"></i>
-                                                    <i class="icon-star star-stat"></i>
-                                                </div>
-                                                <p>Total Reviews : 20</p>
-                                                <button class="btn btn-action-edit">
-                                                    <i class="icon-edit"></i>edit
-                                                </button>
-                                                
-                                                <button class="btn btn-action-delete">
-                                                    <i class="icon-delete"></i>delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="tr-attributes-drop">
-                                            <td>
-                                            
-                                            </td>
-                                            <td colspan="2" class="td-attributes">
-                                                <div class="info-main-cont">
-                                                    <div class="toggle-info" id="info-item-1">
-                                                        <i class="info-item-icon-1 fa fa-plus-circle"></i> <span class="text-info-icon-1">more info</span>
-                                                    </div>
-                                                    <div class="info-attributes" id="info-attributes-1">
-                                                        <div class="row">
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Color : </span>blue, charcoal black, white
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Memory : </span>16gb, 32gb, 64gb
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">SIM : </span>single, dual
-                                                            </div>
-                                                            <div class="col-xs-5">
-                                                                <span class="strong-label">Material : </span>plastic, metal
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <div class="form-filter">
+                                <label>Sort by:</label>
+                                <select class="select-filter-item search-filter">
+                                    <option value="default">default sorting</option>
+                                    <option value="lastmodified">last modified</option>
+                                    <option value="new">new</option>
+                                </select>
                             </div>
                         </div>
+                        <div>
+                            <input type="hidden" class="container-id" value="drafted-product-container" />
+                            <input type="hidden" class="request-type" value="drafted" />
+                        </div>
                     </div>
-                </div>
-               
+                
+                    <div id="drafted-product-container">
+                        <?=$draftedProductView;?>
+                    </div>
+                <?php else:?> 
+                    <div class="jumbotron no-items">
+                        <i class="icon-category"></i>No items for this category
+                    </div>
+                <?php endif;?>
             </div>
             
-            <div id="feedbacks">
-                <!--<div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
-                <?php include("dashboard-feedbacks.php");?>
+            <div id="feedbacks"> 
+                <?=$allFeedBackView; ?> 
             </div>
             <div id="sales">
-            <?php include("dashboard-sales.php");?>
-                 <!--<div class="jumbotron no-items">
-                    <i class="icon-category"></i>No items for this category
-                </div>-->
+                <?=$salesView;?>
             </div>
         </div>
     </div>
 </div>
+
+<div id="hidden-product-container">
+    <div id="hidden-active-container">
+        <div id="hidden-active-container-default">
+            <div id="page-1">
+                <?=$activeProductView;?>
+            </div>
+        </div>
+        <div id="hidden-active-container-lastmodified"></div>
+        <div id="hidden-active-container-new"></div>
+    </div>
+    <div id="hidden-deleted-container">
+        <div id="hidden-deleted-container-default">
+            <div id="page-1">
+                <?=$deletedProductView;?>
+            </div>
+        </div>
+        <div id="hidden-deleted-container-lastmodified"></div>
+        <div id="hidden-deleted-container-new"></div>
+    </div>
+    <div id="hidden-drafted-container">
+        <div id="hidden-drafted-container-default">
+            <div id="page-1">
+                <?=$draftedProductView;?>
+            </div>
+        </div>
+        <div id="hidden-drafted-container-lastmodified"></div>
+        <div id="hidden-drafted-container-new"></div>
+    </div>
+</div>
+
+<div id="hidden-feedback-container">
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>">
+        <div id="page-1">
+            <?=$feedBackView; ?>
+        </div>
+    </div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER;?>"> </div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER;?>"></div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER;?>"></div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER;?>"></div>
+</div>
+
+<div id="hidden-sales-container">
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>">
+        <div id="page-1"><?=$currentSales;?></div>
+    </div>
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>">
+        <div id="page-1"><?=$historySales;?></div>
+    </div>
+</div>
+
