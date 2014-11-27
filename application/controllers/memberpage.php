@@ -700,19 +700,35 @@ class Memberpage extends MY_Controller
                     'order_id' => $data['order_id']
                 );
             }
-            $checkTransaction = $this->payment_model->checkTransaction($transacData);
-            
-            // if transaction exists
-            if(count($checkTransaction) > 0){ 
-                // Check if feedback entry already exists
-                $checkFeedback = $this->memberpage_model->checkFeedback($data);
+            $doesTransactionExists = $this->transactionManager->doesTransactionExists($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
 
-                if(count($checkFeedback) == 0){ // if no feedback entry
-                    $result = $this->memberpage_model->addFeedback($data);
+            if ($doesTransactionExists) {
+                $memberId = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->find($data['uid']);
+                $forMemberid = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->find($data['for_memberid']);
+                $orderId = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                $doesFeedbackExists = $this->entityManager->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                                            ->findOneBy([
+                                                                'member' => $memberId,
+                                                                'forMemberid' => $forMemberid,
+                                                                'feedbKind' => $data['feedb_kind'],
+                                                                'order' => $orderId
+                                                            ]);
+                if (! (bool) $doesFeedbackExists) {
+                    $result = $this->entityManager->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                                    ->addFeedback(
+                                                        $memberId,
+                                                        $forMemberid,
+                                                        $data['feedb_msg'],
+                                                        $data['feedb_kind'],
+                                                        $orderId,
+                                                        $data['rating1'],
+                                                        $data['rating2'],
+                                                        $data['rating3']
+                                                    );
                 }
             }
-            
-            echo $result?1:0;
+
+            echo (bool) $result;
         }
         else{
             echo 0;
@@ -775,12 +791,9 @@ class Memberpage extends MY_Controller
              *  Also checks for data accuracy
              *  Returns o_success, o_message
              */
-#            $result = $this->payment_model->updateTransactionStatus($data);
             $result = $this->transactionManager->updateTransactionStatus($data['status'], $data['order_product_id'], $data['transaction_num'], $data['invoice_num'], $data['member_id']);
 
             if( $result['o_success'] >= 1 ){
-                // Get order product transaction details
-#                $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
                 $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $data['order_product_id'], $data['member_id'], $data['invoice_num'], $data['status']);
                 $parseData['store_link'] = base_url() . $parseData['user_slug'];
                 $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
@@ -832,14 +845,17 @@ class Memberpage extends MY_Controller
             $this->load->library('dragonpay');
             
             // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            $txnId = $checkTransaction[0]['transaction_id'];
-            
-            if(count($checkTransaction) == 1){
-                // Check dragonpay transaction status - connects to Dragonpay
-                $dragonpayResult = $this->dragonpay->getStatus($txnId);
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                    ->findOneBy([
+                                                        'idOrder' => $data['transaction_num'],
+                                                        'invoiceNo' => $data['invoice_num'],
+                                                        'buyer' => $data['member_id']
+                                                    ]);
+
+            if ( (int) count($getTransaction) === 1) {
+                $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
                 
-                if($dragonpayResult == 'S'){ // Transaction Complete
+                if ($dragonpayResult == 'S') {
                     $serverResponse['result'] = 'success';
                     $serverResponse['error'] = '';
                 }
@@ -855,10 +871,14 @@ class Memberpage extends MY_Controller
          */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            
-            if( count($checkTransaction) == 1 ){
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                    ->findOneBy([
+                                                        'idOrder' => $data['transaction_num'],
+                                                        'invoiceNo' => $data['invoice_num'],
+                                                        'buyer' => $data['member_id']
+                                                    ]);
+
+            if ( (int) count($getTransaction) === 1 ) {
                 $postData = array(
                     'order_id' => $data['transaction_num'],
                     'bank' => $this->input->post('bank'),

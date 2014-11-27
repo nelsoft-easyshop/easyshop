@@ -620,16 +620,31 @@
 			changeYear: true
         });
     });
-    
+
+//OLD feedback modal
     $('#give-feedback').click(function (e) {
         $('#feedback-modal').modal();
         $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
         return false;
     });
-
-    $('#ship-item').click(function (e) {
+//OLD ship item modal
+    $('.ship-item').click(function (e) {
         $('#shipping-details').modal();
         $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
+        return false;
+    });
+
+    $('.div-meta-description').on('click', '.shipment-detail-button', function(e) {
+        var shipmentModal = $(this).parent().find('div.shipping-details');
+        shipmentModal.modal();
+        shipmentModal.parents("#simplemodal-container").addClass("shipping-details-container");
+        return false;
+    });
+
+    $('.item-list-panel').on('click', '.give-feedback-button', function(e) {
+        var feedbackModal = $(this).parent().find('div.give-feedback-modal');
+        feedbackModal.modal();
+        feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
         return false;
     });
 

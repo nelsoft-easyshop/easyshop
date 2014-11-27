@@ -56,7 +56,7 @@ class TransactionManager
                         $transaction['sellerId'] === $product['seller_id']
                     ) {
                         $product['has_shipping_summary'] = 0;
-                        if (trim(strlen($product['courier'])) > 0 && trim(strlen($product['datemodified'])) > 0) {
+                        if ( (bool) $product['courier'] === true &&  (bool) $product['datemodified']  === true ) {
                             $product['has_shipping_summary'] = 1;
                         }
                         $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
@@ -105,48 +105,48 @@ class TransactionManager
 
     public function updateTransactionStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId)
     {
-//        $result = [
-//            'o_success' => false,
-//            'o_message' => 'Product Order entry not found!'
-//        ];
-//        $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
-//
-//        if ( (bool) $getOrderProduct['orderProductId'] ) {
-//            $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-//                                        ->findOneBy([
-//                                            'idOrderProduct' => $orderProductId,
-//                                            'order' => $orderId
-//                                        ]);
-//            $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find($status);
-//            $this->em->getRepository('EasyShop\Entities\EsOrderProduct')->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
-//            $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);
-//
-//            $doesAllOrderProductResponded = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-//                                                        ->findOneBy([
-//                                                            'status' => 0, #orderProductStatus Ongoing
-//                                                            'order' => $orderId
-//                                                        ]);
-//            if ( ! (bool) $doesAllOrderProductResponded ) {
-//                $esOrder = $this->em->getRepository('EasyShop\Entities\EsOrder')
-//                                        ->findOneBy([
-//                                            'invoiceNo' => $invoiceNumber,
-//                                            'idOrder' => $orderId
-//                                        ]);
-//                $esOrderStatus = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')->find(1);
-//                $this->em->getRepository('EasyShop\Entities\EsOrder')->updateOrderStatus($esOrder, $esOrderStatus);
-//                $orderHistoryData = [
-//                    'order_id' => $orderId,
-//                    'order_status' => 1, #remove hard coded strings
-//                    'comment' => 'COMPLETED', #remove hard coded strings
-//                ];
-//                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
-//            }
-//
-//            $result = [
-//                'o_success' => true,
-//                'o_message' => 'Product Order entry updated!'
-//            ];
-//        }
+        $result = [
+            'o_success' => false,
+            'o_message' => 'Product Order entry not found!'
+        ];
+        $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
+
+        if ( (bool) $getOrderProduct['orderProductId'] ) {
+            $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                        ->findOneBy([
+                                            'idOrderProduct' => $orderProductId,
+                                            'order' => $orderId
+                                        ]);
+            $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find($status);
+            $this->em->getRepository('EasyShop\Entities\EsOrderProduct')->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
+            $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);
+
+            $doesAllOrderProductResponded = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                        ->findOneBy([
+                                                            'status' => 0, #orderProductStatus Ongoing
+                                                            'order' => $orderId
+                                                        ]);
+            if ( ! (bool) $doesAllOrderProductResponded ) {
+                $esOrder = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                        ->findOneBy([
+                                            'invoiceNo' => $invoiceNumber,
+                                            'idOrder' => $orderId
+                                        ]);
+                $esOrderStatus = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')->find(1);
+                $this->em->getRepository('EasyShop\Entities\EsOrder')->updateOrderStatus($esOrder, $esOrderStatus);
+                $orderHistoryData = [
+                    'order_id' => $orderId,
+                    'order_status' => 1, #remove hard coded strings
+                    'comment' => 'COMPLETED', #remove hard coded strings
+                ];
+                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
+            }
+
+            $result = [
+                'o_success' => true,
+                'o_message' => 'Product Order entry updated!'
+            ];
+        }
 
         $result = [
             'o_success' => true,
@@ -290,5 +290,27 @@ class TransactionManager
         $parseData['net'] = number_format($parseData['net'], 2, '.', ',');
 
         return $parseData;
+    }
+
+    /**
+     * Check transaction if exists
+     * @param $orderId
+     * @param $buyer
+     * @param $seller
+     * @return bool
+     */
+    public function doesTransactionExists($orderId, $buyer, $seller)
+    {
+        $qb = $this->em->createQueryBuilder()
+            ->select('o.idOrder')
+            ->from('EasyShop\Entities\EsOrder','o')
+            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op','WITH','op.order = o.idOrder AND o.idOrder = :orderId AND o.buyer = :buyer AND op.seller = :seller')
+            ->setParameter('orderId', $orderId)
+            ->setParameter('buyer', $buyer)
+            ->setParameter('seller', $seller)
+            ->getQuery();
+        $order = $qb->getResult();
+
+        return (bool) $order;
     }
 }

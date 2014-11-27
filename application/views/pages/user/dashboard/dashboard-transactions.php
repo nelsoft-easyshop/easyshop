@@ -116,6 +116,56 @@
                                             <?PHP endif; ?>
                                         <?PHP endif; ?>
                                     </div>
+                                    <?php if( $product['has_shipping_summary'] == 1 ):?>
+                                    <div class="col-xs-6">
+                                        <span class="strong-label shipment-detail-button">View shipment detail</span>
+<!--                                        ADD view shipment detail-->
+                                        <div class="shipping-details">
+                                            <div class="shipping-details-wrapper">
+                                                <h1>Shipping details</h1>
+                                            </div>
+                                            <div class="col-xs-12 text-right">
+                                                <?=date_format($product['datemodified'], 'jS \of F Y')?>
+                                            </div>
+                                            <div class="col-xs-12 pd-bttm-10"></div>
+                                            <div class="col-xs-12 shipping-details-con">
+                                                <div class="col-md-4">
+                                                    Shipped by:
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="ui-form-control" value="<?=$product['courier'];?>" disabled="disabled">
+                                                </div>
+                                                <div class="col-xs-12 pd-bttm-10"></div>
+                                                <div class="col-md-4">
+                                                    Tracking Number:
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="ui-form-control" value="<?=$product['trackingNum']?>" disabled="disabled">
+                                                </div>
+                                                <div class="col-xs-12 pd-bttm-10"></div>
+                                                <div class="col-md-4">
+                                                    Delivery Date:
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['deliveryDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                </div>
+                                                <div class="col-xs-12 pd-bttm-10"></div>
+                                                <div class="col-md-4">
+                                                    Expected Date of Arrival:
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <textarea placeholder="Write your comment..." disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
+                                                </div>
+                                                <div class="clear"></div>
+                                                <div class="shipping-border"></div>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                    <?php endif;?>
                                 </div>
                             </div>
                         </div>
@@ -156,9 +206,45 @@
                         </div>
                         <div class="trans-btn-wrapper">
                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
-                            <button class="btn btn-default-1" id="give-feedback">
+                            <button class="btn btn-default-1 give-feedback-button">
                                 <span class="img-give-feedback"></span>give feedback
                             </button>
+                            <div class="give-feedback-modal">
+                                <div class="feedback-content">
+                                    <h1>LEAVE A FEEDBACK</h1>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label">Item quality:</span>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat"></i>
+                                    </div>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label">Communication: </span>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat"></i>
+                                    </div>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label">Shipment time:  </span>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat star-active"></i>
+                                        <i class="icon-star star-stat"></i>
+                                    </div>
+                                    <div>
+                                        <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="feedback-btns">
+                                    <span class="simplemodal-close btn btn-default-1">Cancel</span>
+                                    <button class="btn btn-default-3">Submit</button>
+                                </div>
+                            </div>
                             <?PHP endif; ?>
                         </div>
                         <?PHP endif; ?>
@@ -259,10 +345,10 @@
                                                     <?PHP if( intval($soldTransactionDetails['idPaymentMethod']) === 3 ) : ?>
                                                         <span class="trans-status-cod">Cash on Delivery</span>
                                                     <?PHP else:?>
-                                                        <?PHP if (trim(strlen($product['courier'])) > 0 && trim(strlen($product['datemodified'])) > 0) : ?>
+                                                        <?PHP if ( (bool) $product['courier'] > 0 &&  (bool) $product['datemodified'] > 0) : ?>
                                                             <span class="trans-status-cod">Item shipped</span>
-                                                        <?PHP elseif (!(trim(strlen($product['courier'])) > 0 && trim(strlen($product['datemodified'])) > 0) ) : ?>
-                                                            <span class="trans-status-cod">Easyshop received payment</span>
+                                                        <?PHP elseif (!( (bool) $product['courier'] > 0 &&  (bool) $product['datemodified'] > 0) ) : ?>
+                                                            <span class="trans-status-pending">Easyshop received payment.</span>
                                                         <?PHP endif;?>
                                                     <?PHP endif;?>
                                                 <?PHP else : ?>
@@ -1228,7 +1314,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="trans-btn-wrapper">
+                <div class="trans-btn-wrapper ship-item">
                     <button class="btn btn-default-1">Cancel order</button>
                     <button class="btn btn-default-1">Ship Item</button>
                 </div>

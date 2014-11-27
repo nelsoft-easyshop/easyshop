@@ -2,7 +2,9 @@
 
 namespace EasyShop\Repositories;
 
-use Doctrine\ORM\EntityRepository; 
+use Doctrine\ORM\EntityRepository;
+use EasyShop\Entities\EsMemberFeedback;
+use DateTime;
 
 class EsMemberFeedbackRepository extends EntityRepository
 {
@@ -239,5 +241,34 @@ class EsMemberFeedbackRepository extends EntityRepository
         return $feedbacks;
     }
 
+    /**
+     * Add new Feedback
+     * @param $memberId
+     * @param $forMemberId
+     * @param $feedbackMessage
+     * @param $feedbackKind
+     * @param $orderId
+     * @param $rating1
+     * @param $rating2
+     * @param $rating3
+     * @return EsMemberFeedback
+     */
+    public function addFeedback($memberId, $forMemberId, $feedbackMessage, $feedbackKind, $orderId, $rating1, $rating2, $rating3)
+    {
+        $esMemberFeedback = new EsMemberFeedback();
+        $esMemberFeedback->setMember($memberId);
+        $esMemberFeedback->setForMemberid($forMemberId);
+        $esMemberFeedback->setFeedbMsg($feedbackMessage);
+        $esMemberFeedback->setFeedbKind($feedbackKind);
+        $esMemberFeedback->setOrder($orderId);
+        $esMemberFeedback->setRating1($rating1);
+        $esMemberFeedback->setRating2($rating2);
+        $esMemberFeedback->setRating3($rating3);
+        $esMemberFeedback->setDateadded(new DateTime('now'));
+        $this->_em->persist($esMemberFeedback);
+        $this->_em->flush();
+
+        return $esMemberFeedback;
+    }
 }
 
