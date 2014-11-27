@@ -6,11 +6,7 @@
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
-
-
-
     /********************* START CHANGE PASSWORD ***********************/
-
 
      $("#changePassForm").validate({
          rules: {
@@ -43,14 +39,19 @@
          errorPlacement: function(error, element) {
             error.addClass("val-error");
             error.appendTo(element.parent());
-            var added_span = $('<span/>',{'class':"val-error-icon-pass"});
-            added_span.insertAfter(element.next());    
-            var icon = $('<i/>',{'class':"fa fa-times"});        
-            icon.appendTo(added_span);
                       
          },
          submitHandler: function(form){
             event.preventDefault();
+            var newPassword = $("#password").val();
+            var confirmPassword = $("#confirmPassword").val();
+            var currentPassword = $("#currentPassword").val();
+            var username = $("#username").val();  
+            
+            var loadingimg = $('img.changePasswordLoader'); 
+            var actionGroupChangePass = $('#actionGroupChangePass');             
+            actionGroupChangePass.hide();
+            loadingimg.show(); 
             $.ajax({
                 type: 'post',
                 data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
@@ -58,73 +59,22 @@
                 success: function(data) {
                     actionGroupChangePass.show();
                     loadingimg.hide();
-
+                    var obj = jQuery.parseJSON(data); 
+                    if(obj.result === "success") {                    
+                        alert("You have successfully changed your password");
+                    }
+                    else {
+                        alert(obj.error);
+                    }
+                    $("#password").val("");
+                    $("#confirmPassword").val("");
+                    $("#currentPassword").val("");                    
+                    $( "#cancel-edit-password" ).trigger( "click" );                         
                 },
             });   
 
         }
      });
-
-    /********************* END CHANGE PASSWORD ***********************/
-
-
-
-    $("#password").on('input paste keyup', function(){
-        if($.trim($(this).val()).length >= 6){
-           $('#cpassword').attr("disabled", false);
-          
-        }
-    });
-    // $("#changePassForm").on('click','#changePassBtn',function (e) {
-    //     e.preventDefault();
-
-    //     var hasNoErrors = true;
-    //     var newPassword = $("#password").val();
-    //     var confirmPassword = $("#confirmPassword").val();
-    //     var currentPassword = $("#currentPassword").val();
-    //     var username = $("#username").val();
-    //     // if((confirmPassword !== newPassword)) {
-    //     //     $("#errorNewPasswordDiv, #errorConfirmPasswordDiv").css("display","block");
-    //     //     $("#errorConfirmText").text("The password you have entered does not match your new one");
-    //     //     hasNoErrors = false;
-    //     // }
-    //     // else if(currentPassword === "") {
-    //     //     hasNoErrors = false;
-
-    //     // }
-
-    //     var loadingimg = $('img.changePasswordLoader'); 
-    //     var actionGroupChangePass = $('#actionGroupChangePass'); 
-     
-    //     if(hasNoErrors === true) {
-    //         actionGroupChangePass.hide();
-    //         loadingimg.show();               
-    //         $.ajax({
-    //             type: 'post',
-    //             data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
-    //             url: "/register/changepass",
-    //             success: function(data) {
-    //                 actionGroupChangePass.show();
-    //                 loadingimg.hide();
-    //                 // $( "#btn-edit-email" ).prop("disabled", false);
-    //                 // var obj = jQuery.parseJSON(data);   
-    //                 // loadingimg.hide();
-    //                 // verifyspan.show();
-    //                 // $("#verifyEmail").css("display","none");    
-    //                 // if(obj === "success") {
-    //                 //     $("#verifiedEmail").css("display","block");                     
-    //                 //     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
-    //                 // }
-    //                 // else {
-    //                 //     $("#errorIndicatoreVerify").css("display","block");
-    //                 //     $("#errorTextVerify").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
-    //                 // }
-     
-    //             },
-    //         });   
-    //     }
-  
-    // });
 
     /**************** GOOGLE MAPS ******************************/
 
@@ -144,51 +94,7 @@
         }            
         
     });
-
-    function codeAddress(address, type) {
-        $("#delivery_mapcanvas").css("display","block");
-        geocoder = new google.maps.Geocoder();
-        geocoder.geocode( { 'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
-        }
-      });
-    }  
-    
-    //all DOM elements accessed via id
-    function initialize(myLatlng, type) {
-        var mapOptions = {
-            center:myLatlng,
-            zoom: 15
-        };
-
-        var templat = $('#temp_clat');
-        var templng = $('#temp_clng');
-        mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),mapOptions);
-        markerDelivery = new google.maps.Marker({
-            position: myLatlng,
-            map: mapDelivery,
-            title:"I'm here!",
-            draggable: true
-        });
-        google.maps.event.addListener(markerDelivery, 'dragend', function(evt){
-            templat.val(evt.latLng.lat());
-            templng.val(evt.latLng.lng());
-            
-            window.setTimeout(function(){
-                mapDelivery.panTo(markerDelivery.getPosition());
-            }, 500);
-        });
-        google.maps.event.addListenerOnce(mapDelivery, 'idle', function(){
-            google.maps.event.trigger(mapDelivery, 'resize');
-            window.setTimeout(function(){
-                mapDelivery.panTo(markerDelivery.getPosition());
-            }, 500);
-        });
-        
-        templat.val(myLatlng.lat());
-        templng.val(myLatlng.lng());
-    }      
+ 
 
     $('.map-trigger').click(function () {
         var maplat = $(this).siblings('input[name="map_lat"]').val();
@@ -258,26 +164,6 @@
                 else {
                     $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
                 }
-
-/*                    $("#savePersonalInfo").text("SAVE CHANGES");
-                    var obj = jQuery.parseJSON(data);
-                    if(obj.result !== "success") {
-                        $("#verifiedEmail, #verifyEmail").css("display","none");
-                        if(obj.error.mobile) {
-                            $("#errorIndicatorMobileNumber").css("display","block");
-                            $("#errorTextMobile").text(obj.error.mobile);
-                        }
-                        if(obj.error.email) {
-                            $("#errorIndicatoreEmailAddress").css("display","block");
-                            $("#errorTextEmail").text(obj.error.email);
-                        }                        
-                    }
-                    else {
-                        if(email !== originalEmail) {
-                            $("#verifyEmail").css("display","block");
-                            $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
-                        }
-                    }*/
             },
         });            
 
@@ -295,25 +181,6 @@
         cityselect.val(0);
         cityFilter( $(this), cityselect );
     });
-
-    function cityFilter(stateregionselect,cityselect){
-        var stateregionID = stateregionselect.find('option:selected').attr('value');
-        var optionclone = cityselect.find('option.optionclone').clone();
-        optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
-
-        cityselect.find('option.echo').remove();
-        
-        if(stateregionID in jsonCity){
-            jQuery.each(jsonCity[stateregionID], function(k,v){
-                //optionclone.attr('value', k).html(v).show();
-                optionclone.attr('value', k).html(v).css('display', 'block');
-                cityselect.append(optionclone.clone());
-            });
-        }
-        
-        cityselect.trigger('chosen:updated');
-        
-    }
 
     /************** End Delivery Address ***************************/
     
@@ -355,12 +222,11 @@
         });     
     });
 
-
-    $(document.body).on('click','#changeEmailBtn',function (e) {
+    $("#editEmailPanel").on('click','#changeEmailBtn',function (e) {
 
         email = $("#emailAddressEdit").val().trim();
         var loadingimg = $('img.changeEmailLoader'); 
-        var verifyspan = $('#changeEmailBtn');  
+        var verifyspan = $('#changeEmailBtnAction');  
         var currentEmail =  $("#currentEmail").text();
         verifyspan.hide();
         loadingimg.show();
@@ -394,12 +260,7 @@
         });             
     });   
 
-
-
-
-
-
-    $(document.body).on('click','#verifyEmailAction',function (e) {
+    $("#verifyEmail").on('click','#verifyEmailAction',function (e) {
         $( "#btn-edit-email" ).prop("disabled", true);
         var data = $("#currentEmail").text();
         var field = "email";
@@ -433,6 +294,69 @@
 
 
     /**************** END PERSONAL INFORMATION ******************/
+
+    function cityFilter(stateregionselect,cityselect){
+        var stateregionID = stateregionselect.find('option:selected').attr('value');
+        var optionclone = cityselect.find('option.optionclone').clone();
+        optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
+
+        cityselect.find('option.echo').remove();
+        
+        if(stateregionID in jsonCity){
+            jQuery.each(jsonCity[stateregionID], function(k,v){
+                //optionclone.attr('value', k).html(v).show();
+                optionclone.attr('value', k).html(v).css('display', 'block');
+                cityselect.append(optionclone.clone());
+            });
+        }
+        
+        cityselect.trigger('chosen:updated');
+        
+    }
+
+    function codeAddress(address, type) {
+        $("#delivery_mapcanvas").css("display","block");
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
+        }
+      });
+    }  
+    
+    function initialize(myLatlng, type) {
+        var mapOptions = {
+            center:myLatlng,
+            zoom: 15
+        };
+
+        var templat = $('#temp_clat');
+        var templng = $('#temp_clng');
+        mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),mapOptions);
+        markerDelivery = new google.maps.Marker({
+            position: myLatlng,
+            map: mapDelivery,
+            title:"I'm here!",
+            draggable: true
+        });
+        google.maps.event.addListener(markerDelivery, 'dragend', function(evt){
+            templat.val(evt.latLng.lat());
+            templng.val(evt.latLng.lng());
+            
+            window.setTimeout(function(){
+                mapDelivery.panTo(markerDelivery.getPosition());
+            }, 500);
+        });
+        google.maps.event.addListenerOnce(mapDelivery, 'idle', function(){
+            google.maps.event.trigger(mapDelivery, 'resize');
+            window.setTimeout(function(){
+                mapDelivery.panTo(markerDelivery.getPosition());
+            }, 500);
+        });
+        
+        templat.val(myLatlng.lat());
+        templng.val(myLatlng.lng());
+    }         
 
 
 }(jQuery));
