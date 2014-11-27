@@ -2054,6 +2054,35 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
+    public function renderDeactivatedAccountPage()
+    {
+        $cart_items = serialize($this->session->userdata('cart_contents'));
+        $id = $this->session->userdata('member_id');        
+        $this->cart_model->save_cartitems($cart_items,$id);
+        $this->user_model->logout();
+        $temp = array(
+                'member_id' => $this->session->userdata('member_id'),
+                'ip' => $this->session->userdata('ip_address'),
+                'useragent' => $this->session->userdata('user_agent'),
+                'token' => get_cookie('es_usr')
+        );
+
+        $this->user_model->dbdelete_cookie_keeplogin($temp);
+        delete_cookie('es_usr');
+        delete_cookie('es_vendor_subscribe');
+        $this->session->sess_destroy();
+
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+        $data = array(
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
+        );
+        $data = array_merge($data, $this->fill_header());        
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/home/home_primary', $data);
+        $this->load->view('templates/footer_primary', $viewData);
+    }
     /**
      * send notification to user and deactivate account
      * @param id
@@ -2095,7 +2124,6 @@ class Memberpage extends MY_Controller
                 $this->emailNotification->sendMail();
                 $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
             }
-
         }
         echo json_encode($result);
     }
@@ -2121,10 +2149,23 @@ class Memberpage extends MY_Controller
             redirect('/login', 'refresh');
         }
         else {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
+            // $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
         }
-
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+    
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+        $data = array(
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
+        );
+        $data = array_merge($data, $this->fill_header());        
+        $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/MemberPageAccountActivate');
+        $this->load->view('templates/footer_primary', $viewData);
+
     }
 
     /**
