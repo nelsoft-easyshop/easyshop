@@ -1958,7 +1958,7 @@ class Memberpage extends MY_Controller
                 'c_lat' => $cLat,
                 'c_lng' => $cLng,
                 'c_stateregionID' => $stateRegionId,
-                'c_cityID' => $cityId,
+                'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
                 'followingCount' => $userFollowing['count'],
                 'productCount' => $userProductCount,
