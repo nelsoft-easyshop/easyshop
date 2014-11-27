@@ -36,8 +36,8 @@
                 </div>
             </div>
         </div>
-       <div class="clear"></div>
-        <div class="bank-account-item">
+        <div class="clear"></div>
+        <div class="bank-account-item mrgn-bttm-15">
             <div class="col-xs-8">
                 <div class="pd-top-10">
                     <span class="col-xs-12 col-sm-4 bank-label">Bank Name:</span>
@@ -60,6 +60,56 @@
             </div>
             <div class="clear"></div>
         </div>
-        
+        <div class="clear"></div>
+        <div class="bank-account-item mrgn-bttm-15">
+            <div class="col-xs-8">
+                <div class="pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Bank Name:</span>
+                    <span class="col-xs-12 col-sm-8">BDO - Banco de Oro</span>
+                </div>
+                <div class="clear pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Account Name:</span>
+                    <span class="col-xs-12 col-sm-8">Juan Dela Cruz</span>
+                </div>
+                <div class="clear pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Account Number:</span>
+                    <span class="col-xs-12 col-sm-8">1234567890</span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="col-xs-4 bank-account-item-btns">
+                <span class="btn btn-default-3">Set as Default Account</span>
+                <span class="btn btn-default-1 mrgn-2 mrgn-top-10"><span class="icon-edit"></span> Edit</span>
+                <span class="btn btn-default-1 mrgn-top-10"><span class="icon-delete"></span> Delete</span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div class="bank-account-item mrgn-bttm-15">
+            <div class="col-xs-8">
+                <div class="pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Bank Name:</span>
+                    <span class="col-xs-12 col-sm-8">BDO - Banco de Oro</span>
+                </div>
+                <div class="clear pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Account Name:</span>
+                    <span class="col-xs-12 col-sm-8">Juan Dela Cruz</span>
+                </div>
+                <div class="clear pd-top-10">
+                    <span class="col-xs-12 col-sm-4 bank-label">Account Number:</span>
+                    <span class="col-xs-12 col-sm-8">1234567890</span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="col-xs-4 bank-account-item-btns">
+                <span class="btn btn-default-3">Set as Default Account</span>
+                <span class="btn btn-default-1 mrgn-2 mrgn-top-10"><span class="icon-edit"></span> Edit</span>
+                <span class="btn btn-default-1 mrgn-top-10"><span class="icon-delete"></span> Delete</span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="text-center">
+            <span class="btn btn-loadmore">Load More</span>
+        </div>
     </div>
 </div>
