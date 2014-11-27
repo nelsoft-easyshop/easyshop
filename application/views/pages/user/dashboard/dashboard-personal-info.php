@@ -16,22 +16,22 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Real Name : </label>
                     <div class="col-sm-8">
-                        <input type="text" class="text-info" value="<?php echo html_escape($fullname)?>" name ="fname" id="fullname" placeholder="First Name">
+                        <input type="text" class="text-info" value="<?php echo html_escape($member->getFullname())?>" name ="fname" id="fullname" placeholder="First Name">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Gender : </label>
                     <div class="col-sm-5 col-with-radio">
-                        <input type="radio" id="male" name="gender" value="M" <?php echo ($gender=='M'?'checked="true"':'') ?>/> <label class="lbl-radio" for="male">Male</label>
-                        <input type="radio" id="female" name="gender" value="F" <?php echo ($gender=='F'?'checked="true"':'') ?>/> <label class="lbl-radio" for="female">Female</label>
+                        <input type="radio" id="male" name="gender" value="M" <?php echo ($member->getGender()=='M'?'checked="true"':'') ?>/> <label class="lbl-radio" for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="F" <?php echo ($member->getGender()=='F'?'checked="true"':'') ?>/> <label class="lbl-radio" for="female">Female</label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Birthday : </label>
                      <div class="col-sm-8">
-                        <input type="text" value="<?php echo html_escape($birthday == '0000-00-00' || $birthday == '0001-01-01'?'':$birthday)?>" name="birthday" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
+                        <input type="text" value="<?php echo $member->getBirthday() == '0000-00-00' || $member->getBirthday() == '0001-01-01'? '':$member->getBirthday()->format('Y-m-d')?>" name="birthday" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
                     </div>
 
                 </div>
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" id="mobileNumber" value="<?php echo html_escape($contactno);?>" name="mobile" class="text-info text-required" placeholder="Enter your 11 digit mobile number here">
+                        <input type="text" id="mobileNumber" value="<?php echo html_escape($member->getContactno());?>" name="mobile" class="text-info text-required" placeholder="Enter your 11 digit mobile number here">
                         <!-- DISPLAY WHEN ERROR -->
                         <div id="errorIndicatorMobileNumber" style="display:none;">
                             <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
