@@ -101,8 +101,6 @@
     <?=form_close();?> 
 </div>
 
-<script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>

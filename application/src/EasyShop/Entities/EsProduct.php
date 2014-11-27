@@ -345,6 +345,13 @@ class EsProduct
     /**
      *  @var integer
      *
+     *  isDraft value for drafted items ( item can be restored )
+     */
+    const DRAFT = 1;
+
+    /**
+     *  @var integer
+     *
      *  isDelete value for deleted items ( item can be restored )
      */
     const DELETE = 1;
@@ -356,42 +363,17 @@ class EsProduct
      */
     const FULL_DELETE = 2;
 
+    /**
+     * Default value if the product is promoted
+     */
+    const PRODUCT_IS_PROMOTE_ON = 1;
+
     /*
      * @var integer
      *
      * @ORM\Column(name="ships_within_days", type="integer", nullable=true)
      */
     private $shipsWithinDays;
-
-    /**
-     * Default value if the product is promoted
-     */
-    const PRODUCT_IS_PROMOTE_ON = 1;
-
-    /**
-     * Value for is_delete is active
-     */
-    const IS_DELETE_ON = 1;
-
-    /**
-     * Value for hard is_delete is active
-     */
-    const IS_DELETE_HARD_ON = 2;
-
-    /**
-     * Value for is_draft is active
-     */
-    const IS_DRAFT_ON = 1;
-
-    /**
-     * Default Value for is_delete 
-     */
-    const IS_DELETE_OFF = 0;
-
-    /**
-     * Default Value for is_draft
-     */
-    const IS_DRAFT_OFF = 0;
 
     public function __construct() 
     {

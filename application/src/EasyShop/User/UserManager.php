@@ -750,23 +750,24 @@ class UserManager
         }
 
         $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                            ->findOneBy([
-                                                'idMember' => $memberEntity->getIdMember(), 
-                                                'type' => EsAddress::TYPE_DELIVERY
-                                            ]);
+                                  ->findOneBy([
+                                        'idMember' => $memberEntity->getIdMember(), 
+                                        'type' => EsAddress::TYPE_DELIVERY
+                                  ]);
 
         if($addressEntity){
             $counter += 4;
         }
 
         $imageURL = $memberEntity->getImgurl();
-        $isHide = (boolean)$memberEntity->getIsHideBanner();
+        $isHideBanner = (boolean)$memberEntity->getIsHideBanner();
+        $isHideAvatar = (boolean)$memberEntity->getIsHideAvatar();
 
-        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_NORMAL_SIZE) && !$isHide){
+        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_NORMAL_SIZE) && !$isHideAvatar){
             $counter++;
         }
 
-        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_BANNER) && !$isHide){
+        if(file_exists($imageURL.'/'.EsMember::DEFAULT_IMG_BANNER) && !$isHideBanner){
             $counter++;
         }
 

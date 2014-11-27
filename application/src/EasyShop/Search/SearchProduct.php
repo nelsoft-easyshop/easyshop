@@ -343,7 +343,6 @@ class SearchProduct
         }
 
         if($sortBy && strtolower($sortBy) == "price"){
-            exit();
             $data = new ArrayCollection($products);
             $iterator = $data->getIterator();
             $sortString = "ASC";

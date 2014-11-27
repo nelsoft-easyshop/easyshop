@@ -1841,8 +1841,8 @@ class Memberpage extends MY_Controller
 
             $userProductCount = $esProductRepo->getUserProductCount($memberId);
 
-            $deleteConditions = [EsProduct::IS_DELETE_OFF];
-            $draftConditions = [EsProduct::IS_DRAFT_OFF];
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::ACTIVE];
             $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
             $userActiveProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
             $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
@@ -1852,8 +1852,8 @@ class Memberpage extends MY_Controller
             ];
             $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
 
-            $deleteConditions = [EsProduct::IS_DELETE_ON];
-            $draftConditions = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
             $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
             $userDeletedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions); 
             $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
@@ -1863,8 +1863,8 @@ class Memberpage extends MY_Controller
             ];
             $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
             
-            $deleteConditions = [EsProduct::IS_DELETE_OFF];
-            $draftConditions = [EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
             $userDraftedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
             $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
@@ -1884,8 +1884,8 @@ class Memberpage extends MY_Controller
                                                                       $feedbackLimit);
             // add user image on each feedback
            foreach ($feedbacks as $key => $feedback) {
-                $feedbacks[$key]['revieweeAvatarImage'] = $this->userManager->getUserImage($feedback['revieweeId'], "small");
-                $feedbacks[$key]['reviewerAvatarImage'] = $this->userManager->getUserImage($feedback['reviewerId'], "small");
+                $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+                $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
             }
             $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
             $feedbacksData = [
@@ -1987,7 +1987,7 @@ class Memberpage extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
-        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_ON);
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::DELETE);
 
         $responseArray = [
             'isSuccess' => $deleteResponse,
@@ -2006,7 +2006,7 @@ class Memberpage extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
-        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_HARD_ON);
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::FULL_DELETE);
 
         $responseArray = [
             'isSuccess' => $deleteResponse,
@@ -2025,7 +2025,7 @@ class Memberpage extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
-        $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::IS_DELETE_OFF);
+        $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::ACTIVE);
 
         $responseArray = [
             'isSuccess' => $restoreResponse,
@@ -2050,16 +2050,16 @@ class Memberpage extends MY_Controller
         $sortType = trim($this->input->get('sort'));
         $searchString = trim($this->input->get('search_string'));
  
-        $deleteConditions = [EsProduct::IS_DELETE_OFF];
-        $draftConditions = [EsProduct::IS_DRAFT_OFF];
+        $deleteConditions = [EsProduct::ACTIVE];
+        $draftConditions = [EsProduct::ACTIVE];
 
         if(strtolower($requestType) === "deleted"){ 
-            $deleteConditions = [EsProduct::IS_DELETE_ON];
-            $draftConditions = [EsProduct::IS_DRAFT_OFF,EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
         }
         elseif (strtolower($requestType) === "drafted"){ 
-            $deleteConditions = [EsProduct::IS_DELETE_OFF];
-            $draftConditions = [EsProduct::IS_DRAFT_ON];
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
         }
 
         $userProductCount = $esProductRepo->getUserProductCount($memberId,
@@ -2116,8 +2116,8 @@ class Memberpage extends MY_Controller
                                                                   $page - 1);
         // add user image on each feedback
        foreach ($feedbacks as $key => $feedback) {
-            $feedbacks[$key]['revieweeAvatarImage'] = $this->userManager->getUserImage($feedback['revieweeId'], "small");
-            $feedbacks[$key]['reviewerAvatarImage'] = $this->userManager->getUserImage($feedback['reviewerId'], "small");
+            $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+            $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
         }
 
         switch($requestType){

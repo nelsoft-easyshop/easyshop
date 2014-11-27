@@ -57,7 +57,7 @@
                                                     <td class="td-label-desc"><span class="strong-label">Description: </span></td>
                                                     <td class="td-desc-item">
                                                         <?php if(strlen($product->getBrief()) > 100): ?>
-                                                            <?=substr_replace( $product->getBrief(), "...", 100); ?>
+                                                            <?=substr_replace(html_escape($product->getBrief()), "...", 100); ?>
                                                         <?php else: ?>
                                                             <?=html_escape($product->getBrief());?>
                                                         <?php endif; ?>
@@ -127,8 +127,8 @@
                                         <div class="row">
                                             <?php foreach($product->attributes as $attributeName => $attributeValue): ?>
                                                 <div class="col-xs-5">
-                                                    <span class="strong-label"><?=$attributeName;?> : </span>
-                                                    <?=implode(', ', $attributeValue); ?> 
+                                                    <span class="strong-label"><?=html_escape($attributeName);?> : </span>
+                                                    <?=html_escape(implode(', ', $attributeValue)); ?> 
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>

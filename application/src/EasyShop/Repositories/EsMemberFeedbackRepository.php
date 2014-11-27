@@ -51,6 +51,14 @@ class EsMemberFeedbackRepository extends EntityRepository
         return $feedbacks;
     }
 
+    /**
+     * Get all feedback of member by giving its type
+     * @param  integer $memberId
+     * @param  integer $feedType
+     * @param  integer $limit
+     * @param  integer $page
+     * @return mixed
+     */
     public function getUserFeedbackByType($memberId, $feedType, $limit, $page = 0)
     {
         $em =  $this->_em;

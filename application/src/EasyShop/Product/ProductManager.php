@@ -8,7 +8,7 @@ use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsProductShippingHead; 
 use EasyShop\Entities\EsProductImage as EsProductImage; 
 use EasyShop\Entities\EsOrder; 
-use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsProduct as EsProduct;
 use Easyshop\Entities\EsProductItem;
 use EasyShop\Entities\EsMemberProdcat;
 use Easyshop\Entities\EsProducItemLock;
@@ -856,8 +856,8 @@ class ProductManager
      * @return objec
      */
     public function getProductsByUser($memberId,
-                                      $isDelete = [self::IS_DELETE_OFF],
-                                      $isDraft = [self::IS_DRAFT_OFF],
+                                      $isDelete = [EsProduct::ACTIVE],
+                                      $isDraft = [EsProduct::ACTIVE],
                                       $offset = 0,
                                       $searchString = "",
                                       $sortString = "")

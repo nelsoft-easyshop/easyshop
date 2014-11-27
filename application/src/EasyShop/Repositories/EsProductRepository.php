@@ -832,10 +832,10 @@ class EsProductRepository extends EntityRepository
      * @return integer
      */
     public function getUserProductCount($memberId,
-                                        $isDelete = [EsProduct::IS_DELETE_ON,
-                                                    EsProduct::IS_DELETE_OFF],
-                                        $isDraft = [EsProduct::IS_DRAFT_ON,
-                                                    EsProduct::IS_DRAFT_OFF],
+                                        $isDelete = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
+                                        $isDraft = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
                                         $searchString = "")
     {
         $this->em = $this->_em;
