@@ -801,6 +801,10 @@ class UserManager
      */
     public function updateSlug($memberEntity, $storeSlug, $routes)
     {
+        if($memberEntity->getIsSlugChanged()){
+            return false;
+        }
+    
         $usersWithSlug = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->getUsersWithSlug($storeSlug, 
                                                    $memberEntity->getIdMember());
@@ -822,6 +826,7 @@ class UserManager
         
         if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes)){
             $memberEntity->setSlug($storeSlug);
+            $memberEntity->setIsSlugChanged(true);
             $isSuccessful = true;
             try{
                 $this->em->flush();
