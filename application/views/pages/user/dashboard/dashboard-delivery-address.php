@@ -9,12 +9,12 @@
     <div class="div-tab-inner">
         <div class="div-personal-info">
             <p class="panel-dashboard-title">Delivery Address</p>
-            <input type="hidden" name="c_country" value="<?php echo $country_id?>">
+            <input type="hidden" name="c_country" value="<?php echo html_escape($country_id) ?>">
             <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Consignee Name : </label>
                     <div class="col-sm-4">
-                        <input type="text" id="consigneeName" name="consignee" value="<?php echo html_escape($consignee)?>"  class="text-info" placeholder="Consignee name">
+                        <input type="text" id="consigneeName" name="consignee" value="<?php echo html_escape($address->getConsignee())?>"  class="text-info" placeholder="Consignee name">
                         <div id="errorsDivConsignee" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextConsignee"></span>
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="<?php echo html_escape($c_mobile)?>" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
+                        <input type="text" class="text-info text-required" value="<?php echo html_escape($address->getMobile())?>" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
                         <div id="errorsDivMobile" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextMobile"></span>
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Telephone Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="<?php echo html_escape($c_telephone)?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
+                        <input type="text" class="text-info text-required" value="<?php echo html_escape($address->getTelephone())?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
                         <!--DISPLAY WHEN OK-->
                         <!-- <span class="val-success"><i class="fa fa-check"></i></span> -->
                     </div>
@@ -55,16 +55,16 @@
                         <span class="span-label-address">State/Region</span>
                     </div>
                     <div class="col-sm-4 col-city">
-                        <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $c_cityID?>">
+                        <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $consigneeCityId?>">
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
                             <?php if($c_cityID != '' && $c_stateregionID != ''):?>
                                 <?php foreach($city_lookup[$c_stateregionID] as $lockey=>$city):?>
-                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $consigneeCityId == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                                 <?php endforeach;?>
                             <?php endif;?>
                         </select>
-                        <input type="hidden" name="ccity_orig" value="<?php echo $c_cityID?>">                        
+                        <input type="hidden" name="ccity_orig" value="<?php echo $consigneeCityId?>">                        
                         <span class="span-label-address">City</span>
                     </div>
                     <div class="col-sm-4 col-city">
@@ -103,8 +103,8 @@
                         <input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">
                         <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo $c_lat;?>">
                         <input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo $c_lng;?>">
-                        <input type="text" name="current_lat" id="current_lat" value="">
-                        <input type="text" name="current_lang" id="current_lang" value="">
+                        <input type="hidden" name="current_lat" id="current_lat" value="">
+                        <input type="hidden" name="current_lang" id="current_lang" value="">
                         <div class="map-container">
                             <span><a href="javascript:void(0);" class='refresh_map'><i class="fa fa-search refresh_map"></i> Search Address</a></span>
                             <span><a href="javascript:void(0)" class="span-current-location"><i class="fa fa-map-marker span-current-location"></i> Current Location</a><span>
