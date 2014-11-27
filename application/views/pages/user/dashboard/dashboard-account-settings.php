@@ -131,7 +131,7 @@
                 </div>
                 <div class="edit-status">
                     <p class="p-orange"> Are you sure you want to deactivate your account? </p>
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" id="deactivateAccountForm">
                        <!--<div class="form-group">
                             <label class="col-sm-3 control-label">Reason for leaving : </label>
                             <div class="col-sm-9 col-with-radio">
@@ -157,24 +157,24 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your current password here">
-                                <!-- DISPLAY WHEN ERROR -->
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                
-                                <!--DISPLAY WHEN OK
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
+                                <input type="password" name="deactivatePassword" id="deactivatePassword" class="text-info text-required" placeholder="Type your current password here">
+                                <div id="deactivateErrorDiv" style="display:none;">
+                                    <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
+                                    <span class="val-error">Please enter at least 6 characters.</span>                                
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-5">
-                            <button class="btn btn-setting-save-btn">
-                                Save changes
-                            </button>
-                            <span class="btn btn-setting-cancel-btn" id="cancel-deact-status">
-                                Cancel
-                            </span>
+                                <div id="deactivateActionPanel">
+                                    <input type="hidden" id="idMember" value="<?php echo $member->getidMember() ?>">
+                                    <input class="btn btn-setting-save-btn" type='submit' value='Save Changes' id="deactivateAccountButton"/>
+                                    <span class="btn btn-setting-cancel-btn" id="cancel-deact-status">
+                                        Cancel
+                                    </span>
+                                </div>
+                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
                             </div>
                         </div>
                     </form>

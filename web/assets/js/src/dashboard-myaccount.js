@@ -10,6 +10,51 @@
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
+    /********************* DEACTIVATE ACCOUNT **************************/
+
+     $("#deactivateAccountForm").validate({
+         rules: {
+            deactivatePassword: {
+                required: true,
+                },
+
+         },
+         messages:{
+            deactivatePassword:{
+                required: 'This field is required'
+            },
+         },
+         errorElement: "span",
+         errorPlacement: function(error, element) {
+            error.addClass("val-error");
+            error.appendTo(element.parent());
+                      
+         },
+         submitHandler: function(form){
+            event.preventDefault();
+            var password = $("#deactivatePassword").val();
+            var id = $("#idMember").val();
+
+            var actionGroupChangePass = $('#deactivateActionPanel');    
+            var loadingimg = $('#deactivateAccountLoader'); 
+            actionGroupChangePass.hide();
+            loadingimg.show();
+            $.ajax({
+                type: 'post',
+                data: {password:password, id:id, csrfname : csrftoken},
+                url: "/memberpage/sendDeactivateNotification",
+                success: function(data) {
+                    actionGroupChangePass.show();
+                    loadingimg.hide();      
+                },
+            });   
+
+        }
+     });
+
+
+    /********************* END DEACTIVATE ACCOUNT **************************/
+
     /********************* START CHANGE PASSWORD ***********************/
 
      $("#changePassForm").validate({
@@ -36,9 +81,6 @@
                 equalTo: 'The password you have entered does not match your new one'
             },
          },
-        success: function(label){
-            $(label).css("display","none");
-        },
          errorElement: "span",
          errorPlacement: function(error, element) {
             error.addClass("val-error");

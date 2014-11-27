@@ -58,6 +58,7 @@ class Memberpage extends MY_Controller
         // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->accountManager = $this->serviceContainer['account_manager'];        
         $this->em = $this->serviceContainer['entity_manager']; 
     }
 
@@ -2051,6 +2052,80 @@ class Memberpage extends MY_Controller
         ];
 
         echo json_encode($responseArray);
+    }
+
+    /**
+     * send notification to user and deactivate account
+     * @param id
+     * @param password
+     * @return mixed
+     */
+    public function sendDeactivateNotification()
+    {
+        $this->load->library('encrypt');
+        if ((!$this->input->post('id') && !$this->input->post('password')) || $this->input->post('id') != $this->session->userdata('member_id')) {
+            $result = false;
+        }
+        else {
+            $member = $this->em
+                        ->getRepository('EasyShop\Entities\EsMember')
+                            ->find($this->input->post('id'));
+            $doesMemberExists = $this->accountManager
+                                    ->authenticateMember($member->getUsername(), $this->input->post('password'));
+            if (!$member) {
+                $result = false;
+            }
+            else if (!$doesMemberExists['member']) {
+                $result = 'Incorrect Password';
+            }
+            else {
+                $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
+                $this->load->library('parser');
+                $parseData = array(
+                    'username' => $member->getUsername(),
+                    'hash' => $this->encrypt->encode($member->getIdMember()),
+                    'site_url' => site_url('memberpage/activateAccount')
+                );
+                $userManager = $this->serviceContainer['user_manager'];             
+                $userManager->setMemberMisc([
+                    'setIsActive' => EsMember::DEFAULT_ACTIVE
+                ]);
+
+
+                $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
+                $this->emailNotification->setRecipient($member->getEmail());
+                $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
+                $this->emailNotification->setMessage($message);
+                $this->emailNotification->sendMail();
+                $this->entityManager->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * Show activate account page
+     */
+    public function activateAccount()
+    {
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+            redirect('/login', 'refresh');
+        }
+
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'isActive' => 0
+            ]);
+        if (!$member) {
+            redirect('/login', 'refresh');
+        }
+
+        $this->load->view('pages/user/MemberPageAccountActivate');
     }
 
     /**
