@@ -143,7 +143,7 @@
                 <div class="edit-status">
                     <p class="p-orange"> Are you sure you want to deactivate your account? </p>
                     <form class="form-horizontal">
-                       <div class="form-group">
+                       <!--<div class="form-group">
                             <label class="col-sm-3 control-label">Reason for leaving : </label>
                             <div class="col-sm-9 col-with-radio">
                                 <div class="div-reason-choice"><input type="radio" id="1" name="reason"/> <label class="lbl-radio" for="1">I don't find Easyshop useful.</label></div>
@@ -164,7 +164,19 @@
                                 <div class="div-reason-choice"><input type="checkbox" id="opt-out" name="opt-out"/> <label class="lbl-radio" for="opt-out">Opt out of receiving newsletters from Easyshop</label></div>
                             </div>
                         </div>
-                        
+                        -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Your Password : </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="text-info text-required" placeholder="Type your current password here">
+                                <!-- DISPLAY WHEN ERROR -->
+                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
+                                <span class="val-error">Please enter at least 6 characters.</span>
+                                
+                                <!--DISPLAY WHEN OK
+                                <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-5">
