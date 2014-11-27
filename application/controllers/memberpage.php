@@ -76,6 +76,10 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];        
     }
 
+    /**
+     *  Provides change email functionality
+     *  @return JSON
+     */
     public function edit_email()
     {
         $um = $this->serviceContainer['user_manager'];
