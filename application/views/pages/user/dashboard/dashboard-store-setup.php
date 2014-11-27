@@ -11,7 +11,7 @@
             <p class="panel-setup-title">Store Name</p>
             <div class="div-setup-content">
                 <div class="current-store-name">
-                    <span class="setting-current-email">Mang Pedring Store</span> 
+                    <span class="setting-current-email"><?php echo html_escape( $member->validatedStoreName ) ?></span> 
                     <button class="btn btn-setting-edit-btn" id="btn-edit-store-name">
                        <i class="icon-edit"></i> Edit
                     </button>
@@ -19,16 +19,17 @@
                 <div class="edit-store-name">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="Mang Pedring Store"/>
-                            <!-- DISPLAY WHEN ERROR -->
-                            <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            
-                            <!--DISPLAY WHEN OK
-                            <span class="val-success"><i class="fa fa-check"></i></span>-->
+                            <input id="input-store-name" type="text" class="text-info text-required" value="<?php echo html_escape($member->validatedStoreName); ?>"/>
+
+                            <span class="val-error-icon-setup" id="fail-icon-store-name" style="display:none">
+                                <i class="fa fa-times"></i>
+                            </span>
+                            <span class="val-error" id="fail-message-store-name" style="display:none">
+                                
+                            </span>
                         </div>
                         <div class="col-md-5 col-action-buttons">
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-name">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-name">
@@ -38,7 +39,7 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    You can give your store a different name other than you're registered username. Improve you're store's visibility and branding by giving you're store a name that other people can easily reconigze and remember.
                 </p>
             </div>
         </div>
@@ -46,7 +47,11 @@
             <p class="panel-setup-title">Store Link</p>
             <div class="div-setup-content">
                 <div class="current-store-url">
-                    <span class="setting-current-email"><a href="#">https://easyshop.ph/mangpedring</a></span> 
+                    <span class="setting-current-email">
+                        <a href="<?php echo base_url().html_escape($member->getSlug()); ?>" > 
+                            <?php echo base_url().html_escape($member->getSlug()); ?>
+                        </a>
+                    </span> 
                     <button class="btn btn-setting-edit-btn" id="btn-edit-store-url">
                        <i class="icon-edit"></i> Edit
                     </button>
@@ -54,8 +59,8 @@
                 <div class="edit-store-url">
                     <div class="row">
                         <div class="col-md-6 col-inline-textbtn">
-                             <span class="setting-edit-url">https://easyshop.ph/</span> 
-                             <input type="text" class="text-info-url text-required" value="Mang Pedring Store"/>
+                             <span class="setting-edit-url"><?php echo base_url(); ?></span> 
+                             <input type="text" class="text-info-url text-required" value="<?php echo html_escape($member->getSlug()); ?>"/>
                             <!-- DISPLAY WHEN ERROR 
                             <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
                             <span class="val-error">Please enter at least 6 characters.</span>
@@ -64,7 +69,7 @@
                             <span class="val-success-url"><i class="fa fa-check"></i></span>
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn save-store-setting">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-url">

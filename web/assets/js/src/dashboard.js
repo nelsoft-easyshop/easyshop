@@ -632,6 +632,47 @@
         $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
         return false;
     });
+    
+    $(".save-store-setting").click(function(){
+            var $this = $(this);
+            var storename = $('#input-store-name').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var buttonHtml = $this.html();
+            var field = $this.data('variable');
+            $("#fail-message-"+field).hide();
+            $("#fail-icon-"+field).hide();
+            
+            var postData = {csrfname: csrftoken};
+            var expectedField = '';
+            if(field === 'store-name'){
+                postData['storename'] = storename;
+            }
+            
+            $this.html('PLEASE WAIT');
+            $.ajax({
+                type: "post",
+                url: '/memberpage/updateStoreSetting',
+                data: postData,
+                success: function(data){ 
+                    var response = $.parseJSON(data);
+                    if(response.isSuccessful == 'true'){
+                        $('.edit-'+field).slideToggle( "slow" );
+                        var currentSettingContainer = $('.current-'+field);
+                        currentSettingContainer.slideToggle( "slow" );
+                        currentSettingContainer.find('span').html(response.updatedValue);
+                    }
+                    else{
+                        var failMessageContainer = $("#fail-message-"+field);
+                        failMessageContainer.html(response.errors);
+                        failMessageContainer.show();
+                        $("#fail-icon-"+field).show();
+                    }
+                }
+            });
+            $this.html(buttonHtml);
+    });
+    
+    
 
 }(jQuery));
 
