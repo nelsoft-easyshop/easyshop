@@ -11,15 +11,15 @@
             <p class="panel-setting-title">Email Address</p>
             <div class="div-setting-content">
                 <div class="current-email">
-                <span class="setting-current-email" id="currentEmail"><?php echo html_escape($email); ?></span> 
+                <span class="setting-current-email" id="currentEmail"><?php echo html_escape($member->getEmail()); ?></span> 
                 <button class="btn btn-setting-edit-btn" id="btn-edit-email">
                    <i class="icon-edit"></i> Edit
                 </button>
                 <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
-                <div id="verifyEmail" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>"  <?php echo (trim($email)==''?'':'disabled');?>>
+                <div id="verifyEmail" style="<?php echo $member->getIsEmailVerify() == 0 && trim($member->getEmail()) !== ''?'':'display:none;'?>"  <?php echo (trim($member->getEmail())==''?'':'disabled');?>>
                     <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
                 </div>
-                <div id="verifiedEmail" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
+                <div id="verifiedEmail" style="<?php echo $member->getIsEmailVerify() == 0?'display:none;':''?>">
                     <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
                 </div>                                   
                 <div id="errorIndicatoreVerify" style="display:none;">
@@ -29,7 +29,7 @@
                 <div class="edit-email" id="editEmailPanel">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" id="emailAddressEdit" value="<?php echo html_escape($email);?>"/>
+                            <input type="text" class="text-info text-required" id="emailAddressEdit" value="<?php echo html_escape($member->getEmail());?>"/>
                             <div id="errorIndicatoreEmailAddress" style="display:none;">
                                 <span class="val-error" id="errorTextEmail"></span>
                             </div>
@@ -98,7 +98,7 @@
                                 <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here">
                             </div>
                         </div>
-                        <input id="username" name="wsx" type="hidden" value="<?php echo $user["username"]; ?>"/>
+                        <input id="username" name="wsx" type="hidden" value="<?php echo $member->getUserName(); ?>"/>
                         <div class="form-group">
                     
                             <div class="col-sm-4" style='text-align:center;'>
