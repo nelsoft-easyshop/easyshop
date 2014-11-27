@@ -540,8 +540,8 @@
         }
     });
     $( "#color-item-2" ).click(function() {
-      $( ".color-name-drop" ).text("Chestnut Rose");
-      $( ".current-color-drop" ).css("background", "#D24D57");
+      $( ".color-name-drop" ).text("California");
+      $( ".current-color-drop" ).css("background", "#F89406");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor2 = $("i.cd").attr("class");
         if(attrColor2 == "cd icon-dropup pull-right"){
@@ -560,8 +560,8 @@
     });
 
     $( "#color-item-4" ).click(function() {
-      $( ".color-name-drop" ).text("RED");
-      $( ".current-color-drop" ).css("background", "#FF0000");
+      $( ".color-name-drop" ).text("Radical red");
+      $( ".current-color-drop" ).css("background", "#F62459");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor4 = $("i.cd").attr("class");
         if(attrColor4 == "cd icon-dropup pull-right"){
@@ -570,8 +570,8 @@
     });
 
     $( "#color-item-5" ).click(function() {
-      $( ".color-name-drop" ).text("THUNDERBIRD");
-      $( ".current-color-drop" ).css("background", "#D91E18");
+      $( ".color-name-drop" ).text("Honey Flower");
+      $( ".current-color-drop" ).css("background", "#674172");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor5 = $("i.cd").attr("class");
         if(attrColor5 == "cd icon-dropup pull-right"){
@@ -580,8 +580,8 @@
     });
 
     $( "#color-item-6" ).click(function() {
-      $( ".color-name-drop" ).text("FLAMINGO");
-      $( ".current-color-drop" ).css("background", "#EF4836");
+      $( ".color-name-drop" ).text("Ming");
+      $( ".current-color-drop" ).css("background", "#336E7B");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor6 = $("i.cd").attr("class");
         if(attrColor6 == "cd icon-dropup pull-right"){
@@ -590,8 +590,8 @@
     });
 
     $( "#color-item-7" ).click(function() {
-      $( ".color-name-drop" ).text("TALL POPPY");
-      $( ".current-color-drop" ).css("background", "#C0392B");
+      $( ".color-name-drop" ).text("SAN MARINO");
+      $( ".current-color-drop" ).css("background", "#446CB3");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor7 = $("i.cd").attr("class");
         if(attrColor7 == "cd icon-dropup pull-right"){
@@ -600,8 +600,8 @@
     });
 
     $( "#color-item-8" ).click(function() {
-      $( ".color-name-drop" ).text("MONZA");
-      $( ".current-color-drop" ).css("background", "#CF000F");
+      $( ".color-name-drop" ).text("JELLY BEAN");
+      $( ".current-color-drop" ).css("background", "#2574A9");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor8 = $("i.cd").attr("class");
         if(attrColor8 == "cd icon-dropup pull-right"){
@@ -610,8 +610,18 @@
     });
 
     $( "#color-item-9" ).click(function() {
-      $( ".color-name-drop" ).text("CINNABAR");
-      $( ".current-color-drop" ).css("background", "#E74C3C");
+      $( ".color-name-drop" ).text("SALEM");
+      $( ".current-color-drop" ).css("background", "#1E824C");
+      $( ".current-color-drop" ).trigger( "click" );
+      var attrColor9 = $("i.cd").attr("class");
+        if(attrColor9 == "cd icon-dropup pull-right"){
+            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
+        }
+    });
+    
+    $( "#color-item-10" ).click(function() {
+      $( ".color-name-drop" ).text("LYNCH");
+      $( ".current-color-drop" ).css("background", "#6C7A89");
       $( ".current-color-drop" ).trigger( "click" );
       var attrColor9 = $("i.cd").attr("class");
         if(attrColor9 == "cd icon-dropup pull-right"){
