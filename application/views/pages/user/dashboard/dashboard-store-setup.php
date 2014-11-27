@@ -52,9 +52,13 @@
                             <?php echo base_url().html_escape($member->getSlug()); ?>
                         </a>
                     </span> 
-                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-url">
-                       <i class="icon-edit"></i> Edit
-                    </button>
+
+                    <?php if(!$member->getIsSlugChanged()): ?>
+                        <button class="btn btn-setting-edit-btn" id="btn-edit-store-url">
+                        <i class="icon-edit"></i> Edit
+                        </button>
+                    <?php endif; ?>
+                    
                 </div>
                 <div class="edit-store-url edit-store-slug">
                     <div class="row">
@@ -83,7 +87,7 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Your store link can only be changed once. Once a change has been made to the store link, you will also have to regenerate your store QR code. 
                 </p>
             </div>
         </div>

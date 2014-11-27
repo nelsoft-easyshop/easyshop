@@ -927,6 +927,7 @@
                         if(field == 'store-slug'){
                             var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
                             displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
+                            $('#btn-edit-store-url').css('display', 'none');
                         } 
                         currentSettingContainer.find('span').html(displayHtml);
                     }
