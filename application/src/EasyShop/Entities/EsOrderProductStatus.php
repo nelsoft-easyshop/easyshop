@@ -28,7 +28,19 @@ class EsOrderProductStatus
      */
     private $name;
 
+    const ON_GOING = 0;
 
+    const FORWARD_SELLER = 1;
+
+    const RETURNED_BUYER = 2;
+
+    const CASH_ON_DELIVERY = 3;
+
+    const PAID_FORWARDED = 4;
+
+    const PAID_RETURNED = 5;
+    
+    const CANCEL = 6;
 
     /**
      * Get idOrderProductStatus
