@@ -87,13 +87,26 @@ class UserManager
     private $stringUtility;
     
     /**
+     * Array of reserved keywords that cannot be used for the slug
+     *
+     * @var string[]
+     */
+    private $reservedSlugs;
+
+    /**
      *  Constructor. Retrieves Entity Manager instance
      *
      * @param Doctrine\Orm\EntityManager $em
      * @param EasyShop\ConfigLoader\ConfigLoader $ConfigLoader
      * @param EasyShop\Utility\StringUtility $stringUtility
      */
-    public function __construct($em,$configLoader,$formValidation,$formFactory,$formErrorHelper, $stringUtility)
+    public function __construct($em, 
+                                $configLoader,
+                                $formValidation,
+                                $formFactory,
+                                $formErrorHelper, 
+                                $stringUtility,
+                                $reservedSlugs = array())
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
@@ -103,6 +116,7 @@ class UserManager
         $this->formValidation = $formValidation;
         $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
+        $this->reservedSlugs = $reservedSlugs;
     }
 
     /**
@@ -776,4 +790,69 @@ class UserManager
         return $percentage;
     }
 
+    
+    /**
+     * Updates the slug of a user
+     *
+     * @param EasyShop\Entities\EsMember $memberEntity
+     * @param string $storeSlug
+     * @param string[] $routes
+     * @return bool
+     */
+    public function updateSlug($memberEntity, $storeSlug, $routes)
+    {
+        $usersWithSlug = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->getUsersWithSlug($storeSlug, 
+                                                   $memberEntity->getIdMember());
+        $restrictedRoutes = array();
+        foreach( $routes as $userRoute => $appRoute ){
+            //remove anything in between parentheses
+            $userRouteWithoutParentheses = preg_replace('/\(.{2,5}\)/','',$userRoute); 
+            $firstSegmentUserRoute = explode("/", $userRouteWithoutParentheses)[0];
+            $firstSegmentAppRoute = explode("/", $appRoute)[0];
+            if( !in_array($firstSegmentUserRoute, $restrictedRoutes) ){
+                $restrictedRoutes[] = $firstSegmentUserRoute;
+            }
+            if( !in_array($firstSegmentAppRoute, $restrictedRoutes) ){
+                $restrictedRoutes[] = $firstSegmentAppRoute;
+            }
+        }
+        #Get union of controller list and restricted list
+        $restrictedRoutes = array_unique(array_merge($restrictedRoutes , $this->reservedSlugs));
+        
+        if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes)){
+            $memberEntity->setSlug($storeSlug);
+            $isSuccessful = true;
+            try{
+                $this->em->flush();
+            }
+            catch(\Doctrine\ORM\Query\QueryException $e){
+                $isSuccessful = false;
+            }
+            return $isSuccessful;
+        }
+        return false;
+    }
+    
+    /**
+     * Updates the user store name
+     *
+     * @param EasyShop\Entities\EsMember $memberEntity
+     * @param string $storename
+     * @return bool
+     */
+    public function updateStorename($memberEntity, $storename)
+    {
+        $isSuccessful = true;
+        $memberEntity->setStorename($storename);
+        try{
+            $this->em->flush();
+        }
+        catch(\Doctrine\ORM\Query\QueryException $e){
+            $isSuccessful = false;
+        }
+        return $isSuccessful;
+    }
+    
+    
 }
