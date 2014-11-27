@@ -17,6 +17,7 @@ use EasyShop\Entities\EsCat as EsCat;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 
 class Memberpage extends MY_Controller
 {
