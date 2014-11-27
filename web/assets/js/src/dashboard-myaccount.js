@@ -1,8 +1,5 @@
 (function ($) {
 
-
-
-
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
@@ -53,7 +50,7 @@
                     }
                     else {
                         alert("You have successfully deactivated your account");
-                        window.location = "/login/logout";                        
+                        window.location = "/memberpage/renderDeactivatedAccountPage";                        
                     }
 
                 },
