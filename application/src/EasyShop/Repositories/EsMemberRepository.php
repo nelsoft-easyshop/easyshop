@@ -231,4 +231,31 @@ class EsMemberRepository extends EntityRepository
 
         return $member;
     }
+    
+    
+    /**
+     * Get users with the given slug excluding provided memberId
+     *
+     * @param string $slug
+     * @param integer $notMemberId
+     * @return EasyShop\Entities\EsMember[]
+     */
+    public function getUsersWithSlug($slug, $notMemberId = null)
+    {
+        $queryBuilder =   $this->_em->createQueryBuilder()
+                                    ->select('m')
+                                    ->from('EasyShop\Entities\EsMember','m')
+                                    ->where('m.slug = :slug')
+                                    ->setParameter('slug', $slug);
+
+        if($notMemberId !== null){
+            $queryBuilder->andWhere('m.idMember != :member_id')
+                         ->setParameter('member_id', $notMemberId);
+        }  
+
+        return $queryBuilder->getQuery()
+                            ->getResult();
+    
+    }
+    
 }
