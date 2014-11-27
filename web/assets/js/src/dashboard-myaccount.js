@@ -45,7 +45,17 @@
                 url: "/memberpage/sendDeactivateNotification",
                 success: function(data) {
                     actionGroupChangePass.show();
-                    loadingimg.hide();      
+                    loadingimg.hide();  
+                    var obj = jQuery.parseJSON(data);    
+                    if(obj === "Incorrect Password") {
+                        $("#deactivatePassword").val("");                        
+                        alert(obj);                        
+                    }
+                    else {
+                        alert("You have successfully deactivated your account");
+                        window.location = "/login/logout";                        
+                    }
+
                 },
             });   
 
