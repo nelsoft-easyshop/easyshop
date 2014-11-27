@@ -2222,7 +2222,7 @@ class Memberpage extends MY_Controller
         $entityManager = $this->serviceContainer['entity_manager'];
         $jsonResponse = ['isSuccessful' => 'false',
                          'errors' => []];        
-        if($this->input->post()){
+        if($this->input->post('storename') || $this->input->post('storeslug')){
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
