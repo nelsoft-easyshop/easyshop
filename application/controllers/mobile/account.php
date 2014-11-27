@@ -50,7 +50,7 @@ class Account extends MY_Controller
         $password = trim($this->input->post('password'));
         $email = trim($this->input->post('email'));
         $contactno = trim($this->input->post('mobile'));
-        $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno);
+        $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno, true);
         if(empty($registrationResult['errors'])){
             $isSuccessful = true;
         }

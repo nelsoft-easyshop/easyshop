@@ -1,4 +1,5 @@
 
+<?php if(count($recommended) > 0): ?>
 <div class="container" id="rec">
     <div class="prod-detail-main">
         <div class="div-rec-title">
@@ -45,7 +46,7 @@
                 <div class="clear"></div>
                 <a href="/item/<?=$value->getSlug(); ?>">
                     <p class="p-rec-product-name">
-                    <?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
+                    <?=html_escape( $value->getName());?>
                     </p>
                 </a>
                 <p class="p-rec-product-price">
@@ -84,4 +85,5 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 

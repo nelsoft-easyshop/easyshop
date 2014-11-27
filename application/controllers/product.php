@@ -6,6 +6,7 @@ if (!defined('BASEPATH')){
 
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Entities\EsCat as EsCat; 
+use EasyShop\Entities\EsProduct as EsProduct; 
 
 class product extends MY_Controller 
 { 
@@ -51,7 +52,6 @@ class product extends MY_Controller
      */
     public function categoryPage($categorySlug)
     {
-        header ('Content-type: text/html; charset=ISO-8859-1');
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager'];
         
@@ -273,7 +273,7 @@ class product extends MY_Controller
             $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
             $isBuyButtonViewable = true;
 
-            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
+            if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                 $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                 if($bannerfile){
                     $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], true); 
@@ -336,7 +336,7 @@ class product extends MY_Controller
 
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
             $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
-            $headerData['title'] = $product->getName(). " | Easyshop.ph";
+            $headerData['title'] = html_escape($product->getName()). " | Easyshop.ph";
             $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
             $headerData['homeContent'] = $this->fillCategoryNavigation();
       
