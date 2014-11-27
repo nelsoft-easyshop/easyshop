@@ -242,17 +242,21 @@ class EsMemberRepository extends EntityRepository
      */
     public function getUsersWithSlug($slug, $notMemberId = null)
     {
-        $queryBuilder =   $this->_em->createQueryBuilder()
-                                    ->select('m')
-                                    ->from('EasyShop\Entities\EsMember','m')
-                                    ->where('m.slug = :slug')
-                                    ->setParameter('slug', $slug);
+        $queryBuilder =   $this->_em->createQueryBuilder();
+        
+        $queryBuilder->select('m')
+                    ->from('EasyShop\Entities\EsMember','m')
+                    ->where($queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq('m.slug', ':slugA'),
+                        $queryBuilder->expr()->eq('m.username', ':slugB')
+                    ))
+                    ->setParameter('slugA', $slug)
+                    ->setParameter('slugB', $slug);
 
         if($notMemberId !== null){
             $queryBuilder->andWhere('m.idMember != :member_id')
                          ->setParameter('member_id', $notMemberId);
         }  
-
         return $queryBuilder->getQuery()
                             ->getResult();
     
