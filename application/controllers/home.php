@@ -401,7 +401,8 @@ class Home extends MY_Controller
                 }
                 
                 // Load View
-                $this->load->view('templates/header_alt', $bannerData);
+                $headerData = array_merge($headerData, $bannerData);
+                $this->load->view('templates/header_alt', $headerData);
                 $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
@@ -502,6 +503,7 @@ class Home extends MY_Controller
         $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
 
         // Load View
+        $headerData = array_merge($headerData, $bannerData);
         $this->load->view('templates/header_alt', $headerData);
         $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/followers' ,$followerData);
@@ -746,6 +748,7 @@ class Home extends MY_Controller
         $headerData['relCanonical'] = base_url().$sellerslug.'/about';
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
+        $headerData = array_merge($headerData, $bannerData);
         $this->load->view('templates/header_alt', $headerData);
         $this->load->view('templates/vendor_banner', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
@@ -913,6 +916,7 @@ class Home extends MY_Controller
         $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
+        $headerData = array_merge($headerData, $bannerData);
         $this->load->view('templates/header_alt', $headerData);
         $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
