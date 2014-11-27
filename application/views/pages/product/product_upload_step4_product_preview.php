@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
 
 <section class="product-main-top-content">
