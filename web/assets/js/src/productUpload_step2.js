@@ -90,9 +90,7 @@ function askDraft(location)
             resizable: false,
             height: 200,
             width: 530,
-            modal: true, 
-            open: function() {
-            },
+            modal: true,
             buttons: {
                 "Yes, please.": function() {
                     $(".ui-dialog-buttonset").hide();
@@ -158,11 +156,9 @@ function checkCombination(currentStringId)
     });
     if(arrayCombination.length > 0){
         if($.inArray(currentStringId,arrayCombination) <= -1){
-            console.log('not exist');
             return true;
         }
         else{
-            console.log('exist');
             return false;
         }
     }
@@ -481,8 +477,7 @@ function processCombination()
 
         eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
         eachCombination.data = eachData; 
-        eachCombination.itemid = itemId; 
-        console.log(eachCombination);
+        eachCombination.itemid = itemId;
         completeCombination.push(eachCombination);
     });
 
@@ -809,7 +804,6 @@ var previous,editSelectedValue,editSelectedId;
         var checked = $('.set-default:checked').length > 0; 
 
         if(selectedValue == 0){
-            console.log('no value selected');
             return false;
         }
 
@@ -910,7 +904,6 @@ var previous,editSelectedValue,editSelectedId;
                         $(this).children('option:selected').data('price',validSelection[selectedValue]['price']);
                         $(this).children('option:selected').data('image',validSelection[selectedValue]['image']);
                         $(this).children('option:selected').text(validSelection[selectedValue]['text']);
-                        console.log($(this).children('option:selected').data('price'));
                     }
                 });
             });
@@ -1011,9 +1004,6 @@ var previous,editSelectedValue,editSelectedId;
 
     $(document).on("click",".remove-attr",function (){
         var selector = $(this);
-        console.log('you press remove-attr class');
-        console.log('confirmation ask');
-
         var id = selector.data('id');
         validateRedTextBox(".div2 > span > #"+id);
         var confirmation = confirm('Are you sure you want to remove?');
@@ -1182,8 +1172,27 @@ var currentRequest = null;
 
 // ES_UPLOADER BETA     
 var canProceed = true; 
-var removeThisPictures = []; var imageAttr = [];
-var pictureCountOther  = 0; var primaryPicture = 0;
+var removeThisPictures = []; 
+var imageAttr = [];
+var pictureCountOther  = 0; 
+var pictureCount = 0;
+var primaryPicture = 0;
+
+var filescnt = 1;
+var imageCustom =  new Array();
+var editRemoveThisPictures = new Array();
+var response;
+var filescntret;
+var currentCnt;
+
+var imageObject = new Array();
+var cropCurrentCount;
+var arrayUpload = new Array();
+var afstart = new Array();
+var imageName = "";
+var errorValues = "";
+var axes = new Array();
+
 (function($) {
   
     if(window.FileReader){
@@ -1199,136 +1208,107 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('.files.active').click(); 
     });
 
-    var filescnt = 1;
-    var imageCustom =  new Array();
-    var editRemoveThisPictures = new Array();
-    var response;
-    var filescntret;
-    var currentCnt;
+    function showCoords(c){ 
+        $('#image_x').val(c.x);
+        $('#image_y').val(c.y);
+        $('#image_w').val(c.w);
+        $('#image_h').val(c.h);
+    }
 
-    $(document).on('change',".files.active",function (e){
-        var arrayUpload = new Array();
-        var afstart = new Array();
+    var cropImage = function($input)
+    {
+        var totalCropImage = imageObject.length;
+        var targetImage = imageObject[cropCurrentCount];
+        var jcrop_api, imgHeight, imgWidth;
+        var widthRatio = 445;
+        var heightRatio = 538
 
-        if(badIE == false){
-            var fileList = this.files;
-            var anyWindow = window.URL || window.webkitURL; 
-            var errorValues = "";
-            for(var i = 0; i < fileList.length; i++){
-                var activeText= ""; 
-                var primaryText = "Make Primary"; 
-                var size = fileList[i].size
-                var val = fileList[i].name;
-                var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-                var objectUrl = anyWindow.createObjectURL(fileList[i]); 
-                pictureInDiv = $("#list > div").length;
+        $('#crop-image-main > #imageTag').attr('src',targetImage);
+        $("<img/>") // Make in memory copy of image to avoid css issues
+            .attr("src", $('#crop-image-main > #imageTag').attr("src"))
+            .load(function() {
+                imgWidth = this.width;   // Note: $(this).width() will not 
+                imgHeight = this.height; // work for in memory images.
 
-                if(pictureInDiv == 0){
-                    primaryText = "Your Primary";
-                    activeText = "active_img";
-                    primaryPicture = pictureCount;
-                }
-
-                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
-                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
-                        <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
-                        <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
-                        <span class="loading-text">0 %</span>\
-                        <a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a>\
-                        <div class="loadingfiles"></div>\
-                        </div>');
-                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
-                    $('.filescnt'+filescnt+' > .removepic').hide(); 
-
-                }else{
-                    if(size < 5*1024*1024){
-                        errorValues += val + "\n(Invalid file type).\n<br>";
-                    }
-                    else{
-                        errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
-                    }
-                    removeThisPictures.push(pictureCount);
-                }
-
-                imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-                af.push(imageName+'||'+extension); 
-                afstart.push(imageName); 
-                // window.URL.revokeObjectURL(fileList[i]);
-                arrayUpload.push(pictureCount);
-                pictureCount++; 
-            }
-
-            $(".files").hide();  
-            $(".files.active").each(function(){
-                $(this).removeClass('active');
+                x = imgWidth / 2 - widthRatio / 2;
+                y = imgHeight / 2 - heightRatio / 2;
+                x1 = x + widthRatio;
+                y1 = y + heightRatio;
+                $('#crop-image-main').dialog({
+                    resizable: false,
+                    height: 600,
+                    width: 600,
+                    modal: true,
+                    buttons: {
+                        "Crop": function() {
+                            $(this).dialog("close");
+                        }
+                    },
+                    open: function() {
+                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                            aspectRatio: widthRatio / heightRatio,
+                            setSelect: [ x, y, x1, y1 ],
+                            boxWidth: 500,
+                            boxHeight: 500,
+                            minSize: [
+                                imgWidth * 0.1,
+                                imgHeight * 0.1
+                            ],
+                            trueSize: [
+                                imgWidth,
+                                imgHeight
+                            ],
+                            onChange: showCoords,
+                            onSelect: showCoords
+                        });
+                    },
+                    close: function(){
+                        $('#crop-image-main >  #imageTag').attr('src', ''); 
+                        $('#crop-image-main').append('<img src="" id="imageTag">');
+                        jcrop_api.destroy(); 
+                        $.modal.close();
+                        cropCurrentCount++;
+                        var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                        axes.push(coordinate);
+                        if(cropCurrentCount < totalCropImage){
+                            cropImage($input);
+                        }
+                        else{
+                            triggerUpload();
+                            $(".files").hide();
+                            $(".files.active").each(function(){
+                                $(this).removeClass('active');
+                            });
+                            $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                            $input.remove();
+                        }
+                    },
+                    "title": "Crop your image"
+                });
             });
+    }
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
-            filescnt++;
-            $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-            $(this).remove();
-        }
-        else{
-            var activeText= ""; 
-            var errorValues = "";
-            var primaryText = "Make Primary"; 
-            var val = $(this).val();
-            pictureInDiv = $("#list > div").length;
-
-            if(pictureInDiv == 0){
-                primaryText = "Your Primary";
-                activeText = "active_img";
-                primaryPicture = pictureCount;
-            }
-
-            var id = "imgid" + pictureCount;
-            imageCustom = document.getElementById('files').value;
-            var filename = imageCustom.match(/[^\/\\]+$/);
-            extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-
-            switch(extension){
-                case 'gif': case 'jpg': case 'png': case 'jpeg':
-                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
-                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
-                    $('.filescnt'+filescnt+' > .removepic').hide(); 
-                break;
-                default:
-                    alert('Invalid file type. Please choose another image.');
-                    removeThisPictures.push(pictureCount); 
-                    return false;
-                break;
-            }
-
-            $(".files").hide();  
-            $(".files.active").each(function(){
-                $(this).removeClass('active');
-            });
-
-            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-            af.push(imageName+'||'+extension); 
-            afstart.push(imageName); 
-            arrayUpload.push(pictureCount);  
-            pictureCount++;
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
-            filescnt++;
-        }
-    });
+    function triggerUpload()
+    {
+        startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
+        filescnt++;
+    }
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
         canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
-        $('#afstart').val(JSON.stringify(afstart));   
+        $('#afstart').val(JSON.stringify(afstart));
+        $("#coordinates").val(JSON.stringify(axes));
         $('#form_files').ajaxForm({
             url: '/productUpload/uploadimage',
             type: "POST", 
-            dataType: "json",             
+            dataType: "json",
             xhr: function(){
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt){
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total * 100.0;
-                        console.log(percentComplete);
                         $('.loading-text').html(parseFloat(percentComplete).toFixed(2) + ' %');
                     }
                 }, false);
@@ -1383,6 +1363,105 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('#form_files').submit();
     }
 
+    $(document).on('change',".files.active",function (e){
+        arrayUpload = new Array();
+        afstart = new Array();
+        imageObject = new Array();
+        axes = new Array();
+        errorValues = "";
+        cropCurrentCount = 0;
+
+        if(badIE == false){
+            var fileList = this.files;
+            var anyWindow = window.URL || window.webkitURL;
+            for(var i = 0; i < fileList.length; i++){
+                var activeText= ""; 
+                var primaryText = "Make Primary"; 
+                var size = fileList[i].size
+                var val = fileList[i].name;
+                var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+                var objectUrl = anyWindow.createObjectURL(fileList[i]); 
+                pictureInDiv = $("#list > div").length;
+
+                if(pictureInDiv == 0){
+                    primaryText = "Your Primary";
+                    activeText = "active_img";
+                    primaryPicture = pictureCount;
+                }
+
+                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
+                        <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
+                        <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
+                        <span class="loading-text">0 %</span>\
+                        <a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a>\
+                        <div class="loadingfiles"></div>\
+                        </div>');
+                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+                    $('.filescnt'+filescnt+' > .removepic').hide(); 
+                }
+                else{
+                    if(size < 5*1024*1024){
+                        errorValues += val + "\n(Invalid file type).\n<br>";
+                    }
+                    else{
+                        errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
+                    }
+                    removeThisPictures.push(pictureCount);
+                }
+
+                imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+                af.push(imageName+'||'+extension); 
+                afstart.push(imageName);
+                arrayUpload.push(pictureCount);
+                imageObject.push(objectUrl);
+                pictureCount++;
+            }
+            cropImage($(this));
+        }
+        else{
+            var activeText= ""; 
+            var primaryText = "Make Primary"; 
+            var val = $(this).val();
+            pictureInDiv = $("#list > div").length;
+
+            if(pictureInDiv == 0){
+                primaryText = "Your Primary";
+                activeText = "active_img";
+                primaryPicture = pictureCount;
+            }
+
+            var id = "imgid" + pictureCount;
+            imageCustom = document.getElementById('files').value;
+            var filename = imageCustom.match(/[^\/\\]+$/);
+            extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+
+            switch(extension){
+                case 'gif': case 'jpg': case 'png': case 'jpeg':
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
+                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+                    $('.filescnt'+filescnt+' > .removepic').hide(); 
+                break;
+                default:
+                    alert('Invalid file type. Please choose another image.');
+                    removeThisPictures.push(pictureCount); 
+                    return false;
+                break;
+            }
+
+            $(".files").hide();  
+            $(".files.active").each(function(){
+                $(this).removeClass('active');
+            });
+
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            af.push(imageName+'||'+extension); 
+            afstart.push(imageName); 
+            arrayUpload.push(pictureCount);
+            cropImage($(this));
+        }
+    });
+
     $(document).on('click','.remove-attr-image',function(e){
         var selector = $(this);
         currentCnt = selector.data('cnt');
@@ -1412,30 +1491,65 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $("#pop-image").parents("#simplemodal-container").addClass("prod-upload-con");
     });
 
-    $(document).on('change',".attr-image-input",function (e){
- 
-        var val = $(this).val();
 
-        extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-        switch(extension){
-            case 'gif': case 'jpg': case 'png': case 'jpeg':
-            break;
-            default:
-                alert('Invalid file type. Please choose another image.');
-                return false;
-            break;
-        }
+    var cropImageOther = function(imageCustom)
+    {
+        var jcrop_api, imgHeight, imgWidth;
+        var widthRatio = 445;
+        var heightRatio = 538
 
-        if(badIE == false){
-            var size = this.files[0].size;
-            if(size > 5*1024*1024){
-                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
-                return false;
-            }
-        }
- 
-        picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        canProceed = false;
+        $('#crop-image-main > #imageTag').attr('src',imageCustom);
+        $("<img/>") // Make in memory copy of image to avoid css issues
+            .attr("src", $('#crop-image-main > #imageTag').attr("src"))
+            .load(function() {
+                imgWidth = this.width;   // Note: $(this).width() will not 
+                imgHeight = this.height; // work for in memory images.
+
+                x = imgWidth / 2 - widthRatio / 2;
+                y = imgHeight / 2 - heightRatio / 2;
+                x1 = x + widthRatio;
+                y1 = y + heightRatio;
+                $('#crop-image-main').dialog({
+                    resizable: false,
+                    height: 600,
+                    width: 600,
+                    modal: true,
+                    buttons: {
+                        "Crop": function() {
+                            $(this).dialog("close");
+                        }
+                    },
+                    open: function() {
+                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                            aspectRatio: widthRatio / heightRatio,
+                            setSelect: [ x, y, x1, y1 ],
+                            boxWidth: 500,
+                            boxHeight: 500,
+                            minSize: [
+                                imgWidth * 0.1,
+                                imgHeight * 0.1
+                            ],
+                            trueSize: [
+                                imgWidth,
+                                imgHeight
+                            ],
+                            onChange: showCoords,
+                            onSelect: showCoords
+                        });
+                    },
+                    close: function(){
+                        $('#crop-image-main >  #imageTag').attr('src', ''); 
+                        $('#crop-image-main').append('<img src="" id="imageTag">');
+                        jcrop_api.destroy(); 
+                        $.modal.close();
+                    },
+                    "title": "Crop your image"
+                });
+            });
+    }
+
+    function triggerUploadOther(picName)
+    {
         $('#other_files').ajaxForm({
             url: '/productUpload/uploadimageOther',
             type: "POST", 
@@ -1460,13 +1574,13 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 canProceed = false;
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
-            success :function(d) {   
+            success :function(d) {
                 canProceed = true;
                 if(d.result == "ok"){
                     imageAttr.push(picName);
                     $('.imageText'+currentCnt).val(picName); 
                     $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/'+picName);
-                    pictureCountOther++;    
+                    pictureCountOther++;
                 }
                 else{
                     alert(d.msg);
@@ -1484,6 +1598,32 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 $('#other_files > #pictureName').remove();
             }
         }).submit();
+    }
+
+    $(document).on('change',".attr-image-input",function (e){
+ 
+        var val = $(this).val();
+        extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+        switch(extension){
+            case 'gif': case 'jpg': case 'png': case 'jpeg':
+            break;
+            default:
+                alert('Invalid file type. Please choose another image.');
+                return false;
+            break;
+        }
+
+        if(badIE == false){
+            var size = this.files[0].size;
+            if(size > 5*1024*1024){
+                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+                return false;
+            }
+        }
+ 
+        picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        canProceed = false;
+        cropImageOther(val)
     });
 
 
@@ -1499,9 +1639,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             primaryPicture = 0;
             primary_control_anchor.text('Your Primary');     
             first_img_div.addClass("active_img"); 
-        }
-        console.log('Primary Picture: ' + primaryPicture);
-        console.log('Picture to remove: ' + removeThisPictures); 
+        } 
     });
 
     $(document).on('click','.makeprimary',function(){

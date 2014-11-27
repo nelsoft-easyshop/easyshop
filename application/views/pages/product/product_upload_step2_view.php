@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
 <script type="text/javascript">
     var af = new Array();
@@ -63,6 +64,7 @@
                 <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
                 <input type="hidden" class="filescnttxt" name="filescnttxt">
                 <input type="hidden" class="afstart" id="afstart" name="afstart">
+                <input type="hidden" class="coordinates" id="coordinates" name="coordinates">
                 <div id="inputList" class="inputList"></div>
             </form> 
 
@@ -505,6 +507,13 @@
                     <a class="simplemodal-close" title="Close"><span class="orange_btn3 width-30p img-upload-save">Save</span></a>
                 </div>
             </div>
+            <div style="display:none" id="crop-image-main" class="simplemodal-container">
+                <img src="" id="imageTag">
+                <input type='text' name='x' value='0' readonly size="7" id='image_x'>
+                <input type='text' name='y' value='0' readonly size="7"  id='image_y'>
+                <input type='text' name='h' value='0' readonly size="7"  id='image_h'>
+                <input type='text' name='w' value='0' readonly size="7"  id='image_w'>
+            </div>
         </div>
     </div>
 </div>
@@ -522,6 +531,7 @@
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
 <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
 <script type="text/javascript" src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
 <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>

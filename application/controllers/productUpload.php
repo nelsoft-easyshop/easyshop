@@ -401,6 +401,7 @@ class productUpload extends MY_Controller
         $afstart = $this->input->post('afstart');
         $afstartArray = json_decode($afstart); 
         $filenames_ar = array(); 
+        $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
         $error = 0;
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
@@ -468,7 +469,9 @@ class productUpload extends MY_Controller
 
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
-            for ($i=0; $i < sizeof($filenames_ar); $i++) { 
+            for ($i=0; $i < sizeof($filenames_ar); $i++) {
+                $coordinate = explode(',', $coordinates[$i]);
+                $this->es_img_crop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
@@ -495,6 +498,34 @@ class productUpload extends MY_Controller
             );
 
         die(json_encode($return));
+    }
+
+    /**
+     * Crop product image based on coordinates
+     * @param  string $souceImage
+     * @param  float  $axisX
+     * @param  float  $axisY
+     * @param  float  $axisX2
+     * @param  float  $axisY2
+     */
+    private function es_img_crop($souceImage, $axisX, $axisY, $width, $height)
+    { 
+         $config = [
+            'image_library' => 'gd2',
+            'maintain_ratio' => false,
+            'source_image' => $souceImage, 
+            'quality' => '100%',
+            'width' => $width,
+            'height' => $height,
+            'x_axis' => $axisX,
+            'y_axis' => $axisY
+        ]; 
+        $this->image_lib->initialize($config);
+
+        if ( ! $this->image_lib->image_process_gd('crop')){
+            echo $this->image_lib->display_errors();
+        }
+        $this->image_lib->clear();
     }
 
     /**
