@@ -46,9 +46,9 @@
         <div class="div-store-setup">
             <p class="panel-setup-title">Store Link</p>
             <div class="div-setup-content">
-                <div class="current-store-url">
-                    <span class="setting-current-email">
-                        <a href="<?php echo base_url().html_escape($member->getSlug()); ?>" > 
+                <div class="current-store-url current-store-slug">
+                    <span class="setting-current-email"  id="store-slug-display" data-slug="<?php echo html_escape($member->getSlug()); ?>">
+                        <a href="<?php echo base_url().html_escape($member->getSlug()); ?>"> 
                             <?php echo base_url().html_escape($member->getSlug()); ?>
                         </a>
                     </span> 
@@ -56,19 +56,24 @@
                        <i class="icon-edit"></i> Edit
                     </button>
                 </div>
-                <div class="edit-store-url">
+                <div class="edit-store-url edit-store-slug">
                     <div class="row">
                         <div class="col-md-6 col-inline-textbtn">
                              <span class="setting-edit-url"><?php echo base_url(); ?></span> 
-                             <input type="text" class="text-info-url text-required" value="<?php echo html_escape($member->getSlug()); ?>"/>
+                             <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
                           
-                            <!-- DISPLAY WHEN ERROR 
-                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            -->
+                   
+                            <span class="val-error-icon-pass" id="fail-icon-store-slug" style="display:none">
+                                <i class="fa fa-times"></i>
+                            </span>
+                            <span class="val-error" id="fail-message-store-slug" style="display:none">
+                            </span>
+
+                            </span>
+                          
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
-                            <button class="btn btn-setting-save-btn save-store-setting">
+                            <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-slug">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-url">

@@ -501,7 +501,6 @@
         $('#input-store-name').val($('#store-name-display').html())
         $("#fail-message-store-name").css('display', 'none');
         $("#fail-icon-store-name").css('display', 'none');
-
     });
 
     $( "#btn-edit-store-url" ).click(function() {
@@ -511,6 +510,9 @@
 
     $( "#cancel-edit-store-url" ).click(function() {
         $( "#btn-edit-store-url" ).trigger( "click" );
+        $('#input-store-slug').val($('#store-slug-display').data('slug'));
+        $("#fail-message-store-slug").css('display', 'none');
+        $("#fail-icon-store-slug").css('display', 'none');
     });
 
     $( "#btn-edit-store-theme" ).click(function() {
@@ -895,18 +897,21 @@
     $(".save-store-setting").click(function(){
             var $this = $(this);
             var storename = $('#input-store-name').val();
+            var storeslug = $('#input-store-slug').val();
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var buttonHtml = $this.html();
             var field = $this.data('variable');
             $("#fail-message-"+field).hide();
             $("#fail-icon-"+field).hide();
-            
+
             var postData = {csrfname: csrftoken};
             var expectedField = '';
-            if(field === 'store-name'){
+            if(field == 'store-slug'){
+                 postData['storeslug'] = storeslug;
+            }
+            else{
                 postData['storename'] = storename;
             }
-            
             $this.html('PLEASE WAIT');
             $.ajax({
                 type: "post",
@@ -918,7 +923,12 @@
                         $('.edit-'+field).slideToggle( "fast" );
                         var currentSettingContainer = $('.current-'+field);
                         currentSettingContainer.slideToggle( "fast" );
-                        currentSettingContainer.find('span').html(response.updatedValue);
+                        var displayHtml = response.updatedValue;
+                        if(field == 'store-slug'){
+                            var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
+                            displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
+                        } 
+                        currentSettingContainer.find('span').html(displayHtml);
                     }
                     else{
                         var failMessageContainer = $("#fail-message-"+field);
