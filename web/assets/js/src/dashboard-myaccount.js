@@ -83,12 +83,11 @@
     /**************** GOOGLE MAPS ******************************/
 
     $(".refresh_map").click(function(){     
-        var stateregion = $('#delivery_stateregion').find('option:selected').text();
-        var city = $('#delivery_city').find('option:selected').text();
+        var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
+        var city = $('#delivery_city').find('option:selected').text().trim();
         var type = "delivery";
-
         var address = stateregion + " " + city + " PH";
-        if(address === " --- Select City --- PH") {
+        if(address === "--- Select City --- PH" || city === "--- Select City ---") {
             alert('Please specify a valid address.');            
             $( ".map-container" ).slideToggle( "slow" );
         }
@@ -104,8 +103,15 @@
         var refreshmapbtn = $('.refresh_map');
         var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
         var type = this.name;
-        
-        if (maplat == 0 && maplng == 0){
+
+        var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
+        var city = $('#delivery_city').find('option:selected').text().trim();
+        if( (stateregion === "--Select State/Region--" || city === "--- Select City ---")) {
+            alert('Please specify a valid address.');    
+            $( ".map-container" ).slideToggle( "slow" );
+        }
+
+        if ((maplat == 0 && maplng == 0)){
             refreshmapbtn.trigger('click');
         }else{
             var myLatlng =  new google.maps.LatLng(maplat,maplng);
