@@ -119,7 +119,6 @@
                                     <?php if( $product['has_shipping_summary'] == 1 ):?>
                                     <div class="col-xs-6">
                                         <span class="strong-label shipment-detail-button">View shipment detail</span>
-<!--                                        ADD view shipment detail-->
                                         <div class="shipping-details">
                                             <div class="shipping-details-wrapper">
                                                 <h1>Shipping details</h1>
@@ -205,6 +204,16 @@
                             </div>
                         </div>
                         <div class="trans-btn-wrapper">
+                            <?PHP if ( (int) $product['has_shipping_summary'] === 1 && (int) $boughtTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $boughtTransactionDetails['idPaymentMethod'] !== 3 && (int) $boughtTransactionDetails['isFlag'] === 0 ) : ?>
+                                <button class="btn btn-default-1">Item recieved</button>
+                                <?php if( (int) $product['isReject'] === 0):?>
+                                    <button class="btn btn-default-1">Reject Item</button>
+                                    <input type="hidden" name="method" value="reject">
+                                <?php else:?>
+                                    <button class="btn btn-default-1">Unreject Item</button>
+                                    <input type="hidden" name="method" value="unreject">
+                                <?php endif;?>
+                            <?PHP endif; ?>
                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
                             <button class="btn btn-default-1 give-feedback-button">
                                 <span class="img-give-feedback"></span>give feedback

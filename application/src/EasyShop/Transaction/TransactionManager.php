@@ -162,9 +162,8 @@ class TransactionManager
             'historyLog' => false
         ];
         if ( (int) $status === 1 ) {
-            #have not tried
             $qb = $this->em->createQueryBuilder()
-                ->select('op.orderProductId')
+                ->select('op.idOrderProduct')
                 ->from('EasyShop\Entities\EsOrderProduct','op')
                 ->innerJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder AND op.order = :orderId AND op.idOrderProduct = :orderProductId AND o.invoiceNo = :invoice')
                 ->where('op.status = 0 AND o.buyer = :memberId')

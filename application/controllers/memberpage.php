@@ -1010,23 +1010,39 @@ class Memberpage extends MY_Controller
             'error' => 'Transaction does not exist.'
         );
         
-        $result = $this->payment_model->checkOrderProductBasic($data);
-        
-        if( count($result) == 1 ){
-            $dbresult = $this->payment_model->responseReject($data);
-            if($dbresult){
-                $historyData['order_product_id'] = $data['order_product'];
-                $historyData['order_product_status'] = 99;
-                if($data['method'] === 'reject'){
-                    $historyData['comment'] = 'REJECTED';
+        $checkOrderProductBasic = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                        ->findOneBy([
+                                                            'idOrderProduct' => $data['order_product'],
+                                                            'order' => $data['transact_num'],
+                                                            'seller' => $data['member_id']
+                                                        ]);
+
+        if ($checkOrderProductBasic) {
+            $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
+            $seller = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->find($data['member_id']);
+            $esOrderProduct = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                    ->findOneBy([
+                                                        'idOrderProduct' => $data['order_product'],
+                                                        'order' => $order,
+                                                        'seller' => $seller
+                                                    ]);
+            $isReject = $data['method'] === "reject" ? 1 : 0;
+            $rejectTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProduct')->updateIsReject($isReject, $esOrderProduct);
+
+            if ( (bool) $rejectTransaction) {
+                $historyData['order_product_id'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProduct')->find($data['order_product']);
+                if ($data['method'] === 'reject') {
+                    $historyData['comment'] = 'REJECTED';#remove hard coded strings
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(99); #remove hard coded strings
                 }
-                else if($data['method'] === 'unreject'){
-                    $historyData['comment'] = 'UNREJECTED';
+                else if ($data['method'] === 'unreject') {
+                    $historyData['comment'] = 'UNREJECTED';#remove hard coded strings
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(0); #remove hard coded strings
                 }
-                $this->payment_model->addOrderProductHistory($historyData);
+                $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($historyData['order_product_id'], $historyData['order_product_status'], $historyData['comment']);
             }
-            $serverResponse['result'] = $dbresult ? 'success':'fail';
-            $serverResponse['error'] = $dbresult ? '':'Failed to update database.';
+            $serverResponse['result'] = $rejectTransaction ? 'success':'fail';
+            $serverResponse['error'] = $rejectTransaction ? '':'Failed to update database.';
         }
         
         echo json_encode($serverResponse);

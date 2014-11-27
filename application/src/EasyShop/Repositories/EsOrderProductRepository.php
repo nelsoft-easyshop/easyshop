@@ -163,4 +163,18 @@ class EsOrderProductRepository extends EntityRepository
 
         return $esOrderProduct;
     }
+
+    /**
+     * Update IsReject
+     * @param $isReject
+     * @param $esOrderProduct
+     * @return EsOrderProduct
+     */
+    public function updateIsReject($isReject, $esOrderProduct)
+    {
+        $esOrderProduct->setIsReject($isReject);
+        $this->_em->flush();
+
+        return $esOrderProduct;
+    }
 }
