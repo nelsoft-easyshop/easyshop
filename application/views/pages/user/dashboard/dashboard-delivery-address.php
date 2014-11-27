@@ -95,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Map Location : </label>
                     <div class="col-sm-8 col-map">
@@ -104,13 +103,14 @@
                         <input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">
                         <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo $c_lat;?>">
                         <input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo $c_lng;?>">
+                        <input type="text" name="current_lat" id="current_lat" value="">
+                        <input type="text" name="current_lang" id="current_lang" value="">
                         <div class="map-container">
-                            <span><a href="javascript:void(0);" class='refresh_map'><i class="fa fa-search"></i> Search Address</a></span>
-                            <span class="span-current-location"><a href="#"><i class="fa fa-map-marker"></i> Current Location</a><span>
+                            <span><a href="javascript:void(0);" class='refresh_map'><i class="fa fa-search refresh_map"></i> Search Address</a></span>
+                            <span><a href="javascript:void(0)" class="span-current-location"><i class="fa fa-map-marker span-current-location"></i> Current Location</a><span>
                             <div id="GoogleMapContainer" title="Google Map Container"></div>
 
-                            <div id="delivery_mapcanvas" class="map-canvas"  class="map-canvas" frameborder="0" style="max-width:500px;max-height:450px;"></div>                           
-                            <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3861.5040209573253!2d120.9912379!3d14.570331999999999!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c981a81d19cb%3A0x908919dcb6a3f9f1!2sMarc+2000+Tower%2C+%231973+San+Andres+St%2C+Malate%2C+Manila%2C+Metro+Manila!5e0!3m2!1sen!2sph!4v1415776376560" width="600" height="450" frameborder="0" style="border:0"></iframe> -->
+                            <div id="delivery_mapcanvas" class="map-canvas"  class="map-canvas" frameborder="0" style="max-width:500px;max-height:450px;display:block;"></div>                           
                         </div>
                     </div>
                 </div>
