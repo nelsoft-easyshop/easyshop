@@ -2088,17 +2088,17 @@ class Memberpage extends MY_Controller
                 );
                 $userManager = $this->serviceContainer['user_manager'];             
                 $userManager->setUser($member->getIdMember())
-                ->setMemberMisc([
-                    'setIsActive' => EsMember::DEFAULT_ACTIVE
-                ]);
+                            ->setMemberMisc([
+                                'setIsActive' => 0
+                            ]);
 
-
+                $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member->getEmail());
                 $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
                 $this->emailNotification->setMessage($message);
                 $this->emailNotification->sendMail();
-                $this->entityManager->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
+                $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
             }
         }
 
