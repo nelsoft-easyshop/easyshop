@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
 body{
     color: #565656;
     background: #fff;
@@ -1963,5 +1963,100 @@ a{
     
     .col-button-searc-hist{
         padding-left: 15px;
+    }
+}
+
+
+/***** payment account css ******/
+.add-bank-account {
+    border: none;
+    font-weight: 900;
+    max-width: 300px;
+    padding: 9px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.select-bank {
+    display: none;
+    margin-top: 30px;
+}
+
+.add-bank-account i {
+    margin-right: 6px;
+}
+
+.select-bank input,
+.select-bank select {
+    width: 100%;
+}
+
+.select-bank strong {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.bank-btns-con span,
+.bank-btns-con input {
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.bank-btns-con input {
+    border: none;
+    margin-top: 12px;
+    padding: 9px;
+}
+
+.bank-btns-con span {
+    margin-right: 12px;
+}
+
+.bank-account-item {
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+    padding: 30px 40px;
+}
+
+.bank-account-item-btns .btn-default-3 {
+    border:none;
+    font-weight: 900;
+    padding: 9px;
+    width: 100%;
+}
+
+.bank-account-item-btns .mrgn-2 {
+    margin-right: 2%;
+}
+
+.bank-account-item-btns .btn-default-1 {
+    width: 48%;
+}
+
+.bank-label {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+@media screen and (min-width: 480px) {
+    .bank-btns-con span,
+    .bank-btns-con input {
+        max-width: 200px;
+    }
+    .bank-btns-con input {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .bank-account-item-btns .btn-default-1 {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .bank-account-item {
+        padding: 10px;
     }
 }
