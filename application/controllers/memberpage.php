@@ -2056,22 +2056,26 @@ class Memberpage extends MY_Controller
 
     public function renderDeactivatedAccountPage()
     {
-        $cart_items = serialize($this->session->userdata('cart_contents'));
-        $id = $this->session->userdata('member_id');        
-        $this->cart_model->save_cartitems($cart_items,$id);
-        $this->user_model->logout();
-        $temp = array(
-                'member_id' => $this->session->userdata('member_id'),
-                'ip' => $this->session->userdata('ip_address'),
-                'useragent' => $this->session->userdata('user_agent'),
-                'token' => get_cookie('es_usr')
-        );
+        // $cart_items = serialize($this->session->userdata('cart_contents'));
+        // $id = $this->session->userdata('member_id');        
+        // $this->cart_model->save_cartitems($cart_items,$id);
+        // $this->user_model->logout();
+        // $temp = array(
+        //         'member_id' => $this->session->userdata('member_id'),
+        //         'ip' => $this->session->userdata('ip_address'),
+        //         'useragent' => $this->session->userdata('user_agent'),
+        //         'token' => get_cookie('es_usr')
+        // );
 
-        $this->user_model->dbdelete_cookie_keeplogin($temp);
-        delete_cookie('es_usr');
-        delete_cookie('es_vendor_subscribe');
-        $this->session->sess_destroy();
+        // $this->user_model->dbdelete_cookie_keeplogin($temp);
+        // delete_cookie('es_usr');
+        // delete_cookie('es_vendor_subscribe');
+        // $this->session->sess_destroy();
 
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+    
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
@@ -2080,8 +2084,8 @@ class Memberpage extends MY_Controller
         );
         $data = array_merge($data, $this->fill_header());        
         $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/home/home_primary', $data);
-        $this->load->view('templates/footer_primary', $viewData);
+        $this->load->view('pages/user/MemberPageAccountDeactivated');
+        $this->load->view('templates/footer_primary', $viewData);        
     }
     /**
      * send notification to user and deactivate account
@@ -2154,7 +2158,7 @@ class Memberpage extends MY_Controller
         $socialMediaLinks = $this->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
-    
+
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
