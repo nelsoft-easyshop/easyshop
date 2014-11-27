@@ -33,7 +33,14 @@ class Memberpage extends MY_Controller
      *
      * @var integer
      */
-    public $salesPerPage = 1;
+    public $salesPerPage = 10;
+
+    /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $feedbackLimit = 10;
 
     /**
      *  Class Constructor
@@ -1809,7 +1816,6 @@ class Memberpage extends MY_Controller
     {
         $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
-        $feedbackUserManager = $this->serviceContainer['feedback_user_manager'];
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
@@ -1818,7 +1824,7 @@ class Memberpage extends MY_Controller
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
-        $feedbackLimit = $feedbackUserManager::FEEDBACK_PER_PAGE;
+        $feedbackLimit = $this->feedbackLimit;
         $salesPerPage = $this->salesPerPage;
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -1877,7 +1883,10 @@ class Memberpage extends MY_Controller
                                                                       EsMemberFeedback::TYPE_ALL,
                                                                       $feedbackLimit);
             // add user image on each feedback
-            $feedbackUserManager->applyUserImage($feedbacks);
+           foreach ($feedbacks as $key => $feedback) {
+                $feedbacks[$key]['revieweeAvatarImage'] = $this->userManager->getUserImage($feedback['revieweeId'], "small");
+                $feedbacks[$key]['reviewerAvatarImage'] = $this->userManager->getUserImage($feedback['reviewerId'], "small");
+            }
             $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
             $feedbacksData = [
                 'feedbacks' => $feedbacks,
@@ -2089,13 +2098,12 @@ class Memberpage extends MY_Controller
     public function feedbackMemberPagePaginate()
     {
         $userManager = $this->serviceContainer['user_manager'];
-        $feedbackUserManager = $this->serviceContainer['feedback_user_manager'];
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         
         $page = (int) ($this->input->get('page')) ? trim($this->input->get('page')) : 1;
         $requestType = (int) trim($this->input->get('request'));
         $memberId = $this->session->userdata('member_id');
-        $feedbackLimit = $feedbackUserManager::FEEDBACK_PER_PAGE;
+        $feedbackLimit = $this->feedbackLimit;
         $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
         $paginationData = [
             'isHyperLink' => false,
@@ -2106,7 +2114,11 @@ class Memberpage extends MY_Controller
                                                                   $requestType,
                                                                   $feedbackLimit,
                                                                   $page - 1);
-        $feedbackUserManager->applyUserImage($feedbacks);
+        // add user image on each feedback
+       foreach ($feedbacks as $key => $feedback) {
+            $feedbacks[$key]['revieweeAvatarImage'] = $this->userManager->getUserImage($feedback['revieweeId'], "small");
+            $feedbacks[$key]['reviewerAvatarImage'] = $this->userManager->getUserImage($feedback['reviewerId'], "small");
+        }
 
         switch($requestType){
             case EsMemberFeedback::TYPE_AS_BUYER: 

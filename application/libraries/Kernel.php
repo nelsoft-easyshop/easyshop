@@ -442,14 +442,6 @@ class Kernel
                         );
         };
 
-        // Feedback User Manager
-        $container['feedback_user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\Feedback\FeedbackUserManager(
-                            $container['entity_manager'],
-                            $container['user_manager']
-                        );
-        };
-
         /* Register services END */
         $this->serviceContainer = $container;
     }
