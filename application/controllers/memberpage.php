@@ -2085,12 +2085,7 @@ class Memberpage extends MY_Controller
                     'username' => $member->getUsername(),
                     'hash' => $this->encrypt->encode($member->getIdMember()),
                     'site_url' => site_url('memberpage/activateAccount')
-                );
-                $userManager = $this->serviceContainer['user_manager'];             
-                $userManager->setUser($member->getIdMember())
-                            ->setMemberMisc([
-                                'setIsActive' => 0
-                            ]);
+                );        
 
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
@@ -2100,8 +2095,8 @@ class Memberpage extends MY_Controller
                 $this->emailNotification->sendMail();
                 $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
             }
-        }
 
+        }
         echo json_encode($result);
     }
 
@@ -2117,13 +2112,16 @@ class Memberpage extends MY_Controller
             redirect('/login', 'refresh');
         }
 
-        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
             ->findOneBy([
                 'idMember' => $getData[0],
                 'isActive' => 0
             ]);
         if (!$member) {
             redirect('/login', 'refresh');
+        }
+        else {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
         }
 
         $this->load->view('pages/user/MemberPageAccountActivate');
