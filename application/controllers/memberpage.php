@@ -17,6 +17,8 @@ use EasyShop\Entities\EsCat as EsCat;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsAddress as EsAddress;
 
 class Memberpage extends MY_Controller
 {
@@ -56,6 +58,7 @@ class Memberpage extends MY_Controller
         // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->accountManager = $this->serviceContainer['account_manager'];        
         $this->em = $this->serviceContainer['entity_manager']; 
     }
 
@@ -92,6 +95,54 @@ class Memberpage extends MY_Controller
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
         $this->load->view('templates/footer_primary', $footerData);
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];        
+    }
+
+    /**
+     *  Provides change email functionality
+     *  @return JSON
+     */
+    public function edit_email()
+    {
+        $um = $this->serviceContainer['user_manager'];
+        $memberId = $this->session->userdata('member_id');
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('email', 'text', array('constraints' => $rules['email']))
+                    ->getForm();    
+        $form->submit([
+            'email' => $this->input->post('email')
+        ]);        
+
+        if($form->isValid()){
+            $formData = $form->getData();
+            $validEmail = (string)$formData['email'];
+            $um->setUser($memberId)
+               ->setEmail($validEmail);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult ? 'success' : 'error'
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => 'fail'
+                , 'error' => $formErrorHelper->getFormErrors($form)
+            );
+        }
+
+        echo json_encode($serverResponse);                          
     }
 
     /**
@@ -114,38 +165,29 @@ class Memberpage extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                     ->setMethod('POST')
-                    ->add('nickname', 'text')
                     ->add('fullname', 'text')
                     ->add('gender', 'text')
                     ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
                     ->add('mobile', 'text', array('constraints' => $rules['mobile']))
-                    ->add('email', 'text', array('constraints' => $rules['email']))
                     ->getForm();
 
         $form->submit([
-            'nickname' => $this->input->post('nickname')
-            , 'fullname' => $this->input->post('fullname')
+             'fullname' => $this->input->post('fullname')
             , 'gender' => $this->input->post('gender')
             , 'dateofbirth' => $this->input->post('dateofbirth')
             , 'mobile' => $this->input->post('mobile')
-            , 'email' => $this->input->post('email')
         ]);
 
         if($form->isValid()){
             $formData = $form->getData();
-            $validNickname = (string)$formData['nickname'];
             $validFullname = (string)$formData['fullname'];
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
-            $validEmail = (string)$formData['email'];
-
             $um->setUser($memberId)
                ->setMobile($validMobile)
-               ->setEmail($validEmail)
                ->setMemberMisc([
-                    'setNickname' => $validNickname
-                    , 'setFullname' => $validFullname
+                     'setFullname' => $validFullname
                     , 'setGender' => $validGender
                     , 'setBirthday' => new DateTime($validDateOfBirth)
                     , 'setLastmodifieddate' => new DateTime('now')
@@ -572,63 +614,22 @@ class Memberpage extends MY_Controller
      */
     public function edit_consignee_address()
     {
-        if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-            $uid = $this->session->userdata('member_id');
-            $result = array(false,false);
 
-            $postdata = array(
-                'consignee' => $this->input->post('consignee'),
-                'mobile' => ltrim($this->input->post('c_mobile'), '0'),
-                'telephone' => $this->input->post('c_telephone'),
-                'stateregion' => $this->input->post('c_stateregion'),
-                'city' => $this->input->post('c_city'),
-                'address' => $this->input->post('c_address'),
-                'country' => $this->input->post('c_country'),
-                'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng'),
-                'addresstype' => 1
-            );
-
-            $temp = array(
-                'stateregion' => $this->input->post('cstateregion_orig'),
-                'city' => $this->input->post('ccity_orig'),
-                'address' => $this->input->post('caddress_orig'),
-                'map_lat' => $this->input->post('map_lat'),
-                'map_lng' => $this->input->post('map_lng')
-            );
-
-            if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
-                && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
-                $postdata['lat'] = 0;
-                $postdata['lng'] = 0;
-            }
-
-            $addressID = $this->memberpage_model->getAddress($uid,1)['id_address'];
-            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-
-            if($this->input->post('c_def_address')){
-                $addressID = $this->memberpage_model->getAddress($uid,0)['id_address'];
-                $postdata['addresstype'] = 0;
-                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-                $data['default_add'] = $this->input->post('c_def_address');
-            }
-            else{
-                $result[1] = true;
-                $data['default_add'] = 'off';
-            }
-
-            $data['result'] = $result[0] && $result[1] ? 'success':'fail';
-            $data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
-
-            $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-
+        if($this->input->post('c_deliver_address_btn')) {
+            $userMgr = $this->serviceContainer['user_manager'];
+            $result = $userMgr->setAddress(
+                    $this->input->post('c_address'),
+                    $this->input->post('c_stateregion'),
+                    $this->input->post('c_city'),
+                    $this->session->userdata('member_id'),
+                    $this->input->post('consignee'),
+                    $this->input->post('c_mobile'),
+                    $this->input->post('c_telephone'),
+                    $this->input->post('temp_lat'),
+                    $this->input->post('temp_lng')
+                );
+            echo json_encode($result);
         }
-        else{
-            $data['result'] = 'fail';
-            $data['errmsg'] = 'Failed to validate form.';
-        }
-
-        $this->output->set_output(json_encode($data));
     }
 
     /**
@@ -1207,10 +1208,11 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function verify(){
+
         if($this->input->post('reverify') === 'true'){
             $uid = $this->session->userdata('member_id');
-
             $data = $this->register_model->get_verifcode($uid);
+
 
             if($this->input->post('field') === 'mobile' && $this->input->post('data') == $data['contactno'])
             {
@@ -1241,6 +1243,7 @@ class Memberpage extends MY_Controller
             }
             else if($this->input->post('field') === 'email' && $this->input->post('data') == $data['email'])
             {
+
                 //GENERATE NEW HASH FOR EMAIL VERIFICATION
                 $hash = sha1($this->session->userdata('session_id').time());
                 $confirmation_code = $data['mobilecode'];
@@ -1821,6 +1824,8 @@ class Memberpage extends MY_Controller
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
@@ -1829,7 +1834,13 @@ class Memberpage extends MY_Controller
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
-
+        $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
+        $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
+        $stateRegionId = $address[0]->getCountry()->getIdLocation();
+        $cityId = $address[0]->getCity()->getIdLocation();
+        $consigneAddress = $address[0]->getAddress();
+        $cLat = $address[0]->getLat();
+        $cLng = $address[0]->getLng();
         if($member){
             $paginationData['isHyperLink'] = false;
 
@@ -1935,11 +1946,19 @@ class Memberpage extends MY_Controller
                 'historyTotalSales' => $historyTotalSales,
             ];
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
-
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
                 'bannerImage' => $userBannerImage,
+                'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                'stateRegionLists' => $locationLookup["stateRegionLookup"],
+                'cities' => $locationLookup["cityLookup"],
+                'consigneeAddress' => $consigneAddress,
+                'address' => $address[0],
+                'latitude' => $cLat,
+                'longitude' => $cLng,
+                'consigneeStateRegionId' => $stateRegionId,
+                'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
                 'followingCount' => $userFollowing['count'],
                 'productCount' => $userProductCount,
@@ -2033,6 +2052,125 @@ class Memberpage extends MY_Controller
         ];
 
         echo json_encode($responseArray);
+    }
+
+    public function renderDeactivatedAccountPage()
+    {
+        // $cart_items = serialize($this->session->userdata('cart_contents'));
+        // $id = $this->session->userdata('member_id');        
+        // $this->cart_model->save_cartitems($cart_items,$id);
+        // $this->user_model->logout();
+        // $temp = array(
+        //         'member_id' => $this->session->userdata('member_id'),
+        //         'ip' => $this->session->userdata('ip_address'),
+        //         'useragent' => $this->session->userdata('user_agent'),
+        //         'token' => get_cookie('es_usr')
+        // );
+
+        // $this->user_model->dbdelete_cookie_keeplogin($temp);
+        // delete_cookie('es_usr');
+        // delete_cookie('es_vendor_subscribe');
+        // $this->session->sess_destroy();
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+        $data = array(
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
+        );
+        $data['homeContent'] = $this->fillCategoryNavigation();
+        $data = array_merge($data, $this->fill_header());        
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/user/MemberPageAccountDeactivated');
+        $this->load->view('templates/footer_primary', $viewData);        
+    }
+    /**
+     * send notification to user and deactivate account
+     * @param id
+     * @param password
+     * @return mixed
+     */
+    public function sendDeactivateNotification()
+    {
+        $this->load->library('encrypt');
+        if ((!$this->input->post('id') && !$this->input->post('password')) || $this->input->post('id') != $this->session->userdata('member_id')) {
+            $result = false;
+        }
+        else {
+            $member = $this->em
+                        ->getRepository('EasyShop\Entities\EsMember')
+                            ->find($this->input->post('id'));
+            $doesMemberExists = $this->accountManager
+                                    ->authenticateMember($member->getUsername(), $this->input->post('password'));
+            if (!$member) {
+                $result = false;
+            }
+            else if (!$doesMemberExists['member']) {
+                $result = 'Incorrect Password';
+            }
+            else {
+                $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
+                $this->load->library('parser');
+                $parseData = array(
+                    'username' => $member->getUsername(),
+                    'hash' => $this->encrypt->encode($member->getIdMember()),
+                    'site_url' => site_url('memberpage/activateAccount')
+                );        
+
+                $this->emailNotification = $this->serviceContainer['email_notification'];
+                $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
+                $this->emailNotification->setRecipient($member->getEmail());
+                $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
+                $this->emailNotification->setMessage($message);
+                $this->emailNotification->sendMail();
+                $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
+            }
+        }
+        echo json_encode($result);
+    }
+
+    /**
+     * Show activate account page
+     */
+    public function activateAccount()
+    {
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+            // redirect('/login', 'refresh');
+        }
+
+/*        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'isActive' => 0
+            ]);
+        if (!$member) {
+            redirect('/login', 'refresh');
+        }
+        else {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
+        }*/
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+        $data = array(
+            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+            'relCanonical' => base_url(),
+        );
+        $data['homeContent'] = $this->fillCategoryNavigation();    
+        $data = array_merge($data, $this->fill_header());        
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/user/MemberPageAccountActivate');
+        $this->load->view('templates/footer_primary', $viewData);
+
     }
 
     /**

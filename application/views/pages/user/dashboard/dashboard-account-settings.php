@@ -11,29 +11,41 @@
             <p class="panel-setting-title">Email Address</p>
             <div class="div-setting-content">
                 <div class="current-email">
-                <span class="setting-current-email">mangpedring@yahoo.com</span> 
+                <span class="setting-current-email" id="currentEmail"><?php echo html_escape($member->getEmail()); ?></span> 
                 <button class="btn btn-setting-edit-btn" id="btn-edit-email">
                    <i class="icon-edit"></i> Edit
                 </button>
+                <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+                <div id="verifyEmail" style="<?php echo $member->getIsEmailVerify() == 0 && trim($member->getEmail()) !== ''?'':'display:none;'?>"  <?php echo (trim($member->getEmail())==''?'':'disabled');?>>
+                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
                 </div>
-                <div class="edit-email">
+                <div id="verifiedEmail" style="<?php echo $member->getIsEmailVerify() == 0?'display:none;':''?>">
+                    <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
+                </div>                                   
+                <div id="errorIndicatoreVerify" style="display:none;">
+                    <span class="val-error" id="errorTextVerify"></span>
+                 </div>
+                </div>
+                <div class="edit-email" id="editEmailPanel">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="mangpedring@yahoo.com"/>
-                            <!-- DISPLAY WHEN ERROR 
-                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            -->
+                            <input type="text" class="text-info text-required" id="emailAddressEdit" value="<?php echo html_escape($member->getEmail());?>"/>
+                            <div id="errorIndicatoreEmailAddress" style="display:none;">
+                                <span class="val-error" id="errorTextEmail"></span>
+                            </div>
                             <!--DISPLAY WHEN OK-->
                             <span class="val-success"><i class="fa fa-check"></i></span>
                         </div>
                         <div class="col-md-5">
-                            <button class="btn btn-setting-save-btn">
-                                Save changes
-                            </button>
-                            <button class="btn btn-setting-cancel-btn" id="cancel-edit-email">
-                                Cancel
-                            </button>
+                            <img src="/assets/images/orange_loader_small.gif" class="changeEmailLoader" style="display:none"/>
+                             <div id="changeEmailBtnAction">   
+                                <button class="btn btn-setting-save-btn" id="changeEmailBtn">
+                                    Save changes
+                                </button>
+                                <button class="btn btn-setting-cancel-btn" id="cancel-edit-email">
+                                    Cancel
+                                </button>
+                        </div>                                
                         </div>
                     </div>
                 </div>
@@ -63,63 +75,40 @@
                     </button>
                 </div>
                 <div class="edit-password">
-                     <form class="form-horizontal">
+                     <form class="form-horizontal" id="changePassForm">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Current Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your current password here">
-                                <!-- DISPLAY WHEN ERROR -->
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
+                                <input type = "password" id="currentPassword" name="currentPassword" class="text-info text-required" placeholder="Type your current password here">
                                 
                                 <!--DISPLAY WHEN OK
                                 <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
                             </div>
                         </div>
-                        
                         <div class="form-group">
                             <label class="col-sm-4 control-label">New Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your new password here">
-                                <div class="progress" style="height: 10px; margin-top: 5px; margin-bottom: 0px;">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%; background: #00a388 !important;">
-                                        
-                                    </div>
-                                </div>
-                                <span class="password-label-strength">
-                                    Password Strength: <b>Good</b>
-                                </span>
-                                <!-- DISPLAY WHEN ERROR 
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                -->
-                                <!--DISPLAY WHEN OK-->
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>
+                                <input type="password" id="password" name="password" class="text-info text-required" placeholder="Type your new password here">
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label class="col-sm-4 control-label text-required">Confirm New Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info" placeholder="Confirm your new password here">
-                                <!-- DISPLAY WHEN ERROR 
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                -->
-                                <!--DISPLAY WHEN OK-->
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here">
                             </div>
                         </div>
-                        
+                        <input id="username" name="wsx" type="hidden" value="<?php echo $member->getUserName(); ?>"/>
                         <div class="form-group">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-5">
-                            <button class="btn btn-setting-save-btn">
-                                Save changes
-                            </button>
-                            <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
-                                Cancel
-                            </span>
+                    
+                            <div class="col-sm-4" style='text-align:center;'>
+                                <img src="/assets/images/orange_loader_small.gif" class="changePasswordLoader" style="display:none"/>
+                            </div>
+                            <div class="col-sm-5" id="actionGroupChangePass">
+                                <input type="submit" class="btn btn-setting-save-btn" id="changePassBtn" name="changePassBtn"  value="Save Changes">
+                                <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
+                                    Cancel
+                                </span>
                             </div>
                         </div>
                     </form>
@@ -142,7 +131,7 @@
                 </div>
                 <div class="edit-status">
                     <p class="p-orange"> Are you sure you want to deactivate your account? </p>
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" id="deactivateAccountForm">
                        <!--<div class="form-group">
                             <label class="col-sm-3 control-label">Reason for leaving : </label>
                             <div class="col-sm-9 col-with-radio">
@@ -168,24 +157,24 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your current password here">
-                                <!-- DISPLAY WHEN ERROR -->
-                                <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                <span class="val-error">Please enter at least 6 characters.</span>
-                                
-                                <!--DISPLAY WHEN OK
-                                <span class="val-success-pass"><i class="fa fa-check"></i></span>-->
+                                <input type="password" name="deactivatePassword" id="deactivatePassword" class="text-info text-required" placeholder="Type your current password here">
+                                <div id="deactivateErrorDiv" style="display:none;">
+                                    <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
+                                    <span class="val-error">Please enter at least 6 characters.</span>                                
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-5">
-                            <button class="btn btn-setting-save-btn">
-                                Save changes
-                            </button>
-                            <span class="btn btn-setting-cancel-btn" id="cancel-deact-status">
-                                Cancel
-                            </span>
+                                <div id="deactivateActionPanel">
+                                    <input type="hidden" id="idMember" value="<?php echo $member->getidMember() ?>">
+                                    <input class="btn btn-setting-save-btn" type='submit' value='Save Changes' id="deactivateAccountButton"/>
+                                    <span class="btn btn-setting-cancel-btn" id="cancel-deact-status">
+                                        Cancel
+                                    </span>
+                                </div>
+                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
                             </div>
                         </div>
                     </form>
