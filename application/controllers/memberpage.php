@@ -2075,13 +2075,13 @@ class Memberpage extends MY_Controller
         $socialMediaLinks = $this->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
-    
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         );
+        $data['homeContent'] = $this->fillCategoryNavigation();
         $data = array_merge($data, $this->fill_header());        
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/MemberPageAccountDeactivated');
@@ -2141,10 +2141,10 @@ class Memberpage extends MY_Controller
         $getData = $hashUtility->decode($this->input->get('h'));
 
         if (intval($getData[0]) === 0 || !$this->input->get('h')) {
-            redirect('/login', 'refresh');
+            // redirect('/login', 'refresh');
         }
 
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+/*        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
             ->findOneBy([
                 'idMember' => $getData[0],
                 'isActive' => 0
@@ -2153,8 +2153,8 @@ class Memberpage extends MY_Controller
             redirect('/login', 'refresh');
         }
         else {
-            // $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
-        }
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
+        }*/
         $socialMediaLinks = $this->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
@@ -2165,6 +2165,7 @@ class Memberpage extends MY_Controller
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         );
+        $data['homeContent'] = $this->fillCategoryNavigation();    
         $data = array_merge($data, $this->fill_header());        
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/MemberPageAccountActivate');
