@@ -2087,7 +2087,8 @@ class Memberpage extends MY_Controller
                     'site_url' => site_url('memberpage/activateAccount')
                 );
                 $userManager = $this->serviceContainer['user_manager'];             
-                $userManager->setMemberMisc([
+                $userManager->setUser($member->getIdMember())
+                ->setMemberMisc([
                     'setIsActive' => EsMember::DEFAULT_ACTIVE
                 ]);
 
