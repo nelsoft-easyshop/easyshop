@@ -108,6 +108,10 @@
 </div>
 
 
+
+
+<script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
+
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
 <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
