@@ -2071,21 +2071,35 @@ class Memberpage extends MY_Controller
         // delete_cookie('es_usr');
         // delete_cookie('es_vendor_subscribe');
         // $this->session->sess_destroy();
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         );
-        $data['homeContent'] = $this->fillCategoryNavigation();
-        $data = array_merge($data, $this->fill_header());        
+
+        $data = array_merge($data, $this->fill_header());
+
+        $em = $this->serviceContainer["entity_manager"];
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(true);
+
+        $data['homeContent'] = $homeContent;
+
+        if($data['logged_in']){
+            $memberId = $this->session->userdata('member_id');
+            $data['logged_in'] = true;
+            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                       ->find($memberId);
+            $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
+        }
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/MemberPageAccountDeactivated');
-        $this->load->view('templates/footer_primary', $viewData);        
+        $this->load->view('templates/footer_primary', $viewData);      
     }
     /**
      * send notification to user and deactivate account
@@ -2155,9 +2169,6 @@ class Memberpage extends MY_Controller
         else {
             $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
         }*/
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
 
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
         $data = array(
@@ -2165,11 +2176,29 @@ class Memberpage extends MY_Controller
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         );
-        $data['homeContent'] = $this->fillCategoryNavigation();    
-        $data = array_merge($data, $this->fill_header());        
+
+        $data = array_merge($data, $this->fill_header());
+
+        $em = $this->serviceContainer["entity_manager"];
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(true);
+
+        $data['homeContent'] = $homeContent;
+
+        if($data['logged_in']){
+            $memberId = $this->session->userdata('member_id');
+            $data['logged_in'] = true;
+            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                       ->find($memberId);
+            $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
+        }
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $viewData['facebook'] = $socialMediaLinks["facebook"];
+        $viewData['twitter'] = $socialMediaLinks["twitter"];
+
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/MemberPageAccountActivate');
-        $this->load->view('templates/footer_primary', $viewData);
+        $this->load->view('templates/footer_primary', $viewData);          
 
     }
 
