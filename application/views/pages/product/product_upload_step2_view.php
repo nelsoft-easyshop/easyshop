@@ -77,6 +77,7 @@
             );
             echo form_open('productUpload/uploadimageOther', $attr);
             ?>
+                <input type="hidden" class="coordinatesOther" id="coordinatesOther" name="coordinates">
                 <input type="file" class="attr-image-input" accept="image/*" style="left: -9999px;position: absolute;z-index: -1900;" name="attr-image-input" >
             </form> 
 
@@ -508,11 +509,11 @@
                 </div>
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
-                <img src="" id="imageTag">
-                <input type='text' name='x' value='0' readonly size="7" id='image_x'>
-                <input type='text' name='y' value='0' readonly size="7"  id='image_y'>
-                <input type='text' name='h' value='0' readonly size="7"  id='image_h'>
-                <input type='text' name='w' value='0' readonly size="7"  id='image_w'>
+                    <img src="" id="imageTag">
+                    <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
+                    <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
+                    <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
+                    <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
             </div>
         </div>
     </div>

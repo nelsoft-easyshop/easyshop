@@ -413,24 +413,25 @@ class productUpload extends MY_Controller
             $file_ext = strtolower(end($file_ext)); 
             $filenames_ar[$key] = $afstartArray[$key];
 
-            if(!in_array(strtolower($file_ext),$allowed))
-            {
+            if(!in_array(strtolower($file_ext),$allowed)){
                 unset($_FILES['files']['name'][$key]);
                 unset($_FILES['files']['type'][$key]);
                 unset($_FILES['files']['tmp_name'][$key]);
                 unset($_FILES['files']['error'][$key]);
                 unset($_FILES['files']['size'][$key]);
                 unset($filenames_ar[$key]); 
+                unset($coordinates[$key]); 
             }
 
             if(isset($_FILES['files']['name'][$key])){
-                if($_FILES['files']['size'][$key] >= ($this->max_file_size_mb * 1024) * 1024){ # size of image must be 5mb only
+                if($_FILES['files']['size'][$key] >= ($this->max_file_size_mb * 1024) * 1024){
                     unset($_FILES['files']['name'][$key]);
                     unset($_FILES['files']['type'][$key]);
                     unset($_FILES['files']['tmp_name'][$key]);
                     unset($_FILES['files']['error'][$key]);
                     unset($_FILES['files']['size'][$key]);
                     unset($filenames_ar[$key]); 
+                    unset($coordinates[$key]); 
                 }
             }
         }
@@ -441,17 +442,18 @@ class productUpload extends MY_Controller
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
         $filenames_ar = array_values($filenames_ar); 
+        $coordinates = array_values($coordinates);
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);;
         }
 
         if(count($filenames_ar) <= 0){
-            $return = array( 
+            $return = [
                 'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
                 'fcnt' => $filescnttxt,
                 'err' => 1
-                );
+            ];
 
             die(json_encode($return));
         }
@@ -494,11 +496,11 @@ class productUpload extends MY_Controller
             $error = 1;
         }
           
-        $return = array( 
+        $return = [
             'msg' => $text, 
             'fcnt' => $filescnttxt,
             'err' => $error
-            );
+        ];
 
         die(json_encode($return));
     }
@@ -542,14 +544,14 @@ class productUpload extends MY_Controller
         $tempDirectory = $this->session->userdata('tempDirectory');
         $memberId =  $this->session->userdata('member_id');
         $filename =  $this->input->post('pictureName');
+        $coordinates =  $this->input->post('coordinates');
+        $isCroppable = !$this->input->post('coordinates') ? false : true;
         $date = date("Ymd");
-        $fulldate = date("YmdGis"); 
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
         $fileExtension = explode('.', $filename);
         $fileExtension = strtolower(end($fileExtension));
 
-        if(!in_array(strtolower($fileExtension),$allowed))
-        {
+        if(!in_array(strtolower($fileExtension),$allowed)){
             die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
         }
 
@@ -571,6 +573,10 @@ class productUpload extends MY_Controller
             )); 
  
         if ($this->upload->do_multi_upload('attr-image-input')){ 
+            if($isCroppable){
+                $coordinate = explode(',', $coordinates);
+                $this->es_img_crop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+            }
             $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
             $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
             $this->es_img_resize($filename,$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
@@ -612,7 +618,6 @@ class productUpload extends MY_Controller
         $member_id =  $this->session->userdata('member_id');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $date = date("Ymd");
-        $fulldate = date("YmdGis");
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
         if(intval($brand_id,10) == 1){
