@@ -71,7 +71,7 @@ class EsLocationLookupRepository extends EntityRepository
     }
  
     /**
-     * Retrieves statergions cities that is used for deliveru address tab in memberpage
+     * Retrieves stateregions cities that is used for delivery address tab in memberpage
      * @param bool $isJsonReturn (parameter that is used to convert citylookup to JSON)
      * @return mixed
      */
