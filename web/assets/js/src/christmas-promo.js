@@ -126,8 +126,11 @@ $(document).ready(function() {
         }
 
         else {
+            
+            $('#register').submit();
             $(".newsletter-info").show();
             $(".newsletter-validate, .newsletter-info-blank").hide();
+            
             return false;
         }
     });

@@ -128,7 +128,7 @@
                     <div class="span12 padding-top-30">
                         <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h5>
                         <br>
-                        <form method="post" id="register" action="" class="newsletter-form">
+                        <form method="post" id="register" action="/subscribe" class="newsletter-form">
                             <div class="row-fluid">
                                 <fieldset>
                                     <input id="useremail" class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
