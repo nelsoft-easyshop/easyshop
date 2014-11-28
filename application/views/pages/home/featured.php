@@ -1,4 +1,6 @@
 
+<?php if($homeContent['seller']['memberEntity'] !== null): ?>
+
 <div class="row mo">
     <div class="row" style="background: url('<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
@@ -111,3 +113,6 @@
     </div>
     
 </div>
+
+<?php endif; ?>
+
