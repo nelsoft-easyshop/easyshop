@@ -1349,6 +1349,17 @@ class Home extends MY_Controller
         $data['cityList'] = $cityPerRegionList;
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
+    
+    
+    /**
+     * Christmas Promo temporary page
+     *
+     */
+    public function christmasPromo()
+    {
+        $this->load->view('pages/web/christmas-promo');
+    }
+    
 }
 
 /* End of file home.php */
