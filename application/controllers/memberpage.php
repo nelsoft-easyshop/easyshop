@@ -1955,7 +1955,7 @@ class Memberpage extends MY_Controller
                 'bannerImage' => $userBannerImage,
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
-                'cities' => $locationLookup["cityLookup"],
+                'cities' => $locationLookup["json_city"],
                 'consigneeAddress' => $consigneAddress,
                 'address' => $address[0],
                 'latitude' => $cLat,
