@@ -2057,53 +2057,6 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
-    public function renderDeactivatedAccountPage()
-    {
-        // $cart_items = serialize($this->session->userdata('cart_contents'));
-        // $id = $this->session->userdata('member_id');        
-        // $this->cart_model->save_cartitems($cart_items,$id);
-        // $this->user_model->logout();
-        // $temp = array(
-        //         'member_id' => $this->session->userdata('member_id'),
-        //         'ip' => $this->session->userdata('ip_address'),
-        //         'useragent' => $this->session->userdata('user_agent'),
-        //         'token' => get_cookie('es_usr')
-        // );
-
-        // $this->user_model->dbdelete_cookie_keeplogin($temp);
-        // delete_cookie('es_usr');
-        // delete_cookie('es_vendor_subscribe');
-        // $this->session->sess_destroy();
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $data = array(
-            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-            'relCanonical' => base_url(),
-        );
-
-        $data = array_merge($data, $this->fill_header());
-
-        $em = $this->serviceContainer["entity_manager"];
-        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(true);
-
-        $data['homeContent'] = $homeContent;
-
-        if($data['logged_in']){
-            $memberId = $this->session->userdata('member_id');
-            $data['logged_in'] = true;
-            $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                       ->find($memberId);
-            $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
-        }
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/MemberPageAccountDeactivated');
-        $this->load->view('templates/footer_primary', $viewData);      
-    }
     /**
      * send notification to user and deactivate account
      * @param id
