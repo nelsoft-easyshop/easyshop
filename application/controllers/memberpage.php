@@ -2121,7 +2121,7 @@ class Memberpage extends MY_Controller
             redirect('/login', 'refresh');
         }
         else if($this->input->get("activateAccountButton") && $member) {
-          
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
             $result = [
                 "username" => $member->getUsername(),
                 "result" => "success"
