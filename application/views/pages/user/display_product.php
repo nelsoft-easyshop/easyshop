@@ -11,6 +11,10 @@
                 $isPromote = intval($objProduct->getIsPromote());
                 $isFreeShipping = $objProduct->getIsFreeShipping();
                 $productImagePath = $objProduct->directory .'categoryview/'. $objProduct->imageFileName;
+                $secondaryImagePath = null;
+                if($objProduct->secondaryImageDirectory && $objProduct->secondaryImageFileName){
+                    $secondaryImagePath = $objProduct->secondaryImageDirectory .'categoryview/'. $objProduct->secondaryImageFileName;
+                }
                 $briefDesc = html_escape($objProduct->getBrief());
                 $catObj = $objProduct->getCat();
                 $immediateCat = $catObj->getIdCat() === 1 ? html_escape($objProduct->getCatOtherName()) : html_escape($catObj->getName());
@@ -19,17 +23,21 @@
                     <div class="panel-item">
                         <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                             <div class="div-item">
-                                <!-- PUT THE SECONDARY PRODUCT IMAGE HERE-->
-                                <span class="span-img-wrapper" style="background: url(<?=$productImagePath;?>) center no-repeat; background-cover: cover;">
+                            
+                            
+                                <?php if($secondaryImagePath !== null): ?>
+                                <span class="span-img-wrapper" style="background: url(<?=$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
                                     </center>
                                 
                                 </span>
+                                <?php endif; ?>
                                 
-                                <!-- PUT THE PRODUCT PRIMARY IMAGE HERE. REMOVE THE image-hover-none class if there is no secondary image -->
-                                <div class="image-hover-none main-image" style="background: url(/assets/images/img_cd_prod1.jpg) no-repeat center; background-size: cover;">
+                
+                                
+                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: url(<?php echo $productImagePath; ?>) no-repeat center; background-size: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
