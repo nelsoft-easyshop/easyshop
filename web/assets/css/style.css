@@ -910,6 +910,12 @@ a.msgs_link:hover {
         display: none;
     }
 
+.header-theme-bg {
+    background: #fff url(../images/img-snow.jpg) no-repeat top center;
+    height: 100px;
+    margin-top: 0;
+    padding-top: 10px;
+}
 /*** end of header ***/
 
 /**** Logo ***/
