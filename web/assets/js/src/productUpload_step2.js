@@ -1254,7 +1254,7 @@ var imageCollection = [];
                                 aspectRatio: widthRatio / heightRatio,
                                 setSelect: [ x / 2, 0, x1, imgHeight ],
                                 boxWidth: 500,
-                                boxHeight: 500,
+                                boxHeight: 431,
                                 minSize: [
                                     imgWidth * 0.1,
                                     imgHeight * 0.1
@@ -1279,6 +1279,8 @@ var imageCollection = [];
                             jcrop_api.destroy(); 
                             $.modal.close();
                             af.push(afTemp[cropCurrentCount]); 
+                            console.log(afTemp[cropCurrentCount]);
+                            console.log(af);
                             axes.push(coordinate); 
                             cropCurrentCount++; 
                             if(cropCurrentCount < totalCropImage){
@@ -1301,6 +1303,8 @@ var imageCollection = [];
         else{
             axes.push("0,0,0,0");
             af.push(afTemp[cropCurrentCount]); 
+            console.log(afTemp[cropCurrentCount]);
+            console.log(af);
             cropCurrentCount++;
             if(cropCurrentCount < totalCropImage){
                 cropImage($input);
@@ -1401,6 +1405,7 @@ var imageCollection = [];
     $(document).on('change',".files.active",function (e){
         arrayUpload = [];
         afstart = [];
+        afTemp = [];
         imageObject = [];
         axes = [];
         sizeList = [];
@@ -1569,7 +1574,7 @@ var imageCollection = [];
                             aspectRatio: widthRatio / heightRatio,
                             setSelect: [ x / 2, 0, x1, imgHeight ],
                             boxWidth: 500,
-                            boxHeight: 500,
+                            boxHeight: 431,
                             minSize: [
                                 imgWidth * 0.1,
                                 imgHeight * 0.1

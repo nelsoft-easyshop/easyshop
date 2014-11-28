@@ -1378,4 +1378,17 @@ li.brand_result:hover{
     text-align:center;
 }
 
+#imageTag{
 
+}
+#crop-image-main > div {
+    margin: 0 auto;
+}
+#crop-image-main > div > img {
+    max-height: 430px;
+    margin: 0 auto;
+}
+
+#imageTag {
+    margin: 0 auto;
+}
