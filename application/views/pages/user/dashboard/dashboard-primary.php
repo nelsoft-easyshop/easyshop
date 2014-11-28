@@ -26,7 +26,7 @@
                             <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
                             <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
-                            <a href="#payment-account"><li class="m-li">Payment Account</li></a>
+                            <a href="#payment-account"><li class="f-li f-a">Payment Account</li></a>
                         </ul>
                     </div>
                 </ul>
