@@ -2121,8 +2121,7 @@ class Memberpage extends MY_Controller
             redirect('/login', 'refresh');
         }
         else if($this->input->get("activateAccountButton") && $member) {
-            // print_r($this->input->get());
-            // $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);             
+          
             $result = [
                 "username" => $member->getUsername(),
                 "password" => $this->input->get("password"),
@@ -2163,13 +2162,6 @@ class Memberpage extends MY_Controller
                 $this->load->view('templates/footer_primary', $viewData);                    
             }            
         }
-
-        // else {
-        //     print_r($this->input->get());               
-        //     // $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
-        // }
-      
-
     }
 
     /**
