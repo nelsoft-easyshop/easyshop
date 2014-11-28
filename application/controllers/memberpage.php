@@ -2103,6 +2103,32 @@ class Memberpage extends MY_Controller
     }
 
     /**
+     * Flags member as activated
+     * @return json
+     */
+    public function flagActivatedAccount()
+    {
+
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'isActive' => 0
+            ]);
+
+        if($this->input->get("activateAccountButton") && $member) {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
+            $result = [
+                "username" => $member->getUsername(),
+                "result" => "success"
+            ];
+            echo json_encode($result);
+        }
+    }
+
+    /**
      * Show activate account page
      */
     public function activateAccount()
@@ -2119,14 +2145,6 @@ class Memberpage extends MY_Controller
 
         if (intval($getData[0]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
-        }
-        else if($this->input->get("activateAccountButton") && $member) {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
-            $result = [
-                "username" => $member->getUsername(),
-                "result" => "success"
-            ];
-            echo json_encode($result);
         }
         else {
             if (!$member) {

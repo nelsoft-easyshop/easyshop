@@ -38,7 +38,7 @@
             $.ajax({
                 type: 'get',
                 data: postData,
-                url: "/memberpage/activateAccount",                
+                url: "/memberpage/flagActivatedAccount",                
                 success: function(data) {                      
                     var obj = jQuery.parseJSON(data); 
                     if(obj.result === "success") {
@@ -61,7 +61,11 @@
             success: function(data) {
                 verifyspan.show();
                 loadingimg.hide();                 
-                $('#activated-modal').modal();
+                $('#activated-modal').modal({       
+                    onClose: function(){
+                        window.location = "/";
+                    }
+                 });
             },
         });          
     }
