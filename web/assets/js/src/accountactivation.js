@@ -6,8 +6,6 @@
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
-    /********************* ACTIVATE ACCOUNT ****************************/
-
      $("#activateAccountForm").validate({
          rules: {
             password: {
@@ -38,7 +36,7 @@
             $.ajax({
                 type: 'get',
                 data: postData,
-                url: "/memberpage/flagActivatedAccount",                
+                url: "/memberpage/doReactivateAccount",                
                 success: function(data) {                      
                     var obj = jQuery.parseJSON(data); 
                     if(obj.result === "success") {
@@ -70,6 +68,6 @@
         });          
     }
 
-    /********************* END ACTIVATE ACCOUNT ****************************/
+
 
 })( jQuery );

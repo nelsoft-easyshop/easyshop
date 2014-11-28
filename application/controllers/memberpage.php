@@ -2087,7 +2087,7 @@ class Memberpage extends MY_Controller
                 $parseData = array(
                     'username' => $member->getUsername(),
                     'hash' => $this->encrypt->encode($member->getIdMember()),
-                    'site_url' => site_url('memberpage/activateAccount')
+                    'site_url' => site_url('memberpage/showActivateAccount')
                 );        
 
                 $this->emailNotification = $this->serviceContainer['email_notification'];
@@ -2106,7 +2106,7 @@ class Memberpage extends MY_Controller
      * Flags member as activated
      * @return json
      */
-    public function flagActivatedAccount()
+    public function doReactivateAccount()
     {
 
         $hashUtility = $this->serviceContainer['hash_utility'];
@@ -2131,22 +2131,22 @@ class Memberpage extends MY_Controller
     /**
      * Show activate account page
      */
-    public function activateAccount()
+    public function showActivateAccount()
     {
 
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-            ->findOneBy([
-                'idMember' => $getData[0],
-                'isActive' => 0
-            ]);
-
         if (intval($getData[0]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
         else {
+             $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy([
+                                    'idMember' => $getData[0],
+                                    'isActive' => 0
+                                ]);
+
             if (!$member) {
                 redirect('/login', 'refresh');
             }
