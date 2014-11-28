@@ -204,9 +204,9 @@ class SocialMediaManager
         $member = false;
         $rules = $this->formValidation->getRules('register');
         $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
-            ->setMethod('POST')
-            ->add('username', 'text', ['constraints' => $rules['username']])
-            ->getForm();
+                     ->setMethod('POST')
+                     ->add('username', 'text', ['constraints' => $rules['username']])
+                     ->getForm();
 
         $form->submit([ 'username' => $username]);
         if ($form->isValid()) {
@@ -242,11 +242,11 @@ class SocialMediaManager
     public function mergeAccount($member, $oAuthId, $oAuthProvider)
     {
         $doesAccountMerged = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
-                                ->findBy([
-                                    'member' => $member->getidMember(),
-                                    'socialMediaId' => $oAuthId,
-                                    'socialMediaProvider' => $oAuthProvider->getIdSocialMediaProvider()
-                                ]);
+                                        ->findBy([
+                                            'member' => $member->getidMember(),
+                                            'socialMediaId' => $oAuthId,
+                                            'socialMediaProvider' => $oAuthProvider->getIdSocialMediaProvider()
+                                        ]);
         if (!$doesAccountMerged) {
             $socialAccount = new EsMemberMerge();
             $socialAccount->setMember($member);
@@ -289,7 +289,160 @@ class SocialMediaManager
 
         return $newEsMember;
     }
-        
+
+    /**
+     * Merge old social media account to new account social media account
+     * @param $socialMediaId
+     * @param $socialMediaProvider
+     * @param $newSocialMediaAccount
+     */
+    public function mergeOldSocialMediaAccountToNew($socialMediaId, $socialMediaProvider, $newSocialMediaAccount)
+    {
+        $oldSocialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'oauthId' => $socialMediaId,
+                'oauthProvider' => (int) $socialMediaProvider === 1 ? 'Facebook' : 'Google'
+            ]);
+        if ($oldSocialMediaAccount) {
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsOrder', 'tblOrder')
+                ->set('tblOrder.buyer', ':newId')
+                ->where('tblOrder.buyer = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsOrderProduct', 'tblOrderProduct')
+                ->set('tblOrderProduct.seller', ':newId')
+                ->where('tblOrderProduct.seller = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsProduct', 'tblProduct')
+                ->set('tblProduct.member', ':newId')
+                ->where('tblProduct.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsBillingInfo', 'tblBillingInfo')
+                ->set('tblBillingInfo.member', ':newId')
+                ->where('tblBillingInfo.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsMemberFeedback', 'tblMemberFeedback')
+                ->set('tblMemberFeedback.member', ':newId')
+                ->where('tblMemberFeedback.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsMemberFeedback', 'tblMemberFeedback')
+                ->set('tblMemberFeedback.forMemberid', ':newId')
+                ->where('tblMemberFeedback.forMemberid = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsMessages', 'tblMessages')
+                ->set('tblMessages.to', ':newId')
+                ->where('tblMessages.to = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsMessages', 'tblMessages')
+                ->set('tblMessages.from', ':newId')
+                ->where('tblMessages.from = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsOrderProductTag', 'tblOrderProductTag')
+                ->set('tblOrderProductTag.seller', ':newId')
+                ->where('tblOrderProductTag.seller = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsProductReview', 'tblProductReview')
+                ->set('tblProductReview.member', ':newId')
+                ->where('tblProductReview.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsProductShippingComment', 'tblProductShippingComment')
+                ->set('tblProductShippingComment.member', ':newId')
+                ->where('tblProductShippingComment.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsProductShippingPreferenceHead', 'tblProductShippingPrefHead')
+                ->set('tblProductShippingPrefHead.member', ':newId')
+                ->where('tblProductShippingPrefHead.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsPromo', 'tblPromo')
+                ->set('tblPromo.memberId', ':newId')
+                ->where('tblPromo.memberId = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsVendorSubscribe', 'tblVendorSubscribe')
+                ->set('tblVendorSubscribe.member', ':newId')
+                ->where('tblVendorSubscribe.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsVendorSubscribe', 'tblVendorSubscribe')
+                ->set('tblVendorSubscribe.vendor', ':newId')
+                ->where('tblVendorSubscribe.vendor = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsVendorSubscribeHistory', 'tblVendorSubscribeHistory')
+                ->set('tblVendorSubscribeHistory.member', ':newId')
+                ->where('tblVendorSubscribeHistory.member = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+            $qb = $this->em->createQueryBuilder();
+            $query = $qb->update('EasyShop\Entities\EsVendorSubscribeHistory', 'tblVendorSubscribeHistory')
+                ->set('tblVendorSubscribeHistory.vendor', ':newId')
+                ->where('tblVendorSubscribeHistory.vendor = :oldId')
+                ->setParameter(':newId', $newSocialMediaAccount->getIdMember())
+                ->setParameter(':oldId', $oldSocialMediaAccount->getIdMember())
+                ->getQuery();
+            $query->execute();
+        }
+    }
+
     /**
      * Returns the facebook type constant
      *
