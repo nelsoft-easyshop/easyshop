@@ -1729,6 +1729,7 @@ td.td-view.p-view2.color-default{
     text-align: center !important;
     color: #ffffff !important;
     z-index: 999;
+    bottom: 35px !important;
 }
 
 #scrollUp:hover{
