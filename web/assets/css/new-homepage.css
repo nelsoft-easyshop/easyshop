@@ -1420,7 +1420,7 @@ header {
 
 .item-price-container {
     display:inline-block;
-    font:700 16px "Helvetica", Arial, sans-serif;
+    font:700 14px "Helvetica", Arial, sans-serif;
     color:#adadad;
     margin-bottom: 5px;
 }
@@ -1533,6 +1533,10 @@ header {
     padding-top:5px;
 }
 
+.item-meta-container{
+    margin-top: 10px;
+}
+
 .item-meta-container > a,
 .item-meta-container > a >.item-name
 {
@@ -1576,7 +1580,7 @@ header {
 
 /* title for all items */
 .item-name {
-    font:700 16px 'Helvetica', 'Open Sans', sans-serif;
+    font:700 14px 'Helvetica', 'Open Sans', sans-serif;
     margin:0 0 5px;
     text-overflow: ellipsis;
     white-space:nowrap;
