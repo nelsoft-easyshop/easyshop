@@ -26,10 +26,8 @@
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
+                            <a href="#payment-account"><li class="m-li m-li2">Payment Account</li></a>
                             <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
-                            <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
-                            <a href="#payment-account"><li class="f-li f-a">Payment Account</li></a>
-
                         </ul>
                     </div>
                 </ul>
@@ -58,8 +56,8 @@
                     <ul class="my-account-menu-mobile-ul">
                         <a href="#personal-information" class="dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
                         <a href="#delivery-address" class="dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
+                        <a href="#payment-account" class="dash-mobile-trigger"><li class="m-menu-setting">Payment Account</li></a>
                         <a href="#account-settings" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
-                        <a href="#payment-account" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
             </div>
