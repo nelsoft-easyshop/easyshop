@@ -320,7 +320,6 @@ class Home extends MY_Controller
                 $headerData = $this->fill_header();
 
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
-                $bannerData['cartSize'] = $headerData['cartSize'];
                 $bannerData['cartItems'] = $headerData["cartItems"];
                 $bannerData['cartTotal'] = $headerData['cartTotal'];
 
