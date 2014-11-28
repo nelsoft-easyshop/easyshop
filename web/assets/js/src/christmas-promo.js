@@ -53,26 +53,6 @@ jQuery(document).ready(function() {
         jQuery(this).addClass('animated fadeInUp');
         }
     });
-    
-    /* Newsletter Form */
-
-    var newsletter_form = jQuery('.newsletter-form');
-
-    newsletter_form.submit(function() {
-        var form_data = jQuery(this).serialize();
-        var email = jQuery('.newsletter-form input').prop('value');
-        if (validateEmail(email)) {
-            jQuery.post(jQuery(this).attr('action'), form_data, function() {
-                newsletter_form.css({'background' : 'none'});
-                jQuery('.newsletter-fields, .newsletter-validate, .newsletter-form fieldset').fadeOut('fast');
-                jQuery('.newsletter-info').fadeIn('fast');
-            });
-        } else {
-            jQuery('.newsletter-validate').fadeIn('fast');
-        }
-        return false;
-    });
-
 });
 
 function fullslideshow_height (slide, reset) {
@@ -120,10 +100,35 @@ Modernizr.load([
     { load : '//assets.pinterest.com/js/pinit.js' }
 ]);
 
-/* validate email */ 
-function validateEmail(a){
-    "use strict";
-    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-    return pattern.test(emailAddress);
-}
 
+$(document).ready(function() {
+    $('.btn-primary').click(function() {
+
+        $(".error").hide();
+        var hasError = false;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailaddressVal = $("#useremail").val();
+
+        if(emailaddressVal == '') {
+            $(".newsletter-info-blank").show();
+            $(".newsletter-validate, .newsletter-info").hide();
+            hasError = true;
+        }
+
+        else if(!emailReg.test(emailaddressVal)) {
+            $(".newsletter-validate").show();
+            $(".newsletter-info-blank, .newsletter-info").hide();
+            hasError = true;
+        }
+
+        if(hasError == true) { 
+            return false;
+        }
+
+        else {
+            $(".newsletter-info").show();
+            $(".newsletter-validate, .newsletter-info-blank").hide();
+            return false;
+        }
+    });
+}); 

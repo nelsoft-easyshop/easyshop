@@ -128,15 +128,18 @@
                     <div class="span12 padding-top-30">
                         <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h5>
                         <br>
-                        <form method="post" action="/subscribe" class="newsletter-form">
+                        <form method="post" id="register" action="" class="newsletter-form">
                             <div class="row-fluid">
                                 <fieldset>
-                                    <input class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                    <button class="btn btn-primary" type="submit">SUBSCRIBE</button>
+                                    <input id="useremail" class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
+                                    <button class="btn btn-primary" type="submit">SUBSRIBE</button>
                                 </fieldset>
-                            </div>           
-                            <div class="newsletter-info">Thanks for subscribing</div>
-                            <div class="newsletter-validate">Please enter a valid e-mail</div>
+                            </div>
+                            <div>
+                                <div class="newsletter-info-blank">Please enter your email address.</div>
+                                <div class="newsletter-info">Thank you for subscribing.</div>
+                                <div class="newsletter-validate">Please enter a valid e-mail address</div>
+                            </div>
                         </form>
                     </div>
                 </div>
