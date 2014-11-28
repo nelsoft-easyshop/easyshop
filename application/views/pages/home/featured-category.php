@@ -83,26 +83,18 @@
                                     
                                         <a href="/item/<?php echo $productSlug ?>">
                                             <h3 class="item-name" style="position: relative;">
-                                                <?php
-                                                    if(strlen($product->getName())>20){
-                                                ?>
-                                                 <div class="tooltip-home">
-                                                   <?php echo html_escape($product->getName())?>
-                                                 </div>
-                                                 <?php
-                                                    }
-                                                 ?>
-                                                 <?php
-                                                    if(strlen($product->getName())>20){
-                                                ?>
-                                                <span style="width: 100%; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                                                <?php }
-                                                    else{?>
-                                                        <span>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                        <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
+                                                <?php if(strlen($product->getName())>20): ?>
+                                                     <div class="tooltip-home">
+                                                       <?php echo html_escape($product->getName())?>
+                                                     </div>
+                                                <?php endif; ?>
+                                                 
+                                                <?php if(strlen($product->getName())>20): ?>
+                                                    <span style="width: 100%; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                                                <?php else: ?>
+                                                    <span>
+                                                <?php endif; ?>
+                                                    <?php echo html_escape((strlen($product->getName())> 20)?substr_replace($product->getName(), "...", 20):$product->getName());?>
                                                     </span>
                                             </h3>
                                         </a>
