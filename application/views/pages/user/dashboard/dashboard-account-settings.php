@@ -1,3 +1,14 @@
+<style>
+    .activated-container{
+        height: 220px !Important;
+    }
+
+    @media only screen and (max-width: 991px){
+        .activated-container{
+            height: 288px !important;
+        }
+    }
+</style>
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
         <ul>
@@ -195,19 +206,10 @@
     </div>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                You have successfully deactivated your account.<br/><br/> If you have been unsatisfied with EasyShop as an e-Commerce platform, please send us an email at info@easyshop.ph to let us know how we can improve our website further.<br/><br/> Have a nice day!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+
+<div id="activated-modal" style="display:none; height: 100px;">
+    <h2>Deactivated Account</h2>
+    <div id="activated-message">
+            You have successfully deactivated your account.<br/><br/> If you have been unsatisfied with <a href="#">EasyShop</a> as an e-Commerce platform, please send us an email at <a href="#">info@easyshop.ph</a> to let us know how we can improve our website further.<br/><br/> Have a nice day!
     </div>
 </div>

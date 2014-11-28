@@ -49,10 +49,12 @@
                         alert(obj);                        
                     }
                     else {
-                        $("#myModal").modal("show");
-                        $('#myModal').bind('hidden.bs.modal', function () {
-                                window.location.href = "login/logout";  
-                        })                          
+                        $('#activated-modal').modal();
+                        $('#activated-modal').parents("#simplemodal-container").addClass("activated-container");                     
+                        // $("#myModal").modal("show");
+                        // $('#myModal').bind('hidden.bs.modal', function () {
+                        //         window.location.href = "login/logout";  
+                        // })                          
                     }
 
                 },

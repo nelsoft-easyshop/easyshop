@@ -1496,6 +1496,36 @@ a{
     font-size: 14px;
     font-weight: bold;
 }
+
+
+
+#activated-message{
+    font-size: 15px;
+    margin-top: 14px;
+    padding: 0px 20px;
+    font-weight: bold;
+}
+
+#activated-message a{
+    color: #ff893a;
+    font-weight: 900;
+}
+
+.activated-container{
+    height: 200px important;
+}
+
+.activated-container h2{
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #565656;
+}
+
+.activated-modal .feedback-content{
+    text-align:left;
+
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;

@@ -1,4 +1,21 @@
 <link type="text/css" href='/assets/css/new-dashboard.css' rel="stylesheet" media='screen'/>
+<style>
+#simplemodal-container{
+        height: 150px !important;
+    }
+#simplemodal-container h2{
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #565656;
+    }
+
+@media only screen and (max-width: 991px){
+        #simplemodal-container{
+            height: 200px !important;
+        }
+    }
+</style>
 <div class="activateAccount">
     <div class="container">
         <div class="row">
@@ -48,13 +65,12 @@
 </div>
 
 
-<div id="activated-modal" style="display:none;">
+<div id="activated-modal" style="display:none; height: 100px;">
     <div class="feedback-content">
-        <h1>LEAVE A FEEDBACK</h1>
-        <div id="message">
+        <div id="activated-message">
              Congratulations! You've just reactivated your account with EasyShop!
 
-            Click <a href="/home">here</a> to go back to our Homepage and start browsing for your favourite items.
+            <a href="/home">Click here</a> to go back to our Homepage and start browsing for your favourite items.
         </div>
     </div>
 </div>
