@@ -890,11 +890,11 @@
 
     $(".add-bank-account").click(function() {
         $(this).fadeOut();
-        $(".select-bank").fadeIn();
+        $(".select-bank").slideDown();
     });
 
     $(".cancel-add-bank").click(function() {
-        $(".select-bank").fadeOut();
+        $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
 

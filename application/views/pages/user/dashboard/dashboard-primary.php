@@ -56,6 +56,7 @@
                         <a href="#personal-information" class="dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
                         <a href="#delivery-address" class="dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
                         <a href="#account-settings" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
+                        <a href="#payment-account" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
             </div>
