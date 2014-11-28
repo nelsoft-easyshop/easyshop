@@ -67,11 +67,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
 <!-- End Google Tag Manager -->
 
-<header class="new-header-con">
+<!-- <header class="new-header-con"> -->
+<header class="vendor-christmas-theme">
     <div class="main-container">
         <div>
             <a href="/">
-                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                <!-- <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo"> -->
+                <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
             </a>
         </div>
         <div class="search-container">
@@ -189,7 +191,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-<div class="persistent-nav-container">
+<!-- <div class="persistent-nav-container"> -->
+<div class="persistent-nav-container persistent-christmas-theme">
     <div class="main-container">
         <ul class="sticky-nav">
             <li>

@@ -176,7 +176,7 @@ textarea {
 }
 
 .vendor-christmas-theme {
-    background: #fff url(../images/img-snow.jpg) no-repeat center center;
+    background: #fff url(../images/img-snow.jpg) no-repeat bottom center;
     border-top: 2px solid #4370cc;
     min-height: 50px;
     padding: 6px 0;
