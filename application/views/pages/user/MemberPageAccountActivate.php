@@ -49,10 +49,10 @@
                             </div>
                             <div class="activateActions">
                                 <center>
-                                    <input type="submit" class="btn btn-setting-save-btn" id="activateAccountButton" name="activateAccountButton"  value="Save Changes">
-                                    <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
+                                    <input type="submit" class="btn btn-setting-save-btn" id="activateAccountButton" name="activateAccountButton"  value="Submit">
+                                    <a href="/" class="btn btn-setting-cancel-btn" id="cancel-edit-password">
                                         Cancel
-                                    </span>
+                                    </a>
                                 </center>
                             </div>
                             <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
