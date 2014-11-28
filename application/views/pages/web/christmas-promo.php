@@ -132,11 +132,11 @@
                             <div class="row-fluid">
                                 <fieldset>
                                     <input class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                    <button class="btn btn-primary" type="submit">SUBSRIBE</button>
+                                    <button class="btn btn-primary" type="submit">SUBSCRIBE</button>
                                 </fieldset>
                             </div>           
                             <div class="newsletter-info">Thanks for subscribing</div>
-                            <div class="newsletter-validate">Please enter a valid e-mail'</div>
+                            <div class="newsletter-validate">Please enter a valid e-mail</div>
                         </form>
                     </div>
                 </div>
