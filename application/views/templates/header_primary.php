@@ -133,16 +133,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div><!-- End .container -->
             </div><!-- End #header-top -->
             
-       <!-- <div id="inner-header"> original container -->
-            <div id="inner-header" class="christmas-theme">
+       
+            <div id="inner-header" class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'christmas-theme' : '' ?>">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-3 col-sm-3 col-xs-12 logo-container">
                             <h1 class="logo clearfix">
                                 <span>EasyShop.ph</span>
                                 <a href="/" title="EasyShop.ph Website">
-                               <!-- <img src="/assets/images/img_logo.png" alt="Online Shopping"> original logo -->
-                                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
+                                    <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+                                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
+                                    <?php else: ?>
+                                        <img src="/assets/images/img_logo.png" alt="Online Shopping">
+                                    <?php endif; ?>
                                 </a>
                             </h1>
                         </div><!-- End .col-md-5 -->
@@ -220,7 +223,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="persistent-header-wrapper">
                     <div class="sticky-header-nav">
                    <!-- <div id="main-nav-container"> -->
-                        <div id="main-nav-container" class="persistent-christmas-theme">
+                        <div id="main-nav-container" class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'persistent-christmas-theme' : '' ?>">
                             <div class="container">
                                 <div  class="sticky-nav-logo-con">
                                     <div class="sticky-nav-logo">

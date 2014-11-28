@@ -47,7 +47,7 @@ else{
     $fileVersion = '8.1.21';
 }
 define('ES_FILE_VERSION',$fileVersion);
-
+define('ES_ENABLE_CHRISTMAS_MODS', true);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
