@@ -215,36 +215,36 @@
 
     function disabledSelection($selectedValues)
     { 
-        var $varTempValues = [];
-        var $selectedCount = $selectedValues.length;
+        // var $varTempValues = [];
+        // var $selectedCount = $selectedValues.length;
 
-        $.each($productCombQuantity, function(i, val) {
-            $successCount = 0;
-            $.each($selectedValues, function(j, selVal) {
-                if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
-                    $successCount ++;
-                }
-            });
-            if($successCount == $selectedCount){
-               $.each(val.product_attribute_ids, function(k, idVal) {
-                    $varTempValues.push(idVal); 
-                });
-            }
-        });
+        // $.each($productCombQuantity, function(i, val) {
+        //     $successCount = 0;
+        //     $.each($selectedValues, function(j, selVal) {
+        //         if(isInArray(selVal,val.product_attribute_ids) && val.quantity > 0){
+        //             $successCount ++;
+        //         }
+        //     });
+        //     if($successCount == $selectedCount){
+        //        $.each(val.product_attribute_ids, function(k, idVal) {
+        //             $varTempValues.push(idVal); 
+        //         });
+        //     }
+        // });
 
-        $selectedValues = $selectedValues.concat($varTempValues); 
+        // $selectedValues = $selectedValues.concat($varTempValues); 
 
-        $(".attribute-control > option").prop("disabled",false);
-        var $uniqueSelected = arrayUnique($selectedValues);
-        if($uniqueSelected != undefined && $uniqueSelected != null && $uniqueSelected.length != 0){
-            $(".attribute-control > option").prop("disabled",true);
-            $.each($uniqueSelected, function(i, val) {
-                $('.attribute-control > option[value="0"]').prop("disabled",false);
-                $('.attribute-control > option[value="' + val + '"]').prop("disabled",false);
-            });
-        }
+        // $(".attribute-control > option").prop("disabled",false);
+        // var $uniqueSelected = arrayUnique($selectedValues);
+        // if($uniqueSelected != undefined && $uniqueSelected != null && $uniqueSelected.length != 0){
+        //     $(".attribute-control > option").prop("disabled",true);
+        //     $.each($uniqueSelected, function(i, val) {
+        //         $('.attribute-control > option[value="0"]').prop("disabled",false);
+        //         $('.attribute-control > option[value="' + val + '"]').prop("disabled",false);
+        //     });
+        // }
 
-        return $uniqueSelected;
+        // return $uniqueSelected;
     }
 
 
