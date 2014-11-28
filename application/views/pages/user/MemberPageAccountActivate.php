@@ -38,6 +38,7 @@
                                     </span>
                                 </center>
                             </div>
+                            <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
                         </form>
                     </div>
                 </div>
@@ -66,7 +67,8 @@
     (function ($) {
 
 
-
+    var loadingimg = $('img#deactivateAccountLoader'); 
+    var verifyspan = $('.activateActions');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
@@ -94,16 +96,22 @@
                       
          },
          submitHandler: function(form){
+
+            verifyspan.hide();
+            loadingimg.show();                          
             event.preventDefault();
             var postData = $("#activateAccountForm").serializeArray();
             $.ajax({
                 type: 'get',
                 data: postData,
                 url: "/memberpage/activateAccount",                
-                success: function(data) {
+                success: function(data) {                      
                     var obj = jQuery.parseJSON(data); 
                     if(obj.result === "success") {
                         login(obj.username,obj.password);
+                    }
+                    else {
+                        alert("Invalid Password");
                     }
                 },
             });            
@@ -117,6 +125,8 @@
             data: {login_form:"submit",login_username:username, login_password:password, csrfname : csrftoken},
             url: "/login/authenticate",                
             success: function(data) {
+                verifyspan.show();
+                loadingimg.hide();                 
                 $('#activated-modal').modal();
             },
         });          
