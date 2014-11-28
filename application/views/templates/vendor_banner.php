@@ -148,7 +148,7 @@
     </div>
 </section>
 <section class="sticky-nav-bg">
-    <div class="vendor-sticky-nav <?php echo ES_ENABLE_CHRISTMAS_MODS ? 'persistent-christmas-theme' : ''; ?>">
+    <div class="vendor-menu-nav">
         <div class="main-container">
             <ul class="vendor-nav">
                 <?php
@@ -172,75 +172,6 @@
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/contact" class="<?php if($url_id === "contact"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Contact</a>
                 </li>
             </ul>
-            <ul class="sticky-nav">
-                <li>
-                    <div class="vendor-profile-img-con">
-                        <img src="<?=$avatarImage?>" alt="Profile Photo">
-                    </div>
-                    <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
-                </li>
-                <li>
-                    <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                    <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                    <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
-                </li>
-                <li> 
-                    <form class="search-form">
-                        <select class="ui-form-control search-type">
-                            <option value="1">On Seller's Page</option>
-                            <option value="2">Main Page</option> 
-                        </select>
-                        <input type="text" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
-                        <input type="submit"  value="" class="submitSearch span_bg">
-                    </form>
-                </li>
-                <li class="pos-rel">
-                    <div class="header-cart-container">
-                        <a href="/cart" class="header-cart-wrapper">
-                            <span class="header-cart-items-con sticky-cart ui-form-control">
-                                <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
-                            </span>
-                            <span class="header-cart-icon-con span_bg cart-icon"></span>
-                        </a>
-                        <div class="sticky-header-cart-item-list">                        
-                            <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
-                            <?PHP else : ?>
-                                <p>Recently added item(s)</p>
-                                <?php $cartItemsReversed = array_reverse($cartItems); ?>
-                                <?php for($i = 0 ; $i < 2; $i++): ?>
-                                        <?php if(!isset($cartItemsReversed[$i])) break; ?>
-                                        <div class="mrgn-bttm-15">
-                                            <div class="header-cart-item-img">
-                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
-                                                </a>
-                                            </div>
-                                            <div class="header-cart-item-con">
-                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
-                                                <span>x <?=$cartItemsReversed[$i]['qty']?></span>
-                                                <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
-                                            </div>
-                                            <div class="clear"></div>
-                                        </div>
-                                <?php endfor; ?>
-         
-                                
-                                <div class="header-cart-lower-content">
-                                    <div class="header-cart-shipping-total">
-                                        <p>Item(s) in cart: <span><?=$cartSize?></span></p>
-                                        <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
-                                    </div>
-                                    <div class="header-cart-buttons">
-                                        <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
-                                        <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            <?PHP endif;?>
-                        </div>
-                    </div>
-                </li>
-            </ul>
             <div class="clear"></div>
         </div>
     </div>
@@ -254,5 +185,3 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
-
- 

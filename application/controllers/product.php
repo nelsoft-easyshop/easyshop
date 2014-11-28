@@ -291,6 +291,7 @@ class product extends MY_Controller
 
             $reviewDetailsData = [
                         'productDetails' => $productDescription,
+                        'productAttributes' => $productAttributes,
                         'productReview' => $productReviews,
                         'canReview' => $canReview,
                         'additionalInformation' => $additionalInformation
