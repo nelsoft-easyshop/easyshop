@@ -385,7 +385,7 @@ class Home extends MY_Controller
  
                 // count the followers 
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
-                                ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+                                          ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 

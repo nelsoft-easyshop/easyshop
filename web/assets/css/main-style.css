@@ -1346,6 +1346,24 @@ td.td-view.p-view2.color-default{
     width: 100%;
     height: 165px;
     border-radius: 4px 4px 0px 0px;
+    position: relative;
+}
+
+.main-image{
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0;
+    border-radius: 4px 4px 0px 0px;
+}
+
+.image-hover-none{
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.image-hover-none:hover{
+    opacity: 0;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
@@ -1589,6 +1607,7 @@ td.td-view.p-view2.color-default{
     font-size: 12px;
     width: 42px;
     font-weight:bold;
+    top: 0;
 }
 .span-new-pin-list{
     position:absolute;
@@ -1613,8 +1632,18 @@ td.td-view.p-view2.color-default{
     font-size: 12px;
     width: 42px;
     font-weight:bold;
-    right: 0 !important;
+    right: -5px !important;
     margin-right: 5px !important;
+    top: 0;
+}
+
+.main-image-list{
+    width: 100%;
+    height:100%;
+    z-index: 999;
+    position: absolute;
+    top: 0;
+    border-radius: 4px 0px 0px 4px;
 }
 
 .grid-span-new-pin{
@@ -1696,6 +1725,7 @@ td.td-view.p-view2.color-default{
     text-align: center !important;
     color: #ffffff !important;
     z-index: 999;
+    bottom: 35px !important;
 }
 
 #scrollUp:hover{
