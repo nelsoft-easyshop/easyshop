@@ -1,4 +1,11 @@
 /** <!--Member page CSS Janz--> **/
+.memberpage-christmas-theme {
+    margin-top: -80px;
+}
+
+.header-old-christmas-logo {
+    margin-right: 65px;
+}
 
 #tx_dialog_pass_cont input{
     width: 240px;
@@ -6,7 +13,7 @@
     margin-left: 5px;
 }
 
-#tx_dialog_pass_cont lbl-tx-password{
+#tx_dialog_pass_cont .lbl-tx-password{
     width: 140px;
 }
 

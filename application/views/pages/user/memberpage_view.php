@@ -6,12 +6,17 @@
 <link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
 <link type="text/css"  rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css" media="screen"/>
 
-
-<div id = "member_page_body">
+<!-- <div id="member_page_body"> -->
+<div id="member_page_body" class="memberpage-christmas-theme">
     <div class="clear"></div>
     <section>
         <div class="wrapper profile_content">
-            <div class="logo"> <a href="/"><span class="span_bg"></span></a> </div>
+            <div class="logo"> 
+                <a href="/">
+                    <!-- <span class="span_bg"></span> original logo -->
+                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                </a>
+            </div>
             <div class="profile_top_nav">               
             
                 <div>

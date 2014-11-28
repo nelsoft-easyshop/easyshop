@@ -420,7 +420,7 @@
             scrollTop: $('#scrollpoint').offset().top 
         }, 500);
 
-        $(".sticky-header-nav").delay(1000).addClass("product-disable-nav", 1000);
+        $(".sticky-header-nav").delay(2000).addClass("product-disable-nav", 2000);
     };
 
 

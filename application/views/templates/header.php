@@ -191,11 +191,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 <form action="/search/search.html" name="search_form" method="get">
-    <section>
+
+<!--<section> original container -->
+    <section class="header-theme-bg">
+
         <div class="res_wrapper wrapper search_wrapper">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
-            <div class="logo"> <a href="/" class="prevent"><span class="span_bg"></span></a> </div>
+            <div class="logo"> 
+                <a href="/" class="prevent">
+                    <!-- <span class="span_bg"></span> -->
+                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
+                </a>
+            </div>
         <?php endif; ?>
         
         <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>

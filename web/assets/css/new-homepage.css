@@ -544,6 +544,11 @@ header {
     padding-top:35px;
 }
 
+#inner-header.christmas-theme {
+    background: #fff url(../images/img-snow.jpg) no-repeat top center;
+    padding-top:30px;
+}
+
 #inner-header .logo-container,
 #inner-header .header-inner-right {
     margin-bottom:22px;
@@ -665,6 +670,10 @@ header {
 .sticky-header-nav.sticky-nav-fixed {
     width: 100%;
     z-index: 99999;
+}
+
+.sticky-nav-fixed #main-nav-container.persistent-christmas-theme {
+    background: #fff url(../images/img-snow.jpg) no-repeat bottom center;
 }
 
 .sticky-nav-fixed #main-nav-container {
