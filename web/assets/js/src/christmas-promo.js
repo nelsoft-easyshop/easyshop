@@ -62,11 +62,11 @@ jQuery(document).ready(function() {
         var form_data = jQuery(this).serialize();
         var email = jQuery('.newsletter-form input').prop('value');
         if (validateEmail(email)) {
-        jQuery.post(jQuery(this).attr('action'), form_data, function() {
-            newsletter_form.css({'background' : 'none'});
-            jQuery('.newsletter-fields, .newsletter-validate, .newsletter-form fieldset').fadeOut('fast');
-            jQuery('.newsletter-info').fadeIn('fast');
-        });
+            jQuery.post(jQuery(this).attr('action'), form_data, function() {
+                newsletter_form.css({'background' : 'none'});
+                jQuery('.newsletter-fields, .newsletter-validate, .newsletter-form fieldset').fadeOut('fast');
+                jQuery('.newsletter-info').fadeIn('fast');
+            });
         } else {
             jQuery('.newsletter-validate').fadeIn('fast');
         }
