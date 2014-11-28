@@ -1842,8 +1842,8 @@ class Memberpage extends MY_Controller
             $stateRegionId = $address[0]->getCountry()->getIdLocation();
             $cityId = $address[0]->getCity()->getIdLocation();
             $consigneAddress = $address[0]->getAddress();
-            $cLat = $address[0]->getLat();
-            $cLng = $address[0]->getLng();
+            $addressLatitude  = $address[0]->getLat();
+            $addressLongitude = $address[0]->getLng();
 
             $paginationData['isHyperLink'] = false;
 
@@ -1958,8 +1958,8 @@ class Memberpage extends MY_Controller
                 'cities' => $locationLookup["json_city"],
                 'consigneeAddress' => $consigneAddress,
                 'address' => $address[0],
-                'latitude' => $cLat,
-                'longitude' => $cLng,
+                'latitude' => $addressLatitude ,
+                'longitude' => $addressLongitude,
                 'consigneeStateRegionId' => $stateRegionId,
                 'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
