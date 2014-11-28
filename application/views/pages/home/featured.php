@@ -17,7 +17,7 @@
                     <?php $defaultImage = $product['product']->getDefaultImage(); ?>
                     <?php $secondaryImage = $product['secondaryProductImage']; ?>
 
-                    <div class="item">
+                    <div class="item" style="position: relative;">
                         <center>
                             <a href="/item/<?php echo $productSlug ?>">
                             
@@ -47,9 +47,21 @@
                         <!-- End .item-image -->
                           
                         <div class="item-meta-container" align="left">
-                            <h3 class="item-name">
+                           
+                            <h3 class="item-name" style="position: relative;">
+                                <?php if(strlen($product['product']->getName())>20): ?>
+                                <div class="tooltip-home">
+                                   <?php echo html_escape($product['product']->getName())?>
+                                </div>
+                                <?php endif; ?>
                                 <a href="/item/<?=$productSlug?>">
+                                    <?php if(strlen($product['product']->getName())>20):?>
+                                        <span style="width: 100%; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                                    <?php else: ?>
+                                        <span>
+                                    <?php endif;?>
                                     <?php echo html_escape((strlen($product['product']->getName())>20) ? substr_replace($product['product']->getName(), "...", 20): $product['product']->getName()) ;?>
+                                        </span>
                                 </a>
                             </h3>
                             <div class="item-meta-inner-container clearfix">
