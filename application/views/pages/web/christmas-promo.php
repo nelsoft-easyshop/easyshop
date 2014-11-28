@@ -9,6 +9,7 @@
         <title>Early Christmas Sale</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <link href='https://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
         <link href='/assets/css/promo-css.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' type='text/css'/>
@@ -127,7 +128,7 @@
                     <div class="span12 padding-top-30">
                         <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h5>
                         <br>
-                        <form method="post" action="newsletter.php" class="newsletter-form">
+                        <form method="post" action="/subscribe" class="newsletter-form">
                             <div class="row-fluid">
                                 <fieldset>
                                     <input class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
