@@ -56,6 +56,9 @@ a{
     border: none !important;
 }
 
+.m-li2{
+    border-top: none !important;
+}
 
 #my-store-menu, #my-account-menu{
     display: none;
