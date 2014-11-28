@@ -1834,14 +1834,17 @@ class Memberpage extends MY_Controller
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
-        $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
-        $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
-        $stateRegionId = $address[0]->getCountry()->getIdLocation();
-        $cityId = $address[0]->getCity()->getIdLocation();
-        $consigneAddress = $address[0]->getAddress();
-        $cLat = $address[0]->getLat();
-        $cLng = $address[0]->getLng();
+
         if($member){
+
+            $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
+            $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
+            $stateRegionId = $address[0]->getCountry()->getIdLocation();
+            $cityId = $address[0]->getCity()->getIdLocation();
+            $consigneAddress = $address[0]->getAddress();
+            $cLat = $address[0]->getLat();
+            $cLng = $address[0]->getLng();
+
             $paginationData['isHyperLink'] = false;
 
             $userAvatarImage = $userManager->getUserImage($memberId);
