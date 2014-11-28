@@ -13,15 +13,19 @@
         <link href='https://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
         <link href='/assets/css/promo-css.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' type='text/css'/>
+     
         <script type="text/javascript">
+
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-33801742-8']);
           _gaq.push(['_trackPageview']);
+
           (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
+
         </script>
     </head>
     <body class="animated fadeIn">
@@ -110,15 +114,14 @@
                             <img src="/assets/images/promo-images/item7.jpg">
                             <p>Super Starbabies</p>
                         </a>
-                    </div>
+                    </div>git
 
-                </div>
-                
-                <div class="span4 box seller-list">
-                    <a href="https://www.easyshop.ph/ckkmobile" target="_blank">
-                        <img src="/assets/images/promo-images/item8.jpg">
-                        <p>ckkmobile</p>
-                    </a>
+                    <div class="span4 box seller-list">
+                        <a href="/ckkmobile" target="_blank">
+                            <img src="/assets/images/promo-images/item8.jpg">
+                            <p>ckkmobile</p>
+                        </a>
+                    </div>
                 </div>
 
             </div>
