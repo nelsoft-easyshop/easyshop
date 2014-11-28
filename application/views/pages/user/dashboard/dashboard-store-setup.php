@@ -54,14 +54,27 @@
                 <div class="edit-store-url">
                     <div class="row">
                         <div class="col-md-6 col-inline-textbtn">
-                             <span class="setting-edit-url">https://easyshop.ph/</span> 
-                             <input type="text" class="text-info-url text-required" value="Mang Pedring Store"/>
-                            <!-- DISPLAY WHEN ERROR 
-                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            -->
-                            <!--DISPLAY WHEN OK-->
-                            <span class="val-success-url"><i class="fa fa-check"></i></span>
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                        <span class="setting-edit-url">https://easyshop.ph.trunk/</span> 
+                                    </td>
+                                    <td>
+                                        <div class="div-input-url-cont">
+                                            <input type="text" class="text-info-url text-required" value="Mang Pedring Store"/>
+                                            <!-- DISPLAY WHEN ERROR 
+                                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
+                                            <span class="val-error">Please enter at least 6 characters.</span>
+                                            -->
+                                            <!--DISPLAY WHEN OK-->
+                                            <span class="val-success-url"><i class="fa fa-check"></i></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                             
+                            
+                            
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
                             <button class="btn btn-setting-save-btn">

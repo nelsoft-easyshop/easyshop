@@ -888,6 +888,16 @@
         return false;
     });
 
+    $(".add-bank-account").click(function() {
+        $(this).fadeOut();
+        $(".select-bank").slideDown();
+    });
+
+    $(".cancel-add-bank").click(function() {
+        $(".select-bank").slideUp();
+        $(".add-bank-account").fadeIn();
+    });
+
 }(jQuery));
 
 
