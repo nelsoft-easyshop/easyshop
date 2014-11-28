@@ -51,7 +51,8 @@ class EsOrderRepository extends EntityRepository
                                 m.username as buyer,
                                 m.slug as buyerslug,
                                 pm.idPaymentMethod,
-                                pm.name as paymentMethod")
+                                pm.name as paymentMethod,
+                                COALESCE(memberFeedback.idMember,0) as forMemberId")
             ->from('EasyShop\Entities\EsOrder','o')
             ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with',
                 $qb->expr()->andX(
@@ -72,6 +73,7 @@ class EsOrderRepository extends EntityRepository
             ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
             ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
             ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
+            ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
             ->where(
                 $qb->expr()->not(
                     $qb->expr()->andX(

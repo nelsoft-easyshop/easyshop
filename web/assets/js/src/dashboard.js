@@ -641,10 +641,53 @@
         return false;
     });
 
+    $(document).on('mouseover','.feedb-star', function(){
+        $(this).siblings('.raty-error').html('');
+    });
+
     $('.item-list-panel').on('click', '.give-feedback-button', function(e) {
         var feedbackModal = $(this).parent().find('div.give-feedback-modal');
-        feedbackModal.modal();
+        var form = feedbackModal.find('form.transac-feedback-form');
+        var textArea = form.find('textarea[name="feedback-field"]');
+        var econt = form.find('.raty-error');
+        var btn = $(this);
+
+        feedbackModal.modal({
+            onShow: function() {
+                $('.rating1').raty('destroy').raty({scoreName: 'rating1'});
+                $('.rating2').raty('destroy').raty({scoreName: 'rating2'});
+                $('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+
+                this.setPosition();
+                var submitbtn = form.find('.feedback-submit');
+                submitbtn.off('click').on('click', function(event) {
+                    var rating1 = form.find('input[name="rating1"]').val();
+                    var rating2 = form.find('input[name="rating2"]').val();
+                    var rating3 = form.find('input[name="rating3"]').val();
+                    if ($.trim(textArea.val()).length < 1) {
+                        textArea.effect('pulsate',{times:3},800);
+                    }
+                    else if (rating1 === '' || rating2 === '' || rating3 ==='') {
+                        econt.html('Please rate this user!');
+                    }
+                    else {
+                        $.post('/memberpage/addFeedback',form.serialize(),function(data) {
+                            if (parseInt(data) === 1) {
+                                alert('Your feedback has been submitted.');
+                                btn.remove();
+                            }
+                            else {
+                                alert('An error was encountered. Try again later.');
+                            }
+                        });
+                        $.modal.close();
+                        return false;
+                    }
+                });
+            }
+        });
         feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
+
         return false;
     });
 

@@ -85,7 +85,7 @@ class TransactionManager
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
                 $orderProducts =
                     $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                        ->getOrderProductTransactionDetails($transaction['idOrder']);
+                                ->getOrderProductTransactionDetails($transaction['idOrder']);
                 foreach ($orderProducts as $productKey => $product) {
                     if ( (int) $memberId !== (int) $product['seller_id']) {
                         continue;

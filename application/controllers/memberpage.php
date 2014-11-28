@@ -682,19 +682,16 @@ class Memberpage extends MY_Controller
                 'rating2' => $this->input->post('rating2'),
                 'rating3' => $this->input->post('rating3')
             );
-            
-            // Check if transaction exists based on post details
-            // current user is buyer
+
             if($data['feedb_kind'] == 0){
-                $transacData = array(                   
+                $transacData = array(
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
                 );
-            // current user is seller
             }
             else if($data['feedb_kind'] == 1){
-                $transacData = array(                   
+                $transacData = array(
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
                     'order_id' => $data['order_id']

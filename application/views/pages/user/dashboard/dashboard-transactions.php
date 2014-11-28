@@ -219,40 +219,38 @@
                                 <span class="img-give-feedback"></span>give feedback
                             </button>
                             <div class="give-feedback-modal">
+                                <?php
+                                $attr = ['class'=>'transac-feedback-form'];
+                                echo form_open('',$attr);
+                                ?>
+                                <input type="hidden" name="feedb_kind" value="0">
+                                <input type="hidden" name="order_id" value="<?=$boughtTransactionDetails['idOrder']?>">
+                                <input type="hidden" name="for_memberid" value="<?=$boughtTransactionDetails['sellerId']?>">
                                 <div class="feedback-content">
                                     <h1>LEAVE A FEEDBACK</h1>
                                     <div class="star-rating-wrapper">
-                                        <span class="star-label">Item quality:</span>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat"></i>
+                                        <span class="star-label"><?=$this->lang->line('rating')[0].':'?></span>
+                                        <div class="feedb-star rating1"></div>
                                     </div>
                                     <div class="star-rating-wrapper">
-                                        <span class="star-label">Communication: </span>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat"></i>
+                                        <span class="star-label"><?=$this->lang->line('rating')[1].':'?></span>
+                                        <div class="feedb-star rating2"></div>
                                     </div>
                                     <div class="star-rating-wrapper">
-                                        <span class="star-label">Shipment time:  </span>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat star-active"></i>
-                                        <i class="icon-star star-stat"></i>
+                                        <span class="star-label"><?=$this->lang->line('rating')[2].':'?></span>
+                                        <div class="feedb-star rating3"></div>
                                     </div>
+                                    <span class="raty-error"></span>
                                     <div>
                                         <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                        <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
                                     </div>
                                 </div>
                                 <div class="feedback-btns">
                                     <span class="simplemodal-close btn btn-default-1">Cancel</span>
-                                    <button class="btn btn-default-3">Submit</button>
+                                    <span class="btn btn-default-3 feedback-submit">Submit</span>
                                 </div>
+                                <?php echo form_close();?>
                             </div>
                             <?PHP endif; ?>
                         </div>
@@ -452,9 +450,45 @@
                                 <span class="img-completed"></span>completed
                             </button>
                         <?PHP endif; ?>
-                            <button class="btn btn-default-1">
+                            <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0) : ?>
+                            <button class="btn btn-default-1 give-feedback-button">
                                 <span class="img-give-feedback"></span>give feedback
                             </button>
+                                <div class="give-feedback-modal">
+                                    <?php
+                                    $attr = ['class'=>'transac-feedback-form'];
+                                    echo form_open('',$attr);
+                                    ?>
+                                    <input type="hidden" name="feedb_kind" value="1">
+                                    <input type="hidden" name="order_id" value="<?=$soldTransactionDetails['idOrder']?>">
+                                    <input type="hidden" name="for_memberid" value="<?=$soldTransactionDetails['buyerId']?>">
+                                    <div class="feedback-content">
+                                        <h1>LEAVE A FEEDBACK</h1>
+                                        <div class="star-rating-wrapper">
+                                            <span class="star-label"><?=$this->lang->line('rating')[0].':'?></span>
+                                            <div class="feedb-star rating1"></div>
+                                        </div>
+                                        <div class="star-rating-wrapper">
+                                            <span class="star-label"><?=$this->lang->line('rating')[1].':'?></span>
+                                            <div class="feedb-star rating2"></div>
+                                        </div>
+                                        <div class="star-rating-wrapper">
+                                            <span class="star-label"><?=$this->lang->line('rating')[2].':'?></span>
+                                            <div class="feedb-star rating3"></div>
+                                        </div>
+                                        <span class="raty-error"></span>
+                                        <div>
+                                            <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                            <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="feedback-btns">
+                                        <span class="simplemodal-close btn btn-default-1">Cancel</span>
+                                        <span class="btn btn-default-3 feedback-submit">Submit</span>
+                                    </div>
+                                    <?php echo form_close();?>
+                                </div>
+                            <?PHP endif; ?>
                         </div>
                     <?PHP endif; ?>
                     </div>
