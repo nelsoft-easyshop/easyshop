@@ -1421,6 +1421,7 @@ var axes = new Array();
         }
         else{
             var activeText= ""; 
+            var errorValues = "";
             var primaryText = "Make Primary"; 
             var val = $(this).val();
             pictureInDiv = $("#list > div").length;
@@ -1457,8 +1458,10 @@ var axes = new Array();
             imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
             af.push(imageName+'||'+extension); 
             afstart.push(imageName); 
-            arrayUpload.push(pictureCount);
-            cropImage($(this));
+            arrayUpload.push(pictureCount);  
+            pictureCount++;
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
+            filescnt++;
         }
     });
 
@@ -1550,6 +1553,32 @@ var axes = new Array();
 
     function triggerUploadOther(picName)
     {
+       
+    }
+
+    $(document).on('change',".attr-image-input",function (e){
+ 
+        var val = $(this).val();
+        extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+        switch(extension){
+            case 'gif': case 'jpg': case 'png': case 'jpeg':
+            break;
+            default:
+                alert('Invalid file type. Please choose another image.');
+                return false;
+            break;
+        }
+
+        if(badIE == false){
+            var size = this.files[0].size;
+            if(size > 5*1024*1024){
+                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+                return false;
+            }
+        }
+ 
+        picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        canProceed = false;
         $('#other_files').ajaxForm({
             url: '/productUpload/uploadimageOther',
             type: "POST", 
@@ -1598,32 +1627,6 @@ var axes = new Array();
                 $('#other_files > #pictureName').remove();
             }
         }).submit();
-    }
-
-    $(document).on('change',".attr-image-input",function (e){
- 
-        var val = $(this).val();
-        extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-        switch(extension){
-            case 'gif': case 'jpg': case 'png': case 'jpeg':
-            break;
-            default:
-                alert('Invalid file type. Please choose another image.');
-                return false;
-            break;
-        }
-
-        if(badIE == false){
-            var size = this.files[0].size;
-            if(size > 5*1024*1024){
-                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
-                return false;
-            }
-        }
- 
-        picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        canProceed = false;
-        cropImageOther(val)
     });
 
 

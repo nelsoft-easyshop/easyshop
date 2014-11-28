@@ -400,9 +400,10 @@ class productUpload extends MY_Controller
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
         $afstartArray = json_decode($afstart); 
-        $filenames_ar = array(); 
+        $filenames_ar = array();
         $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
+        $isCroppable = !empty($coordinates) ? true : false;
         $error = 0;
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
 
@@ -470,8 +471,10 @@ class productUpload extends MY_Controller
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
             for ($i=0; $i < sizeof($filenames_ar); $i++) {
-                $coordinate = explode(',', $coordinates[$i]);
-                $this->es_img_crop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+                if($isCroppable){
+                    $coordinate = explode(',', $coordinates[$i]);
+                    $this->es_img_crop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+                }
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
