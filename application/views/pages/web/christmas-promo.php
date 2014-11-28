@@ -62,7 +62,7 @@
         <section>
             <div class="container load-animate">
 
-                <h3 class="align-center padding-top-30">SELLERS</h3>
+                <h3 class="align-center padding-top-30">Hurry! Check out these selected items from our exclusive sellers!</h3>
 
                 <div class="row-fluid padding-top-30"> 
                     <div class="span4 box seller-list">
@@ -116,6 +116,12 @@
                         </a>
                     </div>
 
+                    <div class="span4 box seller-list">
+                        <a href="https://www.easyshop.ph/ckkmobile" target="_blank">
+                            <img src="/assets/images/promo-images/item8.jpg">
+                            <p>ckkmobile</p>
+                        </a>
+                    </div>
                 </div>
 
             </div>
