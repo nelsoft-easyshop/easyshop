@@ -44,14 +44,17 @@
 
                 <div class="clear"></div>
                 <div class="item-name2" style="position: relative; width: 100%;">
-                    
-                    <div class="tooltip-home">
-                       <?php echo htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
-                     </div>
-                     
-                     <p class="p-rec-product-name">
-                    <a href="/item/<?=$value->getSlug(); ?>"><?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?></a>
-                    </p>
+                    <?php
+                        $item_name = htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);
+                        if(strlen($item_name)>20):
+                    ?>
+                        <div class="tooltip-home">
+                           <?php echo htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?>
+                         </div>
+                    <?php endif; ?>
+                        <p class="p-rec-product-name">
+                            <a href="/item/<?=$value->getSlug(); ?>"><?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?></a>
+                        </p>
                 </div>
                 <p class="p-rec-product-price">
                     
