@@ -13,7 +13,6 @@
         <link href='https://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
         <link href='/assets/css/promo-css.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' type='text/css'/>
-        <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script type="text/javascript">
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-33801742-8']);
@@ -33,7 +32,7 @@
 
                     <div id="navigation">
                         <ul class="nav">
-                            <li class="logo"><a href="https://www.easyshop.ph/"><img src="/assets/images/promo-images/logo-xmas.png"></a></li>
+                            <li class="logo"><a href="/"><img src="/assets/images/promo-images/logo-xmas.png"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -63,19 +62,19 @@
 
                 <div class="row-fluid padding-top-30"> 
                     <div class="span4 box seller-list">
-                        <a href="https://www.easyshop.ph/frluxxeproducts" target="_blank">
+                        <a href="/frluxxeproducts" target="_blank">
                             <img src="/assets/images/promo-images/item1.jpg">
                             <p>FRLUXXEPRODUCTS</p>
                         </a>
                     </div>
                     <div class="span4 box seller-list">
-                        <a href="https://www.easyshop.ph/GaronGenMerch" target="_blank">
+                        <a href="/GaronGenMerch" target="_blank">
                             <img src="/assets/images/promo-images/item2.jpg">
                          <p>Garon Gen Merch</p>
                         </a>
                     </div>
                     <div class="span4 box seller-list">
-                        <a href=" https://www.easyshop.ph/jsdonline" target="_blank">
+                        <a href="/jsdonline" target="_blank">
                             <img src="/assets/images/promo-images/item3.jpg">
                             <p>JSD Online Shopping</p>
                         </a>
@@ -85,19 +84,19 @@
 
                 <div class="row-fluid"> 
                     <div class="span4 box seller-list">
-                        <a href="https://www.easyshop.ph/kaiserdom" target="_blank">
+                        <a href="/kaiserdom" target="_blank">
                             <img src="/assets/images/promo-images/item4.jpg">
                             <p>Kaiserdom</p>
                         </a>
                     </div>
                     <div class="span4 box seller-list">
-                        <a href="https://www.easyshop.ph/lifeup101" target="_blank">
+                        <a href="/lifeup101" target="_blank">
                             <img src="/assets/images/promo-images/item5.jpg">
                          <p>LifeStyle Upgrade 101</p>
                         </a>
                     </div>
                     <div class="span4 box seller-list">
-                        <a href=" https://www.easyshop.ph/sjeternal" target="_blank">
+                        <a href="/sjeternal" target="_blank">
                             <img src="/assets/images/promo-images/item6.jpg">
                             <p>SjEternal</p>
                         </a>
@@ -107,7 +106,7 @@
 
                 <div class="row-fluid"> 
                     <div class="span4 box seller-list">
-                        <a href="https://www.easyshop.ph/superstarbabies" target="_blank">
+                        <a href="/superstarbabies" target="_blank">
                             <img src="/assets/images/promo-images/item7.jpg">
                             <p>Super Starbabies</p>
                         </a>
@@ -166,5 +165,6 @@
         <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     </body>
 </html>
