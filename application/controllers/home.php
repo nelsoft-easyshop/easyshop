@@ -318,10 +318,7 @@ class Home extends MY_Controller
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $headerData = $this->fill_header();
-
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
-                $bannerData['cartItems'] = $headerData["cartItems"];
-                $bannerData['cartTotal'] = $headerData['cartTotal'];
 
                 if ($bannerData['hasNoItems']){
                     redirect($vendorSlug.'/about');
