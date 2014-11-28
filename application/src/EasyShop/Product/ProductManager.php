@@ -591,7 +591,9 @@ class ProductManager
         foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
-                                ->getDefaultImage($productId);
+                                ->getDefaultImage($productId);       
+            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                              ->getSecondaryImage($productId);
             if(!$objImage){
                 $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                 $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -599,6 +601,12 @@ class ProductManager
             else{
                 $product->directory = $objImage->getDirectory();
                 $product->imageFileName = $objImage->getFilename();
+            }
+            $product->secondaryImageDirectory = null;
+            $product->secondaryImageFileName = null;
+            if($secondaryProductImage){
+                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
             $categoryProducts[] = $product;
         }
@@ -763,9 +771,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productInventory = $esProductRepo->getProductInventoryDetail($productId);
- 
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
