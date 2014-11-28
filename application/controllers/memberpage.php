@@ -2124,7 +2124,6 @@ class Memberpage extends MY_Controller
           
             $result = [
                 "username" => $member->getUsername(),
-                "password" => $this->input->get("password"),
                 "result" => "success"
             ];
             echo json_encode($result);

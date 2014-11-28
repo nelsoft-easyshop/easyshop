@@ -124,7 +124,7 @@
                 success: function(data) {                      
                     var obj = jQuery.parseJSON(data); 
                     if(obj.result === "success") {
-                        login(obj.username,obj.password);
+                        login(obj.username,$("#password").val());
                     }
                     else {
                         alert("Invalid Password");
