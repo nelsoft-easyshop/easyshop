@@ -1,20 +1,7 @@
 <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
 
-
-<style>
-    <?php $colorHexadecimal = $storeColorScheme->getHexadecimal(); ?>
-    .followers-circle{
-        background: #<?php echo html_escape($colorHexadecimal) ?> !important;
-    }
-    .vendor-nav li a.vendor-nav-active {
-        color: #<?php echo html_escape($colorHexadecimal) ?> !important;
-        border-bottom: 3px solid #<?php echo html_escape($colorHexadecimal) ?> !important;
-    }
-    .vendor-nav li a:hover {
-        border-bottom: 3px solid #<?php echo html_escape($colorHexadecimal) ?> !important;
-    }
-</style>
+<?php include('store-custom-theme.php'); ?>
 
 <section>
     <div class="pos-rel" id="display-banner-view">

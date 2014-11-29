@@ -364,12 +364,12 @@ class Home extends MY_Controller
 
                 //HEADER DATA
                 $storeColor = $memberEntity->getStoreColor();
+                $bannerData['storeColorScheme'] = $storeColor;
                 $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
                 $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
                 $headerData['relCanonical'] = base_url().$vendorSlug;
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
-                $bannerData['storeColorScheme'] = $storeColor;
 
                 $viewData = array(
                   //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
@@ -461,6 +461,11 @@ class Home extends MY_Controller
             } 
         }
 
+        $bannerData['storeColorScheme'] = $this->serviceContainer['entity_manager']
+                                               ->getRepository('EasyShop\Entities\EsMember')
+                                               ->findOneBy(['slug' => $sellerslug])
+                                               ->getStoreColor();
+        
         $followerData['followerCount'] = $bannerData["followerCount"];
         $followerData['storeName'] = strlen($bannerData['arrVendorDetails']['store_name']) > 0 ? $bannerData['arrVendorDetails']['store_name'] : $bannerData['arrVendorDetails']['username'];
         $followerData['followers'] = $followers['followers'];
@@ -691,7 +696,7 @@ class Home extends MY_Controller
                                                                             ), TRUE);                                                          
                                           
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
                                                                    'isHyperLink' => false), TRUE);
 
@@ -738,6 +743,8 @@ class Home extends MY_Controller
         }
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
         $headerData = $this->fill_header();
+        
+        $bannerData['storeColorScheme'] = $member->getStoreColor();
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
         $bannerData['vendorLink'] = "about";
         $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
@@ -899,13 +906,8 @@ class Home extends MY_Controller
         
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $sellerslug]);                             
-        $EsLocationLookupRepository = $this->serviceContainer['entity_manager']
-                                           ->getRepository('EasyShop\Entities\EsLocationLookup');
-        $arrVendorDetails = $this->serviceContainer['entity_manager']
-                                 ->getRepository("EasyShop\Entities\EsMember")
-                                 ->getVendorDetails($sellerslug);        
-        
+                                                   ->findOneBy(['slug' => $sellerslug]);                                  
+        $bannerData['storeColorScheme'] = $member->getStoreColor();
         $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
         $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
         $headerData['relCanonical'] = base_url().$sellerslug.'/contact';
