@@ -2359,6 +2359,7 @@ class Memberpage extends MY_Controller
     /**
      * Updated the store setting
      *
+     * @return json
      */
     public function updateStoreSetting()
     {   
@@ -2419,8 +2420,24 @@ class Memberpage extends MY_Controller
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
             }
         }
-        
         echo json_encode($jsonResponse);
+    }
+    
+    
+    /**
+     * Gets the store settings
+     *
+     */
+    public function getStoreSettings()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['colors'] = $this->serviceContainer['entity_manager']
+                                       ->getRepository('EasyShop\Entities\EsStoreColor')
+                                       ->getAllColors(true);
+        }
+        echo json_encode($response);
     }
     
 

@@ -942,7 +942,26 @@
             $this.html(buttonHtml);
     });
     
-    
+    var isStoreSetupInitialized = false;
+    $('#store-setup-tab').on('click', function(){
+        if(!isStoreSetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreSettings',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
+                    var unorderedList = $("#store-color-dropdown");
+                    var colorList = [];
+                    $.each(jsonResponse.colors, function(index, color) {
+                        colorList.push('<li style="background: #'+color.hexadecimal+'; text-transform: uppercase;" id="color-item-'+color.idStoreColor+'">'+color.name+'</li>');
+                    });
+                    unorderedList.append( colorList.join('') );
+                
+                    isStoreSetupInitialized = true;
+                }
+            });
+        }
+    });
 
     $(".add-bank-account").click(function() {
         $(this).fadeOut();
@@ -953,6 +972,9 @@
         $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
+    
+    
+    
 
 }(jQuery));
 

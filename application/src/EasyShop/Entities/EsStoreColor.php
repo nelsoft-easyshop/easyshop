@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsStoreColor
  *
  * @ORM\Table(name="es_store_color")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsStoreColorRepository")
  */
 class EsStoreColor
 {

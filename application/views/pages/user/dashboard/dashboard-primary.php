@@ -17,7 +17,7 @@
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
                             <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
-                            <a href="#setup"><li class="f-li">Store Setup</li></a>
+                            <a href="#setup" id="store-setup-tab"><li class="f-li">Store Setup</li></a>
                         </ul>
                     </div>
                     <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>

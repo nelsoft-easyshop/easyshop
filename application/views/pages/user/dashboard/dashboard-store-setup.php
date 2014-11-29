@@ -133,8 +133,9 @@
                                     <span class="color-name-drop">Easyshop</span>
                                     <i class="cd icon-dropdown pull-right"></i>
                                 </div>
-                                <div class="color-dropdown">
-                                    <ul class="color-list">
+                                <div class="color-dropdown" >
+                                    <ul class="color-list" id="store-color-dropdown">
+                                        <!--
                                         <li style="background: #FF893A" id="color-item-1">EASYSHOP <i class="fa fa-check pull-right"></i></li>
                                         <li style="background: #F89406" id="color-item-2">CALIFORNIA</li>
                                         <li style="background: #F22613" id="color-item-3">POMEGRANATE</li>
@@ -145,7 +146,7 @@
                                         <li style="background: #2574A9" id="color-item-8">JELLY BEAN</li>
                                         <li style="background: #1E824C" id="color-item-9">SALEM</li>
                                         <li style="background: #6C7A89" id="color-item-10">LYNCH</li>
-                                        
+                                        -->
                                     </ul>
                                 </div>
                             </div>
