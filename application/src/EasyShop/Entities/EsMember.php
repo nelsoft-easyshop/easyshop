@@ -252,6 +252,13 @@ class EsMember
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     */
+    private $isActive = '0';    
+
+    /**
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -280,6 +287,12 @@ class EsMember
      *  @var string
      */
     const DEFAULT_IMG_BANNER = 'banner.png';
+
+    
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 0;    
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -1102,6 +1115,27 @@ class EsMember
         return $this->isSlugChanged;
     }
     
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return EsMember
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
 
-    
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }    
+
 }

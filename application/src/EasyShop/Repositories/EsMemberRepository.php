@@ -232,7 +232,6 @@ class EsMemberRepository extends EntityRepository
         return $member;
     }
     
-    
     /**
      * Get users with the given slug excluding provided memberId
      *
@@ -262,4 +261,19 @@ class EsMemberRepository extends EntityRepository
     
     }
     
+    /**
+     * Deactivate / Activate account
+     * @param $member
+     * @param $activate
+     * @return EsMember
+     */
+    public function accountActivation($member, $activate = true)
+    {
+        $em = $this->_em;
+        $member->setIsActive($activate);
+        $em->flush();
+
+        return $member;
+    }    
+
 }

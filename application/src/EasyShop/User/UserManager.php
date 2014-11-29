@@ -646,13 +646,12 @@ class UserManager
      * @param string   $telephoneNumber [description]
      * @param interger $country
      */
-    public function setAddress($streetAddress,$region,$city,$memberId,$type=0,$consignee="",$mobileNumber="",$telephoneNumber = "",$country = 1)
+    public function setAddress($streetAddress,$region,$city,$memberId,$consignee="",$mobileNumber="",$telephoneNumber = "", $lat = EsAddress::TYPE_DELIVERY, $lng = EsAddress::TYPE_DELIVERY, $country = 1, $type = EsAddress::TYPE_DELIVERY)
     { 
         $formValidation = $this->formValidation; 
         $formFactory = $this->formFactory;
         $rules = $formValidation->getRules('user_shipping_address'); 
         $data['isSuccessful'] = false;
-
         if(intval($type)===EsAddress::TYPE_DELIVERY){
 
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
@@ -664,7 +663,7 @@ class UserManager
                                 ->add('region', 'text', array('constraints' => $rules['region'])) 
                                 ->add('city', 'text', array('constraints' => $rules['city']))
                                 ->getForm();
-
+                   
             $form->submit([ 
                 'consignee' => $consignee,
                 'mobile_number' => $mobileNumber,
@@ -712,6 +711,8 @@ class UserManager
                     $esAddress->setConsignee($consignee);
                     $esAddress->setMobile(substr($mobileNumber,1));
                     $esAddress->setTelephone($telephoneNumber);
+                    $esAddress->setLat($lat);
+                    $esAddress->setLng($lng);
                     $this->em->persist($esAddress);
                     $this->em->flush();
 
