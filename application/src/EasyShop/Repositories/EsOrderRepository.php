@@ -187,8 +187,7 @@ class EsOrderRepository extends EntityRepository
     public function getOrderRelations($oneMemberId, $anotherMemberId, $excludeReviewed = false)
     {
         $qb = $this->_em->createQueryBuilder();
-        
-        
+
         $queryBuilder = $qb->select('o.idOrder, o.invoiceNo, o.transactionId, o.dateadded, stat.name as orderStatusName',
                                 'stat.orderStatus', 'p.name as productname', 'COALESCE(COUNT(feedback.idFeedback), 0) as reviewCount')
                 ->from('EasyShop\Entities\EsOrder','o')

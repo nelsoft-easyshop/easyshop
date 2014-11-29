@@ -1,7 +1,7 @@
 <?php
 
 namespace EasyShop\Transaction;
-
+use EasyShop\Entities\EsOrderProductStatus;
 class TransactionManager
 {
     /**
@@ -55,9 +55,9 @@ class TransactionManager
                         !isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]) &&
                         $transaction['sellerId'] === $product['seller_id']
                     ) {
-                        $product['has_shipping_summary'] = 0;
+                        $product['has_shipping_summary'] = false;
                         if ( (bool) $product['courier'] === true &&  (bool) $product['datemodified']  === true ) {
-                            $product['has_shipping_summary'] = 1;
+                            $product['has_shipping_summary'] = true;
                         }
                         $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
                     }
@@ -123,7 +123,7 @@ class TransactionManager
 
             $doesAllOrderProductResponded = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                                         ->findOneBy([
-                                                            'status' => 0, #orderProductStatus Ongoing
+                                                            'status' => EsOrderProductStatus::STATUS_ONGOING,
                                                             'order' => $orderId
                                                         ]);
             if ( ! (bool) $doesAllOrderProductResponded ) {
@@ -136,8 +136,8 @@ class TransactionManager
                 $this->em->getRepository('EasyShop\Entities\EsOrder')->updateOrderStatus($esOrder, $esOrderStatus);
                 $orderHistoryData = [
                     'order_id' => $orderId,
-                    'order_status' => 1, #remove hard coded strings
-                    'comment' => 'COMPLETED', #remove hard coded strings
+                    'order_status' => EsOrderProductStatus::STATUS_FORWARD_TO_SELLER,
+                    'comment' => 'COMPLETED',
                 ];
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
             }
@@ -179,7 +179,7 @@ class TransactionManager
                 'historyLog' => 'FORWARDED'
             ];
         }
-        else if ( (int) $status === 2 ||  (int) $status === 3 ) {
+        else if ( (int) $status === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER || (int) $status === (int) EsOrderProductStatus::STATUS_COD ) {
             $qb = $this->em->createQueryBuilder()
                 ->select('op.idOrderProduct')
                 ->from('EasyShop\Entities\EsOrderProduct','op')
@@ -193,10 +193,10 @@ class TransactionManager
             $orderProduct = $qb->getOneOrNullResult();
 
             $result['orderProductId'] = $orderProduct['idOrderProduct'];
-            if ( (int) $status === 2 ) {
+            if ( (int) $status === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER ) {
                 $result['historyLog'] = 'RETURNED';
             }
-            else if ( (int) $status === 3 ) {
+            else if ( (int) $status === (int) EsOrderProductStatus::STATUS_COD ) {
                 $result['historyLog'] = 'COD - COMPLETED';
             }
         }
@@ -243,14 +243,14 @@ class TransactionManager
         $parseData = array_splice($row[0], 1, 10);
         $parseData['attr'] = array();
 
-        if ( (int) $orderProductStatus === 1) { // if forward to seller (email to seller)  #fix hard coded strings
+        if ( (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_FORWARD_TO_SELLER ) {
             $parseData['user'] = $row[0]['buyer'];
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
             $parseData['recipient'] = $row[0]['seller'];
         }
-        else if ( (int) $orderProductStatus === 2 || (int) $orderProductStatus === 3){ // if return to buyer or COD (email to buyer)  #fix hard coded strings
+        else if ( (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER || (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_COD ) {
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
@@ -260,23 +260,24 @@ class TransactionManager
 
         switch( (int) $row[0]['payment_method_id'] ){
             case 1:
-                $parseData['payment_method_name'] = "PayPal"; #fix hard coded strings
+                $parseData['payment_method_name'] = "PayPal";
                 break;
             case 2:
-                $parseData['payment_method_name'] = "DragonPay"; #fix hard coded strings
+                $parseData['payment_method_name'] = "DragonPay";
                 break;
             case 3:
-                $parseData['payment_method_name'] = "Cash on Delivery"; #fix hard coded strings
+                $parseData['payment_method_name'] = "Cash on Delivery";
                 break;
             case 5:
-                $parseData['payment_method_name'] = "Bank Deposit"; #fix hard coded strings
+                $parseData['payment_method_name'] = "Bank Deposit";
                 break;
         }
 
         foreach( $row as $r){
-            if( (string)$r['attr_name']!=='' && (string)$r['attr_value']!=='' ){
+            if( (string) $r['attr_name'] !== '' && (string) $r['attr_value'] !== '' ) {
                 array_push($parseData['attr'], array('field' => ucwords(strtolower($r['attr_name'])), 'value' => ucwords(strtolower($r['attr_value'])) ));
-            }else{
+            }
+            else {
                 array_push($parseData['attr'], array('field' => 'Attribute', 'value' => 'N/A' ));
             }
         }

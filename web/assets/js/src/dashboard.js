@@ -739,7 +739,6 @@
         if(!isConfirmed){
             return false;
         }
-
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
@@ -748,18 +747,19 @@
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
-        $.post("/memberpage/transactionResponse", data, function(data){
-            try{
+
+        $.post("/memberpage/transactionResponse", data, function(data) {
+            try {
                 var serverResponse = jQuery.parseJSON(data);
             }
-            catch(e){
+            catch (e) {
                 alert('An error was encountered while processing your data. Please try again later.');
                 txResponseBtn.val(buttonText);
                 txResponseBtn.addClass('enabled').removeClass('loading');
                 return false;
             }
 
-            if(serverResponse.result !== 'success'){
+            if (serverResponse.result !== 'success') {
                 alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
                 txResponseBtn.val(buttonText);
                 txResponseBtn.addClass('enabled').removeClass('loading');

@@ -14,7 +14,7 @@
         <li><a href="#completed-transaction">Completed</a></li>
     </ul>
 </div>
-<!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
+<!---------------------------------------------------------------ongoing bought starts here-------------------------------------------------------------->
 <div class="col-md-12" id="on-going-transaction">
 <div class="row">
 <div class="transaction-title-bought">
@@ -586,7 +586,7 @@
 </div>
 </div>
 </div>
-<!---------------------------------------------------------------completed bought starts here---------------------------------------------------------------->
+<!---------------------------------------------------------------completed bought starts here------------------------------------------------------------>
 <div class="col-md-12" id="completed-transaction">
 <div class="row">
 <div class="transaction-title-bought-completed">
