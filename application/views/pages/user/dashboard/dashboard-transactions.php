@@ -346,24 +346,24 @@
                                         <span class="strong-label">Status : </span>
                                         <?PHP if (intval($soldTransactionDetails['orderStatus']) === 0 && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                             <?PHP if (intval($product['isReject']) === 1) : ?>
-                                                <span class="trans-status-pending">ITEM REJECTED</span>
+                                                <span class="trans-status-pending status-class">ITEM REJECTED</span>
                                             <?PHP else : ?>
                                                 <?PHP if (intval($product['idOrderProductStatus']) === 0) : ?>
                                                     <?PHP if( intval($soldTransactionDetails['idPaymentMethod']) === 3 ) : ?>
-                                                        <span class="trans-status-cod">Cash on Delivery</span>
+                                                        <span class="trans-status-cod status-class">Cash on Delivery</span>
                                                     <?PHP else:?>
                                                         <?PHP if ( (bool) $product['courier'] > 0 &&  (bool) $product['datemodified'] > 0) : ?>
-                                                            <span class="trans-status-cod">Item shipped</span>
+                                                            <span class="trans-status-cod status-class">Item shipped</span>
                                                         <?PHP elseif (!( (bool) $product['courier'] > 0 &&  (bool) $product['datemodified'] > 0) ) : ?>
-                                                            <span class="trans-status-pending">Easyshop received payment.</span>
+                                                            <span class="trans-status-pending status-class">Easyshop received payment.</span>
                                                         <?PHP endif;?>
                                                     <?PHP endif;?>
                                                 <?PHP else : ?>
-                                                    <?=$soldTransactionDetails['paymentMethod']?>
+                                                    <span class="trans-status-pending status-class"><?=$soldTransactionDetails['paymentMethod']?></span>
                                                 <?PHP endif; ?>
                                             <?PHP endif; ?>
                                         <?PHP else : ?>
-                                            <span class="trans-status-pending">ON HOLD</span>
+                                            <span class="trans-status-pending status-class">ON HOLD</span>
                                         <?PHP endif; ?>
                                     </div>
                                 </div>
@@ -441,12 +441,85 @@
                         <?PHP endif; ?>
                         <div class="trans-btn-wrapper">
                         <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && (int) $soldTransactionDetails['isFlag'] === 0) : ?>
-                            <!--                    ---------------------------        SHIP ITEM FORM STARTS HERE                                 ----------------------------------------------------->
-                            <button class="btn btn-default-1">Ship Item</button>
-                            <button class="btn btn-default-1">Cancel order</button>
+                            <button class="btn btn-default-1 isform shipment-detail-button txt_buttons">Ship Item</button>
+                            <div class="shipping-details">
+                                <?php
+                                $disable = (bool) trim($product['shipping_comment']);
+                                $attr = ['class'=>'shipping_details_form'];
+                                echo form_open('',$attr);
+                                ?>
+                                <div class="shipping-details-wrapper">
+                                    <h1>Shipping details</h1>
+                                </div>
+                                <div class="col-xs-12 text-right">
+                                    <?=$product['datemodified'] ? date_format($product['datemodified'], 'jS \of F Y') : ''?>
+                                </div>
+                                <div class="col-xs-12 pd-bttm-10"></div>
+                                <div class="col-xs-12 shipping-details-con">
+                                    <div class="col-md-4">
+                                        Shipped by:
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="ui-form-control" name="courier" value="<?=html_escape($product['courier'])?>" >
+                                    </div>
+                                    <div class="col-xs-12 pd-bttm-10"></div>
+                                    <div class="col-md-4">
+                                        Tracking Number:
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="ui-form-control" name="tracking_num" value="<?=html_escape($product['trackingNum']);?>" >
+                                    </div>
+                                    <div class="col-xs-12 pd-bttm-10"></div>
+                                    <div class="col-md-4">
+                                        Delivery Date:
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="ui-form-control modal_date" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
+                                    </div>
+                                    <div class="col-xs-12 pd-bttm-10"></div>
+                                    <div class="col-md-4">
+                                        Expected Date of Arrival:
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="ui-form-control modal_date" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>" >
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <textarea name="comment" placeholder="Write your comment..." data-value="<?=html_escape($product['shipping_comment']); ?>" ><?=html_escape($product['shipping_comment'])?></textarea>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="shipping-border"></div>
+                                    <div class="shipping-btns">
+                                        <div class="col-xs-12 padding-reset">
+                                            <input name="order_product" type="hidden" value="<?=$product['idOrderProduct']?>">
+                                            <input name="transact_num" type="hidden" value="<?=$soldTransactionDetails['idOrder']?>">
+                                            <input class="shipping_comment_submit btn btn-default-3" type="submit" value="<?= $disable ? 'Update':'Save'?>">
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <?php echo form_close();?>
+                            </div>
+                            <div class="shipping-details-container">
+                                <input type="hidden" name="courier" value="<?=html_escape($product['courier'])?>">
+                                <input type="hidden" name="tracking_num" value="<?=html_escape($product['trackingNum']);?>">
+                                <input type="hidden" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
+                                <input type="hidden" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>">
+                                <input type="hidden" name="comment" value="<?=html_escape($product['shipping_comment'])?>">
+                                <input type="hidden" name="is_new" value="<?= $disable ?>">
+                            </div>
+                            <?php
+                            $attr = ['class' => 'transac_response'];
+                            echo form_open('', $attr);
+                            ?>
+                            <input type="button" value="Cancel Order" class="btn btn-default-1 transac_response_btn tx_return enabled txt_buttons">
+                            <input type="hidden" name="seller_response" value="<?=$product['idOrderProduct']?>">
+                            <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
+                            <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
+                            <?php echo form_close();?>
                         <?PHP elseif (intval($soldTransactionDetails['orderStatus']) === 0 && intval($product['idOrderProductStatus']) === 0 && intval($soldTransactionDetails['idPaymentMethod']) === 3) : ?>
                             <!--                    ---------------------------        COMPLETE BUTTON STARTS HERE                                 ----------------------------------------------------->
-                            <button class="btn btn-default-3">
+                            <button class="btn btn-default-3 txt_buttons">
                                 <span class="img-completed"></span>completed
                             </button>
                         <?PHP endif; ?>
@@ -454,40 +527,40 @@
                             <button class="btn btn-default-1 give-feedback-button">
                                 <span class="img-give-feedback"></span>give feedback
                             </button>
-                                <div class="give-feedback-modal">
-                                    <?php
-                                    $attr = ['class'=>'transac-feedback-form'];
-                                    echo form_open('',$attr);
-                                    ?>
-                                    <input type="hidden" name="feedb_kind" value="1">
-                                    <input type="hidden" name="order_id" value="<?=$soldTransactionDetails['idOrder']?>">
-                                    <input type="hidden" name="for_memberid" value="<?=$soldTransactionDetails['buyerId']?>">
-                                    <div class="feedback-content">
-                                        <h1>LEAVE A FEEDBACK</h1>
-                                        <div class="star-rating-wrapper">
-                                            <span class="star-label"><?=$this->lang->line('rating')[0].':'?></span>
-                                            <div class="feedb-star rating1"></div>
-                                        </div>
-                                        <div class="star-rating-wrapper">
-                                            <span class="star-label"><?=$this->lang->line('rating')[1].':'?></span>
-                                            <div class="feedb-star rating2"></div>
-                                        </div>
-                                        <div class="star-rating-wrapper">
-                                            <span class="star-label"><?=$this->lang->line('rating')[2].':'?></span>
-                                            <div class="feedb-star rating3"></div>
-                                        </div>
-                                        <span class="raty-error"></span>
-                                        <div>
-                                            <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
-                                            <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-                                        </div>
+                            <div class="give-feedback-modal">
+                                <?php
+                                $attr = ['class'=>'transac-feedback-form'];
+                                echo form_open('',$attr);
+                                ?>
+                                <input type="hidden" name="feedb_kind" value="1">
+                                <input type="hidden" name="order_id" value="<?=$soldTransactionDetails['idOrder']?>">
+                                <input type="hidden" name="for_memberid" value="<?=$soldTransactionDetails['buyerId']?>">
+                                <div class="feedback-content">
+                                    <h1>LEAVE A FEEDBACK</h1>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label"><?=$this->lang->line('rating')[0].':'?></span>
+                                        <div class="feedb-star rating1"></div>
                                     </div>
-                                    <div class="feedback-btns">
-                                        <span class="simplemodal-close btn btn-default-1">Cancel</span>
-                                        <span class="btn btn-default-3 feedback-submit">Submit</span>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label"><?=$this->lang->line('rating')[1].':'?></span>
+                                        <div class="feedb-star rating2"></div>
                                     </div>
-                                    <?php echo form_close();?>
+                                    <div class="star-rating-wrapper">
+                                        <span class="star-label"><?=$this->lang->line('rating')[2].':'?></span>
+                                        <div class="feedb-star rating3"></div>
+                                    </div>
+                                    <span class="raty-error"></span>
+                                    <div>
+                                        <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                        <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+                                    </div>
                                 </div>
+                                <div class="feedback-btns">
+                                    <span class="simplemodal-close btn btn-default-1">Cancel</span>
+                                    <span class="btn btn-default-3 feedback-submit">Submit</span>
+                                </div>
+                                <?php echo form_close();?>
+                            </div>
                             <?PHP endif; ?>
                         </div>
                     <?PHP endif; ?>
@@ -1419,57 +1492,57 @@
 </div>
 
 <!---------------------------------------------------------------ship item modal starts here---------------------------------------------------------------->
-<div id="shipping-details">
-    <div class="shipping-details-wrapper">
-        <h1>Shipping details</h1>
-    </div>
-    <div class="col-xs-12 text-right">
-        20th November 2014
-    </div>
-    <div class="col-xs-12 pd-bttm-10"></div>
-    <div class="col-xs-12 shipping-details-con">
-        <div class="col-md-4">
-            Shipped by:
-        </div>
-        <div class="col-md-8">
-            <input type="text" class="ui-form-control">
-        </div>
-        <div class="col-xs-12 pd-bttm-10"></div>
-        <div class="col-md-4">
-            Tracking Number:
-        </div>
-        <div class="col-md-8">
-            <input type="text" class="ui-form-control">
-        </div>
-        <div class="col-xs-12 pd-bttm-10"></div>
-        <div class="col-md-4">
-            Delivery Date:
-        </div>
-        <div class="col-md-8">
-            <input type="text" class="ui-form-control">
-        </div>
-        <div class="col-xs-12 pd-bttm-10"></div>
-        <div class="col-md-4">
-            Expected Date of Arrival:
-        </div>
-        <div class="col-md-8">
-            <input type="text" class="ui-form-control">
-        </div>
-        <div class="col-xs-12">
-            <textarea placeholder="Write your comment..."></textarea>
-        </div>
-        <div class="clear"></div>
-        <div class="shipping-border"></div>
-        <div class="shipping-btns">
-            <div class="col-xs-12 padding-reset">
-                <span class="simplemodal-close btn btn-default-1">Edit</span>
-                <button class="btn btn-default-3">Save</button>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div class="clear"></div>
-</div>
+<!--<div id="shipping-details">-->
+<!--    <div class="shipping-details-wrapper">-->
+<!--        <h1>Shipping details</h1>-->
+<!--    </div>-->
+<!--    <div class="col-xs-12 text-right">-->
+<!--        20th November 2014-->
+<!--    </div>-->
+<!--    <div class="col-xs-12 pd-bttm-10"></div>-->
+<!--    <div class="col-xs-12 shipping-details-con">-->
+<!--        <div class="col-md-4">-->
+<!--            Shipped by:-->
+<!--        </div>-->
+<!--        <div class="col-md-8">-->
+<!--            <input type="text" class="ui-form-control">-->
+<!--        </div>-->
+<!--        <div class="col-xs-12 pd-bttm-10"></div>-->
+<!--        <div class="col-md-4">-->
+<!--            Tracking Number:-->
+<!--        </div>-->
+<!--        <div class="col-md-8">-->
+<!--            <input type="text" class="ui-form-control">-->
+<!--        </div>-->
+<!--        <div class="col-xs-12 pd-bttm-10"></div>-->
+<!--        <div class="col-md-4">-->
+<!--            Delivery Date:-->
+<!--        </div>-->
+<!--        <div class="col-md-8">-->
+<!--            <input type="text" class="ui-form-control">-->
+<!--        </div>-->
+<!--        <div class="col-xs-12 pd-bttm-10"></div>-->
+<!--        <div class="col-md-4">-->
+<!--            Expected Date of Arrival:-->
+<!--        </div>-->
+<!--        <div class="col-md-8">-->
+<!--            <input type="text" class="ui-form-control">-->
+<!--        </div>-->
+<!--        <div class="col-xs-12">-->
+<!--            <textarea placeholder="Write your comment..."></textarea>-->
+<!--        </div>-->
+<!--        <div class="clear"></div>-->
+<!--        <div class="shipping-border"></div>-->
+<!--        <div class="shipping-btns">-->
+<!--            <div class="col-xs-12 padding-reset">-->
+<!--                <span class="simplemodal-close btn btn-default-1">Edit</span>-->
+<!--                <button class="btn btn-default-3">Save</button>-->
+<!--            </div>-->
+<!--            <div class="clear"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="clear"></div>-->
+<!--</div>-->
 
 
 

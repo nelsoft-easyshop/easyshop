@@ -592,32 +592,40 @@
         $('#th-p-net').toggle();
         $('.td-p-net').toggle();
     });
-    
-    
+
     $(function() {
         $( "#birthday-picker" ).datepicker({
             changeMonth: true,
-			changeYear: true
+            changeYear: true
         });
-        
+
         $( "#sales-end-date" ).datepicker({
             changeMonth: true,
-			changeYear: true
+            changeYear: true
         });
-        
+
         $( "#sales-start-date" ).datepicker({
             changeMonth: true,
-			changeYear: true
+            changeYear: true
         });
-        
+
         $( "#payout-end-date" ).datepicker({
             changeMonth: true,
-			changeYear: true
+            changeYear: true
         });
-        
+
         $( "#payout-start-date" ).datepicker({
             changeMonth: true,
-			changeYear: true
+            changeYear: true
+        });
+
+        $( ".modal_date" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '2013:2050',
+            dateFormat:"yy-M-dd"
+        }).on('keypress',function(){
+            return false;
         });
     });
 
@@ -634,12 +642,152 @@
         return false;
     });
 
-    $('.div-meta-description').on('click', '.shipment-detail-button', function(e) {
+    $('.shipment-detail-button').on('click', function(e) {
         var shipmentModal = $(this).parent().find('div.shipping-details');
-        shipmentModal.modal();
+        var shipmentContainer = $(this).parent().find('div.shipping-details-container');
+        var thisbtn = $(this);
+        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var form = shipmentModal.find('.shipping_details_form');
+        var submitbtn = $(form).find('.shipping_comment_submit');
+        var input = $(form).find('input[type="text"]');
+        var editbtn = $(form).find('.tx_modal_edit');
+        var cancelbtn = $(form).find('.tx_modal_cancel');
+        var courier = form.find('input[name="courier"]');
+        var tracking_num = form.find('input[name="tracking_num"]');
+        var delivery_date = form.find('input[name="delivery_date"]');
+        var expected_date = form.find('input[name="expected_date"]');
+        var textarea = $(form).find('textarea');
+
+        courier.val(shipmentContainer.find('input[name="courier"]').val());
+        tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
+        delivery_date.val(shipmentContainer.find('input[name="delivery_date"]').val());
+        expected_date.val(shipmentContainer.find('input[name="expected_date"]').val());
+        textarea.val(shipmentContainer.find('input[name="comment"]').val());
+
+        shipmentModal.modal({
+            escClose: false,
+            onShow: function() {
+                if ( thisbtn.hasClass('isform') ) {
+                    form.validate({
+                        rules:{
+                            courier:{
+                                required: true
+                            },
+                            delivery_date:{
+                                required: true
+                            }
+                        },
+                        errorElement: "span",
+                        errorPlacement: function(error, element) {
+                            error.addClass('red');
+                            error.insertAfter(element);
+                        },
+                        submitHandler: function(form){
+                            input.attr('disabled',false);
+                            textarea.attr('disabled', false);
+
+                            $.post('/memberpage/addShippingComment', $(form).serializeArray(), function(data){
+                                submitbtn.attr('disabled', false);
+                                submitbtn.val('Save');
+
+                                try{
+                                    var obj = jQuery.parseJSON(data);
+                                }
+                                catch(e){
+                                    alert('An error was encountered while processing your data. Please try again later.');
+                                    return false;
+                                }
+
+                                if (obj.result === 'success') {
+                                    shipmentContainer.find('input[name="courier"]').val(courier.val());
+                                    shipmentContainer.find('input[name="tracking_num"]').val(tracking_num.val());
+                                    shipmentContainer.find('input[name="delivery_date"]').val(delivery_date.val());
+                                    shipmentContainer.find('input[name="expected_date"]').val(expected_date.val());
+                                    shipmentContainer.find('input[name="comment"]').val(textarea.val());
+                                    shipmentContainer.find('input[name="is_new"]').val(1);
+                                    textarea.attr('data-value', htmlDecode(textarea.val()));
+                                    textarea.attr('disabled', true);
+
+                                    if(thisbtn.hasClass('isform')) {
+                                        txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                    }
+                                    $.modal.close();
+                                }else{
+                                    alert(obj.error);
+                                }
+                            });
+                            submitbtn.attr('disabled', true);
+                            submitbtn.val('Saving...');
+                        }
+                    });
+                }
+                this.setPosition();
+                input.each(function(){
+                    if( $.trim($(this).attr('value')).length>0 ){
+                        cancelbtn.trigger('click');
+                        return false;
+                    }
+                });
+            }
+        });
         shipmentModal.parents("#simplemodal-container").addClass("shipping-details-container");
         return false;
     });
+
+    $('.transac_response_btn.enabled').on('click', function() {
+        var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
+        if(!isConfirmed){
+            return false;
+        }
+
+        var txResponseBtn = $(this);
+        var form = txResponseBtn.closest('form.transac_response');
+        var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
+        var data = form.serializeArray();
+        var buttonText = txResponseBtn.val();
+        txResponseBtn.addClass('loading');
+        txResponseBtn.removeClass('enabled');
+        txResponseBtn.val('Please wait..');
+        $.post("/memberpage/transactionResponse", data, function(data){
+            try{
+                var serverResponse = jQuery.parseJSON(data);
+            }
+            catch(e){
+                alert('An error was encountered while processing your data. Please try again later.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+                return false;
+            }
+
+            if(serverResponse.result !== 'success'){
+                alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+            }
+            else{
+                if(txResponseBtn.hasClass('tx_forward')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                }else if(txResponseBtn.hasClass('tx_return')){
+                    txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                }else if(txResponseBtn.hasClass('tx_cod')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                }
+                txResponseBtn.val('Successful');
+                txResponseBtn.parent().parent().find('.txt_buttons').hide();
+            }
+            txResponseBtn.addClass('enabled');
+        });
+
+
+    });
+
+    function htmlDecode(value) {
+        if (value) {
+            return $('<div />').html(value).text();
+        } else {
+            return '';
+        }
+    }
 
     $(document).on('mouseover','.feedb-star', function(){
         $(this).siblings('.raty-error').html('');

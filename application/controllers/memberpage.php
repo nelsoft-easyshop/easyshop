@@ -751,7 +751,7 @@ class Memberpage extends MY_Controller
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
-        
+
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
         $imageArray = array(
@@ -781,8 +781,8 @@ class Memberpage extends MY_Controller
                 $data['order_product_id'] = $this->input->post('cash_on_delivery');
                 $data['status'] = 3;
             }
-            
-            /** 
+
+            /**
              *  NEXT LINE OF CODE:
              *  Updates database entries and retrieve update stats and buyer info
              *  Also checks for data accuracy
@@ -840,7 +840,7 @@ class Memberpage extends MY_Controller
         }
         else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
-            
+
             // Fetch transaction data
             $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
                                                     ->findOneBy([
@@ -851,7 +851,7 @@ class Memberpage extends MY_Controller
 
             if ( (int) count($getTransaction) === 1) {
                 $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
-                
+
                 if ($dragonpayResult == 'S') {
                     $serverResponse['result'] = 'success';
                     $serverResponse['error'] = '';
@@ -885,7 +885,7 @@ class Memberpage extends MY_Controller
                     'comment' => $this->input->post('comment')
                 );
                 $result = $this->payment_model->addBankDepositDetails($postData);
-                
+
                 $serverResponse['result'] = $result ? 'success' : 'fail';
                 $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
             }
