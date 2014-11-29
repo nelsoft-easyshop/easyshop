@@ -131,10 +131,11 @@
                             <div class="color-theming">
                                 <?php $storeColor = $member->getStoreColor(); ?>
                                 <div class="current-color-drop" style="background: #<?php echo html_escape($storeColor->getHexadecimal()); ?>;">
+                                    <input type="hidden" value="<?php echo $storeColor->getIdStoreColor(); ?>" id="current-store-color-id"/>
                                     <span class="color-name-drop"><?php echo html_escape($storeColor->getName()); ?></span>
                                     <i class="cd icon-dropdown pull-right"></i>
                                 </div>
-                                <input type="hidden" value="<?php echo $storeColor->getIdStoreColor(); ?>" id="current-store-color-id"/>
+                                
                                 <div class="color-dropdown" >
                                     <ul class="color-list" id="store-color-dropdown">
                                     </ul>

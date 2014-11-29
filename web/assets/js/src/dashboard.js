@@ -536,105 +536,26 @@
         }
     });
 
-    $( "#color-item-1" ).click(function() {
-      $( ".color-name-drop" ).text("Easyshop");
-      $( ".current-color-drop" ).css("background", "#ff893a");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor1 = $("i.cd").attr("class");
-        if(attrColor1 == "cd icon-dropup pull-right"){
+    $('.color-theming').on('click', '.color-li',function(){
+        var colorList = $(this);
+        $( ".color-name-drop" ).text(colorList.data('name'));
+        $( ".current-color-drop" ).css("background", colorList.css('background'));
+        $( ".current-color-drop" ).trigger( "click" );
+        var arrowIconClass = $("i.cd").attr("class");
+        if(arrowIconClass == "cd icon-dropup pull-right"){
             $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
         }
-    });
-    $( "#color-item-2" ).click(function() {
-      $( ".color-name-drop" ).text("California");
-      $( ".current-color-drop" ).css("background", "#F89406");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor2 = $("i.cd").attr("class");
-        if(attrColor2 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-3" ).click(function() {
-      $( ".color-name-drop" ).text("POMEGRANATE");
-      $( ".current-color-drop" ).css("background", "#F22613");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor3 = $("i.cd").attr("class");
-        if(attrColor3 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-4" ).click(function() {
-      $( ".color-name-drop" ).text("Radical red");
-      $( ".current-color-drop" ).css("background", "#F62459");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor4 = $("i.cd").attr("class");
-        if(attrColor4 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-5" ).click(function() {
-      $( ".color-name-drop" ).text("Honey Flower");
-      $( ".current-color-drop" ).css("background", "#674172");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor5 = $("i.cd").attr("class");
-        if(attrColor5 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-6" ).click(function() {
-      $( ".color-name-drop" ).text("Ming");
-      $( ".current-color-drop" ).css("background", "#336E7B");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor6 = $("i.cd").attr("class");
-        if(attrColor6 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-7" ).click(function() {
-      $( ".color-name-drop" ).text("SAN MARINO");
-      $( ".current-color-drop" ).css("background", "#446CB3");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor7 = $("i.cd").attr("class");
-        if(attrColor7 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-8" ).click(function() {
-      $( ".color-name-drop" ).text("JELLY BEAN");
-      $( ".current-color-drop" ).css("background", "#2574A9");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor8 = $("i.cd").attr("class");
-        if(attrColor8 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-9" ).click(function() {
-      $( ".color-name-drop" ).text("SALEM");
-      $( ".current-color-drop" ).css("background", "#1E824C");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
+        var selectedColorList = $('.color-li.selected');
+        selectedColorList.removeClass('selected');
+        var checkIcon = selectedColorList.find('i');
+        var newCheckIcon = checkIcon.clone();
+        checkIcon.remove();
+        colorList.addClass('selected');
+        colorList.append(newCheckIcon);
     });
     
-    $( "#color-item-10" ).click(function() {
-      $( ".color-name-drop" ).text("LYNCH");
-      $( ".current-color-drop" ).css("background", "#6C7A89");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
 
+    
     $( "#btn-edit-store-cat" ).click(function() {
       $( ".current-store-cat" ).slideToggle( "fast" );
       $( ".edit-store-cat" ).slideToggle( "fast" );
@@ -953,11 +874,24 @@
                     var unorderedList = $("#store-color-dropdown");
                     var colorList = [];
                     var currentColorId = $('#current-store-color-id').val();
+                    var isCurrentColorSet = false;
+
                     $.each(jsonResponse.colors, function(index, color) {
-                        colorList.push('<li style="background: #'+color.hexadecimal+'; text-transform: uppercase;" id="color-item-'+color.idStoreColor+'">'+color.name+'</li>');
+                        var icon = '';
+                        var currentColorClass = '';
+                        if(!isCurrentColorSet && color.idStoreColor == currentColorId){
+                            icon = '<i class="fa fa-check pull-right"></i>';
+                            currentColorClass = 'selected';
+                            isCurrentColorSet = true;
+                        }
+                        var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+color.name+'" data-id="'+color.idStoreColor+'" ' +
+                                           'style="background: #'+color.hexadecimal+'; text-transform: uppercase;" ' +
+                                           'id="color-item-'+color.idStoreColor+'">' +color.name + icon +
+                                        '</li>';
+                        colorList.push(listHtml);
                     });
                     unorderedList.append( colorList.join('') );
-                    unorderedList.find('#color-item-'+currentColorId).append(' <i class="fa fa-check pull-right"></i>');
+                    unorderedList.find('#color-item-'+currentColorId).append(' </i>');
                 
                     isStoreSetupInitialized = true;
                 }
