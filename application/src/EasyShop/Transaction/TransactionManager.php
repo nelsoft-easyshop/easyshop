@@ -49,6 +49,8 @@ class TransactionManager
         foreach ($getUserBoughtTransactions as $key => $transaction) {
             if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
                 $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']] = $transaction;
+                $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['userImage'] = $this->userManager->getUserImage($transaction['sellerId']);
+
                 $orderProducts =
                     $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                 ->getOrderProductTransactionDetails($transaction['idOrder']);
@@ -86,6 +88,7 @@ class TransactionManager
         foreach ($getUserSoldTransactions as $key => $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
+                $soldTransactionDetails[$transaction['idOrder']]['userImage'] = $this->userManager->getUserImage($transaction['buyerId']);
                 $orderProducts =
                     $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                 ->getOrderProductTransactionDetails($transaction['idOrder']);

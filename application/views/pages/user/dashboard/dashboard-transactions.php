@@ -195,7 +195,7 @@
                             <h4>Bought From:</h4>
                             <div>
                                 <span class="transac-item-profile-con">
-                                    <img src="/assets/images/products/samsung-p.jpg">
+                                    <img src="<?=$boughtTransactionDetails['userImage']?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
                                     <?=html_escape($product['seller'])?>
@@ -397,7 +397,7 @@
                             <h4>Sold To:</h4>
                             <div>
                                 <span class="transac-item-profile-con">
-                                    <img src="/assets/images/products/samsung-p.jpg">
+                                    <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
                                     <?=html_escape($soldTransactionDetails['buyer'])?>
@@ -691,7 +691,7 @@
                         <h4>Bought From:</h4>
                         <div>
                             <span class="transac-item-profile-con">
-                                <img src="/assets/images/products/samsung-p.jpg">
+                                <img src="<?=$boughtTransactionDetails['userImage']?>">
                             </span>
                             <span class="transac-item-consignee-name">
                                     <?=html_escape($product['seller'])?>
@@ -856,7 +856,7 @@
                             <h4>Sold To:</h4>
                             <div>
                                 <span class="transac-item-profile-con">
-                                    <img src="/assets/images/products/samsung-p.jpg">
+                                    <img src="<?=$soldTransactionDetails['userImage']?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
                                     <?=html_escape($soldTransactionDetails['buyer'])?>
