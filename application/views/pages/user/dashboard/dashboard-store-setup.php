@@ -146,9 +146,6 @@
                     <div class="form-group">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-5">
-                            <button class="btn btn-setting-edit-btn">
-                                Preview
-                            </button>
                             <button id="store-color-save" class="btn btn-setting-save-btn btn-color-save">
                                 Save changes
                             </button>
@@ -167,7 +164,7 @@
                     
                 <div class="clear"></div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Customize the color theme of your store page. Choose from the different available colors and make your store page more personalized.
                 </p>
             </div>
         </div>
