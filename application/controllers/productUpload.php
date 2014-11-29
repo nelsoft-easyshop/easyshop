@@ -396,6 +396,7 @@ class productUpload extends MY_Controller
      */
     public function uploadimage()
     {  
+        $imageUtility = $this->serviceContainer['image_utility'];
         $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
@@ -475,7 +476,7 @@ class productUpload extends MY_Controller
             for ($i=0; $i < sizeof($filenames_ar); $i++) {
                 if($isCroppable){
                     $coordinate = explode(',', $coordinates[$i]);
-                    $this->es_img_crop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+                    $imageUtility->imageCrop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
                 }
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
                 $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
@@ -506,40 +507,13 @@ class productUpload extends MY_Controller
     }
 
     /**
-     * Crop product image based on coordinates
-     * @param  string $souceImage
-     * @param  float  $axisX
-     * @param  float  $axisY
-     * @param  float  $axisX2
-     * @param  float  $axisY2
-     */
-    private function es_img_crop($souceImage, $axisX, $axisY, $width, $height)
-    { 
-         $config = [
-            'image_library' => 'gd2',
-            'maintain_ratio' => false,
-            'source_image' => $souceImage, 
-            'quality' => '100%',
-            'width' => $width,
-            'height' => $height,
-            'x_axis' => $axisX,
-            'y_axis' => $axisY
-        ]; 
-        $this->image_lib->initialize($config);
-
-        if ( ! $this->image_lib->image_process_gd('crop')){
-            echo $this->image_lib->display_errors();
-        }
-        $this->image_lib->clear();
-    }
-
-    /**
      *  Upload image for attributes of the product
      *  
      *  @return JSON
      */
     public function uploadimageOther()
     {
+        $imageUtility = $this->serviceContainer['image_utility'];
         $temp_product_id = $this->session->userdata('tempId');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $memberId =  $this->session->userdata('member_id');
@@ -575,7 +549,7 @@ class productUpload extends MY_Controller
         if ($this->upload->do_multi_upload('attr-image-input')){ 
             if($isCroppable){
                 $coordinate = explode(',', $coordinates);
-                $this->es_img_crop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+                $imageUtility->imageCrop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
             }
             $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
             $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
