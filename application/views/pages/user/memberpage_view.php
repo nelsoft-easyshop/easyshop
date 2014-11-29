@@ -1,17 +1,25 @@
 
-<link type="text/css" href="/assets/css/jquery-ui.css" rel="stylesheet" />
-<link type="text/css" href="/assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
-<link type="text/css"  href='/assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
-<link type="text/css"  rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css" media="screen"/>
+<link type="text/css" rel="stylesheet" href="/assets/css/jquery-ui.css"  />
+<link type="text/css" rel="stylesheet" href="/assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>"media='screen'/>
+<link type="text/css" rel="stylesheet" href='/assets/css/jqpagination.css' media='screen'/>
+<link type="text/css" rel="stylesheet" href="/assets/css/jquery.Jcrop.min.css" media='screen'/>
+<link type="text/css" rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
+<link type="text/css" rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css" media="screen"/>
 
 
-<div id = "member_page_body">
+<div id="member_page_body" class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'memberpage-christmas-theme' : '' ?>">
     <div class="clear"></div>
     <section>
         <div class="wrapper profile_content">
-            <div class="logo"> <a href="/"><span class="span_bg"></span></a> </div>
+            <div class="logo"> 
+                <a href="/">
+                    <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                    <?php else: ?>
+                        <span class="span_bg"></span>
+                    <?php endif; ?>
+                </a>
+            </div>
             <div class="profile_top_nav">               
             
                 <div>
@@ -21,7 +29,6 @@
                             <span>Setup</span>
                             <ul>
                                 <li><a href="javascript:void(0)" onclick="triggerTab('dashboard');">Dashboard</a></li>
-                                <!-- <li><a href="javascript:void(0)" onclick="triggerTab('wishlist');">Wishlist</a></li> -->
                                 <li><a href="javascript:void(0)" onclick="triggerTab('personal_information');">Personal Information</a></li>
                                 <li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment Accounts</a></li>
                                 <li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
