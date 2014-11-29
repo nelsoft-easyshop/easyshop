@@ -816,51 +816,54 @@
     });
     
     $(".save-store-setting").click(function(){
-            var $this = $(this);
-            var storename = $('#input-store-name').val();
-            var storeslug = $('#input-store-slug').val();
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var buttonHtml = $this.html();
-            var field = $this.data('variable');
-            $("#fail-message-"+field).hide();
-            $("#fail-icon-"+field).hide();
+        var $this = $(this);
+        var storename = $('#input-store-name').val();
+        var storeslug = $('#input-store-slug').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var buttonHtml = $this.html();
+        var field = $this.data('variable');
+        $("#fail-message-"+field).hide();
+        $("#fail-icon-"+field).hide();
 
-            var postData = {csrfname: csrftoken};
-            var expectedField = '';
-            if(field == 'store-slug'){
-                 postData['storeslug'] = storeslug;
-            }
-            else{
-                postData['storename'] = storename;
-            }
-            $this.html('PLEASE WAIT');
-            $.ajax({
-                type: "post",
-                url: '/memberpage/updateStoreSetting',
-                data: postData,
-                success: function(data){ 
-                    var response = $.parseJSON(data);
-                    if(response.isSuccessful == 'true'){
-                        $('.edit-'+field).slideToggle( "fast" );
-                        var currentSettingContainer = $('.current-'+field);
-                        currentSettingContainer.slideToggle( "fast" );
-                        var displayHtml = response.updatedValue;
-                        if(field == 'store-slug'){
-                            var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
-                            displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
-                            $('#btn-edit-store-url').css('display', 'none');
-                        } 
-                        currentSettingContainer.find('span').html(displayHtml);
-                    }
-                    else{
-                        var failMessageContainer = $("#fail-message-"+field);
-                        failMessageContainer.html(response.errors);
-                        failMessageContainer.show();
-                        $("#fail-icon-"+field).show();
-                    }
+        var postData = {csrfname: csrftoken};
+        var expectedField = '';
+        var action = '';
+        if(field == 'store-slug'){
+            postData['storeslug'] = storeslug;
+            action = '/memberpage/updateStoreSlug';
+        }
+        else{
+            postData['storename'] = storename;
+            action = '/memberpage/updateStoreName';
+        }
+        $this.html('PLEASE WAIT');
+        $.ajax({
+            type: "post",
+            url: action,
+            data: postData,
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('.edit-'+field).slideToggle( "fast" );
+                    var currentSettingContainer = $('.current-'+field);
+                    currentSettingContainer.slideToggle( "fast" );
+                    var displayHtml = response.updatedValue;
+                    if(field == 'store-slug'){
+                        var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
+                        displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
+                        $('#btn-edit-store-url').css('display', 'none');
+                    } 
+                    currentSettingContainer.find('span').html(displayHtml);
                 }
-            });
-            $this.html(buttonHtml);
+                else{
+                    var failMessageContainer = $("#fail-message-"+field);
+                    failMessageContainer.html(response.errors);
+                    failMessageContainer.show();
+                    $("#fail-icon-"+field).show();
+                }
+            }
+        });
+        $this.html(buttonHtml);
     });
     
     var isStoreSetupInitialized = false;

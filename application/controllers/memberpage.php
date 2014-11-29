@@ -2357,11 +2357,11 @@ class Memberpage extends MY_Controller
 
     
     /**
-     * Updated the store setting
+     * Update the store name 
      *
      * @return json
      */
-    public function updateStoreSetting()
+    public function updateStoreName()
     {   
         $memberId = $this->session->userdata('member_id');
         $formValidation = $this->serviceContainer['form_validation'];
@@ -2370,21 +2370,59 @@ class Memberpage extends MY_Controller
         $entityManager = $this->serviceContainer['entity_manager'];
         $jsonResponse = ['isSuccessful' => 'false',
                          'errors' => []];        
-        if($this->input->post('storename') || $this->input->post('storeslug')){
+                         
+        if($this->input->post('storename')){
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-            $formData = [];
-            if($this->input->post('storename') !== false){
-                $formBuild->add('storename', 'text');
-                $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
-                $formData['storename'] = $this->input->post('storename');
-            }                    
-            if($this->input->post('storeslug') !== false){
-                $formBuild->add('storeslug', 'text');
-                $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
-                $formData['storeslug'] = $this->input->post('storeslug');
-            }                    
+            $formBuild->add('storename', 'text');
+            $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
+            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->findOneBy(['idMember' => $memberId]);
+                $isUpdated = false;
+                if($member){
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                    ->updateStorename($member, $formData['storename']);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storename'];
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        
+        echo json_encode($jsonResponse); 
+    }
+                 
+    /**
+     * Update the store slug 
+     *
+     * @return json
+     */
+    public function updateStoreSlug()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storeslug')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storeslug', 'text');
+            $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
+            $formData['storeslug'] = $this->input->post('storeslug');
             $form = $formBuild->getForm();
             $form->submit($formData);
             
@@ -2393,36 +2431,25 @@ class Memberpage extends MY_Controller
                                           ->findOneBy(['idMember' => $memberId]);
                 $isUpdated = false;
                 if($member){
-                    $formData = $form->getData();
-                    if(isset($formData['storename'])){
-                            $isUpdated = $this->serviceContainer['user_manager']
-                                              ->updateStorename($member, $formData['storename']);
-                        if($isUpdated){
-                            $jsonResponse['updatedValue'] = $formData['storename'];
-                        }
+                    $routes = $this->router->routes;
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateSlug($member, $formData['storeslug'], $routes);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storeslug'];
                     }
-                    if(isset($formData['storeslug'])){
-                        $routes = $this->router->routes;
-                        $isUpdated = $this->serviceContainer['user_manager']
-                                          ->updateSlug($member, $formData['storeslug'], $routes);
-                        if($isUpdated){
-                            $jsonResponse['updatedValue'] = $formData['storeslug'];
-                        }
-                        else{
-                            $jsonResponse['errors'] = 'This store link is not available';
-                        }
+                    else{
+                        $jsonResponse['errors'] = 'This store link is not available';
                     }
-         
-                    $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
                 }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
             }
         }
-        echo json_encode($jsonResponse);
+        echo json_encode($jsonResponse); 
     }
-    
+
     
     /**
      * Gets the store settings
