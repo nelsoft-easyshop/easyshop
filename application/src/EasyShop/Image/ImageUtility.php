@@ -74,9 +74,9 @@ class ImageUtility
             'y_axis' => $axisY
         ]; 
 
-        $this->image_lib->initialize($config);
-        $this->image_lib->image_process_gd('crop')
-        $this->image_lib->clear();
+        $this->imageLibrary->initialize($config);
+        $this->imageLibrary->image_process_gd('crop');
+        $this->imageLibrary->clear();
     }
 }
 
