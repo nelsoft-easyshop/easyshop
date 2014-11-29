@@ -67,18 +67,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
 <!-- End Google Tag Manager -->
 
-<!-- <header class="new-header-con"> original container -->
-<header class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'vendor-christmas-theme' : 'new-header-con' ?>">
+
+<?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+    <header class="vendor-christmas-theme">
+<?php else: ?>
+    <header class="new-header-con">
+<?php endif; ?>
+
     <div class="main-container">
         <div>
             <a href="/">
-            
                 <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
                 <?php else: ?>
-                    <span class="span_bg"></span>
+                    <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
                 <?php endif; ?>
 
+               
             </a>
         </div>
         <div class="search-container">
@@ -196,35 +201,84 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
+<?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+    <div class="persistent-nav-container persistent-christmas-theme">
+<?php else: ?>
+    <div class="persistent-nav-container">
+<?php endif; ?>
+
+    <div class="main-container">
+        <ul class="sticky-nav">
+            <li>
+                <div class="vendor-profile-img-con">
+                    <img src="<?=$avatarImage?>" alt="Profile Photo">
+                </div>
+                <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
+            </li>
+            <li>
+                <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+            </li>
+            <li> 
+                <form class="search-form">
+                    <select class="ui-form-control search-type">
+                        <option value="1">On Seller's Page</option>
+                        <option value="2">Main Page</option> 
+                    </select>
+                    <input type="text" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                    <input type="submit"  value="" class="submitSearch span_bg">
+                </form>
+            </li>
+            <li class="pos-rel">
+                <div class="header-cart-container">
+                    <a href="/cart" class="header-cart-wrapper">
+                        <span class="header-cart-items-con sticky-cart ui-form-control">
+                            <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
+                        </span>
+                        <span class="header-cart-icon-con span_bg cart-icon"></span>
+                    </a>
+                    <div class="sticky-header-cart-item-list">                        
+                        <?PHP if ((intval(sizeof($cartItems))) === 0 ) : ?>
+                        <?PHP else : ?>
+                            <p>Recently added item(s)</p>
+                            <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                            <?php for($i = 0 ; $i < 2; $i++): ?>
+                                    <?php if(!isset($cartItemsReversed[$i])) break; ?>
+                                    <div class="mrgn-bttm-15">
+                                        <div class="header-cart-item-img">
+                                            <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                                <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                            </a>
+                                        </div>
+                                        <div class="header-cart-item-con">
+                                            <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
+                                            <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                            <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                            <?php endfor; ?>
+     
+                            
+                            <div class="header-cart-lower-content">
+                                <div class="header-cart-shipping-total">
+                                    <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                    <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
+                                </div>
+                                <div class="header-cart-buttons">
+                                    <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                    <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        <?PHP endif;?>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <script type="text/javascript" src="/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
-
-<script type='text/javascript'>
-
-    (function(){
-    
-        $(function () {
-   
-            var $user_nav_dropdown = $(".user-nav-dropdown");
-            var $nav_dropdown = $("ul.nav-dropdown");
-
-            $(document).mouseup(function (e) {
-
-                if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
-                    && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
-                {
-                    $nav_dropdown.hide(1);
-                }
-
-            });
-
-            $user_nav_dropdown.click(function() {
-                $nav_dropdown.show();
-            });
-        
-        });
-
-    })(jQuery);
-
-
-</script>
 

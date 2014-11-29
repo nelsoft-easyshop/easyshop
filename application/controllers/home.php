@@ -364,7 +364,7 @@ class Home extends MY_Controller
                 }
 
                 //HEADER DATA
-                $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
+                $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
                 $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
                 $headerData['relCanonical'] = base_url().$vendorSlug;
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
@@ -383,7 +383,7 @@ class Home extends MY_Controller
  
                 // count the followers 
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
-                                ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
+                                          ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
@@ -398,10 +398,11 @@ class Home extends MY_Controller
                 }
                 
                 // Load View
-                $this->load->view('templates/header_new', $headerData);
-                $this->load->view('templates/header_vendor',$bannerData);
+                $headerData = array_merge($headerData, $bannerData);
+                $this->load->view('templates/header_alt', $headerData);
+                $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
-                $this->load->view('templates/footer_vendor', ['sellerSlug' => $vendorSlug]);
+                $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
             }
         }
         // Load invalid link error page
@@ -499,10 +500,11 @@ class Home extends MY_Controller
         $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
 
         // Load View
-        $this->load->view('templates/header_new', $headerData);
-        $this->load->view('templates/header_vendor',$bannerData);
+        $headerData = array_merge($headerData, $bannerData);
+        $this->load->view('templates/header_alt', $headerData);
+        $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/followers' ,$followerData);
-        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
+        $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
     }
 
     public function getMoreFollowers()
@@ -743,8 +745,9 @@ class Home extends MY_Controller
         $headerData['relCanonical'] = base_url().$sellerslug.'/about';
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
-        $this->load->view('templates/header_new', $headerData);
-        $this->load->view('templates/header_vendor', $bannerData);
+        $headerData = array_merge($headerData, $bannerData);
+        $this->load->view('templates/header_alt', $headerData);
+        $this->load->view('templates/vendor_banner', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
                                                'feedbackTabs' => $feedbackTabs,
@@ -754,7 +757,7 @@ class Home extends MY_Controller
                                                'isEditable' =>  $bannerData['isEditable'],
                                                'userDetails' => $userDetails,
                                               ]);
-        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
+        $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
     }
     
     
@@ -910,10 +913,11 @@ class Home extends MY_Controller
         $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
 
-        $this->load->view('templates/header_new', $headerData);
-        $this->load->view('templates/header_vendor',$bannerData);
+        $headerData = array_merge($headerData, $bannerData);
+        $this->load->view('templates/header_alt', $headerData);
+        $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
-        $this->load->view('templates/footer_vendor', ['sellerSlug' => $sellerslug]);
+        $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
     }
 
     /**
@@ -1346,6 +1350,18 @@ class Home extends MY_Controller
         $data['cityList'] = $cityPerRegionList;
         return $this->load->view('/partials/userdetails', array_merge($data,['member'=>$member]), TRUE);
     }    
+
+    
+    /**
+     * Christmas Promo temporary page
+     *
+     */
+    public function christmasPromo()
+    {
+        $this->load->view('pages/web/christmas-promo');
+    }
+    
+
 }
 
 /* End of file home.php */
