@@ -518,10 +518,15 @@
                             <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                             <?php echo form_close();?>
                         <?PHP elseif (intval($soldTransactionDetails['orderStatus']) === 0 && intval($product['idOrderProductStatus']) === 0 && intval($soldTransactionDetails['idPaymentMethod']) === 3) : ?>
-                            <!--                    ---------------------------        COMPLETE BUTTON STARTS HERE                                 ----------------------------------------------------->
-                            <button class="btn btn-default-3 txt_buttons">
-                                <span class="img-completed"></span>completed
-                            </button>
+                            <?php
+                            $attr = ['class' => 'transac_response'];
+                            echo form_open('',$attr);
+                            ?>
+                            <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled">
+                            <input type="hidden" name="cash_on_delivery" value="<?=$product['idOrderProduct']?>">
+                            <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
+                            <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
+                            <?php echo form_close();?>
                         <?PHP endif; ?>
                             <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0) : ?>
                             <button class="btn btn-default-1 give-feedback-button">
