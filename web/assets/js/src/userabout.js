@@ -86,28 +86,28 @@
     });
     
     $( "#ab" ).click(function() {
-        $(this).css("color","#fe893a");
-        $("#as").css("color","#575759");
-        $("#fob").css("color","#575759");
-        $("#fos").css("color","#575759");
+        $(this).addClass('tab-active-link');
+        $("#as").removeClass('tab-active-link');
+        $("#fob").removeClass('tab-active-link');
+        $("#fos").removeClass('tab-active-link');;
     });
     $( "#as" ).click(function() {
-        $("#ab").css("color","#575759");
-        $(this).css("color","#fe893a");
-        $("#fob").css("color","#575759");
-        $("#fos").css("color","#575759");
+        $("#ab").removeClass('tab-active-link');
+        $(this).addClass('tab-active-link');
+        $("#fob").removeClass('tab-active-link');
+        $("#fos").removeClass('tab-active-link');
     });
     $( "#fob" ).click(function() {
-        $("#ab").css("color","#575759");
-        $("#as").css("color","#575759");
-        $(this).css("color","#fe893a");
-        $("#fos").css("color","#575759");
+        $("#ab").removeClass('tab-active-link');
+        $("#as").removeClass('tab-active-link');
+        $(this).addClass('tab-active-link');
+        $("#fos").removeClass('tab-active-link');
     });
     $( "#fos" ).click(function() {
-        $("#ab").css("color","#575759");
-        $("#as").css("color","#575759");
-        $("#fob").css("color","#575759");
-        $(this).css("color","#fe893a");
+        $("#ab").removeClass('tab-active-link');
+        $("#as").removeClass('tab-active-link');
+        $("#fob").removeClass('tab-active-link');
+        $(this).addClass('tab-active-link');
     });
     
     
