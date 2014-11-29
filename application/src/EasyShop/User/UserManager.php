@@ -849,13 +849,19 @@ class UserManager
      */
     public function updateStorename($memberEntity, $storename)
     {
-        $isSuccessful = true;
-        $memberEntity->setStorename($storename);
-        try{
-            $this->em->flush();
-        }
-        catch(\Doctrine\ORM\Query\QueryException $e){
-            $isSuccessful = false;
+        $isSuccessful = false;
+        $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                   ->getUsedStoreName($memberEntity->getIdMember(), $storename);
+   
+        if(empty($usersWithStorename)){
+            $memberEntity->setStorename($storename);
+            $isSuccessful = true;
+            try{
+                $this->em->flush();
+            }
+            catch(\Doctrine\ORM\Query\QueryException $e){
+                $isSuccessful = false;
+            }
         }
         return $isSuccessful;
     }

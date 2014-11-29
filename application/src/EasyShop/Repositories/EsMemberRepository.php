@@ -68,16 +68,19 @@ class EsMemberRepository extends EntityRepository
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
         $rsm->addFieldResult('m','id_member','idMember');
+        $rsm->addFieldResult('m','username','username');
         $rsm->addFieldResult('m','store_name','storeName');
 
         $query = $em->createNativeQuery(
-            'SELECT id_member, store_name
+            'SELECT id_member, store_name, username
             FROM es_member
-            WHERE id_member != ? AND store_name LIKE ?'
+            WHERE id_member != :memberId AND 
+            (store_name = :storeName OR  (username = :userName AND store_name IS NULL))'
         , $rsm);
 
-        $query->setParameter(1,$excludeMemberId);
-        $query->setParameter(2,$storeName);
+        $query->setParameter('memberId',$excludeMemberId);
+        $query->setParameter('storeName',$storeName);
+        $query->setParameter('userName',$storeName);
 
         return $query->getResult();
     }
