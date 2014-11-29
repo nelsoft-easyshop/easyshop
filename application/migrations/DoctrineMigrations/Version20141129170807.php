@@ -20,7 +20,14 @@ class Version20141129170807 extends AbstractMigration
               `activity_description` VARCHAR(100),
               PRIMARY KEY (`id_activity_type`)
             );
+        ");
 
+        $this->addSql("
+            INSERT INTO `es_activity_type`
+                (`activity_description`)
+            VALUES ('information update'),
+                   ('product update'),
+                   ('transaction update');
         ");
 
         $this->addSql("

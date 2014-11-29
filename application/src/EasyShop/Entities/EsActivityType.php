@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsActivityType
 {
+    const INFORMATION_UPDATE = 1;
+
+    const PRODUCT_UPDATE = 2;
+
+    const TRANSACTION_UPDATE = 3;
+
     /**
      * @var integer
      *
