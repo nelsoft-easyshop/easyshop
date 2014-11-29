@@ -259,6 +259,17 @@ class EsMember
     private $isActive = '0';    
 
     /**
+     * @var \EasyShop\Entities\EsStoreColor
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsStoreColor")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="store_color_id", referencedColumnName="id_store_color")
+     * })
+     */
+    private $storeColor;
+    
+    
+    /**
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -1136,6 +1147,26 @@ class EsMember
     public function getIsActive()
     {
         return $this->isActive;
+    }    
+    
+    /**
+     * Set storeColor
+     *
+     * @param EasyShop\Entities\EsStoreColor $storeColor
+     */
+    public function setStoreColor($storeColor)
+    {
+        $this->storeColor = $storeColor;
+    }
+
+    /**
+     * Get storeColor
+     *
+     * @return EasyShop\Entities\EsStoreColor 
+     */
+    public function getStoreColor()
+    {
+        return $this->storeColor;
     }    
 
 }
