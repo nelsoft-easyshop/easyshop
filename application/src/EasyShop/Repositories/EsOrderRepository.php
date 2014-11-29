@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder;
+use EasyShop\Entities\EsOrderProductStatus;
 use EasyShop\Entities\EsOrderStatus as orderStatus;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsPaymentMethod;
@@ -13,7 +14,6 @@ use DateTime;
 
 class EsOrderRepository extends EntityRepository
 {
-
 
     /**
      * Returns sold transactions of users
@@ -23,12 +23,7 @@ class EsOrderRepository extends EntityRepository
      */   
     public function getUserSoldTransactions($userId, $isOngoing = true)
     {
-        #issue-01 : remove hard coded strings
-        $orderStatus = [1];
-        if ($isOngoing) {
-            $orderStatus = [0,99];
-        }
-
+        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         $qb = $this->_em->createQueryBuilder();
         $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
@@ -98,11 +93,13 @@ class EsOrderRepository extends EntityRepository
 
     /**
      * Returns bought transactions of users
-     * @param int $userid
+     * @param int $uid
+     * @param boolean $isOngoing
      * @return object
      */   
-    public function getUserBoughtTransactions($uid)
+    public function getUserBoughtTransactions($uid, $isOngoing = true)
     {
+        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
         $qb = $this->_em->createQueryBuilder();
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
 
@@ -123,7 +120,7 @@ class EsOrderRepository extends EntityRepository
                         ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
                         ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
                         ->innerJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
-        ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
+                        ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
                         ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
                         ->where(
                                 $qb->expr()->not(
@@ -133,17 +130,18 @@ class EsOrderRepository extends EntityRepository
                                     )
                                 )
                             )
-                        ->andWhere('o.orderStatus IN(0,99)')    
-                        ->andWhere('o.buyer = :buyer_id')    
-                        ->andWhere('o.paymentMethod IN(:paymentMethodLists)')      
+                        ->andWhere('o.orderStatus IN(:orderStatus)')
+                        ->andWhere('o.buyer = :buyer_id')
+                        ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
                         ->orderBy('o.idOrder', "desc")
                         ->setParameter('buyer_id', $uid)
-                        ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT) 
-                        ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL) 
+                        ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
+                        ->setParameter('orderStatus', $orderStatus)
+                        ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
                         ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods())))) 
                         ->getQuery();
-                return $queryBuilder->getResult();         
 
+                return $queryBuilder->getResult();
     }
 
     /**

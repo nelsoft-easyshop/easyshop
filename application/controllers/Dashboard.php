@@ -52,8 +52,8 @@ class Dashboard extends MY_Controller
                 'sold' => $this->transactionManager->getSoldTransactionDetails($memberId),
             ],
             'complete' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId),
-                'sold' => '',
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false),
             ]
         ];
 

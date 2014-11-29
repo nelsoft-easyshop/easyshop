@@ -38,12 +38,14 @@ class TransactionManager
     /**
      * Get bought transaction details
      * @param $memberId
+     * @param $isOngoing
      * @return mixed
      */
-    public function getBoughtTransactionDetails ($memberId)
+    public function getBoughtTransactionDetails ($memberId, $isOngoing = true)
     {
         $boughtTransactionDetails = array();
-        $getUserBoughtTransactions = $this->em->getRepository('EasyShop\Entities\EsOrder')->getUserBoughtTransactions($memberId);
+        $getUserBoughtTransactions = $this->em->getRepository('EasyShop\Entities\EsOrder')->getUserBoughtTransactions($memberId, $isOngoing);
+
         foreach ($getUserBoughtTransactions as $key => $transaction) {
             if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
                 $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']] = $transaction;
@@ -74,12 +76,13 @@ class TransactionManager
     /**
      * Get Sold transaction details
      * @param $memberId
+     * @param $isOngoing
      * @return mixed
      */
-    public function getSoldTransactionDetails ($memberId)
+    public function getSoldTransactionDetails ($memberId, $isOngoing = true)
     {
         $soldTransactionDetails = array();
-        $getUserSoldTransactions = $this->em->getRepository('EasyShop\Entities\EsOrder')->getUserSoldTransactions($memberId);
+        $getUserSoldTransactions = $this->em->getRepository('EasyShop\Entities\EsOrder')->getUserSoldTransactions($memberId, $isOngoing);
         foreach ($getUserSoldTransactions as $key => $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
