@@ -304,7 +304,6 @@ class Home extends MY_Controller
         $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
                            ->findOneBy(['slug' => $vendorSlug]);
 
-        // User found - valid slug
         if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);
             if($pageSection === 'about'){
@@ -364,13 +363,13 @@ class Home extends MY_Controller
                 }
 
                 //HEADER DATA
+                $storeColor = $memberEntity->getStoreColor();
                 $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
                 $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
                 $headerData['relCanonical'] = base_url().$vendorSlug;
                 $bannerData['isLoggedIn'] = $headerData['logged_in'];
                 $bannerData['vendorLink'] = "";
-
-                // Data for the view
+                $bannerData['storeColorScheme'] = $storeColor;
 
                 $viewData = array(
                   //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
@@ -378,7 +377,8 @@ class Home extends MY_Controller
                     "defaultCatProd" => $productView['defaultCatProd'],
                     "product_condition" => $this->lang->line('product_condition'),
                     "isLoggedIn" => $headerData['logged_in'],
-                    "prodLimit" => $this->vendorProdPerPage
+                    "prodLimit" => $this->vendorProdPerPage,
+                    "storeColorScheme" => $storeColor,
                 );
  
                 // count the followers 
