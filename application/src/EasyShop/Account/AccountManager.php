@@ -178,7 +178,7 @@ class AccountManager
      * @param string $contactno
      * @return mixed Returns an array of the error and the member entity
      */
-    public function registerMember($username, $password, $email, $contactno)
+    public function registerMember($username, $password, $email, $contactno, $isEmailVerify = false)
     {
         $member = null;
         $rules = $this->formValidation->getRules('register');
@@ -215,10 +215,10 @@ class AccountManager
             $member->setLastFailedLoginDateTime(new DateTime('now'));
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
-            
+            $member->setIsEmailVerify($isEmailVerify); 
+
             $this->em->persist($member);
             $this->em->flush();
-            
         }
     
         return ['errors' => $this->formErrorHelper->getFormErrors($form),

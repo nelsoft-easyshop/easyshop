@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
 body{
     color: #565656;
     background: #fff;
@@ -56,6 +56,9 @@ a{
     border: none !important;
 }
 
+.m-li2{
+    border-top: none !important;
+}
 
 #my-store-menu, #my-account-menu{
     display: none;
@@ -663,7 +666,8 @@ a{
     outline: none;
     transition: all 0.3s ease;
     color: #565656;
-    display: inline;
+    display: inline-block;
+    width: 100%;
 }
 
 .text-info:focus,
@@ -727,7 +731,7 @@ a{
     color: #007c67;
     font-size: 22px;
     position: absolute;
-    right: 33px;
+    right: 7px;
     top: 8px;
 }
 
@@ -807,6 +811,12 @@ a{
     width: 100% !important;
     height: 300px !important;
     margin-top: 10px;
+}
+
+#hidden-product-container,
+#hidden-feedback-container,
+#hidden-sales-container{
+    display: none;
 }
 
 .map-trigger{
@@ -950,12 +960,17 @@ a{
     height: 25px;
 }
 
+.div-input-url-cont{
+
+    position: relative;
+}
+
 .col-inline-textbtn{
     padding-right: 0px;
 }
 
 .col-inline-btn-url{
-    padding-left: 0px;
+    padding-left: 34px;
 }
 
 .edit-email,
@@ -1416,6 +1431,110 @@ a{
     text-align: left;
 }
 
+#wrapper {
+    width:600px; 
+    margin:0 auto; 
+    border-radius:0 0 5px 5px;
+    -moz-border-radius:0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    background:#fff; 
+    border:1px solid #ccc; 
+    padding:25px; 
+    border-top:none; 
+    box-shadow:0 0 5px #ccc;
+    -moz-box-shadow:0 0 5px #ccc;
+    -webkit-box-shadow:0 0 5px #ccc;
+    text-align:center;
+}
+
+
+#lightbox #content{
+    background-color: transparent !important;
+}
+
+#lightbox {
+    position:fixed; /* keeps the lightbox window in the current viewport */
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    background:url(/assets/images/overlay.png) repeat; 
+    text-align:center;
+    z-index: 99999;
+}
+
+#lightbox p {
+    text-align:right; 
+    color:#fff; 
+    margin-right:20px; 
+    font-size:12px; 
+}
+#lightbox img {
+    box-shadow:0 0 25px #111;
+    -webkit-box-shadow:0 0 25px #111;
+    -moz-box-shadow:0 0 25px #111;
+    margin:0px auto;
+    margin-top:40px;
+    display:block;
+    max-width:100%;
+    max-height:100%;
+    margin-top:36px;
+}
+    
+.col-button-searc-hist{
+    padding-left: 0px;
+}
+
+.panel-activate > .panel-heading{
+    font-weight: 900;
+    font-size: 15px;
+    color: #565656;
+    text-transform: uppercase;
+}
+
+.activateAccount{
+    margin: 60px 0px;
+}
+
+.activateActions{
+    margin-top: 23px;
+    margin-bottom: 13px;
+}
+
+.p-panel-body{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+
+#activated-message{
+    font-size: 15px;
+    margin-top: 14px;
+    padding: 0px 20px;
+    font-weight: bold;
+}
+
+#activated-message a{
+    color: #ff893a;
+    font-weight: 900;
+}
+
+.activated-container{
+    height: 200px important;
+}
+
+.activated-container h2{
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #565656;
+}
+
+.activated-modal .feedback-content{
+    text-align:left;
+
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1783,10 +1902,6 @@ a{
         width: 100%;
     }
     
-    .val-success-url{
-        right: 23px;
-        top: 32px;
-    }
     
     .col-inline-btn-url{
         padding-left: 15px;
@@ -1901,4 +2016,175 @@ a{
     .red-tip{
         top: -21px;
     }
+    
+    .col-button-searc-hist{
+        padding-left: 15px;
+    }
+
+    
+    .activateAccount{
+        margin: 20px 0px;
+    }
+
+
 }
+
+
+/***** payment account css ******/
+.add-bank-account {
+    border: none;
+    font-weight: 900;
+    max-width: 300px;
+    padding: 9px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.add-bank-btn-con {
+    height: 40px;
+}
+
+.select-bank {
+    display: none;
+}
+
+.add-bank-account i {
+    margin-right: 6px;
+}
+
+.select-bank input,
+.select-bank select {
+    width: 100%;
+}
+
+.select-bank strong {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.bank-btns-con span,
+.bank-btns-con input {
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.bank-btns-con input {
+    border: none;
+    margin-top: 12px;
+    padding: 9px;
+}
+
+.bank-btns-con span {
+    margin-right: 12px;
+}
+
+.bank-account-item {
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+    padding: 30px 40px;
+}
+
+.bank-account-item-btns .btn-default-3 {
+    border:none;
+    font-weight: 900;
+    padding: 9px;
+    width: 100%;
+}
+
+.bank-account-item-btns .mrgn-2 {
+    margin-right: 2%;
+}
+
+.bank-account-item-btns .btn-default-1 {
+    width: 48%;
+}
+
+.bank-label {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.bank-account-item-btns .default-account {
+    background-color: #00a388;
+    border: 1px solid #00a388;
+    color:#fff;
+    cursor: default;
+    font-weight: 900;
+    width: 100%;
+}
+
+.bank-account-item-btns .btn {
+    padding: 9px;
+}
+
+.bank-account-item-btns .btn-set-default {
+    background-color: #878787;
+    border: none;
+    border-bottom: 2px solid #565656;
+    color:#fff;
+    font-weight: 900;
+    width: 100%;
+}
+
+.bank-account-item-btns .btn-set-default:hover {
+    background-color: #565656;
+}
+
+@media screen and (min-width: 480px) {
+    .bank-btns-con span,
+    .bank-btns-con input {
+        max-width: 200px;
+    }
+    .bank-btns-con input {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .bank-account-item-btns .btn-default-1 {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .bank-account-item {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .bank-account-item-btns .btn {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .bank-account-item .col-xs-8 {
+        float: none;
+        width: 100%;
+    }
+
+    .bank-account-item .col-xs-5 {
+        padding: 0;
+    }
+
+    .bank-account-item-btns {
+        float: none;
+        margin-top: 12px;
+        width: 100%;
+    }
+
+    .bank-account-item-btns .btn {
+        width: 58%;
+    }
+
+    .bank-account-item-btns .btn-default-1 {
+        width: 19%;
+        margin-top: 0;
+        margin-right: 0;
+    }
+
+}
+
+

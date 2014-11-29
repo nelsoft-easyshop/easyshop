@@ -3,45 +3,12 @@
 namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
-use EasyShop\Entities\EsMemberFeedback;
 use DateTime;
+use Doctrine\ORM\Query\ResultSetMapping;
+use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 
 class EsMemberFeedbackRepository extends EntityRepository
 {
-
-    /**
-     * Returns the average ratings of a user
-     *
-     * @param integer $userId
-     * @return mixed
-     */
-    public function getAverageRatings($userId)
-    {
-        $ratings = $this->_em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                             ->findBy(['forMemberid' => $userId]);
-
-        $averageRatings = array(
-            'count' => 0,
-            'rating1' => 0,
-            'rating2' => 0,
-            'rating3' => 0,
-        );
-
-        foreach($ratings as $rating){
-            $averageRatings['count']++;
-            $averageRatings['rating1'] += intval($rating->getRating1());
-            $averageRatings['rating2'] += intval($rating->getRating2());
-            $averageRatings['rating3'] += intval($rating->getRating3());
-        }
-        if($averageRatings['count'] > 0){
-            $averageRatings['rating1'] /= $averageRatings['count'];
-            $averageRatings['rating2'] /= $averageRatings['count'];
-            $averageRatings['rating3'] /= $averageRatings['count'];
-        }
-
-        return $averageRatings;
-    }
-
     /**
      * Get all feedbacks of a member
      *
@@ -55,8 +22,10 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as reviewerId, 
                                             reviewer.username as reviewerUsername, 
+                                            reviewer.slug as reviewerSlug, 
                                             reviewee.idMember as revieweeId, 
                                             reviewee.username as revieweeUsername, 
+                                            reviewee.slug as revieweeSlug, 
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
@@ -76,11 +45,142 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->setParameter('fromMemberId', $memberId)
                             ->setParameter('forMemberId', $memberId)
                             ->addOrderBy('fb.dateadded', 'DESC')
-                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
+                            ->addOrderBy('orderTransaction.idOrder', 'DESC')
                             ->getQuery()
                             ->getResult();
 
         return $feedbacks;
+    }
+
+    /**
+     * Get all feedback of member by giving its type
+     * @param  integer $memberId
+     * @param  integer $feedType
+     * @param  integer $limit
+     * @param  integer $page
+     * @return mixed
+     */
+    public function getUserFeedbackByType($memberId, $feedType, $limit, $page = 0)
+    {
+        $em =  $this->_em;
+        $queryBuilder = $em->createQueryBuilder();
+
+        $queryBuilder = $queryBuilder->select('reviewer.idMember as reviewerId, 
+                                            reviewer.username as reviewerUsername, 
+                                            reviewer.slug as reviewerSlug, 
+                                            reviewee.idMember as revieweeId, 
+                                            reviewee.username as revieweeUsername, 
+                                            reviewee.slug as revieweeSlug, 
+                                            fb.feedbMsg,
+                                            fb.dateadded,
+                                            fb.rating1,
+                                            fb.rating2,
+                                            fb.rating3,
+                                            fb.feedbKind,
+                                            orderTransaction.idOrder')
+                            ->from('EasyShop\Entities\EsMemberFeedback','fb')
+                            ->leftJoin('EasyShop\Entities\EsMember','reviewer',
+                                                'WITH','reviewer.idMember = fb.member')
+                            ->leftJoin('EasyShop\Entities\EsMember','reviewee',
+                                                'WITH','reviewee.idMember = fb.forMemberid')
+                            ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
+                                                'WITH', 'orderTransaction.idOrder = fb.order')
+                            ->orderBy('orderTransaction.idOrder', 'DESC')
+                            ->addOrderBy('fb.dateadded', 'DESC')
+                            ->setFirstResult($page * $limit)
+                            ->setMaxResults($limit);
+
+       switch($feedType){
+            case EsMemberFeedback::TYPE_AS_SELLER: 
+                $queryBuilder = $queryBuilder->where('fb.forMemberid = :forMemberid')
+                                             ->andWhere('fb.feedbKind = 0')
+                                             ->setParameter('forMemberid', $memberId);
+                break;
+            case EsMemberFeedback::TYPE_AS_BUYER: 
+                $queryBuilder = $queryBuilder->where('fb.forMemberid = :forMemberid')
+                                             ->andWhere('fb.feedbKind = 1')
+                                             ->setParameter('forMemberid', $memberId);
+                break;
+            case EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER: 
+                $queryBuilder = $queryBuilder->where('fb.member = :forMemberid')
+                                             ->andWhere('fb.feedbKind = 1')
+                                             ->setParameter('forMemberid', $memberId);
+                break;
+            case EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER: 
+                $queryBuilder = $queryBuilder->where('fb.member = :forMemberid')
+                                             ->andWhere('fb.feedbKind = 0')
+                                             ->setParameter('forMemberid', $memberId);
+                break;
+            default:
+                $queryBuilder = $queryBuilder->where('fb.member = :fromMemberId')
+                                             ->orWhere('fb.forMemberid = :forMemberId')
+                                             ->setParameter('fromMemberId', $memberId)
+                                             ->setParameter('forMemberId', $memberId);
+                break;
+        }
+
+        $feedbacks = $queryBuilder->getQuery()
+                                  ->getResult();
+
+        return $feedbacks;
+    }
+
+    /**
+     * Get total count of feedback per user
+     * @param  integer $memberId
+     * @return integer
+     */
+    public function getUserTotalFeedBackCount($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+            SELECT 
+                COUNT(id_feedback) as count
+            FROM
+                easyshop.es_member_feedback
+            WHERE
+                member_id = :member_id OR for_memberid = :member_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    /**
+     * Get User average ratings
+     * @param  integer $memberId
+     * @return array
+     */
+    public function getUserFeedbackAverageRating($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('rating1', 'rating1');
+        $rsm->addScalarResult('rating2', 'rating2');
+        $rsm->addScalarResult('rating3', 'rating3');
+
+        $sql = "
+            SELECT 
+                ROUND(AVG(rating1)) as rating1,
+                ROUND(AVG(rating2)) as rating2,
+                ROUND(AVG(rating3)) as rating3
+            FROM
+                easyshop.es_member_feedback
+            WHERE
+                for_memberid = :member_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return $result;
     }
     
     /**
@@ -105,20 +205,20 @@ class EsMemberFeedbackRepository extends EntityRepository
                                             fb.rating2,
                                             fb.rating3,
                                             orderTransaction.idOrder')
-                            ->from('EasyShop\Entities\EsMemberFeedback','fb')
-                            ->leftJoin('EasyShop\Entities\EsMember','reviewee',
-                                                'WITH','reviewee.idMember = fb.forMemberid')
-                            ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
-                                                'WITH', 'orderTransaction.idOrder = fb.order')
-                            ->where('fb.member = :fromMemberId')
-                            ->andWhere('fb.feedbKind = 0')
-                            ->setParameter('fromMemberId', $memberId)
-                            ->addOrderBy('fb.dateadded', 'DESC')
-                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
-                            ->setFirstResult($page * $limit)
-                            ->setMaxResults($limit)
-                            ->getQuery()
-                            ->getResult();
+                                  ->from('EasyShop\Entities\EsMemberFeedback','fb')
+                                  ->leftJoin('EasyShop\Entities\EsMember','reviewee',
+                                                      'WITH','reviewee.idMember = fb.forMemberid')
+                                  ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
+                                                      'WITH', 'orderTransaction.idOrder = fb.order')
+                                  ->where('fb.member = :fromMemberId')
+                                  ->andWhere('fb.feedbKind = 0')
+                                  ->setParameter('fromMemberId', $memberId)
+                                  ->addOrderBy('fb.dateadded', 'DESC')
+                                  ->addOrderBy('orderTransaction.idOrder', 'DESC') 
+                                  ->setFirstResult($page * $limit)
+                                  ->setMaxResults($limit)
+                                  ->getQuery()
+                                  ->getResult();
         return $feedbacks;
     }
     
@@ -144,20 +244,20 @@ class EsMemberFeedbackRepository extends EntityRepository
                                             fb.rating2,
                                             fb.rating3,
                                             orderTransaction.idOrder')
-                            ->from('EasyShop\Entities\EsMemberFeedback','fb')
-                            ->leftJoin('EasyShop\Entities\EsMember','reviewee',
-                                                'WITH','reviewee.idMember = fb.forMemberid')
-                            ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
-                                                'WITH', 'orderTransaction.idOrder = fb.order')
-                            ->where('fb.member = :fromMemberId')
-                            ->andWhere('fb.feedbKind = 1')
-                            ->setParameter('fromMemberId', $memberId)
-                            ->addOrderBy('fb.dateadded', 'DESC')
-                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
-                            ->setFirstResult($page * $limit)
-                            ->setMaxResults($limit)
-                            ->getQuery()
-                            ->getResult();
+                                  ->from('EasyShop\Entities\EsMemberFeedback','fb')
+                                  ->leftJoin('EasyShop\Entities\EsMember','reviewee',
+                                                      'WITH','reviewee.idMember = fb.forMemberid')
+                                  ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
+                                                      'WITH', 'orderTransaction.idOrder = fb.order')
+                                  ->where('fb.member = :fromMemberId')
+                                  ->andWhere('fb.feedbKind = 1')
+                                  ->setParameter('fromMemberId', $memberId)
+                                  ->addOrderBy('fb.dateadded', 'DESC')
+                                  ->addOrderBy('orderTransaction.idOrder', 'DESC') 
+                                  ->setFirstResult($page * $limit)
+                                  ->setMaxResults($limit)
+                                  ->getQuery()
+                                  ->getResult();
         return $feedbacks;
     }
     
@@ -184,20 +284,20 @@ class EsMemberFeedbackRepository extends EntityRepository
                                             fb.rating2,
                                             fb.rating3,
                                             orderTransaction.idOrder')
-                            ->from('EasyShop\Entities\EsMemberFeedback','fb')
-                            ->leftJoin('EasyShop\Entities\EsMember','reviewer',
-                                                'WITH','reviewer.idMember = fb.member')
-                            ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
-                                                'WITH', 'orderTransaction.idOrder = fb.order')
-                            ->where('fb.forMemberid = :forMemberid')
-                            ->andWhere('fb.feedbKind = 1')
-                            ->setParameter('forMemberid', $memberId)
-                            ->addOrderBy('fb.dateadded', 'DESC')
-                            ->addOrderBy('orderTransaction.idOrder', 'DESC') 
-                            ->setFirstResult($page * $limit)
-                            ->setMaxResults($limit)
-                            ->getQuery()
-                            ->getResult();
+                                  ->from('EasyShop\Entities\EsMemberFeedback','fb')
+                                  ->leftJoin('EasyShop\Entities\EsMember','reviewer',
+                                                      'WITH','reviewer.idMember = fb.member')
+                                  ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
+                                                      'WITH', 'orderTransaction.idOrder = fb.order')
+                                  ->where('fb.forMemberid = :forMemberid')
+                                  ->andWhere('fb.feedbKind = 1')
+                                  ->setParameter('forMemberid', $memberId)
+                                  ->orderBy('fb.dateadded', 'DESC')
+                                  ->addOrderBy('orderTransaction.idOrder', 'DESC') 
+                                  ->setFirstResult($page * $limit)
+                                  ->setMaxResults($limit)
+                                  ->getQuery()
+                                  ->getResult();
         return $feedbacks;
     }
     
@@ -224,20 +324,20 @@ class EsMemberFeedbackRepository extends EntityRepository
                                             fb.rating2,
                                             fb.rating3,
                                             orderTransaction.idOrder')
-                            ->from('EasyShop\Entities\EsMemberFeedback','fb')
-                            ->leftJoin('EasyShop\Entities\EsMember','reviewer',
-                                                'WITH','reviewer.idMember = fb.member')
-                            ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
-                                                'WITH', 'orderTransaction.idOrder = fb.order')
-                            ->where('fb.forMemberid = :forMemberid')
-                            ->andWhere('fb.feedbKind = 0')
-                            ->setParameter('forMemberid', $memberId)
-                            ->addOrderBy('fb.dateadded', 'DESC')
-                            ->addOrderBy('orderTransaction.idOrder', 'DESC')                           
-                            ->setFirstResult($page * $limit)
-                            ->setMaxResults($limit)
-                            ->getQuery()
-                            ->getResult();
+                                  ->from('EasyShop\Entities\EsMemberFeedback','fb')
+                                  ->leftJoin('EasyShop\Entities\EsMember','reviewer',
+                                                      'WITH','reviewer.idMember = fb.member')
+                                  ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
+                                                      'WITH', 'orderTransaction.idOrder = fb.order')
+                                  ->where('fb.forMemberid = :forMemberid')
+                                  ->andWhere('fb.feedbKind = 0')
+                                  ->setParameter('forMemberid', $memberId)
+                                  ->orderBy('fb.dateadded', 'DESC')
+                                  ->addOrderBy('orderTransaction.idOrder', 'DESC')
+                                  ->setFirstResult($page * $limit)
+                                  ->setMaxResults($limit)
+                                  ->getQuery()
+                                  ->getResult();
         return $feedbacks;
     }
 

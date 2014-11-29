@@ -1057,7 +1057,7 @@ $string = '<typeNode>
                         $imageFileName = $productImage->getFilename();
                     }
 
-                    $productName = $product->getName();
+                    $productName = utf8_encode($product->getName());
                     $productSlug = $product->getSlug();
                     $productDiscount = floatval($product->getDiscountPercentage());
                     $productBasePrice = floatval($product->getPrice());

@@ -2,7 +2,7 @@
 /* =============================================
 -----------------  General -------------
 ==============================================*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
 @font-face {
     font-family: Helvetica;
@@ -544,6 +544,11 @@ header {
     padding-top:35px;
 }
 
+#inner-header.christmas-theme {
+    background: #fff url(../images/img-snow.jpg) no-repeat top center;
+    padding-top:30px;
+}
+
 #inner-header .logo-container,
 #inner-header .header-inner-right {
     margin-bottom:22px;
@@ -656,7 +661,6 @@ header {
 .persistent-header-wrapper {
     min-height: 44px;
     position: relative;
-    z-index: 999;
 }
 
 .sticky-header-nav {
@@ -666,6 +670,10 @@ header {
 .sticky-header-nav.sticky-nav-fixed {
     width: 100%;
     z-index: 99999;
+}
+
+.sticky-nav-fixed #main-nav-container.persistent-christmas-theme {
+    background: #fff url(../images/img-snow.jpg) no-repeat bottom center;
 }
 
 .sticky-nav-fixed #main-nav-container {
@@ -722,6 +730,7 @@ header {
 .sticky-search-wrapper input[type="text"] {
     vertical-align: middle;
     margin-right: 10px;
+    padding-left: 12px !important;
     width: 84.5%;
 }
 
@@ -736,7 +745,7 @@ header {
 }
 
 .sticky-nav-fixed .header-text-container {
-    font-size: 14px;
+    font-size: 13px;
     margin-left: 18px;
     width: 24%;
 }
@@ -1420,7 +1429,7 @@ header {
 
 .item-price-container {
     display:inline-block;
-    font:700 16px "Helvetica", Arial, sans-serif;
+    font:700 14px "Helvetica", Arial, sans-serif;
     color:#adadad;
     margin-bottom: 5px;
 }
@@ -1533,6 +1542,10 @@ header {
     padding-top:5px;
 }
 
+.item-meta-container{
+    margin-top: 10px;
+}
+
 .item-meta-container > a,
 .item-meta-container > a >.item-name
 {
@@ -1576,11 +1589,11 @@ header {
 
 /* title for all items */
 .item-name {
-    font:700 16px 'Helvetica', 'Open Sans', sans-serif;
+    font:700 14px 'Helvetica', 'Open Sans', sans-serif;
     margin:0 0 5px;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;
     white-space:nowrap;
-    overflow:hidden;
+    overflow:hidden;*/
     margin-top: 5px;
 }
 
@@ -2995,6 +3008,50 @@ h3 > b{
     opacity: 0;
 }
 
+.tooltip-home 
+{
+    position: absolute;
+    width: 100%;
+    /* height: 120px; */
+    padding: 0px;
+    background: #003e91;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 10px;
+    bottom: 24px;
+    font-size: 12px;
+    color: #fff;
+    display: none;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    text-align:center;
+}
+
+.tooltip-home:after 
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 20px 22px 0;
+    border-color: #003e91 transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    bottom: -9px;
+    left: 39%;-webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+.item-name:hover .tooltip-home{
+    display: inline-block;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
@@ -3008,8 +3065,8 @@ h3 > b{
 
     .sticky-nav-logo {
         background-color: #4370cc;
-        height: 50px;
-        padding-top: 5px;
+        height: 46px;
+        padding-top: 3px;
         position: absolute;
         top: 0px;
         right: 0;
@@ -3362,11 +3419,6 @@ h3 > b{
 }
 
 @media only screen and (max-width: 479px) {
-    #header-top .row {
-        margin-right: -30px;
-        margin-left: -30px;
-    }
-
     #top-links li {
         margin-right: 0;
     }
@@ -3561,6 +3613,10 @@ h3 > b{
 }
 
 @media only screen and (max-width: 991px) {
+    .col-xs-6.col-sm-6.col-md-6.top-header-left {
+        padding: 0;
+    }
+
     .sticky-nav-fixed .mobile-menu-nav-hide {
         display: block;
     }
@@ -3777,6 +3833,17 @@ h3 > b{
 }
 
 @media (max-width: 767px) {
+    #header-top .col-md-12,
+    #header-top .row .col-md-12 .top-header-right {
+        padding: 0;
+    }
+
+    .default-nav-dropdown:after,
+    .default-nav-dropdown:before,
+    .default-nav-dropdown {
+        right: 0;
+    }
+
     .sticky-search-cart-wrapper {
         width: 93%;
     }

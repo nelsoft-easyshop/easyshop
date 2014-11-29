@@ -193,13 +193,13 @@ class EsMember
      * @var string
      * @ORM\Column(name="oauth_id", type="string", length=255, nullable=false)
      */
-    private $oauthId;
+    private $oauthId = '0';
 
     /**
      * @var string
      * @ORM\Column(name="oauth_provider", type="string", length=255, nullable=false)
      */
-    private $oauthProvider;
+    private $oauthProvider = '';
     /**
      * @var integer
      *
@@ -243,6 +243,13 @@ class EsMember
     private $isHideBanner = '0';
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     */
+    private $isActive = '0';    
+
+    /**
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -271,6 +278,12 @@ class EsMember
      *  @var string
      */
     const DEFAULT_IMG_BANNER = 'banner.png';
+
+    
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 0;    
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -1072,5 +1085,28 @@ class EsMember
     {
         return $this->isHideBanner;
     }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return EsMember
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }    
 
 }

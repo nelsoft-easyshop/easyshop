@@ -44,10 +44,10 @@ if(ENVIRONMENT == 'development'){
     $fileVersion = date('Ymdhis');
 }
 else{
-    $fileVersion = '7.1.10';
+    $fileVersion = '8.1.21';
 }
 define('ES_FILE_VERSION',$fileVersion);
-
+define('ES_ENABLE_CHRISTMAS_MODS', true);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

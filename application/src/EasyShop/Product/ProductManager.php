@@ -5,18 +5,16 @@ namespace EasyShop\Product;
 use Easyshop\Promo\PromoManager as PromoManager;
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
+use EasyShop\Entities\EsProductShippingHead; 
+use EasyShop\Entities\EsProductImage as EsProductImage; 
 use EasyShop\Entities\EsOrder; 
-use EasyShop\Entities\EsProduct; 
-use EasyShop\Entities\EsProductShippingHead;
-
+use EasyShop\Entities\EsProduct as EsProduct;
 use Easyshop\Entities\EsProductItem;
-
 use EasyShop\Entities\EsMemberProdcat;
-
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\ArrayCollection;
 use Easyshop\Entities\EsProducItemLock;
 use EasyShop\Entities\EsCat;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product Manager Class
@@ -45,9 +43,9 @@ class ProductManager
     const PRODUCT_META_DESCRIPTION_LIMIT = 155;
 
     /**
-     * Default limit of meta desciption of the product
+     * Default result product count in dashboard
      */
-    const PRODUCT_IS_PROMOTE = 1;
+    const PRODUCT_COUNT_DASHBOARD = 10;
 
     /**
      * Entity Manager instance
@@ -96,7 +94,7 @@ class ProductManager
     /**
      * User Manager Instance
      *
-     * @var CI_Image_lib
+     * @var Easyshop\User\UserManager
      */
     private $userManager;
 
@@ -104,7 +102,12 @@ class ProductManager
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper,$configLoader, $imageLibrary, $userManager)
+    public function __construct($em,
+                                $promoManager,
+                                $collectionHelper,
+                                $configLoader,
+                                $imageLibrary,
+                                $userManager)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
@@ -529,7 +532,8 @@ class ProductManager
         $categoryProducts = array();
 
         // Condition parameters passed
-        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $productLimit;
+        $currentPage = (int) $page <= 0 ? 0 : $page-1;
+        $page = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
         $condition = strval($condition);
 
         $lprice = str_replace(",", "", (string)$lprice);
@@ -548,30 +552,51 @@ class ProductManager
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
                                                    ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);
+                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
                     break;
-            }            
-            $isAllProductIds = FALSE;
+            }        
+            $isFiltered = false;    
         }
         else{
+              
             switch( $catType ){
                 case "custom":
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId);
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
                 default:
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId);
+                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
                     break;
             }
-            $isAllProductIds = TRUE;
+
+            if($lprice !== "" || $uprice !== "") {
+                foreach ($categoryProductIds as $key => $prodId) {
+                    $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
+                    if( ( $lprice !== "" && bccomp($discountedPrice, $lprice) === -1) || ( $uprice !== "" && bccomp($discountedPrice, $uprice) === 1)) {
+                        unset($categoryProductIds[$key]);
+                    }
+                }   
+            }             
+            
+
+            $isFiltered = true;  
         }
-        
+
+        if($isFiltered) {
+            $productCount = count($categoryProductIds);
+            if(!empty($categoryProductIds)) {
+                $filteredCategoryProducts = array_chunk($categoryProductIds, $productLimit);            
+                $categoryProductIds = $filteredCategoryProducts[$currentPage];
+            }
+        }
         // Fetch product object and append image
         foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
-                                ->getDefaultImage($productId);
+                                ->getDefaultImage($productId);       
+            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                              ->getSecondaryImage($productId);
             if(!$objImage){
                 $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                 $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -580,66 +605,15 @@ class ProductManager
                 $product->directory = $objImage->getDirectory();
                 $product->imageFileName = $objImage->getFilename();
             }
+            $product->secondaryImageDirectory = null;
+            $product->secondaryImageFileName = null;
+            if($secondaryProductImage){
+                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
+            }
             $categoryProducts[] = $product;
         }
 
-        // IF FILTER CONDITIONS ARE PROVIDED
-        if($isAllProductIds){
-            // Flag for triggering andWhere in criteria
-            $hasWhere = FALSE;
-
-            $arrCollectionProducts = new ArrayCollection($categoryProducts);
-            $criteria = new Criteria();
-
-            // Start appending filter conditions
-            if($condition !== ""){
-                $criteria->where(Criteria::expr()->eq("condition", $condition));
-                $hasWhere = TRUE;
-            }
-
-            if($lprice !== ""){
-                if(!$hasWhere){
-                    $criteria->where(Criteria::expr()->gte("finalPrice", $lprice));
-                    $hasWhere = TRUE;
-                }
-                else{
-                    $criteria->andWhere(Criteria::expr()->gte("finalPrice", $lprice));
-                }
-            }
-
-            if($uprice !== ""){
-                if(!$hasWhere){
-                    $criteria->where(Criteria::expr()->lte("finalPrice", $uprice));
-                    $hasWhere = TRUE;
-                }
-                else{
-                    $criteria->andWhere(Criteria::expr()->lte("finalPrice", $uprice));
-                }   
-            }
-
-            // Generate orderby criteria - Implemented to handle multiple conditions
-            $criteriaOrderBy = array();
-            foreach($orderBy as $sortBy=>$sort){
-                if($sort === "ASC"){
-                    $criteriaOrderBy[$sortBy] = Criteria::ASC;
-                }
-                else{
-                    $criteriaOrderBy[$sortBy] = Criteria::DESC;
-                }
-            }
-            $criteria->orderBy($criteriaOrderBy);
-
-            // Count product result after filtering
-            $productCount = count($arrCollectionProducts->matching($criteria));
-
-            // Filter number of results (pagination)
-            $criteria->setFirstResult($page)
-                    ->setMaxResults($productLimit);
-
-            // Push products to be displayed
-            $categoryProducts = $arrCollectionProducts->matching($criteria);
-        }
-        
         // Generate result array
         $result = array(
             'products' => $categoryProducts,
@@ -688,10 +662,10 @@ class ProductManager
     {
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
-        $defaultAttributes = array();                    
+        $defaultAttributes = [];
         if($product){
             $inventoryDetails = $this->getProductInventory($product);
-            $defaultInventory = array();
+            $defaultInventory = [];
             foreach($inventoryDetails as $inventory){
                 if($inventory['quantity'] > 0){
                     $defaultInventory = $inventory;
@@ -701,13 +675,11 @@ class ProductManager
 
             $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getProductAttributeDetailByName($productId);
-            /**
-             *  If the default quantity has been set
-             */
-            if( intval($defaultInventory['product_attribute_ids'][0]['id']) === 0 &&
-                intval($defaultInventory['product_attribute_ids'][0]['is_other']) === 0)
+
+            if( (int)$defaultInventory['product_attribute_ids'][0]['id'] === 0 &&
+                (int)$defaultInventory['product_attribute_ids'][0]['is_other'] === 0)
             {
-                foreach($attributes as $attributeIndex => $attribute){
+                foreach($attributes as $attribute){
                     if(!array_key_exists($attribute['attr_name'],$defaultAttributes)){
                         $defaultAttributes[$attribute['attr_name']] = $attribute;
                     }
@@ -716,9 +688,9 @@ class ProductManager
             else{
                 foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
                     foreach($attributes as $attributeIndex => $attribute){
-                        if(intval($productAttributeId['id']) === intval($attribute['attr_id']) &&
-                        intval($productAttributeId['is_other']) === intval($attribute['is_other'])){
-                            array_push($defaultAttributes, $attribute);
+                        if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
+                           (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
+                            $defaultAttributes[] = $attribute;
                             unset($attributes[$attributeIndex]);
                         } 
                     }
@@ -726,6 +698,7 @@ class ProductManager
             }
            
         }
+
         return $defaultAttributes;
     }
     
@@ -745,6 +718,7 @@ class ProductManager
                 $isListingOnly = true;
             }
         }
+
         return $isListingOnly;
     }
 
@@ -804,13 +778,12 @@ class ProductManager
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
-        // check if totally free shipping 
-        $isFreeShippingNationwide = TRUE;
+        $isFreeShippingNationwide = true;
         foreach ($shippingDetails as $value) {
-            if( intval($value['location_id']) !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
-                || bccomp(floatval($value['price']),0) !== 0){
+            if((int)$value['location_id'] !== \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID
+                || bccomp((float)$value['price'],0) !== 0){
 
-                $isFreeShippingNationwide = FALSE;
+                $isFreeShippingNationwide = false;
                 break;
             }
         }
@@ -825,9 +798,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productInventory = $esProductRepo->getProductInventoryDetail($productId);
- 
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
@@ -866,8 +839,8 @@ class ProductManager
             }
         }
 
-        // check if combination available
         $noMoreSelection = "";
+
         if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
             || (count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes))){
             $noMoreSelection = $productInventory[0]['id_product_item'];
@@ -883,6 +856,82 @@ class ProductManager
                 'productCombinationAvailable' => $productCombinationAvailable,
                 'needToSelect' => $needToSelect,
             ];
+    }
+
+    /**
+     * Get all active product of specific user
+     * @param  integer  $memberId
+     * @param  integer $offset
+     * @return objec
+     */
+    public function getProductsByUser($memberId,
+                                      $isDelete = [EsProduct::ACTIVE],
+                                      $isDraft = [EsProduct::ACTIVE],
+                                      $offset = 0,
+                                      $searchString = "",
+                                      $sortString = "")
+    {
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        switch( $sortString ){
+            case "lastmodified":
+                $orderByColumn = "p.lastmodifieddate";
+                break;
+            case "new": 
+                $orderByColumn = "p.createddate";
+                break;
+            default: 
+                $orderByColumn = "p.idProduct";
+                break;
+        }
+
+        $resultProducts = $esProductRepo->getUserProducts($memberId,
+                                                          $isDelete,
+                                                          $isDraft,
+                                                          $offset,
+                                                          self::PRODUCT_COUNT_DASHBOARD,
+                                                          $searchString,
+                                                          $orderByColumn);
+        $products = [];
+        foreach ($resultProducts as $resultProduct) {
+            $product = $this->getProductDetails($resultProduct);
+            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+
+            if($product->getDefaultImage()){
+                $product->directory = $product->getDefaultImage()->getDirectory();
+                $product->imageFileName = $product->getDefaultImage()->getFilename();
+            }
+
+            $product->rating = $esProductRepo->getProductAverageRating($product->getIdProduct());
+            $product->reviewCount = $esProductRepo->getProductReviewCount($product->getIdProduct());
+            $product->availableStock = $esProductRepo->getProductAvailableStocks($product->getIdProduct());
+            $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
+            $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
+            $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
+    /**
+     * Update is_delete status of individual product
+     * @param  integer $productId
+     * @param  integer $memberId
+     * @param  integer $isDeleteStatus
+     * @return boolean
+     */
+    public function updateIsDeleteStatus($productId, $memberId, $isDeleteStatus)
+    {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->find($productId);
+
+        if($product && $product->getMember()->getIdMember() === (int) $memberId){
+            $product->setIsDelete($isDeleteStatus); 
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -28,7 +28,6 @@ class EsOrderProductStatus
      */
     private $name;
 
-
     /**
      * @var integer
      */
@@ -68,6 +67,20 @@ class EsOrderProductStatus
      * @var integer
      */
     const STATUS_REJECT = 99;
+
+    const ON_GOING = 0;
+
+    const FORWARD_SELLER = 1;
+
+    const RETURNED_BUYER = 2;
+
+    const CASH_ON_DELIVERY = 3;
+
+    const PAID_FORWARDED = 4;
+
+    const PAID_RETURNED = 5;
+
+    const CANCEL = 6;
 
     /**
      * Get idOrderProductStatus

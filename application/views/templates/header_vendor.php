@@ -148,7 +148,7 @@
     </div>
 </section>
 <section class="sticky-nav-bg">
-    <div class="vendor-sticky-nav">
+    <div class="vendor-sticky-nav <?php echo ES_ENABLE_CHRISTMAS_MODS ? 'persistent-christmas-theme' : ''; ?>">
         <div class="main-container">
             <ul class="vendor-nav">
                 <?php
