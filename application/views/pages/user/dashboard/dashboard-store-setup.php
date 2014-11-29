@@ -108,10 +108,11 @@
                 <div class="current-store-theme">
                     <form class="form-horizontal">
                        <div class="form-group">
+                            <?php $storeColor = $member->getStoreColor(); ?>
                             <label class="col-sm-2 control-label">Color : </label>
                             <div class="col-sm-5 col-xs-12 col-with-radio">
-                                <div class="current-color-choice" style="background: #ff893a;">
-                                    Easyshop
+                                <div class="current-color-choice" style="background: #<?php echo html_escape($storeColor->getHexadecimal()) ?>;">
+                                    <?php echo html_escape($storeColor->getName()); ?>
                                 </div>
                                  
                             </div>
@@ -129,7 +130,6 @@
                         <label class="col-sm-3 control-label">Pick Your Color : </label>
                         <div class="col-sm-5 col-xs-12 col-with-radio">
                             <div class="color-theming">
-                                <?php $storeColor = $member->getStoreColor(); ?>
                                 <div class="current-color-drop" style="background: #<?php echo html_escape($storeColor->getHexadecimal()); ?>;">
                                     <input type="hidden" value="<?php echo $storeColor->getIdStoreColor(); ?>" id="current-store-color-id"/>
                                     <span class="color-name-drop"><?php echo html_escape($storeColor->getName()); ?></span>
@@ -149,12 +149,18 @@
                             <button class="btn btn-setting-edit-btn">
                                 Preview
                             </button>
-                            <button class="btn btn-setting-save-btn btn-color-save">
+                            <button id="store-color-save" class="btn btn-setting-save-btn btn-color-save">
                                 Save changes
                             </button>
                             <span class="btn btn-setting-cancel-btn btn-color-cancel" id="cancel-edit-store-theme">
                                 Cancel
                             </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-5">
+                            <span class="val-error" id="store-color-error" style=""></span>
                         </div>
                     </div>
                 </div>

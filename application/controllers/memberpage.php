@@ -2386,9 +2386,12 @@ class Memberpage extends MY_Controller
                 $isUpdated = false;
                 if($member){
                     $isUpdated = $this->serviceContainer['user_manager']
-                                    ->updateStorename($member, $formData['storename']);
+                                      ->updateStorename($member, $formData['storename']);
                     if($isUpdated){
                         $jsonResponse['updatedValue'] = $formData['storename'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store name is not available';
                     }
                 }
                 $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
@@ -2449,7 +2452,37 @@ class Memberpage extends MY_Controller
         }
         echo json_encode($jsonResponse); 
     }
-
+   
+    /**
+     * Update the store color scheme 
+     *
+     * @return json
+     */
+    public function updateStoreColorScheme()
+    {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $response = ['isSuccessful' => 'false'];
+        if($this->input->post('colorId')){
+            $memberId = $this->session->userdata('member_id');
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);     
+            $color = $entityManager->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find($this->input->post('colorId'));
+            if($color !== null && $member !== null){
+                $member->setStoreColor($color);
+                $isSuccessful = true;
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                    $response['errors'] = 'Sorry, something went wrong. Try again in a while.';
+                }
+                $response['isSuccessful'] = $isSuccessful ? 'true' : 'false';
+            }
+        }
+        echo json_encode($response);
+    }
     
     /**
      * Gets the store settings
@@ -2466,6 +2499,8 @@ class Memberpage extends MY_Controller
         }
         echo json_encode($response);
     }
+    
+
     
 
 }

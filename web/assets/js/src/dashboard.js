@@ -518,10 +518,13 @@
     $( "#btn-edit-store-theme" ).click(function() {
         $( ".current-store-theme" ).slideToggle( "slow" );
         $( ".edit-store-theme" ).slideToggle( "slow" );
+        $('#store-color-error').html('');
     });
 
-    $( "#cancel-edit-store-theme" ).click(function() {
+    $( "#cancel-edit-store-theme" ).click(function() {        
         $( "#btn-edit-store-theme" ).trigger( "click" );
+        var currentStoreColor = $('#current-store-color-id').val();
+        $('#color-item-'+currentStoreColor).trigger('click');
     });
 
     $( ".current-color-drop" ).click(function() {
@@ -865,7 +868,7 @@
         });
         $this.html(buttonHtml);
     });
-    
+        
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         if(!isStoreSetupInitialized){
@@ -900,6 +903,33 @@
                 }
             });
         }
+    });
+    
+    
+        
+    $('#store-color-save').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var selectedList = $('.color-li.selected');
+        var colorId = selectedList.data('id');
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreColorScheme',
+            data: {csrfname: csrftoken, colorId: colorId},
+            success: function(data){
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('#current-store-color-id').val(colorId);
+                    var currentColorChoiceContainer = $('.current-color-choice');
+                    currentColorChoiceContainer.css('background',selectedList.css('background'));
+                    currentColorChoiceContainer.html(selectedList.data('name'));
+                    $( "#btn-edit-store-theme" ).trigger( "click" );
+                }
+                else{
+                    $('#store-color-error').html(response.errors);
+                }
+                
+            }
+        });
     });
 
     $(".add-bank-account").click(function() {
