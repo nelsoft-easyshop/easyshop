@@ -952,10 +952,12 @@
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
                     var colorList = [];
+                    var currentColorId = $('#current-store-color-id').val();
                     $.each(jsonResponse.colors, function(index, color) {
                         colorList.push('<li style="background: #'+color.hexadecimal+'; text-transform: uppercase;" id="color-item-'+color.idStoreColor+'">'+color.name+'</li>');
                     });
                     unorderedList.append( colorList.join('') );
+                    unorderedList.find('#color-item-'+currentColorId).append(' <i class="fa fa-check pull-right"></i>');
                 
                     isStoreSetupInitialized = true;
                 }

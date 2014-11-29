@@ -129,24 +129,14 @@
                         <label class="col-sm-3 control-label">Pick Your Color : </label>
                         <div class="col-sm-5 col-xs-12 col-with-radio">
                             <div class="color-theming">
-                                <div class="current-color-drop" style="background: #ff893a;">
-                                    <span class="color-name-drop">Easyshop</span>
+                                <?php $storeColor = $member->getStoreColor(); ?>
+                                <div class="current-color-drop" style="background: #<?php echo html_escape($storeColor->getHexadecimal()); ?>;">
+                                    <span class="color-name-drop"><?php echo html_escape($storeColor->getName()); ?></span>
                                     <i class="cd icon-dropdown pull-right"></i>
                                 </div>
+                                <input type="hidden" value="<?php echo $storeColor->getIdStoreColor(); ?>" id="current-store-color-id"/>
                                 <div class="color-dropdown" >
                                     <ul class="color-list" id="store-color-dropdown">
-                                        <!--
-                                        <li style="background: #FF893A" id="color-item-1">EASYSHOP <i class="fa fa-check pull-right"></i></li>
-                                        <li style="background: #F89406" id="color-item-2">CALIFORNIA</li>
-                                        <li style="background: #F22613" id="color-item-3">POMEGRANATE</li>
-                                        <li style="background: #F62459" id="color-item-4">RADICAL RED</li>
-                                        <li style="background: #674172" id="color-item-5">HONEY FLOWER</li>
-                                        <li style="background: #336E7B" id="color-item-6">MING</li>
-                                        <li style="background: #446CB3" id="color-item-7">SAN MARINO</li>
-                                        <li style="background: #2574A9" id="color-item-8">JELLY BEAN</li>
-                                        <li style="background: #1E824C" id="color-item-9">SALEM</li>
-                                        <li style="background: #6C7A89" id="color-item-10">LYNCH</li>
-                                        -->
                                     </ul>
                                 </div>
                             </div>
