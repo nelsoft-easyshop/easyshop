@@ -11,10 +11,11 @@
         die;
     }
   
-    $preparedStatement = $dbConnection->prepare("SELECT id_cat, parent_id FROM es_cat ORDER BY parent_id");
+    $preparedStatement = $dbConnection->prepare("SELECT id_cat, parent_id FROM es_cat ORDER BY id_cat");
     $preparedStatement->execute();
     $allCategories = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
     
+ 
     /**
      * Translate the categories to address the problem with spaces in between the category ids
      * For the nested set to work, the ids must appear sequentially without breaks.
@@ -44,8 +45,9 @@
         }  
         $translatedCategories[$index]['translated_parent_id'] = $translatedParentId;
     }
-    
+
     $categoriesGroupedByParent = [];
+    $count = 0;
     foreach($translatedCategories as $category){
         $parentId = $category['translated_parent_id'];
         $categoryId = $category['translated_id'];    
@@ -54,7 +56,7 @@
         }
         $categoriesGroupedByParent[$parentId][] = $categoryId;
     }
- 
+
 
     /**
      * Unset the root category from the children of root
@@ -223,7 +225,7 @@
          */
         private function getChildren($categoryId) 
         {
-            return isset($this->list[$categoryId]) ? $this->list[$categoryId] : null;
+            return isset($this->list[$categoryId]) ? $this->list[$categoryId] : false;
         }
 
         /**
