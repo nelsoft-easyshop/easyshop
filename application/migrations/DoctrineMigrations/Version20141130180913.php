@@ -15,12 +15,12 @@ class Version20141130180913 extends AbstractMigration
         $this->addSql("
            CREATE TABLE `es_category_nested_set` (
             `id_category_nested_set` int(11) NOT NULL AUTO_INCREMENT,
-            `category_id` int(10) unsigned NOT NULL,
+            `original_category_id` int(10) unsigned NOT NULL DEFAULT '0',
             `left` int(11) NOT NULL DEFAULT '0',
             `right` int(11) NOT NULL DEFAULT '0',
             PRIMARY KEY (`id_category_nested_set`),
-            KEY `fk_es_category_nested_set_es_cat_idx` (`category_id`),
-            CONSTRAINT `fk_es_category_nested_set_es_cat` FOREIGN KEY (`category_id`) REFERENCES `es_cat` (`id_cat`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            KEY `fk_es_category_nested_set_es_cat_idx` (`original_category_id`),
+            CONSTRAINT `fk_es_category_nested_set_es_cat` FOREIGN KEY (`original_category_id`) REFERENCES `es_cat` (`id_cat`) ON DELETE NO ACTION ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
         ");
