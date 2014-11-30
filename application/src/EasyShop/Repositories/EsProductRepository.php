@@ -424,6 +424,7 @@ class EsProductRepository extends EntityRepository
     public function getUserProductParentCategories($memberId)
     {
         $em = $this->_em;
+        /*
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('parent_cat','parent_cat');
         $rsm->addScalarResult('cat_id','cat_id');
@@ -435,8 +436,161 @@ class EsProductRepository extends EntityRepository
         $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('member_id', $memberId);
+        */
+        
+        $parentCategories = $em->createQueryBuilder()
+                                ->select('n') 
+                                ->from('EasyShop\Entities\EsCategoryNestedSet','n')
+                                ->innerJoin('n.originalCategory', 'c', 'WITH', 'c.idCat != 1 AND c.parent = 1')
+                                ->getQuery()
+                                ->getResult();
+        $mainCategoryList = [];
+        foreach($parentCategories as $category){
+            $categoryId = $category->getOriginalCategory()->getIdCat();
+            $mainCategoryList[$categoryId]['nestedTableLeft'] = $category->getLeft();
+            $mainCategoryList[$categoryId]['nestedTableRight'] = $category->getRight();
+        }                        
+        
+        $count = 1;
+        $wherePartialQuery = '';
+        $casePartialQuery = '';
+        $bindedParameters = [];
 
-        return $query->getResult();
+        $numberOfMainCategories = count($mainCategoryList);
+       
+        $whereClauseCounter = 0;
+        $caseClauseCounter = 0;
+        foreach($mainCategoryList as  $index => $mainCategory){
+            $casePartialQuery .= "WHEN (es_category_nested_set.left > :param".($caseClauseCounter)." AND es_category_nested_set.right < :param".($caseClauseCounter+1).") 
+                                 THEN :param".($caseClauseCounter+2)." "; 
+            $bindedParameters[$caseClauseCounter] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$caseClauseCounter+1] = $mainCategory['nestedTableRight'];
+            $bindedParameters[$caseClauseCounter+2] = $index;
+            $caseClauseCounter += 3;
+            $adjustedIndex = 3*$numberOfMainCategories + $whereClauseCounter;
+            $wherePartialQuery .= " (es_category_nested_set.left > :param".($adjustedIndex+1)." AND es_category_nested_set.right < :param".($adjustedIndex+2).") OR";
+            $bindedParameters[$adjustedIndex+1] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$adjustedIndex+2] = $mainCategory['nestedTableRight'];
+            $whereClauseCounter += 2;
+        }
+        $wherePartialQuery = rtrim($wherePartialQuery, 'OR');
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_id','parent_id');
+        $rsm->addScalarResult('children','children');
+        $sql = "SELECT 
+                    GROUP_CONCAT(es_category_nested_set.original_category_id) as children, 
+                    CASE
+                        ".$casePartialQuery." 
+                    END as parent_id
+                FROM es_category_nested_set
+                WHERE ".$wherePartialQuery." GROUP BY parent_id";
+              
+        $query = $em->createNativeQuery($sql, $rsm);
+        foreach($bindedParameters as $index => $param){
+            $query->setParameter('param'.$index, $param);
+        }
+        $mainCategoryChildrenList = $query->getResult();
+        $reindexedMainCategoryChildrenList = [];
+     
+        foreach($mainCategoryChildrenList as $mainCategory){
+            $reindexedMainCategoryChildrenList[$mainCategory['parent_id']] = $mainCategory;
+        }
+        $mainCategoryChildrenList = $reindexedMainCategoryChildrenList;
+        
+        foreach($mainCategoryList as $categoryId => $mainCategory){
+            if(!isset($mainCategoryChildrenList[$categoryId])){
+                $mainCategoryChildrenList[$categoryId] = ['children' => '', 
+                                                          'parent_id' => $categoryId,
+                                                         ];
+            }
+        } 
+       
+        $casePartialQuery = "";
+        $bindParameters = [];
+        foreach($mainCategoryChildrenList as  $index => $childList){
+            $categoryString =  rtrim($childList['parent_id'].','.$childList['children'],',');
+            $childrenArray = explode(',',$categoryString);
+            $qmarks = implode(',', array_fill(0, count($childrenArray), '?'));
+            $casePartialQuery .= " WHEN es_product.cat_id IN (".$qmarks.") THEN ? "; 
+            $bindParameters = array_merge($bindParameters, $childrenArray);
+            $bindParameters[] = $childList['parent_id'];
+        }
+        
+        $sql = "SELECT count(es_product.id_product) as productCount,
+                CASE
+                    ".$casePartialQuery."
+                END as parent_id
+                FROM es_product 
+                WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
+                GROUP BY parent_id
+               ";
+
+        $bindParameters[] = $memberId;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('productCount','productCount');
+        $rsm->addScalarResult('parent_id','parent_id');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $count = 1;
+        foreach($bindParameters as $param){
+            $query->setParameter($count++, $param);
+        }
+        $uploadsPerCategory = $query->getResult();
+        
+        $finalCategoryList = [];
+        $reindexedUploadsPerCategory = [];
+        foreach($uploadsPerCategory as $category){
+            $parentId =  $category['parent_id'];
+            if(trim($parentId) === ''){
+                $reindexedUploadsPerCategory['other'] = $category;
+            }
+            else{   
+                $finalCategoryList[] = $parentId;
+                $reindexedUploadsPerCategory[$parentId] = $category;
+            }
+            
+        }
+
+        $uploadsPerCategory = $reindexedUploadsPerCategory;
+
+        $qmarks = implode(',', array_fill(0, count($finalCategoryList), '?'));
+        $sql = "SELECT 
+                    es_cat.name, 
+                    es_cat.id_cat, 
+                    es_cat.slug, 
+                    es_cat_img.path as image,
+                    es_cat.parent_id
+                FROM es_cat
+                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
+                WHERE es_cat.id_cat IN (".$qmarks.")";
+                $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_id','parent_cat');
+        $rsm->addScalarResult('id_cat','cat_id');
+        $rsm->addScalarResult('name','p_cat_name');
+        $rsm->addScalarResult('slug','p_cat_slug');
+        $rsm->addScalarResult('image','p_cat_img');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $count = 1;
+        foreach($finalCategoryList as $param){
+            $query->setParameter($count++, $param);
+        }
+        $categoryData = $query->getResult();
+   
+        foreach($categoryData as $index => $category){
+            $categoryData[$index]['prd_count'] = $uploadsPerCategory[$category['cat_id']]['productCount'];
+        }
+        if(isset($uploadsPerCategory['other'])){
+            $categoryData[] = ['parent_cat' => 1, 
+                               'cat_id' => 1,
+                               'prd_count' => $uploadsPerCategory['other']['productCount'],
+                               'p_cat_name' => 'NULL',
+                               'p_cat_slug' => 'null',
+                               'p_cat_img' => ''
+                              ];
+        }
+
+        return $categoryData;
+   
     }
 
     /**
