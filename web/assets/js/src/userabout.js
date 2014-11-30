@@ -17,7 +17,7 @@
         var $tabPane = $(this).closest('.tab-pane');
         var tab = $tabPane.attr('id');
         $.ajax({
-            url: '/home/feedback',
+            url: '/store/feedback',
             method: 'GET',
             data: {page:page, memberid:memberid, tab:tab},
             success : function(data) {

@@ -74,7 +74,7 @@ if ($enable_splash && ($bypass_IP !== $clientIP)){
 }
 else {
     $route['default_controller'] = "home";
-    $route['404_override'] = 'home/userprofile';
+    $route['404_override'] = 'store/userprofile';
     
     # CATEGORY
     $route['(?i)category/(:any)'] = 'product/categoryPage/$1'; # janz serafico
@@ -115,7 +115,7 @@ else {
     $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
     $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
     $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
-    $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';
+    $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
