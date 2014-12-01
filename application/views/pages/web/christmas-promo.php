@@ -47,7 +47,7 @@
             <div class="container single-image-before"></div>
 
             <div class="single-image">
-                <img src="/assets/images/promo-images/header-xmas.jpg" alt="">
+                <img src="/assets/images/promo-images/header-xmas.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
 
             </div>
 
