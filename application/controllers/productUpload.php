@@ -213,6 +213,9 @@ class productUpload extends MY_Controller
             mkdir($tempDirectory.'small/', 0777, true);
             mkdir($tempDirectory.'thumbnail/', 0777, true);
             mkdir($tempDirectory.'other/', 0777, true);
+            mkdir($tempDirectory.'other/categoryview/', 0777, true);
+            mkdir($tempDirectory.'other/small/', 0777, true);
+            mkdir($tempDirectory.'other/thumbnail/', 0777, true);
 
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
@@ -379,6 +382,18 @@ class productUpload extends MY_Controller
 
         directory_copy($path, $tempdirectory,$tempId,$arrayNameOnly); 
         
+        if (!file_exists ($tempdirectory.'other/categoryview')){
+            mkdir($tempdirectory.'other/categoryview/', 0777, true);
+        }
+
+        if (!file_exists ($tempdirectory.'other/small')){
+            mkdir($tempdirectory.'other/small/', 0777, true);
+        }
+
+        if (!file_exists ($tempdirectory.'other/thumbnail')){
+            mkdir($tempdirectory.'other/thumbnail/', 0777, true);
+        }
+
         $data = array('title'=>'Edit Product');
         $data = array_merge($data,$this->fill_view());
         $data['$render_searchbar'] = false; 
@@ -407,6 +422,9 @@ class productUpload extends MY_Controller
         $isCroppable = !empty($coordinates) ? true : false;
         $error = 0;
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
+
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
 
         foreach($_FILES['files']['name'] as $key => $value ) {
 
@@ -478,13 +496,25 @@ class productUpload extends MY_Controller
                     $coordinate = explode(',', $coordinates[$i]);
                     $imageUtility->imageCrop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
                 }
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+
+                $imageUtility->imageResize($pathDirectory.$filenames_ar[$i], 
+                                           $pathDirectory."small/".$filenames_ar[$i],
+                                           $imageDimensions["small"]);
+
+                $imageUtility->imageResize($pathDirectory."small/".$filenames_ar[$i], 
+                                           $pathDirectory."categoryview/".$filenames_ar[$i],
+                                           $imageDimensions["categoryview"]);
+
+                $imageUtility->imageResize($pathDirectory."categoryview/".$filenames_ar[$i], 
+                                           $pathDirectory."thumbnail/".$filenames_ar[$i],
+                                           $imageDimensions["thumbnail"]);
+
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-                        $this->es_img_resize($file_data[$i]['file_name'],$pathDirectory,'', $this->img_dimension['usersize']);
+                        $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
+                                                   $pathDirectory.$file_data[$i]['file_name'],
+                                                   $imageDimensions["usersize"]);
                     }
                 }
             }
@@ -514,6 +544,9 @@ class productUpload extends MY_Controller
     public function uploadimageOther()
     {
         $imageUtility = $this->serviceContainer['image_utility'];
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
+
         $temp_product_id = $this->session->userdata('tempId');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $memberId =  $this->session->userdata('member_id');
@@ -551,9 +584,19 @@ class productUpload extends MY_Controller
                 $coordinate = explode(',', $coordinates);
                 $imageUtility->imageCrop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
             }
-            $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
-            $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-            $this->es_img_resize($filename,$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+
+            $imageUtility->imageResize($pathDirectory.$filename, 
+                                       $pathDirectory."small/".$filename,
+                                       $imageDimensions["small"]);
+
+            $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                       $pathDirectory."categoryview/".$filename,
+                                       $imageDimensions["categoryview"]);
+
+            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                       $pathDirectory."thumbnail/".$filename,
+                                       $imageDimensions["thumbnail"]);
+
             die('{"result":"ok"}');
         }
         else{
@@ -1187,31 +1230,6 @@ class productUpload extends MY_Controller
         echo json_encode($data);
     }
 
-    private function es_img_resize($filename,$path_directory,$added_path,$dimension){
-        $filename = strtolower($filename);
-        $path_to_result_directory = $path_directory.$added_path; 
-        $path_to_image_directory = $path_directory;
-
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $path_to_image_directory . $filename;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['new_image'] = $path_to_result_directory . $filename;
-        $config['width'] = $dimension[0];
-        $config['height'] = $dimension[1];
-
-        if(!file_exists($path_to_result_directory)) {  
-            if(!mkdir($path_to_result_directory)) {  
-                die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0015]"}');  
-            }   
-        }
-
-        $this->image_lib->initialize($config); 
-        $this->image_lib->resize();
-        $this->image_lib->clear();
-    }
-    
-    
     /**
      * Renders upload step 3
      *
