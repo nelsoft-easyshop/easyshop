@@ -189,7 +189,7 @@ class TransactionManager
             'orderProductId' => false,
             'historyLog' => false
         ];
-        if ( (int) $status === 1 ) {
+        if ( (int) $status === EsOrderProductStatus::FORWARD_SELLER ) {
             $qb =
                 $this->em->createQueryBuilder()
                          ->select('op.idOrderProduct')
