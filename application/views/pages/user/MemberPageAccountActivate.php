@@ -34,17 +34,17 @@
                         <br>
                         <form class="form-horizontal" id="activateAccountForm">
                             <div class="form-group">
-                                <label class="col-sm-5 control-label">Your password : </label>
+                                <label class="col-sm-5 control-label">Type your password : </label>
                                 <div class="col-sm-7">
                                     <input type = "hidden" name="h" value="<?php echo $hash; ?>">
                                     <input type = "hidden" name="userId" value="<?php echo $idMember; ?>">
-                                    <input type = "password"  id="password" name="password" class="text-info text-required" placeholder="Type your new password here">
+                                    <input type = "password"  id="password" name="password" class="text-info text-required" placeholder="Type your account password here">
                                 </div> 
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-5 control-label">Confirm  password : </label>
+                                <label class="col-sm-5 control-label">Confirm your password : </label>
                                 <div class="col-sm-7">
-                                    <input type = "password"  id="confirmPassword" name="confirmPassword" class="text-info text-required" placeholder="Confirm your new password here">
+                                    <input type = "password"  id="confirmPassword" name="confirmPassword" class="text-info text-required" placeholder="Confirm your account password here">
                                 </div>
                             </div>
                             <div class="activateActions">

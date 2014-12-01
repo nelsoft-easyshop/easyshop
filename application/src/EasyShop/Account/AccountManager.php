@@ -111,7 +111,7 @@ class AccountManager
      * @param bool $asArray
      * @return mixed Returns an array of the error and the member entity
      */    
-    public function authenticateMember($username, $password, $asArray = false)
+    public function authenticateMember($username, $password, $asArray = false, $isForActivationNotice = false)
     {
         $errors = array();
         $member = null;
@@ -145,6 +145,7 @@ class AccountManager
             }         
 
             if($member) {
+
                 if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
                     if(!$this->authenticateByReverseHashing($validatedUsername, $validatedPassword, $member)) {
                         $member = NULL;                        
@@ -163,6 +164,11 @@ class AccountManager
             }
         }
 
+
+        if($member && ((bool)$member->getIsActive() === false && !$isForActivationNotice)) {
+            array_push($errors, [   'login' => "Account Deactivated",'id' => $member->getIdMember() ]);
+            $member = NULL;                        
+        }
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                  'member' => $member];
     

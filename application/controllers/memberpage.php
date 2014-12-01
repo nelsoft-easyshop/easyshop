@@ -2065,8 +2065,9 @@ class Memberpage extends MY_Controller
      */
     public function sendDeactivateNotification()
     {
+
         $this->load->library('encrypt');
-        if ((!$this->input->post('id') && !$this->input->post('password')) || $this->input->post('id') != $this->session->userdata('member_id')) {
+        if ((!$this->input->post('id') && !$this->input->post('password'))) {
             $result = false;
         }
         else {
@@ -2074,12 +2075,12 @@ class Memberpage extends MY_Controller
                         ->getRepository('EasyShop\Entities\EsMember')
                             ->find($this->input->post('id'));
             $doesMemberExists = $this->accountManager
-                                    ->authenticateMember($member->getUsername(), $this->input->post('password'));
+                                    ->authenticateMember($member->getUsername(), $this->input->post('password'), false, true);
             if (!$member) {
                 $result = false;
             }
             else if (!$doesMemberExists['member']) {
-                $result = 'Incorrect Password';
+                $result = 'Invalid Username/Password';
             }
             else {
                 $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());

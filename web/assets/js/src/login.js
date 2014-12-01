@@ -9,7 +9,35 @@
             $("#login-form").hide();
         }
     });
+    $(document).on('click','#sendReactivationLink',function (e) {
+        $('#loading_img_activate').show();
+        $('#login_error').hide();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');  
+        var password = $("#login_password").val();
+        var id = $(this).data("id");
+        $.ajax({
+            type: 'post',
+            data: {password:password, id:id, csrfname : csrftoken},
+            url: "/memberpage/sendDeactivateNotification",
+            success: function(data) {
+                var obj = jQuery.parseJSON(data);   
+                $('#loading_img_activate').hide();
+                $('#login_error').show();                
+                if(obj !== "Incorrect Password") {
+                    $("#login_username").val("");
+                    $("#login_password").val("");
+                    $("#deactivatePassword").val("");                        
+                    $("#login_error").html("<span style='color:green'>Please check your email for the verification link we've just sent to complete the reactivation process of your account. We are looking forward to serving you again! Happy Shopping!</span>");
 
+                }
+                else{
+                    $("#login_error").html(obj);
+                }                
+
+            },
+        });         
+    });        
     $(document).ready(function(){
         $("#login_form").validate({
             rules: {
@@ -53,8 +81,14 @@
                         }
                         else{
                             if(data.o_success <= 0){
+                                
                                 $("#login_error").empty();
-                                $("#login_error").html(data["o_message"]);
+                                if(data["o_message"] == "Account Deactivated") {
+                                    $("#login_error").html("<span id='deactivatedPrompt'>Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id='"+data["errors"][0]["id"]+"' style='color:blue;cursor:pointer;'>here</a> to send a reactivation link to your email.</span>");
+                                }
+                                else {
+                                    $("#login_error").html(data["o_message"] );
+                                }
                                 $('#loading_img').hide();
                                 $('#login').show();
                             }

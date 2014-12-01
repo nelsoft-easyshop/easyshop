@@ -76,6 +76,7 @@
                                 <input type="password" id="login_password" name="login_password" class="ui-form-control"> 
                                     <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"> </span>
                                     <span id="login_error" class="red" style="font-weight:bold;display:block"><?php echo (isset($form_error)?$form_error:'');?>  </span>
+                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-25 mrgn-top-20">
