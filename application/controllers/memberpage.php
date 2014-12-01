@@ -2076,7 +2076,6 @@ class Memberpage extends MY_Controller
                             ->find($this->input->post('id'));
             $doesMemberExists = $this->accountManager
                                     ->authenticateMember($member->getUsername(), $this->input->post('password'), false, true);
-            print_r($doesMemberExists["member"]);
             if (!$member) {
                 $result = false;
             }
