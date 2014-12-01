@@ -250,10 +250,9 @@ class EsMemberRepository extends EntityRepository
                     ->from('EasyShop\Entities\EsMember','m')
                     ->where($queryBuilder->expr()->orX(
                         $queryBuilder->expr()->eq('m.slug', ':slugA'),
-                        $queryBuilder->expr()->eq('m.username', ':slugB')
+                        $queryBuilder->expr()->eq('m.username', ':slugA')
                     ))
-                    ->setParameter('slugA', $slug)
-                    ->setParameter('slugB', $slug);
+                    ->setParameter('slugA', $slug);
 
         if($notMemberId !== null){
             $queryBuilder->andWhere('m.idMember != :member_id')
