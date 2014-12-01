@@ -67,11 +67,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
 <!-- End Google Tag Manager -->
 
-<header class="new-header-con">
+<!-- <header class="new-header-con"> original container -->
+<header class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'vendor-christmas-theme' : 'new-header-con' ?>">
     <div class="main-container">
         <div>
             <a href="/">
-                <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
+            
+                <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                <?php else: ?>
+                    <span class="span_bg"></span>
+                <?php endif; ?>
+
             </a>
         </div>
         <div class="search-container">

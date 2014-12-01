@@ -49,8 +49,12 @@
                         alert(obj);                        
                     }
                     else {
-                        alert("You have successfully deactivated your account");
-                        window.location = "/memberpage/renderDeactivatedAccountPage";                        
+                        $('#activated-modal').modal({       
+                            onClose: function(){
+                                window.location = "/login/logout";
+                            }
+                         });
+                        $('#activated-modal').parents("#simplemodal-container").addClass("activated-container");                                             
                     }
 
                 },

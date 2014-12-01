@@ -1834,14 +1834,17 @@ class Memberpage extends MY_Controller
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
-        $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
-        $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
-        $stateRegionId = $address[0]->getCountry()->getIdLocation();
-        $cityId = $address[0]->getCity()->getIdLocation();
-        $consigneAddress = $address[0]->getAddress();
-        $cLat = $address[0]->getLat();
-        $cLng = $address[0]->getLng();
+
         if($member){
+
+            $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
+            $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
+            $stateRegionId = $address[0]->getCountry()->getIdLocation();
+            $cityId = $address[0]->getCity()->getIdLocation();
+            $consigneAddress = $address[0]->getAddress();
+            $addressLatitude  = $address[0]->getLat();
+            $addressLongitude = $address[0]->getLng();
+
             $paginationData['isHyperLink'] = false;
 
             $userAvatarImage = $userManager->getUserImage($memberId);
@@ -1952,11 +1955,11 @@ class Memberpage extends MY_Controller
                 'bannerImage' => $userBannerImage,
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
-                'cities' => $locationLookup["cityLookup"],
+                'cities' => $locationLookup["json_city"],
                 'consigneeAddress' => $consigneAddress,
                 'address' => $address[0],
-                'latitude' => $cLat,
-                'longitude' => $cLng,
+                'latitude' => $addressLatitude ,
+                'longitude' => $addressLongitude,
                 'consigneeStateRegionId' => $stateRegionId,
                 'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
@@ -2054,39 +2057,6 @@ class Memberpage extends MY_Controller
         echo json_encode($responseArray);
     }
 
-    public function renderDeactivatedAccountPage()
-    {
-        // $cart_items = serialize($this->session->userdata('cart_contents'));
-        // $id = $this->session->userdata('member_id');        
-        // $this->cart_model->save_cartitems($cart_items,$id);
-        // $this->user_model->logout();
-        // $temp = array(
-        //         'member_id' => $this->session->userdata('member_id'),
-        //         'ip' => $this->session->userdata('ip_address'),
-        //         'useragent' => $this->session->userdata('user_agent'),
-        //         'token' => get_cookie('es_usr')
-        // );
-
-        // $this->user_model->dbdelete_cookie_keeplogin($temp);
-        // delete_cookie('es_usr');
-        // delete_cookie('es_vendor_subscribe');
-        // $this->session->sess_destroy();
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $data = array(
-            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-            'relCanonical' => base_url(),
-        );
-        $data['homeContent'] = $this->fillCategoryNavigation();
-        $data = array_merge($data, $this->fill_header());        
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/MemberPageAccountDeactivated');
-        $this->load->view('templates/footer_primary', $viewData);        
-    }
     /**
      * send notification to user and deactivate account
      * @param id
@@ -2117,7 +2087,7 @@ class Memberpage extends MY_Controller
                 $parseData = array(
                     'username' => $member->getUsername(),
                     'hash' => $this->encrypt->encode($member->getIdMember()),
-                    'site_url' => site_url('memberpage/activateAccount')
+                    'site_url' => site_url('memberpage/showActivateAccount')
                 );        
 
                 $this->emailNotification = $this->serviceContainer['email_notification'];
@@ -2133,44 +2103,82 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Show activate account page
+     * Flags member as activated
+     * @return json
      */
-    public function activateAccount()
+    public function doReactivateAccount()
     {
+
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
-            // redirect('/login', 'refresh');
-        }
-
-/*        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
             ->findOneBy([
                 'idMember' => $getData[0],
                 'isActive' => 0
             ]);
-        if (!$member) {
+
+        if($this->input->get("activateAccountButton") && $member) {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
+            $result = [
+                "username" => $member->getUsername(),
+                "result" => "success"
+            ];
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * Show activate account page
+     */
+    public function showActivateAccount()
+    {
+
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
         else {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);            
-        }*/
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
+             $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy([
+                                    'idMember' => $getData[0],
+                                    'isActive' => 0
+                                ]);
 
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $data = array(
-            'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-            'relCanonical' => base_url(),
-        );
-        $data['homeContent'] = $this->fillCategoryNavigation();    
-        $data = array_merge($data, $this->fill_header());        
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/MemberPageAccountActivate');
-        $this->load->view('templates/footer_primary', $viewData);
+            if (!$member) {
+                redirect('/login', 'refresh');
+            }
+            else {
+                $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+                $data = array(
+                    'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+                    'relCanonical' => base_url(),
+                    'username' => $member->getUsername(),
+                    'idMember' => $getData[0],            
+                    'hash' => $this->input->get('h')            
+                );
+                $data = array_merge($data, $this->fill_header());
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $em = $this->serviceContainer["entity_manager"];
+                if($data['logged_in']){
+                    $memberId = $this->session->userdata('member_id');
+                    $data['logged_in'] = true;
+                    $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                               ->find($memberId);
+                    $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
+                }                
+                $data["homeContent"] = $this->serviceContainer['xml_cms']->getHomeData(true);        
+                $viewData['facebook'] = $socialMediaLinks["facebook"];
+                $viewData['twitter'] = $socialMediaLinks["twitter"];
 
+                $this->load->view('templates/header_primary', $data);
+                $this->load->view('pages/user/MemberPageAccountActivate', $data);
+                $this->load->view('templates/footer_primary', $viewData);                    
+            }            
+        }
     }
 
     /**

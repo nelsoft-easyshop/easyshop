@@ -1484,6 +1484,57 @@ a{
 .col-button-searc-hist{
     padding-left: 0px;
 }
+
+.panel-activate > .panel-heading{
+    font-weight: 900;
+    font-size: 15px;
+    color: #565656;
+    text-transform: uppercase;
+}
+
+.activateAccount{
+    margin: 60px 0px;
+}
+
+.activateActions{
+    margin-top: 23px;
+    margin-bottom: 13px;
+}
+
+.p-panel-body{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+
+#activated-message{
+    font-size: 15px;
+    margin-top: 14px;
+    padding: 0px 20px;
+    font-weight: bold;
+}
+
+#activated-message a{
+    color: #ff893a;
+    font-weight: 900;
+}
+
+.activated-container{
+    height: 200px important;
+}
+
+.activated-container h2{
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #565656;
+}
+
+.activated-modal .feedback-content{
+    text-align:left;
+
+}
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -1969,6 +2020,13 @@ a{
     .col-button-searc-hist{
         padding-left: 15px;
     }
+
+    
+    .activateAccount{
+        margin: 20px 0px;
+    }
+
+
 }
 
 
@@ -2126,4 +2184,7 @@ a{
         margin-top: 0;
         margin-right: 0;
     }
+
 }
+
+
