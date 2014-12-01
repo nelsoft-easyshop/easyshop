@@ -28,9 +28,10 @@
                             <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
                                 <?=html_escape($product['name'])?>
                             </a>
-                                <span class="trans-circle trans-circle-inc">
-                                    <span class="glyphicon glyphicon-ok"></span>
-                                </span>
+                            <?PHP if (intval($soldTransactionDetails['orderStatus']) === 0 && intval($product['idOrderProductStatus']) === 0 && intval($soldTransactionDetails['idPaymentMethod']) === 3) : ?>
+                            <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox">
+                            <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
+                            <?PHP endif; ?>
                         </p>
                         <p class="item-amount">
                             <span class="item-current-amount">P<?=number_format($product['price'], 2, '.', ',') ?></span>

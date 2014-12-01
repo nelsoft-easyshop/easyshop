@@ -25,7 +25,7 @@
         <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
-                    <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                    <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
                     <button class="btn btn-default-3">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
@@ -34,11 +34,13 @@
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
-                    <span>Sort By:</span>
-                    <select class="select-filter-item">
-                        <option selected=selected>Last Modified</option>
-                        <option>2</option>
-                        <option>3</option>
+                    <span>Payment Filter:</span>
+                    <select class="select-filter-item payment-filter" data="ongoing-bought">
+                        <option value="all" selected=selected>Show all</option>
+                        <option value="1">PayPal</option>
+                        <option value="2">DragonPay</option>
+                        <option value="3">Cash On Delivery</option>
+                        <option value="5">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -59,7 +61,7 @@
         <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
-                    <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                    <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
                     <button class="btn btn-setting-edit-btn">
                         <i class="icon-fax"></i> Print
                     </button>
@@ -68,11 +70,13 @@
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
-                    <span>Sort By:</span>
-                    <select class="select-filter-item">
-                        <option selected=selected>Last Modified</option>
-                        <option>2</option>
-                        <option>3</option>
+                    <span>Payment Filter:</span>
+                    <select class="select-filter-item payment-filter" data="ongoing-sold">
+                        <option value="all" selected=selected>Show all</option>
+                        <option value="1">PayPal</option>
+                        <option value="2">DragonPay</option>
+                        <option value="3">Cash On Delivery</option>
+                        <option value="5">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -98,7 +102,7 @@
         <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
-                <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
                 <button class="btn btn-default-3">
                     <i class="icon-fax"></i> <span>Print</span>
                 </button>
@@ -107,11 +111,13 @@
                 </button>
             </div>
             <div class="col-md-3 text-right">
-                <span>Sort By:</span>
-                <select class="select-filter-item">
-                    <option selected=selected>Last Modified</option>
-                    <option>2</option>
-                    <option>3</option>
+                <span>Payment Filter:</span>
+                <select class="select-filter-item payment-filter" data="complete-bought">
+                    <option value="all" selected=selected>Show all</option>
+                    <option value="1">PayPal</option>
+                    <option value="2">DragonPay</option>
+                    <option value="3">Cash On Delivery</option>
+                    <option value="5">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>
@@ -132,7 +138,7 @@
         <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
-                <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
+                <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
                 <button class="btn btn-default-3">
                     <i class="icon-fax"></i> <span>Print</span>
                 </button>
@@ -141,11 +147,13 @@
                 </button>
             </div>
             <div class="col-md-3 text-right">
-                <span>Sort By:</span>
-                <select class="select-filter-item">
-                    <option selected=selected>Last Modified</option>
-                    <option>2</option>
-                    <option>3</option>
+                <span>Payment Filter:</span>
+                <select class="select-filter-item payment-filter" data="complete-sold">
+                    <option value="all" selected=selected>Show all</option>
+                    <option value="1">PayPal</option>
+                    <option value="2">DragonPay</option>
+                    <option value="3">Cash On Delivery</option>
+                    <option value="5">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>

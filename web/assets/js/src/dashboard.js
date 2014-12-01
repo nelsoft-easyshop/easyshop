@@ -1067,7 +1067,46 @@
 
         getTransactionDetails($page, $requestType, $container);
     });
-    
+
+    $(".search-transaction-num").on('keypress', function(e) {
+        var code = e.keyCode || e.which;
+        var $value = $(this).val();
+        var $container =  $(this).attr('data');
+        var $searchFor = 'transactionNumber';
+        if (code === 13) {
+            searchForTransaction($container, $searchFor, $value, $container);
+            return false;
+        }
+    });
+
+    $('.payment-filter').on('change',function() {
+        var $value = $(this).val();
+        var $container =  $(this).attr('data');
+        var $searchFor = 'paymentMethod';
+        searchForTransaction($container, $searchFor, $value, $container);
+    });
+
+    function searchForTransaction($requestType, $searchFor, $value, $container)
+    {
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : 0,
+                value : $value,
+                searchFor : $searchFor,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
+
     $(".save-store-setting").click(function(){
         var $this = $(this);
         var storename = $('#input-store-name').val();
@@ -1191,9 +1230,6 @@
         $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
-    
-    
-    
 
     function getTransactionDetails($page, $requestType, $container)
     {

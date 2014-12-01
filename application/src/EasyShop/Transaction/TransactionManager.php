@@ -45,12 +45,14 @@ class TransactionManager
      * @param bool $isOngoing
      * @param $offset
      * @param $perPage
+     * @param $transactionNumber
+     * @param $paymentMethod
      * @return array
      */
-    public function getBoughtTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10)
+    public function getBoughtTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber = '', $paymentMethod = '')
     {
         $boughtTransactionDetails = [];
-        $getUserBoughtTransactions =  $this->esOrderRepo->getUserBoughtTransactions($memberId, $isOngoing, $offset, $perPage);
+        $getUserBoughtTransactions =  $this->esOrderRepo->getUserBoughtTransactions($memberId, $isOngoing, $offset, $perPage, $transactionNumber, $paymentMethod);
 
         foreach ($getUserBoughtTransactions as $transaction) {
             $definedKey = $transaction['idOrder'] . '-' . $transaction['sellerId'];
@@ -85,12 +87,14 @@ class TransactionManager
      * @param bool $isOngoing
      * @param int $offset
      * @param int $perPage
+     * @param $transactionNumber
+     * @param $paymentMethod
      * @return array
      */
-    public function getSoldTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10)
+    public function getSoldTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber = '', $paymentMethod = '')
     {
         $soldTransactionDetails = [];
-        $getUserSoldTransactions =  $this->esOrderRepo->getUserSoldTransactions($memberId, $isOngoing, $offset, $perPage);
+        $getUserSoldTransactions =  $this->esOrderRepo->getUserSoldTransactions($memberId, $isOngoing, $offset, $perPage, $transactionNumber, $paymentMethod);
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
@@ -411,5 +415,10 @@ class TransactionManager
         }
 
         return count($soldTransactionDetails);
+    }
+
+    public function getBoughtTransactionDetailsByTransactionNum($memberId, $transactionNum)
+    {
+
     }
 }
