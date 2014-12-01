@@ -407,6 +407,10 @@
         if (status == google.maps.GeocoderStatus.OK) {
             google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
         }
+        else{
+            alert('Please specify a valid address.');            
+            $( ".map-container" ).slideToggle( "slow" );            
+        }
       });
     }  
     
