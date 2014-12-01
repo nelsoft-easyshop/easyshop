@@ -47,11 +47,12 @@
 <script src="/assets/js/src/vendor/snowstorm-min.js" type="text/javascript"></script>
 <script>
     snowStorm.snowColor = '#f7f7f7';   // blue-ish snow!?
-    snowStorm.flakesMaxActive = 250;    // show more snow on screen at once
-    snowStorm.flakesMax = 250;    // show more snow on screen at once
+    snowStorm.flakesMaxActive = 150;    // show more snow on screen at once
+    snowStorm.flakesMax = 100;    // show more snow on screen at once
     snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
     snowStorm.followMouse = false;
     snowStorm.freezeOnBlur = false;
     snowStorm.zIndex = 99999;
+    snowStorm.animationInterval = 10;
 </script>
 <?php endif; ?>
