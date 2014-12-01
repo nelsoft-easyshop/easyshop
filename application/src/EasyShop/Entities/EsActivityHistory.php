@@ -31,14 +31,14 @@ class EsActivityHistory
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="activity_datetime", type="datetime", nullable=true)
+     * @ORM\Column(name="activity_datetime", type="datetime", nullable=false)
      */
     private $activityDatetime = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \EasyShop\\Entities\EsActivityType
+     * @var \EasyShop\Entities\EsActivityType
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\\Entities\EsActivityType")
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsActivityType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_type_id", referencedColumnName="id_activity_type")
      * })
@@ -106,10 +106,10 @@ class EsActivityHistory
     /**
      * Set activityType
      *
-     * @param \EasyShop\\Entities\EsActivityType $activityType
+     * @param \EasyShop\Entities\EsActivityType $activityType
      * @return EsActivityHistory
      */
-    public function setActivityType(\EasyShop\\Entities\EsActivityType $activityType = null)
+    public function setActivityType(\EasyShop\Entities\EsActivityType $activityType = null)
     {
         $this->activityType = $activityType;
 
@@ -119,7 +119,7 @@ class EsActivityHistory
     /**
      * Get activityType
      *
-     * @return \EasyShop\\Entities\EsActivityType 
+     * @return \EasyShop\Entities\EsActivityType 
      */
     public function getActivityType()
     {
