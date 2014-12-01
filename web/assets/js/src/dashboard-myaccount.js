@@ -135,7 +135,8 @@
 
     /**************** GOOGLE MAPS ******************************/
 
-    $(".refresh_map").click(function(){     
+    $(".refresh_map").click(function(){  
+        console.log("refresh map");
         var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
         var city = $('#delivery_city').find('option:selected').text().trim();
         var type = "delivery";
@@ -144,43 +145,10 @@
             alert('Please specify a valid address.');            
             $( ".map-container" ).slideToggle( "slow" );
         }
-        else {
+        else {        
             codeAddress(address, type);
-        }            
-        
-    });
- 
-    $('.map-trigger').click(function () {
-        var maplat = $(this).siblings('input[name="map_lat"]').val();
-        var maplng = $(this).siblings('input[name="map_lng"]').val();
-        var refreshmapbtn = $('.refresh_map');
-        var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
-        var type = this.name;
-
-        var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
-        var city = $('#delivery_city').find('option:selected').text().trim();
-        if( (stateregion === "--Select State/Region--" || city === "--- Select City ---")) {
-            alert('Please specify a valid address.');    
-            $( ".map-container" ).slideToggle( "slow" );
         }
 
-        if ((maplat == 0 && maplng == 0)){
-            refreshmapbtn.trigger('click');
-        }else{
-            var myLatlng =  new google.maps.LatLng(maplat,maplng);
-            if(mapcanvas.hasClass('map_canvas')){
-                if( type === 'personal' ){
-                    mapPersonal.setCenter(myLatlng);
-                    markerPersonal.setPosition(myLatlng);
-                }
-                else{
-                    mapDelivery.setCenter(myLatlng);
-                    markerDelivery.setPosition(myLatlng);
-                }
-            }else{
-                google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
-            }
-        }    
     });
 
     $('.span-current-location').click(function () {
@@ -214,15 +182,14 @@
 
 
     $('.map-trigger').click(function () {
+        console.log("map trigger");
         var maplat = $(this).siblings('input[name="map_lat"]').val();
         var maplng = $(this).siblings('input[name="map_lng"]').val();
         var refreshmapbtn = $('.refresh_map');
         var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
         var type = this.name;
         
-        if (maplat == 0 && maplng == 0){
-            refreshmapbtn.trigger('click');
-        }else{
+        if(maplat !== 0 && maplng !== 0){
             var myLatlng =  new google.maps.LatLng(maplat,maplng);
             if(mapcanvas.hasClass('map_canvas')){
                 if( type === 'personal' ){
@@ -432,6 +399,7 @@
     }
 
     function codeAddress(address, type) {
+        console.log("codeAddress");
         $("#delivery_mapcanvas").css("display","block");
         geocoder = new google.maps.Geocoder();
         geocoder.geocode( { 'address': address}, function(results, status) {
