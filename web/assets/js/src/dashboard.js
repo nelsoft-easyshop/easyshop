@@ -894,19 +894,6 @@
         });
     });
 
-//OLD feedback modal
-    $('#give-feedback').click(function (e) {
-        $('#feedback-modal').modal();
-        $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
-        return false;
-    });
-//OLD ship item modal
-    $('.ship-item').click(function (e) {
-        $('#shipping-details').modal();
-        $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
-        return false;
-    });
-
     $('.shipment-detail-button').on('click', function(e) {
         var shipmentModal = $(this).parent().find('div.shipping-details');
         var shipmentContainer = $(this).parent().find('div.shipping-details-container');
@@ -1104,6 +1091,48 @@
         return false;
     });
 
+    $("#ongoing-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-bought';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#ongoing-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-sold';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-bought';
+
+        alert($container);
+        return false;
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-sold';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
     $(".add-bank-account").click(function() {
         $(this).fadeOut();
         $(".select-bank").slideDown();
@@ -1114,6 +1143,25 @@
         $(".add-bank-account").fadeIn();
     });
 
+    function getTransactionDetails($page, $requestType, $container)
+    {
+        console.log($container);
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : $page,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
 }(jQuery));
 
 

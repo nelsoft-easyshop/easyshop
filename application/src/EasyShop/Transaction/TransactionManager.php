@@ -42,34 +42,35 @@ class TransactionManager
     /**
      * Get bought transaction details
      * @param $memberId
-     * @param $isOngoing
-     * @return mixed
+     * @param bool $isOngoing
+     * @param $offset
+     * @param $perPage
+     * @return array
      */
-    public function getBoughtTransactionDetails ($memberId, $isOngoing = true)
+    public function getBoughtTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10)
     {
-        $boughtTransactionDetails = array();
-        $getUserBoughtTransactions =  $this->esOrderRepo->getUserBoughtTransactions($memberId, $isOngoing);
+        $boughtTransactionDetails = [];
+        $getUserBoughtTransactions =  $this->esOrderRepo->getUserBoughtTransactions($memberId, $isOngoing, $offset, $perPage);
 
         foreach ($getUserBoughtTransactions as $transaction) {
-            if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
-                $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']] = $transaction;
-                $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['userImage'] = $this->userManager->getUserImage($transaction['sellerId']);
-
-                $orderProducts =
-                    $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
+            $definedKey = $transaction['idOrder'] . '-' . $transaction['sellerId'];
+            if (!isset($boughtTransactionDetails[$definedKey])) {
+                $boughtTransactionDetails[$definedKey] = $transaction;
+                $boughtTransactionDetails[$definedKey]['userImage'] = $this->userManager->getUserImage($transaction['sellerId']);
+                $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
                 foreach ($orderProducts as $productKey => $product) {
                     if (
-                        !isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]) &&
+                        !isset($boughtTransactionDetails[$definedKey]['product'][$orderProducts[$productKey]['idOrderProduct']]) &&
                         $transaction['sellerId'] === $product['seller_id']
                     ) {
                         $product['has_shipping_summary'] = false;
                         if ( (bool) $product['courier'] === true &&  (bool) $product['datemodified']  === true ) {
                             $product['has_shipping_summary'] = true;
                         }
-                        $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
+                        $boughtTransactionDetails[$definedKey]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
                     }
                     if ($product['attrName'] && $transaction['sellerId'] === $product['seller_id']) {
-                        $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
+                        $boughtTransactionDetails[$definedKey]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
                     }
                 }
             }
@@ -81,13 +82,15 @@ class TransactionManager
     /**
      * Get Sold transaction details
      * @param $memberId
-     * @param $isOngoing
-     * @return mixed
+     * @param bool $isOngoing
+     * @param int $offset
+     * @param int $perPage
+     * @return array
      */
-    public function getSoldTransactionDetails ($memberId, $isOngoing = true)
+    public function getSoldTransactionDetails ($memberId, $isOngoing = true, $offset = 0, $perPage = 10)
     {
-        $soldTransactionDetails = array();
-        $getUserSoldTransactions =  $this->esOrderRepo->getUserSoldTransactions($memberId, $isOngoing);
+        $soldTransactionDetails = [];
+        $getUserSoldTransactions =  $this->esOrderRepo->getUserSoldTransactions($memberId, $isOngoing, $offset, $perPage);
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
@@ -127,7 +130,7 @@ class TransactionManager
         ];
         $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
 
-        if ( (bool) $getOrderProduct['orderProductId'] ) {
+        if ( isset($getOrderProduct['orderProductId']) ) {
             $esOrderProduct = $this->esOrderProductRepo
                                    ->findOneBy([
                                        'idOrderProduct' => $orderProductId,
@@ -139,7 +142,7 @@ class TransactionManager
 
             $doesAllOrderProductResponded = $this->esOrderProductRepo
                                                  ->findOneBy([
-                                                     'status' => EsOrderProductStatus::STATUS_ONGOING,
+                                                     'status' => EsOrderProductStatus::ON_GOING,
                                                      'order' => $orderId
                                                  ]);
             if ( ! (bool) $doesAllOrderProductResponded ) {
@@ -152,7 +155,7 @@ class TransactionManager
                 $this->esOrderRepo->updateOrderStatus($esOrder, $esOrderStatus);
                 $orderHistoryData = [
                     'order_id' => $orderId,
-                    'order_status' => EsOrderProductStatus::STATUS_FORWARD_TO_SELLER,
+                    'order_status' => EsOrderProductStatus::FORWARD_SELLER,
                     'comment' => 'COMPLETED',
                 ];
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
@@ -205,25 +208,24 @@ class TransactionManager
                 'historyLog' => 'FORWARDED'
             ];
         }
-        else if ( (int) $status === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER || (int) $status === (int) EsOrderProductStatus::STATUS_COD ) {
-            $qb =
-                $this->em->createQueryBuilder()
-                         ->select('op.idOrderProduct')
-                         ->from('EasyShop\Entities\EsOrderProduct','op')
-                         ->innerJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder AND o.invoiceNo = :invoice')
-                         ->where('op.status = 0 AND op.seller = :memberId AND op.idOrderProduct = :orderProductId AND op.order = :orderId')
-                         ->setParameter('invoice', $invoiceNumber)
-                         ->setParameter('orderId', $orderId)
-                         ->setParameter('orderProductId', $orderProductId)
-                         ->setParameter('memberId', $memberId)
-                         ->getQuery();
+        else if ( (int) $status === (int) EsOrderProductStatus::RETURNED_BUYER || (int) $status === (int) EsOrderProductStatus::CASH_ON_DELIVERY ) {
+            $qb = $this->em->createQueryBuilder()
+                           ->select('op.idOrderProduct')
+                           ->from('EasyShop\Entities\EsOrderProduct','op')
+                           ->innerJoin('EasyShop\Entities\EsOrder', 'o','WITH','op.order = o.idOrder AND o.invoiceNo = :invoice')
+                           ->where('op.status = 0 AND op.seller = :memberId AND op.idOrderProduct = :orderProductId AND op.order = :orderId')
+                           ->setParameter('invoice', $invoiceNumber)
+                           ->setParameter('orderId', $orderId)
+                           ->setParameter('orderProductId', $orderProductId)
+                           ->setParameter('memberId', $memberId)
+                           ->getQuery();
             $orderProduct = $qb->getOneOrNullResult();
 
             $result['orderProductId'] = $orderProduct['idOrderProduct'];
-            if ( (int) $status === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER ) {
+            if ( (int) $status === (int) EsOrderProductStatus::RETURNED_BUYER ) {
                 $result['historyLog'] = 'RETURNED';
             }
-            else if ( (int) $status === (int) EsOrderProductStatus::STATUS_COD ) {
+            else if ( (int) $status === (int) EsOrderProductStatus::CASH_ON_DELIVERY ) {
                 $result['historyLog'] = 'COD - COMPLETED';
             }
         }
@@ -268,17 +270,15 @@ class TransactionManager
                      ->getQuery();
         $row = $queryBuilder->getResult();
 
-        $parseData = array_splice($row[0], 1, 10);
         $parseData['attr'] = [];
-
-        if ( (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_FORWARD_TO_SELLER ) {
+        if ( (int) $orderProductStatus === (int) EsOrderProductStatus::FORWARD_SELLER ) {
             $parseData['user'] = $row[0]['buyer'];
             $parseData['user_slug'] = $row[0]['buyer_slug'];
             $parseData['email'] = $row[0]['seller_email'];
             $parseData['mobile'] = trim($row[0]['seller_contactno']);
             $parseData['recipient'] = $row[0]['seller'];
         }
-        else if ( (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_RETURNED_TO_BUYER || (int) $orderProductStatus === (int) EsOrderProductStatus::STATUS_COD ) {
+        else if ( (int) $orderProductStatus === (int) EsOrderProductStatus::RETURNED_BUYER || (int) $orderProductStatus === (int) EsOrderProductStatus::CASH_ON_DELIVERY ) {
             $parseData['user'] = $row[0]['seller'];
             $parseData['user_slug'] = $row[0]['seller_slug'];
             $parseData['email'] = $row[0]['buyer_email'];
@@ -341,5 +341,75 @@ class TransactionManager
         $order = $qb->getResult();
 
         return (bool) $order;
+    }
+
+    /**
+     * Get the total number of bought transaction
+     * @param $memberId
+     * @param $isOngoing
+     * @return int
+     */
+    public function getBoughtTransactionCount($memberId, $isOngoing = true)
+    {
+        $boughtTransactionDetails = [];
+        $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing);
+
+        foreach ($getUserBoughtTransactions as $transaction) {
+            if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
+                $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']] = $transaction;
+                $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['userImage'] = $this->userManager->getUserImage($transaction['sellerId']);
+
+                $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
+                foreach ($orderProducts as $productKey => $product) {
+                    if (
+                        !isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]) &&
+                        $transaction['sellerId'] === $product['seller_id']
+                    ) {
+                        $product['has_shipping_summary'] = false;
+                        if ( isset($product['courier']) &&  isset($product['datemodified']) ) {
+                            $product['has_shipping_summary'] = true;
+                        }
+                        $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
+                    }
+                    if ($product['attrName'] && $transaction['sellerId'] === $product['seller_id']) {
+                        $boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
+                    }
+                }
+            }
+        }
+
+        return count($boughtTransactionDetails);
+    }
+
+    /**
+     * Get Sold transaction details
+     * @param $memberId
+     * @param $isOngoing
+     * @return int
+     */
+    public function getSoldTransactionCount ($memberId, $isOngoing = true)
+    {
+        $soldTransactionDetails = array();
+        $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing);
+        foreach ($getUserSoldTransactions as $transaction) {
+            if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
+                $soldTransactionDetails[$transaction['idOrder']] = $transaction;
+                $soldTransactionDetails[$transaction['idOrder']]['userImage'] = $this->userManager->getUserImage($transaction['buyerId']);
+                $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
+                foreach ($orderProducts as $productKey => $product) {
+                    if ( (int) $memberId !== (int) $product['seller_id']) {
+                        continue;
+                    }
+                    if (!isset($soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']])) {
+                        $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
+                    }
+                    if ($product['attrName']) {
+                        $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
+                    }
+                }
+            }
+        }
+
+        return count($soldTransactionDetails);
     }
 }

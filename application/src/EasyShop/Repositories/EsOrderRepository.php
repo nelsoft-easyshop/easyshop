@@ -18,15 +18,18 @@ class EsOrderRepository extends EntityRepository
     /**
      * Returns sold transactions of users
      * @param $userId
-     * @param $isOngoing
+     * @param bool $isOngoing
+     * @param int $offset
+     * @param int $perPage
      * @return array
-     */   
-    public function getUserSoldTransactions($userId, $isOngoing = true)
+     */
+    public function getUserSoldTransactions($userId, $isOngoing = true, $offset = 0, $perPage = 10)
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         $qb = $this->_em->createQueryBuilder();
-        $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
+        $queryBuilder =
+            $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                 o.isFlag as isFlag,
                                 op.total as totalOrderProduct,
                                 p.name as productname,
@@ -48,56 +51,61 @@ class EsOrderRepository extends EntityRepository
                                 pm.idPaymentMethod,
                                 pm.name as paymentMethod,
                                 COALESCE(memberFeedback.idMember,0) as forMemberId")
-            ->from('EasyShop\Entities\EsOrder','o')
-            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with',
-                $qb->expr()->andX(
-                    $qb->expr()->eq('o.idOrder', 'op.order')
-                    ,$qb->expr()->eq('op.seller', ':sellerId')
-                )
-            )
-            ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with',
-                $qb->expr()->andX(
-                    $qb->expr()->eq('o.idOrder', 'feedback.order')
-                    ,$qb->expr()->eq('feedback.forMemberid', 'o.buyer')
-                    ,$qb->expr()->eq('feedback.member', ':sellerId')
-                )
-            )
-            ->leftJoin('EasyShop\Entities\EsOrderShippingAddress', 'shippingAdd', 'with', "o.shippingAddressId = shippingAdd.idOrderShippingAddress")
-            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
-            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
-            ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
-            ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
-            ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
-            ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
-            ->where(
-                $qb->expr()->not(
+                ->from('EasyShop\Entities\EsOrder','o')
+                ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with',
                     $qb->expr()->andX(
-                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                        $qb->expr()->eq('o.idOrder', 'op.order')
+                        ,$qb->expr()->eq('op.seller', ':sellerId')
                     )
                 )
-            )
-            ->andWhere('o.orderStatus != 2')
-            ->andWhere('o.orderStatus IN (:orderStatus)')
-            ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
-            ->orderBy('o.idOrder', "desc")
-            ->setParameter('sellerId', $userId)
-            ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
-            ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
-            ->setParameter('orderStatus', $orderStatus)
-            ->setParameter('paymentMethodLists', $EsPaymentMethodRepository->getPaymentMethods())
-            ->getQuery();
+                ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with',
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('o.idOrder', 'feedback.order')
+                        ,$qb->expr()->eq('feedback.forMemberid', 'o.buyer')
+                        ,$qb->expr()->eq('feedback.member', ':sellerId')
+                    )
+                )
+                ->leftJoin('EasyShop\Entities\EsOrderShippingAddress', 'shippingAdd', 'with', "o.shippingAddressId = shippingAdd.idOrderShippingAddress")
+                ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
+                ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
+                ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
+                ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
+                ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
+                ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
+                ->where(
+                    $qb->expr()->not(
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                            ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                        )
+                    )
+                )
+                ->andWhere('o.orderStatus != :statusVoid')
+                ->andWhere('o.orderStatus IN (:orderStatus)')
+                ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+                ->orderBy('o.idOrder', "desc")
+                ->setParameter('sellerId', $userId)
+                ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
+                ->setParameter('statusVoid', orderStatus::STATUS_VOID)
+                ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+                ->setParameter('orderStatus', $orderStatus)
+                ->setParameter('paymentMethodLists', $EsPaymentMethodRepository->getPaymentMethods())
+                ->setFirstResult($offset)
+                ->setMaxResults($perPage)
+                ->getQuery();
 
         return $queryBuilder->getResult();
     }
 
     /**
      * Returns bought transactions of users
-     * @param int $uid
-     * @param boolean $isOngoing
-     * @return object
-     */   
-    public function getUserBoughtTransactions($uid, $isOngoing = true)
+     * @param $uid
+     * @param bool $isOngoing
+     * @param int $offset
+     * @param int $perPage
+     * @return array
+     */
+    public function getUserBoughtTransactions($uid, $isOngoing = true, $offset = 0, $perPage = 10)
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
         $qb = $this->_em->createQueryBuilder();
@@ -138,7 +146,9 @@ class EsOrderRepository extends EntityRepository
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                         ->setParameter('orderStatus', $orderStatus)
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
-                        ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods())))) 
+                        ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods()))))
+                        ->setFirstResult($offset)
+                        ->setMaxResults($perPage)
                         ->getQuery();
 
                 return $queryBuilder->getResult();
@@ -266,7 +276,133 @@ class EsOrderRepository extends EntityRepository
 
         return $esOrder;
     }
+    /**
+     * Returns all bought transactions
+     * @param $uid
+     * @param bool $isOngoing
+     * @return integer
+     */
+    public function getAllUserBoughtTransactions($uid, $isOngoing = true)
+    {
+        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
+        $qb = $this->_em->createQueryBuilder();
+        $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
+
+        $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
+                                                            o.isFlag as isFlag,
+                                                            op.total as total,
+                                                            p.name as productname,
+                                                            m.fullname as fullname,
+                                                            sm.idMember as sellerId,
+                                                            op.orderQuantity as orderQuantity,
+                                                            IDENTITY(o.buyer) as buyerId,
+                                                            o.dateadded as dateadded,
+                                                            o.idOrder,
+                                                            o.invoiceNo,
+                                                            pm.idPaymentMethod,
+                                                            pm.name as paymentMethod")
+            ->from('EasyShop\Entities\EsOrder','o')
+            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with', 'o.idOrder = op.order')
+            ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
+            ->innerJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
+            ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
+            ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
+            ->where(
+                $qb->expr()->not(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                    )
+                )
+            )
+            ->andWhere('o.orderStatus IN(:orderStatus)')
+            ->andWhere('o.buyer = :buyer_id')
+            ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+            ->orderBy('o.idOrder', "desc")
+            ->setParameter('buyer_id', $uid)
+            ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
+            ->setParameter('orderStatus', $orderStatus)
+            ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods()))))
+            ->getQuery();
+
+        return $queryBuilder->getResult();
+    }
+
+    /**
+     * Returns all sold transactions
+     * @param $userId
+     * @param bool $isOngoing
+     * @return array
+     */
+    public function getAllUserSoldTransactions($userId, $isOngoing = true)
+    {
+        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
+        $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
+        $qb = $this->_em->createQueryBuilder();
+        $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
+                                o.isFlag as isFlag,
+                                op.total as totalOrderProduct,
+                                p.name as productname,
+                                m.fullname as fullname,
+                                op.orderQuantity as orderQuantity,
+                                IDENTITY(o.buyer) as buyerId,
+                                o.dateadded as dateadded,
+                                o.idOrder,
+                                o.invoiceNo as invoiceNo,
+                                shippingAdd.consignee,
+                                shippingAdd.mobile,
+                                shippingAdd.telephone,
+                                stateRegion.location,
+                                cityLocation.location as city,
+                                shippingAdd.address as fulladd,
+                                o.isFlag,
+                                m.username as buyer,
+                                m.slug as buyerslug,
+                                pm.idPaymentMethod,
+                                pm.name as paymentMethod,
+                                COALESCE(memberFeedback.idMember,0) as forMemberId")
+            ->from('EasyShop\Entities\EsOrder','o')
+            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op', 'with',
+                $qb->expr()->andX(
+                    $qb->expr()->eq('o.idOrder', 'op.order')
+                    ,$qb->expr()->eq('op.seller', ':sellerId')
+                )
+            )
+            ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'feedback', 'with',
+                $qb->expr()->andX(
+                    $qb->expr()->eq('o.idOrder', 'feedback.order')
+                    ,$qb->expr()->eq('feedback.forMemberid', 'o.buyer')
+                    ,$qb->expr()->eq('feedback.member', ':sellerId')
+                )
+            )
+            ->leftJoin('EasyShop\Entities\EsOrderShippingAddress', 'shippingAdd', 'with', "o.shippingAddressId = shippingAdd.idOrderShippingAddress")
+            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
+            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
+            ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
+            ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
+            ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
+            ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
+            ->where(
+                $qb->expr()->not(
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                    )
+                )
+            )
+            ->andWhere('o.orderStatus != 2')
+            ->andWhere('o.orderStatus IN (:orderStatus)')
+            ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+            ->orderBy('o.idOrder', "desc")
+            ->setParameter('sellerId', $userId)
+            ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
+            ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('orderStatus', $orderStatus)
+            ->setParameter('paymentMethodLists', $EsPaymentMethodRepository->getPaymentMethods())
+            ->getQuery();
+
+        return $queryBuilder->getResult();
+    }
+
 }
-
-
-
