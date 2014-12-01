@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsCategoryNestedSet
  *
  * @ORM\Table(name="es_category_nested_set", indexes={@ORM\Index(name="fk_es_category_nested_set_es_cat_idx", columns={"original_category_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsCategoryNestedSetRepository")
  */
 class EsCategoryNestedSet
 {
