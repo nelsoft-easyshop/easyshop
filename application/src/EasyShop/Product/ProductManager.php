@@ -567,19 +567,16 @@ class ProductManager
                     break;
             }
 
-            if($lprice !== "" && $uprice !== "") {
-
+            if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-
-                    if($discountedPrice >= floatval($lprice) && $discountedPrice <= floatval($uprice)) {
-                        continue;
-                    }
-                    else {
+                    if( ( $lprice !== "" && bccomp($discountedPrice, $lprice) === -1) || ( $uprice !== "" && bccomp($discountedPrice, $uprice) === 1)) {
                         unset($categoryProductIds[$key]);
                     }
-                }
-            }
+                }   
+            }             
+            
+
             $isFiltered = true;  
         }
 
@@ -594,7 +591,9 @@ class ProductManager
         foreach($categoryProductIds as $productId){
             $product = $this->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
-                                ->getDefaultImage($productId);
+                                ->getDefaultImage($productId);       
+            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                              ->getSecondaryImage($productId);
             if(!$objImage){
                 $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                 $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -602,6 +601,12 @@ class ProductManager
             else{
                 $product->directory = $objImage->getDirectory();
                 $product->imageFileName = $objImage->getFilename();
+            }
+            $product->secondaryImageDirectory = null;
+            $product->secondaryImageFileName = null;
+            if($secondaryProductImage){
+                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
             $categoryProducts[] = $product;
         }
@@ -614,27 +619,6 @@ class ProductManager
 
         return $result;
     }
-
-    /**
-     * Creates directories, checks if the passed image name exists in the admin folder
-     * @param int $imagesId
-     * @return JSONP
-     */ 
-    public function imageresize($imageDirectory, $newDirectory, $dimension)
-    {
-        
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $imageDirectory;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['new_image'] = $newDirectory;
-        $config['width'] = $dimension[0];
-        $config['height'] = $dimension[1]; 
-
-        $this->imageLibrary->initialize($config); 
-        $this->imageLibrary->resize();
-        $this->imageLibrary->clear();        
-    } 
 
     /**
      * Generates slugs 
@@ -736,6 +720,52 @@ class ProductManager
     }
 
     /**
+     *  Bulk Restore products in memberpage
+     *
+     *  @param array $arrProductId - product Ids
+     *  @param integer $memberId
+     *
+     *  @return boolean
+     */
+    public function editBulkIsDelete($arrProductId, $memberId, $selector = "restore")
+    {
+        $arrayProductId = is_array($arrProductId) ? $arrProductId : array($arrProductId);
+        $objMember = $this->em->find("EasyShop\Entities\EsMember", $memberId);
+
+        switch( $selector ){
+            case "restore":
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+            case "delete":
+                $isDeleteVal = EsProduct::DELETE;
+                break;
+            case "full_delete":
+                $isDeleteVal = EsProduct::FULL_DELETE;
+                break;
+            default:
+                $isDeleteVal = EsProduct::ACTIVE;
+                break;
+        }
+
+        foreach($arrayProductId as $productId){
+            $objProduct = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                   ->findOneBy(array(
+                                        "idProduct" => $productId,
+                                        "member" => $objMember
+                                    ));
+
+            $objProduct->setIsDelete($isDeleteVal)
+                       ->setLastmodifieddate(date_create());
+
+            $this->em->persist($objProduct);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
+    
+    /*
      * Check if the product is free shipping nationwide
      * @param  integer  $productId
      * @return boolean
@@ -766,9 +796,9 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productInventory = $esProductRepo->getProductInventoryDetail($productId);
- 
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 

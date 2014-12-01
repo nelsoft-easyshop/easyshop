@@ -54,39 +54,66 @@ class CMS
         $this->userManager = $userManager;
         $this->urlUtility = $urlUtility;
     }
+  
 
     /**
-     *  First part of re-ordering the slide parent node
+     *  Syncs values from new_home_page.xml to new_home_page_temp.xml
+     *  @param string $tempHomeFile
+     *  @param string $homeFile
+     *  @param array $sliders
+     *  @param int $order
+     */
+    public function syncTempSliderValues($tempHomeFile, $homeFile ,$sliders, $index = 0)
+    {
+
+        $map = simplexml_load_file($tempHomeFile);        
+  
+        foreach ($sliders as $key => $value) {  
+            $map->sliderSection->slide[$key]->template = $value->template;
+            $map->asXML($tempHomeFile);                
+            $string = $this->getString("sliderSection", "", "", "", "");       
+            $this->addXmlFormatted($map,$string,'/map/sliderSection/slide[last()]',"\t\t","\n\n", true, true);   
+        }
+
+        foreach($sliders as $key => $value) {
+
+            $this->syncSliderValues($tempHomeFile, $value->image, "", $key, $key );
+        }
+    }
+
+
+    /**
+     *  Handles the re-ordering of sliderSection parent node
      *  @param string $image
      *  @param string $template
      *  @param int $index
      *  @param int $order
+     *  @param int $subIndex
      */
-    public function syncSliderValues($file,$image, $template, $index, $order)
+    public function syncSliderValues($file,$image, $template, $index, $order, $subIndex = 0)
     {
         $map = simplexml_load_file($file);
 
         foreach($image as $key => $insertImages) {
-           
-            if(count($image) == 1) {
-                $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
-                $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+            if(count($image) == 1) {    
+                $map->sliderSection->slide[$index]->image[$subIndex]->path = $insertImages->path;
+                $map->sliderSection->slide[$index]->image[$subIndex]->target = $insertImages->target;
                 $map->asXML($file);                
             }
             else {
-                if($key == 0 ) {
-                    $map->sliderSection->slide[$index]->image[$key]->path = $insertImages->path;
-                    $map->sliderSection->slide[$index]->image[$key]->target = $insertImages->target;
+                if($subIndex == 0 ) {
+                    $map->sliderSection->slide[$index]->image[$subIndex]->path = $insertImages->path;
+                    $map->sliderSection->slide[$index]->image[$subIndex]->target = $insertImages->target;
                 }
                 else {
                     $string = $this->getString("subSliderSection", $insertImages->path, "", "", $insertImages->target);      
                     $this->addXmlFormatted($map,$string,'/map/sliderSection/slide['.($index + 1).']/image[last()]',"\t\t\t","\n\n", true, true);           
                 } 
             }
-        $map->asXML($file);  
-
+        $map->asXML($file);
+        $subIndex++;  
         }        
-    }      
+    }     
 
     /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
@@ -319,10 +346,33 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index, $subIndex = null) 
+    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null) 
     {
 
-        if($nodeName == "mainSliderSection"){
+        if($nodeName == "tempHomeSlider"){
+            $index = 0;
+            $map = simplexml_load_file($file);
+            $tempSliderCount = count($map->sliderSection->slide);
+
+            foreach ($map->sliderSection->slide as $key => $value) {
+                if( $tempSliderCount> 1) {
+                    $this->removeXmlNode($file, "mainSliderSection",1);
+                    $tempSliderCount--;
+                }
+                else {
+                    $imageCount = count($value->image);
+                    foreach($value->image as $images) {
+                        if($imageCount > 1) {
+                            $this->removeXmlNode($file, "subSliderSection",1,1);
+                            $imageCount--;   
+                        }
+                     }
+                }
+                $index++;                
+            }  
+            return true;          
+        }
+        else if($nodeName == "mainSliderSection"){
             $referred = "/map/sliderSection/slide[".$index."]"; 
 
             $doc = new \SimpleXMLElement(file_get_contents($file));
@@ -748,6 +798,7 @@ $string = '<typeNode>
         return $result;
     }
     
+
     
     /**
      * Returns the home page data
@@ -755,9 +806,15 @@ $string = '<typeNode>
      * @param boolean $isCategoryNavigationOnly
      * @return mixed
      */
-    public function getHomeData($isCategoryNavigationOnly = false)
+    /**
+     * Returns the home page data
+     * 
+     * @param boolean $isCategoryNavigationOnly
+     * @return mixed
+     */
+    public function getHomeData($isCategoryNavigationOnly = false, $doUseTemporaryFile = false)
     {
-        $homeXmlFile = $this->xmlResourceGetter->getHomeXMLfile();
+        $homeXmlFile = (!$doUseTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
         $homePageData = array();
@@ -941,6 +998,7 @@ $string = '<typeNode>
         return $homePageData;
     }
     
+    
 
     /**
      * Returns the mobile home page data
@@ -1002,7 +1060,7 @@ $string = '<typeNode>
                         $imageFileName = $productImage->getFilename();
                     }
 
-                    $productName = $product->getName();
+                    $productName = utf8_encode($product->getName());
                     $productSlug = $product->getSlug();
                     $productDiscount = floatval($product->getDiscountPercentage());
                     $productBasePrice = floatval($product->getPrice());

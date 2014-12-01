@@ -3,6 +3,9 @@
 namespace EasyShop\Promo;
 
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
+use EasyShop\Entities\EsPromo;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * PromoManager Class
@@ -185,6 +188,86 @@ class PromoManager
         }
 
         return $promoQuantityLimit;
+    }
+
+    /**
+     * Register member for buy at zero promo
+     * @param $productId
+     * @param $memberId
+     * @return bool
+     */
+    public function registerMemberForBuyAtZero($productId, $memberId)
+    {
+        $isAccountRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                            ->findOneBy([
+                                                'productId' => $productId,
+                                                'memberId' => $memberId,
+                                                'promoType' => EsPromo::BUY_AT_ZERO
+                                            ]);
+        if (!$isAccountRegistered) {
+            $promo = new EsPromo();
+            $promo->setMemberId($memberId);
+            $promo->setProductId($productId);
+            $promo->setPromoType(EsPromo::BUY_AT_ZERO);
+            $promo->setCreatedAt(new \DateTime('now'));
+
+            $this->em->persist($promo);
+            $this->em->flush();
+        }
+
+        return (bool) $isAccountRegistered;
+    }
+
+    /**
+     * validates code and returns the details needed for scratch and win promo
+     * @param $code
+     * @return array
+     */
+    public function validateCodeForScratchAndWin($code)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tblProduct.idProduct, tblPromo.memberId AS c_member_id, tblProductImage.productImagePath as path')
+                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+                    ->leftJoin('EasyShop\Entities\EsProduct', 'tblProduct', 'WITH', 'tblProduct.idProduct = tblPromo.productId')
+                    ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
+                    ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
+                    ->setParameter('code', $code)
+                    ->setParameter('promoType', EsPromo::SCRATCH_AND_WIN)
+                    ->getQuery();
+        $result = $query->getResult();
+
+        if ($result) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
+            $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['memberId' => $result[0]['c_member_id']]);
+            $this->hydratePromoData($product);
+            $result = [
+                'id_product'=> $product->getIdProduct(),
+                'price'=> $product->getPrice(),
+                'product' => $product->getName(),
+                'brief' => $product->getBrief(),
+                'c_id_code' => $result[0]['c_member_id'],
+                'can_purchase' => (bool) $isMemberRegistered ? false : true,
+                'product_image_path' => $result[0]['path']
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update member id
+     * @param $memberId
+     * @param $code
+     * @return bool
+     */
+    public function tieUpCodeToMemberForScratchAndWin($memberId, $code)
+    {
+        $promo = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['code' => $code]);
+        $promo->setMemberId($memberId);
+        $this->em->persist($promo);
+        $this->em->flush();
+
+        return (int) $memberId === (int) $promo->getMemberId();
     }
 }
 

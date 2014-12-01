@@ -279,6 +279,10 @@ class Kernel
                                                         $userManager);
         };
 
+        $container['image_utility'] = function ($c) use ($container){
+            $imageLibrary = new \CI_Image_lib();            
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };            
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
@@ -404,11 +408,13 @@ class Kernel
             $productManager = $container['product_manager'];
             $cartManager = $container['cart_manager'];
             $reviewProductService = $container['review_product_service'];
+            $stringUtility = $container['string_utility'];
             return new \EasyShop\Api\ApiFormatter($em,
                                                   $collectionHelper,
                                                   $productManager,
                                                   $cartManager,
-                                                  $reviewProductService);
+                                                  $reviewProductService,
+                                                  $stringUtility);
         }; 
 
         // Notification Services
