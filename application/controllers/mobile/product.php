@@ -39,7 +39,7 @@ class Product extends MY_Controller {
 
             $isButtonClickable = true;
             if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
-                $isBuyButtonViewable = $this->promoConfig[$product->getPromoType()]['viewable_button_product_page'];
+                $isButtonClickable = $this->promoConfig[$product->getPromoType()]['viewable_button_product_page'];
             }
 
             $buttonLabel = "Add to Cart";
@@ -54,7 +54,7 @@ class Product extends MY_Controller {
                 $buttonLabel = "This product is for promo use only.";
             }
 
-            $format['productDetails']['isButtonClickable'] = $isBuyButtonViewable;
+            $format['productDetails']['isButtonClickable'] = $isButtonClickable;
             $format['productDetails']['buttonLabel'] = $buttonLabel;
 
             $relatedItems = $productManager->getRecommendedProducts($productId, 10);
