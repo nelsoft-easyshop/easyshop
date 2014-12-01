@@ -88,9 +88,9 @@ class MY_Controller extends CI_Controller
             'msgs'=> $msgs,
             'category_search' => $this->product_model->getFirstLevelNode(),
             );
+
         return $data;
     }
-
     
     /**
      * Generates the category navigation
@@ -110,10 +110,12 @@ class MY_Controller extends CI_Controller
     public function fillUserDetails()
     {
             $em = $this->serviceContainer["entity_manager"];
+            $userManager = $this->serviceContainer['user_manager'];
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                                            ->find($memberId);
+                              ->find($memberId);
             $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
+
             return $userDetails;
     }
     
@@ -234,15 +236,14 @@ class MY_Controller extends CI_Controller
                 $evaluate .= $value;
             }
         }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
 
-        $hash = $evaluate.$password["password"];
+        $em = $this->serviceContainer["entity_manager"];
+        $adminUser = $em->getRepository("EasyShop\Entities\EsAdminMember")
+                                        ->find($postedData["userid"]);
 
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-            exit($error);
-        }   
+        $hash = $evaluate.$adminUser->getPassword();
+
+        return $isAuthenticated = (sha1($hash) != $postedHash) ? false : true;
     }
 
 

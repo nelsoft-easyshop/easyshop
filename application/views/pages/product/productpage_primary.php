@@ -25,7 +25,7 @@
         <div class="row">
             <div class="product-name-seller col-md-12">
                 <h1 id="<?=$product->getIdProduct();?>"> 
-                    <span id="pname"> <?=htmlspecialchars(iconv("cp1252", "utf-8", $product->getName()),ENT_IGNORE,'UTF-8',true);?> </span>
+                    <span id="pname"> <?=html_escape($product->getName());?> </span>
                 </h1>
                 <div>
                     By:

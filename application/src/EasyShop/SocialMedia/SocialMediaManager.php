@@ -166,22 +166,22 @@ class SocialMediaManager
      */
     public function authenticateAccount($oauthId, $oauthProvider, $email)
     {
-        $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->findOneBy([
-                                        'email' => $email
-                                    ]);
+        $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy([
+                                    'email' => $email
+                                 ]);
         $socialMediaAccount = $this->em->getRepository('EasyShop\Entities\EsMemberMerge')
                                         ->findOneBy([
                                             'socialMediaId' => $oauthId,
                                             'socialMediaProvider' => $oauthProvider
                                         ]);
         if ($socialMediaAccount) {
-            $doesEmailExists = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->find($socialMediaAccount->getMember());
+            $getMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($socialMediaAccount->getMember());
         }
         $response = [
-            'doesAccountExists' => $doesEmailExists,
-            'doesAccountMerged' => $socialMediaAccount
+            'getMember' => $getMember,
+            'doesAccountMerged' => (bool) $socialMediaAccount
         ];
 
         return $response;
@@ -204,9 +204,9 @@ class SocialMediaManager
         $member = false;
         $rules = $this->formValidation->getRules('register');
         $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                    ->setMethod('POST')
-                                    ->add('username', 'text', ['constraints' => $rules['username']])
-                                    ->getForm();
+                     ->setMethod('POST')
+                     ->add('username', 'text', ['constraints' => $rules['username']])
+                     ->getForm();
 
         $form->submit([ 'username' => $username]);
         if ($form->isValid()) {

@@ -1,71 +1,56 @@
 <?php
 
-namespace Easyshop\Image;
+namespace EasyShop\Image;
 
 /**
- * Image utility class
+ * Image Utility Class
  *
- * @author Sam Gavinio <samgavinio@easyshop.ph>
+ * @author Inon Baguio
  */
 class ImageUtility
-{   
-    /**
-     * Image LIbrary
-     * @var system/libraries/CI_Image_lib
-     */
-    private $imageLibrary;
+{
 
+    /**
+     * CI_Image_lib Instance
+     *
+     * @var CI_Image_lib
+     */
+    private $imageLibrary;  
+
+    /**
+     * Constructor. Retrieves Image Libraryss instance
+     * 
+     */
     public function __construct($imageLibrary)
     {
         $this->imageLibrary = $imageLibrary;
     }
 
     /**
-     * Resize an image. Returns false if the resized image cannot
-     * be created.
+     * Resizes images
      *
-     * @param string $sourceFilename
-     * @param string $sourceDirectory
-     * @param string $destinationDirectory
-     * @param integer $width
-     * @param integer $height
-     * @param string $resultFilename
-     * @return boolean
-     * 
-     */
-    public function resizeImage($sourceFilename , $sourceDirectory, $destinationDirectory, $width, $height, $resultFilename = NULL)
-    {        
-        $pathToSourceImage = $sourceDirectory.$sourceFilename;
-        if($resultFilename){
-            $pathToDestinationImage = $destinationDirectory.$resultFilename;
-        }
-        else{
-            $pathToDestinationImage = $destinationDirectory.$sourceFilename;
-        }
-
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $pathToSourceImage;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['width'] = $width;
-        $config['height'] = $height;
-        $config['new_image'] = $pathToDestinationImage;
+     * @param string $imageDirectory
+     * @param string $newDirectory
+     * @param array $dimension
+     * @param bool $isRatioMainted
+     *
+     * @return JSONP
+     */ 
+    public function imageResize($imageDirectory, $newDirectory, $dimension, $isRatioMainted = true)
+    {
         
-        if(!file_exists($destinationDirectory)) {  
-            if(!mkdir($destinationDirectory)) {  
-                return false;  
-            }   
-        }
+        $config['image_library'] = 'GD2';
+        $config['source_image'] = $imageDirectory;
+        $config['maintain_ratio'] = $isRatioMainted;
+        $config['quality'] = '85%';
+        $config['new_image'] = $newDirectory;
+        $config['width'] = $dimension[0];
+        $config['height'] = $dimension[1]; 
 
         $this->imageLibrary->initialize($config); 
-        $isSuccessful = $this->imageLibrary->resize();
-        $this->imageLibrary->clear();
-        return $isSuccessful;
-    }
-
-    
-    
+        $this->imageLibrary->resize();
+        $this->imageLibrary->clear();        
+    } 
 }
-
 
 

@@ -402,7 +402,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                 <a class="prevent" href="/login/logout">Logout</a>
                                                             </li>
                                                         </ul>
-                                                        <div class="clear"></div>                                            
+                                                        <div class="clear"></div>
                                                     </div>
                                                 <?php else: ?> 
                                                     <div class="header-link">

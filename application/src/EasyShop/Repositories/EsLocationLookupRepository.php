@@ -70,7 +70,12 @@ class EsLocationLookupRepository extends EntityRepository
         return $locationLookup->getParent();
     }
  
-    public function getLocationLookup()
+    /**
+     * Retrieves stateregions cities that is used for delivery address tab in memberpage
+     * @param bool $isJsonReturn (parameter that is used to convert citylookup to JSON)
+     * @return mixed
+     */
+    public function getLocationLookup($isJsonReturn = false)
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -101,6 +106,9 @@ class EsLocationLookupRepository extends EntityRepository
             }
         }
 
+        if($isJsonReturn) {
+            $data['json_city'] = json_encode($data['cityLookup'], JSON_FORCE_OBJECT); 
+        }
         return $data;
     }
  

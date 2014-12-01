@@ -35,14 +35,14 @@
                         }, 1000);
                     }
                     else if(data){
-                        msg = "Congratulations! You now have the chance to win this  " + 
+                        msg = "You are already currently subscribed for this promo. " +
+                            "Stay tuned to find out whether you are one of the lucky winners.";
+                    }
+                    else{
+                        msg = "Congratulations! You now have the chance to win this  " +
                             escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
                             "announced on December 16, 2014. Stay tuned for more EasyShop.ph " +
                             "promotions. ";
-                    }
-                    else{
-                        msg = "You are already currently subscribed for this promo. " +
-                            "Stay tuned to find out whether you are one of the lucky winners.";
                     }
                     
                     alert("<div style='font-size: 13px; font-weight: lighter;'>" + msg + "</div>")

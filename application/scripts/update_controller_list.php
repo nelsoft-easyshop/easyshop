@@ -27,25 +27,25 @@ getDirContents($myFiles);
 
 # Overwrite config file with new array
 echo "Creating controllers.php configuration file ... \n";
-file_put_contents($configFile, '<?php $controllerConfig = ' . var_export( $controllerConfig, true ) . ";" );
+file_put_contents($configFile, '<?php $controllerConfig = ' . var_export( $controllerConfig, true ) . '; return $controllerConfig;' );
 
 echo "\n\nControllers.php created! Execution complete! \n";
 
 # Gets filename for all files inside directory
-function getDirContents($files){
-	global $controllerConfig;
-
-	foreach($files as $file){
-		if( is_dir($file) ){
-			$newFiles = glob($file.'/*');
-			getDirContents($newFiles);
-		}else{
-			$path_parts = pathinfo($file);
-			if( $path_parts['extension'] === "php" ){
-				if( !in_array($path_parts['basename'], $controllerConfig) ){
-					$controllerConfig[] = $path_parts['filename'];
-				}
-			}
-		}
-	}
+function getDirContents($files)
+{
+    global $controllerConfig;
+    foreach($files as $file){
+        if( is_dir($file) ){
+            $newFiles = glob($file.'/*');
+            getDirContents($newFiles);
+        }else{
+            $path_parts = pathinfo($file);
+            if( $path_parts['extension'] === "php" ){
+                if( !in_array($path_parts['basename'], $controllerConfig) ){
+                    $controllerConfig[] = $path_parts['filename'];
+                }
+            }
+        }
+    }
 }

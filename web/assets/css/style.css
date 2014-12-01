@@ -4276,7 +4276,7 @@ a:hover.tooltips span {
 }
 
 .post_item_srch_container {
-    margin:10px 0;
+    margin:16px 0;
 }
 
 .post_item_srch_container input[type="text"] {
@@ -7725,6 +7725,16 @@ div.sold_prod_container {
     height:1em;
     font-size:0.85em;
     text-decoration: line-through;
+}
+
+.bulk_options.head{
+    display:inline-block;
+    float:right;
+    padding-top:10px;
+}
+
+.bulk_options > *{
+    cursor:pointer;
 }
 
 .shipping-days {

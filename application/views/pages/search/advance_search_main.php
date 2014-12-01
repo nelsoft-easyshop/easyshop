@@ -118,7 +118,7 @@
                     <?php 
                     foreach ($products as $key => $value):
                         $productEntity = $value;
-                        $productName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
+                        $productName = html_escape($productEntity->getName());
                         $productSlug = $productEntity->getSlug();
                         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                         $productCondition = html_escape($productEntity->getCondition());
@@ -296,7 +296,7 @@
                                     <?php foreach ($products as $key => $value): ?>  
                                     <?php
                                         $productEntity = $value;
-                                        $productName = htmlspecialchars($productEntity->getName(),ENT_QUOTES,'ISO-8859-1');
+                                        $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
                                         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                                         $productCondition = html_escape($productEntity->getCondition());
