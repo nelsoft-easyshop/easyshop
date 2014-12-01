@@ -21,7 +21,7 @@ class EsPaymentBankdepositRepository extends EntityRepository
         if ($orderDetails) {
             $transactionBankDepositDetails =
                 $this->em->getRepository('EasyShop\Entities\EsPaymentBankdeposit')
-                            ->findOneBy(['order' => $orderDetails]);
+                         ->findOneBy(['order' => $orderDetails]);
         }
 
         return $transactionBankDepositDetails;

@@ -59,7 +59,8 @@ class Memberpage extends MY_Controller
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
-        $this->em = $this->serviceContainer['entity_manager']; 
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->transactionManager = $this->serviceContainer['transaction_manager'];
     }
 
     public function sample()
@@ -1997,7 +1998,8 @@ class Memberpage extends MY_Controller
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
-                'salesView' => $salesView
+                'salesView' => $salesView,
+                'transactionInfo' => $this->getMemberPageDetails()
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
