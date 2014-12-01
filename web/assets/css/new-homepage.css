@@ -546,17 +546,27 @@ header {
 
 #inner-header.christmas-theme {
     background: #fff url(../images/img-snow.jpg) no-repeat top center;
-    padding-top:30px;
 }
+
+/*#inner-header .logo-container,
+#inner-header .header-inner-right {
+    margin-bottom:22px;
+}*/
 
 #inner-header .logo-container,
 #inner-header .header-inner-right {
-    margin-bottom:22px;
+    margin-bottom:15px;
 }
+
+/*.logo {
+    position:relative;
+    margin-top:-5px;
+
+}*/
 
 .logo {
     position:relative;
-    margin-top:-5px;
+    margin-top:-10px;
 
 }
 
