@@ -113,7 +113,7 @@
                             <img src="/assets/images/promo-images/item7.jpg">
                             <p>Super Starbabies</p>
                         </a>
-                    </div>git
+                    </div>
 
                     <div class="span4 box seller-list">
                         <a href="/ckkmobile" target="_blank">
