@@ -65,6 +65,9 @@ class cart extends MY_Controller
   
         $this->oauthServer =  $this->serviceContainer['oauth2_server']; 
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->apiFormatter = $this->serviceContainer['api_formatter'];
+        $this->carManager = $this->serviceContainer['cart_manager'];
+
         header('Content-type: application/json');
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
@@ -84,23 +87,25 @@ class cart extends MY_Controller
      * @return JSON
      */
     public function persist()
-    { 
-        $mobileCartContents = json_decode($this->input->post('cartData'));
-        $mobileCartContents = $mobileCartContents ? $mobileCartContents : array();
-        $this->serviceContainer['api_formatter']->updateCart($mobileCartContents,$this->member->getIdMember());
+    {
+        $mobileCartContents = $this->input->post('cartData') 
+                              ? json_decode($this->input->post('cartData')) 
+                              : [];
+        $cartData = $this->apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
+        $formattedCartContents = $this->apiFormatter->formatCart($cartData);
 
-        return $this->getCartData();
+        print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
     }
 
     /**
      * Returns the cart data
      *
+     * @return JSON
      */
     public function getCartData()
     {
-        $cartData = unserialize($this->member->getUserdata());
-        $cartData = $cartData ? $cartData : array(); 
-        $formattedCartContents = $this->serviceContainer['api_formatter']->formatCart($cartData);
+        $cartData = $this->carManager->getValidatedCartContents($this->member->getIdMember());
+        $formattedCartContents = $this->apiFormatter->formatCart($cartData);
 
         print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
     }

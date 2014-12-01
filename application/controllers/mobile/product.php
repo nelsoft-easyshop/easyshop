@@ -25,14 +25,38 @@ class Product extends MY_Controller {
     public function item($slug = '')
     {
         $productManager = $this->serviceContainer['product_manager'];
+        $configLoader = $this->serviceContainer['config_loader'];
+        $promoConfig = $configLoader->getItem('promo', 'Promo');
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->findOneBy(['slug' => $slug]);
+                            ->findOneBy(['slug' => $slug, 'isDelete' => 0, 'isDraft' => 0]);
 
         if($product){
             $productId = $product->getIdProduct();
             $productCategoryId = $product->getCat()->getIdCat();
-
             $format = $this->serviceContainer['api_formatter']->formatItem($productId,true);
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->getShippingDetailsByProductId($productId);
+
+            $isButtonClickable = true;
+            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
+                $isBuyButtonViewable = $this->promoConfig[$product->getPromoType()]['viewable_button_product_page'];
+            }
+
+            $buttonLabel = "Add to Cart";
+            if(count($shippingDetails) === 0 && (int)$product->getIsMeetup() === 1){
+                $buttonLabel = "Item is listed as an ad only. *";
+            }
+            elseif((int)$product->getPromoType() === \EasyShop\Entities\EsPromo::BUY_AT_ZERO 
+                   && (int)$product->getStartPromo() === 1){
+                $buttonLabel = "Click buy to qualify for the promo *";
+            }
+            elseif(!$isButtonClickable && (int)$product->getStartPromo() === 1){
+                $buttonLabel = "This product is for promo use only.";
+            }
+
+            $format['productDetails']['isButtonClickable'] = $isBuyButtonViewable;
+            $format['productDetails']['buttonLabel'] = $buttonLabel;
+
             $relatedItems = $productManager->getRecommendedProducts($productId, 10);
             $formattedRelatedItems = [];
             foreach ($relatedItems as $item) {
