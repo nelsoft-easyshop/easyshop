@@ -327,7 +327,7 @@ class TransactionManager
      * @param $seller
      * @return bool
      */
-    public function doesTransactionExists($orderId, $buyer, $seller)
+    public function doesTransactionExist($orderId, $buyer, $seller)
     {
         $qb =
             $this->em->createQueryBuilder()
