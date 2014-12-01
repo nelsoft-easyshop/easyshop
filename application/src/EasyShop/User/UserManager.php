@@ -809,7 +809,7 @@ class UserManager
         $usersWithSlug = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->getUsersWithSlug($storeSlug, 
                                                    $memberEntity->getIdMember());
-        $restrictedRoutes = array();
+        $restrictedRoutes = [];
         foreach( $routes as $userRoute => $appRoute ){
             //remove anything in between parentheses
             $userRouteWithoutParentheses = preg_replace('/\(.{2,5}\)/','',$userRoute); 
