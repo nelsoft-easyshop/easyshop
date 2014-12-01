@@ -1192,6 +1192,8 @@ var axes = [];
 var sizeList = [];
 var extensionList = [];
 var imageCollection = [];
+var widthRatio = 445;
+var heightRatio = 538;
 
 (function($) {
   
@@ -1219,8 +1221,6 @@ var imageCollection = [];
     {
         var totalCropImage = imageObject.length;
         var jcrop_api, imgHeight, imgWidth;
-        var widthRatio = 445;
-        var heightRatio = 538
         var targetImage = imageObject[cropCurrentCount];
         var currentExtension = extensionList[cropCurrentCount];
         var currentSize = sizeList[cropCurrentCount];
@@ -1237,8 +1237,10 @@ var imageCollection = [];
                 .load(function() {
                     imgWidth = this.width;   // Note: $(this).width() will not 
                     imgHeight = this.height; // work for in memory images.
-                    x = imgWidth / 2 - widthRatio / 2; 
-                    x1 = x + widthRatio; 
+                    var x1 = imgWidth / 2 - widthRatio / 2; 
+                    var x2 = x1 + widthRatio; 
+                    var y1 = 0;
+                    var y2 = imgHeight;
                     $('#crop-image-main').dialog({
                         resizable: false,
                         height: 600,
@@ -1252,7 +1254,7 @@ var imageCollection = [];
                         open: function() {
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                                 aspectRatio: widthRatio / heightRatio,
-                                setSelect: [ x / 2, 0, x1, imgHeight ],
+                                setSelect: [ x1 / 2, y1, x2, y2 ],
                                 boxWidth: 500,
                                 boxHeight: 431,
                                 minSize: [
@@ -1278,9 +1280,7 @@ var imageCollection = [];
                             $('#crop-image-main').append('<img src="" id="imageTag">');
                             jcrop_api.destroy(); 
                             $.modal.close();
-                            af.push(afTemp[cropCurrentCount]); 
-                            console.log(afTemp[cropCurrentCount]);
-                            console.log(af);
+                            af.push(afTemp[cropCurrentCount]);
                             axes.push(coordinate); 
                             cropCurrentCount++; 
                             if(cropCurrentCount < totalCropImage){
@@ -1302,9 +1302,7 @@ var imageCollection = [];
         }
         else{
             axes.push("0,0,0,0");
-            af.push(afTemp[cropCurrentCount]); 
-            console.log(afTemp[cropCurrentCount]);
-            console.log(af);
+            af.push(afTemp[cropCurrentCount]);
             cropCurrentCount++;
             if(cropCurrentCount < totalCropImage){
                 cropImage($input);
@@ -1548,17 +1546,16 @@ var imageCollection = [];
     var cropImageOther = function(imageCustom, picName)
     {
         var jcrop_api, imgHeight, imgWidth;
-        var widthRatio = 445;
-        var heightRatio = 538
-
         $('#crop-image-main > #imageTag').attr('src',imageCustom);
         $("<img/>") // Make in memory copy of image to avoid css issues
             .attr("src", $('#crop-image-main > #imageTag').attr("src"))
             .load(function() {
                 imgWidth = this.width;   // Note: $(this).width() will not 
                 imgHeight = this.height; // work for in memory images.
-                x = imgWidth / 2 - widthRatio / 2; 
-                x1 = x + widthRatio; 
+                var x1 = imgWidth / 2 - widthRatio / 2; 
+                var x2 = x1 + widthRatio; 
+                var y1 = 0;
+                var y2 = imgHeight;
                 $('#crop-image-main').dialog({
                     resizable: false,
                     height: 600,
@@ -1572,7 +1569,7 @@ var imageCollection = [];
                     open: function() {
                         jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                             aspectRatio: widthRatio / heightRatio,
-                            setSelect: [ x / 2, 0, x1, imgHeight ],
+                            setSelect: [ x1 / 2, y1, x2, y2 ],
                             boxWidth: 500,
                             boxHeight: 431,
                             minSize: [
