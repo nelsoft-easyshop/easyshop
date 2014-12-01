@@ -811,7 +811,6 @@ class UserManager
                                                    $memberEntity->getIdMember());
         $restrictedRoutes = [];
         foreach( $routes as $userRoute => $appRoute ){
-            //remove anything in between parentheses
             $userRouteWithoutParentheses = preg_replace('/\(.{2,5}\)/','',$userRoute); 
             $firstSegmentUserRoute = explode("/", $userRouteWithoutParentheses)[0];
             $firstSegmentAppRoute = explode("/", $appRoute)[0];
@@ -822,7 +821,6 @@ class UserManager
                 $restrictedRoutes[] = $firstSegmentAppRoute;
             }
         }
-        #Get union of controller list and restricted list
         $restrictedRoutes = array_unique(array_merge($restrictedRoutes , $this->reservedSlugs));
         
         if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes)){
