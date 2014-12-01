@@ -424,7 +424,7 @@ class EsProductRepository extends EntityRepository
     public function getUserProductParentCategories($memberId)
     {
         $em = $this->_em;
-        /*
+       /*
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('parent_cat','parent_cat');
         $rsm->addScalarResult('cat_id','cat_id');
@@ -436,8 +436,8 @@ class EsProductRepository extends EntityRepository
         $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('member_id', $memberId);
-        */
-        
+        $uploadsPerCategory = $query->getResult();
+ */
         $parentCategories = $em->createQueryBuilder()
                                 ->select('n') 
                                 ->from('EasyShop\Entities\EsCategoryNestedSet','n')
@@ -520,50 +520,22 @@ class EsProductRepository extends EntityRepository
         $sql = "SELECT count(es_product.id_product) as productCount,
                 CASE
                     ".$casePartialQuery."
-                END as parent_id
+                    ELSE 1
+                END as parent_id,
+                es_cat.id_cat, 
+                IF(es_cat.id_cat != 1,es_cat.name,'NULL') as name,
+                IF(es_cat.id_cat != 1, es_cat.slug, 'null') as slug,
+                es_cat_img.path as image        
                 FROM es_product 
+                LEFT JOIN es_cat ON es_cat.id_cat = es_product.cat_id
+                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
                 WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
-                GROUP BY parent_id
+                GROUP BY es_product.cat_id
                ";
 
         $bindParameters[] = $memberId;
         $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('productCount','productCount');
-        $rsm->addScalarResult('parent_id','parent_id');
-        $query = $em->createNativeQuery($sql, $rsm);
-        $count = 1;
-        foreach($bindParameters as $param){
-            $query->setParameter($count++, $param);
-        }
-        $uploadsPerCategory = $query->getResult();
-        
-        $finalCategoryList = [];
-        $reindexedUploadsPerCategory = [];
-        foreach($uploadsPerCategory as $category){
-            $parentId =  $category['parent_id'];
-            if(trim($parentId) === ''){
-                $reindexedUploadsPerCategory['other'] = $category;
-            }
-            else{   
-                $finalCategoryList[] = $parentId;
-                $reindexedUploadsPerCategory[$parentId] = $category;
-            }
-            
-        }
-
-        $uploadsPerCategory = $reindexedUploadsPerCategory;
-
-        $qmarks = implode(',', array_fill(0, count($finalCategoryList), '?'));
-        $sql = "SELECT 
-                    es_cat.name, 
-                    es_cat.id_cat, 
-                    es_cat.slug, 
-                    es_cat_img.path as image,
-                    es_cat.parent_id
-                FROM es_cat
-                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
-                WHERE es_cat.id_cat IN (".$qmarks.")";
-                $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('productCount','prd_count');
         $rsm->addScalarResult('parent_id','parent_cat');
         $rsm->addScalarResult('id_cat','cat_id');
         $rsm->addScalarResult('name','p_cat_name');
@@ -571,25 +543,12 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('image','p_cat_img');
         $query = $em->createNativeQuery($sql, $rsm);
         $count = 1;
-        foreach($finalCategoryList as $param){
+        foreach($bindParameters as $param){
             $query->setParameter($count++, $param);
         }
-        $categoryData = $query->getResult();
-   
-        foreach($categoryData as $index => $category){
-            $categoryData[$index]['prd_count'] = $uploadsPerCategory[$category['cat_id']]['productCount'];
-        }
-        if(isset($uploadsPerCategory['other'])){
-            $categoryData[] = ['parent_cat' => 1, 
-                               'cat_id' => 1,
-                               'prd_count' => $uploadsPerCategory['other']['productCount'],
-                               'p_cat_name' => 'NULL',
-                               'p_cat_slug' => 'null',
-                               'p_cat_img' => ''
-                              ];
-        }
+        $uploadsPerCategory = $query->getResult();
 
-        return $categoryData;
+        return $uploadsPerCategory;
    
     }
 
