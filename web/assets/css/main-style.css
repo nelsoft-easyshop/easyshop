@@ -1154,7 +1154,7 @@ td.td-view.p-view2.color-default{
 }
 
 .active-view{
-    color: #ff893b !important;
+    color: #ff893b;
 }
 .color-default{
     color: #575759;
@@ -1197,7 +1197,7 @@ td.td-view.p-view2.color-default{
  }
  
  .panel-category-heading,  .panel-category-heading > .panel-title > a{
-    background: #ff893b !important;
+    background: #ff893b;
     color: #ffffff;
     text-decoration: none;
  }

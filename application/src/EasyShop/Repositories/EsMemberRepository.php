@@ -68,16 +68,19 @@ class EsMemberRepository extends EntityRepository
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
         $rsm->addFieldResult('m','id_member','idMember');
+        $rsm->addFieldResult('m','username','username');
         $rsm->addFieldResult('m','store_name','storeName');
 
         $query = $em->createNativeQuery(
-            'SELECT id_member, store_name
+            'SELECT id_member, store_name, username
             FROM es_member
-            WHERE id_member != ? AND store_name LIKE ?'
+            WHERE id_member != :memberId AND 
+            (store_name = :storeName OR  (username = :userName AND store_name IS NULL))'
         , $rsm);
 
-        $query->setParameter(1,$excludeMemberId);
-        $query->setParameter(2,$storeName);
+        $query->setParameter('memberId',$excludeMemberId);
+        $query->setParameter('storeName',$storeName);
+        $query->setParameter('userName',$storeName);
 
         return $query->getResult();
     }
@@ -231,7 +234,35 @@ class EsMemberRepository extends EntityRepository
 
         return $member;
     }
+    
+    /**
+     * Get users with the given slug excluding provided memberId
+     *
+     * @param string $slug
+     * @param integer $notMemberId
+     * @return EasyShop\Entities\EsMember[]
+     */
+    public function getUsersWithSlug($slug, $notMemberId = null)
+    {
+        $queryBuilder =   $this->_em->createQueryBuilder();
+        
+        $queryBuilder->select('m')
+                    ->from('EasyShop\Entities\EsMember','m')
+                    ->where($queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq('m.slug', ':slugA'),
+                        $queryBuilder->expr()->eq('m.username', ':slugA')
+                    ))
+                    ->setParameter('slugA', $slug);
 
+        if($notMemberId !== null){
+            $queryBuilder->andWhere('m.idMember != :member_id')
+                         ->setParameter('member_id', $notMemberId);
+        }  
+        return $queryBuilder->getQuery()
+                            ->getResult();
+    
+    }
+    
     /**
      * Deactivate / Activate account
      * @param $member
@@ -246,4 +277,5 @@ class EsMemberRepository extends EntityRepository
 
         return $member;
     }    
+
 }

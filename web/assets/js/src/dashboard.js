@@ -497,30 +497,39 @@
     });
     
     $( "#btn-edit-store-name" ).click(function() {
-        $( ".current-store-name" ).slideToggle( "slow" );
-        $( ".edit-store-name" ).slideToggle( "slow" );
+        $( ".current-store-name" ).slideToggle( "fast" );
+        $( ".edit-store-name" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-name" ).click(function() {
         $( "#btn-edit-store-name" ).trigger( "click" );
+        $('#input-store-name').val($('#store-name-display').html())
+        $("#fail-message-store-name").css('display', 'none');
+        $("#fail-icon-store-name").css('display', 'none');
     });
 
     $( "#btn-edit-store-url" ).click(function() {
-        $( ".current-store-url" ).slideToggle( "slow" );
-        $( ".edit-store-url" ).slideToggle( "slow" );
+        $( ".current-store-url" ).slideToggle( "fast" );
+        $( ".edit-store-url" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-url" ).click(function() {
         $( "#btn-edit-store-url" ).trigger( "click" );
+        $('#input-store-slug').val($('#store-slug-display').data('slug'));
+        $("#fail-message-store-slug").css('display', 'none');
+        $("#fail-icon-store-slug").css('display', 'none');
     });
 
     $( "#btn-edit-store-theme" ).click(function() {
         $( ".current-store-theme" ).slideToggle( "slow" );
         $( ".edit-store-theme" ).slideToggle( "slow" );
+        $('#store-color-error').html('');
     });
 
-    $( "#cancel-edit-store-theme" ).click(function() {
+    $( "#cancel-edit-store-theme" ).click(function() {        
         $( "#btn-edit-store-theme" ).trigger( "click" );
+        var currentStoreColor = $('#current-store-color-id').val();
+        $('#color-item-'+currentStoreColor).trigger('click');
     });
 
     $( ".current-color-drop" ).click(function() {
@@ -535,108 +544,29 @@
         }
     });
 
-    $( "#color-item-1" ).click(function() {
-      $( ".color-name-drop" ).text("Easyshop");
-      $( ".current-color-drop" ).css("background", "#ff893a");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor1 = $("i.cd").attr("class");
-        if(attrColor1 == "cd icon-dropup pull-right"){
+    $('.color-theming').on('click', '.color-li',function(){
+        var colorList = $(this);
+        $( ".color-name-drop" ).text(colorList.data('name'));
+        $( ".current-color-drop" ).css("background", colorList.css('background'));
+        $( ".current-color-drop" ).trigger( "click" );
+        var arrowIconClass = $("i.cd").attr("class");
+        if(arrowIconClass == "cd icon-dropup pull-right"){
             $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
         }
-    });
-    $( "#color-item-2" ).click(function() {
-      $( ".color-name-drop" ).text("California");
-      $( ".current-color-drop" ).css("background", "#F89406");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor2 = $("i.cd").attr("class");
-        if(attrColor2 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-3" ).click(function() {
-      $( ".color-name-drop" ).text("POMEGRANATE");
-      $( ".current-color-drop" ).css("background", "#F22613");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor3 = $("i.cd").attr("class");
-        if(attrColor3 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-4" ).click(function() {
-      $( ".color-name-drop" ).text("Radical red");
-      $( ".current-color-drop" ).css("background", "#F62459");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor4 = $("i.cd").attr("class");
-        if(attrColor4 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-5" ).click(function() {
-      $( ".color-name-drop" ).text("Honey Flower");
-      $( ".current-color-drop" ).css("background", "#674172");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor5 = $("i.cd").attr("class");
-        if(attrColor5 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-6" ).click(function() {
-      $( ".color-name-drop" ).text("Ming");
-      $( ".current-color-drop" ).css("background", "#336E7B");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor6 = $("i.cd").attr("class");
-        if(attrColor6 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-7" ).click(function() {
-      $( ".color-name-drop" ).text("SAN MARINO");
-      $( ".current-color-drop" ).css("background", "#446CB3");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor7 = $("i.cd").attr("class");
-        if(attrColor7 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-8" ).click(function() {
-      $( ".color-name-drop" ).text("JELLY BEAN");
-      $( ".current-color-drop" ).css("background", "#2574A9");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor8 = $("i.cd").attr("class");
-        if(attrColor8 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-9" ).click(function() {
-      $( ".color-name-drop" ).text("SALEM");
-      $( ".current-color-drop" ).css("background", "#1E824C");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
+        var selectedColorList = $('.color-li.selected');
+        selectedColorList.removeClass('selected');
+        var checkIcon = selectedColorList.find('i');
+        var newCheckIcon = checkIcon.clone();
+        checkIcon.remove();
+        colorList.addClass('selected');
+        colorList.append(newCheckIcon);
     });
     
-    $( "#color-item-10" ).click(function() {
-      $( ".color-name-drop" ).text("LYNCH");
-      $( ".current-color-drop" ).css("background", "#6C7A89");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
 
+    
     $( "#btn-edit-store-cat" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-cat" ).click(function() {
@@ -644,8 +574,8 @@
     });
 
     $( "#btn-edit-store-cat-new" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat-new" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat-new" ).slideToggle( "fast" );
     });
 
     $( "#cancel-store-cat-new" ).click(function() {
@@ -892,6 +822,120 @@
         $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
         return false;
     });
+    
+    $(".save-store-setting").click(function(){
+        var $this = $(this);
+        var storename = $('#input-store-name').val();
+        var storeslug = $('#input-store-slug').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var buttonHtml = $this.html();
+        var field = $this.data('variable');
+        $("#fail-message-"+field).hide();
+        $("#fail-icon-"+field).hide();
+
+        var postData = {csrfname: csrftoken};
+        var expectedField = '';
+        var action = '';
+        if(field == 'store-slug'){
+            postData['storeslug'] = storeslug;
+            action = '/memberpage/updateStoreSlug';
+        }
+        else{
+            postData['storename'] = storename;
+            action = '/memberpage/updateStoreName';
+        }
+        $this.html('PLEASE WAIT');
+        $.ajax({
+            type: "post",
+            url: action,
+            data: postData,
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('.edit-'+field).slideToggle( "fast" );
+                    var currentSettingContainer = $('.current-'+field);
+                    currentSettingContainer.slideToggle( "fast" );
+                    var displayHtml = response.updatedValue;
+                    if(field == 'store-slug'){
+                        var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
+                        displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
+                        $('#btn-edit-store-url').css('display', 'none');
+                    } 
+                    currentSettingContainer.find('span').html(displayHtml);
+                }
+                else{
+                    var failMessageContainer = $("#fail-message-"+field);
+                    failMessageContainer.html(response.errors);
+                    failMessageContainer.show();
+                    $("#fail-icon-"+field).show();
+                }
+            }
+        });
+        $this.html(buttonHtml);
+    });
+        
+    var isStoreSetupInitialized = false;
+    $('#store-setup-tab').on('click', function(){
+        if(!isStoreSetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreSettings',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
+                    var unorderedList = $("#store-color-dropdown");
+                    var colorList = [];
+                    var currentColorId = $('#current-store-color-id').val();
+                    var isCurrentColorSet = false;
+
+                    $.each(jsonResponse.colors, function(index, color) {
+                        var icon = '';
+                        var currentColorClass = '';
+                        if(!isCurrentColorSet && color.idStoreColor == currentColorId){
+                            icon = '<i class="fa fa-check pull-right"></i>';
+                            currentColorClass = 'selected';
+                            isCurrentColorSet = true;
+                        }
+                        var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+color.name+'" data-id="'+color.idStoreColor+'" ' +
+                                           'style="background: #'+color.hexadecimal+'; text-transform: uppercase;" ' +
+                                           'id="color-item-'+color.idStoreColor+'">' +color.name + icon +
+                                        '</li>';
+                        colorList.push(listHtml);
+                    });
+                    unorderedList.append( colorList.join('') );
+                    unorderedList.find('#color-item-'+currentColorId).append(' </i>');
+                
+                    isStoreSetupInitialized = true;
+                }
+            });
+        }
+    });
+    
+    
+        
+    $('#store-color-save').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var selectedList = $('.color-li.selected');
+        var colorId = selectedList.data('id');
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreColorScheme',
+            data: {csrfname: csrftoken, colorId: colorId},
+            success: function(data){
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('#current-store-color-id').val(colorId);
+                    var currentColorChoiceContainer = $('.current-color-choice');
+                    currentColorChoiceContainer.css('background',selectedList.css('background'));
+                    currentColorChoiceContainer.html(selectedList.data('name'));
+                    $( "#btn-edit-store-theme" ).trigger( "click" );
+                }
+                else{
+                    $('#store-color-error').html(response.errors);
+                }
+                
+            }
+        });
+    });
 
     $(".add-bank-account").click(function() {
         $(this).fadeOut();
@@ -902,6 +946,9 @@
         $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
+    
+    
+    
 
 }(jQuery));
 
