@@ -39,3 +39,16 @@
 <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/newhome.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+
+<!--Script for snow storm-->
+<script src="/assets/js/src/vendor/snowstorm-min.js" type="text/javascript"></script>
+<script>
+    snowStorm.snowColor = '#f7f7f7';   // blue-ish snow!?
+    snowStorm.flakesMaxActive = 1000;    // show more snow on screen at once
+    snowStorm.flakesMax = 500;    // show more snow on screen at once
+    snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+    snowStorm.followMouse = false;
+    snowStorm.freezeOnBlur = false;
+    snowStorm.zIndex = 99999;
+</script>
+
