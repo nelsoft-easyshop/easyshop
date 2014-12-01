@@ -332,8 +332,17 @@ class ProductManager
         $defaultCatImg = "assets/images/default_icon_small.png";
         $vendorCategories = array();
 
-        $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->getUserProductParentCategories($memberId);
+        
+        $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
+                                            ->getNestedSetCategoryCount();
+        if($categoryNestedSetCount === 0){
+                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getUserCategoriesUsingAdjacencyList($memberId);
+        }
+        else{
+                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getUserCategoriesUsingNestedSet($memberId);
+        }    
 
         foreach( $rawVendorCategories as $vendorCategory ){
             if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) !== 1 ){
