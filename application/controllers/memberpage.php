@@ -1951,8 +1951,7 @@ class Memberpage extends MY_Controller
             ];
 
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
-            $member->validatedStoreName = $member->getStoreName() !== null && trim($member->getStoreName()) !== "" 
-                                         ? $member->getStoreName() : $member->getUsername();
+            $member->validatedStoreName = $member->getStoreName();
 
             $dashboardHomeData = [
                 'member' => $member,
