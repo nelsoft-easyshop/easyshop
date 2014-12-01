@@ -49,5 +49,6 @@
     snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
     snowStorm.followMouse = false;
     snowStorm.freezeOnBlur = false;
+    snowStorm.zIndex = 99999;
 </script>
 
