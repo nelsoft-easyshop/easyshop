@@ -84,7 +84,7 @@
                                 
                                 $("#login_error").empty();
                                 if(data["o_message"] == "Account Deactivated") {
-                                    $("#login_error").html("<span id='deactivatedPrompt'>Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id='"+data["errors"][0]["id"]+"' style='color:blue;cursor:pointer;'>here</a> to send a reactivation link in your email.</span>");
+                                    $("#login_error").html("<span id='deactivatedPrompt'>Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id='"+data["errors"][0]["id"]+"' style='color:blue;cursor:pointer;'>here</a> to send a reactivation link to your email.</span>");
                                 }
                                 else {
                                     $("#login_error").html(data["o_message"] );
