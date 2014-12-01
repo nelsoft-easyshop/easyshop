@@ -552,7 +552,7 @@ class productUpload extends MY_Controller
         $memberId =  $this->session->userdata('member_id');
         $filename =  $this->input->post('pictureName');
         $coordinates =  $this->input->post('coordinates');
-        $isCroppable = !$this->input->post('coordinates') ? false : true;
+        $isCroppable = !empty($coordinates) ? true : false;
         $date = date("Ymd");
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
         $fileExtension = explode('.', $filename);
