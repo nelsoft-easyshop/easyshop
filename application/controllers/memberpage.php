@@ -2080,7 +2080,7 @@ class Memberpage extends MY_Controller
                 $result = false;
             }
             else if (!$doesMemberExists['member']) {
-                $result = 'Incorrect Password';
+                $result = 'Invalid Username/Password';
             }
             else {
                 $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
