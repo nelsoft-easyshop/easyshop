@@ -34,7 +34,7 @@
 
         ajaxRequest = $.ajax({
             type: "GET",
-            url: '/home/getMoreFollowers',
+            url: '/store/getMoreFollowers',
             data: {page:page,vendorId:vendorId} ,
             beforeSend: function(){ 
                 $('#follower-container').hide(); 
@@ -101,7 +101,7 @@
                         }
                         else{
                             $.ajax({ 
-                                url: "/home/getMoreRecommendToFollow",
+                                url: "/store/getMoreRecommendToFollow",
                                 type: "GET",
                                 dataType: "json",
                                 data: {vendorId:vendorId,ids:ids},

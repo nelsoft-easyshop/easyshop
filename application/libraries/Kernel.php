@@ -102,14 +102,18 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
         
+        
+               
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
+            $controllerList = require(APPPATH . 'config/param/controllers.php');
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
                                                 ,$container['form_factory']
                                                 ,$container['form_error_helper']
-                                                ,$container['string_utility']);
+                                                ,$container['string_utility']
+                                                ,$controllerList);
         };
         
         //Account Manager

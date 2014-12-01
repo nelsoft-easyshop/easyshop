@@ -368,7 +368,7 @@ class EsProduct
      */
     const PRODUCT_IS_PROMOTE_ON = 1;
 
-    /*
+    /**
      * @var integer
      *
      * @ORM\Column(name="ships_within_days", type="integer", nullable=true)

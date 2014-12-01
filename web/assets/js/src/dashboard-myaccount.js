@@ -135,7 +135,7 @@
 
     /**************** GOOGLE MAPS ******************************/
 
-    $(".refresh_map").click(function(){     
+    $(".refresh_map").click(function(){  
         var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
         var city = $('#delivery_city').find('option:selected').text().trim();
         var type = "delivery";
@@ -144,44 +144,39 @@
             alert('Please specify a valid address.');            
             $( ".map-container" ).slideToggle( "slow" );
         }
-        else {
+        else {        
             codeAddress(address, type);
-        }            
-        
+        }
+
     });
- 
+
+
     $('.map-trigger').click(function () {
         var maplat = $(this).siblings('input[name="map_lat"]').val();
         var maplng = $(this).siblings('input[name="map_lng"]').val();
         var refreshmapbtn = $('.refresh_map');
         var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
         var type = this.name;
-
-        var stateregion = $('#delivery_stateregion').find('option:selected').text().trim();
-        var city = $('#delivery_city').find('option:selected').text().trim();
-        if( (stateregion === "--Select State/Region--" || city === "--- Select City ---")) {
-            alert('Please specify a valid address.');    
-            $( ".map-container" ).slideToggle( "slow" );
+        if(maplat == 0 && maplng == 0 ) {
+            refreshmapbtn.trigger("click");
         }
-
-        if ((maplat == 0 && maplng == 0)){
-            refreshmapbtn.trigger('click');
-        }else{
+        else{
             var myLatlng =  new google.maps.LatLng(maplat,maplng);
             if(mapcanvas.hasClass('map_canvas')){
                 if( type === 'personal' ){
                     mapPersonal.setCenter(myLatlng);
                     markerPersonal.setPosition(myLatlng);
                 }
-                else{
+                else if( type === 'delivery' ){
                     mapDelivery.setCenter(myLatlng);
                     markerDelivery.setPosition(myLatlng);
                 }
             }else{
                 google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
             }
-        }    
-    });
+        }   
+                  
+    });    
 
     $('.span-current-location').click(function () {
         var maplat = $("#current_lat").val();
@@ -213,32 +208,6 @@
     });
 
 
-    $('.map-trigger').click(function () {
-        var maplat = $(this).siblings('input[name="map_lat"]').val();
-        var maplng = $(this).siblings('input[name="map_lng"]').val();
-        var refreshmapbtn = $('.refresh_map');
-        var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
-        var type = this.name;
-        
-        if (maplat == 0 && maplng == 0){
-            refreshmapbtn.trigger('click');
-        }else{
-            var myLatlng =  new google.maps.LatLng(maplat,maplng);
-            if(mapcanvas.hasClass('map_canvas')){
-                if( type === 'personal' ){
-                    mapPersonal.setCenter(myLatlng);
-                    markerPersonal.setPosition(myLatlng);
-                }
-                else if( type === 'delivery' ){
-                    mapDelivery.setCenter(myLatlng);
-                    markerDelivery.setPosition(myLatlng);
-                }
-            }else{
-                google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
-            }
-        }   
-                  
-    });
 
     /**************** END GOOGLE MAPS ******************************/
 
@@ -438,8 +407,9 @@
         if (status == google.maps.GeocoderStatus.OK) {
             google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
         }
-        else {
-            alert('Please specify a valid address.');
+        else{
+            alert('Please specify a valid address.');            
+            $( ".map-container" ).slideToggle( "slow" );            
         }
       });
     }  

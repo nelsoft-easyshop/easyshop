@@ -1163,7 +1163,7 @@ class Memberpage extends MY_Controller
     {
         # Require config file for list of controllers (filenames) ; returns $controllerConfig
         require_once(APPPATH . 'config/param/controllers.php');
-    
+
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form.'
@@ -1817,6 +1817,7 @@ class Memberpage extends MY_Controller
         echo json_encode($return);
     }
 
+
     // new implementation starts here
     /**
      * Request for transaction details - ajax
@@ -2094,6 +2095,10 @@ class Memberpage extends MY_Controller
             $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
             $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
             $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+
+            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
+            $member->validatedStoreName = $member->getStoreName();
+
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
@@ -2499,6 +2504,155 @@ class Memberpage extends MY_Controller
 
         echo json_encode($responseData);
     }
+
+    
+    /**
+     * Update the store name 
+     *
+     * @return json
+     */
+    public function updateStoreName()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storename')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storename', 'text');
+            $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
+            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateStorename($member, $formData['storename']);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storename'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store name is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        
+        echo json_encode($jsonResponse); 
+    }
+                 
+    /**
+     * Update the store slug 
+     *
+     * @return json
+     */
+    public function updateStoreSlug()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storeslug')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storeslug', 'text');
+            $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
+            $formData['storeslug'] = $this->input->post('storeslug');
+            $form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $routes = $this->router->routes;
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateSlug($member, $formData['storeslug'], $routes);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storeslug'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store link is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        echo json_encode($jsonResponse); 
+    }
+   
+    /**
+     * Update the store color scheme 
+     *
+     * @return json
+     */
+    public function updateStoreColorScheme()
+    {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $response = ['isSuccessful' => 'false'];
+        if($this->input->post('colorId')){
+            $memberId = $this->session->userdata('member_id');
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);     
+            $color = $entityManager->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find($this->input->post('colorId'));
+            if($color !== null && $member !== null){
+                $member->setStoreColor($color);
+                $isSuccessful = true;
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                    $response['errors'] = 'Sorry, something went wrong. Try again in a while.';
+                }
+                $response['isSuccessful'] = $isSuccessful ? 'true' : 'false';
+            }
+        }
+        echo json_encode($response);
+    }
+    
+    /**
+     * Gets the store settings
+     *
+     */
+    public function getStoreSettings()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['colors'] = $this->serviceContainer['entity_manager']
+                                       ->getRepository('EasyShop\Entities\EsStoreColor')
+                                       ->getAllColors(true);
+        }
+        echo json_encode($response);
+    }
+    
+
+    
+
 }
 
 /* End of file memberpage.php */
