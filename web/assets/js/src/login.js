@@ -66,8 +66,8 @@
                 }
             },
             submitHandler: function (form) {
-                // $('#loading_img').show();
-                // $('#login').hide();
+                $('#loading_img').show();
+                $('#login').hide();
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
@@ -81,7 +81,7 @@
                         }
                         else{
                             if(data.o_success <= 0){
-                                // 
+                                
                                 $("#login_error").empty();
                                 if(data["o_message"] == "Account Deactivated") {
                                     $("#login_error").html("<span id='deactivatedPrompt'>Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id='"+data["errors"][0]["id"]+"' style='color:blue;cursor:pointer;'>here</a> to send a reactivation link in your email.</span>");
@@ -105,21 +105,21 @@
                                 var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
 
                                 if( typeof vendorSubscriptionUri !== "undefined" ){
-                                    // window.location = '/' + vendorSubscriptionUri;
+                                    window.location = '/' + vendorSubscriptionUri;
                                 }
                                 else if (first_uri_segment == 'promo') {
                                     var code = url.split("/");
-                                    // window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
+                                    window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
                                 else{
                                     if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                        // window.location = '/' + url;
+                                        window.location = '/' + url;
                                     }
                                     else if(first_uri_segment == 'cart'){
-                                        // window.location = '/' + first_uri_segment;
+                                        window.location = '/' + first_uri_segment;
                                     }
                                     else{
-                                        // window.location = '/';
+                                        window.location = '/';
                                     }                            
                                 }
                             }
