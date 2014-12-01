@@ -2381,7 +2381,7 @@ class Memberpage extends MY_Controller
             
             if($form->isValid()){
                 $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
-                                          ->findOneBy(['idMember' => $memberId]);
+                                        ->find($memberId);
                 $isUpdated = false;
                 if($member){
                     $isUpdated = $this->serviceContainer['user_manager']
@@ -2430,7 +2430,7 @@ class Memberpage extends MY_Controller
             
             if($form->isValid()){
                 $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
-                                          ->findOneBy(['idMember' => $memberId]);
+                                          ->find($memberId);
                 $isUpdated = false;
                 if($member){
                     $routes = $this->router->routes;
