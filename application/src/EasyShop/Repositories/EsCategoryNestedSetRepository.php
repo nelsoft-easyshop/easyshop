@@ -19,8 +19,10 @@ class EsCategoryNestedSetRepository extends EntityRepository
         $rsm->addScalarResult('count', 'count');
         $sql = "SELECT COUNT(*) as count FROM es_category_nested_set WHERE 1 ";
         $query = $this->_em->createNativeQuery($sql, $rsm);
-        return $query->getResult()[0]['count'];
+        $result = $query->getOneOrNullResult();
+        return $result ? $result['count'] : 0;
     }
 
 
 }
+
