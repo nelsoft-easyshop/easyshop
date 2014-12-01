@@ -417,14 +417,15 @@ class EsProductRepository extends EntityRepository
     }    
 
     /**
-     *  Get parent categories(default) of products uploaded by a specific user
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the adjececny list implementation
      *
-     *  @return array
+     * @param integer $memberId
+     * @return mixed
      */
-    public function getUserProductParentCategories($memberId)
+    public function getUserCategoriesUsingAdjacencyList($memberId)
     {
         $em = $this->_em;
-       /*
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('parent_cat','parent_cat');
         $rsm->addScalarResult('cat_id','cat_id');
@@ -437,7 +438,20 @@ class EsProductRepository extends EntityRepository
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('member_id', $memberId);
         $uploadsPerCategory = $query->getResult();
- */
+        return $uploadsPerCategory;
+    }
+        
+        
+    /**
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the nested set implementation
+     *
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getUserCategoriesUsingNestedSet($memberId)
+    {
+        $em = $this->_em;
         $parentCategories = $em->createQueryBuilder()
                                 ->select('n') 
                                 ->from('EasyShop\Entities\EsCategoryNestedSet','n')
@@ -547,9 +561,7 @@ class EsProductRepository extends EntityRepository
             $query->setParameter($count++, $param);
         }
         $uploadsPerCategory = $query->getResult();
-
         return $uploadsPerCategory;
-   
     }
 
     /**
