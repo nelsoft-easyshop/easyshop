@@ -406,7 +406,9 @@
 }
 
 #feedback-modal,
-#shipping-details {
+#shipping-details,
+.shipping-details,
+.give-feedback-modal{
     display: none;
 }
 

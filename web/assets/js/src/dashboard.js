@@ -787,13 +787,22 @@
         $('#th-p-net').toggle();
         $('.td-p-net').toggle();
     });
-    
-    
+
     $(function() {
         $( "#birthday-picker" ).datepicker({
             changeMonth: true,
             changeYear: true
-        }); 
+        });
+
+        $( "#sales-end-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $( "#sales-start-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
 
         $( ".date-picker-sales" ).datepicker({
             changeMonth: true,
@@ -804,23 +813,259 @@
             changeMonth: true,
             changeYear: true
         });
-        
+
         $( "#payout-start-date" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
+
+        $( ".modal_date" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '2013:2050',
+            dateFormat:"yy-M-dd"
+        }).on('keypress',function(){
+            return false;
+        });
     });
-    
-    $('#give-feedback').click(function (e) {
-        $('#feedback-modal').modal();
-        $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
+
+    $('.shipment-detail-button').on('click', function(e) {
+        var shipmentModal = $(this).parent().find('div.shipping-details');
+        var shipmentContainer = $(this).parent().find('div.shipping-details-container');
+        var thisbtn = $(this);
+        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var form = shipmentModal.find('.shipping_details_form');
+        var submitbtn = $(form).find('.shipping_comment_submit');
+        var input = $(form).find('input[type="text"]');
+        var editbtn = $(form).find('.tx_modal_edit');
+        var cancelbtn = $(form).find('.tx_modal_cancel');
+        var courier = form.find('input[name="courier"]');
+        var tracking_num = form.find('input[name="tracking_num"]');
+        var delivery_date = form.find('input[name="delivery_date"]');
+        var expected_date = form.find('input[name="expected_date"]');
+        var textarea = $(form).find('textarea');
+
+        courier.val(shipmentContainer.find('input[name="courier"]').val());
+        tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
+        delivery_date.val(shipmentContainer.find('input[name="delivery_date"]').val());
+        expected_date.val(shipmentContainer.find('input[name="expected_date"]').val());
+        textarea.val(shipmentContainer.find('input[name="comment"]').val());
+
+        shipmentModal.modal({
+            escClose: false,
+            onShow: function() {
+                if ( thisbtn.hasClass('isform') ) {
+                    form.validate({
+                        rules:{
+                            courier:{
+                                required: true
+                            },
+                            delivery_date:{
+                                required: true
+                            }
+                        },
+                        errorElement: "span",
+                        errorPlacement: function(error, element) {
+                            error.addClass('red');
+                            error.insertAfter(element);
+                        },
+                        submitHandler: function(form){
+                            input.attr('disabled',false);
+                            textarea.attr('disabled', false);
+
+                            $.post('/memberpage/addShippingComment', $(form).serializeArray(), function(data){
+                                submitbtn.attr('disabled', false);
+                                submitbtn.val('Save');
+
+                                try{
+                                    var obj = jQuery.parseJSON(data);
+                                }
+                                catch(e){
+                                    alert('An error was encountered while processing your data. Please try again later.');
+                                    return false;
+                                }
+
+                                if (obj.result === 'success') {
+                                    shipmentContainer.find('input[name="courier"]').val(courier.val());
+                                    shipmentContainer.find('input[name="tracking_num"]').val(tracking_num.val());
+                                    shipmentContainer.find('input[name="delivery_date"]').val(delivery_date.val());
+                                    shipmentContainer.find('input[name="expected_date"]').val(expected_date.val());
+                                    shipmentContainer.find('input[name="comment"]').val(textarea.val());
+                                    shipmentContainer.find('input[name="is_new"]').val(1);
+                                    textarea.attr('data-value', htmlDecode(textarea.val()));
+                                    textarea.attr('disabled', true);
+
+                                    if(thisbtn.hasClass('isform')) {
+                                        txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                    }
+                                    $.modal.close();
+                                }else{
+                                    alert(obj.error);
+                                }
+                            });
+                            submitbtn.attr('disabled', true);
+                            submitbtn.val('Saving...');
+                        }
+                    });
+                }
+                this.setPosition();
+                input.each(function(){
+                    if( $.trim($(this).attr('value')).length>0 ){
+                        cancelbtn.trigger('click');
+                        return false;
+                    }
+                });
+            }
+        });
+        shipmentModal.parents("#simplemodal-container").addClass("shipping-details-container");
         return false;
     });
 
-    $('#ship-item').click(function (e) {
-        $('#shipping-details').modal();
-        $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
+    $('.transac_response_btn.enabled').on('click', function() {
+        var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
+        if(!isConfirmed){
+            return false;
+        }
+        var txResponseBtn = $(this);
+        var form = txResponseBtn.closest('form.transac_response');
+        var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
+        var data = form.serializeArray();
+        var buttonText = txResponseBtn.val();
+        txResponseBtn.addClass('loading');
+        txResponseBtn.removeClass('enabled');
+        txResponseBtn.val('Please wait..');
+
+        $.post("/memberpage/transactionResponse", data, function(data) {
+            try {
+                var serverResponse = jQuery.parseJSON(data);
+            }
+            catch (e) {
+                alert('An error was encountered while processing your data. Please try again later.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+                return false;
+            }
+
+            if (serverResponse.result !== 'success') {
+                alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+            }
+            else{
+                if(txResponseBtn.hasClass('tx_forward')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                }else if(txResponseBtn.hasClass('tx_return')){
+                    txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                }else if(txResponseBtn.hasClass('tx_cod')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                }
+                txResponseBtn.val('Successful');
+                txResponseBtn.parent().parent().find('.txt_buttons').hide();
+            }
+            txResponseBtn.addClass('enabled');
+        });
+
+
+    });
+
+    function htmlDecode(value) {
+        if (value) {
+            return $('<div />').html(value).text();
+        } else {
+            return '';
+        }
+    }
+
+    $(document).on('mouseover','.feedb-star', function(){
+        $(this).siblings('.raty-error').html('');
+    });
+
+    $('.item-list-panel').on('click', '.give-feedback-button', function(e) {
+        var feedbackModal = $(this).parent().find('div.give-feedback-modal');
+        var form = feedbackModal.find('form.transac-feedback-form');
+        var textArea = form.find('textarea[name="feedback-field"]');
+        var econt = form.find('.raty-error');
+        var btn = $(this);
+
+        feedbackModal.modal({
+            onShow: function() {
+                $('.rating1').raty('destroy').raty({scoreName: 'rating1'});
+                $('.rating2').raty('destroy').raty({scoreName: 'rating2'});
+                $('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+
+                this.setPosition();
+                var submitbtn = form.find('.feedback-submit');
+                submitbtn.off('click').on('click', function(event) {
+                    var rating1 = form.find('input[name="rating1"]').val();
+                    var rating2 = form.find('input[name="rating2"]').val();
+                    var rating3 = form.find('input[name="rating3"]').val();
+                    if ($.trim(textArea.val()).length < 1) {
+                        textArea.effect('pulsate',{times:3},800);
+                    }
+                    else if (rating1 === '' || rating2 === '' || rating3 ==='') {
+                        econt.html('Please rate this user!');
+                    }
+                    else {
+                        $.post('/memberpage/addFeedback',form.serialize(),function(data) {
+                            if (parseInt(data) === 1) {
+                                alert('Your feedback has been submitted.');
+                                btn.remove();
+                            }
+                            else {
+                                alert('An error was encountered. Try again later.');
+                            }
+                        });
+                        $.modal.close();
+                        return false;
+                    }
+                });
+            }
+        });
+        feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
+
         return false;
+    });
+
+    $("#ongoing-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-bought';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#ongoing-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-sold';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-bought';
+
+        alert($container);
+        return false;
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-sold';
+
+        getTransactionDetails($page, $requestType, $container);
     });
     
     $(".save-store-setting").click(function(){
@@ -950,6 +1195,25 @@
     
     
 
+    function getTransactionDetails($page, $requestType, $container)
+    {
+        console.log($container);
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : $page,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
 }(jQuery));
 
 

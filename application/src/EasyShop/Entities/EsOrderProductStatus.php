@@ -39,8 +39,13 @@ class EsOrderProductStatus
     const PAID_FORWARDED = 4;
 
     const PAID_RETURNED = 5;
-    
+
     const CANCEL = 6;
+
+    /**
+     * @var integer
+     */
+    const STATUS_REJECT = 99;
 
     /**
      * Get idOrderProductStatus

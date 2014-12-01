@@ -283,6 +283,13 @@ class Kernel
                                                         $userManager);
         };
 
+        $container['transaction_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $productManager = $container['product_manager'];
+
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+        };
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);

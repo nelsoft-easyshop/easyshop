@@ -45,6 +45,13 @@ class Memberpage extends MY_Controller
     public $feedbackLimit = 10;
 
     /**
+     * Number of transaction per page
+     *
+     * @var integer
+     */
+    public $transactionRowCount = 10;
+
+    /**
      *  Class Constructor
      */
     public function __construct()
@@ -59,7 +66,8 @@ class Memberpage extends MY_Controller
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
-        $this->em = $this->serviceContainer['entity_manager']; 
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->transactionManager = $this->serviceContainer['transaction_manager'];
     }
 
     public function sample()
@@ -72,12 +80,12 @@ class Memberpage extends MY_Controller
      *  Class Index. Renders Memberpage
      */
     public function index()
-    {        
+    {
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
         }
-        $data['tab'] = $this->input->get('me');        
+        $data['tab'] = $this->input->get('me');
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
@@ -85,12 +93,12 @@ class Memberpage extends MY_Controller
             $data['user_details'] = $this->fillUserDetails();
         }
         $data['homeContent'] = $this->fillCategoryNavigation();
+        $data['transactionInfo'] = $this->getMemberPageDetails();
         $data = array_merge($data, $this->fill_header());
-        
+
         $socialMediaLinks = $this->getSocialMediaLinks();
         $footerData['facebook'] = $socialMediaLinks["facebook"];
         $footerData['twitter'] = $socialMediaLinks["twitter"];
-
 
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
@@ -98,7 +106,7 @@ class Memberpage extends MY_Controller
 
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
-        $formErrorHelper = $this->serviceContainer['form_error_helper'];        
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
     }
 
     /**
@@ -1811,7 +1819,140 @@ class Memberpage extends MY_Controller
 
 
     // new implementation starts here
-    
+    /**
+     * Request for transaction details - ajax
+     */
+    public function getTransactionsForPagination()
+    {
+        $page = (int) trim($this->input->get('page'));
+        $requestType = trim($this->input->get('request'));
+        $memberId = $this->session->userdata('member_id');
+        $paginationData = [
+            'isHyperLink' => false,
+            'currentPage' => $page
+        ];
+
+        switch ($requestType) {
+            case 'ongoing-bought':
+                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+                $ongoingBoughtTransactionData = [
+                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $ongoingBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+                break;
+            case 'ongoing-sold':
+                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+                $ongoingSoldTransactionData = [
+                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $ongoingSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+                break;
+            case 'complete-bought':
+                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+                $completeBoughtTransactionsData = [
+                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $completeBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+                break;
+            case 'complete-sold':
+                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+                $completeSoldTransactionsData = [
+                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $completeSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+                break;
+            default:
+                break;
+        }
+
+        $responseData = [
+            'html' => $transactionView,
+        ];
+
+        echo json_encode($responseData);
+    }
+
+    /**
+     * Get all transaction data
+     * @return mixed
+     */
+    private function getTransactionDetails()
+    {
+        $memberId = $this->session->userdata('member_id');
+
+        $transaction = [
+            'ongoing' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, true, 0, $this->transactionRowCount)
+            ],
+            'complete' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false, 0, $this->transactionRowCount)
+            ]
+        ];
+
+        $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+        $ongoingBoughtTransactionData = [
+            'transaction' => $transaction['ongoing']['bought'],
+            'count' => $ongoingBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingBoughtTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+
+        $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+        $ongoingSoldTransactionData = [
+            'transaction' => $transaction['ongoing']['sold'],
+            'count' => $ongoingSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingSoldTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+
+        $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+        $completeBoughtTransactionsData = [
+            'transaction' => $transaction['complete']['bought'],
+            'count' => $completeBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeBoughtTransactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+
+        $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+        $completeSoldTransactionsData = [
+            'transaction' => $transaction['complete']['sold'],
+            'count' => $completeSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeSoldTransactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+
+        $data = [
+            'ongoing' => [
+                'bought' => $ongoingBoughtTransactionView,
+                'sold' => $ongoingSoldTransactionView,
+            ],
+            'complete' => [
+                'bought' => $completeBoughtTransactionView,
+                'sold' => $completeSoldTransactionView,
+            ]
+        ];
+
+        return $data;
+    }
+
     /**
      * display dashboard view
      * @return view
@@ -1949,6 +2090,11 @@ class Memberpage extends MY_Controller
                 'historySales' => $historySalesView,
                 'historyTotalSales' => $historyTotalSales,
             ];
+            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+            $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+            $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+            $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+            $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
 
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
             $member->validatedStoreName = $member->getStoreName();
@@ -1980,7 +2126,12 @@ class Memberpage extends MY_Controller
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
-                'salesView' => $salesView
+                'salesView' => $salesView,
+                'transactionInfo' => $this->getTransactionDetails(),
+                'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
+                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
+                'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);

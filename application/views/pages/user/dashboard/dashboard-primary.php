@@ -94,8 +94,9 @@
 <br/>
 
 <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
 <script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
 
 
 <div>
