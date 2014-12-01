@@ -1,5 +1,10 @@
 (function ($) {
-
+    
+    $( ".dash-me" ).click(function() {
+        $( ".active-me" ).trigger( "click" );
+    });
+    
+    
     $( "#dash" ).click(function() {
         $( "#my-account-menu" ).slideUp();
         var attr = $("i.m").attr("class");
