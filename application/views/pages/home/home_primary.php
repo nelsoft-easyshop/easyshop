@@ -53,6 +53,6 @@
     snowStorm.followMouse = false;
     snowStorm.freezeOnBlur = false;
     snowStorm.zIndex = 99999;
-    snowStorm.animationInterval = 10;
+    snowStorm.animationInterval = 33;
 </script>
 <?php endif; ?>
