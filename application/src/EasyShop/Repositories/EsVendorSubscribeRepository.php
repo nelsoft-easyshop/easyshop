@@ -40,6 +40,33 @@ class EsVendorSubscribeRepository extends EntityRepository
     }
 
     /**
+     * Get all user following by the specific user
+     * @param  integer  $userId
+     * @param  integer $offset
+     * @param  integer $perPage
+     * @return array
+     */
+    public function getUserFollowing($userId,$offset = 0,$perPage = 6)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('vs')
+                            ->from('EasyShop\Entities\EsVendorSubscribe','vs')
+                            ->where('vs.member = :userId')
+                            ->setParameter('userId', $userId)
+                            ->getQuery();
+        $totalCount = count($qbResult->getResult());
+        $qbResult->setFirstResult($offset*$perPage)
+                 ->setMaxResults($perPage);
+        $result = $qbResult->getResult();
+
+        return array(
+                    'count' =>  $totalCount,
+                    'followers' => $result
+                );
+    }
+
+    /**
      * get recommended followers on page
      * @param  integer $memberId member id of the page owner
      * @param  integer $viewerId member id of the page viewer

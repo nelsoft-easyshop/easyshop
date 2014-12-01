@@ -74,7 +74,7 @@ if ($enable_splash && ($bypass_IP !== $clientIP)){
 }
 else {
     $route['default_controller'] = "home";
-    $route['404_override'] = 'home/userprofile';
+    $route['404_override'] = 'store/userprofile';
     
     # CATEGORY
     $route['(?i)category/(:any)'] = 'product/categoryPage/$1'; # janz serafico
@@ -108,12 +108,19 @@ else {
     $route['(?i)sell/finishupload'] = 'productUpload/finishProductPreview'; #js
 
     # USER
-    $route['(?i)vendor/(:any)'] = 'home/oldUserProfile/$1';
-    $route['(?i)me'] = 'memberpage'; # janz
+    $route['(?i)me'] = 'memberpage/newMemberpage';
+    $route['(?i)me/product/next'] = 'memberpage/productMemberPagePaginate';
+    $route['(?i)me/product/delete-soft'] = 'memberpage/softDeleteProduct';
+    $route['(?i)me/product/delete-hard'] = 'memberpage/hardDeleteProduct';
+    $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
+    $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
+    $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
+    $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
+
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
     $route['(?i)exportbuytransactions'] = 'memberpage/exportBuyTransactions'; # inon baguio
-    $route['(?i)exportsoldtransactions'] = 'memberpage/exportSellTransactions'; # inon baguio    
+    $route['(?i)exportsoldtransactions'] = 'memberpage/exportSellTransactions'; # inon baguio
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio

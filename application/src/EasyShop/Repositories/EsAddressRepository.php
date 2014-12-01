@@ -16,12 +16,16 @@ class EsAddressRepository extends EntityRepository
             JOIN a.stateregion s
             JOIN a.city c
             WHERE a.idMember = :member_id
-                AND a.type = :type
+                AND ( 
+                    a.type = :personal
+                    OR a.type = :delivery
+                    )
         ";
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
-                    ->setParameter('type', $type);
+                    ->setParameter('personal', $type)
+                    ->setParameter('delivery', !$type);
 
         return $query->getResult();
     }

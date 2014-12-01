@@ -102,14 +102,18 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
         
+        
+               
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
+            $controllerList = require(APPPATH . 'config/param/controllers.php');
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
                                                 ,$container['form_factory']
                                                 ,$container['form_error_helper']
-                                                ,$container['string_utility']);
+                                                ,$container['string_utility']
+                                                ,$controllerList);
         };
         
         //Account Manager
@@ -279,6 +283,13 @@ class Kernel
                                                         $userManager);
         };
 
+        $container['transaction_manager'] = function ($c) use ($container) {
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            $productManager = $container['product_manager'];
+
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+        };
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);

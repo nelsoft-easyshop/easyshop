@@ -345,6 +345,13 @@ class EsProduct
     /**
      *  @var integer
      *
+     *  isDraft value for drafted items ( item can be restored )
+     */
+    const DRAFT = 1;
+
+    /**
+     *  @var integer
+     *
      *  isDelete value for deleted items ( item can be restored )
      */
     const DELETE = 1;
@@ -356,7 +363,12 @@ class EsProduct
      */
     const FULL_DELETE = 2;
 
-    /*
+    /**
+     * Default value if the product is promoted
+     */
+    const PRODUCT_IS_PROMOTE_ON = 1;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="ships_within_days", type="integer", nullable=true)

@@ -818,10 +818,7 @@ $string = '<typeNode>
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
         $homePageData = array();
-        $homePageData['categorySection'] = array(); 
-
-
-        //Start Get Category Navigation
+        $homePageData['categorySection'] = array();
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
         $homePageData['menu']['topProducts']  = array();
         $homePageData['menu']['topSellers']  = array();

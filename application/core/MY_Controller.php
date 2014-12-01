@@ -88,9 +88,9 @@ class MY_Controller extends CI_Controller
             'msgs'=> $msgs,
             'category_search' => $this->product_model->getFirstLevelNode(),
             );
+
         return $data;
     }
-
     
     /**
      * Generates the category navigation
@@ -110,10 +110,12 @@ class MY_Controller extends CI_Controller
     public function fillUserDetails()
     {
             $em = $this->serviceContainer["entity_manager"];
+            $userManager = $this->serviceContainer['user_manager'];
             $memberId = $this->session->userdata('member_id');
             $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                                            ->find($memberId);
+                              ->find($memberId);
             $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
+
             return $userDetails;
     }
     
