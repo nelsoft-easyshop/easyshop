@@ -13,7 +13,7 @@
             <div class=" idTabs">
             <div class="col-sm-3 col-sidebar">
                 <ul class="sidebar-dashboard" >
-                    <a href="#dashboard" class="selected"><li id="dash"  class="mf-li">Dashboard</li></a>
+                    <a href="#dashboard" class="dash-me selected"><li id="dash"  class="mf-li">Dashboard</li></a>
                     <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
@@ -61,6 +61,7 @@
                     </ul>
                 </div>
             </div>
+            
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
@@ -118,6 +119,8 @@
 <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
 
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
+
 <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
 <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
