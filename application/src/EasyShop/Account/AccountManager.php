@@ -169,7 +169,7 @@ class AccountManager
             if($member){
                 unset($errors[0]);                
                 if(!(bool)$member->getIsActive()) {
-                    $errors[] = ['login' => 'This account is currently suspended.'];
+                    $errors[] = ['login' => 'This account has temporarily been suspended. Please contact our customer support through info@easyshop.ph for further details'];
                     $member = NULL;    
                 }
                 else {
