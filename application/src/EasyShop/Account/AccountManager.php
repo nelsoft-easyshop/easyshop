@@ -166,7 +166,7 @@ class AccountManager
                 }       
             }
             
-            if($member){
+            if($member && (bool)$member->getIsActive()){
                 unset($errors[0]);
                 $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                 $member->setLastLoginIp($this->httpRequest->getClientIp());
