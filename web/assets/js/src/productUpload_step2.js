@@ -565,17 +565,21 @@ function processAttributes()
             toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
             relative_urls: false,
             setup: function(editor) {
-                editor.on('change', function(e) {
+                editor.on('focusout', function(e) {
                     var content = tinyMCE.get('prod_description').getContent();
-                    tinyMCE.get('prod_description').setContent(content.substring(0, maxDescriptionLength));
-                    $('#prod_description').val(content.substring(0, maxDescriptionLength));
-                    $('#prod_description').trigger( "change" );
+                    if ( tinyMCE.get('prod_description').getContent().length >= maxDescriptionLength ){
+                        tinyMCE.get('prod_description').setContent(content.substring(0, maxDescriptionLength));
+                        $('#prod_description').val(content.substring(0, maxDescriptionLength));
+                    }
+                    else{
+                        $('#prod_description').val(content);
+                    }
                 });
 
                 editor.on('keyDown', function(editor, evt) {
                     var key = editor.keyCode;
                     var ctrlKey = editor.ctrlKey;
-                    if ( tinyMCE.get('prod_description').getContent().length > maxDescriptionLength 
+                    if ( tinyMCE.get('prod_description').getContent().length >= maxDescriptionLength 
                          && key != 8 
                          && key != 46 
                          && key != 37 
