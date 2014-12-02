@@ -83,7 +83,11 @@ class cart extends MY_Controller
      */
     public function getCartData()
     {
-        $cartData = $this->carManager->getValidatedCartContents($this->member->getIdMember());
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($this->member->getIdMember());
+        $cartData = !empty(unserialize($member->getUserdata())) 
+                    ? unserialize($member->getUserdata()) 
+                    : [];
         $formattedCartContents = $this->apiFormatter->formatCart($cartData);
 
         print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
