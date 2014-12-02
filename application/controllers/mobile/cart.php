@@ -5,27 +5,6 @@ if (!defined('BASEPATH'))
 
 class cart extends MY_Controller 
 {
-    
-    /**
-     * The cartManager
-     *
-     * @var EasyShop\Cart\CartManager
-     */
-    private $cartManager;
-    
-    /**
-     * Product manager
-     *
-     * @var EasyShop\Product\ProductManager
-     */
-    private $productManager;
-    
-    /**
-     * The cart object
-     * 
-     * @var EasyShop\Cart\CartInterface
-     */
-    private $cartImplementation;
 
     /**
      * Oauth2 server
