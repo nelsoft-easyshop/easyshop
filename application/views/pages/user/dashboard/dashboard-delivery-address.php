@@ -13,7 +13,7 @@
             <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Consignee Name : </label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-8">
                         <input type="text" id="consigneeName" name="consignee" value="<?php echo html_escape($address->getConsignee())?>"  class="text-info" placeholder="Consignee name">
                         <div id="errorsDivConsignee" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>

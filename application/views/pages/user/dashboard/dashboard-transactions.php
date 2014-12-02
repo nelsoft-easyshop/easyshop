@@ -47,7 +47,10 @@
                 <?=$transactionInfo['ongoing']['bought']?>
             </div>
         <?PHP else : ?>
-            You have not bought any items yet.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> You have not bought any items yet.
+            </div>
         <?PHP endif; ?>
     </div>
 <!---------------------------------------------------------------ongoing sold starts here---------------------------------------------------------------->
@@ -81,7 +84,10 @@
             <?=$transactionInfo['ongoing']['sold']?>
         </div>
         <?PHP else : ?>
-            You have not sold any items yet.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> You have not sold any items yet.
+            </div>
         <?PHP endif; ?>
     </div>
 
@@ -120,7 +126,10 @@
             <?=$transactionInfo['complete']['bought']?>
         </div>
         <?PHP else : ?>
-            There are no transactions for this category.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> There are no transactions for this category.
+            </div>
         <?PHP endif; ?>
     </div>
 <!---------------------------------------------------------------completed sold starts here---------------------------------------------------------------->
@@ -154,7 +163,9 @@
             <?=$transactionInfo['complete']['sold']?>
         </div>
         <?PHP else : ?>
-            There are no transactions for this category.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> There are no transactions for this category.
         <?PHP endif; ?>
     </div>
 </div>
