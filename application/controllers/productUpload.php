@@ -567,7 +567,7 @@ class productUpload extends MY_Controller
         $otherBrand = '';
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
-        $product_description =  $this->input->post('prod_description');
+        $product_description =  substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
@@ -785,7 +785,7 @@ class productUpload extends MY_Controller
         $cat_id = $this->input->post('id');
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
-        $product_description =  $this->input->post('prod_description');
+        $product_description = substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
