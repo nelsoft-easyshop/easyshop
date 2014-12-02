@@ -2066,40 +2066,30 @@ class Memberpage extends MY_Controller
     public function sendDeactivateNotification()
     {
 
-        $this->load->library('encrypt');
-        if ((!$this->input->post('id') && !$this->input->post('password'))) {
-            $result = false;
+        $doesMemberExists = $this->accountManager
+                                ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);
+        if (!$doesMemberExists['member']) {
+            $result = 'Invalid Username/Password';
         }
         else {
-            $member = $this->em
-                        ->getRepository('EasyShop\Entities\EsMember')
-                            ->find($this->input->post('id'));
-            $doesMemberExists = $this->accountManager
-                                    ->authenticateMember($member->getUsername(), $this->input->post('password'), false, true);
-            if (!$member) {
-                $result = false;
-            }
-            else if (!$doesMemberExists['member']) {
-                $result = 'Invalid Username/Password';
-            }
-            else {
-                $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
-                $this->load->library('parser');
-                $parseData = array(
-                    'username' => $member->getUsername(),
-                    'hash' => $this->encrypt->encode($member->getIdMember()),
-                    'site_url' => site_url('memberpage/showActivateAccount')
-                );        
+            $this->load->library('encrypt');            
+            $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
+            $this->load->library('parser');
+            $parseData = array(
+                'username' => $doesMemberExists['member']->getUsername(),
+                'hash' => $this->encrypt->encode($doesMemberExists['member']->getIdMember()),
+                'site_url' => site_url('memberpage/showActivateAccount')
+            );        
 
-                $this->emailNotification = $this->serviceContainer['email_notification'];
-                $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
-                $this->emailNotification->setRecipient($member->getEmail());
-                $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
-                $this->emailNotification->setMessage($message);
-                $this->emailNotification->sendMail();
-                $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, false);
-            }
+            $this->emailNotification = $this->serviceContainer['email_notification'];
+            $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
+            $this->emailNotification->setRecipient($doesMemberExists['member']->getEmail());
+            $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
+            $this->emailNotification->setMessage($message);
+            $this->emailNotification->sendMail();
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($doesMemberExists['member'], false);
         }
+        
         echo json_encode($result);
     }
 
