@@ -111,7 +111,7 @@ class AccountManager
      * @param bool $asArray
      * @return mixed Returns an array of the error and the member entity
      */    
-    public function authenticateMember($username, $password, $asArray = false, $isForActivationNotice = false)
+    public function authenticateMember($username, $password, $asArray = false, $doIgnoreActiveStatus = false)
     {
         $errors = array();
         $member = null;
@@ -165,7 +165,7 @@ class AccountManager
         }
 
 
-        if($member && ((bool)$member->getIsActive() === false && !$isForActivationNotice)) {
+        if($member && ((bool)$member->getIsActive() === false && !$doIgnoreActiveStatus)) {
             array_push($errors, [   'login' => "Account Deactivated",'id' => $member->getIdMember() ]);
             $member = NULL;                        
         }
