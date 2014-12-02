@@ -167,7 +167,11 @@ class AccountManager
             }
             
             if($member){
-                unset($errors[0]);
+                unset($errors[0]);                
+                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = ['login' => 'Oooops! This account has already been deactivated.','id' => $member->getIdMember()];
+                    $member = NULL;    
+                }
                 $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                 $member->setLastLoginIp($this->httpRequest->getClientIp());
                 $member->setFailedLoginCount(0);
