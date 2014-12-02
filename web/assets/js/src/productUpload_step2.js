@@ -561,6 +561,7 @@ function processAttributes()
     });
 
     // Load tinyMCE plugin
+    var maxDescriptionLength = 65000
     $(function() {
         tinyMCE.init({ 
             mode : "specific_textareas",
@@ -573,8 +574,26 @@ function processAttributes()
             relative_urls: false,
             setup: function(editor) {
                 editor.on('change', function(e) {
-                    $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                    var content = tinyMCE.get('prod_description').getContent();
+                    tinyMCE.get('prod_description').setContent(content.substring(0, maxDescriptionLength));
+                    $('#prod_description').val(content.substring(0, maxDescriptionLength));
                     $('#prod_description').trigger( "change" );
+                });
+
+                editor.on('keyDown', function(editor, evt) {
+                    var key = editor.keyCode;
+                    var ctrlKey = editor.ctrlKey;
+                    if ( tinyMCE.get('prod_description').getContent().length > maxDescriptionLength 
+                         && key != 8 
+                         && key != 46 
+                         && key != 37 
+                         && key != 38 
+                         && key != 39 
+                         && key != 40 
+                         && !(ctrlKey && (key == 65 || key == 88) )){
+                        editor.preventDefault();
+                        return false;
+                    }
                 });
             }
         });
