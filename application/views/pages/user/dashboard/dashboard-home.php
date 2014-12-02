@@ -181,7 +181,7 @@
         <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
-                <a href="#active-items"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
+                <a href="#active-items" class="active-me"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
                 <a href="#deleted-items"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
                 <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
                 <a href="#feedbacks"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>

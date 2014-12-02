@@ -141,6 +141,9 @@ class AccountManager
             $formData = $form->getData();
             $validatedUsername = $formData['username'];
             $validatedPassword = $formData['password'];
+            /**
+             * Intialize error array
+             */
             array_push($errors, ['login' => 'Invalid Username/Password']);  
             
             if(strpos($validatedUsername, '@') !== false){
@@ -165,6 +168,7 @@ class AccountManager
             }
             
             if($member){
+                unset($errors[0]);
                 $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                 $member->setLastLoginIp($this->httpRequest->getClientIp());
                 $member->setFailedLoginCount(0);
