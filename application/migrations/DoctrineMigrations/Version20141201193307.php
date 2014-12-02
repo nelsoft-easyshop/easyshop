@@ -16,8 +16,8 @@ class Version20141201193307 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("
-        ALTER TABLE `es_activity_type` 
-            ADD COLUMN `activity_phrase` TEXT NULL AFTER `activity_description`;
+            ALTER TABLE `es_activity_type` 
+                ADD COLUMN `activity_phrase` TEXT NULL AFTER `activity_description`;
         ");
     }
 
@@ -25,8 +25,8 @@ class Version20141201193307 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("
-        ALTER TABLE `es_activity_type` 
-            DROP COLUMN `activity_phrase`;
+            ALTER TABLE `es_activity_type` 
+                DROP COLUMN `activity_phrase`;
         ");
     }
 }
