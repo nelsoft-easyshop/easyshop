@@ -78,7 +78,6 @@ class ApiFormatter
     {
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-
         $product = $this->productManager->getProductDetails($productId);
         $memberId = $product->getMember()->getIdMember();
 
@@ -355,6 +354,9 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
+        $cartData = $this->cartManager->getValidatedCartContents($memberId);
+
+        return $cartData;
     }
 }
  
