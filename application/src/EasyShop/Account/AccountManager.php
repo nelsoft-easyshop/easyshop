@@ -168,20 +168,21 @@ class AccountManager
             }
             
             if($member){
-                unset($errors[0]);
-                $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                $member->setLastLoginIp($this->httpRequest->getClientIp());
-                $member->setFailedLoginCount(0);
-                $member->setLoginCount($member->getLoginCount() + 1);
-                $this->em->flush(); 
-                $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                    ->getHydratedMember($validatedUsername, $asArray);                    
+                unset($errors[0]);                
+                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
+                    $member = NULL;    
+                }
+                else {
+                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+                    $member->setLastLoginIp($this->httpRequest->getClientIp());
+                    $member->setFailedLoginCount(0);
+                    $member->setLoginCount($member->getLoginCount() + 1);
+                    $this->em->flush(); 
+                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                                        ->getHydratedMember($validatedUsername, $asArray);                     
+                }                                                                    
             }
-        }
-
-        if($member && ((bool)$member->getIsActive() === false && !$doIgnoreActiveStatus)) {
-            $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
-            $member = NULL;                        
         }
 
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
