@@ -145,7 +145,7 @@ class TransactionManager
                                                      'status' => EsOrderProductStatus::ON_GOING,
                                                      'order' => $orderId
                                                  ]);
-            if ( ! (bool) $doesAllOrderProductResponded ) {
+            if ( !$doesAllOrderProductResponded ) {
                 $esOrder =  $this->esOrderRepo
                                  ->findOneBy([
                                      'invoiceNo' => $invoiceNumber,
@@ -270,6 +270,7 @@ class TransactionManager
                      ->getQuery();
         $row = $queryBuilder->getResult();
 
+        $parseData = $row[0];
         $parseData['attr'] = [];
         if ( (int) $orderProductStatus === (int) EsOrderProductStatus::FORWARD_SELLER ) {
             $parseData['user'] = $row[0]['buyer'];
