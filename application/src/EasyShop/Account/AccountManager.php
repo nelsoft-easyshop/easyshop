@@ -121,7 +121,7 @@ class AccountManager
      * @param bool $asArray
      * @return mixed Returns an array of the error and the member entity
      */    
-    public function authenticateMember($username, $password, $asArray = false)
+    public function authenticateMember($username, $password, $asArray = false, $doIgnoreActiveStatus = false)
     {
         $errors = array();
         $member = null;
@@ -164,20 +164,26 @@ class AccountManager
                         $member = null;   
                     }
                 }       
+
             }
             
             if($member){
-                unset($errors[0]);
-                $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                $member->setLastLoginIp($this->httpRequest->getClientIp());
-                $member->setFailedLoginCount(0);
-                $member->setLoginCount($member->getLoginCount() + 1);
-                $this->em->flush(); 
-                $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                    ->getHydratedMember($validatedUsername, $asArray);                    
+                unset($errors[0]);                
+                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
+                    $member = NULL;    
+                }
+                else {
+                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+                    $member->setLastLoginIp($this->httpRequest->getClientIp());
+                    $member->setFailedLoginCount(0);
+                    $member->setLoginCount($member->getLoginCount() + 1);
+                    $this->em->flush(); 
+                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                                        ->getHydratedMember($validatedUsername, $asArray);                     
+                }                                                                    
             }
         }
-
 
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                 'member' => $member];
