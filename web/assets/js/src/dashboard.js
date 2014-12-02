@@ -943,6 +943,7 @@
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
+        var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
         var data = form.serializeArray();
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
@@ -971,7 +972,7 @@
                 }else if(txResponseBtn.hasClass('tx_return')){
                     txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
                 }else if(txResponseBtn.hasClass('tx_cod')){
-                    txStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                    alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                 }
                 txResponseBtn.val('Successful');
                 txResponseBtn.parent().parent().find('.txt_buttons').hide();

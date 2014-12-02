@@ -74,6 +74,9 @@ class Memberpage extends MY_Controller
         $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
     }
 
+    /**
+     * sample function for qr code generator
+     */
     public function sample()
     {
         $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
@@ -707,14 +710,14 @@ class Memberpage extends MY_Controller
                 'rating3' => $this->input->post('rating3')
             ];
 
-            if ( (int) $data['feedb_kind'] === 0) {
+            if ( !(bool) $data['feedb_kind']) {
                 $transacData = [
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
                 ];
             }
-            else if ( (int) $data['feedb_kind'] === 1) {
+            else if ( (bool) $data['feedb_kind']) {
                 $transacData = [
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
@@ -723,24 +726,24 @@ class Memberpage extends MY_Controller
             }
             $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
             if ($doesTransactionExists) {
-                $memberId = $this->esMemberRepo->find($data['uid']);
-                $forMemberid = $this->esMemberRepo->find($data['for_memberid']);
-                $orderId = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                $member = $this->esMemberRepo->find($data['uid']);
+                $forMember = $this->esMemberRepo->find($data['for_memberid']);
+                $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
                 $doesFeedbackExists = $this->esMemberFeedbackRepo
                                            ->findOneBy([
-                                               'member' => $memberId,
-                                               'forMemberid' => $forMemberid,
+                                               'member' => $member,
+                                               'forMemberid' => $forMember,
                                                'feedbKind' => $data['feedb_kind'],
-                                               'order' => $orderId
+                                               'order' => $order
                                            ]);
                 if (! (bool) $doesFeedbackExists) {
                     $result = $this->esMemberFeedbackRepo
                                    ->addFeedback(
-                                       $memberId,
-                                       $forMemberid,
+                                       $member,
+                                       $forMember,
                                        $data['feedb_msg'],
                                        $data['feedb_kind'],
-                                       $orderId,
+                                       $order,
                                        $data['rating1'],
                                        $data['rating2'],
                                        $data['rating3']
@@ -751,7 +754,7 @@ class Memberpage extends MY_Controller
             echo (bool) $result;
         }
         else{
-            echo 0;
+            echo false;
         }
     }
 
@@ -820,9 +823,13 @@ class Memberpage extends MY_Controller
                         $parseData['facebook'] = $socialMediaLinks["facebook"];
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
 
-                        $hasNotif = FALSE;
-                        if ( (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER || (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER || (int) $data['status'] === (int) EsOrderProductStatus::CASH_ON_DELIVERY ) {
-                            $hasNotif = TRUE;
+                        $hasNotif = false;
+                        if (
+                            (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::CASH_ON_DELIVERY
+                        ) {
+                            $hasNotif = true;
                         }
                         switch ($data['status']) {
                             case EsOrderProductStatus::FORWARD_SELLER :
@@ -983,12 +990,12 @@ class Memberpage extends MY_Controller
                         "buyer" => $buyerEntity->getUsername(),
                         "invoice" => $orderEntity->getInvoiceNo(),
                         "product_name" => $orderProductEntity->getProduct()->getName(),
-                        "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
+                        "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
                         "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
                         "facebook" => $socialMediaLinks["facebook"],
                         "twitter" => $socialMediaLinks["twitter"]
                     ]);
-                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
+                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
 
                     $emailService->setRecipient($buyerEmail)
                                  ->setSubject($buyerEmailSubject)
