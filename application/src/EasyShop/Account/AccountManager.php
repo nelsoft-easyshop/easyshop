@@ -121,7 +121,7 @@ class AccountManager
      * @param bool $asArray
      * @return mixed Returns an array of the error and the member entity
      */    
-    public function authenticateMember($username, $password, $asArray = false)
+    public function authenticateMember($username, $password, $asArray = false, $doIgnoreActiveStatus = false)
     {
         $errors = array();
         $member = null;
@@ -164,12 +164,12 @@ class AccountManager
                         $member = null;   
                     }
                 }       
+
             }
             
             if($member){
-                unset($errors[0]);                
-                if(!(bool)$member->getIsActive()) {
-                    $errors[] = ['login' => 'This account has temporarily been suspended. Please contact our customer support through info@easyshop.ph for further details'];
+                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
                     $member = NULL;    
                 }
                 else {
@@ -183,7 +183,6 @@ class AccountManager
                 }                                                                    
             }
         }
-
 
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
                 'member' => $member];
