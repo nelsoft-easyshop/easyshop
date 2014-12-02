@@ -103,7 +103,7 @@ class Login extends MY_Controller
             $dataval = array('login_username' => $uname, 'login_password' => $pass);             
             $row = $this->accountManager->authenticateMember($uname, $pass);
 
-            if (!empty($row["member"])) {
+            if (!empty($row["member"]) && (bool)$row["member"]->getIsActive()) {
             
                 $row['o_success'] = 1;
                 $row["o_memberid"] = $row["member"]->getIdMember();
