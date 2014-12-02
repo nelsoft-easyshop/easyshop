@@ -354,7 +354,7 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
-        $cartData = $this->carManager->getValidatedCartContents($memberId);
+        $cartData = $this->cartManager->getValidatedCartContents($memberId);
 
         return $cartData;
     }
