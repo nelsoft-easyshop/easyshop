@@ -109,8 +109,8 @@ $lang['new_message_notif'] = "Easyshop.ph - New message received";
 #Merge account notification
 $lang['merge_subject'] = 'Easyshop.ph - Merging of account';
 
-#Merge account notification
-$lang['deactivate_subject'] = 'Easyshop.ph - Account Deactivated';
+#Account activation notification
+$lang['deactivate_subject'] = 'Easyshop.ph - Account Activation';
 
 #Notification shipping comment provided
 $lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
