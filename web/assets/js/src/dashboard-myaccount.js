@@ -46,13 +46,14 @@
                     actionGroupChangePass.show();
                     loadingimg.hide();  
                     var obj = jQuery.parseJSON(data);    
-                    if(obj === "Incorrect Password") {
+                    if(obj === "Invalid Username/Password") {
                         $("#deactivatePassword").val("");                        
                         alert(obj);                        
                     }
                     else {
                         $('#activated-modal').modal({       
                             onClose: function(){
+                                $.modal.close();                                
                                 window.location = "/login/logout";
                             }
                          });
