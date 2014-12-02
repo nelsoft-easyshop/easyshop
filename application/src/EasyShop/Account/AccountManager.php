@@ -149,13 +149,13 @@ class AccountManager
                 if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
                     if(!$this->authenticateByReverseHashing($validatedUsername, $validatedPassword, $member)) {
                         $member = NULL;                        
-                        array_push($errors, ['login' => 'Invalid Username/Password']);  
+                        $errors[] = ['login' => 'Invalid Username/Password'];
                     }
                 }
             }
             else {
                 $member = NULL;
-                array_push($errors, ['login' => 'Invalid Username/Password']);
+                        $errors[] = ['login' => 'Invalid Username/Password'];
             }
 
             if($member !== NULL && $asArray) {
@@ -166,7 +166,7 @@ class AccountManager
 
 
         if($member && ((bool)$member->getIsActive() === false && !$doIgnoreActiveStatus)) {
-            array_push($errors, [   'login' => "Account Deactivated",'id' => $member->getIdMember() ]);
+            $errors[] = ['login' => 'Invalid Username/Password','id' => $member->getIdMember()];
             $member = NULL;                        
         }
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
