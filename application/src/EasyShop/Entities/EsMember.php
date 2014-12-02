@@ -256,7 +256,7 @@ class EsMember
      *
      * @ORM\Column(name="is_active", type="boolean", nullable=false)
      */
-    private $isActive = '0';    
+    private $isActive = '1';    
 
     /**
      * @var \EasyShop\Entities\EsStoreColor
@@ -270,6 +270,7 @@ class EsMember
     
     
     /**
+     *
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -1148,7 +1149,7 @@ class EsMember
     {
         return $this->isActive;
     }    
-    
+
     /**
      * Set storeColor
      *
@@ -1168,5 +1169,6 @@ class EsMember
     {
         return $this->storeColor;
     }    
+
 
 }
