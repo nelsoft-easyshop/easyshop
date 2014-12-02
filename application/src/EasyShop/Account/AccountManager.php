@@ -180,7 +180,7 @@ class AccountManager
         }
 
         if($member && ((bool)$member->getIsActive() === false && !$doIgnoreActiveStatus)) {
-            $errors[] = ['login' => 'Invalid Username/Password','id' => $member->getIdMember()];
+            $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
             $member = NULL;                        
         }
 
