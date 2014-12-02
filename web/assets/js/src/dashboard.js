@@ -921,6 +921,20 @@
         return false;
     });
 
+    $(".order-checkbox").on('change', function() {
+        var $container = $(this).parent().parent().parent().parent().parent().parent();
+        var $checkboxes = $container.find('.order-checkbox');
+        var checkedValues = $checkboxes.filter(':checked').map(function() {
+            return this.value;
+        }).get().join('-');
+        $container.find('.tx_cod').prop('disabled', true);
+        $container.parent().find('input[name=cash_on_delivery]').val('');
+        if ($checkboxes.length == $checkboxes.filter(':checked').length) {
+            $container.find('.tx_cod').prop('disabled', false);
+            $container.parent().find('input[name=cash_on_delivery]').val(checkedValues);
+        }
+    });
+
     $('.transac_response_btn.enabled').on('click', function() {
         var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
         if(!isConfirmed){
