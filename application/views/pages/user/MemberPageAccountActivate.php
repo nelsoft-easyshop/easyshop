@@ -29,7 +29,7 @@
                         Hello there!<br>
 
                         We're really excited that you've decided to reactivate your account with us.<br>
-                        Just follow the instructions below and and you'll be done in a jiffy.<br>
+                        Just fill in the required information below and and you'll be done in a jiffy.<br>
                         </p>
                         <br>
                         <form class="form-horizontal" id="activateAccountForm">
