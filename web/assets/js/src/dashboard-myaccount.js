@@ -14,6 +14,9 @@
             deactivatePassword: {
                 required: true,
                 },
+            deactivateUserName: {
+                required: true,
+                },                
 
          },
          messages:{
@@ -30,15 +33,14 @@
          submitHandler: function(form){
             event.preventDefault();
             var password = $("#deactivatePassword").val();
-            var id = $("#idMember").val();
-
+            var username = $("#deactivateUsername").val();
             var actionGroupChangePass = $('#deactivateActionPanel');    
             var loadingimg = $('#deactivateAccountLoader'); 
             actionGroupChangePass.hide();
             loadingimg.show();
             $.ajax({
                 type: 'post',
-                data: {password:password, id:id, csrfname : csrftoken},
+                data: {username:username, password:password, csrfname : csrftoken},
                 url: "/memberpage/sendDeactivateNotification",
                 success: function(data) {
                     actionGroupChangePass.show();
