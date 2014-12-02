@@ -169,7 +169,7 @@ class AccountManager
             if($member){
                 unset($errors[0]);                
                 if(!(bool)$member->getIsActive()) {
-                    $errors[] = ['login' => 'Oooops! This account has already been deactivated.'];
+                    $errors[] = ['login' => 'This account is currently suspended.'];
                     $member = NULL;    
                 }
                 else {
