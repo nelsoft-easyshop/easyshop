@@ -2066,14 +2066,14 @@ class Memberpage extends MY_Controller
     public function sendDeactivateNotification()
     {
         $member = $this->accountManager
-                                ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);  
+                       ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);  
         if ($member['member']) {
             $authenticatedMember = true;
             if($this->session->userdata('member_id') && ($member["member"]->getIdMember() !== $this->session->userdata('member_id'))) {
                 $result = 'Invalid Username/Password';
                 $authenticatedMember = false;
             }             
-            if($authenticatedMember === true) {
+            if($authenticatedMember) {
                 $this->load->library('encrypt');
                 $result = $this->encrypt->encode($member['member']->getIdMember());
                 $this->load->library('parser');
@@ -2089,7 +2089,8 @@ class Memberpage extends MY_Controller
                 $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
                 $this->emailNotification->setMessage($message);
                 $this->emailNotification->sendMail();
-                $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member['member'], false);
+                $this->em->getRepository('EasyShop\Entities\EsMember')
+                         ->accountActivation($member['member'], false);
             }
         }     
         else {
