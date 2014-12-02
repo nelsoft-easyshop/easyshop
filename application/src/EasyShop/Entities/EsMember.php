@@ -247,7 +247,7 @@ class EsMember
      *
      * @ORM\Column(name="is_active", type="boolean", nullable=false)
      */
-    private $isActive = '0';       
+    private $isActive = '1';       
 
     /**
      *  @var string
