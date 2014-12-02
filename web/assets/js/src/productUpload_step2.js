@@ -1229,7 +1229,7 @@ var heightRatio = 538;
             || currentExtension == 'jpg' 
             || currentExtension == 'png' 
             || currentExtension == 'jpeg') 
-            && currentSize < 5242880){
+            && currentSize < maxImageSize){
            
             $('#crop-image-main > #imageTag').attr('src',targetImage);
             $("<img/>") // Make in memory copy of image to avoid css issues
@@ -1431,7 +1431,7 @@ var heightRatio = 538;
                     primaryPicture = pictureCount;
                 }
 
-                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
+                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < maxImageSize){
                     $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
                         <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
                         <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
@@ -1443,7 +1443,7 @@ var heightRatio = 538;
                     $('.filescnt'+filescnt+' > .removepic').hide();
                 }
                 else{
-                    if(size < 5*1024*1024){
+                    if(size < maxImageSize){
                         errorValues += val + "\n(Invalid file type).\n<br>";
                     }
                     else{
@@ -1665,7 +1665,7 @@ var heightRatio = 538;
         }
 
         if(badIE == false){
-            if(size > 5*1024*1024){
+            if(size > maxImageSize){
                 alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
                 return false;
             }

@@ -5,7 +5,8 @@ if (!defined('BASEPATH'))
 class productUpload extends MY_Controller 
 {
     public $max_file_size_mb;
-    public $img_dimension = array();
+    public $img_dimension = [];
+    public $maxFileSizeInMb;
 
     function __construct()
     { 
@@ -16,6 +17,8 @@ class productUpload extends MY_Controller
         }
 
         $this->max_file_size_mb = 5;
+        $this->maxFileSizeInMb = ($this->max_file_size_mb * 1024) * 1024;
+
         /* Uploaded images dimensions: (w,h) */
         $this->img_dimension['usersize'] = array(1024,768);
         $this->img_dimension['small'] = array(400,535);
@@ -201,6 +204,7 @@ class productUpload extends MY_Controller
             $response['otherCategory'] = $otherCategory; # id is the selected category
             $response['sell'] = true;
             $response['img_max_dimension'] = $this->img_dimension['usersize'];
+            $response['maxImageSize'] = $this->maxFileSizeInMb;
 
             $date = date("Ymd");
             $tempDirectory = './assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
@@ -370,6 +374,7 @@ class productUpload extends MY_Controller
         $response['product_details'] = $product;
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
+        $response['maxImageSize'] = $this->maxFileSizeInMb;
         $date = end(explode('_', explode('/', $path)[3]));
  
         $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
@@ -418,7 +423,7 @@ class productUpload extends MY_Controller
         $filenames_ar = array();
         $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
-        $isCroppable = !empty($coordinates) ? true : false;
+        $isCroppable = !empty($coordinates);
         $error = 0;
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
 
@@ -442,7 +447,7 @@ class productUpload extends MY_Controller
             }
 
             if(isset($_FILES['files']['name'][$key])){
-                if($_FILES['files']['size'][$key] >= ($this->max_file_size_mb * 1024) * 1024){
+                if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb){
                     unset($_FILES['files']['name'][$key]);
                     unset($_FILES['files']['type'][$key]);
                     unset($_FILES['files']['tmp_name'][$key]);
@@ -551,7 +556,7 @@ class productUpload extends MY_Controller
         $memberId =  $this->session->userdata('member_id');
         $filename =  $this->input->post('pictureName');
         $coordinates =  $this->input->post('coordinates');
-        $isCroppable = !empty($coordinates) ? true : false;
+        $isCroppable = !empty($coordinates);
         $date = date("Ymd");
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
         $fileExtension = explode('.', $filename);

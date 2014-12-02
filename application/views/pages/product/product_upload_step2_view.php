@@ -529,6 +529,7 @@
     var tempDirectory = '<?=(isset($tempdirectory)) ? $tempdirectory : '' ;?>';
     var combinationcnt = '<?=$cmbcounter;?>';  
     var isEdit =  '<?=(isset($is_edit)) ? "1" : "0" ?>';
+    var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
 <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
