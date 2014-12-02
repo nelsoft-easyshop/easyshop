@@ -1870,13 +1870,28 @@ class Memberpage extends MY_Controller
             'isHyperLink' => false,
             'currentPage' => $page
         ];
-
+        $transactionNumber = '';
+        $paymentMethod = '';
+        if (trim($this->input->get('searchFor')) === 'transactionNumber') {
+            $transactionNumber =  trim( (string) $this->input->get('value'));
+        }
+        if (trim($this->input->get('searchFor')) === 'paymentMethod') {
+            $paymentMethod =  trim( (int) $this->input->get('value'));
+        }
         switch ($requestType) {
             case 'ongoing-bought':
                 $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
-                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $ongoingBoughtTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1886,7 +1901,15 @@ class Memberpage extends MY_Controller
                 $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
-                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                             $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $ongoingSoldTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1896,7 +1919,15 @@ class Memberpage extends MY_Controller
                 $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
-                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $completeBoughtTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1906,7 +1937,15 @@ class Memberpage extends MY_Controller
                 $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
-                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $completeSoldTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];

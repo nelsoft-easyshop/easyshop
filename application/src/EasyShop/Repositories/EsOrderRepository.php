@@ -21,12 +21,18 @@ class EsOrderRepository extends EntityRepository
      * @param bool $isOngoing
      * @param int $offset
      * @param int $perPage
+     * @param $transactionNumber
+     * @param $paymentMethod
      * @return array
      */
-    public function getUserSoldTransactions($userId, $isOngoing = true, $offset = 0, $perPage = 10)
+    public function getUserSoldTransactions($userId, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber = '', $paymentMethod = '')
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
+        if (!$paymentMethod || trim($paymentMethod) === 'all') {
+            $paymentMethod = $EsPaymentMethodRepository->getPaymentMethods();
+        }
+
         $qb = $this->_em->createQueryBuilder();
         $queryBuilder =
             $qb->select("IDENTITY(o.orderStatus) as orderStatus,
@@ -83,13 +89,15 @@ class EsOrderRepository extends EntityRepository
                 ->andWhere('o.orderStatus != :statusVoid')
                 ->andWhere('o.orderStatus IN (:orderStatus)')
                 ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+                ->andWhere('o.invoiceNo LIKE :transNum ')
                 ->orderBy('o.idOrder', "desc")
                 ->setParameter('sellerId', $userId)
                 ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                 ->setParameter('statusVoid', orderStatus::STATUS_VOID)
                 ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
                 ->setParameter('orderStatus', $orderStatus)
-                ->setParameter('paymentMethodLists', $EsPaymentMethodRepository->getPaymentMethods())
+                ->setParameter('transNum', '%' . $transactionNumber . '%')
+                ->setParameter('paymentMethodLists', $paymentMethod)
                 ->setFirstResult($offset)
                 ->setMaxResults($perPage)
                 ->getQuery();
@@ -103,13 +111,18 @@ class EsOrderRepository extends EntityRepository
      * @param bool $isOngoing
      * @param int $offset
      * @param int $perPage
+     * @param $transactionNumber
+     * @param $paymentMethod
      * @return array
      */
-    public function getUserBoughtTransactions($uid, $isOngoing = true, $offset = 0, $perPage = 10)
+    public function getUserBoughtTransactions($uid, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber ='', $paymentMethod = '')
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
         $qb = $this->_em->createQueryBuilder();
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
+        if (!$paymentMethod || trim($paymentMethod) === 'all') {
+            $paymentMethod = $EsPaymentMethodRepository->getPaymentMethods();
+        }
 
         $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                                             o.isFlag as isFlag, 
@@ -141,12 +154,14 @@ class EsOrderRepository extends EntityRepository
                         ->andWhere('o.orderStatus IN(:orderStatus)')
                         ->andWhere('o.buyer = :buyer_id')
                         ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+                        ->andWhere('o.invoiceNo LIKE :transNum ')
                         ->orderBy('o.idOrder', "desc")
                         ->setParameter('buyer_id', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                         ->setParameter('orderStatus', $orderStatus)
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
-                        ->setParameter('paymentMethodLists', explode(",",(implode(",",$EsPaymentMethodRepository->getPaymentMethods()))))
+                        ->setParameter('paymentMethodLists', $paymentMethod)
+                        ->setParameter('transNum', '%' . $transactionNumber . '%')
                         ->setFirstResult($offset)
                         ->setMaxResults($perPage)
                         ->getQuery();

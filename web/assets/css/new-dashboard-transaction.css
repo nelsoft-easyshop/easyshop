@@ -291,6 +291,44 @@ label.css-label {
     text-transform: uppercase;
     width: 100%;
 }
+input[type=checkbox].css-checkbox {
+    border:0;
+    clip: rect(0 0 0 0);
+    height:1px;
+    left:-1000px;
+    margin:-1px;
+    overflow: hidden;
+    padding:0;
+    position:absolute;
+    width:1px;
+    z-index:-1000;
+}
+
+input[type=checkbox].css-checkbox + label.css-label {
+    background-repeat:no-repeat;
+    background-position: 0 0;
+    cursor:pointer;
+    display:inline-block;
+    font-size:33px;
+    height:33px;
+    line-height:33px;
+    margin-left: 12px;
+    padding-left:30px;
+    vertical-align:middle;
+}
+
+input[type=checkbox].css-checkbox:checked + label.css-label {
+    background-position: 0 -33px;
+}
+label.css-label {
+    background-image:url(../images/sprites/css-checkbox.png);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 .transaction-right-content .btn.btn-default-3 {
     border-left: 0;
