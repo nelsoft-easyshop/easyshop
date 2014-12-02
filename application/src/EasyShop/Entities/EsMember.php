@@ -243,6 +243,13 @@ class EsMember
     private $isHideBanner = '0';
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     */
+    private $isActive = '1';       
+
+    /**
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -1073,4 +1080,26 @@ class EsMember
         return $this->isHideBanner;
     }
 
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return EsMember
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }    
 }
