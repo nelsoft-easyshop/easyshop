@@ -26,10 +26,10 @@
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
                     <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                    <button class="btn btn-default-3">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printBuyTransactions">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
-                    <button class="btn btn-default-3">
+                    <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions">
                         <i class="icon-category"></i> <span>Export CSV</span>
                     </button>
                 </div>
@@ -60,10 +60,10 @@
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
                     <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printSellTransactions">
                         <i class="icon-fax"></i> Print
                     </button>
-                    <button class="btn btn-setting-edit-btn">
+                    <button class="btn btn-setting-edit-btn exportTransactions" data-url="/memberpage/exportSellTransactions">
                         <i class="icon-category"></i> Export CSV
                     </button>
                 </div>
@@ -99,12 +99,6 @@
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
                 <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
             </div>
             <div class="col-md-3 text-right">
                 <span>Sort By:</span>
@@ -133,12 +127,6 @@
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
                 <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
             </div>
             <div class="col-md-3 text-right">
                 <span>Sort By:</span>

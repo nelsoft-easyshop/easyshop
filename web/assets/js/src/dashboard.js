@@ -983,6 +983,29 @@
 
     });
 
+    $('#on-going-transaction').on('click','.exportTransactions', function(){
+        var url = $(this).data("url");
+        document.location.href = url;
+    });
+
+    $('#on-going-transaction').on('click','.printTransactions', function() {
+        var url = $(this).data("url");
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function(json) {
+                var originalContents = $(document.body).html();
+                $(document.body).html(json);
+                window.print();
+                location.reload();
+            },
+            error: function(e) {
+                alert("Action failed, please try again");
+            }
+        });
+    });
+
     function htmlDecode(value) {
         if (value) {
             return $('<div />').html(value).text();

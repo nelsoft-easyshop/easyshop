@@ -353,7 +353,7 @@ class Memberpage extends MY_Controller
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
             }
         }  
 
@@ -361,18 +361,18 @@ class Memberpage extends MY_Controller
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=soldtransactions.csv');
         $output = fopen('php://output', 'w');
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Buyers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -414,18 +414,18 @@ class Memberpage extends MY_Controller
         header('Content-Disposition: attachment; filename=boughttransactions.csv');
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Sellers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -462,7 +462,8 @@ class Memberpage extends MY_Controller
             if(count($attr) > 0) {
                 array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
-        }        
+        }
+
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
@@ -480,12 +481,11 @@ class Memberpage extends MY_Controller
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
-                    array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                    array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
                 }
             }
            
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
-    
     }
     
 
