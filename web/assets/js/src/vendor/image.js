@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 	
 	$('.lightbox_trigger').click(function(e) {
-		
+		$('body').css("overflow", "hidden");
 		//prevent default action (hyperlink)
 		e.preventDefault();
 		
@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
 			//create HTML markup for lightbox window
 			var lightbox = 
 			'<div id="lightbox">' +
-				'<p>Click to close</p>' +
+				'<p class="closeLightbox"><i class="fa fa-times fa-2x"></i></p>' +
 				'<div id="content">' + //insert clicked link's href into img src
 					'<img src="' + image_href +'" />' +
 				'</div>' +	
@@ -43,8 +43,9 @@ jQuery(document).ready(function($) {
 	});
 	
 	//Click anywhere on the page to get rid of lightbox window
-	$(document).on('click','#lightbox', function() { //must use live, as the lightbox element is inserted into the DOM
+	$(document).on('click','.closeLightbox', function() { //must use live, as the lightbox element is inserted into the DOM
 		$('#lightbox').hide();
+        $('body').css("overflow", "auto");
 	});
 
 });

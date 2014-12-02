@@ -11,7 +11,6 @@ class productUpload extends MY_Controller
     { 
         parent::__construct(); 
         $this->load->model("product_model");
-        $this->load->helper('htmlpurifier');
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
             redirect('/login', 'refresh');
         }
@@ -1408,6 +1407,7 @@ class productUpload extends MY_Controller
      */
     public function finishProductPreview()
     {
+        header('Content-Type:text/html; charset=UTF-8');
         $productRepository = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
         $productImageRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
 
