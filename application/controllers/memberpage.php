@@ -2065,29 +2065,32 @@ class Memberpage extends MY_Controller
      */
     public function sendDeactivateNotification()
     {
-
-        $doesMemberExists = $this->accountManager
-                                ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);
-        if (!$doesMemberExists['member']) {
-            $result = 'Invalid Username/Password';
-        }
-        else {
-            $this->load->library('encrypt');            
-            $result = $this->encrypt->encode($doesMemberExists['member']->getIdMember());
+        $member = $this->accountManager
+                                ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);  
+        if ($member['member']) {
+            if($this->session->userdata('member_id') && ($member["member"]->getIdMember() !== $this->session->userdata('member_id'))) {
+                $result = 'Invalid Username/Password';
+            }             
+            $this->load->library('encrypt');
+            $result = $this->encrypt->encode($member['member']->getIdMember());
             $this->load->library('parser');
             $parseData = array(
-                'username' => $doesMemberExists['member']->getUsername(),
-                'hash' => $this->encrypt->encode($doesMemberExists['member']->getIdMember()),
+                'username' => $member['member']->getUsername(),
+                'hash' => $this->encrypt->encode($member['member']->getIdMember()),
                 'site_url' => site_url('memberpage/showActivateAccount')
             );        
 
             $this->emailNotification = $this->serviceContainer['email_notification'];
             $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
-            $this->emailNotification->setRecipient($doesMemberExists['member']->getEmail());
+            $this->emailNotification->setRecipient($member['member']->getEmail());
             $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
             $this->emailNotification->setMessage($message);
             $this->emailNotification->sendMail();
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($doesMemberExists['member'], false);
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member['member'], false);
+
+        }     
+        else {
+            $result = 'Invalid Username/Password';
         }
         
         echo json_encode($result);
