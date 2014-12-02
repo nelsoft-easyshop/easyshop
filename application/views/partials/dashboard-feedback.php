@@ -119,7 +119,7 @@
                                 </table>
                             </div>
                         </div>
-                         <p class="feedback-content"><i>"<?=html_escape($feedback['feedbMsg']); ?>"</i></p>
+                         <p class="feedback-content" style="text-align: left;"><i>"<?=html_escape($feedback['feedbMsg']); ?>"</i></p>
                          <p class="feedback-whom">&mdash; from <a href="/<?=html_escape($feedback['reviewerSlug']); ?>"><?=html_escape($feedback['reviewerUsername']); ?></a></p>
                    </div>
                     
