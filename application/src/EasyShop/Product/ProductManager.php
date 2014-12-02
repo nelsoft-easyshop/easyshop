@@ -137,6 +137,10 @@ class ProductManager
         else{
             return false;
         }
+
+        if(!$product){
+            return false;
+        }
         
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                               ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
