@@ -26,10 +26,10 @@
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
                     <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
-                    <button class="btn btn-default-3">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printBuyTransactions">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
-                    <button class="btn btn-default-3">
+                    <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions">
                         <i class="icon-category"></i> <span>Export CSV</span>
                     </button>
                 </div>
@@ -49,7 +49,10 @@
                 <?=$transactionInfo['ongoing']['bought']?>
             </div>
         <?PHP else : ?>
-            You have not bought any items yet.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> You have not bought any items yet.
+            </div>
         <?PHP endif; ?>
     </div>
 <!---------------------------------------------------------------ongoing sold starts here---------------------------------------------------------------->
@@ -62,10 +65,10 @@
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
                     <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printSellTransactions">
                         <i class="icon-fax"></i> Print
                     </button>
-                    <button class="btn btn-setting-edit-btn">
+                    <button class="btn btn-setting-edit-btn exportTransactions" data-url="/memberpage/exportSellTransactions">
                         <i class="icon-category"></i> Export CSV
                     </button>
                 </div>
@@ -85,7 +88,10 @@
             <?=$transactionInfo['ongoing']['sold']?>
         </div>
         <?PHP else : ?>
-            You have not sold any items yet.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> You have not sold any items yet.
+            </div>
         <?PHP endif; ?>
     </div>
 
@@ -103,12 +109,6 @@
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
             </div>
             <div class="col-md-3 text-right">
                 <span>Payment Filter:</span>
@@ -126,7 +126,10 @@
             <?=$transactionInfo['complete']['bought']?>
         </div>
         <?PHP else : ?>
-            There are no transactions for this category.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> There are no transactions for this category.
+            </div>
         <?PHP endif; ?>
     </div>
 <!---------------------------------------------------------------completed sold starts here---------------------------------------------------------------->
@@ -139,12 +142,6 @@
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
             </div>
             <div class="col-md-3 text-right">
                 <span>Payment Filter:</span>
@@ -162,7 +159,9 @@
             <?=$transactionInfo['complete']['sold']?>
         </div>
         <?PHP else : ?>
-            There are no transactions for this category.
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> There are no transactions for this category.
         <?PHP endif; ?>
     </div>
 </div>
