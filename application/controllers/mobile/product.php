@@ -44,6 +44,7 @@ class Product extends MY_Controller {
 
             $buttonLabel = "Add to Cart";
             if(count($shippingDetails) === 0 && (int)$product->getIsMeetup() === 1){
+                $isButtonClickable = false;
                 $buttonLabel = "Item is listed as an ad only. *";
             }
             elseif((int)$product->getPromoType() === \EasyShop\Entities\EsPromo::BUY_AT_ZERO 
