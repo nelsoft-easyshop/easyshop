@@ -76,7 +76,8 @@ class ApiFormatter
      */
     public function formatItem($productId, $isItemView = false)
     {
-        $product = $this->productManager->getProductDetails($productId);
+        $productManager = $this->productManager;
+        $product = $productManager->getProductDetails($productId);
 
         $productDetails = [
                 'name' => utf8_encode($product->getName()),
@@ -353,6 +354,9 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
+        $cartData = $this->cartManager->getValidatedCartContents($memberId);
+
+        return $cartData;
     }
 }
  
