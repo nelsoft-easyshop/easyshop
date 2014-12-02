@@ -14,7 +14,7 @@
         $('#login_error').hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');  
-        var password = $("#login_username").val();
+        var username = $("#login_username").val();
         var password = $("#login_password").val();
         $.ajax({
             type: 'post',
