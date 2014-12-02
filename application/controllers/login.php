@@ -100,10 +100,8 @@ class Login extends MY_Controller
             $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
         }
         else{
-            $dataval = array('login_username' => $uname, 'login_password' => $pass);
-            //$row = $this->user_model->verify_member($dataval);                 
+            $dataval = array('login_username' => $uname, 'login_password' => $pass);             
             $row = $this->accountManager->authenticateMember($uname, $pass);
-            #if user is valid: member i, usersession and cart_contents will be set in the session
 
             if (!empty($row["member"])) {
             
@@ -115,12 +113,8 @@ class Login extends MY_Controller
                 $cartManager = $this->serviceContainer['cart_manager'];
                 $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
                 $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
-            
-
                 $cartData = $cartManager->synchCart($user->getIdMember());
-                
-                
-            
+
                 $this->session->set_userdata('member_id', $row['o_memberid']);
                 $this->session->set_userdata('usersession', $row['o_session']);
                 $this->session->set_userdata('cart_contents', $cartData);
@@ -139,7 +133,7 @@ class Login extends MY_Controller
                 /**
                  * Register authenticated session
                  */
-                $user->setFailedLoginCount(0);
+                $user->setUsersession($row["o_session"] );
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)
                                      ->setSession($session);
