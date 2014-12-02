@@ -168,7 +168,7 @@ class AccountManager
             
             if($member){
                 unset($errors[0]);                
-                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                if(!(bool)$member->getIsActive()) {
                     $errors[] = ['login' => 'Oooops! This account has already been deactivated.','id' => $member->getIdMember()];
                     $member = NULL;    
                 }
