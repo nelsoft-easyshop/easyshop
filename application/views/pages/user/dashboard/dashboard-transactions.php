@@ -25,20 +25,22 @@
         <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
-                    <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                    <button class="btn btn-default-3">
+                    <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printBuyTransactions">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
-                    <button class="btn btn-default-3">
+                    <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions">
                         <i class="icon-category"></i> <span>Export CSV</span>
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
-                    <span>Sort By:</span>
-                    <select class="select-filter-item">
-                        <option selected=selected>Last Modified</option>
-                        <option>2</option>
-                        <option>3</option>
+                    <span>Payment Filter:</span>
+                    <select class="select-filter-item payment-filter" data="ongoing-bought">
+                        <option value="all" selected=selected>Show all</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -62,20 +64,22 @@
         <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
             <div class="mrgn-top-20 mrgn-bttm-25 row">
                 <div class="col-md-9">
-                    <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn">
+                    <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
+                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printSellTransactions">
                         <i class="icon-fax"></i> Print
                     </button>
-                    <button class="btn btn-setting-edit-btn">
+                    <button class="btn btn-setting-edit-btn exportTransactions" data-url="/memberpage/exportSellTransactions">
                         <i class="icon-category"></i> Export CSV
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
-                    <span>Sort By:</span>
-                    <select class="select-filter-item">
-                        <option selected=selected>Last Modified</option>
-                        <option>2</option>
-                        <option>3</option>
+                    <span>Payment Filter:</span>
+                    <select class="select-filter-item payment-filter" data="ongoing-sold">
+                        <option value="all" selected=selected>Show all</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -104,20 +108,16 @@
         <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
-                <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
+                <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
             </div>
             <div class="col-md-3 text-right">
-                <span>Sort By:</span>
-                <select class="select-filter-item">
-                    <option selected=selected>Last Modified</option>
-                    <option>2</option>
-                    <option>3</option>
+                <span>Payment Filter:</span>
+                <select class="select-filter-item payment-filter" data="complete-bought">
+                    <option value="all" selected=selected>Show all</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>
@@ -141,20 +141,16 @@
         <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
         <div class="mrgn-top-20 mrgn-bttm-25 row">
             <div class="col-md-9">
-                <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                <button class="btn btn-default-3">
-                    <i class="icon-fax"></i> <span>Print</span>
-                </button>
-                <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
-                </button>
+                <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
             </div>
             <div class="col-md-3 text-right">
-                <span>Sort By:</span>
-                <select class="select-filter-item">
-                    <option selected=selected>Last Modified</option>
-                    <option>2</option>
-                    <option>3</option>
+                <span>Payment Filter:</span>
+                <select class="select-filter-item payment-filter" data="complete-sold">
+                    <option value="all" selected=selected>Show all</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>

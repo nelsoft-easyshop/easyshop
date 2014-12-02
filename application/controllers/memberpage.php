@@ -21,6 +21,7 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsOrderStatus;
 
 class Memberpage extends MY_Controller
 {
@@ -70,8 +71,14 @@ class Memberpage extends MY_Controller
         $this->accountManager = $this->serviceContainer['account_manager'];        
         $this->em = $this->serviceContainer['entity_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
+        $this->esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        $this->esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
+        $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
     }
 
+    /**
+     * sample function for qr code generator
+     */
     public function sample()
     {
         $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
@@ -348,7 +355,7 @@ class Memberpage extends MY_Controller
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
             }
         }  
 
@@ -356,18 +363,18 @@ class Memberpage extends MY_Controller
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=soldtransactions.csv');
         $output = fopen('php://output', 'w');
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Buyers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -409,18 +416,18 @@ class Memberpage extends MY_Controller
         header('Content-Disposition: attachment; filename=boughttransactions.csv');
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Sellers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -457,7 +464,8 @@ class Memberpage extends MY_Controller
             if(count($attr) > 0) {
                 array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
-        }        
+        }
+
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
@@ -475,12 +483,11 @@ class Memberpage extends MY_Controller
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
-                    array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                    array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
                 }
             }
            
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
-    
     }
     
 
@@ -685,7 +692,7 @@ class Memberpage extends MY_Controller
     {
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
-            $data = array(
+            $data = [
                 'uid' => $this->session->userdata('member_id'),
                 'for_memberid' => $this->input->post('for_memberid'),
                 'feedb_msg' => $this->input->post('feedback-field'),
@@ -694,45 +701,56 @@ class Memberpage extends MY_Controller
                 'rating1' => $this->input->post('rating1'),
                 'rating2' => $this->input->post('rating2'),
                 'rating3' => $this->input->post('rating3')
-            );
-            
-            // Check if transaction exists based on post details
-            // current user is buyer
-            if($data['feedb_kind'] == 0){
-                $transacData = array(                   
+            ];
+
+            if ( !(bool) $data['feedb_kind']) {
+                $transacData = [
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
-                );
-            // current user is seller
+                ];
             }
-            else if($data['feedb_kind'] == 1){
-                $transacData = array(                   
+            else if ( (bool) $data['feedb_kind']) {
+                $transacData = [
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
                     'order_id' => $data['order_id']
-                );
+                ];
             }
-            $checkTransaction = $this->payment_model->checkTransaction($transacData);
-            
-            // if transaction exists
-            if(count($checkTransaction) > 0){ 
-                // Check if feedback entry already exists
-                $checkFeedback = $this->memberpage_model->checkFeedback($data);
-
-                if(count($checkFeedback) == 0){ // if no feedback entry
-                    $result = $this->memberpage_model->addFeedback($data);
+            $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
+            if ($doesTransactionExists) {
+                $member = $this->esMemberRepo->find($data['uid']);
+                $forMember = $this->esMemberRepo->find($data['for_memberid']);
+                $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                $doesFeedbackExists = $this->esMemberFeedbackRepo
+                                           ->findOneBy([
+                                               'member' => $member,
+                                               'forMemberid' => $forMember,
+                                               'feedbKind' => $data['feedb_kind'],
+                                               'order' => $order
+                                           ]);
+                if (! (bool) $doesFeedbackExists) {
+                    $result = $this->esMemberFeedbackRepo
+                                   ->addFeedback(
+                                       $member,
+                                       $forMember,
+                                       $data['feedb_msg'],
+                                       $data['feedb_kind'],
+                                       $order,
+                                       $data['rating1'],
+                                       $data['rating2'],
+                                       $data['rating3']
+                                   );
                 }
             }
-            
-            echo $result?1:0;
+
+            echo (bool) $result;
         }
         else{
-            echo 0;
+            echo false;
         }
-        
     }
-    
+
     /**
      *  Function used to handle user responses on transactions under Transactions Tab
      *  Forward to seller (status = 1), return to buyer (status = 2), Cash On Delivery (status = 3)
@@ -742,25 +760,25 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function transactionResponse(){
-        $serverResponse = array(
+    public function transactionResponse() {
+        $serverResponse = [
             'result' => 'fail',
             'error' => 'Failed to validate form'
-        );
-        
+        ];
+
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
-        
+
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
-        $imageArray = array(
-            "/assets/images/landingpage/templates/header-img.png"
-            , "/assets/images/appbar.home.png"
-            , "/assets/images/appbar.message.png"
-            , "/assets/images/landingpage/templates/facebook.png"
-            , "/assets/images/landingpage/templates/twitter.png"
-        );
+        $imageArray = [
+            "/assets/images/landingpage/templates/header-img.png",
+            "/assets/images/appbar.home.png",
+            "/assets/images/appbar.message.png",
+            "/assets/images/landingpage/templates/facebook.png",
+            "/assets/images/landingpage/templates/twitter.png"
+        ];
 
         /**
          *  DEFAULT RESPONSE HANDLER
@@ -769,70 +787,73 @@ class Memberpage extends MY_Controller
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
             $memberId = $this->session->userdata('member_id');
 
-            // Check type of response ( if user or seller response )
-            if( $this->input->post('buyer_response') ){
+            if ( $this->input->post('buyer_response') ) {
                 $data['order_product_id'] = $this->input->post('buyer_response');
-                $data['status'] = 1;
+                $data['status'] = EsOrderProductStatus::FORWARD_SELLER;
             }
-            else if( $this->input->post('seller_response') ){
+            else if ( $this->input->post('seller_response') ) {
                 $data['order_product_id'] = $this->input->post('seller_response');
-                $data['status'] = 2;
+                $data['status'] = EsOrderProductStatus::RETURNED_BUYER;
             }
-            else if( $this->input->post('cash_on_delivery') ){
-                $data['order_product_id'] = $this->input->post('cash_on_delivery');
-                $data['status'] = 3;
-            }
-            
-            /** 
-             *  NEXT LINE OF CODE:
-             *  Updates database entries and retrieve update stats and buyer info
-             *  Also checks for data accuracy
-             *  Returns o_success, o_message
-             */
-            $result = $this->payment_model->updateTransactionStatus($data);
-
-            if( $result['o_success'] >= 1 ){
-                // Get order product transaction details
-                $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
-                $parseData['store_link'] = base_url() . $parseData['user_slug'];
-                $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $parseData['facebook'] = $socialMediaLinks["facebook"];
-                $parseData['twitter'] = $socialMediaLinks["twitter"];
-
-                $hasNotif = FALSE;
-                if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
-                    $hasNotif = TRUE;
+            else if ( $this->input->post('cash_on_delivery') ) {
+                $data['status'] = EsOrderProductStatus::CASH_ON_DELIVERY;
+                if (stripos($this->input->post('cash_on_delivery'), '-') === false) {
+                    $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
                 }
-                switch($data['status']){
-                    case 1: // Forward to seller
-                        $emailSubject = $this->lang->line('notification_forwardtoseller');
-                        $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
-                        $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                    case 2: // Return to buyer
-                        $emailSubject = $this->lang->line('notification_returntobuyer');
-                        $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
-                        $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                    case 3: // CoD complete
-                        $emailSubject = $this->lang->line('notification_forwardtoseller');
-                        $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
-                        $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                }
-
-                if($hasNotif){
-                    $emailService->setRecipient($parseData['email'])
-                                 ->setSubject($emailSubject)
-                                 ->setMessage($emailMsg, $imageArray)
-                                 ->sendMail();
-                    $smsService->setMobile($parseData['mobile'])
-                               ->setMessage($smsMsg)
-                               ->sendSms();
+                else {
+                    $productIds = explode('-', $this->input->post('cash_on_delivery'));
+                    $data['order_product_id'] = $productIds;
                 }
             }
+            if (is_array($data['order_product_id'])) {
+                foreach ($data['order_product_id'] as $orderProductId) {
+                    $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
+                    if( $result['o_success'] >= 1 ) {
+                        $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
+                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $parseData['facebook'] = $socialMediaLinks["facebook"];
+                        $parseData['twitter'] = $socialMediaLinks["twitter"];
 
+                        $hasNotif = false;
+                        if (
+                            (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::CASH_ON_DELIVERY
+                        ) {
+                            $hasNotif = true;
+                        }
+                        switch ($data['status']) {
+                            case EsOrderProductStatus::FORWARD_SELLER :
+                                $emailSubject = $this->lang->line('notification_forwardtoseller');
+                                $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
+                                $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                            case EsOrderProductStatus::RETURNED_BUYER :
+                                $emailSubject = $this->lang->line('notification_returntobuyer');
+                                $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
+                                $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                            case EsOrderProductStatus::CASH_ON_DELIVERY :
+                                $emailSubject = $this->lang->line('notification_forwardtoseller');
+                                $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                                $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                        }
+
+                        if($hasNotif){
+                            $emailService->setRecipient($parseData['email'])
+                                         ->setSubject($emailSubject)
+                                         ->setMessage($emailMsg, $imageArray)
+                                         ->sendMail();
+                            $smsService->setMobile($parseData['mobile'])
+                                       ->setMessage($smsMsg)
+                                       ->sendSms();
+                        }
+                    }
+                }
+            }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
             $serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
 
@@ -840,18 +861,20 @@ class Memberpage extends MY_Controller
          *  DRAGONPAY HANDLER
          */
         }
-        else if( $this->input->post('dragonpay') ){
+        else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
-            
-            // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            $txnId = $checkTransaction[0]['transaction_id'];
-            
-            if(count($checkTransaction) == 1){
-                // Check dragonpay transaction status - connects to Dragonpay
-                $dragonpayResult = $this->dragonpay->getStatus($txnId);
-                
-                if($dragonpayResult == 'S'){ // Transaction Complete
+
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                  ->findOneBy([
+                                                      'idOrder' => $data['transaction_num'],
+                                                      'invoiceNo' => $data['invoice_num'],
+                                                      'buyer' => $data['member_id']
+                                                  ]);
+
+            if ( (int) count($getTransaction) === 1) {
+                $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
+
+                if ($dragonpayResult == 'S') {
                     $serverResponse['result'] = 'success';
                     $serverResponse['error'] = '';
                 }
@@ -862,25 +885,28 @@ class Memberpage extends MY_Controller
             else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
-        /**
-         *  BANK DEPOSIT HANDLER
-         */
+            /**
+             *  BANK DEPOSIT HANDLER
+             */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            
-            if( count($checkTransaction) == 1 ){
-                $postData = array(
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                  ->findOneBy([
+                                                      'idOrder' => $data['transaction_num'],
+                                                      'invoiceNo' => $data['invoice_num'],
+                                                      'buyer' => $data['member_id']
+                                                  ]);
+
+            if ( (int) count($getTransaction) === 1 ) {
+                $postData = [
                     'order_id' => $data['transaction_num'],
                     'bank' => $this->input->post('bank'),
                     'ref_num' => $this->input->post('ref_num'),
                     'amount' => preg_replace('/,/', '', $this->input->post('amount')),
                     'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
                     'comment' => $this->input->post('comment')
-                );
+                ];
                 $result = $this->payment_model->addBankDepositDetails($postData);
-                
                 $serverResponse['result'] = $result ? 'success' : 'fail';
                 $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
             }
@@ -890,7 +916,7 @@ class Memberpage extends MY_Controller
         }
         echo json_encode($serverResponse);
     }
-    
+
     /**
      *  Used when adding Shipping Comments under Transactions Tab
      *
@@ -900,12 +926,12 @@ class Memberpage extends MY_Controller
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
-        
+
         $em = $this->serviceContainer['entity_manager'];
         $emailService = $this->serviceContainer['email_notification'];
 
         if( $this->form_validation->run('addShippingComment') ){
-            $postData = array(
+            $postData = [
                 'comment' => $this->input->post('comment'),
                 'order_product' => $this->input->post('order_product'),
                 'member_id' => $this->session->userdata('member_id'),
@@ -914,33 +940,30 @@ class Memberpage extends MY_Controller
                 'tracking_num' => $this->input->post('tracking_num'),
                 'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-            );
+            ];
 
             $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
             $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
-            $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
-                                      ->findOneBy(["idOrderProduct" => $postData['order_product'],
-                                                 "seller" => $memberEntity,
-                                                 "order" => $orderEntity
+            $orderProductEntity  = $this->esOrderProductRepo
+                                        ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                            "seller" => $memberEntity,
+                                            "order" => $orderEntity
                                         ]);
             $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                        ->findOneBy(["orderProduct" => $orderProductEntity,
-                                                    "member" => $memberEntity
-                                                    ]);
+                ->findOneBy(["orderProduct" => $orderProductEntity,
+                    "member" => $memberEntity
+                ]);
 
             if( count($shippingCommentEntity) === 1 ){
                 $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
                                            ->getExactShippingComment($postData);
             }
 
-            // If order product entry exists, insert/update comment
             if( count($orderProductEntity) === 1 ){
                 $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
                 $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
                 $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
 
-                // If no previous entry of exact shipping detail && successful insert in database,
-                // queue email notification
                 if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
                     $buyerEntity = $orderEntity->getBuyer();
                     $buyerEmail = $buyerEntity->getEmail();
@@ -953,19 +976,19 @@ class Memberpage extends MY_Controller
 
                     $parseData = $postData;
                     $socialMediaLinks = $this->getSocialMediaLinks();
-                    $parseData = array_merge($parseData, array(
-                            "seller" => $memberEntity->getUsername(),
-                            "store_link" => base_url() . $memberEntity->getSlug(),
-                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
-                            "buyer" => $buyerEntity->getUsername(),
-                            "invoice" => $orderEntity->getInvoiceNo(),
-                            "product_name" => $orderProductEntity->getProduct()->getName(),
-                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
-                            "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"]
-                        ));
-                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
+                    $parseData = array_merge($parseData, [
+                        "seller" => $memberEntity->getUsername(),
+                        "store_link" => base_url() . $memberEntity->getSlug(),
+                        "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
+                        "buyer" => $buyerEntity->getUsername(),
+                        "invoice" => $orderEntity->getInvoiceNo(),
+                        "product_name" => $orderProductEntity->getProduct()->getName(),
+                        "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
+                        "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
+                        "facebook" => $socialMediaLinks["facebook"],
+                        "twitter" => $socialMediaLinks["twitter"]
+                    ]);
+                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
 
                     $emailService->setRecipient($buyerEmail)
                                  ->setSubject($buyerEmailSubject)
@@ -978,10 +1001,10 @@ class Memberpage extends MY_Controller
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
             }
         }
-        
+
         echo json_encode($serverResponse);
     }
-    
+
     /**
      *  Used for the Reject Item functionality under Transactions Tab
      *  Returns json encoded success or fail with error message
@@ -990,37 +1013,53 @@ class Memberpage extends MY_Controller
      */
     public function rejectItem()
     {
-        $data = array(
+        $data = [
             'order_product' => $this->input->post('order_product'),
             'transact_num' => $this->input->post('transact_num'),
             'member_id' => $this->input->post('seller_id'),
             'method' => $this->input->post('method')
-        );
-        
-        $serverResponse = array(
+        ];
+
+        $serverResponse = [
             'result' => 'fail',
             'error' => 'Transaction does not exist.'
-        );
-        
-        $result = $this->payment_model->checkOrderProductBasic($data);
-        
-        if( count($result) == 1 ){
-            $dbresult = $this->payment_model->responseReject($data);
-            if($dbresult){
-                $historyData['order_product_id'] = $data['order_product'];
-                $historyData['order_product_status'] = 99;
-                if($data['method'] === 'reject'){
+        ];
+
+        $checkOrderProductBasic = $this->esOrderProductRepo
+                                       ->findOneBy([
+                                           'idOrderProduct' => $data['order_product'],
+                                           'order' => $data['transact_num'],
+                                           'seller' => $data['member_id']
+                                       ]);
+
+        if ($checkOrderProductBasic) {
+            $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
+            $seller = $this->esMemberRepo->find($data['member_id']);
+            $esOrderProduct = $this->esOrderProductRepo
+                                   ->findOneBy([
+                                       'idOrderProduct' => $data['order_product'],
+                                       'order' => $order,
+                                       'seller' => $seller
+                                   ]);
+            $isReject = $data['method'] === "reject";
+            $rejectTransaction = $this->esOrderProductRepo->updateIsReject($isReject, $esOrderProduct);
+
+            if ( (bool) $rejectTransaction) {
+                $historyData['order_product_id'] = $this->esOrderProductRepo->find($data['order_product']);
+                if ($data['method'] === 'reject') {
                     $historyData['comment'] = 'REJECTED';
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::STATUS_REJECT);
                 }
-                else if($data['method'] === 'unreject'){
+                else if ($data['method'] === 'unreject') {
                     $historyData['comment'] = 'UNREJECTED';
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::ON_GOING);
                 }
-                $this->payment_model->addOrderProductHistory($historyData);
+                $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($historyData['order_product_id'], $historyData['order_product_status'], $historyData['comment']);
             }
-            $serverResponse['result'] = $dbresult ? 'success':'fail';
-            $serverResponse['error'] = $dbresult ? '':'Failed to update database.';
+            $serverResponse['result'] = $rejectTransaction ? 'success' : 'fail';
+            $serverResponse['error'] = $rejectTransaction ? '' : 'Failed to update database.';
         }
-        
+
         echo json_encode($serverResponse);
     }
 
@@ -1827,13 +1866,28 @@ class Memberpage extends MY_Controller
             'isHyperLink' => false,
             'currentPage' => $page
         ];
-
+        $transactionNumber = '';
+        $paymentMethod = '';
+        if (trim($this->input->get('searchFor')) === 'transactionNumber') {
+            $transactionNumber =  trim( (string) $this->input->get('value'));
+        }
+        if (trim($this->input->get('searchFor')) === 'paymentMethod') {
+            $paymentMethod =  trim( (int) $this->input->get('value'));
+        }
         switch ($requestType) {
             case 'ongoing-bought':
                 $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
-                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $ongoingBoughtTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1843,7 +1897,15 @@ class Memberpage extends MY_Controller
                 $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
-                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                             $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $ongoingSoldTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1853,7 +1915,15 @@ class Memberpage extends MY_Controller
                 $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
-                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $completeBoughtTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
@@ -1863,7 +1933,15 @@ class Memberpage extends MY_Controller
                 $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
-                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
                     'count' => $completeSoldTransactionsCount,
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
