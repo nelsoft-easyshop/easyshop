@@ -73,7 +73,7 @@ class CartManager
     {
         $product = $this->productManager->getProductDetails($productId);
         
-        if(!$product){
+        if(!$product || (int)$product->getIsDraft() !== 0 || (int)$product->getIsDelete() !== 0 ){
             return false;
         }
 
@@ -265,6 +265,7 @@ class CartManager
         $isSuccessful = false;
         $quantityToInsert = $quantity;
         $cartContents = $this->cart->getContents(); 
+        
         $validationResult = $this->validateSingleCartContent($productId,$option,$quantityToInsert);
         
         if(!$validationResult){
@@ -371,8 +372,7 @@ class CartManager
     public function synchCart($memberId)
     {
         $userCartData = unserialize($this->em->find('EasyShop\Entities\EsMember', ['idMember' => $memberId])
-                                            ->getUserData());    
-
+                                            ->getUserData());   
         if($userCartData){
             foreach($userCartData as $rowId => $cartItem){
                 if(!isset($cartItem[$this->cart->getIndexName()])){
