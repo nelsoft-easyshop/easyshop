@@ -153,6 +153,18 @@ class ValidationRules
                                 new Assert\Length(['max' => '1024'])
                     ),
             ),
+            'store_setup' => [
+                    'shop_name' =>  [new Assert\NotBlank(),
+                                     new Assert\Length(['min' => '5',
+                                                       'max' => '60']),],
+                    'shop_slug' => [
+                                new Assert\NotBlank(),
+                                new CustomAssert\ContainsAlphanumericUnderscore(),
+                                new Assert\Length(['min' => '3',
+                                                   'max' => '25']),
+                                ],
+        
+            ],
         );
     }
 

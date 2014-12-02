@@ -85,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user_details->profileImage;?>">
+                                                    <img src="<?=$user_details->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user_details->getUsername()); ?>
@@ -404,7 +404,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                 <a class="prevent" href="/login/logout">Logout</a>
                                                             </li>
                                                         </ul>
-                                                        <div class="clear"></div>                                            
+                                                        <div class="clear"></div>
                                                     </div>
                                                 <?php else: ?> 
                                                     <div class="header-link">
@@ -432,7 +432,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="clear"></div>        
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
+
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 

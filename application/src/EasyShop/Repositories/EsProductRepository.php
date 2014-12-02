@@ -4,7 +4,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use EasyShop\Entities\EsProduct; 
+use EasyShop\Entities\EsProduct as EsProduct; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -417,11 +417,13 @@ class EsProductRepository extends EntityRepository
     }    
 
     /**
-     *  Get parent categories(default) of products uploaded by a specific user
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the adjececny list implementation
      *
-     *  @return array
+     * @param integer $memberId
+     * @return mixed
      */
-    public function getUserProductParentCategories($memberId)
+    public function getUserCategoriesUsingAdjacencyList($memberId)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -435,8 +437,131 @@ class EsProductRepository extends EntityRepository
         $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('member_id', $memberId);
+        $uploadsPerCategory = $query->getResult();
+        return $uploadsPerCategory;
+    }
+        
+        
+    /**
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the nested set implementation
+     *
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getUserCategoriesUsingNestedSet($memberId)
+    {
+        $em = $this->_em;
+        $parentCategories = $em->createQueryBuilder()
+                                ->select('n') 
+                                ->from('EasyShop\Entities\EsCategoryNestedSet','n')
+                                ->innerJoin('n.originalCategory', 'c', 'WITH', 'c.idCat != 1 AND c.parent = 1')
+                                ->getQuery()
+                                ->getResult();
+        $mainCategoryList = [];
+        foreach($parentCategories as $category){
+            $categoryId = $category->getOriginalCategory()->getIdCat();
+            $mainCategoryList[$categoryId]['nestedTableLeft'] = $category->getLeft();
+            $mainCategoryList[$categoryId]['nestedTableRight'] = $category->getRight();
+        }                        
+        
+        $count = 1;
+        $wherePartialQuery = '';
+        $casePartialQuery = '';
+        $bindedParameters = [];
 
-        return $query->getResult();
+        $numberOfMainCategories = count($mainCategoryList);
+       
+        $whereClauseCounter = 0;
+        $caseClauseCounter = 0;
+        foreach($mainCategoryList as  $index => $mainCategory){
+            $casePartialQuery .= "WHEN (es_category_nested_set.left > :param".($caseClauseCounter)." AND es_category_nested_set.right < :param".($caseClauseCounter+1).") 
+                                 THEN :param".($caseClauseCounter+2)." "; 
+            $bindedParameters[$caseClauseCounter] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$caseClauseCounter+1] = $mainCategory['nestedTableRight'];
+            $bindedParameters[$caseClauseCounter+2] = $index;
+            $caseClauseCounter += 3;
+            $adjustedIndex = 3*$numberOfMainCategories + $whereClauseCounter;
+            $wherePartialQuery .= " (es_category_nested_set.left > :param".($adjustedIndex+1)." AND es_category_nested_set.right < :param".($adjustedIndex+2).") OR";
+            $bindedParameters[$adjustedIndex+1] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$adjustedIndex+2] = $mainCategory['nestedTableRight'];
+            $whereClauseCounter += 2;
+        }
+        $wherePartialQuery = rtrim($wherePartialQuery, 'OR');
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_id','parent_id');
+        $rsm->addScalarResult('children','children');
+        $sql = "SELECT 
+                    GROUP_CONCAT(es_category_nested_set.original_category_id) as children, 
+                    CASE
+                        ".$casePartialQuery." 
+                    END as parent_id
+                FROM es_category_nested_set
+                WHERE ".$wherePartialQuery." GROUP BY parent_id";
+              
+        $query = $em->createNativeQuery($sql, $rsm);
+        foreach($bindedParameters as $index => $param){
+            $query->setParameter('param'.$index, $param);
+        }
+        $mainCategoryChildrenList = $query->getResult();
+        $reindexedMainCategoryChildrenList = [];
+     
+        foreach($mainCategoryChildrenList as $mainCategory){
+            $reindexedMainCategoryChildrenList[$mainCategory['parent_id']] = $mainCategory;
+        }
+        $mainCategoryChildrenList = $reindexedMainCategoryChildrenList;
+        
+        foreach($mainCategoryList as $categoryId => $mainCategory){
+            if(!isset($mainCategoryChildrenList[$categoryId])){
+                $mainCategoryChildrenList[$categoryId] = ['children' => '', 
+                                                          'parent_id' => $categoryId,
+                                                         ];
+            }
+        } 
+       
+        $casePartialQuery = "";
+        $bindParameters = [];
+        foreach($mainCategoryChildrenList as  $index => $childList){
+            $categoryString =  rtrim($childList['parent_id'].','.$childList['children'],',');
+            $childrenArray = explode(',',$categoryString);
+            $qmarks = implode(',', array_fill(0, count($childrenArray), '?'));
+            $casePartialQuery .= " WHEN es_product.cat_id IN (".$qmarks.") THEN ? "; 
+            $bindParameters = array_merge($bindParameters, $childrenArray);
+            $bindParameters[] = $childList['parent_id'];
+        }
+        
+        $sql = "SELECT count(es_product.id_product) as productCount,
+                CASE
+                    ".$casePartialQuery."
+                    ELSE 1
+                END as parent_id,
+                es_cat.id_cat, 
+                IF(es_cat.id_cat != 1,es_cat.name,'NULL') as name,
+                IF(es_cat.id_cat != 1, es_cat.slug, 'null') as slug,
+                es_cat_img.path as image        
+                FROM es_product 
+                LEFT JOIN es_cat ON es_cat.id_cat = es_product.cat_id
+                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
+                WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
+                GROUP BY es_product.cat_id
+               ";
+
+        $bindParameters[] = $memberId;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('productCount','prd_count');
+        $rsm->addScalarResult('parent_id','parent_cat');
+        $rsm->addScalarResult('id_cat','cat_id');
+        $rsm->addScalarResult('name','p_cat_name');
+        $rsm->addScalarResult('slug','p_cat_slug');
+        $rsm->addScalarResult('image','p_cat_img');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $count = 1;
+        foreach($bindParameters as $param){
+            $query->setParameter($count++, $param);
+        }
+        $uploadsPerCategory = $query->getResult();
+        return $uploadsPerCategory;
     }
 
     /**
@@ -822,6 +947,208 @@ class EsProductRepository extends EntityRepository
         $result = $query->execute();  
         return isset($result[0]) ? $result[0] : NULL;
     }
+
+    /**
+     * Return count users product
+     * @param  integer $memberId  
+     * @param  integer $isDelete
+     * @param  integer $isDraft
+     * @param  string  $searchString
+     * @return integer
+     */
+    public function getUserProductCount($memberId,
+                                        $isDelete = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
+                                        $isDraft = [EsProduct::DELETE,
+                                                    EsProduct::ACTIVE],
+                                        $searchString = "")
+    {
+        $this->em = $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('COUNT(p.idProduct)')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where('p.member = :member_id')
+                     ->setParameter('member_id', $memberId)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        );
+
+        if($searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
+
+        $resultCount = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return $resultCount;
+    }
+
+    /**
+     * Return sold item count of a specific user
+     * @param  integer $memberId
+     * @return integer
+     */
+    public function getUserSoldProductCount($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+            SELECT COUNT(product_id) as count
+            FROM es_order_product
+            WHERE seller_id = :memberId
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    /**
+     * Get all active products of specific user
+     * @param  integer  $memberId
+     * @param  integer $offset
+     * @param  integer $perPage
+     * @return object
+     */
+    public function getUserProducts($memberId,
+                                    $isDelete,
+                                    $isDraft,
+                                    $offset = 0,
+                                    $perPage = 10,
+                                    $searchString = "",
+                                    $orderByField = "p.idProduct")
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('p')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->where(
+                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                        )
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                        )
+                     ->andWhere('p.member = :member_id')
+                     ->setParameter('member_id', $memberId);
+
+        if($searchString){
+            $queryBuilder->andWhere('p.name LIKE :word')
+                         ->setParameter('word', '%'.$searchString.'%');
+        }
+
+        $queryBuilder->orderBy($orderByField,"DESC");
+        $qbStatement = $queryBuilder->setFirstResult($offset)
+                                    ->setMaxResults($perPage)
+                                    ->getQuery();
+        $resultSet = $qbStatement->getResult();
+
+        return $resultSet;
+    }
+
+    /**
+     * Return product average rating of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductAverageRating($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('rating', 'rating');
+
+        $sql = "
+            SELECT AVG(rating) as rating
+            FROM es_product_review
+            WHERE product_id = :product_id
+            AND p_reviewid  = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['rating'];
+    }
+
+    /**
+     * Return total review of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductReviewCount($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = "
+            SELECT COUNT(id_review) as count
+            FROM es_product_review
+            WHERE product_id = :product_id
+            AND p_reviewid  = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['count'];
+    }
+
+    /**
+     * Return product available stock count
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getProductAvailableStocks($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('quantity', 'quantity');
+
+        $sql = "
+            SELECT SUM(quantity) as quantity
+            FROM es_product_item
+            WHERE product_id = :product_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['quantity'];
+    }
+
+    /**
+     * Return sold count of product
+     * @param  integer $productId
+     * @return integer
+     */
+    public function getSoldProductCount($productId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('quantity', 'quantity');
+
+        $sql = "
+            SELECT SUM(order_quantity) as quantity
+            FROM es_order_product
+            WHERE product_id = :product_id
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('product_id', $productId); 
+        $result = $query->getOneOrNullResult();
+
+        return (int) $result['quantity'];
+    }
     
     /**
      * Get product bank and billing information
@@ -920,5 +1247,6 @@ class EsProductRepository extends EntityRepository
         return $result;
     }
 }
+
 
 

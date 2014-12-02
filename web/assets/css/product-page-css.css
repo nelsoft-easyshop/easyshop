@@ -1867,6 +1867,10 @@ body{
 }
 
 @media screen and (max-width : 991px) {
+    .item-name2:hover .tooltip-home{
+        display: none !important;
+    }
+    
     .display-when-desktop {
         display: none;
     }

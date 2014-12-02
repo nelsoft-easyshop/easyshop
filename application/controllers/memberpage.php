@@ -11,6 +11,16 @@ if (!defined('BASEPATH'))
  *  @author Rain Jorque
  *
  */
+
+use EasyShop\Entities\EsMember as EsMember;
+use EasyShop\Entities\EsCat as EsCat;
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsOrderStatus;
+
 class Memberpage extends MY_Controller
 {
 
@@ -20,6 +30,27 @@ class Memberpage extends MY_Controller
      * @var string
      */
     private $contentXmlFile;
+
+    /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $salesPerPage = 10;
+
+    /**
+     * Number of feeds item per page
+     *
+     * @var integer
+     */
+    public $feedbackLimit = 10;
+
+    /**
+     * Number of transaction per page
+     *
+     * @var integer
+     */
+    public $transactionRowCount = 10;
 
     /**
      *  Class Constructor
@@ -32,11 +63,20 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        $this->qrManager = $this->serviceContainer['qr_code_manager'];
+        // $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
+        $this->accountManager = $this->serviceContainer['account_manager'];        
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->transactionManager = $this->serviceContainer['transaction_manager'];
+        $this->esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        $this->esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
+        $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
     }
 
+    /**
+     * sample function for qr code generator
+     */
     public function sample()
     {
         $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
@@ -47,20 +87,77 @@ class Memberpage extends MY_Controller
      *  Class Index. Renders Memberpage
      */
     public function index()
-    {        
+    {
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
         }
-        $data['tab'] = $this->input->get('me');        
+        $data['tab'] = $this->input->get('me');
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
-        $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
-        $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/user/memberpage_view', $data);
-        $this->load->view('templates/footer');
+        if($this->session->userdata('member_id')) {
+            $data['user_details'] = $this->fillUserDetails();
+        }
+        $data['homeContent'] = $this->fillCategoryNavigation();
+        $data['transactionInfo'] = $this->getMemberPageDetails();
+        $data = array_merge($data, $this->fill_header());
+
+        $socialMediaLinks = $this->getSocialMediaLinks();
+        $footerData['facebook'] = $socialMediaLinks["facebook"];
+        $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+        $this->load->view('templates/header_primary', $data);
+        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
+        $this->load->view('templates/footer_primary', $footerData);
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+    }
+
+    /**
+     *  Provides change email functionality
+     *  @return JSON
+     */
+    public function edit_email()
+    {
+        $um = $this->serviceContainer['user_manager'];
+        $memberId = $this->session->userdata('member_id');
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                    ->setMethod('POST')
+                    ->add('email', 'text', array('constraints' => $rules['email']))
+                    ->getForm();    
+        $form->submit([
+            'email' => $this->input->post('email')
+        ]);        
+
+        if($form->isValid()){
+            $formData = $form->getData();
+            $validEmail = (string)$formData['email'];
+            $um->setUser($memberId)
+               ->setEmail($validEmail);
+            $boolResult = $um->save();
+
+            $serverResponse = array(
+                'result' => $boolResult ? 'success' : 'error'
+                , 'error' => $boolResult ? '' : $um->errorInfo()
+            );
+        }
+        else{
+            $serverResponse = array(
+                'result' => 'fail'
+                , 'error' => $formErrorHelper->getFormErrors($form)
+            );
+        }
+
+        echo json_encode($serverResponse);                          
     }
 
     /**
@@ -83,38 +180,29 @@ class Memberpage extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                     ->setMethod('POST')
-                    ->add('nickname', 'text')
                     ->add('fullname', 'text')
                     ->add('gender', 'text')
                     ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
                     ->add('mobile', 'text', array('constraints' => $rules['mobile']))
-                    ->add('email', 'text', array('constraints' => $rules['email']))
                     ->getForm();
 
         $form->submit([
-            'nickname' => $this->input->post('nickname')
-            , 'fullname' => $this->input->post('fullname')
+             'fullname' => $this->input->post('fullname')
             , 'gender' => $this->input->post('gender')
             , 'dateofbirth' => $this->input->post('dateofbirth')
             , 'mobile' => $this->input->post('mobile')
-            , 'email' => $this->input->post('email')
         ]);
 
         if($form->isValid()){
             $formData = $form->getData();
-            $validNickname = (string)$formData['nickname'];
             $validFullname = (string)$formData['fullname'];
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
-            $validEmail = (string)$formData['email'];
-
             $um->setUser($memberId)
                ->setMobile($validMobile)
-               ->setEmail($validEmail)
                ->setMemberMisc([
-                    'setNickname' => $validNickname
-                    , 'setFullname' => $validFullname
+                     'setFullname' => $validFullname
                     , 'setGender' => $validGender
                     , 'setBirthday' => new DateTime($validDateOfBirth)
                     , 'setLastmodifieddate' => new DateTime('now')
@@ -265,7 +353,7 @@ class Memberpage extends MY_Controller
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
             }
         }  
 
@@ -273,18 +361,18 @@ class Memberpage extends MY_Controller
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=soldtransactions.csv');
         $output = fopen('php://output', 'w');
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Buyers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -326,18 +414,18 @@ class Memberpage extends MY_Controller
         header('Content-Disposition: attachment; filename=boughttransactions.csv');
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, array(' Transaction Number '
+        fputcsv($output, [' Transaction Number '
                                 , 'Product Name'
                                 , 'Date of Transaction'
                                 ,'Sellers Name'
                                 ,'Order Quantity'
                                 ,'Payment Method'
                                 ,'Price'
-                                ,'Product Specifications'));    
+                                ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
             if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $key => $attr) {
+                foreach($value["0"]["attributes"] as $attr) {
                      $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
                 }
             }
@@ -374,7 +462,8 @@ class Memberpage extends MY_Controller
             if(count($attr) > 0) {
                 array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
             }
-        }        
+        }
+
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
@@ -392,12 +481,11 @@ class Memberpage extends MY_Controller
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
-                    array_push($soldTransaction["transactions"][$key], array("attributes" => $attr));
+                    array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
                 }
             }
            
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
-    
     }
     
 
@@ -541,63 +629,22 @@ class Memberpage extends MY_Controller
      */
     public function edit_consignee_address()
     {
-        if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-            $uid = $this->session->userdata('member_id');
-            $result = array(false,false);
 
-            $postdata = array(
-                'consignee' => $this->input->post('consignee'),
-                'mobile' => ltrim($this->input->post('c_mobile'), '0'),
-                'telephone' => $this->input->post('c_telephone'),
-                'stateregion' => $this->input->post('c_stateregion'),
-                'city' => $this->input->post('c_city'),
-                'address' => $this->input->post('c_address'),
-                'country' => $this->input->post('c_country'),
-                'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng'),
-                'addresstype' => 1
-            );
-
-            $temp = array(
-                'stateregion' => $this->input->post('cstateregion_orig'),
-                'city' => $this->input->post('ccity_orig'),
-                'address' => $this->input->post('caddress_orig'),
-                'map_lat' => $this->input->post('map_lat'),
-                'map_lng' => $this->input->post('map_lng')
-            );
-
-            if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
-                && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
-                $postdata['lat'] = 0;
-                $postdata['lng'] = 0;
-            }
-
-            $addressID = $this->memberpage_model->getAddress($uid,1)['id_address'];
-            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-
-            if($this->input->post('c_def_address')){
-                $addressID = $this->memberpage_model->getAddress($uid,0)['id_address'];
-                $postdata['addresstype'] = 0;
-                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
-                $data['default_add'] = $this->input->post('c_def_address');
-            }
-            else{
-                $result[1] = true;
-                $data['default_add'] = 'off';
-            }
-
-            $data['result'] = $result[0] && $result[1] ? 'success':'fail';
-            $data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
-
-            $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-
+        if($this->input->post('c_deliver_address_btn')) {
+            $userMgr = $this->serviceContainer['user_manager'];
+            $result = $userMgr->setAddress(
+                    $this->input->post('c_address'),
+                    $this->input->post('c_stateregion'),
+                    $this->input->post('c_city'),
+                    $this->session->userdata('member_id'),
+                    $this->input->post('consignee'),
+                    $this->input->post('c_mobile'),
+                    $this->input->post('c_telephone'),
+                    $this->input->post('temp_lat'),
+                    $this->input->post('temp_lng')
+                );
+            echo json_encode($result);
         }
-        else{
-            $data['result'] = 'fail';
-            $data['errmsg'] = 'Failed to validate form.';
-        }
-
-        $this->output->set_output(json_encode($data));
     }
 
     /**
@@ -652,7 +699,7 @@ class Memberpage extends MY_Controller
     {
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
-            $data = array(
+            $data = [
                 'uid' => $this->session->userdata('member_id'),
                 'for_memberid' => $this->input->post('for_memberid'),
                 'feedb_msg' => $this->input->post('feedback-field'),
@@ -661,45 +708,56 @@ class Memberpage extends MY_Controller
                 'rating1' => $this->input->post('rating1'),
                 'rating2' => $this->input->post('rating2'),
                 'rating3' => $this->input->post('rating3')
-            );
-            
-            // Check if transaction exists based on post details
-            // current user is buyer
-            if($data['feedb_kind'] == 0){
-                $transacData = array(                   
+            ];
+
+            if ( !(bool) $data['feedb_kind']) {
+                $transacData = [
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
-                );
-            // current user is seller
+                ];
             }
-            else if($data['feedb_kind'] == 1){
-                $transacData = array(                   
+            else if ( (bool) $data['feedb_kind']) {
+                $transacData = [
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
                     'order_id' => $data['order_id']
-                );
+                ];
             }
-            $checkTransaction = $this->payment_model->checkTransaction($transacData);
-            
-            // if transaction exists
-            if(count($checkTransaction) > 0){ 
-                // Check if feedback entry already exists
-                $checkFeedback = $this->memberpage_model->checkFeedback($data);
-
-                if(count($checkFeedback) == 0){ // if no feedback entry
-                    $result = $this->memberpage_model->addFeedback($data);
+            $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
+            if ($doesTransactionExists) {
+                $member = $this->esMemberRepo->find($data['uid']);
+                $forMember = $this->esMemberRepo->find($data['for_memberid']);
+                $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                $doesFeedbackExists = $this->esMemberFeedbackRepo
+                                           ->findOneBy([
+                                               'member' => $member,
+                                               'forMemberid' => $forMember,
+                                               'feedbKind' => $data['feedb_kind'],
+                                               'order' => $order
+                                           ]);
+                if (! (bool) $doesFeedbackExists) {
+                    $result = $this->esMemberFeedbackRepo
+                                   ->addFeedback(
+                                       $member,
+                                       $forMember,
+                                       $data['feedb_msg'],
+                                       $data['feedb_kind'],
+                                       $order,
+                                       $data['rating1'],
+                                       $data['rating2'],
+                                       $data['rating3']
+                                   );
                 }
             }
-            
-            echo $result?1:0;
+
+            echo (bool) $result;
         }
         else{
-            echo 0;
+            echo false;
         }
-        
     }
-    
+
     /**
      *  Function used to handle user responses on transactions under Transactions Tab
      *  Forward to seller (status = 1), return to buyer (status = 2), Cash On Delivery (status = 3)
@@ -709,25 +767,25 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function transactionResponse(){
-        $serverResponse = array(
+    public function transactionResponse() {
+        $serverResponse = [
             'result' => 'fail',
             'error' => 'Failed to validate form'
-        );
-        
+        ];
+
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
-        
+
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
-        $imageArray = array(
-            "/assets/images/landingpage/templates/header-img.png"
-            , "/assets/images/appbar.home.png"
-            , "/assets/images/appbar.message.png"
-            , "/assets/images/landingpage/templates/facebook.png"
-            , "/assets/images/landingpage/templates/twitter.png"
-        );
+        $imageArray = [
+            "/assets/images/landingpage/templates/header-img.png",
+            "/assets/images/appbar.home.png",
+            "/assets/images/appbar.message.png",
+            "/assets/images/landingpage/templates/facebook.png",
+            "/assets/images/landingpage/templates/twitter.png"
+        ];
 
         /**
          *  DEFAULT RESPONSE HANDLER
@@ -736,70 +794,73 @@ class Memberpage extends MY_Controller
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
             $memberId = $this->session->userdata('member_id');
 
-            // Check type of response ( if user or seller response )
-            if( $this->input->post('buyer_response') ){
+            if ( $this->input->post('buyer_response') ) {
                 $data['order_product_id'] = $this->input->post('buyer_response');
-                $data['status'] = 1;
+                $data['status'] = EsOrderProductStatus::FORWARD_SELLER;
             }
-            else if( $this->input->post('seller_response') ){
+            else if ( $this->input->post('seller_response') ) {
                 $data['order_product_id'] = $this->input->post('seller_response');
-                $data['status'] = 2;
+                $data['status'] = EsOrderProductStatus::RETURNED_BUYER;
             }
-            else if( $this->input->post('cash_on_delivery') ){
-                $data['order_product_id'] = $this->input->post('cash_on_delivery');
-                $data['status'] = 3;
-            }
-            
-            /** 
-             *  NEXT LINE OF CODE:
-             *  Updates database entries and retrieve update stats and buyer info
-             *  Also checks for data accuracy
-             *  Returns o_success, o_message
-             */
-            $result = $this->payment_model->updateTransactionStatus($data);
-
-            if( $result['o_success'] >= 1 ){
-                // Get order product transaction details
-                $parseData = $this->payment_model->getOrderProductTransactionDetails($data);
-                $parseData['store_link'] = base_url() . $parseData['user_slug'];
-                $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $parseData['facebook'] = $socialMediaLinks["facebook"];
-                $parseData['twitter'] = $socialMediaLinks["twitter"];
-
-                $hasNotif = FALSE;
-                if( $data['status'] === 1 || $data['status'] === 2 || $data['status'] === 3 ){
-                    $hasNotif = TRUE;
+            else if ( $this->input->post('cash_on_delivery') ) {
+                $data['status'] = EsOrderProductStatus::CASH_ON_DELIVERY;
+                if (stripos($this->input->post('cash_on_delivery'), '-') === false) {
+                    $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
                 }
-                switch($data['status']){
-                    case 1: // Forward to seller
-                        $emailSubject = $this->lang->line('notification_forwardtoseller');
-                        $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
-                        $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                    case 2: // Return to buyer
-                        $emailSubject = $this->lang->line('notification_returntobuyer');
-                        $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
-                        $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                    case 3: // CoD complete
-                        $emailSubject = $this->lang->line('notification_forwardtoseller');
-                        $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
-                        $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
-                        break;
-                }
-
-                if($hasNotif){
-                    $emailService->setRecipient($parseData['email'])
-                                 ->setSubject($emailSubject)
-                                 ->setMessage($emailMsg, $imageArray)
-                                 ->sendMail();
-                    $smsService->setMobile($parseData['mobile'])
-                               ->setMessage($smsMsg)
-                               ->sendSms();
+                else {
+                    $productIds = explode('-', $this->input->post('cash_on_delivery'));
+                    $data['order_product_id'] = $productIds;
                 }
             }
+            if (is_array($data['order_product_id'])) {
+                foreach ($data['order_product_id'] as $orderProductId) {
+                    $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
+                    if( $result['o_success'] >= 1 ) {
+                        $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
+                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
+                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $parseData['facebook'] = $socialMediaLinks["facebook"];
+                        $parseData['twitter'] = $socialMediaLinks["twitter"];
 
+                        $hasNotif = false;
+                        if (
+                            (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
+                            (int) $data['status'] === (int) EsOrderProductStatus::CASH_ON_DELIVERY
+                        ) {
+                            $hasNotif = true;
+                        }
+                        switch ($data['status']) {
+                            case EsOrderProductStatus::FORWARD_SELLER :
+                                $emailSubject = $this->lang->line('notification_forwardtoseller');
+                                $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
+                                $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                            case EsOrderProductStatus::RETURNED_BUYER :
+                                $emailSubject = $this->lang->line('notification_returntobuyer');
+                                $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
+                                $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                            case EsOrderProductStatus::CASH_ON_DELIVERY :
+                                $emailSubject = $this->lang->line('notification_forwardtoseller');
+                                $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                                $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
+                                break;
+                        }
+
+                        if($hasNotif){
+                            $emailService->setRecipient($parseData['email'])
+                                         ->setSubject($emailSubject)
+                                         ->setMessage($emailMsg, $imageArray)
+                                         ->sendMail();
+                            $smsService->setMobile($parseData['mobile'])
+                                       ->setMessage($smsMsg)
+                                       ->sendSms();
+                        }
+                    }
+                }
+            }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
             $serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
 
@@ -807,18 +868,20 @@ class Memberpage extends MY_Controller
          *  DRAGONPAY HANDLER
          */
         }
-        else if( $this->input->post('dragonpay') ){
+        else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
-            
-            // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            $txnId = $checkTransaction[0]['transaction_id'];
-            
-            if(count($checkTransaction) == 1){
-                // Check dragonpay transaction status - connects to Dragonpay
-                $dragonpayResult = $this->dragonpay->getStatus($txnId);
-                
-                if($dragonpayResult == 'S'){ // Transaction Complete
+
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                  ->findOneBy([
+                                                      'idOrder' => $data['transaction_num'],
+                                                      'invoiceNo' => $data['invoice_num'],
+                                                      'buyer' => $data['member_id']
+                                                  ]);
+
+            if ( (int) count($getTransaction) === 1) {
+                $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
+
+                if ($dragonpayResult == 'S') {
                     $serverResponse['result'] = 'success';
                     $serverResponse['error'] = '';
                 }
@@ -829,25 +892,28 @@ class Memberpage extends MY_Controller
             else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
-        /**
-         *  BANK DEPOSIT HANDLER
-         */
+            /**
+             *  BANK DEPOSIT HANDLER
+             */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            // Fetch transaction data
-            $checkTransaction = $this->payment_model->checkTransactionBasic($data);
-            
-            if( count($checkTransaction) == 1 ){
-                $postData = array(
+            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                                  ->findOneBy([
+                                                      'idOrder' => $data['transaction_num'],
+                                                      'invoiceNo' => $data['invoice_num'],
+                                                      'buyer' => $data['member_id']
+                                                  ]);
+
+            if ( (int) count($getTransaction) === 1 ) {
+                $postData = [
                     'order_id' => $data['transaction_num'],
                     'bank' => $this->input->post('bank'),
                     'ref_num' => $this->input->post('ref_num'),
                     'amount' => preg_replace('/,/', '', $this->input->post('amount')),
                     'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
                     'comment' => $this->input->post('comment')
-                );
+                ];
                 $result = $this->payment_model->addBankDepositDetails($postData);
-                
                 $serverResponse['result'] = $result ? 'success' : 'fail';
                 $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
             }
@@ -857,7 +923,7 @@ class Memberpage extends MY_Controller
         }
         echo json_encode($serverResponse);
     }
-    
+
     /**
      *  Used when adding Shipping Comments under Transactions Tab
      *
@@ -867,12 +933,12 @@ class Memberpage extends MY_Controller
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
-        
+
         $em = $this->serviceContainer['entity_manager'];
         $emailService = $this->serviceContainer['email_notification'];
 
         if( $this->form_validation->run('addShippingComment') ){
-            $postData = array(
+            $postData = [
                 'comment' => $this->input->post('comment'),
                 'order_product' => $this->input->post('order_product'),
                 'member_id' => $this->session->userdata('member_id'),
@@ -881,33 +947,30 @@ class Memberpage extends MY_Controller
                 'tracking_num' => $this->input->post('tracking_num'),
                 'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-            );
+            ];
 
             $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
             $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
-            $orderProductEntity  = $em->getRepository("EasyShop\Entities\EsOrderProduct")
-                                      ->findOneBy(["idOrderProduct" => $postData['order_product'],
-                                                 "seller" => $memberEntity,
-                                                 "order" => $orderEntity
+            $orderProductEntity  = $this->esOrderProductRepo
+                                        ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                            "seller" => $memberEntity,
+                                            "order" => $orderEntity
                                         ]);
             $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                        ->findOneBy(["orderProduct" => $orderProductEntity,
-                                                    "member" => $memberEntity
-                                                    ]);
+                ->findOneBy(["orderProduct" => $orderProductEntity,
+                    "member" => $memberEntity
+                ]);
 
             if( count($shippingCommentEntity) === 1 ){
                 $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
                                            ->getExactShippingComment($postData);
             }
 
-            // If order product entry exists, insert/update comment
             if( count($orderProductEntity) === 1 ){
                 $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
                 $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
                 $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
 
-                // If no previous entry of exact shipping detail && successful insert in database,
-                // queue email notification
                 if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
                     $buyerEntity = $orderEntity->getBuyer();
                     $buyerEmail = $buyerEntity->getEmail();
@@ -920,19 +983,19 @@ class Memberpage extends MY_Controller
 
                     $parseData = $postData;
                     $socialMediaLinks = $this->getSocialMediaLinks();
-                    $parseData = array_merge($parseData, array(
-                            "seller" => $memberEntity->getUsername(),
-                            "store_link" => base_url() . $memberEntity->getSlug(),
-                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
-                            "buyer" => $buyerEntity->getUsername(),
-                            "invoice" => $orderEntity->getInvoiceNo(),
-                            "product_name" => $orderProductEntity->getProduct()->getName(),
-                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ? "" : date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
-                            "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"]
-                        ));
-                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, TRUE);
+                    $parseData = array_merge($parseData, [
+                        "seller" => $memberEntity->getUsername(),
+                        "store_link" => base_url() . $memberEntity->getSlug(),
+                        "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
+                        "buyer" => $buyerEntity->getUsername(),
+                        "invoice" => $orderEntity->getInvoiceNo(),
+                        "product_name" => $orderProductEntity->getProduct()->getName(),
+                        "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
+                        "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
+                        "facebook" => $socialMediaLinks["facebook"],
+                        "twitter" => $socialMediaLinks["twitter"]
+                    ]);
+                    $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
 
                     $emailService->setRecipient($buyerEmail)
                                  ->setSubject($buyerEmailSubject)
@@ -945,10 +1008,10 @@ class Memberpage extends MY_Controller
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
             }
         }
-        
+
         echo json_encode($serverResponse);
     }
-    
+
     /**
      *  Used for the Reject Item functionality under Transactions Tab
      *  Returns json encoded success or fail with error message
@@ -957,37 +1020,53 @@ class Memberpage extends MY_Controller
      */
     public function rejectItem()
     {
-        $data = array(
+        $data = [
             'order_product' => $this->input->post('order_product'),
             'transact_num' => $this->input->post('transact_num'),
             'member_id' => $this->input->post('seller_id'),
             'method' => $this->input->post('method')
-        );
-        
-        $serverResponse = array(
+        ];
+
+        $serverResponse = [
             'result' => 'fail',
             'error' => 'Transaction does not exist.'
-        );
-        
-        $result = $this->payment_model->checkOrderProductBasic($data);
-        
-        if( count($result) == 1 ){
-            $dbresult = $this->payment_model->responseReject($data);
-            if($dbresult){
-                $historyData['order_product_id'] = $data['order_product'];
-                $historyData['order_product_status'] = 99;
-                if($data['method'] === 'reject'){
+        ];
+
+        $checkOrderProductBasic = $this->esOrderProductRepo
+                                       ->findOneBy([
+                                           'idOrderProduct' => $data['order_product'],
+                                           'order' => $data['transact_num'],
+                                           'seller' => $data['member_id']
+                                       ]);
+
+        if ($checkOrderProductBasic) {
+            $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
+            $seller = $this->esMemberRepo->find($data['member_id']);
+            $esOrderProduct = $this->esOrderProductRepo
+                                   ->findOneBy([
+                                       'idOrderProduct' => $data['order_product'],
+                                       'order' => $order,
+                                       'seller' => $seller
+                                   ]);
+            $isReject = $data['method'] === "reject";
+            $rejectTransaction = $this->esOrderProductRepo->updateIsReject($isReject, $esOrderProduct);
+
+            if ( (bool) $rejectTransaction) {
+                $historyData['order_product_id'] = $this->esOrderProductRepo->find($data['order_product']);
+                if ($data['method'] === 'reject') {
                     $historyData['comment'] = 'REJECTED';
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::STATUS_REJECT);
                 }
-                else if($data['method'] === 'unreject'){
+                else if ($data['method'] === 'unreject') {
                     $historyData['comment'] = 'UNREJECTED';
+                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::ON_GOING);
                 }
-                $this->payment_model->addOrderProductHistory($historyData);
+                $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($historyData['order_product_id'], $historyData['order_product_status'], $historyData['comment']);
             }
-            $serverResponse['result'] = $dbresult ? 'success':'fail';
-            $serverResponse['error'] = $dbresult ? '':'Failed to update database.';
+            $serverResponse['result'] = $rejectTransaction ? 'success' : 'fail';
+            $serverResponse['error'] = $rejectTransaction ? '' : 'Failed to update database.';
         }
-        
+
         echo json_encode($serverResponse);
     }
 
@@ -1123,7 +1202,7 @@ class Memberpage extends MY_Controller
     {
         # Require config file for list of controllers (filenames) ; returns $controllerConfig
         require_once(APPPATH . 'config/param/controllers.php');
-    
+
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form.'
@@ -1176,10 +1255,11 @@ class Memberpage extends MY_Controller
      *  @return JSON
      */
     public function verify(){
+
         if($this->input->post('reverify') === 'true'){
             $uid = $this->session->userdata('member_id');
-
             $data = $this->register_model->get_verifcode($uid);
+
 
             if($this->input->post('field') === 'mobile' && $this->input->post('data') == $data['contactno'])
             {
@@ -1210,6 +1290,7 @@ class Memberpage extends MY_Controller
             }
             else if($this->input->post('field') === 'email' && $this->input->post('data') == $data['email'])
             {
+
                 //GENERATE NEW HASH FOR EMAIL VERIFICATION
                 $hash = sha1($this->session->userdata('session_id').time());
                 $confirmation_code = $data['mobilecode'];
@@ -1774,6 +1855,879 @@ class Memberpage extends MY_Controller
 
         echo json_encode($return);
     }
+
+
+    // new implementation starts here
+    /**
+     * Request for transaction details - ajax
+     */
+    public function getTransactionsForPagination()
+    {
+        $page = (int) trim($this->input->get('page'));
+        $requestType = trim($this->input->get('request'));
+        $memberId = $this->session->userdata('member_id');
+        $paginationData = [
+            'isHyperLink' => false,
+            'currentPage' => $page
+        ];
+        $transactionNumber = '';
+        $paymentMethod = '';
+        if (trim($this->input->get('searchFor')) === 'transactionNumber') {
+            $transactionNumber =  trim( (string) $this->input->get('value'));
+        }
+        if (trim($this->input->get('searchFor')) === 'paymentMethod') {
+            $paymentMethod =  trim( (int) $this->input->get('value'));
+        }
+        switch ($requestType) {
+            case 'ongoing-bought':
+                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+                $ongoingBoughtTransactionData = [
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
+                    'count' => $ongoingBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+                break;
+            case 'ongoing-sold':
+                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+                $ongoingSoldTransactionData = [
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              true,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                             $transactionNumber,
+                                              $paymentMethod
+                                          ),
+                    'count' => $ongoingSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+                break;
+            case 'complete-bought':
+                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+                $completeBoughtTransactionsData = [
+                    'transaction' => $this->transactionManager
+                                          ->getBoughtTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
+                    'count' => $completeBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+                break;
+            case 'complete-sold':
+                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+                $completeSoldTransactionsData = [
+                    'transaction' => $this->transactionManager
+                                          ->getSoldTransactionDetails(
+                                              $memberId,
+                                              false,
+                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount,
+                                              $transactionNumber,
+                                              $paymentMethod
+                                          ),
+                    'count' => $completeSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+                break;
+            default:
+                break;
+        }
+
+        $responseData = [
+            'html' => $transactionView,
+        ];
+
+        echo json_encode($responseData);
+    }
+
+    /**
+     * Get all transaction data
+     * @return mixed
+     */
+    private function getTransactionDetails()
+    {
+        $memberId = $this->session->userdata('member_id');
+
+        $transaction = [
+            'ongoing' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, true, 0, $this->transactionRowCount)
+            ],
+            'complete' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false, 0, $this->transactionRowCount)
+            ]
+        ];
+
+        $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+        $ongoingBoughtTransactionData = [
+            'transaction' => $transaction['ongoing']['bought'],
+            'count' => $ongoingBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingBoughtTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+
+        $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+        $ongoingSoldTransactionData = [
+            'transaction' => $transaction['ongoing']['sold'],
+            'count' => $ongoingSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingSoldTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+
+        $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+        $completeBoughtTransactionsData = [
+            'transaction' => $transaction['complete']['bought'],
+            'count' => $completeBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeBoughtTransactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+
+        $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+        $completeSoldTransactionsData = [
+            'transaction' => $transaction['complete']['sold'],
+            'count' => $completeSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeSoldTransactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+
+        $data = [
+            'ongoing' => [
+                'bought' => $ongoingBoughtTransactionView,
+                'sold' => $ongoingSoldTransactionView,
+            ],
+            'complete' => [
+                'bought' => $completeBoughtTransactionView,
+                'sold' => $completeSoldTransactionView,
+            ]
+        ];
+
+        return $data;
+    }
+
+    /**
+     * display dashboard view
+     * @return view
+     */
+    public function newMemberpage()
+    {
+        $userManager = $this->serviceContainer['user_manager'];
+        $productManager = $this->serviceContainer['product_manager'];
+
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+
+        $headerData = $this->fill_header();
+        $memberId = $this->session->userdata('member_id');
+        $feedbackLimit = $this->feedbackLimit;
+        $salesPerPage = $this->salesPerPage;
+
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
+
+        if($member){
+
+            $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
+            $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
+            $stateRegionId = $address[0]->getCountry()->getIdLocation();
+            $cityId = $address[0]->getCity()->getIdLocation();
+            $consigneAddress = $address[0]->getAddress();
+            $addressLatitude  = $address[0]->getLat();
+            $addressLongitude = $address[0]->getLng();
+
+            $paginationData['isHyperLink'] = false;
+
+            $userAvatarImage = $userManager->getUserImage($memberId);
+            $userBannerImage = $userManager->getUserImage($memberId,"banner");
+
+            $userFollowers = $esVendorSubscribeRepo->getFollowers($memberId);
+            $userFollowing = $esVendorSubscribeRepo->getUserFollowing($memberId);
+
+            $userProductCount = $esProductRepo->getUserProductCount($memberId);
+
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::ACTIVE];
+            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userActiveProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
+            $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
+            $activeProductsData = [
+                'products' => $userActiveProducts,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
+
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
+            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userDeletedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions); 
+            $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
+            $deletedProductsData = [
+                'products' => $userDeletedProducts,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
+            
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
+            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userDraftedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
+            $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
+            $draftedProductsData = [
+                'products' => $userDraftedProducts,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
+            
+            $profilePercentage = $userManager->getProfileCompletePercent($member);  
+            $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
+
+            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
+            $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
+            $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
+                                                                      EsMemberFeedback::TYPE_ALL,
+                                                                      $feedbackLimit);
+            // add user image on each feedback
+           foreach ($feedbacks as $key => $feedback) {
+                $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+                $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
+            }
+            $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
+            $feedbacksData = [
+                'feedbacks' => $feedbacks,
+                'memberId' => $memberId,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+
+            $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
+            $allFeedBackViewData['feedBackView'] = $feedBackView;
+            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
+
+            $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                            EsOrderProductStatus::FORWARD_SELLER,
+                                                                            $salesPerPage);
+            $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                    EsOrderProductStatus::FORWARD_SELLER);
+            $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                      EsOrderProductStatus::FORWARD_SELLER);
+            $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
+            $currentSalesViewData  = [
+                'sales' => $currentSales,
+                'type' => EsOrderProductStatus::FORWARD_SELLER,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
+
+            $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                            EsOrderProductStatus::PAID_FORWARDED,
+                                                                            $salesPerPage);
+            $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                    EsOrderProductStatus::PAID_FORWARDED);
+            $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                      EsOrderProductStatus::PAID_FORWARDED);
+            $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
+            $historySalesViewData = [
+                'sales' => $historySales,
+                'type' => EsOrderProductStatus::PAID_FORWARDED,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
+
+            $salesViewData = [
+                'currentSales' => $currentSalesView,
+                'currentTotalSales' => $currentTotalSales,
+                'historySales' => $historySalesView,
+                'historyTotalSales' => $historyTotalSales,
+            ];
+            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+            $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+            $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+            $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+            $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+
+            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
+            $member->validatedStoreName = $member->getStoreName();
+
+            $dashboardHomeData = [
+                'member' => $member,
+                'avatarImage' => $userAvatarImage,
+                'bannerImage' => $userBannerImage,
+                'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                'stateRegionLists' => $locationLookup["stateRegionLookup"],
+                'cities' => $locationLookup["json_city"],
+                'consigneeAddress' => $consigneAddress,
+                'address' => $address[0],
+                'latitude' => $addressLatitude ,
+                'longitude' => $addressLongitude,
+                'consigneeStateRegionId' => $stateRegionId,
+                'consigneeCityId' => $cityId,
+                'followerCount' => $userFollowers['count'],
+                'followingCount' => $userFollowing['count'],
+                'productCount' => $userProductCount,
+                'activeProductCount' => $userActiveProductCount,
+                'deletedProductCount' => $userDeletedProductCount,
+                'draftedProductCount' => $userDraftedProductCount,
+                'soldProductCount' => $userSoldProductCount,
+                'activeProductView' => $activeProductView,
+                'deletedProductView' => $deletedProductView,
+                'draftedProductView' => $draftedProductView,
+                'memberRating' => $memberRating,
+                'feedBackTotalCount' => $feedBackTotalCount,
+                'profilePercentage' => $profilePercentage,
+                'allFeedBackView' => $allFeedBackView,
+                'salesView' => $salesView,
+                'transactionInfo' => $this->getTransactionDetails(),
+                'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
+                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
+                'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount
+            ];
+
+            $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
+            $dashboardData['dashboardHomeView'] = $dashboardHomeView;
+
+            $headerData['metadescription'] = "";
+            $headerData['title'] = "Dashboard | Easyshop.ph";
+            $headerData['user_details'] = $this->fillUserDetails();
+            $headerData['homeContent'] = $this->fillCategoryNavigation();
+
+            $socialMediaLinks = $this->getSocialMediaLinks();
+            $footerData['facebook'] = $socialMediaLinks["facebook"];
+            $footerData['twitter'] = $socialMediaLinks["twitter"];
+
+            $this->load->view('templates/header_primary', $headerData);
+            $this->load->view('pages/user/dashboard/dashboard-primary',$dashboardData);
+            $this->load->view('templates/footer_primary', $footerData);
+        }
+        else{
+            redirect('/login', 'refresh');
+        }
+    }
+
+    /**
+     * update product is_delete to 1 
+     * @return json
+     */
+    public function softDeleteProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->get('product_id'); 
+        $productManager = $this->serviceContainer['product_manager'];
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::DELETE);
+
+        $responseArray = [
+            'isSuccess' => $deleteResponse,
+            'message' => $deleteResponse ? "" : "You can't delete this item.",
+        ];
+
+        echo json_encode($responseArray);
+    }
+
+    /**
+     * update product is_delete to 2
+     * @return json
+     */
+    public function hardDeleteProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->get('product_id'); 
+        $productManager = $this->serviceContainer['product_manager'];
+        $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::FULL_DELETE);
+
+        $responseArray = [
+            'isSuccess' => $deleteResponse,
+            'message' => $deleteResponse ? "" : "You can't delete this item.",
+        ];
+
+        echo json_encode($responseArray);
+    }
+
+    /**
+     * update product is_delete to 1
+     * @return json
+     */
+    public function restoreProduct()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $productId = $this->input->get('product_id'); 
+        $productManager = $this->serviceContainer['product_manager'];
+        $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::ACTIVE);
+
+        $responseArray = [
+            'isSuccess' => $restoreResponse,
+            'message' => $restoreResponse ? "" : "You can't restore this item.",
+        ];
+
+        echo json_encode($responseArray);
+    }
+
+    /**
+     * send notification to user and deactivate account
+     * @param id
+     * @param password
+     * @return mixed
+     */
+    public function sendDeactivateNotification()
+    {
+        $member = $this->accountManager
+                       ->authenticateMember($this->input->post('username'), $this->input->post('password'), false, true);  
+        if ($member['member']) {
+            $authenticatedMember = true;
+            if($this->session->userdata('member_id') && ($member["member"]->getIdMember() !== $this->session->userdata('member_id'))) {
+                $result = 'Invalid Username/Password';
+                $authenticatedMember = false;
+            }             
+            if($authenticatedMember) {
+                $this->load->library('encrypt');
+                $result = $this->encrypt->encode($member['member']->getIdMember());
+                $this->load->library('parser');
+                $parseData = array(
+                    'username' => $member['member']->getUsername(),
+                    'hash' => $this->encrypt->encode($member['member']->getIdMember()),
+                    'site_url' => site_url('memberpage/showActivateAccount')
+                );        
+
+                $this->emailNotification = $this->serviceContainer['email_notification'];
+                $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
+                $this->emailNotification->setRecipient($member['member']->getEmail());
+                $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
+                $this->emailNotification->setMessage($message);
+                $this->emailNotification->sendMail();
+                $this->em->getRepository('EasyShop\Entities\EsMember')
+                         ->accountActivation($member['member'], false);
+            }
+        }     
+        else {
+            $result = 'Invalid Username/Password';
+        }
+        
+        echo json_encode($result);
+    }
+
+    /**
+     * Flags member as activated
+     * @return json
+     */
+    public function doReactivateAccount()
+    {
+
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+            ->findOneBy([
+                'idMember' => $getData[0],
+                'isActive' => 0
+            ]);
+
+        if($this->input->get("activateAccountButton") && $member) {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
+            $result = [
+                "username" => $member->getUsername(),
+                "result" => "success"
+            ];
+            echo json_encode($result);
+        }
+    }
+
+    /**
+     * Show activate account page
+     */
+    public function showActivateAccount()
+    {
+
+        $hashUtility = $this->serviceContainer['hash_utility'];
+        $getData = $hashUtility->decode($this->input->get('h'));
+
+        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+            redirect('/login', 'refresh');
+        }
+        else {
+             $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy([
+                                    'idMember' => $getData[0],
+                                    'isActive' => 0
+                                ]);
+
+            if (!$member) {
+                redirect('/login', 'refresh');
+            }
+            else {
+                $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+                $data = array(
+                    'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
+                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+                    'relCanonical' => base_url(),
+                    'username' => $member->getUsername(),
+                    'idMember' => $getData[0],            
+                    'hash' => $this->input->get('h')            
+                );
+                $data = array_merge($data, $this->fill_header());
+                $socialMediaLinks = $this->getSocialMediaLinks();
+                $em = $this->serviceContainer["entity_manager"];
+                if($data['logged_in']){
+                    $memberId = $this->session->userdata('member_id');
+                    $data['logged_in'] = true;
+                    $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
+                                               ->find($memberId);
+                    $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
+                }                
+                $data["homeContent"] = $this->serviceContainer['xml_cms']->getHomeData(true);        
+                $viewData['facebook'] = $socialMediaLinks["facebook"];
+                $viewData['twitter'] = $socialMediaLinks["twitter"];
+
+                $this->load->view('templates/header_primary', $data);
+                $this->load->view('pages/user/MemberPageAccountActivate', $data);
+                $this->load->view('templates/footer_primary', $viewData);                    
+            }            
+        }
+    }
+
+    /**
+     * get next product set based on page number
+     * @return json
+     */
+    public function productMemberPagePaginate()
+    {
+        $productManager = $this->serviceContainer['product_manager'];
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
+        $memberId = $this->session->userdata('member_id');
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $requestType = trim($this->input->get('request'));
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string'));
+ 
+        $deleteConditions = [EsProduct::ACTIVE];
+        $draftConditions = [EsProduct::ACTIVE];
+
+        if(strtolower($requestType) === "deleted"){ 
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
+        }
+        elseif (strtolower($requestType) === "drafted"){ 
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
+        }
+
+        $userProductCount = $esProductRepo->getUserProductCount($memberId,
+                                                                $deleteConditions, 
+                                                                $draftConditions, 
+                                                                $searchString);
+        $userProducts = $productManager->getProductsByUser($memberId,
+                                                           $deleteConditions,
+                                                           $draftConditions,
+                                                           $productManager::PRODUCT_COUNT_DASHBOARD*($page-1),
+                                                           $searchString,
+                                                           $sortType); 
+
+        $paginationData = [
+            'lastPage' => ceil($userProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
+            ,'isHyperLink' => false
+            , 'currentPage' => $page
+        ];
+
+        $viewData = [
+            'products' => $userProducts,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+
+        $responseArray = [
+            'html' => $this->load->view('partials/dashboard-products', $viewData, true),
+        ];
+
+        echo json_encode($responseArray);
+    }
+
+    /**
+     * get next set of feedbacks based on page number
+     * @return json
+     */
+    public function feedbackMemberPagePaginate()
+    {
+        $userManager = $this->serviceContainer['user_manager'];
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        
+        $page = (int) ($this->input->get('page')) ? trim($this->input->get('page')) : 1;
+        $requestType = (int) trim($this->input->get('request'));
+        $memberId = $this->session->userdata('member_id');
+        $feedbackLimit = $this->feedbackLimit;
+        $allFeedbacks = $userManager->getFormattedFeedbacks($memberId);
+        $paginationData = [
+            'isHyperLink' => false,
+            'currentPage' => $page
+        ];
+
+        $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
+                                                                  $requestType,
+                                                                  $feedbackLimit,
+                                                                  $page - 1);
+        // add user image on each feedback
+       foreach ($feedbacks as $key => $feedback) {
+            $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
+            $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
+        }
+
+        switch($requestType){
+            case EsMemberFeedback::TYPE_AS_BUYER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['otherspost_buyer']) / $feedbackLimit);
+                break;
+            case EsMemberFeedback::TYPE_AS_SELLER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['otherspost_seller']) / $feedbackLimit);
+                break;
+            case EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['youpost_seller']) / $feedbackLimit);
+                break;
+            case EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER: 
+                $paginationData['lastPage'] =  ceil(count($allFeedbacks['youpost_buyer']) / $feedbackLimit);
+                break;
+            default:
+                $paginationData['lastPage'] =  ceil($allFeedbacks['totalFeedbackCount'] / $feedbackLimit);
+                break;
+        }
+
+        $feedbacksData = [
+            'feedbacks' => $feedbacks,
+            'memberId' => $memberId,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ]; 
+
+        $responseData = [
+            'html' => $this->load->view('partials/dashboard-feedback', $feedbacksData, true),
+        ];
+
+        echo json_encode($responseData);
+    }
+
+    /**
+     * Get next list of sales based on request type
+     * @return json
+     */
+    public function salesMemberPagePaginate()
+    {
+        $page = (int) ($this->input->get('page')) ? trim($this->input->get('page')) : 1;
+        $requestType = (int) trim($this->input->get('request'));
+        $dateFrom = $this->input->get('date_from') ? date('Y-m-d 00:00:00', strtotime($this->input->get('date_from'))) : null;
+        $dateTo = $this->input->get('date_to') ? date('Y-m-d 23:59:59', strtotime($this->input->get('date_to'))) : null;
+        $memberId = $this->session->userdata('member_id');
+        $salesPerPage = $this->salesPerPage;
+
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+
+        $sales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                             $requestType,
+                                             $salesPerPage,
+                                             $page - 1,
+                                             $dateFrom,
+                                             $dateTo);
+        $totalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                         $requestType,
+                                                                         $dateFrom,
+                                                                         $dateTo);
+        $salesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                           $requestType,
+                                                                           $dateFrom,
+                                                                           $dateTo);
+
+        $paginationData = [
+            'isHyperLink' => false,
+            'currentPage' => $page,
+            'lastPage' =>  ceil($salesCount / $salesPerPage),
+        ];
+
+        $salesViewData  = [
+            'sales' => $sales,
+            'type' => $requestType,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+        ];
+        $salesView = $this->load->view('partials/dashboard-sales', $salesViewData, true);
+
+        $responseData = [
+            'html' => $salesView,
+            'netAmount' => number_format($totalSales,2,'.',','),
+        ];
+
+        echo json_encode($responseData);
+    }
+
+    
+    /**
+     * Update the store name 
+     *
+     * @return json
+     */
+    public function updateStoreName()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storename')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storename', 'text');
+            $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
+            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateStorename($member, $formData['storename']);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storename'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store name is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        
+        echo json_encode($jsonResponse); 
+    }
+                 
+    /**
+     * Update the store slug 
+     *
+     * @return json
+     */
+    public function updateStoreSlug()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storeslug')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storeslug', 'text');
+            $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
+            $formData['storeslug'] = $this->input->post('storeslug');
+            $form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $routes = $this->router->routes;
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateSlug($member, $formData['storeslug'], $routes);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storeslug'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store link is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        echo json_encode($jsonResponse); 
+    }
+   
+    /**
+     * Update the store color scheme 
+     *
+     * @return json
+     */
+    public function updateStoreColorScheme()
+    {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $response = ['isSuccessful' => 'false'];
+        if($this->input->post('colorId')){
+            $memberId = $this->session->userdata('member_id');
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);     
+            $color = $entityManager->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find($this->input->post('colorId'));
+            if($color !== null && $member !== null){
+                $member->setStoreColor($color);
+                $isSuccessful = true;
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                    $response['errors'] = 'Sorry, something went wrong. Try again in a while.';
+                }
+                $response['isSuccessful'] = $isSuccessful ? 'true' : 'false';
+            }
+        }
+        echo json_encode($response);
+    }
+    
+    /**
+     * Gets the store settings
+     *
+     */
+    public function getStoreSettings()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['colors'] = $this->serviceContainer['entity_manager']
+                                       ->getRepository('EasyShop\Entities\EsStoreColor')
+                                       ->getAllColors(true);
+        }
+        echo json_encode($response);
+    }
+    
+
+    
 
 }
 

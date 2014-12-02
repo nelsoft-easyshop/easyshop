@@ -241,8 +241,36 @@ class EsMember
      * @ORM\Column(name="is_hide_banner", type="boolean", nullable=false)
      */
     private $isHideBanner = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_slug_changed", type="boolean", nullable=false)
+     */
+    private $isSlugChanged = '0';
+
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     */
+    private $isActive = '1';    
+
+    /**
+     * @var \EasyShop\Entities\EsStoreColor
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsStoreColor")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="store_color_id", referencedColumnName="id_store_color")
+     * })
+     */
+    private $storeColor;
+    
+    
+    /**
+     *
      *  @var string
      */
     const DEFAULT_DATE = "0001-01-01";
@@ -271,6 +299,12 @@ class EsMember
      *  @var string
      */
     const DEFAULT_IMG_BANNER = 'banner.png';
+
+    
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 0;    
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -1072,5 +1106,69 @@ class EsMember
     {
         return $this->isHideBanner;
     }
+
+    /**
+     * Set isSlugChanged
+     *
+     * @param bool $isSlugChanged
+     */
+    public function setIsSlugChanged($isSlugChanged)
+    {
+        $this->isSlugChanged = $isSlugChanged;
+    }
+    
+    /**
+     * Get isSlugChanged
+     *
+     * @return bool 
+     */
+    public function getIsSlugChanged()
+    {
+        return $this->isSlugChanged;
+    }
+    
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return EsMember
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }    
+
+    /**
+     * Set storeColor
+     *
+     * @param EasyShop\Entities\EsStoreColor $storeColor
+     */
+    public function setStoreColor($storeColor)
+    {
+        $this->storeColor = $storeColor;
+    }
+
+    /**
+     * Get storeColor
+     *
+     * @return EasyShop\Entities\EsStoreColor 
+     */
+    public function getStoreColor()
+    {
+        return $this->storeColor;
+    }    
+
 
 }

@@ -129,10 +129,15 @@
           	You have an option to pick up purchases from the seller or through our partners.
           </p>
           <ul>
-          	<li>
-          		We will not be responsible for any issues involving lost and damaged goods or delays in delivery. Such disputes shall be resolved between the buyer seller as well as the logistics provider.
-          	</li>
-          	<li>Prices are subject to change as per seller’s price inputs.</li>
+                <li>
+                    We will not be responsible for any issues involving lost and damaged goods or delays in delivery. Such disputes shall be resolved between the buyer seller as well as the logistics provider.
+                </li>
+                <li>
+                    Prices are subject to change as per seller’s price inputs.
+                </li>
+                <li>
+                    <strong>A 50% deposit will be required for Cash On Delivery transactions for total purchases amounting to Php 100,000 and above. </strong>
+                </li>
           </ul>
           <p>
           	Sellers must take full responsibility for the buyers to receive their purchased items.

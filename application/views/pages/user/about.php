@@ -27,7 +27,7 @@
                                 <pre class="p-about"><?php echo html_escape($member->getStoreDesc()); ?></pre>
                             </p>
                             <div class="div-about-edit-area">
-                                <?php echo form_open('home/doUpdateDescription') ?>
+                                <?php echo form_open('store/doUpdateDescription') ?>
                                     <textarea class="input-lg input-message textarea-about" name='description' maxlength="1024" rows="12" id="description" placeholder="'Say something about your shop...'" data-value="<?php echo html_escape($member->getStoreDesc()); ?>"><?php echo html_escape($member->getStoreDesc()); ?></textarea>
                                     <center>
                                         <input type="submit"  id="save-about" class="btn btn-send" value="SAVE CHANGES" />
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                                                             
-                            <?php echo form_open('/home/doCreateFeedback', ['id' => 'feedback-form']); ?>
+                            <?php echo form_open('/store/doCreateFeedback', ['id' => 'feedback-form']); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
                                     <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
