@@ -37,10 +37,10 @@
                     <span>Payment Filter:</span>
                     <select class="select-filter-item payment-filter" data="ongoing-bought">
                         <option value="all" selected=selected>Show all</option>
-                        <option value="1">PayPal</option>
-                        <option value="2">DragonPay</option>
-                        <option value="3">Cash On Delivery</option>
-                        <option value="5">Direct Bank Deposit</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -73,10 +73,10 @@
                     <span>Payment Filter:</span>
                     <select class="select-filter-item payment-filter" data="ongoing-sold">
                         <option value="all" selected=selected>Show all</option>
-                        <option value="1">PayPal</option>
-                        <option value="2">DragonPay</option>
-                        <option value="3">Cash On Delivery</option>
-                        <option value="5">Direct Bank Deposit</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -114,10 +114,10 @@
                 <span>Payment Filter:</span>
                 <select class="select-filter-item payment-filter" data="complete-bought">
                     <option value="all" selected=selected>Show all</option>
-                    <option value="1">PayPal</option>
-                    <option value="2">DragonPay</option>
-                    <option value="3">Cash On Delivery</option>
-                    <option value="5">Direct Bank Deposit</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>
@@ -150,10 +150,10 @@
                 <span>Payment Filter:</span>
                 <select class="select-filter-item payment-filter" data="complete-sold">
                     <option value="all" selected=selected>Show all</option>
-                    <option value="1">PayPal</option>
-                    <option value="2">DragonPay</option>
-                    <option value="3">Cash On Delivery</option>
-                    <option value="5">Direct Bank Deposit</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
+                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
                 </select>
             </div>
             <div class="clear"></div>

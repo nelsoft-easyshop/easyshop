@@ -416,9 +416,4 @@ class TransactionManager
 
         return count($soldTransactionDetails);
     }
-
-    public function getBoughtTransactionDetailsByTransactionNum($memberId, $transactionNum)
-    {
-
-    }
 }

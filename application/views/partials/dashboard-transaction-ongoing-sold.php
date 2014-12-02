@@ -28,7 +28,7 @@
                             <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
                                 <?=html_escape($product['name'])?>
                             </a>
-                            <?PHP if (intval($soldTransactionDetails['orderStatus']) === 0 && intval($product['idOrderProductStatus']) === 0 && intval($soldTransactionDetails['idPaymentMethod']) === 3) : ?>
+                            <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] === 3) : ?>
                             <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox">
                             <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
                             <?PHP endif; ?>
