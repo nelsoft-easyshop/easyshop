@@ -5534,20 +5534,6 @@ span.star-label{
     cursor: pointer;	
 }
 
-.feedback-submit {
-    background-color: #FF4400;
-    border-radius: 3px;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: inline-block;
-    padding: 10px 25px;
-    margin-top: 10px;
-}
-
-.feedback-submit:hover {
-    background-color: #ff8800;
-}
-
 .feedback-cancel {
     color: #E90000;
 }
@@ -5593,11 +5579,11 @@ div.sold_prod_container {
 }
 
 
-.transac_response_btn:hover, .reject_btn:hover {
+/*.transac_response_btn:hover, .reject_btn:hover {
     -webkit-box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     -moz-box-shadow:    inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
-}
+}*/
 
 
 .transac_response_btn.loading {

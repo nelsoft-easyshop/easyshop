@@ -23,14 +23,14 @@
     </div>
     <div class="on-going-transaction-list-bought">
         <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
-            <div class="mrgn-top-20 mrgn-bttm-25 row">
-                <div class="col-md-9">
+            <div class="mrgn-top-20 mrgn-bttm-15 row">
+                <div class="col-md-9 transaction-top-btns">
                     <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
                     <button class="btn btn-default-3">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
                     <button class="btn btn-default-3">
-                        <i class="icon-category"></i> <span>Export CSV</span>
+                        <i class="icon-file"></i> <span>Export CSV</span>
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
@@ -57,14 +57,14 @@
     </div>
     <div class="on-going-transaction-list-sold">
         <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
-            <div class="mrgn-top-20 mrgn-bttm-25 row">
-                <div class="col-md-9">
+            <div class="mrgn-top-20 mrgn-bttm-15 row">
+                <div class="col-md-9 transaction-top-btns">
                     <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn">
-                        <i class="icon-fax"></i> Print
+                    <button class="btn btn-default-3">
+                        <i class="icon-fax"></i> <span>Print</span>
                     </button>
-                    <button class="btn btn-setting-edit-btn">
-                        <i class="icon-category"></i> Export CSV
+                    <button class="btn btn-default-3">
+                        <i class="icon-file"></i> <span>Export CSV</span>
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
@@ -96,14 +96,14 @@
     </div>
     <div class="on-going-transaction-list-bought-completed">
         <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
-        <div class="mrgn-top-20 mrgn-bttm-25 row">
-            <div class="col-md-9">
+        <div class="mrgn-top-20 mrgn-bttm-15 row">
+            <div class="col-md-9 transaction-top-btns">
                 <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
                 <button class="btn btn-default-3">
                     <i class="icon-fax"></i> <span>Print</span>
                 </button>
                 <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
+                    <i class="icon-file"></i> <span>Export CSV</span>
                 </button>
             </div>
             <div class="col-md-3 text-right">
@@ -130,14 +130,14 @@
     </div>
     <div class="on-going-transaction-list-sold-completed">
         <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
-        <div class="mrgn-top-20 mrgn-bttm-25 row">
-            <div class="col-md-9">
+        <div class="mrgn-top-20 mrgn-bttm-15 row">
+            <div class="col-md-9 transaction-top-btns">
                 <input type="text" class="ui-form-control transaction-search" placeholder="Enter transaction no.">
                 <button class="btn btn-default-3">
                     <i class="icon-fax"></i> <span>Print</span>
                 </button>
                 <button class="btn btn-default-3">
-                    <i class="icon-category"></i> <span>Export CSV</span>
+                    <i class="icon-file"></i> <span>Export CSV</span>
                 </button>
             </div>
             <div class="col-md-3 text-right">
@@ -199,4 +199,5 @@
         <span class="simplemodal-close btn btn-default-1">Cancel</span>
         <button class="btn btn-default-3">Submit</button>
     </div>
+    <div class="clear"></div>
 </div>
