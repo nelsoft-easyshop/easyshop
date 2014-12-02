@@ -928,10 +928,10 @@
             return this.value;
         }).get().join('-');
         $container.find('.tx_cod').prop('disabled', true);
-        $container.parent().find('input[name=cash_on_delivery]').val('');
+        $container.find('input[name=cash_on_delivery]').val('');
         if ($checkboxes.length == $checkboxes.filter(':checked').length) {
             $container.find('.tx_cod').prop('disabled', false);
-            $container.parent().find('input[name=cash_on_delivery]').val(checkedValues);
+            $container.find('input[name=cash_on_delivery]').val(checkedValues);
         }
     });
 
@@ -1067,8 +1067,6 @@
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-bought';
 
-        alert($container);
-        return false;
         getTransactionDetails($page, $requestType, $container);
     });
 
