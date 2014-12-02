@@ -14,11 +14,11 @@
         $('#login_error').hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');  
+        var password = $("#login_username").val();
         var password = $("#login_password").val();
-        var id = $(this).data("id");
         $.ajax({
             type: 'post',
-            data: {password:password, id:id, csrfname : csrftoken},
+            data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
             success: function(data) {
                 var obj = jQuery.parseJSON(data);   
