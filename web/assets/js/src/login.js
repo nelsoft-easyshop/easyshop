@@ -1,6 +1,8 @@
 
 (function($){    
-
+    $("#login_username, #login_password").click(function(){
+        $("#deactivatedAccountPrompt").css("display","none");
+    });
     $(document).ready(function(){
         $(".search_box").css('display','none');
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
@@ -84,7 +86,8 @@
                                 
                                 $("#login_error").empty();
                                 if(data["o_message"] == "Account Deactivated") {
-                                    $("#login_error").html("<span id='deactivatedPrompt'>Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id='"+data["errors"][0]["id"]+"' style='color:blue;cursor:pointer;'>here</a> to send a reactivation link to your email.</span>");
+                                    $("#deactivatedAccountPrompt").css("display","block");
+                                    $("#deactivatedAccountPrompt").find("a").attr("data-id",data["errors"][0]["id"]);
                                 }
                                 else {
                                     $("#login_error").html(data["o_message"] );
