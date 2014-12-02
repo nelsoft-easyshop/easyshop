@@ -15,7 +15,7 @@ class Version20141202094351 extends AbstractMigration
     {
         $this->addSql("
             ALTER TABLE `es_member` 
-            ADD COLUMN `is_active` TINYINT(5) NOT NULL DEFAULT '0';
+            ADD COLUMN `is_active` TINYINT(5) NOT NULL DEFAULT '1';
         ");
 
 
