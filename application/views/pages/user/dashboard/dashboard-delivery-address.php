@@ -106,7 +106,7 @@
                         <input type="hidden" name="current_lat" id="current_lat" value="">
                         <input type="hidden" name="current_lang" id="current_lang" value="">
                         <div class="map-container">
-                            <span><a href="javascript:void(0);" class='refresh_map'><i class="fa fa-search refresh_map"></i> Search Address</a></span>
+                            <span class='refresh_map'><a href="javascript:void(0);"><i class="fa fa-search"></i> Search Address</a></span>
                             <span><a href="javascript:void(0)" class="span-current-location"><i class="fa fa-map-marker span-current-location"></i> Current Location</a><span>
                             <div id="GoogleMapContainer" title="Google Map Container"></div>
 

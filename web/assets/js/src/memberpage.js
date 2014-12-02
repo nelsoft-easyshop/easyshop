@@ -1581,7 +1581,7 @@ $(document).ready(function(){
         $(this).siblings('.raty-error').html('');
     });
     
-    $('.dashboard_table').on('click', '.transac-feedback-btn', function(){
+    $('.dashboard_table').on('click', '.transac-feedback-btn', function(e){
         var divcont = $(this).siblings('.transac-feedback-container');
         var form = divcont.children('form.transac-feedback-form');
         var thisbtn = $(this);

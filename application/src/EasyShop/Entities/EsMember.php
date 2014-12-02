@@ -241,6 +241,15 @@ class EsMember
      * @ORM\Column(name="is_hide_banner", type="boolean", nullable=false)
      */
     private $isHideBanner = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_slug_changed", type="boolean", nullable=false)
+     */
+    private $isSlugChanged = '0';
+
 
     /**
      * @var boolean
@@ -249,6 +258,17 @@ class EsMember
      */
     private $isActive = '0';    
 
+    /**
+     * @var \EasyShop\Entities\EsStoreColor
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsStoreColor")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="store_color_id", referencedColumnName="id_store_color")
+     * })
+     */
+    private $storeColor;
+    
+    
     /**
      *  @var string
      */
@@ -1087,6 +1107,26 @@ class EsMember
     }
 
     /**
+     * Set isSlugChanged
+     *
+     * @param bool $isSlugChanged
+     */
+    public function setIsSlugChanged($isSlugChanged)
+    {
+        $this->isSlugChanged = $isSlugChanged;
+    }
+    
+    /**
+     * Get isSlugChanged
+     *
+     * @return bool 
+     */
+    public function getIsSlugChanged()
+    {
+        return $this->isSlugChanged;
+    }
+    
+    /**
      * Set isActive
      *
      * @param boolean $isActive
@@ -1107,6 +1147,26 @@ class EsMember
     public function getIsActive()
     {
         return $this->isActive;
+    }    
+    
+    /**
+     * Set storeColor
+     *
+     * @param EasyShop\Entities\EsStoreColor $storeColor
+     */
+    public function setStoreColor($storeColor)
+    {
+        $this->storeColor = $storeColor;
+    }
+
+    /**
+     * Get storeColor
+     *
+     * @return EasyShop\Entities\EsStoreColor 
+     */
+    public function getStoreColor()
+    {
+        return $this->storeColor;
     }    
 
 }

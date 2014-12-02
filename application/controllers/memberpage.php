@@ -45,6 +45,13 @@ class Memberpage extends MY_Controller
     public $feedbackLimit = 10;
 
     /**
+     * Number of transaction per page
+     *
+     * @var integer
+     */
+    public $transactionRowCount = 10;
+
+    /**
      *  Class Constructor
      */
     public function __construct()
@@ -59,7 +66,8 @@ class Memberpage extends MY_Controller
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
-        $this->em = $this->serviceContainer['entity_manager']; 
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->transactionManager = $this->serviceContainer['transaction_manager'];
     }
 
     public function sample()
@@ -72,12 +80,12 @@ class Memberpage extends MY_Controller
      *  Class Index. Renders Memberpage
      */
     public function index()
-    {        
+    {
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
         }
-        $data['tab'] = $this->input->get('me');        
+        $data['tab'] = $this->input->get('me');
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
@@ -85,12 +93,12 @@ class Memberpage extends MY_Controller
             $data['user_details'] = $this->fillUserDetails();
         }
         $data['homeContent'] = $this->fillCategoryNavigation();
+        $data['transactionInfo'] = $this->getMemberPageDetails();
         $data = array_merge($data, $this->fill_header());
-        
+
         $socialMediaLinks = $this->getSocialMediaLinks();
         $footerData['facebook'] = $socialMediaLinks["facebook"];
         $footerData['twitter'] = $socialMediaLinks["twitter"];
-
 
         $this->load->view('templates/header_primary', $data);
         $this->load->view('pages/user/dashboard/dashboard-primary', $data);
@@ -98,7 +106,7 @@ class Memberpage extends MY_Controller
 
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
-        $formErrorHelper = $this->serviceContainer['form_error_helper'];        
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
     }
 
     /**
@@ -1155,7 +1163,7 @@ class Memberpage extends MY_Controller
     {
         # Require config file for list of controllers (filenames) ; returns $controllerConfig
         require_once(APPPATH . 'config/param/controllers.php');
-    
+
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form.'
@@ -1809,8 +1817,142 @@ class Memberpage extends MY_Controller
         echo json_encode($return);
     }
 
+
     // new implementation starts here
-    
+    /**
+     * Request for transaction details - ajax
+     */
+    public function getTransactionsForPagination()
+    {
+        $page = (int) trim($this->input->get('page'));
+        $requestType = trim($this->input->get('request'));
+        $memberId = $this->session->userdata('member_id');
+        $paginationData = [
+            'isHyperLink' => false,
+            'currentPage' => $page
+        ];
+
+        switch ($requestType) {
+            case 'ongoing-bought':
+                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+                $ongoingBoughtTransactionData = [
+                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $ongoingBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+                break;
+            case 'ongoing-sold':
+                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+                $ongoingSoldTransactionData = [
+                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, true, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $ongoingSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+                break;
+            case 'complete-bought':
+                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+                $completeBoughtTransactionsData = [
+                    'transaction' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $completeBoughtTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+                break;
+            case 'complete-sold':
+                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+                $completeSoldTransactionsData = [
+                    'transaction' => $this->transactionManager->getSoldTransactionDetails($memberId, false, $this->transactionRowCount * $page, $this->transactionRowCount),
+                    'count' => $completeSoldTransactionsCount,
+                    'pagination' => $this->load->view('pagination/default', $paginationData, true),
+                ];
+                $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+                break;
+            default:
+                break;
+        }
+
+        $responseData = [
+            'html' => $transactionView,
+        ];
+
+        echo json_encode($responseData);
+    }
+
+    /**
+     * Get all transaction data
+     * @return mixed
+     */
+    private function getTransactionDetails()
+    {
+        $memberId = $this->session->userdata('member_id');
+
+        $transaction = [
+            'ongoing' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, true, 0, $this->transactionRowCount)
+            ],
+            'complete' => [
+                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, 0, $this->transactionRowCount),
+                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false, 0, $this->transactionRowCount)
+            ]
+        ];
+
+        $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
+        $ongoingBoughtTransactionData = [
+            'transaction' => $transaction['ongoing']['bought'],
+            'count' => $ongoingBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingBoughtTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
+
+        $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+        $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+        $ongoingSoldTransactionData = [
+            'transaction' => $transaction['ongoing']['sold'],
+            'count' => $ongoingSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $ongoingSoldTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
+
+        $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
+        $completeBoughtTransactionsData = [
+            'transaction' => $transaction['complete']['bought'],
+            'count' => $completeBoughtTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeBoughtTransactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
+
+        $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+        $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+        $completeSoldTransactionsData = [
+            'transaction' => $transaction['complete']['sold'],
+            'count' => $completeSoldTransactionsCount,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $completeSoldTransactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
+
+        $data = [
+            'ongoing' => [
+                'bought' => $ongoingBoughtTransactionView,
+                'sold' => $ongoingSoldTransactionView,
+            ],
+            'complete' => [
+                'bought' => $completeBoughtTransactionView,
+                'sold' => $completeSoldTransactionView,
+            ]
+        ];
+
+        return $data;
+    }
+
     /**
      * display dashboard view
      * @return view
@@ -1949,6 +2091,14 @@ class Memberpage extends MY_Controller
                 'historyTotalSales' => $historyTotalSales,
             ];
             $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+            $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+            $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+            $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+            $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+
+            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
+            $member->validatedStoreName = $member->getStoreName();
+
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
@@ -1976,7 +2126,12 @@ class Memberpage extends MY_Controller
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
-                'salesView' => $salesView
+                'salesView' => $salesView,
+                'transactionInfo' => $this->getTransactionDetails(),
+                'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
+                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
+                'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
@@ -2347,6 +2502,155 @@ class Memberpage extends MY_Controller
 
         echo json_encode($responseData);
     }
+
+    
+    /**
+     * Update the store name 
+     *
+     * @return json
+     */
+    public function updateStoreName()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storename')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storename', 'text');
+            $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
+            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateStorename($member, $formData['storename']);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storename'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store name is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        
+        echo json_encode($jsonResponse); 
+    }
+                 
+    /**
+     * Update the store slug 
+     *
+     * @return json
+     */
+    public function updateStoreSlug()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+                         
+        if($this->input->post('storeslug')){
+            $rules = $formValidation->getRules('store_setup');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('storeslug', 'text');
+            $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
+            $formData['storeslug'] = $this->input->post('storeslug');
+            $form = $formBuild->getForm();
+            $form->submit($formData);
+            
+            if($form->isValid()){
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->find($memberId);
+                $isUpdated = false;
+                if($member){
+                    $routes = $this->router->routes;
+                    $isUpdated = $this->serviceContainer['user_manager']
+                                      ->updateSlug($member, $formData['storeslug'], $routes);
+                    if($isUpdated){
+                        $jsonResponse['updatedValue'] = $formData['storeslug'];
+                    }
+                    else{
+                        $jsonResponse['errors'] = 'This store link is not available';
+                    }
+                }
+                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+            }
+            else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
+        }
+        echo json_encode($jsonResponse); 
+    }
+   
+    /**
+     * Update the store color scheme 
+     *
+     * @return json
+     */
+    public function updateStoreColorScheme()
+    {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $response = ['isSuccessful' => 'false'];
+        if($this->input->post('colorId')){
+            $memberId = $this->session->userdata('member_id');
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);     
+            $color = $entityManager->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find($this->input->post('colorId'));
+            if($color !== null && $member !== null){
+                $member->setStoreColor($color);
+                $isSuccessful = true;
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                    $response['errors'] = 'Sorry, something went wrong. Try again in a while.';
+                }
+                $response['isSuccessful'] = $isSuccessful ? 'true' : 'false';
+            }
+        }
+        echo json_encode($response);
+    }
+    
+    /**
+     * Gets the store settings
+     *
+     */
+    public function getStoreSettings()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['colors'] = $this->serviceContainer['entity_manager']
+                                       ->getRepository('EasyShop\Entities\EsStoreColor')
+                                       ->getAllColors(true);
+        }
+        echo json_encode($response);
+    }
+    
+
+    
+
 }
 
 /* End of file memberpage.php */

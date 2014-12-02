@@ -11,7 +11,7 @@
             <p class="panel-setup-title">Store Name</p>
             <div class="div-setup-content">
                 <div class="current-store-name">
-                    <span class="setting-current-email">Mang Pedring Store</span> 
+                    <span class="setting-current-email" id="store-name-display"><?php echo html_escape( $member->validatedStoreName ) ?></span> 
                     <button class="btn btn-setting-edit-btn" id="btn-edit-store-name">
                        <i class="icon-edit"></i> Edit
                     </button>
@@ -19,16 +19,17 @@
                 <div class="edit-store-name">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="Mang Pedring Store"/>
-                            <!-- DISPLAY WHEN ERROR -->
-                            <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                            
-                            <!--DISPLAY WHEN OK
-                            <span class="val-success"><i class="fa fa-check"></i></span>-->
+                            <input id="input-store-name" type="text" class="text-info text-required" value="<?php echo html_escape($member->validatedStoreName); ?>"/>
+
+                            <span class="val-error-icon-setup" id="fail-icon-store-name" style="display:none">
+                                <i class="fa fa-times"></i>
+                            </span>
+                            <span class="val-error" id="fail-message-store-name" style="display:none">
+                                
+                            </span>
                         </div>
                         <div class="col-md-5 col-action-buttons">
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-name">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-name">
@@ -38,46 +39,45 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    You can give your store a different name other than you're registered username. Improve you're store's visibility and branding by giving you're store a name that other people can easily recognize and remember.
                 </p>
             </div>
         </div>
         <div class="div-store-setup">
             <p class="panel-setup-title">Store Link</p>
             <div class="div-setup-content">
-                <div class="current-store-url">
-                    <span class="setting-current-email"><a href="#">https://easyshop.ph/mangpedring</a></span> 
-                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-url">
-                       <i class="icon-edit"></i> Edit
-                    </button>
+                <div class="current-store-url current-store-slug">
+                    <span class="setting-current-email"  id="store-slug-display" data-slug="<?php echo html_escape($member->getSlug()); ?>">
+                        <a href="<?php echo base_url().html_escape($member->getSlug()); ?>"> 
+                            <?php echo base_url().html_escape($member->getSlug()); ?>
+                        </a>
+                    </span> 
+
+                    <?php if(!$member->getIsSlugChanged()): ?>
+                        <button class="btn btn-setting-edit-btn" id="btn-edit-store-url">
+                        <i class="icon-edit"></i> Edit
+                        </button>
+                    <?php endif; ?>
+                    
                 </div>
-                <div class="edit-store-url">
+                <div class="edit-store-url edit-store-slug">
                     <div class="row">
                         <div class="col-md-6 col-inline-textbtn">
-                            <table width="100%">
-                                <tr>
-                                    <td>
-                                        <span class="setting-edit-url">https://easyshop.ph.trunk/</span> 
-                                    </td>
-                                    <td>
-                                        <div class="div-input-url-cont">
-                                            <input type="text" class="text-info-url text-required" value="Mang Pedring Store"/>
-                                            <!-- DISPLAY WHEN ERROR 
-                                            <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                            <span class="val-error">Please enter at least 6 characters.</span>
-                                            -->
-                                            <!--DISPLAY WHEN OK-->
-                                            <span class="val-success-url"><i class="fa fa-check"></i></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                             
-                            
-                            
+                             <span class="setting-edit-url"><?php echo base_url(); ?></span> 
+                             <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
+                          
+                   
+                            <span class="val-error-icon-pass" id="fail-icon-store-slug" style="display:none">
+                                <i class="fa fa-times"></i>
+                            </span>
+                            <span class="val-error" id="fail-message-store-slug" style="display:none">
+                            </span>
+
+                            </span>
+                          
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-slug">
                                 Save changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-url">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Your store link can only be changed once. Once a change has been made to the store link, you will also have to regenerate your store QR code. 
                 </p>
             </div>
         </div>
@@ -108,10 +108,11 @@
                 <div class="current-store-theme">
                     <form class="form-horizontal">
                        <div class="form-group">
+                            <?php $storeColor = $member->getStoreColor(); ?>
                             <label class="col-sm-2 control-label">Color : </label>
                             <div class="col-sm-5 col-xs-12 col-with-radio">
-                                <div class="current-color-choice" style="background: #ff893a;">
-                                    Easyshop
+                                <div class="current-color-choice" style="background: #<?php echo html_escape($storeColor->getHexadecimal()) ?>;">
+                                    <?php echo html_escape($storeColor->getName()); ?>
                                 </div>
                                  
                             </div>
@@ -129,23 +130,14 @@
                         <label class="col-sm-3 control-label">Pick Your Color : </label>
                         <div class="col-sm-5 col-xs-12 col-with-radio">
                             <div class="color-theming">
-                                <div class="current-color-drop" style="background: #ff893a;">
-                                    <span class="color-name-drop">Easyshop</span>
+                                <div class="current-color-drop" style="background: #<?php echo html_escape($storeColor->getHexadecimal()); ?>;">
+                                    <input type="hidden" value="<?php echo $storeColor->getIdStoreColor(); ?>" id="current-store-color-id"/>
+                                    <span class="color-name-drop"><?php echo html_escape($storeColor->getName()); ?></span>
                                     <i class="cd icon-dropdown pull-right"></i>
                                 </div>
-                                <div class="color-dropdown">
-                                    <ul class="color-list">
-                                        <li style="background: #FF893A" id="color-item-1">EASYSHOP <i class="fa fa-check pull-right"></i></li>
-                                        <li style="background: #F89406" id="color-item-2">CALIFORNIA</li>
-                                        <li style="background: #F22613" id="color-item-3">POMEGRANATE</li>
-                                        <li style="background: #F62459" id="color-item-4">RADICAL RED</li>
-                                        <li style="background: #674172" id="color-item-5">HONEY FLOWER</li>
-                                        <li style="background: #336E7B" id="color-item-6">MING</li>
-                                        <li style="background: #446CB3" id="color-item-7">SAN MARINO</li>
-                                        <li style="background: #2574A9" id="color-item-8">JELLY BEAN</li>
-                                        <li style="background: #1E824C" id="color-item-9">SALEM</li>
-                                        <li style="background: #6C7A89" id="color-item-10">LYNCH</li>
-                                        
+                                
+                                <div class="color-dropdown" >
+                                    <ul class="color-list" id="store-color-dropdown">
                                     </ul>
                                 </div>
                             </div>
@@ -154,10 +146,7 @@
                     <div class="form-group">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-5">
-                            <button class="btn btn-setting-edit-btn">
-                                Preview
-                            </button>
-                            <button class="btn btn-setting-save-btn btn-color-save">
+                            <button id="store-color-save" class="btn btn-setting-save-btn btn-color-save">
                                 Save changes
                             </button>
                             <span class="btn btn-setting-cancel-btn btn-color-cancel" id="cancel-edit-store-theme">
@@ -165,11 +154,17 @@
                             </span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-5">
+                            <span class="val-error" id="store-color-error" style=""></span>
+                        </div>
+                    </div>
                 </div>
                     
                 <div class="clear"></div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Customize the color theme of your store page. Choose from the different available colors and make your store page more personalized.
                 </p>
             </div>
         </div>

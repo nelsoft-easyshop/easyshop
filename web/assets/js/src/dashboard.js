@@ -1,5 +1,10 @@
 (function ($) {
-
+    
+    $( ".dash-me" ).click(function() {
+        $( ".active-me" ).trigger( "click" );
+    });
+    
+    
     $( "#dash" ).click(function() {
         $( "#my-account-menu" ).slideUp();
         var attr = $("i.m").attr("class");
@@ -492,30 +497,39 @@
     });
     
     $( "#btn-edit-store-name" ).click(function() {
-        $( ".current-store-name" ).slideToggle( "slow" );
-        $( ".edit-store-name" ).slideToggle( "slow" );
+        $( ".current-store-name" ).slideToggle( "fast" );
+        $( ".edit-store-name" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-name" ).click(function() {
         $( "#btn-edit-store-name" ).trigger( "click" );
+        $('#input-store-name').val($('#store-name-display').html())
+        $("#fail-message-store-name").css('display', 'none');
+        $("#fail-icon-store-name").css('display', 'none');
     });
 
     $( "#btn-edit-store-url" ).click(function() {
-        $( ".current-store-url" ).slideToggle( "slow" );
-        $( ".edit-store-url" ).slideToggle( "slow" );
+        $( ".current-store-url" ).slideToggle( "fast" );
+        $( ".edit-store-url" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-url" ).click(function() {
         $( "#btn-edit-store-url" ).trigger( "click" );
+        $('#input-store-slug').val($('#store-slug-display').data('slug'));
+        $("#fail-message-store-slug").css('display', 'none');
+        $("#fail-icon-store-slug").css('display', 'none');
     });
 
     $( "#btn-edit-store-theme" ).click(function() {
         $( ".current-store-theme" ).slideToggle( "slow" );
         $( ".edit-store-theme" ).slideToggle( "slow" );
+        $('#store-color-error').html('');
     });
 
-    $( "#cancel-edit-store-theme" ).click(function() {
+    $( "#cancel-edit-store-theme" ).click(function() {        
         $( "#btn-edit-store-theme" ).trigger( "click" );
+        var currentStoreColor = $('#current-store-color-id').val();
+        $('#color-item-'+currentStoreColor).trigger('click');
     });
 
     $( ".current-color-drop" ).click(function() {
@@ -530,108 +544,29 @@
         }
     });
 
-    $( "#color-item-1" ).click(function() {
-      $( ".color-name-drop" ).text("Easyshop");
-      $( ".current-color-drop" ).css("background", "#ff893a");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor1 = $("i.cd").attr("class");
-        if(attrColor1 == "cd icon-dropup pull-right"){
+    $('.color-theming').on('click', '.color-li',function(){
+        var colorList = $(this);
+        $( ".color-name-drop" ).text(colorList.data('name'));
+        $( ".current-color-drop" ).css("background", colorList.css('background'));
+        $( ".current-color-drop" ).trigger( "click" );
+        var arrowIconClass = $("i.cd").attr("class");
+        if(arrowIconClass == "cd icon-dropup pull-right"){
             $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
         }
-    });
-    $( "#color-item-2" ).click(function() {
-      $( ".color-name-drop" ).text("California");
-      $( ".current-color-drop" ).css("background", "#F89406");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor2 = $("i.cd").attr("class");
-        if(attrColor2 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-3" ).click(function() {
-      $( ".color-name-drop" ).text("POMEGRANATE");
-      $( ".current-color-drop" ).css("background", "#F22613");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor3 = $("i.cd").attr("class");
-        if(attrColor3 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-4" ).click(function() {
-      $( ".color-name-drop" ).text("Radical red");
-      $( ".current-color-drop" ).css("background", "#F62459");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor4 = $("i.cd").attr("class");
-        if(attrColor4 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-5" ).click(function() {
-      $( ".color-name-drop" ).text("Honey Flower");
-      $( ".current-color-drop" ).css("background", "#674172");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor5 = $("i.cd").attr("class");
-        if(attrColor5 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-6" ).click(function() {
-      $( ".color-name-drop" ).text("Ming");
-      $( ".current-color-drop" ).css("background", "#336E7B");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor6 = $("i.cd").attr("class");
-        if(attrColor6 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-7" ).click(function() {
-      $( ".color-name-drop" ).text("SAN MARINO");
-      $( ".current-color-drop" ).css("background", "#446CB3");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor7 = $("i.cd").attr("class");
-        if(attrColor7 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-8" ).click(function() {
-      $( ".color-name-drop" ).text("JELLY BEAN");
-      $( ".current-color-drop" ).css("background", "#2574A9");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor8 = $("i.cd").attr("class");
-        if(attrColor8 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
-
-    $( "#color-item-9" ).click(function() {
-      $( ".color-name-drop" ).text("SALEM");
-      $( ".current-color-drop" ).css("background", "#1E824C");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
+        var selectedColorList = $('.color-li.selected');
+        selectedColorList.removeClass('selected');
+        var checkIcon = selectedColorList.find('i');
+        var newCheckIcon = checkIcon.clone();
+        checkIcon.remove();
+        colorList.addClass('selected');
+        colorList.append(newCheckIcon);
     });
     
-    $( "#color-item-10" ).click(function() {
-      $( ".color-name-drop" ).text("LYNCH");
-      $( ".current-color-drop" ).css("background", "#6C7A89");
-      $( ".current-color-drop" ).trigger( "click" );
-      var attrColor9 = $("i.cd").attr("class");
-        if(attrColor9 == "cd icon-dropup pull-right"){
-            $('i.cd').removeClass("cd icon-dropup pull-right").addClass("cd icon-dropdown pull-right");
-        }
-    });
 
+    
     $( "#btn-edit-store-cat" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-store-cat" ).click(function() {
@@ -639,8 +574,8 @@
     });
 
     $( "#btn-edit-store-cat-new" ).click(function() {
-      $( ".current-store-cat" ).slideToggle( "slow" );
-      $( ".edit-store-cat-new" ).slideToggle( "slow" );
+      $( ".current-store-cat" ).slideToggle( "fast" );
+      $( ".edit-store-cat-new" ).slideToggle( "fast" );
     });
 
     $( "#cancel-store-cat-new" ).click(function() {
@@ -852,13 +787,22 @@
         $('#th-p-net').toggle();
         $('.td-p-net').toggle();
     });
-    
-    
+
     $(function() {
         $( "#birthday-picker" ).datepicker({
             changeMonth: true,
             changeYear: true
-        }); 
+        });
+
+        $( "#sales-end-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $( "#sales-start-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
 
         $( ".date-picker-sales" ).datepicker({
             changeMonth: true,
@@ -869,23 +813,373 @@
             changeMonth: true,
             changeYear: true
         });
-        
+
         $( "#payout-start-date" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
+
+        $( ".modal_date" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '2013:2050',
+            dateFormat:"yy-M-dd"
+        }).on('keypress',function(){
+            return false;
+        });
     });
-    
-    $('#give-feedback').click(function (e) {
-        $('#feedback-modal').modal();
-        $('#feedback-modal').parents("#simplemodal-container").addClass("feedback-container");
+
+    $('.shipment-detail-button').on('click', function(e) {
+        var shipmentModal = $(this).parent().find('div.shipping-details');
+        var shipmentContainer = $(this).parent().find('div.shipping-details-container');
+        var thisbtn = $(this);
+        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var form = shipmentModal.find('.shipping_details_form');
+        var submitbtn = $(form).find('.shipping_comment_submit');
+        var input = $(form).find('input[type="text"]');
+        var editbtn = $(form).find('.tx_modal_edit');
+        var cancelbtn = $(form).find('.tx_modal_cancel');
+        var courier = form.find('input[name="courier"]');
+        var tracking_num = form.find('input[name="tracking_num"]');
+        var delivery_date = form.find('input[name="delivery_date"]');
+        var expected_date = form.find('input[name="expected_date"]');
+        var textarea = $(form).find('textarea');
+
+        courier.val(shipmentContainer.find('input[name="courier"]').val());
+        tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
+        delivery_date.val(shipmentContainer.find('input[name="delivery_date"]').val());
+        expected_date.val(shipmentContainer.find('input[name="expected_date"]').val());
+        textarea.val(shipmentContainer.find('input[name="comment"]').val());
+
+        shipmentModal.modal({
+            escClose: false,
+            onShow: function() {
+                if ( thisbtn.hasClass('isform') ) {
+                    form.validate({
+                        rules:{
+                            courier:{
+                                required: true
+                            },
+                            delivery_date:{
+                                required: true
+                            }
+                        },
+                        errorElement: "span",
+                        errorPlacement: function(error, element) {
+                            error.addClass('red');
+                            error.insertAfter(element);
+                        },
+                        submitHandler: function(form){
+                            input.attr('disabled',false);
+                            textarea.attr('disabled', false);
+
+                            $.post('/memberpage/addShippingComment', $(form).serializeArray(), function(data){
+                                submitbtn.attr('disabled', false);
+                                submitbtn.val('Save');
+
+                                try{
+                                    var obj = jQuery.parseJSON(data);
+                                }
+                                catch(e){
+                                    alert('An error was encountered while processing your data. Please try again later.');
+                                    return false;
+                                }
+
+                                if (obj.result === 'success') {
+                                    shipmentContainer.find('input[name="courier"]').val(courier.val());
+                                    shipmentContainer.find('input[name="tracking_num"]').val(tracking_num.val());
+                                    shipmentContainer.find('input[name="delivery_date"]').val(delivery_date.val());
+                                    shipmentContainer.find('input[name="expected_date"]').val(expected_date.val());
+                                    shipmentContainer.find('input[name="comment"]').val(textarea.val());
+                                    shipmentContainer.find('input[name="is_new"]').val(1);
+                                    textarea.attr('data-value', htmlDecode(textarea.val()));
+                                    textarea.attr('disabled', true);
+
+                                    if(thisbtn.hasClass('isform')) {
+                                        txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                    }
+                                    $.modal.close();
+                                }else{
+                                    alert(obj.error);
+                                }
+                            });
+                            submitbtn.attr('disabled', true);
+                            submitbtn.val('Saving...');
+                        }
+                    });
+                }
+                this.setPosition();
+                input.each(function(){
+                    if( $.trim($(this).attr('value')).length>0 ){
+                        cancelbtn.trigger('click');
+                        return false;
+                    }
+                });
+            }
+        });
+        shipmentModal.parents("#simplemodal-container").addClass("shipping-details-container");
         return false;
     });
 
-    $('#ship-item').click(function (e) {
-        $('#shipping-details').modal();
-        $('#shipping-details').parents("#simplemodal-container").addClass("shipping-details-container");
+    $('.transac_response_btn.enabled').on('click', function() {
+        var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
+        if(!isConfirmed){
+            return false;
+        }
+        var txResponseBtn = $(this);
+        var form = txResponseBtn.closest('form.transac_response');
+        var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
+        var data = form.serializeArray();
+        var buttonText = txResponseBtn.val();
+        txResponseBtn.addClass('loading');
+        txResponseBtn.removeClass('enabled');
+        txResponseBtn.val('Please wait..');
+
+        $.post("/memberpage/transactionResponse", data, function(data) {
+            try {
+                var serverResponse = jQuery.parseJSON(data);
+            }
+            catch (e) {
+                alert('An error was encountered while processing your data. Please try again later.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+                return false;
+            }
+
+            if (serverResponse.result !== 'success') {
+                alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
+                txResponseBtn.val(buttonText);
+                txResponseBtn.addClass('enabled').removeClass('loading');
+            }
+            else{
+                if(txResponseBtn.hasClass('tx_forward')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                }else if(txResponseBtn.hasClass('tx_return')){
+                    txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                }else if(txResponseBtn.hasClass('tx_cod')){
+                    txStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                }
+                txResponseBtn.val('Successful');
+                txResponseBtn.parent().parent().find('.txt_buttons').hide();
+            }
+            txResponseBtn.addClass('enabled');
+        });
+
+
+    });
+
+    function htmlDecode(value) {
+        if (value) {
+            return $('<div />').html(value).text();
+        } else {
+            return '';
+        }
+    }
+
+    $(document).on('mouseover','.feedb-star', function(){
+        $(this).siblings('.raty-error').html('');
+    });
+
+    $('.item-list-panel').on('click', '.give-feedback-button', function(e) {
+        var feedbackModal = $(this).parent().find('div.give-feedback-modal');
+        var form = feedbackModal.find('form.transac-feedback-form');
+        var textArea = form.find('textarea[name="feedback-field"]');
+        var econt = form.find('.raty-error');
+        var btn = $(this);
+
+        feedbackModal.modal({
+            onShow: function() {
+                $('.rating1').raty('destroy').raty({scoreName: 'rating1'});
+                $('.rating2').raty('destroy').raty({scoreName: 'rating2'});
+                $('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+
+                this.setPosition();
+                var submitbtn = form.find('.feedback-submit');
+                submitbtn.off('click').on('click', function(event) {
+                    var rating1 = form.find('input[name="rating1"]').val();
+                    var rating2 = form.find('input[name="rating2"]').val();
+                    var rating3 = form.find('input[name="rating3"]').val();
+                    if ($.trim(textArea.val()).length < 1) {
+                        textArea.effect('pulsate',{times:3},800);
+                    }
+                    else if (rating1 === '' || rating2 === '' || rating3 ==='') {
+                        econt.html('Please rate this user!');
+                    }
+                    else {
+                        $.post('/memberpage/addFeedback',form.serialize(),function(data) {
+                            if (parseInt(data) === 1) {
+                                alert('Your feedback has been submitted.');
+                                btn.remove();
+                            }
+                            else {
+                                alert('An error was encountered. Try again later.');
+                            }
+                        });
+                        $.modal.close();
+                        return false;
+                    }
+                });
+            }
+        });
+        feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
+
         return false;
+    });
+
+    $("#ongoing-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-bought';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#ongoing-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'ongoing-sold';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-bought").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-bought';
+
+        alert($container);
+        return false;
+        getTransactionDetails($page, $requestType, $container);
+    });
+
+    $("#complete-sold").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        var $mainContainer = $this.parent().parent().parent().parent().parent();
+        var $container = $mainContainer.attr('id');
+        var $requestType = 'complete-sold';
+
+        getTransactionDetails($page, $requestType, $container);
+    });
+    
+    $(".save-store-setting").click(function(){
+        var $this = $(this);
+        var storename = $('#input-store-name').val();
+        var storeslug = $('#input-store-slug').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var buttonHtml = $this.html();
+        var field = $this.data('variable');
+        $("#fail-message-"+field).hide();
+        $("#fail-icon-"+field).hide();
+
+        var postData = {csrfname: csrftoken};
+        var expectedField = '';
+        var action = '';
+        if(field == 'store-slug'){
+            postData['storeslug'] = storeslug;
+            action = '/memberpage/updateStoreSlug';
+        }
+        else{
+            postData['storename'] = storename;
+            action = '/memberpage/updateStoreName';
+        }
+        $this.html('PLEASE WAIT');
+        $.ajax({
+            type: "post",
+            url: action,
+            data: postData,
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('.edit-'+field).slideToggle( "fast" );
+                    var currentSettingContainer = $('.current-'+field);
+                    currentSettingContainer.slideToggle( "fast" );
+                    var displayHtml = response.updatedValue;
+                    if(field == 'store-slug'){
+                        var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
+                        displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
+                        $('#btn-edit-store-url').css('display', 'none');
+                    } 
+                    currentSettingContainer.find('span').html(displayHtml);
+                }
+                else{
+                    var failMessageContainer = $("#fail-message-"+field);
+                    failMessageContainer.html(response.errors);
+                    failMessageContainer.show();
+                    $("#fail-icon-"+field).show();
+                }
+            }
+        });
+        $this.html(buttonHtml);
+    });
+        
+    var isStoreSetupInitialized = false;
+    $('#store-setup-tab').on('click', function(){
+        if(!isStoreSetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreSettings',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
+                    var unorderedList = $("#store-color-dropdown");
+                    var colorList = [];
+                    var currentColorId = $('#current-store-color-id').val();
+                    var isCurrentColorSet = false;
+
+                    $.each(jsonResponse.colors, function(index, color) {
+                        var icon = '';
+                        var currentColorClass = '';
+                        if(!isCurrentColorSet && color.idStoreColor == currentColorId){
+                            icon = '<i class="fa fa-check pull-right"></i>';
+                            currentColorClass = 'selected';
+                            isCurrentColorSet = true;
+                        }
+                        var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+color.name+'" data-id="'+color.idStoreColor+'" ' +
+                                           'style="background: #'+color.hexadecimal+'; text-transform: uppercase;" ' +
+                                           'id="color-item-'+color.idStoreColor+'">' +color.name + icon +
+                                        '</li>';
+                        colorList.push(listHtml);
+                    });
+                    unorderedList.append( colorList.join('') );
+                    unorderedList.find('#color-item-'+currentColorId).append(' </i>');
+                
+                    isStoreSetupInitialized = true;
+                }
+            });
+        }
+    });
+    
+    
+        
+    $('#store-color-save').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var selectedList = $('.color-li.selected');
+        var colorId = selectedList.data('id');
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreColorScheme',
+            data: {csrfname: csrftoken, colorId: colorId},
+            success: function(data){
+                var response = $.parseJSON(data);
+                if(response.isSuccessful == 'true'){
+                    $('#current-store-color-id').val(colorId);
+                    var currentColorChoiceContainer = $('.current-color-choice');
+                    currentColorChoiceContainer.css('background',selectedList.css('background'));
+                    currentColorChoiceContainer.html(selectedList.data('name'));
+                    $( "#btn-edit-store-theme" ).trigger( "click" );
+                }
+                else{
+                    $('#store-color-error').html(response.errors);
+                }
+                
+            }
+        });
     });
 
     $(".add-bank-account").click(function() {
@@ -897,7 +1191,29 @@
         $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
+    
+    
+    
 
+    function getTransactionDetails($page, $requestType, $container)
+    {
+        console.log($container);
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : $page,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
 }(jQuery));
 
 
