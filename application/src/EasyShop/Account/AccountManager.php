@@ -57,6 +57,14 @@ class AccountManager
      */
     private $stringUtility;
     
+    
+    /**
+     * Symfony's HTTP request class
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $httpRequest;
+    
     /**
      * Intialize dependencies
      *
@@ -67,7 +75,8 @@ class AccountManager
                                 $formFactory, 
                                 $formValidation,
                                 $formErrorHelper, 
-                                $stringUtility)
+                                $stringUtility,
+                                $httpRequest)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -76,6 +85,7 @@ class AccountManager
         $this->formValidation = $formValidation;
         $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
+        $this->httpRequest = $httpRequest;
     }
 
 
@@ -131,40 +141,46 @@ class AccountManager
             $formData = $form->getData();
             $validatedUsername = $formData['username'];
             $validatedPassword = $formData['password'];
-
+            /**
+             * Intialize error array
+             */
+            array_push($errors, ['login' => 'Invalid Username/Password']);  
+            
             if(strpos($validatedUsername, '@') !== false){
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy(['email' => $validatedUsername]);
-                if($member){
-                    $validatedUsername = $member->getUsername();         
-                }
+                               ->findOneBy(['email' => $validatedUsername]);
             }
-            else {
+            else{
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy(['username' => $validatedUsername]);
-            }         
-
-            if($member) {
-                if(!$this->bcryptEncoder->isPasswordValid($member->getPassword(), $validatedPassword)) {
-                    if(!$this->authenticateByReverseHashing($validatedUsername, $validatedPassword, $member)) {
-                        $member = NULL;                        
-                        array_push($errors, ['login' => 'Invalid Username/Password']);  
+                               ->findOneBy(['username' => $validatedUsername]);
+            }
+            
+            if($member){
+                $memberUsername =  $member->getUsername();       
+                $encryptedPassword = $member->getPassword();
+                
+                if(!$this->bcryptEncoder->isPasswordValid($encryptedPassword, $validatedPassword)) {
+                    if(!$this->authenticateByReverseHashing($memberUsername, $validatedPassword, $member)){
+                        $member = null;   
                     }
-                }
+                }       
             }
-            else {
-                $member = NULL;
-                array_push($errors, ['login' => 'Invalid Username/Password']);
-            }
-
-            if($member !== NULL && $asArray) {
-                $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->getHydratedMember($validatedUsername, $asArray); 
+            
+            if($member){
+                unset($errors[0]);
+                $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+                $member->setLastLoginIp($this->httpRequest->getClientIp());
+                $member->setFailedLoginCount(0);
+                $member->setLoginCount($member->getLoginCount() + 1);
+                $this->em->flush(); 
+                $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                                    ->getHydratedMember($validatedUsername, $asArray);                    
             }
         }
 
+
         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
-                 'member' => $member];
+                'member' => $member];
     
     }
     
