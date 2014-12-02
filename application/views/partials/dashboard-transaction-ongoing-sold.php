@@ -28,7 +28,7 @@
                             <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
                                 <?=html_escape($product['name'])?>
                             </a>
-                            <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                            <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                             <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox" value="<?=$product['idOrderProduct']?>">
                             <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
                             <?PHP endif; ?>
@@ -219,8 +219,8 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] === 3) : ?>
-                                <?php
+                            <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                                    <?php
                                 $attr = ['class' => 'transac_response'];
                                 echo form_open('',$attr);
                                 ?>
