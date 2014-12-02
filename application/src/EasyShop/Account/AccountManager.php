@@ -172,13 +172,15 @@ class AccountManager
                     $errors[] = ['login' => 'Oooops! This account has already been deactivated.','id' => $member->getIdMember()];
                     $member = NULL;    
                 }
-                $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                $member->setLastLoginIp($this->httpRequest->getClientIp());
-                $member->setFailedLoginCount(0);
-                $member->setLoginCount($member->getLoginCount() + 1);
-                $this->em->flush(); 
-                $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                    ->getHydratedMember($validatedUsername, $asArray);                    
+                else {
+                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+                    $member->setLastLoginIp($this->httpRequest->getClientIp());
+                    $member->setFailedLoginCount(0);
+                    $member->setLoginCount($member->getLoginCount() + 1);
+                    $this->em->flush(); 
+                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                                        ->getHydratedMember($validatedUsername, $asArray);                    
+                }                                                                    
             }
         }
 
