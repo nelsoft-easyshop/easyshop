@@ -2,15 +2,15 @@
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
         <div class="item-list-panel">
         <div class="transac-title">
-            <?PHP if (intval($soldTransactionDetails['orderStatus']) != 99 && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
+            <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                 <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
                 <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
             <?PHP else : ?>
-                <?php if(intval($soldTransactionDetails['idPaymentMethod']) === 2):?>
+                <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
                     <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyer']?></span></div>
-                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === 5):?>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
                     <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyer']?></span></div>
-                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === 1 && intval($soldTransactionDetails['isFlag']) === 1) : ?>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
                     <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyer']?></span></div>
                 <?php endif;?>
             <?PHP endif; ?>
@@ -46,12 +46,12 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <span class="strong-label">Status : </span>
-                                    <?PHP if (intval($soldTransactionDetails['orderStatus']) === 0 && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
+                                    <?PHP if (intval($soldTransactionDetails['orderStatus']) === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                         <?PHP if (intval($product['isReject']) === 1) : ?>
                                             <span class="trans-status-pending status-class">ITEM REJECTED</span>
                                         <?PHP else : ?>
-                                            <?PHP if (intval($product['idOrderProductStatus']) === 0) : ?>
-                                                <?PHP if( intval($soldTransactionDetails['idPaymentMethod']) === 3 ) : ?>
+                                            <?PHP if (intval($product['idOrderProductStatus']) === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING) : ?>
+                                                <?PHP if( intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY ) : ?>
                                                     <span class="trans-status-cod status-class">Cash on Delivery</span>
                                                 <?PHP else:?>
                                                     <?PHP if ( (bool) $product['courier'] > 0 &&  (bool) $product['datemodified'] > 0) : ?>
@@ -95,7 +95,7 @@
             <div class="col-xs-12 col-sm-3 trans-right-panel">
                 <div class="transaction-right-content">
                     <?PHP if ( (int) $productKey === (int) array_shift(array_keys($soldTransactionDetails['product']))) : ?>
-                        <?PHP if (intval($soldTransactionDetails['orderStatus']) != 99 && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] !== (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && (int) $soldTransactionDetails['isFlag'] === 0 ) : ?>
                             <div class="transaction-profile-wrapper">
                                 <h4>Sold To:</h4>
                                 <div>
