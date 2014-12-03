@@ -2059,7 +2059,8 @@ class Memberpage extends MY_Controller
 
             $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
             $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = $address[0]->getCountry()->getIdLocation();
+
+            $stateRegionId = $address[0]->getStateregion()->getIdLocation();
             $cityId = $address[0]->getCity()->getIdLocation();
             $consigneAddress = $address[0]->getAddress();
             $addressLatitude  = $address[0]->getLat();
@@ -2184,6 +2185,7 @@ class Memberpage extends MY_Controller
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
                 'cities' => $locationLookup["json_city"],
+                'cityLookup' => $locationLookup["cityLookup"],
                 'consigneeAddress' => $consigneAddress,
                 'address' => $address[0],
                 'latitude' => $addressLatitude ,
