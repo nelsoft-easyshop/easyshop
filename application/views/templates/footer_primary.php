@@ -28,8 +28,10 @@
                             </div>
                             <div class="col-md-12 col-xs-12 app-img-con">
                                 <h1>Download our App</h1>
-                                <a href=""><img src="/assets/images/img-app-apple.png" alt="apple app"></a>
-                                <a href=""><img src="/assets/images/img-app-google.png" alt="google app"></a>
+                                <a href="" style="display:none;"><img src="/assets/images/img-app-apple.png" alt="apple app"></a>
+                                <a href="https://play.google.com/store/apps/details?id=com.nelsoft.easyshop" target="_blank">
+                                    <img src="/assets/images/img-app-google.png" alt="google app">
+                                </a>
                             </div>
                         </div>
                     </div>
