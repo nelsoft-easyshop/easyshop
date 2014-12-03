@@ -40,7 +40,7 @@
                                     <?PHP if ($product['isReject']) : ?>
                                         <span class="trans-status-pending">ITEM REJECTED</span>
                                     <?php else:?>
-                                        <?PHP if( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrder::ON_GOING):?>
+                                        <?PHP if( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING):?>
                                             <?PHP if( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY ) : ?>
                                                 <span class="trans-status-cod">CASH ON DELIVERY</span>
                                             <?PHP else : ?>
