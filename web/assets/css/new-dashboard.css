@@ -814,8 +814,14 @@ a{
 
 #hidden-product-container,
 #hidden-feedback-container,
-#hidden-sales-container{
+#hidden-sales-container,
+#hidden-paginate-loader{
     display: none;
+}
+
+#loader-div {
+    margin-bottom: 30px;
+    margin-top: 40px;
 }
 
 .map-trigger{

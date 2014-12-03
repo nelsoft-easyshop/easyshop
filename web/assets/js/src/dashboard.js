@@ -393,13 +393,12 @@
                 request : $requestType,
             },
             beforeSend: function(){ 
-                $('#'+$container).hide();
+                $('#'+$container).html($('#hidden-paginate-loader').html());
             },
             success: function(requestResponse){ 
                 var $response = $.parseJSON(requestResponse);
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
                 $('#'+$container).html($response.html);
-                $('#'+$container).show();
 
                 if( !$searchByString ){
                     if($container == "deleted-product-container"){
@@ -427,14 +426,12 @@
                 request : $requestType, 
             },
             beforeSend: function(){ 
-                $("#feedback-view-container").hide();
+                $("#feedback-view-container").html($('#hidden-paginate-loader').html());
             },
             success: function(requestResponse){
                 var $response = $.parseJSON(requestResponse); 
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
                 $("#feedback-view-container").html($response.html);
-                $("#feedback-view-container").show();
-
                 $("#hidden-feedback-container > #feedback-" + $requestType).append($appendString);
             }
         });
