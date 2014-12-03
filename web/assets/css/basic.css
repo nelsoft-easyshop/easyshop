@@ -22,7 +22,7 @@
 #simplemodal-container {
 	border-radius: 4px;
 	/*height:290px !important;*/
-	height: auto;
+	height: auto !important;
 	width:600px; 
 	background-color:#fff;
 }

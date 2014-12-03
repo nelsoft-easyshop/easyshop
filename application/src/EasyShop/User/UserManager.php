@@ -280,11 +280,15 @@ class UserManager
         $isValidLocation = !empty($locationEntity);
         
         if( $isValidLocation ){
-            $arrAddressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                    ->getAddressDetails($this->memberId, $type);
+
+            $addressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                      ->findOneBy([
+                                            'idMember' => $this->memberId,
+                                            'type' => $type
+                                        ]);
             
-            if( !empty($arrAddressEntity) ){
-                $address = $arrAddressEntity[0];
+            if( $addressEntity ){
+                $address = $addressEntity;
             }
             else{
                 $address = new EsAddress();
