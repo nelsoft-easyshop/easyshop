@@ -5,7 +5,7 @@
 <link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/new-dashboard-transaction.css' rel="stylesheet" media='screen'/>
+
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">

@@ -32,15 +32,15 @@
                                                 </div>
                                                 <div class="col-xs-6">
                                                     <span class="strong-label">Status : </span>
-                                                    <?PHP if ( (int) $product['idOrderProductStatus'] === 1) : ?>
+                                                    <?PHP if ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER) : ?>
                                                         <span class="trans-status-cod status-class">Item Delivered</span>
-                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === 2):?>
+                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER) : ?>
                                                         <span class="trans-status-pending status-class">Order Canceled</span>
-                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === 3):?>
+                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY) : ?>
                                                         <span class="trans-status-cod status-class">Cash on delivery</span>
-                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === 4):?>
+                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED) : ?>
                                                         <span class="trans-status-cod status-class">Payment Received</span>
-                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === 5):?>
+                                                    <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_RETURNED) : ?>
                                                         <span class="trans-status-pending status-class">Payment Returned</span>
                                                     <?PHP endif;?>
                                                 </div>
@@ -82,7 +82,7 @@
                             </span>
                                             </div>
                                         </div>
-                                        <div class="trans-btn-wrapper">
+                                        <div class="trans-btn-wrapper trans-1btn">
                                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
                                                 <button class="btn btn-default-1 give-feedback-button">
                                                     <span class="img-give-feedback"></span>give feedback

@@ -275,8 +275,10 @@
     
     /************* Personal Information **************/
     var formPersonalInfo = $("#formPersonalInfo");
-    formPersonalInfo.find( "#birthday-picker" ).datepicker({ dateFormat: "yy-mm-dd" });
+    formPersonalInfo.find( "#birthday-picker" ).datepicker({ changeMonth:true, changeYear:true, dateFormat: "yy-mm-dd" });
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
+        $("#errorIndicatorMobileNumber").css("display","none");        
+        $("#errorIndicatorBirthday").css("display","none");        
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
@@ -290,7 +292,7 @@
             type: 'post',
             data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, csrfname : csrftoken},
             url: "/memberpage/edit_personal",
-            success: function(data) {
+            success: function(data) {                
                     $("#savePersonalInfo").text("SAVE CHANGES");
                     var obj = jQuery.parseJSON(data);
                     if(obj.result !== "success") {
@@ -299,9 +301,10 @@
                             $("#errorIndicatorMobileNumber").css("display","block");
                             $("#errorTextMobile").text(obj.error.mobile);
                         }
-                        else {
-                            $("#errorIndicatorMobileNumber").css("display","none");                            
-                        }                 
+                        if(obj.error.dateofbirth) {
+                            $("#errorIndicatorBirthday").css("display","block");
+                            $("#errorTextBirthday").text(obj.error.dateofbirth );                            
+                        }              
                     }
                     else {
                         $("#errorIndicatorMobileNumber").css("display","none");
