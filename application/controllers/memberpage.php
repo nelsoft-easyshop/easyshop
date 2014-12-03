@@ -2060,13 +2060,9 @@ class Memberpage extends MY_Controller
                                         'idMember' => $memberId,
                                         'type' => EsAddress::TYPE_DELIVERY
                                     ]);
-            $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
-
-            $stateRegionId = $address->getStateregion()->getIdLocation();
-            $cityId = $address->getCity()->getIdLocation();
-            $consigneAddress = $address->getAddress();
-            $addressLatitude  = $address->getLat();
-            $addressLongitude = $address->getLng();
+            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
+            $stateRegionId = ($address) ? $address->getCountry()->getIdLocation() : '';
+            $cityId = ($address) ? $address->getCity()->getIdLocation() : '';
 
             $paginationData['isHyperLink'] = false;
 
@@ -2187,11 +2183,7 @@ class Memberpage extends MY_Controller
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
                 'cities' => $locationLookup["json_city"],
-                'cityLookup' => $locationLookup["cityLookup"],
-                'consigneeAddress' => $consigneAddress,
                 'address' => $address,
-                'latitude' => $addressLatitude ,
-                'longitude' => $addressLongitude,
                 'consigneeStateRegionId' => $stateRegionId,
                 'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
