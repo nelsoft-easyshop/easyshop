@@ -32,6 +32,10 @@
                     <label class="col-sm-3 control-label">Birthday : </label>
                      <div class="col-sm-8">
                         <input type="text" value="<?php echo $member->getBirthday() == '0000-00-00' || $member->getBirthday() == '0001-01-01'? '':$member->getBirthday()->format('Y-m-d')?>" name="birthday" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
+                        <div id="errorIndicatorBirthday" style="display:none;">
+                            <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextBirthday"></span>
+                        </div>                    
                     </div>
 
                 </div>
