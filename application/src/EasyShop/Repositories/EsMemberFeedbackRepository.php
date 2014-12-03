@@ -140,7 +140,7 @@ class EsMemberFeedbackRepository extends EntityRepository
             SELECT 
                 COUNT(id_feedback) as count
             FROM
-                easyshop.es_member_feedback
+                es_member_feedback
             WHERE
                 member_id = :member_id OR for_memberid = :member_id
         ";
@@ -171,7 +171,7 @@ class EsMemberFeedbackRepository extends EntityRepository
                 ROUND(AVG(rating2)) as rating2,
                 ROUND(AVG(rating3)) as rating3
             FROM
-                easyshop.es_member_feedback
+                es_member_feedback
             WHERE
                 for_memberid = :member_id
         ";

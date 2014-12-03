@@ -28,9 +28,10 @@
                             <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
                                 <?=html_escape($product['name'])?>
                             </a>
-                                <span class="trans-circle trans-circle-inc">
-                                    <span class="glyphicon glyphicon-ok"></span>
-                                </span>
+                            <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                            <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox" value="<?=$product['idOrderProduct']?>">
+                            <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
+                            <?PHP endif; ?>
                         </p>
                         <p class="item-amount">
                             <span class="item-current-amount">P<?=number_format($product['price'], 2, '.', ',') ?></span>
@@ -140,8 +141,8 @@
                                 </div>
                             </div>
                         <?PHP endif; ?>
-                        <div class="trans-btn-wrapper">
-                            <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && (int) $soldTransactionDetails['isFlag'] === 0) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && (int) $soldTransactionDetails['isFlag'] === 0) : ?>
+                            <div class="trans-btn-wrapper trans-btn-con1">
                                 <button class="btn btn-default-1 isform shipment-detail-button txt_buttons">Ship Item</button>
                                 <div class="shipping-details">
                                     <?php
@@ -218,18 +219,19 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            <?PHP elseif (intval($soldTransactionDetails['orderStatus']) === 0 && intval($product['idOrderProductStatus']) === 0 && intval($soldTransactionDetails['idPaymentMethod']) === 3) : ?>
-                                <?php
+                        <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                            <div class="trans-btn-wrapper trans-btn-con2">
+                                    <?php
                                 $attr = ['class' => 'transac_response'];
                                 echo form_open('',$attr);
                                 ?>
-                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled">
+                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled" disabled="disabled">
                                 <input type="hidden" name="cash_on_delivery" value="<?=$product['idOrderProduct']?>">
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
                             <?PHP endif; ?>
-                            <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
                                     <span class="img-give-feedback"></span>give feedback
                                 </button>

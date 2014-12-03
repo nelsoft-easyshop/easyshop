@@ -166,13 +166,15 @@
                         </div>
                         -->
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">Your Username : </label>
+                            <div class="col-sm-5">
+                                <input type="text" name="deactivateUserName" id="deactivateUsername" class="text-info text-required" placeholder="Type your current password here">
+                            </div>
+                        </div>                        
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
                                 <input type="password" name="deactivatePassword" id="deactivatePassword" class="text-info text-required" placeholder="Type your current password here">
-                                <div id="deactivateErrorDiv" style="display:none;">
-                                    <span class="val-error-icon-pass"><i class="fa fa-times"></i></span>
-                                    <span class="val-error">Please enter at least 6 characters.</span>                                
-                                </div>
                             </div>
                         </div>
                         <div class="form-group">

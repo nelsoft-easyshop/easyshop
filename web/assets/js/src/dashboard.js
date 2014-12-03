@@ -470,8 +470,8 @@
     }
 
    $( "#btn-edit-email" ).click(function() {
-        $( ".current-email" ).slideToggle( "slow" );
-        $( ".edit-email" ).slideToggle( "slow" );
+        $( ".current-email" ).slideToggle( "fast" );
+        $( ".edit-email" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-email" ).click(function() {
@@ -479,8 +479,8 @@
     });
 
     $( "#btn-edit-password" ).click(function() {
-        $( ".current-password" ).slideToggle( "slow" );
-        $( ".edit-password" ).slideToggle( "slow" );
+        $( ".current-password" ).slideToggle( "fast" );
+        $( ".edit-password" ).slideToggle( "fast" );
     });
 
     $( "#cancel-edit-password" ).click(function() {
@@ -488,8 +488,8 @@
     });
 
     $( "#btn-edit-status" ).click(function() {
-        $( ".current-status" ).slideToggle( "slow" );
-        $( ".edit-status" ).slideToggle( "slow" );
+        $( ".current-status" ).slideToggle( "fast" );
+        $( ".edit-status" ).slideToggle( "fast" );
     });
 
     $( "#cancel-deact-status" ).click(function() {
@@ -521,8 +521,8 @@
     });
 
     $( "#btn-edit-store-theme" ).click(function() {
-        $( ".current-store-theme" ).slideToggle( "slow" );
-        $( ".edit-store-theme" ).slideToggle( "slow" );
+        $( ".current-store-theme" ).slideToggle( "fast" );
+        $( ".edit-store-theme" ).slideToggle( "fast" );
         $('#store-color-error').html('');
     });
 
@@ -533,7 +533,7 @@
     });
 
     $( ".current-color-drop" ).click(function() {
-        $( ".color-dropdown" ).slideToggle( "slow" );
+        $( ".color-dropdown" ).slideToggle( "fast" );
         var attr8 = $("i.cd").attr("class");
         if(attr8 == "cd icon-dropdown pull-right"){
             $('i.cd').removeClass("cd icon-dropdown pull-right").addClass("cd icon-dropup pull-right");
@@ -789,7 +789,7 @@
     });
 
     $(function() {
-        $( "#birthday-picker" ).datepicker({
+        $( "#birthday-picker2" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
@@ -921,6 +921,20 @@
         return false;
     });
 
+    $(".order-checkbox").on('change', function() {
+        var $container = $(this).parent().parent().parent().parent().parent().parent();
+        var $checkboxes = $container.find('.order-checkbox');
+        var checkedValues = $checkboxes.filter(':checked').map(function() {
+            return this.value;
+        }).get().join('-');
+        $container.find('.tx_cod').prop('disabled', true);
+        $container.find('input[name=cash_on_delivery]').val('');
+        if ($checkboxes.length == $checkboxes.filter(':checked').length) {
+            $container.find('.tx_cod').prop('disabled', false);
+            $container.find('input[name=cash_on_delivery]').val(checkedValues);
+        }
+    });
+
     $('.transac_response_btn.enabled').on('click', function() {
         var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
         if(!isConfirmed){
@@ -929,6 +943,7 @@
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
+        var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
         var data = form.serializeArray();
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
@@ -957,7 +972,7 @@
                 }else if(txResponseBtn.hasClass('tx_return')){
                     txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
                 }else if(txResponseBtn.hasClass('tx_cod')){
-                    txStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                    alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                 }
                 txResponseBtn.val('Successful');
                 txResponseBtn.parent().parent().find('.txt_buttons').hide();
@@ -966,6 +981,29 @@
         });
 
 
+    });
+
+    $('#on-going-transaction').on('click','.exportTransactions', function(){
+        var url = $(this).data("url");
+        document.location.href = url;
+    });
+
+    $('#on-going-transaction').on('click','.printTransactions', function() {
+        var url = $(this).data("url");
+
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function(json) {
+                var originalContents = $(document.body).html();
+                $(document.body).html(json);
+                window.print();
+                location.reload();
+            },
+            error: function(e) {
+                alert("Action failed, please try again");
+            }
+        });
     });
 
     function htmlDecode(value) {
@@ -1053,8 +1091,6 @@
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-bought';
 
-        alert($container);
-        return false;
         getTransactionDetails($page, $requestType, $container);
     });
 
@@ -1067,7 +1103,46 @@
 
         getTransactionDetails($page, $requestType, $container);
     });
-    
+
+    $(".search-transaction-num").on('keypress', function(e) {
+        var code = e.keyCode || e.which;
+        var $value = $(this).val();
+        var $container =  $(this).attr('data');
+        var $searchFor = 'transactionNumber';
+        if (code === 13) {
+            searchForTransaction($container, $searchFor, $value, $container);
+            return false;
+        }
+    });
+
+    $('.payment-filter').on('change',function() {
+        var $value = $(this).val();
+        var $container =  $(this).attr('data');
+        var $searchFor = 'paymentMethod';
+        searchForTransaction($container, $searchFor, $value, $container);
+    });
+
+    function searchForTransaction($requestType, $searchFor, $value, $container)
+    {
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : 0,
+                value : $value,
+                searchFor : $searchFor,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
+
     $(".save-store-setting").click(function(){
         var $this = $(this);
         var storename = $('#input-store-name').val();
@@ -1191,9 +1266,8 @@
         $(".select-bank").slideUp();
         $(".add-bank-account").fadeIn();
     });
-    
-    
-    
+
+    $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
 
     function getTransactionDetails($page, $requestType, $container)
     {

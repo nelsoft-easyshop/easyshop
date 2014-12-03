@@ -667,7 +667,6 @@ a{
     transition: all 0.3s ease;
     color: #565656;
     display: inline-block;
-    width: 100%;
 }
 
 .text-info:focus,
@@ -835,7 +834,7 @@ a{
 }
 
 .span-current-location{
-    margin-left: 20px;
+    margin-left: 0px;
 }
 
 .panel-setting-title,
@@ -1426,6 +1425,10 @@ a{
   
 }
 
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+    font-family: 'Helvetica' !important;
+}
+
 .feedback-content-dashboard{
     padding: 0 0px;
     text-align: left;
@@ -1450,6 +1453,7 @@ a{
 
 #lightbox #content{
     background-color: transparent !important;
+    margin-top: 20px;
 }
 
 #lightbox {
@@ -1461,6 +1465,8 @@ a{
     background:url(/assets/images/overlay.png) repeat; 
     text-align:center;
     z-index: 99999;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #lightbox p {
@@ -1480,7 +1486,16 @@ a{
     max-height:100%;
     margin-top:36px;
 }
-    
+
+#lightbox #content{
+    padding: 10px;
+}
+
+.closeLightbox{
+    margin-top: 10px;
+    cursor: pointer;
+}
+
 .col-button-searc-hist{
     padding-left: 0px;
 }
@@ -1919,6 +1934,7 @@ a{
     right: 0;
     max-width: 390px;
     width: 100%;
+    z-index: 3;
 }
 
 .view-delivery-details strong {
@@ -2179,6 +2195,36 @@ a{
 
 /** =============== Responsive CSS style =============== **/
 
+
+=======
+.chosen-container{
+    width: 100% !important;
+}
+
+.chosen-container-single .chosen-single {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 4px 10px !important;
+    height: 34px !important;
+    border: 1px solid #e2e2e2 !important;
+    border-radius: 4px !important;
+    background-color: #fff !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    color: #444;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 24px;
+}
+
+.chosen-container-single .chosen-drop{
+    margin-top: -3px;
+}
+
+.chosen-container .chosen-drop{
+    border: solid #e2e2e2 1px;
+}
 
 @media only screen and (max-width: 991px){
     .section-dashboard{
@@ -2473,7 +2519,7 @@ a{
     }
     
     .img-follower-cover{
-        display: none;
+        opacity: 0;
     }
     
     .center-image{
@@ -2769,6 +2815,10 @@ a{
 }
 
 @media screen and (max-width: 768px) {
+    .trans-left-panel.trans-btn-con1-1 {
+        margin-top: 150px;
+    }
+
     .trans-left-panel {
         margin-top: 120px;
     }
@@ -2850,6 +2900,14 @@ a{
 }
 
 @media screen and (max-width: 480px) {
+    .trans-left-panel.trans-btn-con1-1 {
+        margin-top: 210px;
+    }
+    .trans-btn-con1 .give-feedback-button,
+    .trans-1btn  .give-feedback-button {
+        width: 100% !important;
+    }
+
     .trans-left-panel {
         margin-top: 180px;
     }
@@ -2893,9 +2951,9 @@ a{
     }
 
     .trans-btn-wrapper button.btn,
-    .trans-btn-wrapper .transac_response_btn{
+    .trans-btn-wrapper .transac_response_btn {
         float: left;
-        width: 48%;
+        width: 49%;
     }
 
     .trans-btn-wrapper .btn.btn-default-3 {
@@ -2903,8 +2961,8 @@ a{
         padding: 11px 12px;
     }
 
-    .trans-btn-wrapper .transac_response_btn,
-    .trans-btn-wrapper .shipment-detail-button {
+    .btn.btn-default-1.isform.shipment-detail-button.txt_buttons,
+    .btn.btn-default-3.txt_buttons.transac_response_btn    {
         margin-right: 2%;
     }
 
@@ -2930,6 +2988,10 @@ a{
     .trans-left-panel .div-product-image {
         height: 55px;
         width: 55px;
+    }
+
+    .view-delivery-details .col-md-6 span, .view-delivery-details .col-md-12 span {
+        width: 100%;
     }
 }
 

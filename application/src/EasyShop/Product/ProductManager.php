@@ -137,6 +137,10 @@ class ProductManager
         else{
             return false;
         }
+
+        if(!$product){
+            return false;
+        }
         
         $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                               ->getSoldPrice($productId, $product->getStartDate(), $product->getEndDate());
@@ -582,7 +586,7 @@ class ProductManager
             if($lprice !== "" || $uprice !== "") {
                 foreach ($categoryProductIds as $key => $prodId) {
                     $discountedPrice = floatval($this->promoManager->hydratePromoDataExpress($prodId));
-                    if( ( $lprice !== "" && bccomp($discountedPrice, $lprice) === -1) || ( $uprice !== "" && bccomp($discountedPrice, $uprice) === 1)) {
+                    if( ( $lprice !== "" && bccomp($discountedPrice, $lprice, 4) === -1) || ( $uprice !== "" && bccomp($discountedPrice, $uprice, 4) === 1)) {
                         unset($categoryProductIds[$key]);
                     }
                 }   

@@ -3055,6 +3055,12 @@ h3 > b{
     -o-transition: all 0.3s ease;
 }
 
+@-moz-document url-prefix() {
+    .tooltip-home{
+        bottom: 30px;
+    }
+}
+
 .item-name:hover .tooltip-home{
     display: inline-block;
     -webkit-transition: all 0.3s ease;
@@ -3623,6 +3629,14 @@ h3 > b{
 }
 
 @media only screen and (max-width: 991px) {
+    .item-name:hover .tooltip-home{
+        display: none !important;
+    }
+    
+    .tooltip-home {
+        display: none;
+    }
+    
     .col-xs-6.col-sm-6.col-md-6.top-header-left {
         padding: 0;
     }

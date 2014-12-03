@@ -157,7 +157,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="trans-btn-wrapper">
+                    <div class="trans-btn-wrapper trans-1btn">
                         <?PHP if ( (int) $product['has_shipping_summary'] === 1 && (int) $boughtTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $boughtTransactionDetails['idPaymentMethod'] !== 3 && (int) $boughtTransactionDetails['isFlag'] === 0 ) : ?>
                             <button class="btn btn-default-1">Item recieved</button>
                             <?php if( (int) $product['isReject'] === 0):?>

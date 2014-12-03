@@ -82,7 +82,7 @@
                             </span>
                                             </div>
                                         </div>
-                                        <div class="trans-btn-wrapper">
+                                        <div class="trans-btn-wrapper trans-1btn">
                                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
                                                 <button class="btn btn-default-1 give-feedback-button">
                                                     <span class="img-give-feedback"></span>give feedback

@@ -9,15 +9,14 @@ use Doctrine\DBAL\Migrations\Version;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20141129161749 extends AbstractMigration
+class Version20141202115428 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
         $this->addSql("
             ALTER TABLE `es_member` 
-            ADD COLUMN `is_active` TINYINT(5) NOT NULL DEFAULT '0';
-        ");
-
+            CHANGE COLUMN `is_active` `is_active` TINYINT(5) NOT NULL DEFAULT '1';
+        ");            
 
     }
 
@@ -25,8 +24,8 @@ class Version20141129161749 extends AbstractMigration
     {
         $this->addSql("
             ALTER TABLE `es_member` 
-            DROP COLUMN `is_active`;
-        ");
+            CHANGE COLUMN `is_active` `is_active` TINYINT(5) NOT NULL DEFAULT '0';
+        ");             
 
 
     }
