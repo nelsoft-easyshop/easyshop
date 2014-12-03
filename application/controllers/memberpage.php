@@ -2601,7 +2601,6 @@ class Memberpage extends MY_Controller
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-            $formBuild->add('storename', 'text');
             $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
             $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
             $form->submit($formData);
@@ -2649,7 +2648,6 @@ class Memberpage extends MY_Controller
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-            $formBuild->add('storeslug', 'text');
             $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
             $formData['storeslug'] = $this->input->post('storeslug');
             $form = $formBuild->getForm();
@@ -2748,7 +2746,46 @@ class Memberpage extends MY_Controller
     
     public function createPaymentAccount()
     {
-    
+        $memberId = $this->session->userdata('member_id');
+
+        
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $jsonResponse = ['isSuccessful' => 'false',
+                         'errors' => []];        
+
+                         
+        if($this->input->post()){
+            $rules = $formValidation->getRules('payment_account');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+
+            $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
+            $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formData['account-bank-id'] = $this->input->post('account-bank-id');
+            $formData['account-name'] = $this->input->post('account-name');
+            $formData['account-number'] = $this->input->post('account-number');
+            $form = $formBuild->getForm();
+            $form->submit($formData);        
+                  
+            if($form->isValid()){
+                $this->serviceContainer['entity_manager']
+                     ->getRepository('EasyShop\Entities\EsBillingInfo')
+                     ->createNewPaymentAccount($memberId, 
+                                               $formData['account-name'], 
+                                               $formData['account-number'], 
+                                               $formData['account-bank-id']
+                                            );
+                $jsonResponse['isSuccessful'] = 'true';
+            }else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
+            }
+        }
+        echo json_encode($jsonResponse); 
+
     }
     
 

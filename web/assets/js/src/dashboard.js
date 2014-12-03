@@ -1335,6 +1335,7 @@
    
     $('#newPaymentForm').on('submit', function(e){
         e.preventDefault()
+        $('#payment-create-error').hide();
         var $bankDropdown = $('.bank-dropdown');
         var $accountName = $('.account-name-input');
         var $accountNumber = $('.account-number-input');
@@ -1360,6 +1361,31 @@
         if(hasErrors){
             return false;
         }
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/createPaymentAccount',
+            data: $( this ).serialize(),
+            success: function(jsonresponse) {
+                var jsonResponse = $.parseJSON(jsonresponse);  
+                if(jsonResponse.isSuccessful == 'true'){
+                    var templateClone =  $('#payment-account-template').clone();
+                    var bankName = $bankDropdown.find('option:selected').text();
+                    templateClone.css('display', 'block');
+                    templateClone.find('.bank-name-container').html(escapeHtml(bankName));
+                    templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
+                    templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
+                    $('.payment-account-container').append(templateClone);
+                    $('.cancel-add-bank').trigger('click');
+                }
+                else{
+                    var paymentErrorContainer = $('#payment-create-error');
+                    paymentErrorContainer.html(jsonResponse.errors);
+                    paymentErrorContainer.show();
+                }
+                
+                
+            }
+        });
         
         
     });

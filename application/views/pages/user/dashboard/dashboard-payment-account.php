@@ -15,18 +15,18 @@
                     <?php echo form_open('/memberpage/createPaymentAccount', [ 'id' => 'newPaymentForm' ]); ?>
                         <div class="col-xs-12 col-sm-12"><strong>Bank Name:</strong></div>
                         <div class="col-xs-12 col-sm-12">
-                            <select class="text-info mrgn-top-10 bank-dropdown">
+                            <select class="text-info mrgn-top-10 bank-dropdown" name='account-bank-id'>
                                 <option value="0">Please select a bank</option>
                             </select>
                         </div>
                         <div class="clear pd-top-10">
                             <div class="col-xs-12 col-sm-6">
                                 <strong>Account Name:</strong>
-                                <input type="text" class="text-info mrgn-top-10 account-name-input">
+                                <input type="text" class="text-info mrgn-top-10 account-name-input" name='account-name' >
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <strong>Account Number:</strong>
-                                <input type="text" class="text-info mrgn-top-10 account-number-input">
+                                <input type="text" class="text-info mrgn-top-10 account-number-input" name='account-number' >
                             </div>
                         </div>
                         <div class="col-xs-12 text-center bank-btns-con pd-top-30">
@@ -34,7 +34,13 @@
                             <input type="submit" class="btn btn-default-3" value="Save">
                         </div> 
                     <?php echo form_close(); ?>
+
                 </div>
+                <br/>
+                <div class="alert alert-danger" id="payment-create-error" role="alert" style="display:none;">
+                    
+                </div>
+                
             </div>
         </div>
         <div class="clear"></div>
