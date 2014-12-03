@@ -2183,6 +2183,7 @@ class Memberpage extends MY_Controller
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
                 'cities' => $locationLookup["json_city"],
+                'cityLookup' => $locationLookup["cityLookup"],
                 'address' => $address,
                 'consigneeStateRegionId' => $stateRegionId,
                 'consigneeCityId' => $cityId,
