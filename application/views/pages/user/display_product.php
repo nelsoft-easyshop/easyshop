@@ -83,16 +83,18 @@
                         <tr>
                             <td width="20%" class="td-list-image" style="">
                                 <div style="position: relative; height: 100%; width: 100%;">
-                                    <!-- PUT THE SECONDARY PRODUCT IMAGE HERE-->
-                                    <div style="background: url(<?=$productImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
-                                        <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
-                                            <div class="span-space">
-                                                
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <!-- PUT THE PRODUCT PRIMARY IMAGE HERE. REMOVE THE image-hover-none class if there is no secondary image -->
-                                    <div class="image-hover-none main-image-list" style="background: url(/assets/images/img_cd_prod1.jpg) center no-repeat; background-size: cover;">
+                                
+                                    <?php if($secondaryImagePath !== null): ?>
+                                        <div style="background: url(<?=$secondaryImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
+                                            <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
+                                                <div class="span-space">
+                                                    
+                                                </div>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
+              
+                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="background: url(<?php echo $productImagePath; ?>) center no-repeat; background-size: cover;">
                                         <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                             <div class="span-space">
                                             

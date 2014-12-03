@@ -61,8 +61,6 @@ class product_search extends MY_Controller {
     */
     public function advance()
     {
-        header ('Content-type: text/html; charset=ISO-8859-1');
-
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
@@ -125,9 +123,7 @@ class product_search extends MY_Controller {
      *   Route: search/(:any)
      */
     public function searchfaster()
-    { 
-        header ('Content-type: text/html; charset=ISO-8859-1');
-
+    {
         if(trim($this->input->get('q_str')) === "" && intval(trim($this->input->get('category'))) <= 1){
             redirect('cat/all');
         }

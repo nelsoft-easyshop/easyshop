@@ -76,7 +76,10 @@ class ApiFormatter
      */
     public function formatItem($productId, $isItemView = false)
     {
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $product = $this->productManager->getProductDetails($productId);
+        $memberId = $product->getMember()->getIdMember();
 
         $productDetails = [
                 'name' => utf8_encode($product->getName()),
@@ -108,11 +111,12 @@ class ApiFormatter
         }
 
         // get user rating
-        $userRating = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
-                               ->getAverageRatings($product->getMember()->getIdMember());
+        $userRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
+
+        $userRatingCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
 
         $rateDescription = [
-                    'rateCount' => $userRating['count'],
+                    'rateCount' => $userRatingCount,
                     'rateDescription' => [
                             'Item quality' => $userRating['rating1'],
                             'Communication' => $userRating['rating2'],
@@ -127,8 +131,7 @@ class ApiFormatter
                 ];
 
         // get product combination
-        $productAttributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->getProductAttributeDetailByName($productId);
+        $productAttributes = $esProductRepo->getProductAttributeDetailByName($productId);
 
         $productAttributesPrice = [];
         foreach ($productAttributes as $key => $value) {
@@ -169,8 +172,7 @@ class ApiFormatter
         }
 
         // get product quantity
-        $productInventory = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                     ->getProductInventoryDetail($productId);
+        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
 
         $temporaryArray = [];
         foreach ($productInventory as $key => $value) {
@@ -212,18 +214,17 @@ class ApiFormatter
             $productQuantity[] = $temporaryArray[$key];
         }
 
-        // get reviews 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 
         return [
-                'productDetails' => $productDetails,
-                'productImages' => $productImages,
-                'sellerDetails' => $sellerDetails,
-                'productCombinationAttributes' => $productCombinationAttributes,
-                'productSpecification' => $productSpecification,
-                'productQuantity' => $productQuantity,
-                'reviews' => $recentReview,
-            ];
+            'productDetails' => $productDetails,
+            'productImages' => $productImages,
+            'sellerDetails' => $sellerDetails,
+            'productCombinationAttributes' => $productCombinationAttributes,
+            'productSpecification' => $productSpecification,
+            'productQuantity' => $productQuantity,
+            'reviews' => $recentReview,
+        ];
     }
 
     /**
@@ -353,6 +354,9 @@ class ApiFormatter
             }
         }
         $this->cartImplementation->persist($memberId);
+        $cartData = $this->cartManager->getValidatedCartContents($memberId);
+
+        return $cartData;
     }
 }
  

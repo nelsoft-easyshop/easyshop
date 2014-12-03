@@ -546,17 +546,27 @@ header {
 
 #inner-header.christmas-theme {
     background: #fff url(../images/img-snow.jpg) no-repeat top center;
-    padding-top:30px;
 }
+
+/*#inner-header .logo-container,
+#inner-header .header-inner-right {
+    margin-bottom:22px;
+}*/
 
 #inner-header .logo-container,
 #inner-header .header-inner-right {
-    margin-bottom:22px;
+    margin-bottom:15px;
 }
+
+/*.logo {
+    position:relative;
+    margin-top:-5px;
+
+}*/
 
 .logo {
     position:relative;
-    margin-top:-5px;
+    margin-top:-10px;
 
 }
 
@@ -3045,6 +3055,12 @@ h3 > b{
     -o-transition: all 0.3s ease;
 }
 
+@-moz-document url-prefix() {
+    .tooltip-home{
+        bottom: 30px;
+    }
+}
+
 .item-name:hover .tooltip-home{
     display: inline-block;
     -webkit-transition: all 0.3s ease;
@@ -3613,6 +3629,14 @@ h3 > b{
 }
 
 @media only screen and (max-width: 991px) {
+    .item-name:hover .tooltip-home{
+        display: none !important;
+    }
+    
+    .tooltip-home {
+        display: none;
+    }
+    
     .col-xs-6.col-sm-6.col-md-6.top-header-left {
         padding: 0;
     }

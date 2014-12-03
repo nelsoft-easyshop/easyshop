@@ -47,7 +47,7 @@
             <div class="container single-image-before"></div>
 
             <div class="single-image">
-                <img src="/assets/images/promo-images/header-xmas.jpg" alt="">
+                <img src="/assets/images/promo-images/header-xmas.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
 
             </div>
 
@@ -113,7 +113,7 @@
                             <img src="/assets/images/promo-images/item7.jpg">
                             <p>Super Starbabies</p>
                         </a>
-                    </div>git
+                    </div>
 
                     <div class="span4 box seller-list">
                         <a href="/ckkmobile" target="_blank">

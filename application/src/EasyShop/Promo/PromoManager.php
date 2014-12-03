@@ -93,8 +93,11 @@ class PromoManager
                 $product->setFinalPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
             }
         }
- 
-        $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
+
+        $percentage = 0;
+        if($product->getOriginalPrice() > 0){
+            $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
+        }
         $product->setDiscountPercentage($percentage); 
     }
 
