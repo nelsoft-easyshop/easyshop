@@ -168,42 +168,4 @@
         </div>
     </div>
     <div class="clear"></div>
-
-<div id="feedback-modal">
-    <div class="feedback-content">
-        <h1>LEAVE A FEEDBACK</h1>
-        <div class="star-rating-wrapper">
-            <span class="star-label">Item quality:</span>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat"></i>
-        </div>
-        <div class="star-rating-wrapper">
-            <span class="star-label">Communication: </span>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat"></i>
-        </div>
-        <div class="star-rating-wrapper">
-            <span class="star-label">Shipment time:  </span>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat star-active"></i>
-            <i class="icon-star star-stat"></i>
-        </div>
-        <div>
-            <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
-        </div>
-    </div>
-    <div class="feedback-btns">
-        <span class="simplemodal-close btn btn-default-1">Cancel</span>
-        <button class="btn btn-default-3">Submit</button>
-    </div>
-    <div class="clear"></div>
 </div>
-
