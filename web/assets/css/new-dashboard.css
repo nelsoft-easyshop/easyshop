@@ -667,6 +667,7 @@ a{
     transition: all 0.3s ease;
     color: #565656;
     display: inline-block;
+    width: 100%;
 }
 
 .text-info:focus,
@@ -754,7 +755,15 @@ a{
     color: #ff3e1d;
     font-size: 22px;
     position: absolute;
-    right: 21px;
+    right: 8px;
+    top: 8px;
+}
+
+.val-error-icon-url{
+    color: #ff3e1d;
+    font-size: 22px;
+    position: absolute;
+    right: 8px;
     top: 8px;
 }
 
@@ -814,8 +823,14 @@ a{
 
 #hidden-product-container,
 #hidden-feedback-container,
-#hidden-sales-container{
+#hidden-sales-container,
+#hidden-paginate-loader{
     display: none;
+}
+
+#loader-div {
+    margin-bottom: 30px;
+    margin-top: 40px;
 }
 
 .map-trigger{
@@ -1329,7 +1344,7 @@ a{
     font-size: 10px;
 }
 
-..dashboard-breadcrumb{
+.dashboard-breadcrumb{
     display: none;
 }
 
@@ -1551,6 +1566,652 @@ a{
 
 }
 
+
+/** ============================= **/
+/** ====== transaction tab ====== **/
+.mrgn-top-12 {
+    margin-top: 12px;
+}
+
+.padding-reset {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pd-top-10 {
+    padding-top: 10px;
+}
+
+.btn-loadmore {
+    background-color: #e2e2e2;
+    border: none;
+    font-weight: 900;
+    font-size: 16px;
+    height: 42px;
+    line-height: 32px;
+    max-width: 170px;
+    width: 100%;
+}
+
+.btn-loadmore {
+    background-color: #c2c2c2;
+}
+
+.btn.btn-inc,
+.btn.btn-inc:hover {
+    background-color: #878787 !important;
+    border-bottom: 2px solid #878787 !important;
+}
+
+.trans-status-cod {
+    color: #00a388;
+}
+
+.trans-status-pending {
+    color: #ff6137;
+}
+
+.transaction-tabs ul {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    height: 60px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.transaction-tabs ul li {
+    float: left;
+    font-size: 16px;
+    text-align: center;
+    height: 60px;
+    line-height: 54px;
+    width: 50%;
+}
+
+.transaction-tabs ul li:first-child {
+    border-right: 1px solid #e2e2e2;
+}
+
+.transaction-tabs ul li a {
+    display: block;
+    text-transform: uppercase;
+}
+
+.transaction-tabs ul li a.selected {
+    border-bottom: 4px solid #fe893a;
+    color: #fe893a;
+    font-weight: 900;
+}
+
+.sales-title-total,
+.payout-title-total,
+.transaction-title-bought,
+.transaction-title-sold,
+.transaction-title-bought-completed,
+.transaction-title-sold-completed,
+.feedback-from-seller,
+.feedback-from-buyer,
+.feedback-for-seller,
+.feedback-for-buyer
+
+ {
+    background-color: #f4f4f4;
+    border-bottom: 3px solid #e2e2e2;
+    border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 58px;
+    line-height: 58px;
+    padding-left: 30px;
+    text-transform: uppercase;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.sales-title-total,
+.payout-title-total,
+.transaction-title-bought,
+.transaction-title-sold,
+.transaction-title-bought-completed,
+.transaction-title-sold-completed,
+.feedback-from-seller,
+.feedback-from-buyer,
+.feedback-for-seller,
+.feedback-for-buyer {
+    background:#f4f4f4 url(../images/sprites/dashboard-arrow.png) no-repeat right center;
+}
+
+.sales-title-total.active-bar,
+.payout-title-total.active-bar,
+.transaction-title-bought.active-bar,
+.transaction-title-sold.active-bar,
+.transaction-title-bought-completed.active-bar,
+.transaction-title-sold-completed.active-bar,
+.feedback-from-seller.active-bar,
+.feedback-from-buyer.active-bar,
+.feedback-for-seller.active-bar,
+.feedback-for-buyer.active-bar
+ {
+    background:#f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
+}
+
+.sales-title-total .trans-title,
+.payout-title-total .trans-title,
+.transaction-title-bought .trans-title,
+.transaction-title-sold .trans-title,
+.transaction-title-bought-completed .trans-title,
+.transaction-title-sold-completed .trans-title,
+.feedback-from-seller .trans-title,
+.feedback-from-buyer .trans-title,
+.feedback-for-seller .trans-title,
+.feedback-for-buyer .trans-title{
+    font-size: 16px;
+    font-weight: 900;
+    padding-right: 18px;
+}
+
+.transaction-title-bought .count,
+.transaction-title-sold .count,
+.transaction-title-bought-completed .count,
+.transaction-title-sold-completed .count,
+.feedback-from-seller .count,
+.feedback-from-buyer .count,
+.feedback-for-seller .count,
+.feedback-for-buyer .count{
+    background-color: #878787;
+    border-radius: 90px;
+    display: inline-block;
+    color: #fff;
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    width: 28px;
+    -moz-border-radius: 90px;
+    -webkit-border-radius: 90px;
+}
+
+.transaction-search {
+    background: url(../images/img_search2.png) no-repeat 7px center;
+    max-width: 300px;
+    margin-right: 12px;
+    padding-left: 35px !important;
+    vertical-align: middle;
+    width: 53%;
+}
+
+#on-going-transaction .btn,
+#completed-transaction .btn,
+.feedback-btns .btn,
+.shipping-btns .btn {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+.transaction-top-btns button.btn i {
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.on-going-transaction-list-bought,
+.on-going-transaction-list-sold,
+.on-going-transaction-list-bought-completed,
+.on-going-transaction-list-sold-completed {
+    display: none;
+}
+
+.transac-title {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e2e2e2;
+    padding: 14px 12px;
+}
+
+.transac-title div {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.transaction-item .item-list-panel {
+    margin-bottom: 15px;
+}
+
+.trans-left-panel .div-product-image {
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    margin: 0 auto;
+}
+
+.trans-left-panel .info-main-cont {
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.transaction-right-content {
+    padding-bottom: 12px;
+    padding-top: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.trans-circle {
+    border-radius: 90px;
+    display: inline-block;
+    height: 25px;
+    margin-left: 20px;
+    text-align: center;
+    width: 25px;
+}
+
+.trans-circle span {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.trans-circle-inc {
+    color: #878787;
+    border: 2px solid #878787;
+}
+
+.trans-circle-com {
+    background-color: #00a388;
+    border: 2px solid #00a388;
+    color: #fff;
+}
+
+.trans-btn-wrapper button:first-child,
+.transac_response .transac_response_btn {
+    margin-bottom: 6px;
+}
+
+.transaction-right-content button,
+.transaction-right-content input {
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.transaction-right-content .btn.btn-default-3 {
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    padding: 9px 12px;
+}
+
+.img-completed,
+.img-give-feedback {
+    background-image: url(../images/sprites/dashboard-sprite.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 5px;
+    height: 18px;
+    vertical-align: bottom;
+    width: 20px;
+}
+
+.img-completed {
+    background-position: -7px -2px;
+}
+
+.img-give-feedback {
+    background-position: -30px -2px;
+}
+
+.btn.btn-default-1:hover .img-give-feedback {
+    background: url(../images/sprites/dashboard-sprite.png) no-repeat -30px -20px;
+}
+
+.trans-item-info .fa-minus-circle:before {
+    content: "\f056" !important;
+}
+
+.transaction-profile-wrapper {
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    padding: 14px 8px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.transaction-profile-wrapper h4 {
+    font-size: 16px;
+}
+
+.transac-item-profile-con {
+    background-color: #f4f4f4;
+    border:1px solid #f4f4f4;
+    border-radius: 4px;
+    display: inline-block;
+    height: 26px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 24px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.transac-item-profile-con img {
+    bottom: 0;
+    left: 0;
+    height: auto;
+    margin:auto;
+    max-height: 26px;
+    max-width: 24px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.transac-item-consignee-name {
+    display: inline-block;
+    font-weight: 900;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.view-delivery-details:before {
+    content: "";
+    border-style: solid;
+    border-width: 0 6.5px 7px 6.5px;
+    border-color: transparent transparent #565656 transparent;
+    position: absolute;
+    right: 77px;
+    top: -7px;
+    height: 0;
+    width: 0;
+}
+
+.view-delivery-lnk {
+    color: #4370cb;
+    cursor: pointer;
+    border-bottom: 1px solid #4370cb;
+}
+
+.view-delivery-details {
+    background-color: #565656;
+    border-radius: 4px;
+    color: #fff;
+    display: none;
+    font-size: 11px;
+    overflow: inherit !important;
+    padding: 10px 0;
+    position: absolute;
+    text-align: left;
+    top: 25px;
+    right: 0;
+    max-width: 390px;
+    width: 100%;
+    z-index: 3;
+}
+
+.view-delivery-details strong {
+    display: inline-block;
+    width: 80px;
+}
+
+.view-delivery-details span {
+    border-bottom: 1px dotted #fff;
+    display: inline-block;
+}
+
+.view-delivery-details .col-md-12 span {
+    width: 76%;
+}
+
+.view-delivery-details .col-md-6 span {
+    width: 49%;
+}
+
+.item-list-last-prod .info-main-cont {
+    border-bottom: none;
+}
+
+/** ---------------- modal css ------------------**/
+
+.feedback-container {
+    max-height: 400px;
+}
+
+.shipping-details-container {
+    max-height: 550px;
+}
+
+#feedback-modal,
+#shipping-details,
+.shipping-details,
+.give-feedback-modal{
+    display: none;
+}
+
+#shipping-details .col-md-4 {
+    line-height: 34px;
+}
+
+.shipping-details-con {
+    padding: 0;
+}
+
+.feedback-content {
+    border-bottom: 1px solid #cecece;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.feedback-content h1,
+.shipping-details-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 30px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.star-rating-wrapper {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.star-rating-wrapper:last-child {
+    margin-right: 0;
+}
+
+.feedback-content .star-label {
+    font-size: 13px;
+}
+
+.feedback-content .star-active,
+.feedback-content .star-stat {
+    vertical-align: middle;
+}
+
+.shipping-details-container .ui-form-control {
+    width: 100%;
+}
+
+.feedback-content textarea,
+.shipping-details-container textarea {
+    background-color: #ececec;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    height: 130px;
+    width: 100%;
+}
+
+.feedback-content textarea {
+    margin: 30px 0;
+}
+
+.shipping-details-container textarea {
+    margin: 15px 0;
+}
+
+.feedback-content textarea:focus,
+.shipping-details-container textarea:focus {
+    background-color: #fff;
+    border: 1px solid #ececec;
+}
+
+.feedback-content textarea::-webkit-input-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea:-moz-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea::-moz-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-content textarea:-ms-input-placeholder,
+.shipping-details-container textarea::-webkit-input-placeholder {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.feedback-btns,
+.shipping-btns {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.feedback-btns .btn,
+.shipping-btns .btn {
+    font-size: 15px;
+    font-weight: 900;
+    padding: 8px 12px;
+    max-width: 136px;
+    width: 100%;
+}
+
+.feedback-btns span,
+.shipping-btns span {
+    margin-right: 10px;
+}
+
+.shipping-border {
+    border-bottom: 1px solid #cecece;
+}
+
+/***** payment account css ******/
+.add-bank-account {
+    border: none;
+    font-weight: 900;
+    max-width: 300px;
+    padding: 9px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.add-bank-btn-con {
+    height: 40px;
+}
+
+.select-bank {
+    display: none;
+}
+
+.add-bank-account i {
+    margin-right: 6px;
+}
+
+.select-bank input,
+.select-bank select {
+    width: 100%;
+}
+
+.select-bank strong {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.bank-btns-con span,
+.bank-btns-con input {
+    font-weight: 900;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.bank-btns-con input {
+    border: none;
+    margin-top: 12px;
+    padding: 9px;
+}
+
+.bank-btns-con span {
+    margin-right: 12px;
+}
+
+.bank-account-item {
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+    padding: 30px 40px;
+}
+
+.bank-account-item-btns .btn-default-3 {
+    border:none;
+    font-weight: 900;
+    padding: 9px;
+    width: 100%;
+}
+
+.bank-account-item-btns .mrgn-2 {
+    margin-right: 2%;
+}
+
+.bank-account-item-btns .btn-default-1 {
+    width: 48%;
+}
+
+.bank-label {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.bank-account-item-btns .default-account {
+    background-color: #00a388;
+    border: 1px solid #00a388;
+    color:#fff;
+    cursor: default;
+    font-weight: 900;
+    width: 100%;
+}
+
+.bank-account-item-btns .btn {
+    padding: 9px;
+}
+
+.bank-account-item-btns .btn-set-default {
+    background-color: #878787;
+    border: none;
+    border-bottom: 2px solid #565656;
+    color:#fff;
+    font-weight: 900;
+    width: 100%;
+}
+
+.bank-account-item-btns .btn-set-default:hover {
+    background-color: #565656;
+}
+
+/** =============== Responsive CSS style =============== **/
+
+
+=======
 .chosen-container{
     width: 100% !important;
 }
@@ -1579,6 +2240,8 @@ a{
 .chosen-container .chosen-drop{
     border: solid #e2e2e2 1px;
 }
+
+
 @media only screen and (max-width: 991px){
     .section-dashboard{
         margin-top: 0px;
@@ -2065,114 +2728,11 @@ a{
         padding-left: 15px;
     }
 
-    
     .activateAccount{
         margin: 20px 0px;
     }
 
 
-}
-
-
-/***** payment account css ******/
-.add-bank-account {
-    border: none;
-    font-weight: 900;
-    max-width: 300px;
-    padding: 9px;
-    text-transform: uppercase;
-    width: 100%;
-}
-
-.add-bank-btn-con {
-    height: 40px;
-}
-
-.select-bank {
-    display: none;
-}
-
-.add-bank-account i {
-    margin-right: 6px;
-}
-
-.select-bank input,
-.select-bank select {
-    width: 100%;
-}
-
-.select-bank strong {
-    font-size: 15px;
-    font-weight: 900;
-}
-
-.bank-btns-con span,
-.bank-btns-con input {
-    font-weight: 900;
-    text-transform: uppercase;
-    width: 100%;
-}
-
-.bank-btns-con input {
-    border: none;
-    margin-top: 12px;
-    padding: 9px;
-}
-
-.bank-btns-con span {
-    margin-right: 12px;
-}
-
-.bank-account-item {
-    border: solid #e2e2e2 1px;
-    border-radius: 4px;
-    padding: 30px 40px;
-}
-
-.bank-account-item-btns .btn-default-3 {
-    border:none;
-    font-weight: 900;
-    padding: 9px;
-    width: 100%;
-}
-
-.bank-account-item-btns .mrgn-2 {
-    margin-right: 2%;
-}
-
-.bank-account-item-btns .btn-default-1 {
-    width: 48%;
-}
-
-.bank-label {
-    font-size: 13px;
-    font-weight: 900;
-}
-
-.bank-account-item-btns .default-account {
-    background-color: #00a388;
-    border: 1px solid #00a388;
-    color:#fff;
-    cursor: default;
-    font-weight: 900;
-    width: 100%;
-}
-
-.bank-account-item-btns .btn {
-    padding: 9px;
-}
-
-.bank-account-item-btns .btn-set-default {
-    background-color: #878787;
-    border: none;
-    border-bottom: 2px solid #565656;
-    color:#fff;
-    font-weight: 900;
-    width: 100%;
-}
-
-.bank-account-item-btns .btn-set-default:hover {
-    background-color: #565656;
 }
 
 @media screen and (min-width: 480px) {
@@ -2185,10 +2745,127 @@ a{
     }
 }
 
+@media screen and (min-width: 768px) {
+    .view-delivery-details {
+        min-width: 390px;
+    }
+
+    .feedback-container {
+        min-width: 650px;
+    }
+}
+
+@media screen and (min-width: 991px) {
+    .feedback-container {
+        min-width: 783px;
+    }
+
+    .shipping-details-container {
+        min-width: 550px;
+        max-width: 555px;
+    }
+
+}
+
+@media (min-width: 991px) and (max-width: 1200px) {
+    .trans-left-panel .div-product-image {
+        height: 145px;
+        width: 145px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .trans-left-panel .div-product-image {
+        height: 185px;
+        width: 185px;
+    }
+}
+
 @media screen and (max-width: 1199px) {
     .bank-account-item-btns .btn-default-1 {
         width: 100%;
     }
+}
+
+@media screen and (max-width: 991px) {
+    .transaction-top-btns {
+        margin-bottom: 12px;
+    }
+
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 76%;
+    }
+
+    .feedback-container {
+        max-height: 460px;
+    }
+
+    .star-rating-wrapper {
+        display: block;
+        margin-right: 0px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .shipping-details-con {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 415px; 
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 66%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .trans-left-panel.trans-btn-con1-1 {
+        margin-top: 150px;
+    }
+
+    .trans-left-panel {
+        margin-top: 120px;
+    }
+    .trans-right-panel {
+        position: absolute;
+    }
+
+    .transaction-profile-wrapper {
+        float: left;
+        width: 50%;
+    }
+
+    .trans-left-panel .info-main-cont {
+        margin-top: 0;
+    }
+
+    .trans-btn-wrapper {
+        float: left;
+        padding: 0 5%;
+        width: 50%;
+    }
+
+    .transaction-right-content .view-delivery-details {
+        left: 0;
+    }
+
+    .transaction-right-content .view-delivery-details:before {
+        left: 40%;
+        right: 0;
+    }
+
 }
 
 @media screen and (max-width: 767px) {
@@ -2228,7 +2905,112 @@ a{
         margin-top: 0;
         margin-right: 0;
     }
-
+    
+    .val-error-icon-url{
+        right: 15px;
+    }
 }
 
+@media screen and (max-width: 520px) {
+    .shipping-btns .btn {
+        max-width: inherit;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .trans-left-panel.trans-btn-con1-1 {
+        margin-top: 210px;
+    }
+    .trans-btn-con1 .give-feedback-button,
+    .trans-1btn  .give-feedback-button {
+        width: 100% !important;
+    }
+
+    .trans-left-panel {
+        margin-top: 180px;
+    }
+
+    .transac-title div {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .transaction-top-btns button.btn i {
+        font-size: 20px;
+    }
+
+    .transaction-top-btns button.btn span {
+        display: none;
+    }
+
+    .transac-title div:last-child {
+        margin-bottom: 0px;
+    }
+
+    .transac-title span {
+        display: inline-block;
+        width: 115px;
+    }
+
+    .transaction-profile-wrapper {
+        float: none;
+        width: 100%;
+    }
+
+    .trans-left-panel .div-product-image {
+        height: 75px;
+        width: 75px;
+    }
+
+    .trans-btn-wrapper {
+        float: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    .trans-btn-wrapper button.btn,
+    .trans-btn-wrapper .transac_response_btn {
+        float: left;
+        width: 49%;
+    }
+
+    .trans-btn-wrapper .btn.btn-default-3 {
+        font-size: 10px;
+        padding: 11px 12px;
+    }
+
+    .btn.btn-default-1.isform.shipment-detail-button.txt_buttons,
+    .btn.btn-default-3.txt_buttons.transac_response_btn    {
+        margin-right: 2%;
+    }
+
+    .transaction-right-content .view-delivery-details {
+        right: 0;
+        margin: auto;
+    }
+
+    .transaction-right-content .view-delivery-details:before {
+        left: 50%;
+    }
+
+    .view-delivery-details .col-md-6 span,
+    .view-delivery-details .col-md-12 span {
+        width: 66%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .transac-title span {
+        display: block;
+    }
+    .trans-left-panel .div-product-image {
+        height: 55px;
+        width: 55px;
+    }
+
+    .view-delivery-details .col-md-6 span, .view-delivery-details .col-md-12 span {
+        width: 100%;
+    }
+}
 

@@ -62,19 +62,25 @@
                 </div>
                 <div class="edit-store-url edit-store-slug">
                     <div class="row">
-                        <div class="col-md-6 col-inline-textbtn">
-                             <span class="setting-edit-url"><?php echo base_url(); ?></span> 
-                             <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
-                          
-                   
-                            <span class="val-error-icon-pass" id="fail-icon-store-slug" style="display:none">
-                                <i class="fa fa-times"></i>
-                            </span>
-                            <span class="val-error" id="fail-message-store-slug" style="display:none">
-                            </span>
-
-                            </span>
-                          
+                        <div class="col-md-7 col-inline-textbtn">
+                            <div class="div-url-container">
+                                <table>
+                                    <tr>
+                                        <td>
+                                             <span class="setting-edit-url"><?php echo base_url(); ?></span>
+                                        </td>
+                                        <td width="100%">
+                                            <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
+                                            <span class="val-error-icon-url" id="fail-icon-store-slug" style="display:none;">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                                <span class="val-error" id="fail-message-store-slug" style="display:none">
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
                             <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-slug">
