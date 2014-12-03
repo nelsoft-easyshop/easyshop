@@ -1285,18 +1285,22 @@
             }
         });
     }
-    
-    
-    
+
     var isPaymentAccountInitialized = false;
     $('#payment-account-tab').on('click', function(){
          if(!isPaymentAccountInitialized){
-
             $.ajax({
                 type: "get",
                 url: '/memberpage/getPaymentAccounts',
                 success: function(data){ 
-                    var jsonResponse = $.parseJSON(data);                    
+                    var jsonResponse = $.parseJSON(data);  
+                    var bankOptionString = '';
+                    $.each(jsonResponse.bankList, function(index, bank) {
+                        bankOptionString += '<option value="'+bank.idBank+'">' 
+                                                + escapeHtml(bank.bankName) +
+                                            '</option>';
+                    });
+                    $('.bank-dropdown').append(bankOptionString);
                     $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
                         var templateClone =  $('#payment-account-template').clone();
                         templateClone.css('display', 'block');
@@ -1312,17 +1316,65 @@
                 
                     isPaymentAccountInitialized = true;
                 }
-            });
-          
-            
-        
-             
-                
-            
-            
+            });   
         }
     });
     
+    $('.bank-dropdown').on('change', function(){
+        $(this).removeClass('input-error');
+    });
+    
+    $('.account-name-input').on('keyup', function(){
+        $(this).removeClass('input-error');
+    });
+   
+    $('.account-number-input').on('keyup', function(){
+        $(this).removeClass('input-error');
+    });
+   
+   
+    $('#newPaymentForm').on('submit', function(e){
+        e.preventDefault()
+        var $bankDropdown = $('.bank-dropdown');
+        var $accountName = $('.account-name-input');
+        var $accountNumber = $('.account-number-input');
+        $bankDropdown.removeClass('input-error');
+        $accountName.removeClass('input-error');
+        $accountNumber.removeClass('input-error');
+        var bankId = $bankDropdown.val();
+        var accountNameValue = $accountName.val();
+        var accountNumberValue = $accountNumber.val();
+        var hasErrors = false;
+        if(parseInt(bankId) <= 0){
+            $bankDropdown.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNameValue).length <= 0){
+            $accountName.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNumberValue).length <= 0){
+            $accountNumber.addClass('input-error');
+            hasErrors = true;
+        }
+        if(hasErrors){
+            return false;
+        }
+        
+        
+    });
+    
+    $('.cancel-add-bank').on('click', function(){
+        var $bankDropdown = $('.bank-dropdown');
+        var $accountName = $('.account-name-input');
+        var $accountNumber = $('.account-number-input');
+        $bankDropdown.removeClass('input-error');
+        $accountName.removeClass('input-error');
+        $accountNumber.removeClass('input-error');
+        $bankDropdown.val(0);
+        $accountName.val('');
+        $accountName.val('');
+    });
     
     
 }(jQuery));

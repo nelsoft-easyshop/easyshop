@@ -2739,8 +2739,16 @@ class Memberpage extends MY_Controller
             $response['paymentAccount'] = $this->serviceContainer['entity_manager']
                                                ->getRepository('EasyShop\Entities\EsBillingInfo')
                                                ->getMemberPaymentAccountsAsArray($memberId);   
+            $response['bankList'] = $this->serviceContainer['entity_manager']
+                                         ->getRepository('EasyShop\Entities\EsBankInfo')
+                                         ->getAllBanks(true); 
         }
         echo json_encode($response);
+    }
+    
+    public function createPaymentAccount()
+    {
+    
     }
     
 
