@@ -275,7 +275,7 @@
     
     /************* Personal Information **************/
     var formPersonalInfo = $("#formPersonalInfo");
-    formPersonalInfo.find( "#birthday-picker" ).datepicker({ dateFormat: "yy-mm-dd" });
+    formPersonalInfo.find( "#birthday-picker" ).datepicker({ changeMonth:true, changeYear:true, dateFormat: "yy-mm-dd" });
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
         $("#errorIndicatorMobileNumber").css("display","none");        
         $("#errorIndicatorBirthday").css("display","none");        
