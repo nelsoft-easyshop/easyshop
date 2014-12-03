@@ -26,6 +26,11 @@
                                     <li><a href="/terms">Terms of Use</a></li>
                                 </ul>
                             </div>
+                            <div class="col-md-12 col-xs-12 app-img-con">
+                                <h1>Download our App</h1>
+                                <a href=""><img src="/assets/images/img-app-apple.png" alt="apple app"></a>
+                                <a href=""><img src="/assets/images/img-app-google.png" alt="google app"></a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 footer-newsletter">
