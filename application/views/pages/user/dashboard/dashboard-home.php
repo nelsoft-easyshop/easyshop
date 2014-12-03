@@ -357,3 +357,11 @@
     </div>
 </div>
 
+<div id="hidden-paginate-loader">
+    <center>
+        <div id="loader-div">
+            <img src="/assets/images/loading/preloader-whiteBG.gif">
+        </div>
+    </center>
+</div>
+
