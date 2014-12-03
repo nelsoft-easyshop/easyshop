@@ -222,12 +222,12 @@ class SocialMediaController extends MY_Controller
     {
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                                        ->findOneBy(['email' => $this->input->post('email')]);
+                                      ->findOneBy(['email' => $this->input->post('email')]);
         $socialMediaLinks = $this->getSocialMediaLinks();
         if ($member) {
             $result = true;
             $this->load->library('parser');
-            $parseData = array(
+            $parseData = [
                 'username' => $member->getUsername(),
                 'hash' => $this->encrypt->encode(
                     $member->getIdMember() .
@@ -240,18 +240,17 @@ class SocialMediaController extends MY_Controller
                 'error_in' => $this->input->post('error'),
                 'facebook' => $socialMediaLinks["facebook"],
                 'twitter' => $socialMediaLinks["twitter"]
+            ];
 
-            );
-            $images = array("/assets/images/landingpage/templates/facebook.png",
-                "/assets/images/landingpage/templates/twitter.png",
-                "/assets/images/appbar.home.png",
-                "/assets/images/appbar.message.png",
-                "/assets/images/landingpage/templates/header-img.png");
+            $this->config->load('email', true);
+            $imageArray = $this->config->config['images'];
+            $imageArray[] = "/assets/images/appbar.home.png";
+            $imageArray[] = "/assets/images/appbar.message.png";
 
             $message = $this->parser->parse('emails/merge-account', $parseData, true);
             $this->emailNotification->setRecipient($member->getEmail());
             $this->emailNotification->setSubject($this->lang->line('merge_subject'));
-            $this->emailNotification->setMessage($message, $images);
+            $this->emailNotification->setMessage($message, $imageArray);
             $this->emailNotification->sendMail();
         }
 
