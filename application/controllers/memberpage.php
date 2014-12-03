@@ -2747,21 +2747,19 @@ class Memberpage extends MY_Controller
     public function createPaymentAccount()
     {
         $memberId = $this->session->userdata('member_id');
-
         
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $jsonResponse = ['isSuccessful' => 'false',
-                         'errors' => []];        
-
-                         
+                         'errors' => [],
+                         'newId' => 0,
+                        ];               
         if($this->input->post()){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
             $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
@@ -2772,20 +2770,34 @@ class Memberpage extends MY_Controller
             $form->submit($formData);        
                   
             if($form->isValid()){
-                $this->serviceContainer['entity_manager']
-                     ->getRepository('EasyShop\Entities\EsBillingInfo')
-                     ->createNewPaymentAccount($memberId, 
-                                               $formData['account-name'], 
-                                               $formData['account-number'], 
-                                               $formData['account-bank-id']
+                $paymentAccountId = $this->serviceContainer['entity_manager']
+                                         ->getRepository('EasyShop\Entities\EsBillingInfo')
+                                         ->createNewPaymentAccount($memberId, 
+                                                $formData['account-name'], 
+                                                $formData['account-number'], 
+                                                $formData['account-bank-id']
                                             );
-                $jsonResponse['isSuccessful'] = 'true';
+                if($paymentAccountId){
+                    $jsonResponse['isSuccessful'] = 'true';
+                    $jsonResponse['newId'] = $paymentAccountId;
+                }
             }else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
             }
         }
         echo json_encode($jsonResponse); 
-
+    }
+    
+    /**
+     * Update default account
+     *
+     */
+    public function changeDefaultPaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');
+        if($this->input->post() && $memberId){
+            
+        }
     }
     
 

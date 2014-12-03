@@ -67,6 +67,7 @@
                 <span class="btn btn-default-1 mrgn-top-10"><span class="icon-delete"></span> Delete</span>
             </div>
             <div class="clear"></div>
+            <input type="hidden" class="payment-account-id" value="0"/>
         </div>
         <div class="clear"></div>
   

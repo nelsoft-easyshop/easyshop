@@ -1307,6 +1307,7 @@
                         templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
+                        templateClone.find('.payment-account-id').val(paymentAccount.idBank);
                         if(paymentAccount.isDefault){
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
                         }    
@@ -1365,8 +1366,8 @@
             type: 'post',
             url: 'memberpage/createPaymentAccount',
             data: $( this ).serialize(),
-            success: function(jsonresponse) {
-                var jsonResponse = $.parseJSON(jsonresponse);  
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response);  
                 if(jsonResponse.isSuccessful == 'true'){
                     var templateClone =  $('#payment-account-template').clone();
                     var bankName = $bankDropdown.find('option:selected').text();
@@ -1374,6 +1375,7 @@
                     templateClone.find('.bank-name-container').html(escapeHtml(bankName));
                     templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
                     templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
+                    templateClone.find('.payment-account-id').val(jsonResponse.newId);
                     $('.payment-account-container').append(templateClone);
                     $('.cancel-add-bank').trigger('click');
                 }
@@ -1400,6 +1402,10 @@
         $bankDropdown.val(0);
         $accountName.val('');
         $accountName.val('');
+    });
+    
+    $('.payment-account-container').on('click', '.btn-set-default', function(){
+
     });
     
     

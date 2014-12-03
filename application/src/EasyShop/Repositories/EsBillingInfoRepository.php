@@ -73,7 +73,7 @@ class EsBillingInfoRepository extends EntityRepository
         catch(Exception $e){
             $isSuccessful = false;
         }
-        return $isSuccessful;
+        return $isSuccessful  ? $paymentAccount->getIdBillingInfo()  : false;
     }
     
     /**
