@@ -1263,6 +1263,8 @@
         $(".add-bank-account").fadeIn();
     });
 
+    $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
+
     function getTransactionDetails($page, $requestType, $container)
     {
         console.log($container);

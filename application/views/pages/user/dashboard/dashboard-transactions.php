@@ -23,14 +23,14 @@
     </div>
     <div class="on-going-transaction-list-bought">
         <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
-            <div class="mrgn-top-20 mrgn-bttm-25 row">
-                <div class="col-md-9">
+            <div class="mrgn-top-20 mrgn-bttm-15 row">
+                <div class="col-md-9 transaction-top-btns">
                     <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printBuyTransactions">
+                    <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions">
                         <i class="icon-fax"></i> <span>Print</span>
                     </button>
                     <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions">
-                        <i class="icon-category"></i> <span>Export CSV</span>
+                        <i class="icon-file"></i> <span>Export CSV</span>
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
@@ -62,14 +62,14 @@
     </div>
     <div class="on-going-transaction-list-sold">
         <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
-            <div class="mrgn-top-20 mrgn-bttm-25 row">
-                <div class="col-md-9">
+            <div class="mrgn-top-20 mrgn-bttm-15 row">
+                <div class="col-md-9 transaction-top-btns">
                     <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
-                    <button class="btn btn-setting-edit-btn printTransactions" data-url="/memberpage/printSellTransactions">
-                        <i class="icon-fax"></i> Print
+                    <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions">
+                        <i class="icon-fax"></i> <span>Print</span>
                     </button>
-                    <button class="btn btn-setting-edit-btn exportTransactions" data-url="/memberpage/exportSellTransactions">
-                        <i class="icon-category"></i> Export CSV
+                    <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportSellTransactions">
+                        <i class="icon-file"></i> <span>Export CSV</span>
                     </button>
                 </div>
                 <div class="col-md-3 text-right">
@@ -106,8 +106,8 @@
     </div>
     <div class="on-going-transaction-list-bought-completed">
         <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
-        <div class="mrgn-top-20 mrgn-bttm-25 row">
-            <div class="col-md-9">
+        <div class="mrgn-top-20 mrgn-bttm-15 row">
+            <div class="col-md-9 transaction-top-btns">
                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
             </div>
             <div class="col-md-3 text-right">
@@ -139,7 +139,7 @@
     </div>
     <div class="on-going-transaction-list-sold-completed">
         <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
-        <div class="mrgn-top-20 mrgn-bttm-25 row">
+        <div class="mrgn-top-20 mrgn-bttm-15 row">
             <div class="col-md-9">
                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
             </div>
@@ -206,4 +206,5 @@
         <span class="simplemodal-close btn btn-default-1">Cancel</span>
         <button class="btn btn-default-3">Submit</button>
     </div>
+    <div class="clear"></div>
 </div>
