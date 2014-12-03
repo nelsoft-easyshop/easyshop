@@ -451,13 +451,12 @@
                 date_to : $dateTo,
             },
             beforeSend: function(){ 
-                $("#" + $container + " > .sales-container").hide();
+                $("#" + $container + " > .sales-container").html($('#hidden-paginate-loader').html());
             },
             success: function(requestResponse){
                 var $response = $.parseJSON(requestResponse); 
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
                 $("#" + $container + " > .sales-container").html($response.html);
-                $("#" + $container + " > .sales-container").show();
                 $("#" + $container + " > .p-stat-total").html("&#8369; "+$response.netAmount);
                 if($dateFrom == "" && $dateTo == ""){
                     $("#hidden-sales-container > #sales-" + $requestType).append($appendString);
