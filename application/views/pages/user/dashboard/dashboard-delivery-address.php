@@ -58,8 +58,8 @@
                         <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $consigneeCityId?>">
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
-                            <?php if($c_cityID != '' && $consigneeStateRegionId != ''):?>
-                                <?php foreach($cities[$consigneeStateRegionId] as $lockey=>$city):?>
+                            <?php if($consigneeCityId != '' && $consigneeStateRegionId != ''):?>
+                                <?php foreach($cityLookup[$consigneeStateRegionId] as $lockey=>$city):?>
                                     <option class="echo" value="<?php echo $lockey?>" <?php echo $consigneeCityId == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                                 <?php endforeach;?>
                             <?php endif;?>
