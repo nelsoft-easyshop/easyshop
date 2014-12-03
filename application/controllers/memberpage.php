@@ -2726,7 +2726,22 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
     
-
+    /**
+     * Returns all the payment accounts of the logged-in user
+     *
+     * @return JSON
+     */
+    public function getPaymentAccounts()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['paymentAccount'] = $this->serviceContainer['entity_manager']
+                                               ->getRepository('EasyShop\Entities\EsBillingInfo')
+                                               ->getMemberPaymentAccountsAsArray($memberId);   
+        }
+        echo json_encode($response);
+    }
     
 
 }

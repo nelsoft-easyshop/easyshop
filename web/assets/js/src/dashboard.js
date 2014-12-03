@@ -1229,8 +1229,7 @@
             });
         }
     });
-    
-    
+
         
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -1286,6 +1285,46 @@
             }
         });
     }
+    
+    
+    
+    var isPaymentAccountInitialized = false;
+    $('#payment-account-tab').on('click', function(){
+         if(!isPaymentAccountInitialized){
+
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getPaymentAccounts',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);                    
+                    $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
+                        var templateClone =  $('#payment-account-template').clone();
+                        templateClone.css('display', 'block');
+                        templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
+                        templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
+                        templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
+                        if(paymentAccount.isDefault){
+                            templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
+                        }    
+                        $('.payment-account-container').append(templateClone);
+                            
+                    });
+                
+                    isPaymentAccountInitialized = true;
+                }
+            });
+          
+            
+        
+             
+                
+            
+            
+        }
+    });
+    
+    
+    
 }(jQuery));
 
 
