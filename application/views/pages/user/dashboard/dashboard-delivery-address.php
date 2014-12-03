@@ -89,10 +89,10 @@
                     <label class="col-sm-3 control-label">Map Location : </label>
                     <div class="col-sm-8 col-map">
                         <span>Location not marked</span> <span class="map-trigger">Mark on map <i class="fa fa-caret-down"></i></span>
-                        <input type="hidden" name="map_lat" id="map_clat" value="<?php ($address) ? $address->getLat() : '' ?>">
-                        <input type="hidden" name="map_lng" id="map_clng" value="<?php ($address) ? $address->getLng() : ''?>">
-                        <input type="hidden" name="temp_lat" id="temp_clat" value="<?php ($address) ? $address->getLat() : '' ?>">
-                        <input type="hidden" name="temp_lng" id="temp_clng" value="<?php ($address) ? $address->getLng() : ''?>">
+                        <input type="hidden" name="map_lat" id="map_clat" value="<?php echo ($address) ? $address->getLat() : '' ?>">
+                        <input type="hidden" name="map_lng" id="map_clng" value="<?php echo ($address) ? $address->getLng() : ''?>">
+                        <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo ($address) ? $address->getLat() : '' ?>">
+                        <input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo ($address) ? $address->getLng() : ''?>">
                         <input type="hidden" name="current_lat" id="current_lat" value="">
                         <input type="hidden" name="current_lang" id="current_lang" value="">
                         <div class="map-container">
