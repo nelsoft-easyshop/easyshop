@@ -1663,18 +1663,18 @@ class Memberpage extends MY_Controller
 
         $rules = $formValidation->getRules('personal_info');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
-                    ->setMethod('POST')
-                    ->add('store_name', 'text')
-                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
-                    ->add('city', 'text')
-                    ->add('stateregion', 'text')
-                    ->getForm();
+                            ->setMethod('POST')
+                            ->add('store_name', 'text')
+                            ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                            ->add('city', 'text')
+                            ->add('stateregion', 'text')
+                            ->getForm();
 
         $form->submit([
-            'store_name' => $this->input->post('store_name')
-            , 'mobile' => $this->input->post('mobile')
-            , 'city' => $this->input->post('city')
-            , 'stateregion' => $this->input->post('stateregion')
+            'store_name' => $this->input->post('store_name'),
+            'mobile' => $this->input->post('mobile'),
+            'city' => $this->input->post('city'),
+            'stateregion' => $this->input->post('stateregion')
         ]);
 
         if( $form->isValid() ){
@@ -1685,9 +1685,9 @@ class Memberpage extends MY_Controller
             $validStateRegion = $formData['stateregion'];
 
             $um->setUser($memberId)
-                ->setStoreName($validStoreName)
-                ->setMobile($validMobile)
-                ->setMemberMisc([
+               ->setStoreName($validStoreName)
+               ->setMobile($validMobile)
+               ->setMemberMisc([
                     'setLastmodifieddate' => new DateTime('now')
                 ]);
 
@@ -1700,22 +1700,22 @@ class Memberpage extends MY_Controller
 
             $boolResult = $um->save();
 
-            $serverResponse = array(
-                'result' => $boolResult
-                , 'error' => $boolResult ? '' : $um->errorInfo()
-                , 'new_data' => $boolResult ? array(
-                                        "store_name" => $validStoreName
-                                        , "mobile" => $validMobile
-                                        , "state_region_id" => $validStateRegion
-                                        , "city_id" => $validCity
-                                    ) : array()
-            );
+            $serverResponse = [
+                'result' => $boolResult,
+                'error' => $boolResult ? '' : $um->errorInfo(),
+                'new_data' => $boolResult ? [
+                                    "store_name" => $validStoreName
+                                    , "mobile" => $validMobile
+                                    , "state_region_id" => $validStateRegion
+                                    , "city_id" => $validCity
+                                ] : []
+            ];
         }
         else{
-            $serverResponse = array(
-                'result' => FALSE
-                , 'error' => $formErrorHelper->getFormErrors($form)
-            );
+            $serverResponse = [
+                'result' => false,
+                'error' => $formErrorHelper->getFormErrors($form)
+            ];
         }
 
         echo json_encode($serverResponse);
@@ -2056,14 +2056,13 @@ class Memberpage extends MY_Controller
                            ->find($memberId);
 
         if($member){
-
-            $address = $esAddressRepo->getAddressDetails($memberId, EsAddress::TYPE_DELIVERY);
-            $locationLookup = $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = $address[0]->getCountry()->getIdLocation();
-            $cityId = $address[0]->getCity()->getIdLocation();
-            $consigneAddress = $address[0]->getAddress();
-            $addressLatitude  = $address[0]->getLat();
-            $addressLongitude = $address[0]->getLng();
+            $address = $esAddressRepo->findOneBy([
+                                        'idMember' => $memberId,
+                                        'type' => EsAddress::TYPE_DELIVERY
+                                    ]);
+            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
+            $stateRegionId = ($address) ? $address->getStateregion()->getIdLocation() : '';
+            $cityId = ($address) ? $address->getCity()->getIdLocation() : '';
 
             $paginationData['isHyperLink'] = false;
 
@@ -2184,10 +2183,8 @@ class Memberpage extends MY_Controller
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 'stateRegionLists' => $locationLookup["stateRegionLookup"],
                 'cities' => $locationLookup["json_city"],
-                'consigneeAddress' => $consigneAddress,
-                'address' => $address[0],
-                'latitude' => $addressLatitude ,
-                'longitude' => $addressLongitude,
+                'cityLookup' => $locationLookup["cityLookup"],
+                'address' => $address,
                 'consigneeStateRegionId' => $stateRegionId,
                 'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],

@@ -7,29 +7,6 @@ use EasyShop\Entities\EsAddress;
 
 class EsAddressRepository extends EntityRepository
 {
-    public function getAddressDetails($memberId, $type)
-    {
-        $em = $this->_em;
-        $dql = "
-            SELECT a,s,c
-            FROM EasyShop\Entities\EsAddress a
-            JOIN a.stateregion s
-            JOIN a.city c
-            WHERE a.idMember = :member_id
-                AND ( 
-                    a.type = :personal
-                    OR a.type = :delivery
-                    )
-        ";
-
-        $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId)
-                    ->setParameter('personal', $type)
-                    ->setParameter('delivery', !$type);
-
-        return $query->getResult();
-    }
-
     public function getShippingAddress($memberId)
     {
         $address = $this->_em->getRepository('EasyShop\Entities\EsAddress')
