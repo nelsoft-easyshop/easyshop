@@ -42,12 +42,6 @@ class Account extends MY_Controller
     public function register()
     {
         $accountManager = $this->serviceContainer['account_manager'];
-        $emailService = $this->serviceContainer['email_notification'];
-
-        $this->load->library('parser');
-        $this->config->load('email', true);
-        $imageArray = $this->config->config['images'];
-        $emailSubject = $this->lang->line('registration_subject');
         $errors = [];
         $isSuccessful = false;
 
@@ -59,6 +53,12 @@ class Account extends MY_Controller
         $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno, true);
         if(empty($registrationResult['errors'])){
             $isSuccessful = true;
+
+            $emailService = $this->serviceContainer['email_notification'];
+            $this->load->library('parser');
+            $this->config->load('email', true);
+            $imageArray = $this->config->config['images'];
+            $emailSubject = $this->lang->line('registration_subject');
             $emailContentData = [
                 'user' => $username,
                 'emailVerified' => true
