@@ -40,7 +40,7 @@
                                     <?PHP if ($product['isReject']) : ?>
                                         <span class="trans-status-pending">ITEM REJECTED</span>
                                     <?php else:?>
-                                        <?PHP if( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::ON_GOING):?>
+                                        <?PHP if( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrder::ON_GOING):?>
                                             <?PHP if( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY ) : ?>
                                                 <span class="trans-status-cod">CASH ON DELIVERY</span>
                                             <?PHP else : ?>
@@ -50,15 +50,15 @@
                                                     <span class="trans-status-cod">ITEM ON ROUTE</span>
                                                 <?PHP endif;?>
                                             <?PHP endif;?>
-                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER) : ?>
+                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER) : ?>
                                             Item Received
-                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER) : ?>
+                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER) : ?>
                                             <span class="trans-status-pending">Seller canceled order</span>
-                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY) : ?>
+                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY) : ?>
                                             <span class="trans-status-cod">CASH ON DELIVERY</span>
-                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED) : ?>
+                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED) : ?>
                                             <span class="trans-status-cod">Paid</span>
-                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsOrderProductStatus::PAID_RETURNED) : ?>
+                                        <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_RETURNED) : ?>
                                             <span class="trans-status-pending">Payment Refunded</span>
                                         <?PHP endif;?>
                                     <?PHP endif; ?>
