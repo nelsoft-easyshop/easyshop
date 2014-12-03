@@ -84,17 +84,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-8">
-                        <input type="checkbox" class="input-checkbox-dash" id="check-default c_def_address" name="c_def_address"/>
-                        <label id="set-default" class="lbl-checkbox" for="check-default">Set as default address <i class="fa fa-question-circle"></i></label>
-                        <div class="default-ad-explain">
-                            Setting as default updates address in Personal Information
-                        </div>
-                    </div>
-                </div>
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Map Location : </label>
                     <div class="col-sm-8 col-map">
