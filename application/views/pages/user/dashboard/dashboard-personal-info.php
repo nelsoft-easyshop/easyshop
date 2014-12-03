@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Birthday : </label>
                      <div class="col-sm-8">
-                        <input type="text" value="<?= ($member->getBirthday()->format('Y-m-d') == '0001-01-01')? '' : $member->getBirthday()->format('Y-m-d')?>" name="birthday" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
+                        <input type="text" value="<?= ($member->getBirthday()->format('Y-m-d') == EasyShop\Entities\EsMember::DEFAULT_DATE )? '' : $member->getBirthday()->format('Y-m-d')?>" name="birthday" class="text-info" id="birthday-picker" placeholder="Pick the date of your birthday here">
                         <div id="errorIndicatorBirthday" style="display:none;">
                             <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextBirthday"></span>
@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" id="mobileNumber" value="0<?php echo html_escape($member->getContactno());?>" name="mobile" class="text-info text-required" placeholder="Enter your 11 digit mobile number here">
+                        <input type="text" id="mobileNumber" value="<?= $member->getContactno() !== '' ? '0'.html_escape($member->getContactno()) : '';?>" name="mobile" class="text-info text-required" placeholder="Enter your 11 digit mobile number here">
                         <!-- DISPLAY WHEN ERROR -->
                         <div id="errorIndicatorMobileNumber" style="display:none;">
                             <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
