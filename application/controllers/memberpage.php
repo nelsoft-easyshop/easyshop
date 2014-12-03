@@ -2061,7 +2061,7 @@ class Memberpage extends MY_Controller
                                         'type' => EsAddress::TYPE_DELIVERY
                                     ]);
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = ($address) ? $address->getCountry()->getIdLocation() : '';
+            $stateRegionId = ($address) ? $address->getStateregion()->getIdLocation() : '';
             $cityId = ($address) ? $address->getCity()->getIdLocation() : '';
 
             $paginationData['isHyperLink'] = false;
