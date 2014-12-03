@@ -59,7 +59,7 @@
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
                             <?php if($consigneeCityId != '' && $consigneeStateRegionId != ''):?>
-                                <?php foreach($cities[$consigneeStateRegionId] as $lockey=>$city):?>
+                                <?php foreach($cityLookup[$consigneeStateRegionId] as $lockey=>$city):?>
                                     <option class="echo" value="<?php echo $lockey?>" <?php echo $consigneeCityId == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                                 <?php endforeach;?>
                             <?php endif;?>
@@ -77,7 +77,7 @@
                     <div class="col-sm-8">
                         <input type="text" class="text-info text-address" id="deliveryAddress" value="Brgy. San Roque, Evergreen Village" name="c_address" placeholder="Enter your street address here">
                         <span class="span-label-address">Street Address</span>
-                        <input type="hidden" name="caddress_orig" value="<?php echo html_escape(($address) ? $address->getAddress : '')?>">
+                        <input type="hidden" name="caddress_orig" value="<?php echo html_escape(($address) ? $address->getAddress() : '')?>">
                         <div id="errorsDivStreetAddress" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextStreetAddress"></span>
