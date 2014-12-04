@@ -168,7 +168,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
-                                <input type="text" name="deactivateUserName" id="deactivateUsername" class="text-info text-required" placeholder="Type your current password here">
+                                <input type="text" name="deactivateUserName" id="deactivateUsername" class="text-info text-required" placeholder="Type your username here">
                             </div>
                         </div>                        
                         <div class="form-group">
