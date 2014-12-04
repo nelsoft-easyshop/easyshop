@@ -806,7 +806,7 @@ class Memberpage extends MY_Controller
                 $data['status'] = EsOrderProductStatus::CASH_ON_DELIVERY;
             }
 
-            if ( (bool) stripos($data['order_product_id'][0], '-') === true) {
+            if ( (bool) stripos($data['order_product_id'][0], '-')) {
                 $productIds = explode('-', $data['order_product_id'][0]);
                 $data['order_product_id'] = $productIds;
             }
