@@ -54,6 +54,7 @@ class Memberpage extends MY_Controller
 
     /**
      *  Class Constructor
+     *
      */
     public function __construct()
     {
