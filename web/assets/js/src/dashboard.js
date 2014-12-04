@@ -1227,10 +1227,10 @@
     });
 
     $('#ongoing-bought').on('click', '.reject_item', function() {
-        var form = $(this).closest('form');
         var thisbtn = $(this);
-        var thismethod = $(this).siblings('input[name="method"]');
-        var status = $(this).parent().parent().parent().parent().parent().parent().find('.status-class');
+        var form = thisbtn.closest('form');
+        var thismethod = thisbtn.siblings('input[name="method"]');
+        var status = thisbtn.closest('.item-list-panel').find('.status-class');
 
         $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
             try{
