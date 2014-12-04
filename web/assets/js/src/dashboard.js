@@ -2,9 +2,58 @@
     
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".dashboard-home-mobile" ).addClass( "selectedM" );
-        $( ".ms-trans" ).removeClass( "selectedM" );
-        $( ".ms-setup" ).removeClass( "selectedM" );
+    });
+    
+    $( ".id-transactions-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-trans" ).addClass( "selectedM" );
+        
+    });
+    
+    $( "#store-setup-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-setup" ).addClass( "selectedM" );
+    });
+    
+    $( ".personal-info-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ma-info" ).addClass( "selectedM" );
+    });
+    
+    $( ".delivery-address-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ma-delivery" ).addClass( "selectedM" );
+    });
+    
+    $( ".payment-address-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ma-payment" ).addClass( "selectedM" );
+    });
+    
+    $( ".settings-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ma-settings" ).addClass( "selectedM" );
     });
     
     $( ".dashboard-home-mobile" ).click(function() {
@@ -12,7 +61,6 @@
          $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
          $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".dashboard-home-mobile" ).addClass( "selectedM" );
-       
     });
     
     $( "#dash" ).click(function() {
