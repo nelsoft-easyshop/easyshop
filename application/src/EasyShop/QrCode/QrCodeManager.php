@@ -5,7 +5,13 @@ namespace EasyShop\QrCode;
 class QrCodeManager
 {
     const FILE_EXTENSION_PNG = '.png';
+
     const IMAGE_PATH = 'assets/qrCode/';
+
+    /**
+     * QR code size for printing
+     */
+    const IMAGE_SIZE_PRINT = 20;
 
     /**
      * QR Code Library
@@ -61,6 +67,16 @@ class QrCodeManager
     public function getImageDirectory()
     {
         return self::IMAGE_PATH;
+    }
+
+    /**
+     * Returns the image size constant
+     *
+     * @return string
+     */
+    public function getImageSizeForPrinting()
+    {
+        return self::IMAGE_SIZE_PRINT;
     }
 
 }
