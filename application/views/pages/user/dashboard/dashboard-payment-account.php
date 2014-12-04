@@ -72,6 +72,11 @@
                         <input type="text" class="text-info" placeholder="Add an account name"/>
                     </span>
                 </div>
+                <div class="clear pd-top-5">
+                    <div class="alert alert-danger update-payment-account-error" role="alert" style="display:none">
+                    
+                    </div>
+                </div>
                 <div class="clear"></div>
             </div>
             <div class="col-xs-4 bank-account-item-btns">

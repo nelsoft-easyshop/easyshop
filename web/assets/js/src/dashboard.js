@@ -1525,6 +1525,14 @@
                     bankNameDisplay.html(selectedBank.html());
                     cancelButton.trigger('click');
                 }
+                else{
+                    var errorContainer = container.find('.update-payment-account-error');
+                    errorContainer.html(jsonResponse.errors);
+                    errorContainer.css('display', 'block');
+                    setTimeout(function(){
+                        errorContainer.fadeOut('slow');
+                    },2500);
+                }
             }
         });
         
