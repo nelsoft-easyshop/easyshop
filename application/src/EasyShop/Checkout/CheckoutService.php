@@ -132,7 +132,7 @@ class CheckoutService
     }
 
     /**
-     * [canPurchaseDesiredQuantity description]
+     * check if desired quantity is available
      * @param  object  $product
      * @param  integer $itemId
      * @param  integer $quantity
@@ -157,9 +157,9 @@ class CheckoutService
     }
 
     /**
-     * [checkPaymentTypAvailable description]
-     * @param  [type] $product [description]
-     * @return [type]          [description]
+     * apply boolean payment type checking
+     * @param  array  $cartProduct [description]
+     * @param  object $product     [description]
      */
     public function applyPaymentTypAvailable(&$cartProduct, $product)
     {   
