@@ -159,14 +159,27 @@
                         </div>
                         <div class="trans-btn-wrapper trans-1btn">
                             <?PHP if ( (int) $product['has_shipping_summary'] === 1 && (int) $boughtTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $boughtTransactionDetails['idPaymentMethod'] !== 3 && (int) $boughtTransactionDetails['isFlag'] === 0 ) : ?>
-                                <button class="btn btn-default-1">Item recieved</button>
+<!--                                start-->
+                                <?php
+                                $attr = ['class'=>'transac_response'];
+                                echo form_open('',$attr);
+                                ?>
+                                <input type="button" value="Item received" class="btn btn-default-1 transac_response_btn tx_forward transac_orange_btn enabled">
+                                <input type="hidden" name="buyer_response" value="<?=$product['idOrderProduct']?>">
+                                <input type="hidden" name="transaction_num" value="<?=$boughtTransactionDetails['idOrder']?>">
+                                <input type="hidden" name="invoice_num" value="<?=$boughtTransactionDetails['invoiceNo']?>">
+                                <?php echo form_close();?>
+
+                                <?php echo form_open('');?>
                                 <?php if( (int) $product['isReject'] === 0):?>
-                                    <button class="btn btn-default-1">Reject Item</button>
+                                    <input type="button" value="Reject Item" class="btn btn-default-1 reject_btn reject_item reject">
                                     <input type="hidden" name="method" value="reject">
                                 <?php else:?>
-                                    <button class="btn btn-default-1">Unreject Item</button>
+                                    <input type="button" value="Unreject Item" class="btn btn-default-1 reject_btn reject_item unreject">
                                     <input type="hidden" name="method" value="unreject">
                                 <?php endif;?>
+                                <?php echo form_close();?>
+<!--                                end-->
                             <?PHP endif; ?>
                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
