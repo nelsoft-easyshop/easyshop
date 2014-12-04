@@ -785,26 +785,25 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $memberId = $this->session->userdata('member_id');
 
             if ( $this->input->post('buyer_response') ) {
-                $data['order_product_id'] = $this->input->post('buyer_response');
+                $data['order_product_id'][0] = $this->input->post('buyer_response');
                 $data['status'] = EsOrderProductStatus::FORWARD_SELLER;
             }
             else if ( $this->input->post('seller_response') ) {
-                $data['order_product_id'] = $this->input->post('seller_response');
+                $data['order_product_id'][0] = $this->input->post('seller_response');
                 $data['status'] = EsOrderProductStatus::RETURNED_BUYER;
             }
             else if ( $this->input->post('cash_on_delivery') ) {
+                $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
                 $data['status'] = EsOrderProductStatus::CASH_ON_DELIVERY;
-                if (stripos($this->input->post('cash_on_delivery'), '-') === false) {
-                    $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
-                }
-                else {
-                    $productIds = explode('-', $this->input->post('cash_on_delivery'));
-                    $data['order_product_id'] = $productIds;
-                }
             }
+
+            if ( (bool) stripos($data['order_product_id'][0], '-')) {
+                $productIds = explode('-', $data['order_product_id'][0]);
+                $data['order_product_id'] = $productIds;
+            }
+
             if (is_array($data['order_product_id'])) {
                 foreach ($data['order_product_id'] as $orderProductId) {
                     $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
