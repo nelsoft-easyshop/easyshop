@@ -7,6 +7,7 @@
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
             <div><span class="strong-label">Date : </span> <?=date_format($boughtTransactionDetails['dateadded'], 'jS \of F Y')?></div>
+            <div><span class="strong-label">Total : Php </span> <?=number_format($boughtTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
         <?PHP endif; ?>
     </div>
         <?PHP foreach($boughtTransactionDetails['product'] as $productKey => $product) : ?>
@@ -24,7 +25,7 @@
                             </a>
                         </p>
                         <p class="item-amount">
-                            <span class="item-current-amount">P<?=number_format($product['price'], 2, '.', ',') ?></span>
+                            <span class="item-current-amount">P<?=number_format($product['item_price'], 2, '.', ',') ?></span>
                         </p>
                         <div class="div-meta-description">
                             <div class="row">
@@ -32,41 +33,44 @@
                                     <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                 </div>
                                 <div class="col-xs-6">
-                                    <span class="strong-label">Total : </span> Php <?=number_format(($product['price']*$product['orderQuantity']), 2, '.', ',') ?>
+                                    <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                 </div>
                                 <div class="col-xs-6">
                                     <span class="strong-label">Status : </span>
                                     <?PHP if (intval($boughtTransactionDetails['isFlag']) === 0 && intval($boughtTransactionDetails['orderStatus']) === 0) : ?>
                                         <?PHP if ($product['isReject']) : ?>
-                                            <span class="trans-status-pending">ITEM REJECTED</span>
+                                            <span class="trans-status-pending status-class">ITEM REJECTED</span>
                                         <?php else:?>
                                             <?PHP if( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING):?>
                                                 <?PHP if( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY ) : ?>
-                                                    <span class="trans-status-cod">CASH ON DELIVERY</span>
+                                                    <span class="trans-status-cod status-class">CASH ON DELIVERY</span>
                                                 <?PHP else : ?>
                                                     <?PHP if( (int) $product['has_shipping_summary'] === 0 ):?>
-                                                        <span class="trans-status-pending">PENDING SHIPPING INFO</span>
+                                                        <span class="trans-status-pending status-class">PENDING SHIPPING INFO</span>
                                                     <?PHP elseif( (int) $product['has_shipping_summary'] === 1 ):?>
-                                                        <span class="trans-status-cod">ITEM ON ROUTE</span>
+                                                        <span class="trans-status-cod status-class">ITEM ON ROUTE</span>
                                                     <?PHP endif;?>
                                                 <?PHP endif;?>
                                             <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER) : ?>
                                                 Item Received
                                             <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER) : ?>
-                                                <span class="trans-status-pending">Seller canceled order</span>
+                                                <span class="trans-status-pending status-class">Seller canceled order</span>
                                             <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY) : ?>
-                                                <span class="trans-status-cod">CASH ON DELIVERY</span>
+                                                <span class="trans-status-cod status-class">CASH ON DELIVERY</span>
                                             <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED) : ?>
-                                                <span class="trans-status-cod">Paid</span>
+                                                <span class="trans-status-cod status-class">Paid</span>
                                             <?PHP elseif ( (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::PAID_RETURNED) : ?>
-                                                <span class="trans-status-pending">Payment Refunded</span>
+                                                <span class="trans-status-pending status-class">Payment Refunded</span>
                                             <?PHP endif;?>
                                         <?PHP endif; ?>
                                     <?PHP else : ?>
                                         <?PHP if ( (int) $boughtTransactionDetails['idPaymentMethod'] === 2) : ?>
-                                            <span class="trans-status-pending">CONFIRM DRAGONPAY PAYMENT</span>
+                                            <span class="trans-status-pending status-class">CONFIRM DRAGONPAY PAYMENT</span>
                                         <?PHP elseif (intval($boughtTransactionDetails['idPaymentMethod']) === 1 && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
-                                            <span class="trans-status-pending">ON HOLD</span>
+                                            <span class="trans-status-pending status-class">ON HOLD</span>
                                         <?PHP endif; ?>
                                     <?PHP endif; ?>
                                 </div>
@@ -159,14 +163,28 @@
                         </div>
                         <div class="trans-btn-wrapper trans-1btn">
                             <?PHP if ( (int) $product['has_shipping_summary'] === 1 && (int) $boughtTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $boughtTransactionDetails['idPaymentMethod'] !== 3 && (int) $boughtTransactionDetails['isFlag'] === 0 ) : ?>
-                                <button class="btn btn-default-1">Item recieved</button>
+                                <?php
+                                $attr = ['class'=>'transac_response'];
+                                echo form_open('',$attr);
+                                ?>
+                                <input type="button" value="Item received" class="btn btn-default-1 transac_response_btn tx_forward transac_orange_btn enabled">
+                                <input type="hidden" name="buyer_response" value="<?=$product['idOrderProduct']?>">
+                                <input type="hidden" name="transaction_num" value="<?=$boughtTransactionDetails['idOrder']?>">
+                                <input type="hidden" name="invoice_num" value="<?=$boughtTransactionDetails['invoiceNo']?>">
+                                <?php echo form_close();?>
+
+                                <?php echo form_open('');?>
                                 <?php if( (int) $product['isReject'] === 0):?>
-                                    <button class="btn btn-default-1">Reject Item</button>
+                                    <input type="button" value="Reject Item" class="btn btn-default-1 reject_btn reject_item reject">
                                     <input type="hidden" name="method" value="reject">
                                 <?php else:?>
-                                    <button class="btn btn-default-1">Unreject Item</button>
+                                    <input type="button" value="Unreject Item" class="btn btn-default-1 reject_btn reject_item unreject">
                                     <input type="hidden" name="method" value="unreject">
                                 <?php endif;?>
+                                    <input type="hidden" name="order_product" value="<?=$product['idOrderProduct']?>">
+                                    <input type="hidden" name="transact_num" value="<?=$boughtTransactionDetails['idOrder']?>">
+                                    <input type="hidden" name="seller_id" value="<?=$boughtTransactionDetails['sellerId']?>">
+                                <?php echo form_close();?>
                             <?PHP endif; ?>
                             <?PHP if ( (int) $product['forMemberId'] === 0) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
