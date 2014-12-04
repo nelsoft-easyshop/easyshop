@@ -58,14 +58,10 @@
                 <div class="clear pd-top-10">
                     <span class="col-xs-5 col-sm-4 bank-label">Account Name:</span>
                     <span class="col-xs-7 col-sm-8 account-name-container">
-                    
                     </span>
-                    
                     <span class="col-xs-7 col-sm-8 edit-account-name" style="display:none">
                         <input type="text" class="text-info" placeholder="Add an account name"/>
                     </span>
-         
-         
                 </div>
                 <div class="clear pd-top-10">
                     <span class="col-xs-5 col-sm-4 bank-label">Account Number:</span>
@@ -81,6 +77,10 @@
                 <span class="btn btn-set-default">Set as Default Account</span>
                 <span class="btn btn-default-1 mrgn-2 mrgn-top-10 edit-account-btn"><span class="icon-edit"></span> Edit</span>
                 <span class="btn btn-default-1 mrgn-top-10 delete-account-btn"><span class="icon-delete"></span> Delete</span>
+                
+                <span class="btn btn-default-1 mrgn-2 mrgn-top-10 save-edit-btn" style="display:none"><span class="icon-edit"></span> Save</span>
+                <span class="btn btn-default-1 mrgn-top-10 cancel-edit-btn" style="display:none"><span class="icon-delete"></span> Cancel</span>
+                
             </div>
             <div class="clear"></div>
             <input type="hidden" class="payment-account-id" value="0"/>
