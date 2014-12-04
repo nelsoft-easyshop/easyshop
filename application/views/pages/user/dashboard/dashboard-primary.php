@@ -25,7 +25,7 @@
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
-                            <a href="#payment-account" class="payment-account-trigger"><li class="m-li m-li2">Payment Account</li></a>
+                            <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
                             <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>
