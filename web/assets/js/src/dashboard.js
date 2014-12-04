@@ -2,8 +2,18 @@
     
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
+        $( ".dashboard-home-mobile" ).addClass( "selectedM" );
+        $( ".ms-trans" ).removeClass( "selectedM" );
+        $( ".ms-setup" ).removeClass( "selectedM" );
     });
     
+    $( ".dashboard-home-mobile" ).click(function() {
+         $( ".dash-me" ).trigger( "click" );
+         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".dashboard-home-mobile" ).addClass( "selectedM" );
+       
+    });
     
     $( "#dash" ).click(function() {
         $( "#my-account-menu" ).slideUp();
@@ -32,6 +42,7 @@
             $( ".f-a" ).css("border-radius", "0px");
         }
         $( "#my-store-menu" ).slideToggle( "slow", function() {
+           
             var attr = $("i.m").attr("class");
         if(attr == "m icon-control-down toggle-down pull-right"){
             $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
@@ -629,6 +640,7 @@
     $('.my-store-menu-mobile').click(function() {
         $('.my-account-menu-mobile-cont').slideUp();
         $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
+            
             var attr_ms = $("i.ms").attr("class");
             if(attr_ms == "ms fa fa-angle-down"){
                 $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
@@ -645,6 +657,7 @@
     });
     
     $('.my-account-menu-mobile').click(function() {
+        $('#my-account-menu-trigger').trigger("click");
         $('.my-store-menu-mobile-cont').slideUp();
         $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
             var attr_ma = $("i.ma").attr("class");
@@ -679,14 +692,72 @@
     });
     
    
-    $('.dash-mobile-trigger').click(function() {
+    $('.dashboard-home-mobile').click(function() {
+        $('.dash-me').trigger("click");
+        $(".dash-me").addClass("selectedM");
+        $(this).addClass("selectedM");
+        $('.ms-trans').removeClass("selectedM");
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
     
+    $('.ms-trans').click(function() {
+        $('.id-transactions-trigger').trigger("click");
+        $('.dash-mobile-trigger ').removeClass("selectedM");
+        $(".dash-me").removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+    
+    
+    $('.ms-setup').click(function() {
+        $('#store-setup-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+    
+    $('.ma-info').click(function() {
+        $('.personal-info-trigger').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $(".ma-info").addClass("selectedM");
+    });
+    
+    $('.ma-delivery').click(function() {
+        $('.delivery-address-trigger').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $(".ma-delivery").addClass("selectedM");
+    });
+    
+    $('.ma-payment').click(function() {
+        $('.payment-account-trigger').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $(".ma-payment").addClass("selectedM");
+    });
+    
+    $('.ma-settings').click(function() {
+        $('.settings-trigger').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $(".ma-settings").addClass("selectedM");
+    });
+    
     $('#sc-selection-trigger').click(function() {
         $('.hide-selection-cont').slideToggle("fast");
-        
     });
     
     $('#hide-date').click(function() {
@@ -1192,6 +1263,10 @@
         
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dash-me').removeClass("selectedM");
+        $('.ms-setup').addClass("selectedM");
+        $(".ms-trans").removeClass("selectedM");
         if(!isStoreSetupInitialized){
             $.ajax({
                 type: "get",
