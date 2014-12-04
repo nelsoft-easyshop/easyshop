@@ -330,8 +330,8 @@ class Kernel
         $container['category_manager'] = function ($c) use($container) {
             $em = $container['entity_manager'];
             $configLoader = $container['config_loader'];
-
-            return new \EasyShop\Category\CategoryManager($configLoader,$em);
+            $productManager = $container['product_manager'];
+            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager);
         };
         
         $container['config_loader'] = function ($c) {

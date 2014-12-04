@@ -2063,8 +2063,8 @@ class Memberpage extends MY_Controller
                                         'type' => EsAddress::TYPE_DELIVERY
                                     ]);
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = ($address) ? $address->getStateregion()->getIdLocation() : '';
-            $cityId = ($address) ? $address->getCity()->getIdLocation() : '';
+            $stateRegionId = ($address && $address->getStateregion()) ? $address->getStateregion()->getIdLocation() : 0;
+            $cityId = ($address && $address->getCity()) ? $address->getCity()->getIdLocation() : 0;
 
             $paginationData['isHyperLink'] = false;
 
@@ -2600,7 +2600,6 @@ class Memberpage extends MY_Controller
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-            $formBuild->add('storename', 'text');
             $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
             $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
             $form->submit($formData);
@@ -2648,7 +2647,6 @@ class Memberpage extends MY_Controller
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
-            $formBuild->add('storeslug', 'text');
             $formBuild->add('storeslug', 'text', array('constraints' => $rules['shop_slug']));
             $formData['storeslug'] = $this->input->post('storeslug');
             $form = $formBuild->getForm();
@@ -2721,11 +2719,176 @@ class Memberpage extends MY_Controller
             $response['colors'] = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
+            
         }
         echo json_encode($response);
     }
     
+    /**
+     * Returns all the payment accounts of the logged-in user
+     *
+     * @return JSON
+     */
+    public function getPaymentAccounts()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['paymentAccount'] = $this->serviceContainer['entity_manager']
+                                               ->getRepository('EasyShop\Entities\EsBillingInfo')
+                                               ->getMemberPaymentAccountsAsArray($memberId);   
+            $response['bankList'] = $this->serviceContainer['entity_manager']
+                                         ->getRepository('EasyShop\Entities\EsBankInfo')
+                                         ->getAllBanks(true); 
+        }
+        echo json_encode($response);
+    }
+    
+    /**
+     * Creates a new payment account
+     *
+     * @return JSON
+     */
+    public function createPaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');
+        
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
+        $jsonResponse = ['isSuccessful' => false,
+                         'errors' => [],
+                         'newId' => 0,
+                         'isDefault' => false,
+                        ];               
+        if($this->input->post()){
+            $rules = $formValidation->getRules('payment_account');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');
+            $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
+            $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formData['account-bank-id'] = (int)$this->input->post('account-bank-id');
+            $formData['account-name'] = $this->input->post('account-name');
+            $formData['account-number'] = $this->input->post('account-number');
+            $form = $formBuild->getForm();
+            $form->submit($formData);        
+                  
+            if($form->isValid()){
+                $newAccount = $this->serviceContainer['entity_manager']
+                                   ->getRepository('EasyShop\Entities\EsBillingInfo')
+                                   ->createNewPaymentAccount($memberId, 
+                                        $formData['account-name'], 
+                                        $formData['account-number'], 
+                                        $formData['account-bank-id']
+                                    );
+                if($newAccount){
+                    $jsonResponse['isSuccessful'] = true;
+                    $jsonResponse['isDefault'] = $newAccount->getIsDefault();
+                    $jsonResponse['newId'] = $newAccount->getIdBillingInfo();
+                }
+            }else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
+            }
+        }
+        echo json_encode($jsonResponse); 
+    }
+    
+    /**
+     * Update default account
+     *
+     * @return JSON
+     */
+    public function changeDefaultPaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $isSuccessful = false;
+        if( $this->input->post('payment-account-id') && $memberId ){
+            $billingInfoId = $this->input->post('payment-account-id');
+            $this->serviceContainer['entity_manager']
+                 ->getRepository('EasyShop\Entities\EsBillingInfo')
+                 ->updateDefaultAccount($memberId, $billingInfoId);
+            $isSuccessful = true;
+        }
+        echo json_encode($isSuccessful);
+    }
+    
+    
+    /**
+     * Destroy action for payment account
+     *
+     * @return JSON
+     */
+    public function deletePaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $jsonResponse = ['isSuccessful' => false,
+                         'defaultId' => 0,
+                        ];
+        if( $this->input->post('payment-account-id') && $memberId ){
+            $billingInfoRepository = $this->serviceContainer['entity_manager']
+                                          ->getRepository('EasyShop\Entities\EsBillingInfo');
+            $billingInfoId = $this->input->post('payment-account-id');
+            $jsonResponse['isSuccessful'] = $billingInfoRepository->deletePaymentAccount($memberId, $billingInfoId);
+            $defaultAccount = $billingInfoRepository->getDefaultAccount($memberId);
+            if($defaultAccount){
+                $jsonResponse['defaultId'] = $defaultAccount->getIdBillingInfo();
+            }
+        }
+        echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Update the payment account
+     *
+     * @return JSON
+     */
+    public function updatePaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');  
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        
+        $jsonResponse = ['isSuccessful' => false,
+                         'errors' => [],
+                        ];          
+        if($this->input->post()){
+            $rules = $formValidation->getRules('payment_account');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');            
+            $formBuild->add('account-id', 'text', array('constraints' => $rules['account-id']));                         
+            $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
+            $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formData['account-bank-id'] = (int)$this->input->post('bank-id');
+            $formData['account-name'] = $this->input->post('account-name');
+            $formData['account-number'] = $this->input->post('account-number');
+            $formData['account-id'] = (int)$this->input->post('payment-account-id');
+            $form = $formBuild->getForm();
+            $form->submit($formData);        
+            if($form->isValid()){
+                $newAccount = $entityManager->getRepository('EasyShop\Entities\EsBillingInfo')
+                                            ->findOneBy(['idBillingInfo' => $formData['account-id'],
+                                                         'member' => $memberId,
+                                                         'isDelete' => false,
+                                            ]);
+                if($newAccount){
+                    $newAccount->setDatemodified(date_create(date("Y-m-d H:i:s")));
+                    $newAccount->setBankAccountName($formData['account-name']);
+                    $newAccount->setBankAccountNumber($formData['account-number']);
+                    $newAccount->setBankId($formData['account-bank-id']);
+                    $entityManager->flush();
+                    $jsonResponse['isSuccessful'] = true;
+                }
+            }else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
+            }
+        }
+        echo json_encode($jsonResponse);
+    }
     
 
 }

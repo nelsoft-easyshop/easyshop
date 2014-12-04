@@ -223,7 +223,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            
+                            </div>
                         <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                         <div class="trans-btn-wrapper trans-btn-con2">
                                     <?php
@@ -235,7 +235,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            
+                            </div>
                         <?PHP endif; ?>
                         <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
@@ -276,7 +276,7 @@
                                     <?php echo form_close();?>
                                 </div>
                         <?PHP endif; ?>
-                        </div>
+                       
                     <?PHP endif; ?>
                 </div>
             </div>

@@ -29,7 +29,7 @@
                         <?php $count = 0; ?>
                         <?php foreach($categorySection['subHeaders'] as $subheader): ?>
                             <a href="<?php echo $subheader['target']; ?>">
-                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" rel="tooltip" data-toggle="tooltip" data-placement="top" title="sample">
+                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>">
                                     <?php echo html_escape($subheader['text']); ?>
                                 </button>
                                 <script type="text/javascript">
