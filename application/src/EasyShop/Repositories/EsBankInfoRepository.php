@@ -22,8 +22,10 @@ class EsBankInfoRepository extends EntityRepository
                     ->select('b')
                     ->from('EasyShop\Entities\EsBankInfo','b')
                     ->getQuery();
-        $banks =  $getAsArray ? $query->getResult(Query::HYDRATE_ARRAY) : $query->getResult();                 
+        $banks =  $getAsArray ? $query->getResult(Query::HYDRATE_ARRAY) : $query->getResult();         
+        
         return $banks;
     }                          
                               
 }
+

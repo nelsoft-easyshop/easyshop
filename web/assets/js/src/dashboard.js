@@ -1240,7 +1240,7 @@
                 if(response.isSuccessful == 'true'){
                     $('#current-store-color-id').val(colorId);
                     var currentColorChoiceContainer = $('.current-color-choice');
-                    currentColorChoiceContainer.css('backgroundColor',selectedList.css('backgroundColor'));
+                    currentColorChoiceContainer.css('background',selectedList.css('background'));
                     currentColorChoiceContainer.html(selectedList.data('name'));
                     $( "#btn-edit-store-theme" ).trigger( "click" );
                 }
@@ -1292,9 +1292,7 @@
                 url: '/memberpage/getPaymentAccounts',
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);  
-                    var bankOptionString = '';
-                    
-                                        
+                    var bankOptionString = '';      
                     var template = $('#payment-account-template');
                     template.find('.edit-bank')
                     $.each(jsonResponse.bankList, function(index, bank) {

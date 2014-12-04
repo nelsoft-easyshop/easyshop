@@ -91,6 +91,6 @@
             <div class="clear"></div>
             <input type="hidden" class="payment-account-id" value="0"/>
         </div>
-        <div class="clear"></div>
-  
+        <div class="clear"></div>  
 </div>
+
