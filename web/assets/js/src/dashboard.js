@@ -1240,7 +1240,7 @@
                 if(response.isSuccessful == 'true'){
                     $('#current-store-color-id').val(colorId);
                     var currentColorChoiceContainer = $('.current-color-choice');
-                    currentColorChoiceContainer.css('background',selectedList.css('background'));
+                    currentColorChoiceContainer.css('backgroundColor',selectedList.css('backgroundColor'));
                     currentColorChoiceContainer.html(selectedList.data('name'));
                     $( "#btn-edit-store-theme" ).trigger( "click" );
                 }
