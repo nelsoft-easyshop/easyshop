@@ -1445,11 +1445,13 @@
                 var jsonResponse = $.parseJSON(response); 
                 if(jsonResponse.isSuccessful){
                     var newDefaultId = jsonResponse.defaultId;
-                    if(newDefaultId !== 0){
+                    var currentDefaultContainer = $('.payment-account-container .bank-account-item').first();
+                    var currentDefaultId = currentDefaultContainer.find('.payment-account-id').val();
+                    if(newDefaultId !== 0 && currentDefaultId !== newDefaultId){
                         var newDefaultContainer = $('#payment-account-' + newDefaultId);
-                        var oldDefaultContainer = $('.payment-account-container .bank-account-item').first();
+                       
                         newDefaultContainer.find('.btn-set-default').addClass('default-account').removeClass('btn-set-default');
-                        newDefaultContainer.insertBefore(oldDefaultContainer);
+                        newDefaultContainer.insertBefore(currentDefaultContainer);
                     }
                     button.closest('.bank-account-item').remove(); 
                 }
