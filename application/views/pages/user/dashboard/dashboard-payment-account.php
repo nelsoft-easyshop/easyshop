@@ -50,14 +50,30 @@
                 <div class="pd-top-10">
                     <span class="col-xs-5 col-sm-4 bank-label">Bank Name:</span>
                     <span class="col-xs-7 col-sm-8 bank-name-container"></span>
+                    <span class="col-xs-7 col-sm-8 edit-bank" style="display:none">
+                        <select></select>
+                    </span>
+                    
                 </div>
                 <div class="clear pd-top-10">
                     <span class="col-xs-5 col-sm-4 bank-label">Account Name:</span>
-                    <span class="col-xs-7 col-sm-8 account-name-container"></span>
+                    <span class="col-xs-7 col-sm-8 account-name-container">
+                    
+                    </span>
+                    
+                    <span class="col-xs-7 col-sm-8 edit-account-name" style="display:none">
+                        <input type="text" class="text-info" placeholder="Add an account name"/>
+                    </span>
+         
+         
                 </div>
                 <div class="clear pd-top-10">
                     <span class="col-xs-5 col-sm-4 bank-label">Account Number:</span>
                     <span class="col-xs-7 col-sm-8 account-number-container"></span>
+                    
+                    <span class="col-xs-7 col-sm-8 edit-account-number" style="display:none">
+                        <input type="text" class="text-info" placeholder="Add an account name"/>
+                    </span>
                 </div>
                 <div class="clear"></div>
             </div>

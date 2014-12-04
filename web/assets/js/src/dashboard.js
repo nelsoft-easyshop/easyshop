@@ -1293,14 +1293,19 @@
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);  
                     var bankOptionString = '';
+                    
+                                        
+                    var template = $('#payment-account-template');
+                    template.find('.edit-bank')
                     $.each(jsonResponse.bankList, function(index, bank) {
                         bankOptionString += '<option value="'+bank.idBank+'">' 
                                                 + escapeHtml(bank.bankName) +
                                             '</option>';
                     });
+                    template.find('.edit-bank select').append(bankOptionString);
                     $('.bank-dropdown').append(bankOptionString);
                     $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
-                        var templateClone =  $('#payment-account-template').clone();
+                        var templateClone =  template.clone();
                         templateClone.css('display', 'block');
                         templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
@@ -1387,8 +1392,6 @@
                     paymentErrorContainer.html(jsonResponse.errors);
                     paymentErrorContainer.show();
                 }
-                
-                
             }
         });
         
@@ -1456,6 +1459,18 @@
                 }
             }
         });
+    });
+    
+    
+    $('.payment-account-container').on('click', '.edit-account-btn', function(){
+        var button = $(this);
+        var container = button.closest('.bank-account-item');
+        container.find('.bank-name-container').css('display','none');
+        container.find('.account-name-container').css('display','none');
+        container.find('.account-number-container').css('display','none');
+        container.find('.edit-bank').css('display', 'inline');
+        container.find('.edit-account-name').css('display', 'inline')
+        container.find('.edit-account-number').css('display', 'inline')
     });
   
     
