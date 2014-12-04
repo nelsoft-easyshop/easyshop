@@ -12,7 +12,7 @@
             <div class=" idTabs">
             <div class="col-sm-3 col-sidebar">
                 <ul class="sidebar-dashboard" >
-                    <a href="#dashboard"><li id="dash"  class="mf-li">Dashboard</li></a>
+                    <a href="#dashboard" class="dash-me selected"><li id="dash"  class="mf-li">Dashboard</li></a>
                     <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
@@ -24,7 +24,7 @@
                     <div id="my-account-menu">
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
-                            <a href="#delivery-address"  class="dash-me selected"><li class="m-li">Delivery Address</li></a>
+                            <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
                             <a href="#payment-account"><li class="m-li m-li2">Payment Account</li></a>
                             <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
