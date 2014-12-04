@@ -51,7 +51,7 @@
                     <span class="col-xs-5 col-sm-4 bank-label">Bank Name:</span>
                     <span class="col-xs-7 col-sm-8 bank-name-container"></span>
                     <span class="col-xs-7 col-sm-8 edit-bank" style="display:none">
-                        <select></select>
+                        <select class="text-info"></select>
                     </span>
                     
                 </div>
@@ -74,12 +74,12 @@
                 <div class="clear"></div>
             </div>
             <div class="col-xs-4 bank-account-item-btns">
-                <span class="btn btn-set-default">Set as Default Account</span>
+                <span class="btn btn-set-default">Default Account</span>
                 <span class="btn btn-default-1 mrgn-2 mrgn-top-10 edit-account-btn"><span class="icon-edit"></span> Edit</span>
                 <span class="btn btn-default-1 mrgn-top-10 delete-account-btn"><span class="icon-delete"></span> Delete</span>
                 
-                <span class="btn btn-default-1 mrgn-2 mrgn-top-10 save-edit-btn" style="display:none"><span class="icon-edit"></span> Save</span>
-                <span class="btn btn-default-1 mrgn-top-10 cancel-edit-btn" style="display:none"><span class="icon-delete"></span> Cancel</span>
+                <span class="btn btn-default-3 mrgn-2 mrgn-top-10 save-edit-btn" style="display:none">Save</span>
+                <span class="btn btn-default-1 mrgn-top-10 cancel-edit-btn" style="display:none">Cancel</span>
                 
             </div>
             <div class="clear"></div>

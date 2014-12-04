@@ -2162,6 +2162,10 @@ a{
     padding: 30px 40px;
 }
 
+.bank-account-item .btn-set-default:before {
+    content: "Set as ";
+}
+
 .bank-account-item-btns .btn-default-3 {
     border:none;
     font-weight: 900;
@@ -2173,7 +2177,8 @@ a{
     margin-right: 2%;
 }
 
-.bank-account-item-btns .btn-default-1 {
+.bank-account-item-btns .btn-default-1,
+.bank-account-item-btns .btn-default-3 {
     width: 48%;
 }
 
@@ -2782,7 +2787,8 @@ a{
 }
 
 @media screen and (max-width: 1199px) {
-    .bank-account-item-btns .btn-default-1 {
+    .bank-account-item-btns .btn-default-1,
+    .bank-account-item-btns .btn-default-3 {
         width: 100%;
     }
 }
@@ -2900,7 +2906,8 @@ a{
         width: 58%;
     }
 
-    .bank-account-item-btns .btn-default-1 {
+    .bank-account-item-btns .btn-default-1,
+    .bank-account-item-btns .btn-default-3 {
         width: 19%;
         margin-top: 0;
         margin-right: 0;
