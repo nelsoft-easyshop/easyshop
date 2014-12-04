@@ -63,7 +63,7 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
-        // $this->qrManager = $this->serviceContainer['qr_code_manager'];
+        $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
@@ -75,12 +75,19 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * sample function for qr code generator
+     * Qr code generator view
      */
-    public function sample()
+    public function generateQrCode()
     {
-        $this->qrManager->save("kurtwilkinson/213213/asdasd.com", "asd", 'L', 4, 2);
-        echo '<img src="/'.$this->qrManager->getImagePath('asd').'"/>';
+        $memberId = $this->session->userdata('member_id');
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($memberId);
+        $storeLink = base_url() . $member->getSlug();
+        $this->qrManager->save($storeLink, $member->getSlug(), 'L', 4, 2);
+        $data = [
+            'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
+            'slug' => $member->getSlug()
+        ];
+        $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
     }
 
     /**

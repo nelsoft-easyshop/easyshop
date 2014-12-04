@@ -35,12 +35,12 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h1 class="qr-sellername">Seller2DaMax</h1>
+                <h1 class="qr-sellername"><?=html_escape($slug)?></h1>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12 qr-code-main">
-                <img src="/assets/images/qrcode-images/img-qr-code.jpg">
+                <img src="/<?=html_escape($qrCodeImageName)?>">
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                 <p>
                     or enter the following URL into your browser
                 </p>
-                <a href="">https://www.easyshop.ph/seller2damax</a>
+                <a href="">https://www.easyshop.ph/<?=html_escape($slug)?></a>
             </div>
         </div>
 
