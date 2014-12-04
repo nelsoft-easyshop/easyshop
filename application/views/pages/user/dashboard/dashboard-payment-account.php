@@ -73,8 +73,8 @@
                     </span>
                 </div>
                 <div class="clear pd-top-5">
+                    <br/>
                     <div class="alert alert-danger update-payment-account-error" role="alert" style="display:none">
-                    
                     </div>
                 </div>
                 <div class="clear"></div>
