@@ -79,6 +79,9 @@ class Memberpage extends MY_Controller
      */
     public function generateQrCode()
     {
+        if(!$this->session->userdata('member_id')){
+            redirect('/', 'refresh');
+        }
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->session->userdata('member_id'));
         $storeLink = base_url() . $member->getSlug();
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
