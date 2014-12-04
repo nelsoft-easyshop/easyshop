@@ -53,6 +53,7 @@
                     <span class="col-xs-7 col-sm-8 edit-bank" style="display:none">
                         <select></select>
                     </span>
+                    <input type="hidden" class="bank-id" value="0"/>
                     
                 </div>
                 <div class="clear pd-top-10">

@@ -1311,6 +1311,7 @@
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
                         templateClone.find('.payment-account-id').val(paymentAccount.idBillingInfo);
+                        templateClone.find('.bank-id').val(paymentAccount.idBank);
                         templateClone.attr('id', 'payment-account-' + paymentAccount.idBillingInfo);
                         if(paymentAccount.isDefault){
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
@@ -1379,6 +1380,7 @@
                     templateClone.find('.bank-name-container').html(escapeHtml(bankName));
                     templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
                     templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
+                    templateClone.find('.bank-id').val(bankId);
                     templateClone.find('.payment-account-id').val(jsonResponse.newId);
                     templateClone.attr('id', 'payment-account-' + jsonResponse.newId);
                     if(jsonResponse.isDefault){
@@ -1464,17 +1466,49 @@
     $('.payment-account-container').on('click', '.edit-account-btn', function(){
         var button = $(this);
         var container = button.closest('.bank-account-item');
-        container.find('.bank-name-container').css('display','none');
-        container.find('.account-name-container').css('display','none');
-        container.find('.account-number-container').css('display','none');
-        container.find('.edit-bank').css('display', 'inline');
-        container.find('.edit-account-name').css('display', 'inline');
-        container.find('.edit-account-number').css('display', 'inline');
+        var accountNameDisplay = container.find('.account-name-container');
+        var accountNumberDisplay = container.find('.account-number-container');
+        var bankNameDisplay = container.find('.bank-name-container');
+        var accountNameInput =  container.find('.edit-account-name');
+        var accountNumberInput =  container.find('.edit-account-number')
+        var bankSelect = container.find('.edit-bank');
+        var accountName = accountNameDisplay.html();
+        var accountNumber = accountNumberDisplay.html();
+        var bankId = container.find('.bank-id').val();
+        bankNameDisplay.css('display','none');
+        accountNameDisplay.css('display','none');
+        accountNumberDisplay.css('display','none');
+        bankSelect.css('display', 'inline');   
+        accountNameInput.css('display', 'inline');
+        accountNumberInput.css('display', 'inline');
+        accountNameInput.find('input').val(accountName);
+        accountNumberInput.find('input').val(accountNumber);
+        bankSelect.find('select').val(bankId);
         container.find('.default-account, .btn-set-default').css('display', 'none');
         container.find('.edit-account-btn').css('display', 'none');
         container.find('.delete-account-btn').css('display', 'none');
         container.find('.save-edit-btn').css('display', 'inline-block');
         container.find('.cancel-edit-btn').css('display', 'inline-block');
+        var paymentAccountId = container.find('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/updatePaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId, 'account-name' : accountName
+                   'account-number' : accountNumber, 'bank-id' : bankId
+            }, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse.isSuccessful){
+                    var accountName = accountNameDisplay.html(accountName);
+                    var accountNumber = accountNumberDisplay.html(accountNumber);
+                    var bankId = container.find('.bank-id').val(bankId);
+                }
+            }
+        });
+        
+        
+        
     });
     
     $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
