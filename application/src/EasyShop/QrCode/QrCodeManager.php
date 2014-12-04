@@ -11,7 +11,7 @@ class QrCodeManager
     /**
      * QR code size for printing
      */
-    const IMAGE_SIZE_PRINT = 20;
+    const IMAGE_SIZE_PRINT = 10;
 
     /**
      * QR Code Library
