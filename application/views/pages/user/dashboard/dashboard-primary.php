@@ -25,7 +25,7 @@
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
-                            <a href="#payment-account"><li class="m-li m-li2">Payment Account</li></a>
+                            <a href="#payment-account" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
                             <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>

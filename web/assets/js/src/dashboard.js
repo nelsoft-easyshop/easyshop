@@ -1001,6 +1001,43 @@
             }
         });
     });
+    
+    
+    $('#ongoing-bought').on('click', '.reject_item', function() {
+        var thisbtn = $(this);
+        var form = thisbtn.closest('form');
+        var thismethod = thisbtn.siblings('input[name="method"]');
+        var status = thisbtn.closest('.item-list-panel').find('.status-class');
+
+        $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
+            try{
+                var obj = jQuery.parseJSON(data);
+            }
+            catch(e){
+                alert('An error was encountered while processing your data. Please try again later.');
+                return false;
+            }
+            thisbtn.attr('disabled', false);
+
+            if(obj.result === 'success'){
+                if ( thisbtn.hasClass('reject') ) {
+                    thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
+                    thismethod.val('unreject');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
+                }else if ( thisbtn.hasClass('unreject') ){
+                    thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
+                    thismethod.val('reject');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
+                }
+            }
+            else{
+                alert(obj.error);
+            }
+        });
+        thisbtn.attr('disabled', true);
+        thisbtn.val('Sending...');
+        return false;
+    });
 
     function htmlDecode(value) {
         if (value) {
@@ -1226,41 +1263,7 @@
         }
     });
 
-    $('#ongoing-bought').on('click', '.reject_item', function() {
-        var thisbtn = $(this);
-        var form = thisbtn.closest('form');
-        var thismethod = thisbtn.siblings('input[name="method"]');
-        var status = thisbtn.closest('.item-list-panel').find('.status-class');
 
-        $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
-            try{
-                var obj = jQuery.parseJSON(data);
-            }
-            catch(e){
-                alert('An error was encountered while processing your data. Please try again later.');
-                return false;
-            }
-            thisbtn.attr('disabled', false);
-
-            if(obj.result === 'success'){
-                if ( thisbtn.hasClass('reject') ) {
-                    thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
-                    thismethod.val('unreject');
-                    status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
-                }else if ( thisbtn.hasClass('unreject') ){
-                    thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
-                    thismethod.val('reject');
-                    status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
-                }
-            }
-            else{
-                alert(obj.error);
-            }
-        });
-        thisbtn.attr('disabled', true);
-        thisbtn.val('Sending...');
-        return false;
-    });
 
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -1275,7 +1278,7 @@
                 if(response.isSuccessful == 'true'){
                     $('#current-store-color-id').val(colorId);
                     var currentColorChoiceContainer = $('.current-color-choice');
-                    currentColorChoiceContainer.css('backgroundColor',selectedList.css('backgroundColor'));
+                    currentColorChoiceContainer.css('background',selectedList.css('background'));
                     currentColorChoiceContainer.html(selectedList.data('name'));
                     $( "#btn-edit-store-theme" ).trigger( "click" );
                 }
@@ -1335,6 +1338,310 @@
             }
         });
     }
+
+    var isPaymentAccountInitialized = false;
+    $('#payment-account-tab').on('click', function(){
+         if(!isPaymentAccountInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getPaymentAccounts',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);  
+                    var bankOptionString = '';      
+                    var template = $('#payment-account-template');
+                    template.find('.edit-bank')
+                    $.each(jsonResponse.bankList, function(index, bank) {
+                        bankOptionString += '<option value="'+bank.idBank+'">' 
+                                                + escapeHtml(bank.bankName) +
+                                            '</option>';
+                    });
+                    template.find('.edit-bank select').append(bankOptionString);
+                    $('.bank-dropdown').append(bankOptionString);
+                    $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
+                        var templateClone =  template.clone();
+                        templateClone.css('display', 'block');
+                        templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
+                        templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
+                        templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
+                        templateClone.find('.payment-account-id').val(paymentAccount.idBillingInfo);
+                        templateClone.find('.bank-id').val(paymentAccount.idBank);
+                        templateClone.attr('id', 'payment-account-' + paymentAccount.idBillingInfo);
+                        if(paymentAccount.isDefault){
+                            templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
+                        }    
+                        $('.payment-account-container').append(templateClone);
+                            
+                    });
+                
+                    isPaymentAccountInitialized = true;
+                }
+            });   
+        }
+    });
+    
+    $('.bank-dropdown').on('change', function(){
+        $(this).removeClass('input-error');
+    });
+    
+    $('.account-name-input').on('keyup', function(){
+        $(this).removeClass('input-error');
+    });
+   
+    $('.account-number-input').on('keyup', function(){
+        $(this).removeClass('input-error');
+    });
+   
+   
+    $('#newPaymentForm').on('submit', function(e){
+        e.preventDefault()
+        $('#payment-create-error').hide();
+        var $bankDropdown = $('.bank-dropdown');
+        var $accountName = $('.account-name-input');
+        var $accountNumber = $('.account-number-input');
+        $bankDropdown.removeClass('input-error');
+        $accountName.removeClass('input-error');
+        $accountNumber.removeClass('input-error');
+        var bankId = $bankDropdown.val();
+        var accountNameValue = $accountName.val();
+        var accountNumberValue = $accountNumber.val();
+        var hasErrors = false;
+        if(parseInt(bankId) <= 0){
+            $bankDropdown.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNameValue).length <= 0){
+            $accountName.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNumberValue).length <= 0){
+            $accountNumber.addClass('input-error');
+            hasErrors = true;
+        }
+        if(hasErrors){
+            return false;
+        }
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/createPaymentAccount',
+            data: $( this ).serialize(),
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response);  
+                if(jsonResponse.isSuccessful){
+                    var templateClone =  $('#payment-account-template').clone();
+                    var bankName = $bankDropdown.find('option:selected').text();
+                    templateClone.css('display', 'block');
+                    templateClone.find('.bank-name-container').html(escapeHtml(bankName));
+                    templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
+                    templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
+                    templateClone.find('.bank-id').val(bankId);
+                    templateClone.find('.payment-account-id').val(jsonResponse.newId);
+                    templateClone.attr('id', 'payment-account-' + jsonResponse.newId);
+                    if(jsonResponse.isDefault){
+                        templateClone.find('.btn-set-default').removeClass('btn-set-default').addClass('default-account');
+                    }
+                    $('.payment-account-container').append(templateClone);
+                    $('.cancel-add-bank').trigger('click');
+                }
+                else{
+                    var paymentErrorContainer = $('#payment-create-error');
+                    paymentErrorContainer.html(jsonResponse.errors);
+                    paymentErrorContainer.show();
+                }
+            }
+        });
+        
+        
+    });
+    
+    $('.cancel-add-bank').on('click', function(){
+        var $bankDropdown = $('.bank-dropdown');
+        var $accountName = $('.account-name-input');
+        var $accountNumber = $('.account-number-input');
+        $bankDropdown.removeClass('input-error');
+        $accountName.removeClass('input-error');
+        $accountNumber.removeClass('input-error');
+        $bankDropdown.val(0);
+        $accountName.val('');
+        $accountName.val('');
+    });
+    
+    $('.payment-account-container').on('click', '.btn-set-default', function(){
+        var button = $(this);
+        var paymentAccountId = button.parent().siblings('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/changeDefaultPaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId}, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse){
+                    var oldDefaultTab = $('.payment-account-container .bank-account-item').first();
+                    $('.default-account').removeClass('default-account').addClass('btn-set-default');
+                    button.addClass('default-account').removeClass('btn-set-default');
+                    var newDefaultTab = button.closest('.bank-account-item');
+                    newDefaultTab.find('.cancel-edit-btn').trigger('click');
+                    newDefaultTab.insertBefore(oldDefaultTab);
+                    $('html, body').animate({
+                        scrollTop: $("#panel-setting-title").offset().top
+                    }, 1000);
+                }
+            }
+        });
+    });
+    
+    $('.payment-account-container').on('click', '.delete-account-btn', function(){
+        var button = $(this);
+        var paymentAccountId = button.parent().siblings('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/deletePaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId}, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse.isSuccessful){
+                    var newDefaultId = jsonResponse.defaultId;
+                    var currentDefaultContainer = $('.payment-account-container .bank-account-item').first();
+                    var currentDefaultId = currentDefaultContainer.find('.payment-account-id').val();
+                    if(newDefaultId !== 0 && currentDefaultId !== newDefaultId){
+                        var newDefaultContainer = $('#payment-account-' + newDefaultId);
+                        newDefaultContainer.find('.btn-set-default').addClass('default-account').removeClass('btn-set-default');
+                        newDefaultContainer.insertBefore(currentDefaultContainer);
+                    }
+                    button.closest('.bank-account-item').remove(); 
+                }
+            }
+        });
+    });
+    
+    
+    $('.payment-account-container').on('click', '.edit-account-btn', function(){
+        var button = $(this);
+        var container = button.closest('.bank-account-item');
+        var accountNameDisplay = container.find('.account-name-container');
+        var accountNumberDisplay = container.find('.account-number-container');
+        var bankNameDisplay = container.find('.bank-name-container');
+        var accountNameInput =  container.find('.edit-account-name');
+        var accountNumberInput =  container.find('.edit-account-number')
+        var bankSelect = container.find('.edit-bank');
+        var accountName = accountNameDisplay.html();
+        var accountNumber = accountNumberDisplay.html();
+        var bankId = container.find('.bank-id').val(); 
+        bankNameDisplay.css('display','none');
+        accountNameDisplay.css('display','none');
+        accountNumberDisplay.css('display','none');
+        bankSelect.css('display', 'inline');   
+        accountNameInput.css('display', 'inline');
+        accountNumberInput.css('display', 'inline');
+        accountNameInput.find('input').val(accountName);
+        accountNumberInput.find('input').val(accountNumber);
+        bankSelect.find('select').val(bankId);
+        container.find('.default-account, .btn-set-default').css('display', 'none');
+        container.find('.edit-account-btn').css('display', 'none');
+        container.find('.delete-account-btn').css('display', 'none');
+        container.find('.save-edit-btn').css('display', 'inline-block');
+        container.find('.cancel-edit-btn').css('display', 'inline-block');
+       
+    });
+    
+    
+    $('.payment-account-container').on('click', '.save-edit-btn', function(){
+        
+        var button = $(this);
+        var container = button.closest('.bank-account-item');
+        var accountNameInput =  container.find('.edit-account-name input');
+        var accountNumberInput =  container.find('.edit-account-number input')
+        var accountName = accountNameInput.val();
+        var accountNumber = accountNumberInput.val();
+        var selectElement = container.find('.edit-bank select');
+        var selectedBank = selectElement.find(':selected');
+        var bankId = selectedBank.val();
+        
+        var hasErrors = false;
+        if(parseInt(bankId) <= 0){
+            selectElement.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountName).length <= 0){
+            accountNameInput.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNumber).length <= 0){
+            accountNumberInput.addClass('input-error');
+            hasErrors = true;
+        }
+        if(hasErrors){
+            return false;
+        }
+        
+        
+        var cancelButton =  container.find('.cancel-edit-btn');
+        var paymentAccountId = container.find('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/updatePaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId, 'account-name' : accountName,
+                   'account-number' : accountNumber, 'bank-id' : bankId
+            }, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse.isSuccessful){  
+                    var accountNameDisplay = container.find('.account-name-container');
+                    var accountNumberDisplay = container.find('.account-number-container');
+                    var bankNameDisplay = container.find('.bank-name-container');
+                    container.find('.bank-id').val(bankId); 
+                    accountNameDisplay.html(accountName);
+                    accountNumberDisplay.html(accountNumber);
+                    bankNameDisplay.html(selectedBank.html());
+                    cancelButton.trigger('click');
+                }
+                else{
+                    var errorContainer = container.find('.update-payment-account-error');
+                    errorContainer.html(jsonResponse.errors);
+                    errorContainer.css('display', 'block');
+                    setTimeout(function(){
+                        errorContainer.fadeOut('slow');
+                    },2500);
+                }
+            }
+        });
+    });
+        
+
+    $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
+        var button = $(this);
+        var container = button.closest('.bank-account-item');
+        container.find('.bank-name-container').css('display','inline');
+        container.find('.account-name-container').css('display','inline');
+        container.find('.account-number-container').css('display','inline');
+        var accountNameContainer =  container.find('.edit-account-name');
+        var accountNumberContainer =  container.find('.edit-account-number');
+        var bankContainer =  container.find('.edit-bank');
+        bankContainer.css('display', 'none');
+        accountNameContainer.css('display', 'none');
+        accountNumberContainer.css('display', 'none');
+        container.find('.default-account,.btn-set-default').css('display', 'inline-block');
+        container.find('.edit-account-btn').css('display', 'inline-block');
+        container.find('.delete-account-btn').css('display', 'inline-block');
+        container.find('.save-edit-btn').css('display', 'none');
+        container.find('.cancel-edit-btn').css('display', 'none');
+        accountNameContainer.find('input').removeClass('input-error');
+        accountNumberContainer.find('input').removeClass('input-error');
+        bankContainer.find('input').removeClass('input-error');
+    });
+  
+    $('.payment-account-container').on('keyup', '.edit-account-name input, .edit-account-number input', function(){
+        $(this).removeClass('input-error');
+    });
+
+    $('.payment-account-container').on('change', '.edit-bank select', function(){
+        $(this).removeClass('input-error');
+    });
+
+    
+    
 }(jQuery));
 
 
