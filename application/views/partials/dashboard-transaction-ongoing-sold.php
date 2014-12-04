@@ -5,6 +5,7 @@
                 <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                     <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
                     <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
+                    <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
                 <?PHP else : ?>
                     <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
                         <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyer']?></span></div>
@@ -40,6 +41,9 @@
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                     </div>
                                     <div class="col-xs-6">
                                         <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
