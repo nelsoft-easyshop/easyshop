@@ -7,6 +7,7 @@
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
             <div><span class="strong-label">Date : </span> <?=date_format($boughtTransactionDetails['dateadded'], 'jS \of F Y')?></div>
+            <div><span class="strong-label">Total : Php </span> <?=number_format($boughtTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
         <?PHP endif; ?>
     </div>
         <?PHP foreach($boughtTransactionDetails['product'] as $productKey => $product) : ?>
@@ -24,7 +25,7 @@
                             </a>
                         </p>
                         <p class="item-amount">
-                            <span class="item-current-amount">P<?=number_format($product['price'], 2, '.', ',') ?></span>
+                            <span class="item-current-amount">P<?=number_format($product['item_price'], 2, '.', ',') ?></span>
                         </p>
                         <div class="div-meta-description">
                             <div class="row">
@@ -32,7 +33,10 @@
                                     <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                 </div>
                                 <div class="col-xs-6">
-                                    <span class="strong-label">Total : </span> Php <?=number_format(($product['price']*$product['orderQuantity']), 2, '.', ',') ?>
+                                    <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                 </div>
                                 <div class="col-xs-6">
                                     <span class="strong-label">Status : </span>
