@@ -342,15 +342,15 @@ class Store extends MY_Controller
     private function getUserDefaultCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
-        $pm = $this->serviceContainer['product_manager'];
+        $categoryManager = $this->serviceContainer['category_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
         switch($catType){
             case "custom":
-                $parentCat = $pm->getAllUserProductCustomCategory($memberId);
+                $parentCat = $categoryManager->getAllUserProductCustomCategory($memberId);
                 break;
             default:
-                $parentCat = $pm->getAllUserProductParentCategory($memberId);
+                $parentCat = $categoryManager->getAllUserProductParentCategory($memberId);
                 break;
         }
 
@@ -358,7 +358,7 @@ class Store extends MY_Controller
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $pm->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
             
             // Unset DEFAULT categories with no products fetched (due to being custom categorized)
             if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
