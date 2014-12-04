@@ -1306,6 +1306,7 @@
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
                         templateClone.find('.payment-account-id').val(paymentAccount.idBank);
+                        templateClone.attr('id', '');
                         if(paymentAccount.isDefault){
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
                         }    
@@ -1374,6 +1375,7 @@
                     templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
                     templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
                     templateClone.find('.payment-account-id').val(jsonResponse.newId);
+                    templateClone.attr('id', '');
                     $('.payment-account-container').append(templateClone);
                     $('.cancel-add-bank').trigger('click');
                 }
@@ -1403,7 +1405,25 @@
     });
     
     $('.payment-account-container').on('click', '.btn-set-default', function(){
+        var button = $(this);
+        var paymentAccountId = button.parent().siblings('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/changeDefaultPaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId}, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse){
+                    var oldDefaultTab = $('.payment-account-container .bank-account-item').first();
+                    $('.default-account').removeClass('default-account').addClass('btn-set-default');
+                    button.addClass('default-account').removeClass('btn-set-default');
+                    var newDefaultTab = button.closest('.bank-account-item');
+                    newDefaultTab.insertBefore(oldDefaultTab);
 
+                }
+            }
+        });
     });
     
     

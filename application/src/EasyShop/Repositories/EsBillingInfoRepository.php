@@ -36,7 +36,7 @@ class EsBillingInfoRepository extends EntityRepository
                               ->setParameter('memberId', $memberId)
                               ->getQuery()
                               ->getResult();
-
+            
        return $paymentAccounts;
     }
 
@@ -88,7 +88,35 @@ class EsBillingInfoRepository extends EntityRepository
         return $em->getRepository('EasyShop\Entities\EsBillingInfo')
                   ->findBy(['member' => $memberId,
                             'isDefault' => true,
-                         ]);
+                    ]);
     }
+
+    /**
+     * Updates the default payment account
+     *
+     * @param integer $memberId
+     * @param integer $paymentAccountId
+     */
+    public function updateDefaultAccount($memberId, $paymentAccountId)
+    {
+        $em = $this->_em;
+        $defaultAccounts = $em->getRepository('EasyShop\Entities\EsBillingInfo')
+                              ->findBy(['member' => $memberId, 
+                                    'isDefault' => true
+                              ]);
+        foreach($defaultAccounts as $defaultAccount){
+            $defaultAccount->setIsDefault(false);
+        }
+        $newDefaultAccount =  $em->getRepository('EasyShop\Entities\EsBillingInfo')
+                                 ->findBy(['member' => $memberId, 
+                                           'idBillingInfo' => $paymentAccountId
+                                         ]);
+        if(!empty($newDefaultAccount)){
+            $newDefaultAccount[0]->setIsDefault(true);
+            $em->flush();
+        }                                    
+    }
+
 }
+
 

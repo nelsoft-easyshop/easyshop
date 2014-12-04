@@ -2787,13 +2787,20 @@ class Memberpage extends MY_Controller
     /**
      * Update default account
      *
+     * @return JSON
      */
     public function changeDefaultPaymentAccount()
     {
         $memberId = $this->session->userdata('member_id');
-        if($this->input->post() && $memberId){
-            
+        $isSuccessful = false;
+        if( $this->input->post('payment-account-id') && $memberId ){
+            $billingInfoId = $this->input->post('payment-account-id');
+            $this->serviceContainer['entity_manager']
+                 ->getRepository('EasyShop\Entities\EsBillingInfo')
+                 ->updateDefaultAccount($memberId, $billingInfoId);
+            $isSuccessful = true;
         }
+        echo json_encode($isSuccessful);
     }
     
 
