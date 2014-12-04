@@ -117,6 +117,44 @@ class mobilePayment extends MY_Controller
     }
 
     /**
+     * Review cart before proceeding on payment.
+     * @return json
+     */
+    public function reviewPayment()
+    {   
+        $apiFormatter = $this->serviceContainer['api_formatter'];
+        $checkoutService = $this->serviceContainer['checkout_service'];
+
+        $canContinue = true;
+        $errorMessage = "";
+        $mobileCartContents = $this->input->post('cartData') 
+                      ? json_decode($this->input->post('cartData')) 
+                      : [];
+
+        $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember(), false);
+        $cartData = !empty(unserialize($this->member->getUserdata())) 
+                    ? unserialize($this->member->getUserdata()) 
+                    : [];
+        $errorMessage = "Please verify your email address.";
+        if((int)$this->member->getIsEmailVerify() > 0){
+            $errorMessage = "You have no item in you cart";
+            if(!empty($cartData)){
+                unset($cartData['total_items'],$cartData['cart_total']);
+                $validatedCart = $checkoutService->validateCartContent($cartData, $this->member);
+                $formattedCartContents = $apiFormatter->formatCart($validatedCart);
+            }
+        }
+
+        $outputData = [
+            'cartData' => $formattedCartContents,
+            'canContinue' => $canContinue,
+            'errorMessage' => $errorMessage,
+        ];
+
+        print(json_encode($outputData,JSON_PRETTY_PRINT));
+    }
+
+    /**
      * Persist Cash on delivery payment
      * @return JSON
      */

@@ -437,6 +437,18 @@ class Kernel
                         );
         };
 
+
+        // Product Shipping Manager
+        $container['checkout_service'] = function ($c) use ($container) {
+            return new \EasyShop\Checkout\CheckoutService(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['promo_manager'],
+                            $container['cart_manager'],
+                            $container['payment_service']
+                        );
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

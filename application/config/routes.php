@@ -177,6 +177,10 @@ else {
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
     
+    #MOBILE
+    $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
+    $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+
     $route['christmas-promo'] = 'home/christmasPromo';
 }
 
