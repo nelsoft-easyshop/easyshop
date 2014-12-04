@@ -88,7 +88,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Map Location : </label>
                     <div class="col-sm-8 col-map">
-                        <span>Location not marked</span> <span class="map-trigger">Mark on map <i class="fa fa-caret-down"></i></span>
+                        <span id="locationMarkedText"><?php echo ($address) ? (((int)$address->getLat() === 0 && (int)$address->getLng() === 0) ? 'Location not Marked' : 'Location Marked') : 'Location not Marked' ?></span>
+                        <span class="map-trigger">Mark on map <i class="fa fa-caret-down"></i></span>
                         <input type="hidden" name="map_lat" id="map_clat" value="<?php echo ($address) ? $address->getLat() : '' ?>">
                         <input type="hidden" name="map_lng" id="map_clng" value="<?php echo ($address) ? $address->getLng() : ''?>">
                         <input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo ($address) ? $address->getLat() : '' ?>">
