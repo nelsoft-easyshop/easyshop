@@ -24,3 +24,4 @@ $config = Array(
         
 /* End of file email.php */
 /* Location: ./application/config/email.php */
+
