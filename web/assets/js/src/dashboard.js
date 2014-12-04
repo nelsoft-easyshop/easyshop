@@ -1287,6 +1287,23 @@
         });
     });
 
+    $('#setup').on('click','.printQrCode', function() {
+        var url = $(this).data("url");
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function(json) {
+                var originalContents = $(document.body).html();
+                $(document.body).html(json);
+                window.print();
+                location.reload();
+            },
+            error: function(e) {
+                alert("Action failed, please try again");
+            }
+        });
+    });
+
     $(".add-bank-account").click(function() {
         $(this).fadeOut();
         $(".select-bank").slideDown();
