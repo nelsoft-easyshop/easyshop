@@ -124,14 +124,17 @@ class mobilePayment extends MY_Controller
     {   
         $apiFormatter = $this->serviceContainer['api_formatter'];
         $checkoutService = $this->serviceContainer['checkout_service'];
+        
+        $this->paymentController = $this->loadController('payment');
 
         $canContinue = true;
         $errorMessage = "";
+        $paymentType = trim($this->input->post('paymentType'));
         $mobileCartContents = $this->input->post('cartData') 
                       ? json_decode($this->input->post('cartData')) 
                       : [];
 
-        $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember(), false);
+        $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
         $cartData = !empty(unserialize($this->member->getUserdata())) 
                     ? unserialize($this->member->getUserdata()) 
                     : [];
@@ -140,8 +143,11 @@ class mobilePayment extends MY_Controller
             $errorMessage = "You have no item in you cart";
             if(!empty($cartData)){
                 unset($cartData['total_items'],$cartData['cart_total']);
+                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+                $canContinue = $dataCollection['canContinue'];
+                $errorMessage = $dataCollection['errMsg'];
                 $validatedCart = $checkoutService->validateCartContent($cartData, $this->member);
-                $formattedCartContents = $apiFormatter->formatCart($validatedCart);
+                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
             }
         }
 
