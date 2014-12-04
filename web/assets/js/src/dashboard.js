@@ -465,7 +465,7 @@
         });
     }
 
-   $( "#btn-edit-email" ).click(function() {
+    $( "#btn-edit-email" ).click(function() {
         $( ".current-email" ).slideToggle( "fast" );
         $( ".edit-email" ).slideToggle( "fast" );
     });
@@ -1001,6 +1001,43 @@
             }
         });
     });
+    
+    
+    $('#ongoing-bought').on('click', '.reject_item', function() {
+        var thisbtn = $(this);
+        var form = thisbtn.closest('form');
+        var thismethod = thisbtn.siblings('input[name="method"]');
+        var status = thisbtn.closest('.item-list-panel').find('.status-class');
+
+        $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
+            try{
+                var obj = jQuery.parseJSON(data);
+            }
+            catch(e){
+                alert('An error was encountered while processing your data. Please try again later.');
+                return false;
+            }
+            thisbtn.attr('disabled', false);
+
+            if(obj.result === 'success'){
+                if ( thisbtn.hasClass('reject') ) {
+                    thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
+                    thismethod.val('unreject');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
+                }else if ( thisbtn.hasClass('unreject') ){
+                    thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
+                    thismethod.val('reject');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
+                }
+            }
+            else{
+                alert(obj.error);
+            }
+        });
+        thisbtn.attr('disabled', true);
+        thisbtn.val('Sending...');
+        return false;
+    });
 
     function htmlDecode(value) {
         if (value) {
@@ -1226,7 +1263,8 @@
         }
     });
 
-        
+
+
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var selectedList = $('.color-li.selected');
@@ -1248,6 +1286,23 @@
                     $('#store-color-error').html(response.errors);
                 }
                 
+            }
+        });
+    });
+
+    $('#setup').on('click','.printQrCode', function() {
+        var url = $(this).data("url");
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function(json) {
+                var originalContents = $(document.body).html();
+                $(document.body).html(json);
+                window.print();
+                location.reload();
+            },
+            error: function(e) {
+                alert("Action failed, please try again");
             }
         });
     });
