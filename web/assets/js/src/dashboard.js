@@ -1471,14 +1471,11 @@
         container.find('.edit-bank').css('display', 'inline');
         container.find('.edit-account-name').css('display', 'inline');
         container.find('.edit-account-number').css('display', 'inline');
-        
         container.find('.default-account').css('display', 'none');
         container.find('.edit-account-btn').css('display', 'none');
         container.find('.delete-account-btn').css('display', 'none');
-       
         container.find('.save-edit-btn').css('display', 'inline-block');
         container.find('.cancel-edit-btn').css('display', 'inline-block');
-
     });
     
     $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
@@ -1490,11 +1487,9 @@
         container.find('.edit-bank').css('display', 'none');
         container.find('.edit-account-name').css('display', 'none');
         container.find('.edit-account-number').css('display', 'none');
-        
         container.find('.default-account').css('display', 'inline-block');
         container.find('.edit-account-btn').css('display', 'inline-block');
         container.find('.delete-account-btn').css('display', 'inline-block');
-       
         container.find('.save-edit-btn').css('display', 'none');
         container.find('.cancel-edit-btn').css('display', 'none');
     });
