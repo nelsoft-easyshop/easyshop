@@ -2241,6 +2241,21 @@ a{
     border: solid #e2e2e2 1px;
 }
 
+.selectedM > div,
+.selectedM > li
+ {
+    background: #ff893a !important;
+    color: #fff;
+}
+
+.dash-mobile-trigger{
+    cursor: pointer;
+}
+
+.selectedCol{
+    background: #ff893a !important;
+    color: #fff;
+}
 
 @media only screen and (max-width: 991px){
     .section-dashboard{
@@ -2330,6 +2345,10 @@ a{
     
     .m-menu-delivery{
         border-top: solid #e2e2e2 1px;
+        border-bottom: solid #e2e2e2 1px;
+    }
+    
+    .m-menu-payment{
         border-bottom: solid #e2e2e2 1px;
     }
     
