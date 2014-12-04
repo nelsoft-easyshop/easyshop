@@ -61,12 +61,12 @@ class CheckoutService
 
     /**
      * Validate Cart before checking out
-     * @param  array  $cartContent
-     * @param  object $member
+     * @param  EasyShop\Entities\EsMember $member
      * @return array
      */
-    public function validateCartContent($cartContent, $member)
+    public function validateCartContent($member)
     {
+        $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
         foreach ($cartContent as $key => $value) {
             $productId = $value['id'];
             $itemId = $value['product_itemID'];
@@ -85,7 +85,7 @@ class CheckoutService
 
     /**
      * Check if product in cart can purchase with other product
-     * @param  object $product
+     * @param  EasyShop\Entities\EsProduct $product
      * @return boolean
      */
     public function canPurchaseWithOtherProduct($product)
@@ -101,9 +101,9 @@ class CheckoutService
 
     /**
      * Check if product in cart is available on users location
-     * @param  object  $product
+     * @param  EasyShop\Entities\EsProduct  $product
      * @param  integer $itemId
-     * @param  object  $member
+     * @param  EasyShop\Entities\EsMember  $member
      * @return boolean
      */
     public function canPurchaseInLocation($product, $itemId, $member)
@@ -133,7 +133,7 @@ class CheckoutService
 
     /**
      * check if desired quantity is available
-     * @param  object  $product
+     * @param  EasyShop\Entities\EsProduct  $product
      * @param  integer $itemId
      * @param  integer $quantity
      * @return boolean
@@ -142,12 +142,16 @@ class CheckoutService
     {
         $quantityData = $this->productManager->getProductInventory($product, false, true);
 
-        return $quantity < $quantityData[$itemId]['quantity'];
+        if(isset($quantityData[$itemId]['quantity'])){
+            return $quantity < $quantityData[$itemId]['quantity'];
+        }
+
+        return false;
     }
 
     /**
      * Check if user is reach the purchase limit on specific product
-     * @param  object   $product
+     * @param  EasyShop\Entities\EsProduct $product
      * @param  integer  $memberId
      * @return boolean
      */
@@ -158,8 +162,8 @@ class CheckoutService
 
     /**
      * apply boolean payment type checking
-     * @param  array  $cartProduct [description]
-     * @param  object $product     [description]
+     * @param  array  $cartProduct
+     * @param  EasyShop\Entities\EsProduct $product
      */
     public function applyPaymentTypAvailable(&$cartProduct, $product)
     {   

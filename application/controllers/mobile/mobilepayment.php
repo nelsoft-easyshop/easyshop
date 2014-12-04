@@ -146,7 +146,7 @@ class mobilePayment extends MY_Controller
                 $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
                 $canContinue = $dataCollection['canContinue'];
                 $errorMessage = $dataCollection['errMsg'];
-                $validatedCart = $checkoutService->validateCartContent($cartData, $this->member);
+                $validatedCart = $checkoutService->validateCartContent($this->member);
                 $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
             }
         }
