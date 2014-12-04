@@ -1,5 +1,11 @@
 <div class="div-tab">
-    
+    <div class="dashboard-breadcrumb">
+        <ul>
+            <li>Dashboard</li>
+            <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Account</li>
+            <li class="bc-arrow"><i class="fa fa-angle-right"></i>Payment Account</li>
+        </ul>
+    </div>
     <div class="div-tab-inner">
         <div class="div-account-setting">
             <p class="panel-setting-title">Payment Account</p>
