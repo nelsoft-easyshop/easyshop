@@ -1449,7 +1449,6 @@
                     var currentDefaultId = currentDefaultContainer.find('.payment-account-id').val();
                     if(newDefaultId !== 0 && currentDefaultId !== newDefaultId){
                         var newDefaultContainer = $('#payment-account-' + newDefaultId);
-                       
                         newDefaultContainer.find('.btn-set-default').addClass('default-account').removeClass('btn-set-default');
                         newDefaultContainer.insertBefore(currentDefaultContainer);
                     }
