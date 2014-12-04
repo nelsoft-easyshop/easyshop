@@ -2740,6 +2740,11 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
     
+    /**
+     * Creates a new payment account
+     *
+     * @return JSON
+     */
     public function createPaymentAccount()
     {
         $memberId = $this->session->userdata('member_id');
@@ -2760,7 +2765,7 @@ class Memberpage extends MY_Controller
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
             $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
-            $formData['account-bank-id'] = $this->input->post('account-bank-id');
+            $formData['account-bank-id'] = (int)$this->input->post('account-bank-id');
             $formData['account-name'] = $this->input->post('account-name');
             $formData['account-number'] = $this->input->post('account-number');
             $form = $formBuild->getForm();
@@ -2825,6 +2830,57 @@ class Memberpage extends MY_Controller
             $defaultAccount = $billingInfoRepository->getDefaultAccount($memberId);
             if($defaultAccount){
                 $jsonResponse['defaultId'] = $defaultAccount->getIdBillingInfo();
+            }
+        }
+        echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Update the payment account
+     *
+     * @return JSON
+     */
+    public function updatePaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');  
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+        
+        $jsonResponse = ['isSuccessful' => false,
+                         'errors' => [],
+                        ];          
+        if($this->input->post()){
+            $rules = $formValidation->getRules('payment_account');
+            $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                                     ->setMethod('POST');            
+            $formBuild->add('account-id', 'text', array('constraints' => $rules['account-id']));                         
+            $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
+            $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formData['account-bank-id'] = (int)$this->input->post('bank-id');
+            $formData['account-name'] = $this->input->post('account-name');
+            $formData['account-number'] = $this->input->post('account-number');
+            $formData['account-id'] = (int)$this->input->post('payment-account-id');
+            $form = $formBuild->getForm();
+            $form->submit($formData);        
+            if($form->isValid()){
+                $newAccount = $entityManager->getRepository('EasyShop\Entities\EsBillingInfo')
+                                            ->findOneBy(['idBillingInfo' => $formData['account-id'],
+                                                         'member' => $memberId,
+                                                         'isDelete' => false,
+                                            ]);
+                if($newAccount){
+                    $newAccount->setDatemodified(date_create(date("Y-m-d H:i:s")));
+                    $newAccount->setBankAccountName($formData['account-name']);
+                    $newAccount->setBankAccountNumber($formData['account-number']);
+                    $newAccount->setBankId($formData['account-bank-id']);
+                    $entityManager->flush();
+                    $jsonResponse['isSuccessful'] = true;
+                }
+            }else{
+                $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
             }
         }
         echo json_encode($jsonResponse);

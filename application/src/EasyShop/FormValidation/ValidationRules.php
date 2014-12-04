@@ -178,6 +178,13 @@ class ValidationRules
                     'account-number' => [
                                 new Assert\NotBlank([ "message" => "The account number cannot be blank",]),
                             ],
+                      
+                    'account-id' => [
+                                new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "This account is invalid.",
+                                                    ]),
+                    ],
             ],
         );
     }

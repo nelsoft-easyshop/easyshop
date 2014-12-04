@@ -1474,7 +1474,7 @@
         var bankSelect = container.find('.edit-bank');
         var accountName = accountNameDisplay.html();
         var accountNumber = accountNumberDisplay.html();
-        var bankId = container.find('.bank-id').val();
+        var bankId = container.find('.bank-id').val(); 
         bankNameDisplay.css('display','none');
         accountNameDisplay.css('display','none');
         accountNumberDisplay.css('display','none');
@@ -1489,28 +1489,49 @@
         container.find('.delete-account-btn').css('display', 'none');
         container.find('.save-edit-btn').css('display', 'inline-block');
         container.find('.cancel-edit-btn').css('display', 'inline-block');
+       
+    });
+    
+    
+    $('.payment-account-container').on('click', '.save-edit-btn', function(){
+        
+        var button = $(this);
+        var container = button.closest('.bank-account-item');
+        var accountNameInput =  container.find('.edit-account-name input');
+        var accountNumberInput =  container.find('.edit-account-number input')
+        var accountName = accountNameInput.val();
+        var accountNumber = accountNumberInput.val();
+        var selectedBank = container.find('.edit-bank').find(':selected');
+        var bankId = selectedBank.val();
+        
+        var cancelButton =  container.find('.cancel-edit-btn');
         var paymentAccountId = container.find('.payment-account-id').val();
         var csrftoken = $("meta[name='csrf-token']").attr('content'); 
         var $ajaxRequest = $.ajax({
             type: 'post',
             url: 'memberpage/updatePaymentAccount',
-            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId, 'account-name' : accountName
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId, 'account-name' : accountName,
                    'account-number' : accountNumber, 'bank-id' : bankId
             }, 
             success: function(response) {
                 var jsonResponse = $.parseJSON(response); 
-                if(jsonResponse.isSuccessful){
-                    var accountName = accountNameDisplay.html(accountName);
-                    var accountNumber = accountNumberDisplay.html(accountNumber);
-                    var bankId = container.find('.bank-id').val(bankId);
+                if(jsonResponse.isSuccessful){  
+                    var accountNameDisplay = container.find('.account-name-container');
+                    var accountNumberDisplay = container.find('.account-number-container');
+                    var bankNameDisplay = container.find('.bank-name-container');
+                    container.find('.bank-id').val(bankId); 
+                    accountNameDisplay.html(accountName);
+                    accountNumberDisplay.html(accountNumber);
+                    bankNameDisplay.html(selectedBank.html());
+                    cancelButton.trigger('click');
                 }
             }
         });
         
-        
-        
     });
-    
+        
+        
+        
     $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
         var button = $(this);
         var container = button.closest('.bank-account-item');
