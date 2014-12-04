@@ -46,6 +46,7 @@ class EsBillingInfoRepository extends EntityRepository
      * @param string $accountName
      * @param string $accountNumber
      * @param integer $bankId
+     * @return EasyShop\Entities\EsBillingInfo
      */
     public function createNewPaymentAccount($memberId, $accountName, $accountNumber, $bankId)
     {
@@ -61,7 +62,7 @@ class EsBillingInfoRepository extends EntityRepository
         $paymentAccount->setMember($member);
         $isDefault = 1;
         $defaultAccount = $this->getDefaultAccount($memberId);
-        if($defaultAccount){
+        if($defaultAccount !== null){
             $isDefault = 0;
         }
         $paymentAccount->setIsDefault($isDefault);
@@ -73,7 +74,7 @@ class EsBillingInfoRepository extends EntityRepository
         catch(Exception $e){
             $isSuccessful = false;
         }
-        return $isSuccessful  ? $paymentAccount->getIdBillingInfo()  : false;
+        return $isSuccessful  ? $paymentAccount : false;
     }
     
     /**
@@ -85,10 +86,12 @@ class EsBillingInfoRepository extends EntityRepository
     public function getDefaultAccount($memberId)
     {
         $em = $this->_em; 
-        return $em->getRepository('EasyShop\Entities\EsBillingInfo')
-                  ->findBy(['member' => $memberId,
-                            'isDefault' => true,
-                    ]);
+        $accounts =  $em->getRepository('EasyShop\Entities\EsBillingInfo')
+                        ->findBy(['member' => $memberId,
+                                    'isDefault' => true,
+                                    'isDelete' => false,
+                            ]);
+        return !empty($accounts) ? $accounts[0] : null;
     }
 
     /**
@@ -102,21 +105,65 @@ class EsBillingInfoRepository extends EntityRepository
         $em = $this->_em;
         $defaultAccounts = $em->getRepository('EasyShop\Entities\EsBillingInfo')
                               ->findBy(['member' => $memberId, 
-                                    'isDefault' => true
+                                        'isDefault' => true,
+                                        'isDelete' => false,
                               ]);
+        $dateToday = date_create(date("Y-m-d H:i:s"));
         foreach($defaultAccounts as $defaultAccount){
             $defaultAccount->setIsDefault(false);
+            $defaultAccount->setDatemodified($dateToday);
         }
         $newDefaultAccount =  $em->getRepository('EasyShop\Entities\EsBillingInfo')
                                  ->findBy(['member' => $memberId, 
-                                           'idBillingInfo' => $paymentAccountId
+                                           'idBillingInfo' => $paymentAccountId,
+                                           'isDelete' => false,
                                          ]);
-        if(!empty($newDefaultAccount)){
+       if(!empty($newDefaultAccount)){
             $newDefaultAccount[0]->setIsDefault(true);
+            $newDefaultAccount[0]->setDatemodified($dateToday);
             $em->flush();
         }                                    
     }
+    
+    /**
+     * Deletes a payment account. Sets a new default account if the current
+     * account is the default account
+     *
+     * @param integer $memberId
+     * @param integer $paymentAccountId
+     * @return bool
+     */
+    public function deletePaymentAccount($memberId, $paymentAccountId)
+    {
+        $em = $this->_em;
+        $paymentAccounts = $em->getRepository('EasyShop\Entities\EsBillingInfo')
+                             ->findBy(['member' => $memberId, 
+                                       'idBillingInfo' => $paymentAccountId,
+                                       'isDelete' => false,
+                             ]);
+        $isSuccessful = false;
+        if(!empty($paymentAccounts)){
+            $accountForDeletion = $paymentAccounts[0];
+            $isDefault = $accountForDeletion->getIsDefault();
+            $accountForDeletion->setIsDelete(true);
+            $accountForDeletion->setIsDefault(false);
+            $accountForDeletion->setDatemodified(date_create(date("Y-m-d H:i:s")));
+            $em->flush();
+            $isSuccessful = true;
+            if($isDefault){
+                $availableAccounts  = $em->getRepository('EasyShop\Entities\EsBillingInfo')
+                                         ->findBy(['member' => $memberId, 
+                                                   'isDelete' => false,
+                                         ]);
+                if(!empty($availableAccounts)){
+                    $this->updateDefaultAccount($memberId, $availableAccounts[0]->getIdBillingInfo());
+                }
+           }  
+        }
+        return $isSuccessful;
+    }
 
+    
 }
 
 

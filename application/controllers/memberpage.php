@@ -2748,9 +2748,10 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => [],
                          'newId' => 0,
+                         'isDefault' => false,
                         ];               
         if($this->input->post()){
             $rules = $formValidation->getRules('payment_account');
@@ -2766,16 +2767,17 @@ class Memberpage extends MY_Controller
             $form->submit($formData);        
                   
             if($form->isValid()){
-                $paymentAccountId = $this->serviceContainer['entity_manager']
-                                         ->getRepository('EasyShop\Entities\EsBillingInfo')
-                                         ->createNewPaymentAccount($memberId, 
-                                                $formData['account-name'], 
-                                                $formData['account-number'], 
-                                                $formData['account-bank-id']
-                                            );
-                if($paymentAccountId){
-                    $jsonResponse['isSuccessful'] = 'true';
-                    $jsonResponse['newId'] = $paymentAccountId;
+                $newAccount = $this->serviceContainer['entity_manager']
+                                   ->getRepository('EasyShop\Entities\EsBillingInfo')
+                                   ->createNewPaymentAccount($memberId, 
+                                        $formData['account-name'], 
+                                        $formData['account-number'], 
+                                        $formData['account-bank-id']
+                                    );
+                if($newAccount){
+                    $jsonResponse['isSuccessful'] = true;
+                    $jsonResponse['isDefault'] = $newAccount->getIsDefault();
+                    $jsonResponse['newId'] = $newAccount->getIdBillingInfo();
                 }
             }else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
@@ -2801,6 +2803,31 @@ class Memberpage extends MY_Controller
             $isSuccessful = true;
         }
         echo json_encode($isSuccessful);
+    }
+    
+    
+    /**
+     * Destroy action for payment account
+     *
+     * @return JSON
+     */
+    public function deletePaymentAccount()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $jsonResponse = ['isSuccessful' => false,
+                         'defaultId' => 0,
+                        ];
+        if( $this->input->post('payment-account-id') && $memberId ){
+            $billingInfoRepository = $this->serviceContainer['entity_manager']
+                                          ->getRepository('EasyShop\Entities\EsBillingInfo');
+            $billingInfoId = $this->input->post('payment-account-id');
+            $jsonResponse['isSuccessful'] = $billingInfoRepository->deletePaymentAccount($memberId, $billingInfoId);
+            $defaultAccount = $billingInfoRepository->getDefaultAccount($memberId);
+            if($defaultAccount){
+                $jsonResponse['defaultId'] = $defaultAccount->getIdBillingInfo();
+            }
+        }
+        echo json_encode($jsonResponse);
     }
     
 

@@ -63,8 +63,8 @@
             </div>
             <div class="col-xs-4 bank-account-item-btns">
                 <span class="btn btn-set-default">Set as Default Account</span>
-                <span class="btn btn-default-1 mrgn-2 mrgn-top-10"><span class="icon-edit"></span> Edit</span>
-                <span class="btn btn-default-1 mrgn-top-10"><span class="icon-delete"></span> Delete</span>
+                <span class="btn btn-default-1 mrgn-2 mrgn-top-10 edit-account-btn"><span class="icon-edit"></span> Edit</span>
+                <span class="btn btn-default-1 mrgn-top-10 delete-account-btn"><span class="icon-delete"></span> Delete</span>
             </div>
             <div class="clear"></div>
             <input type="hidden" class="payment-account-id" value="0"/>

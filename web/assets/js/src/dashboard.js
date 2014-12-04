@@ -1305,8 +1305,8 @@
                         templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
-                        templateClone.find('.payment-account-id').val(paymentAccount.idBank);
-                        templateClone.attr('id', '');
+                        templateClone.find('.payment-account-id').val(paymentAccount.idBillingInfo);
+                        templateClone.attr('id', 'payment-account-' + paymentAccount.idBillingInfo);
                         if(paymentAccount.isDefault){
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
                         }    
@@ -1367,7 +1367,7 @@
             data: $( this ).serialize(),
             success: function(response) {
                 var jsonResponse = $.parseJSON(response);  
-                if(jsonResponse.isSuccessful == 'true'){
+                if(jsonResponse.isSuccessful){
                     var templateClone =  $('#payment-account-template').clone();
                     var bankName = $bankDropdown.find('option:selected').text();
                     templateClone.css('display', 'block');
@@ -1375,7 +1375,10 @@
                     templateClone.find('.account-name-container').html(escapeHtml(accountNameValue));
                     templateClone.find('.account-number-container').html(escapeHtml(accountNumberValue));
                     templateClone.find('.payment-account-id').val(jsonResponse.newId);
-                    templateClone.attr('id', '');
+                    templateClone.attr('id', 'payment-account-' + jsonResponse.newId);
+                    if(jsonResponse.isDefault){
+                        templateClone.find('.btn-set-default').removeClass('btn-set-default').addClass('default-account');
+                    }
                     $('.payment-account-container').append(templateClone);
                     $('.cancel-add-bank').trigger('click');
                 }
@@ -1429,6 +1432,31 @@
             }
         });
     });
+    
+    $('.payment-account-container').on('click', '.delete-account-btn', function(){
+        var button = $(this);
+        var paymentAccountId = button.parent().siblings('.payment-account-id').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content'); 
+        var $ajaxRequest = $.ajax({
+            type: 'post',
+            url: 'memberpage/deletePaymentAccount',
+            data: {'csrfname': csrftoken, 'payment-account-id': paymentAccountId}, 
+            success: function(response) {
+                var jsonResponse = $.parseJSON(response); 
+                if(jsonResponse.isSuccessful){
+                    var newDefaultId = jsonResponse.defaultId;
+                    if(newDefaultId !== 0){
+                        var newDefaultContainer = $('#payment-account-' + newDefaultId);
+                        var oldDefaultContainer = $('.payment-account-container .bank-account-item').first();
+                        newDefaultContainer.find('.btn-set-default').addClass('default-account').removeClass('btn-set-default');
+                        newDefaultContainer.insertBefore(oldDefaultContainer);
+                    }
+                    button.closest('.bank-account-item').remove(); 
+                }
+            }
+        });
+    });
+  
     
     
 }(jQuery));
