@@ -1501,8 +1501,27 @@
         var accountNumberInput =  container.find('.edit-account-number input')
         var accountName = accountNameInput.val();
         var accountNumber = accountNumberInput.val();
-        var selectedBank = container.find('.edit-bank').find(':selected');
+        var selectElement = container.find('.edit-bank select');
+        var selectedBank = selectElement.find(':selected');
         var bankId = selectedBank.val();
+        
+        var hasErrors = false;
+        if(parseInt(bankId) <= 0){
+            selectElement.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountName).length <= 0){
+            accountNameInput.addClass('input-error');
+            hasErrors = true;
+        }
+        if($.trim(accountNumber).length <= 0){
+            accountNumberInput.addClass('input-error');
+            hasErrors = true;
+        }
+        if(hasErrors){
+            return false;
+        }
+        
         
         var cancelButton =  container.find('.cancel-edit-btn');
         var paymentAccountId = container.find('.payment-account-id').val();
@@ -1535,27 +1554,39 @@
                 }
             }
         });
-        
     });
         
-        
-        
+
     $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
         var button = $(this);
         var container = button.closest('.bank-account-item');
         container.find('.bank-name-container').css('display','inline');
         container.find('.account-name-container').css('display','inline');
         container.find('.account-number-container').css('display','inline');
-        container.find('.edit-bank').css('display', 'none');
-        container.find('.edit-account-name').css('display', 'none');
-        container.find('.edit-account-number').css('display', 'none');
+        var accountNameContainer =  container.find('.edit-account-name');
+        var accountNumberContainer =  container.find('.edit-account-number');
+        var bankContainer =  container.find('.edit-bank');
+        bankContainer.css('display', 'none');
+        accountNameContainer.css('display', 'none');
+        accountNumberContainer.css('display', 'none');
         container.find('.default-account,.btn-set-default').css('display', 'inline-block');
         container.find('.edit-account-btn').css('display', 'inline-block');
         container.find('.delete-account-btn').css('display', 'inline-block');
         container.find('.save-edit-btn').css('display', 'none');
         container.find('.cancel-edit-btn').css('display', 'none');
+        accountNameContainer.find('input').removeClass('input-error');
+        accountNumberContainer.find('input').removeClass('input-error');
+        bankContainer.find('input').removeClass('input-error');
     });
   
+    $('.payment-account-container').on('keyup', '.edit-account-name input, .edit-account-number input', function(){
+        $(this).removeClass('input-error');
+    });
+
+    $('.payment-account-container').on('change', '.edit-bank select', function(){
+        $(this).removeClass('input-error');
+    });
+
     
     
 }(jQuery));
