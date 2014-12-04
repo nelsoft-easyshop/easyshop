@@ -1225,12 +1225,13 @@
             });
         }
     });
-//not finished
-    $('.dashboard_table').on('click', '.reject_item', function() {
+
+    $('#ongoing-bought').on('click', '.reject_item', function() {
         var form = $(this).closest('form');
         var thisbtn = $(this);
         var thismethod = $(this).siblings('input[name="method"]');
-        var status = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
+        var status = $(this).parent().parent().parent().parent().parent().parent().find('.status-class');
+
         $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
             try{
                 var obj = jQuery.parseJSON(data);
@@ -1242,14 +1243,14 @@
             thisbtn.attr('disabled', false);
 
             if(obj.result === 'success'){
-                if ( thisbtn.hasClass('reject') ){
+                if ( thisbtn.hasClass('reject') ) {
                     thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
                     thismethod.val('unreject');
-                    status.replaceWith('<span class="trans_alert trans_red">Item Rejected</span>');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
                 }else if ( thisbtn.hasClass('unreject') ){
                     thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
                     thismethod.val('reject');
-                    status.replaceWith('<span class="trans_alert trans_red">Item Unrejected</span>');
+                    status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
                 }
             }
             else{
