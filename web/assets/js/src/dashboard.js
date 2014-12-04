@@ -1420,7 +1420,11 @@
                     button.addClass('default-account').removeClass('btn-set-default');
                     var newDefaultTab = button.closest('.bank-account-item');
                     newDefaultTab.insertBefore(oldDefaultTab);
-
+                    
+                    $('html, body').animate({
+                        scrollTop: $("#panel-setting-title").offset().top
+                    }, 1000);
+                    
                 }
             }
         });

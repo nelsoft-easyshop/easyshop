@@ -2,7 +2,7 @@
     
     <div class="div-tab-inner payment-account-container">
         <div class="div-account-setting">
-            <p class="panel-setting-title">Payment Account</p>
+            <p class="panel-setting-title" id="panel-setting-title">Payment Account</p>
             <p class="p-note-setting">
                 Your payment account will be used whenever a purchased is made for your item. Refunds may also be transferred to any of these
                 accounts if a paypal account is not available.
