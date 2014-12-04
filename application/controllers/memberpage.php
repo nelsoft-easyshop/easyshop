@@ -728,7 +728,7 @@ class Memberpage extends MY_Controller
             if ($doesTransactionExists) {
                 $member = $this->esMemberRepo->find($data['uid']);
                 $forMember = $this->esMemberRepo->find($data['for_memberid']);
-                $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
                 $doesFeedbackExists = $this->esMemberFeedbackRepo
                                            ->findOneBy([
                                                'member' => $member,
@@ -792,26 +792,25 @@ class Memberpage extends MY_Controller
          *  Item Received / Cancel Order / Complete(CoD)
          */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            $memberId = $this->session->userdata('member_id');
 
             if ( $this->input->post('buyer_response') ) {
-                $data['order_product_id'] = $this->input->post('buyer_response');
+                $data['order_product_id'][0] = $this->input->post('buyer_response');
                 $data['status'] = EsOrderProductStatus::FORWARD_SELLER;
             }
             else if ( $this->input->post('seller_response') ) {
-                $data['order_product_id'] = $this->input->post('seller_response');
+                $data['order_product_id'][0] = $this->input->post('seller_response');
                 $data['status'] = EsOrderProductStatus::RETURNED_BUYER;
             }
             else if ( $this->input->post('cash_on_delivery') ) {
+                $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
                 $data['status'] = EsOrderProductStatus::CASH_ON_DELIVERY;
-                if (stripos($this->input->post('cash_on_delivery'), '-') === false) {
-                    $data['order_product_id'][0] = $this->input->post('cash_on_delivery');
-                }
-                else {
-                    $productIds = explode('-', $this->input->post('cash_on_delivery'));
-                    $data['order_product_id'] = $productIds;
-                }
             }
+
+            if ( (bool) stripos($data['order_product_id'][0], '-')) {
+                $productIds = explode('-', $data['order_product_id'][0]);
+                $data['order_product_id'] = $productIds;
+            }
+
             if (is_array($data['order_product_id'])) {
                 foreach ($data['order_product_id'] as $orderProductId) {
                     $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
@@ -871,7 +870,7 @@ class Memberpage extends MY_Controller
         else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
 
-            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                                   ->findOneBy([
                                                       'idOrder' => $data['transaction_num'],
                                                       'invoiceNo' => $data['invoice_num'],
@@ -897,12 +896,12 @@ class Memberpage extends MY_Controller
              */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            $getTransaction = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
-                                                  ->findOneBy([
-                                                      'idOrder' => $data['transaction_num'],
-                                                      'invoiceNo' => $data['invoice_num'],
-                                                      'buyer' => $data['member_id']
-                                                  ]);
+            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                       ->findOneBy([
+                                           'idOrder' => $data['transaction_num'],
+                                            'invoiceNo' => $data['invoice_num'],
+                                            'buyer' => $data['member_id']
+                                       ]);
 
             if ( (int) count($getTransaction) === 1 ) {
                 $postData = [
@@ -1040,7 +1039,7 @@ class Memberpage extends MY_Controller
                                        ]);
 
         if ($checkOrderProductBasic) {
-            $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
             $seller = $this->esMemberRepo->find($data['member_id']);
             $esOrderProduct = $this->esOrderProductRepo
                                    ->findOneBy([
@@ -1055,13 +1054,13 @@ class Memberpage extends MY_Controller
                 $historyData['order_product_id'] = $this->esOrderProductRepo->find($data['order_product']);
                 if ($data['method'] === 'reject') {
                     $historyData['comment'] = 'REJECTED';
-                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::STATUS_REJECT);
+                    $historyData['order_product_status'] = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::STATUS_REJECT);
                 }
                 else if ($data['method'] === 'unreject') {
                     $historyData['comment'] = 'UNREJECTED';
-                    $historyData['order_product_status'] = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::ON_GOING);
+                    $historyData['order_product_status'] = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find(EsOrderProductStatus::ON_GOING);
                 }
-                $this->entityManager->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($historyData['order_product_id'], $historyData['order_product_status'], $historyData['comment']);
+                $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($historyData['order_product_id'], $historyData['order_product_status'], $historyData['comment']);
             }
             $serverResponse['result'] = $rejectTransaction ? 'success' : 'fail';
             $serverResponse['error'] = $rejectTransaction ? '' : 'Failed to update database.';

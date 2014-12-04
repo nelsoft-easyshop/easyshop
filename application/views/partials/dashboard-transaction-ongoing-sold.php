@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-xs-9 col-sm-8 padding-reset">
                             <p class="item-list-name">
-                                <a class="color-default" target="_blank" href="https://easyshop.ph.local/item/boom">
+                                <a class="color-default" target="_blank" href="/item/<?=html_escape($product['slug'])?>">
                                     <?=html_escape($product['name'])?>
                                 </a>
                                 <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>

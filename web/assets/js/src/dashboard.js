@@ -543,7 +543,7 @@
     $('.color-theming').on('click', '.color-li',function(){
         var colorList = $(this);
         $( ".color-name-drop" ).text(colorList.data('name'));
-        $( ".current-color-drop" ).css("background", colorList.css('background'));
+        $( ".current-color-drop" ).css("backgroundColor", colorList.css('backgroundColor'));
         $( ".current-color-drop" ).trigger( "click" );
         var arrowIconClass = $("i.cd").attr("class");
         if(arrowIconClass == "cd icon-dropup pull-right"){
