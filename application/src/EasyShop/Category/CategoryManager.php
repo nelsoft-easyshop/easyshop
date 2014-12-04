@@ -34,14 +34,23 @@ class CategoryManager
      */
     private $productManager;
 
+    
+    /**
+     * Promo Manager
+     *
+     * @var EasyShop\Product\PromoManager
+     */
+    private $promoManager;
+    
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($configLoader, $em, $productManager)
+    public function __construct($configLoader, $em, $productManager, $promoManager)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->productManager = $productManager;
+        $this->promoManager = $promoManager;
     }
 
     /**
