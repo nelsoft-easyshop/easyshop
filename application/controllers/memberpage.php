@@ -721,13 +721,11 @@ class Memberpage extends MY_Controller
         
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
-        $imageArray = array(
-            "/assets/images/landingpage/templates/header-img.png"
-            , "/assets/images/appbar.home.png"
-            , "/assets/images/appbar.message.png"
-            , "/assets/images/landingpage/templates/facebook.png"
-            , "/assets/images/landingpage/templates/twitter.png"
-        );
+
+        $this->config->load('email', true);
+        $imageArray = $this->config->config['images'];
+        $imageArray[] = "/assets/images/appbar.home.png";
+        $imageArray[] = "/assets/images/appbar.message.png";
 
         /**
          *  DEFAULT RESPONSE HANDLER
@@ -912,11 +910,8 @@ class Memberpage extends MY_Controller
                     $buyerEntity = $orderEntity->getBuyer();
                     $buyerEmail = $buyerEntity->getEmail();
                     $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
-                    $imageArray = array(
-                        "/assets/images/landingpage/templates/header-img.png",
-                        "/assets/images/landingpage/templates/facebook.png",
-                        "/assets/images/landingpage/templates/twitter.png"
-                    );
+                    $this->config->load('email', true);
+                    $imageArray = $this->config->config['images'];
 
                     $parseData = $postData;
                     $socialMediaLinks = $this->getSocialMediaLinks();

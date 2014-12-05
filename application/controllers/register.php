@@ -246,15 +246,14 @@ class Register extends MY_Controller
                 $subscriber->setDatecreated(date_create(date("Y-m-d H:i:s")));
                 $em->persist($subscriber);
                 $em->flush();
-                
-                $images = array("/assets/images/landingpage/templates/facebook.png",
-                                "/assets/images/landingpage/templates/twitter.png",
-                                "/assets/images/landingpage/templates/header-img.png");
+
+                $this->config->load('email', true);
+                $imageArray = $this->config->config['images'];
                 $message = $this->load->view('templates/landingpage/lp_subscription_email', array(), true);
                 
                 $emailer->setRecipient($subscriber->getEmail());
                 $emailer->setSubject($this->lang->line('subscription_subject'));
-                $emailer->setMessage($message, $images);
+                $emailer->setMessage($message, $imageArray);
                 $emailer->sendMail();
                 
                 $data['content'] = 'You have successfully Subscribed!';
