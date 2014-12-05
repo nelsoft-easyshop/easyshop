@@ -944,7 +944,7 @@
         });
     });
 
-    $('.shipment-detail-button').on('click', function(e) {
+    $('#transactions').on('click', '.shipment-detail-button', function(e) {
         var shipmentModal = $(this).parent().find('div.shipping-details');
         var shipmentContainer = $(this).parent().find('div.shipping-details-container');
         var thisbtn = $(this);
@@ -1036,7 +1036,7 @@
         return false;
     });
 
-    $(".order-checkbox").on('change', function() {
+    $('#transactions').on('change', '.order-checkbox',function() {
         var $container = $(this).parent().parent().parent().parent().parent().parent();
         var $checkboxes = $container.find('.order-checkbox');
         var checkedValues = $checkboxes.filter(':checked').map(function() {
@@ -1050,7 +1050,7 @@
         }
     });
 
-    $('.transac_response_btn.enabled').on('click', function() {
+    $('#transactions').on('click', '.transac_response_btn.enabled', function() {
         var isConfirmed = confirm('You are about to update this transaction. Are you sure?');
         if(!isConfirmed){
             return false;
@@ -1094,8 +1094,6 @@
             }
             txResponseBtn.addClass('enabled');
         });
-
-
     });
 
     $('#on-going-transaction').on('click','.exportTransactions', function(){
@@ -1120,9 +1118,8 @@
             }
         });
     });
-    
-    
-    $('#ongoing-bought').on('click', '.reject_item', function() {
+
+    $('#transactions').on('click', '#ongoing-bought .reject_item', function() {
         var thisbtn = $(this);
         var form = thisbtn.closest('form');
         var thismethod = thisbtn.siblings('input[name="method"]');
@@ -1158,7 +1155,7 @@
         return false;
     });
 
-    function htmlDecode(value) {
+    var htmlDecode = function (value) {
         if (value) {
             return $('<div />').html(value).text();
         } else {
@@ -1166,11 +1163,11 @@
         }
     }
 
-    $(document).on('mouseover','.feedb-star', function(){
+    $('#transactions').on('mouseover','.feedb-star', function(){
         $(this).siblings('.raty-error').html('');
     });
 
-    $('.item-list-panel').on('click', '.give-feedback-button', function(e) {
+    $('#transactions').on('click', '.item-list-panel .give-feedback-button', function(e) {
         var feedbackModal = $(this).parent().find('div.give-feedback-modal');
         var form = feedbackModal.find('form.transac-feedback-form');
         var textArea = form.find('textarea[name="feedback-field"]');
@@ -1216,7 +1213,7 @@
         return false;
     });
 
-    $("#ongoing-bought").on('click',".individual, .extremes",function () {
+    $("#ongoing-bought").on('click', ".individual, .extremes", function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $mainContainer = $this.parent().parent().parent().parent().parent();
@@ -1226,7 +1223,7 @@
         getTransactionDetails($page, $requestType, $container);
     });
 
-    $("#ongoing-sold").on('click',".individual, .extremes",function () {
+    $("#ongoing-sold").on('click', ".individual, .extremes", function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $mainContainer = $this.parent().parent().parent().parent().parent();
@@ -1236,7 +1233,7 @@
         getTransactionDetails($page, $requestType, $container);
     });
 
-    $("#complete-bought").on('click',".individual, .extremes",function () {
+    $("#complete-bought").on('click', ".individual, .extremes", function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $mainContainer = $this.parent().parent().parent().parent().parent();
@@ -1246,7 +1243,7 @@
         getTransactionDetails($page, $requestType, $container);
     });
 
-    $("#complete-sold").on('click',".individual, .extremes",function () {
+    $("#complete-sold").on('click', ".individual, .extremes", function () {
         var $this = $(this);
         var $page = $this.data('page');
         var $mainContainer = $this.parent().parent().parent().parent().parent();
@@ -1256,25 +1253,24 @@
         getTransactionDetails($page, $requestType, $container);
     });
 
-    $(".search-transaction-num").on('keypress', function(e) {
+    $('#transactions').on('keypress', ".search-transaction-num", function(e) {
         var code = e.keyCode || e.which;
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'transactionNumber';
         if (code === 13) {
             searchForTransaction($container, $searchFor, $value, $container);
-            return false;
         }
     });
 
-    $('.payment-filter').on('change',function() {
+    $('#transactions').on('change', '.payment-filter', function() {
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'paymentMethod';
         searchForTransaction($container, $searchFor, $value, $container);
     });
 
-    function searchForTransaction($requestType, $searchFor, $value, $container)
+    var searchForTransaction = function ($requestType, $searchFor, $value, $container)
     {
         var $ajaxRequest = $.ajax({
             type: 'get',
@@ -1283,6 +1279,26 @@
                 page : 0,
                 value : $value,
                 searchFor : $searchFor,
+                request : $requestType
+            },
+            beforeSend: function() {
+                $("#" + $container).empty();
+            },
+            success: function(requestResponse) {
+                var $response = $.parseJSON(requestResponse);
+                $("#" + $container).append($response.html);
+            }
+        });
+    }
+
+    var getTransactionDetails = function ($page, $requestType, $container)
+    {
+        console.log($container);
+        var $ajaxRequest = $.ajax({
+            type: 'get',
+            url: 'memberpage/getTransactionsForPagination',
+            data: {
+                page : $page,
                 request : $requestType
             },
             beforeSend: function() {
@@ -1386,8 +1402,6 @@
         }
     });
 
-
-
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var selectedList = $('.color-li.selected');
@@ -1442,26 +1456,6 @@
 
     $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
 
-    function getTransactionDetails($page, $requestType, $container)
-    {
-        console.log($container);
-        var $ajaxRequest = $.ajax({
-            type: 'get',
-            url: 'memberpage/getTransactionsForPagination',
-            data: {
-                page : $page,
-                request : $requestType
-            },
-            beforeSend: function() {
-                $("#" + $container).empty();
-            },
-            success: function(requestResponse) {
-                var $response = $.parseJSON(requestResponse);
-                $("#" + $container).append($response.html);
-            }
-        });
-    }
-
     var isPaymentAccountInitialized = false;
     $('#payment-account-tab').on('click', function(){
          if(!isPaymentAccountInitialized){
@@ -1501,20 +1495,19 @@
             });   
         }
     });
-    
+
     $('.bank-dropdown').on('change', function(){
         $(this).removeClass('input-error');
     });
-    
+
     $('.account-name-input').on('keyup', function(){
         $(this).removeClass('input-error');
     });
-   
+
     $('.account-number-input').on('keyup', function(){
         $(this).removeClass('input-error');
     });
-   
-   
+
     $('#newPaymentForm').on('submit', function(e){
         e.preventDefault()
         $('#payment-create-error').hide();
@@ -1575,7 +1568,7 @@
         
         
     });
-    
+
     $('.cancel-add-bank').on('click', function(){
         var $bankDropdown = $('.bank-dropdown');
         var $accountName = $('.account-name-input');
@@ -1637,8 +1630,7 @@
             }
         });
     });
-    
-    
+
     $('.payment-account-container').on('click', '.edit-account-btn', function(){
         var button = $(this);
         var container = button.closest('.bank-account-item');
@@ -1667,8 +1659,7 @@
         container.find('.cancel-edit-btn').css('display', 'inline-block');
        
     });
-    
-    
+
     $('.payment-account-container').on('click', '.save-edit-btn', function(){
         
         var button = $(this);
@@ -1731,7 +1722,6 @@
             }
         });
     });
-        
 
     $('.payment-account-container').on('click', '.cancel-edit-btn', function(){
         var button = $(this);
@@ -1754,7 +1744,7 @@
         accountNumberContainer.find('input').removeClass('input-error');
         bankContainer.find('input').removeClass('input-error');
     });
-  
+
     $('.payment-account-container').on('keyup', '.edit-account-name input, .edit-account-number input', function(){
         $(this).removeClass('input-error');
     });
@@ -1763,8 +1753,6 @@
         $(this).removeClass('input-error');
     });
 
-    
-    
 }(jQuery));
 
 
