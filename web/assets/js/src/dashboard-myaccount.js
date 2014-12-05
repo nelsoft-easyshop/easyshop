@@ -223,6 +223,9 @@ jQuery(document).ready(function () {
         var postData = $("#deliverAddressForm").serializeArray()
         postData.push({ name: this.name, value: this.value });
         e.preventDefault();
+        if(parseInt($("#temp_clat").val()) !== 0 && parseInt($("temp_clng").val()) !== 0) {
+            $("#locationMarkedText").text("Location Marked");
+        }
         $.ajax({
             type: 'post',
             data: postData,
