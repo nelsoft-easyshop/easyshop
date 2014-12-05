@@ -1382,7 +1382,7 @@
                     $.each(jsonResponse.storeCategories, function(index, category) {
                         var html =  '<div class="div-cat">'+category.name+'</div>';
                         categoryViewList.push(html);
-                        html = '<li data-categoryId='+category.categoryId+'><i class="fa fa-sort"></i>'+category.name+'</li>';
+                        html = '<li data-categoryid="'+category.categoryId+'" data-categoryname="'+category.name+'"><i class="fa fa-sort"></i>'+category.name+'</li>';
                         categoryDraggableList.push(html);
                     });
                     $('.store-category-view').append( categoryViewList.join('') );
@@ -1402,7 +1402,8 @@
         var categoryOrderData = [];
         var order = 0;
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
-            return {order: order++, categoryid: $(el).data('categoryid')}
+            var $el = $(el);
+            return {order: order++, categoryid: $el.data('categoryid'), name: $el.data('categoryname')}
         });
         $.ajax({
             type: "post",
