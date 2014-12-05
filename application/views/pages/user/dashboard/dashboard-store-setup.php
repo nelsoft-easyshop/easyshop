@@ -207,7 +207,6 @@
                         <label class="col-sm-3 control-label">Reorder List : </label>
                         <div class="col-sm-5 col-with-radio">
                             <ul class="category_sort list store-category-draggable">
-                                
                             </ul> 
                             <p class="note-category">Drag the category items to reorder</p>
                             <button class="btn btn-setting-save-btn">
