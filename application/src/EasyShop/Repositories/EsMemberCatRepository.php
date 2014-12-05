@@ -17,17 +17,18 @@ class EsMemberCatRepository extends EntityRepository
      *  @param integer $memberId
      *  @return array $customCategories
      */
-    public function getCustomCategoriesArray($memberId, $categoryNameFilter = [])
+    public function getCustomCategoriesArray($memberId)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('id_memcat','id_memcat');
         $rsm->addScalarResult('cat_name','cat_name');
         $rsm->addScalarResult('is_featured','is_featured');
-
+        $rsm->addScalarResult('sort_order','sort_order');
         $sql = 'SELECT id_memcat
                     , cat_name
                     , is_featured
+                    , sort_order
                 FROM es_member_cat
                 WHERE member_id = :member_id
                 ORDER BY id_memcat DESC
