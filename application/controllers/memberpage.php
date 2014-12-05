@@ -2786,21 +2786,39 @@ class Memberpage extends MY_Controller
      *
      * @return JSON
      */
-    public function updateStoreCategoryOrder()
+    public function updateStoreCategories()
     {
         $memberId = $this->session->userdata('member_id'); 
         $entityManager =  $this->serviceContainer['entity_manager'];
         if($this->input->post() && $memberId){
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);
             $categoryData = json_decode($this->input->post('categoryData'));
-            $categoryNames = [];
+            $categoryWithIndexes = [];
             foreach($categoryData as $category){
-                $categoryNames[] = $category->name;
+                $categoryWithIndexes[$category->categoryid] = $category;
             }
-            $categories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                        ->getCustomCategoriesObject($memberId, $categoryNames);
-            print_r($categories);
-           
-            
+            $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                        ->getCustomCategoriesObject($memberId, array_keys($categoryWithIndexes));
+            foreach($savedCategories as $savedCategory){
+                $index = array_search($savedCategory->getCatName(), $categoryWithIndexes);
+                if($index){
+                    $currentCategory = $categoryWithIndexes[$index];
+                    $savedCategory->setCatName($currentCategory->categoryname);
+                    $savedCategory->setSortOrder($currentCategory->order);
+                    unset($categoryWithIndexes[$index]);
+                }
+            }
+            $newMemberCategories = [];
+            foreach($categoryWithIndexes as $index=>$newCategory){
+                $newMemberCategories[$index] = new EasyShop\Entities\EsMemberCat();
+                $newMemberCategories[$index]->setMember($member);
+                $newMemberCategories[$index]->setCatName($newCategory->name);
+                $newMemberCategories[$index]->setSortOrder($newCategory->order);
+                $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                $entityManager->persist($newMemberCategories[$index]);
+            }
+            $entityManager->flush();
         }
     }
 

@@ -17,7 +17,7 @@ class EsMemberCatRepository extends EntityRepository
      *  @param integer $memberId
      *  @return array $customCategories
      */
-    public function getCustomCategoriesArray($memberId)
+    public function getCustomCategoriesArray($memberId, $categoryNameFilter = [])
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -43,10 +43,10 @@ class EsMemberCatRepository extends EntityRepository
      *  Fetch custom categories of memberId in object form
      *
      *  @param integer $memberId
-     *  @param string[] $categoryNameFilter
+     *  @param integer[] $categoryIdFilters
      *  @return EasyShop\Entities\EsMemberCat[]
      */
-    public function getCustomCategoriesObject($memberId, $categoryNameFilter = [])
+    public function getCustomCategoriesObject($memberId, $categoryIdFilters = [])
     {
     
         $em = $this->_em;
@@ -56,8 +56,8 @@ class EsMemberCatRepository extends EntityRepository
                            ->where('mc.member = :memberId');
         $queryBuilder->setParameter('memberId', $memberId); 
         if(!empty($categoryNameFilter)){
-            $queryBuilder->andWhere('mc.catName IN (:categoryNames)')
-                         ->setParameter('categoryNames', $categoryNameFilter);
+            $queryBuilder->andWhere('mc.catName IN (:categoryIds)')
+                         ->setParameter('categoryIds', $categoryIdFilters);
         }
         $customCategories = $queryBuilder->getQuery()
                                          ->getResult();

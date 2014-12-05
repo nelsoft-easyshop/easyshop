@@ -1407,7 +1407,7 @@
         });
         $.ajax({
             type: "post",
-            url: '/memberpage/updateStoreCategoryOrder',
+            url: '/memberpage/updateStoreCategories',
             data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
             success: function(data){ 
                 
