@@ -1395,6 +1395,17 @@
         }
     });
 
+    
+    $('#category-order-save').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var categoryDraggableList =  $('.store-category-draggable li');
+        var categoryOrderData = [];
+        var order = 0;
+        var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
+            return {order: order++, categoryid: $(el).data('categoryid')}
+        });
+ 
+    });
 
 
     $('#store-color-save').on('click', function(){

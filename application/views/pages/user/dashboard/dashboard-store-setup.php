@@ -209,7 +209,7 @@
                             <ul class="category_sort list store-category-draggable">
                             </ul> 
                             <p class="note-category">Drag the category items to reorder</p>
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn" id="category-order-save">
                                Save Changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
