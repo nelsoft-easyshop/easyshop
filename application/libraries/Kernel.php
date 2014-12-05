@@ -67,6 +67,11 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
+
+            $em->getEventManager()->addEventListener(
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\EsMemberListener()
+            );
+
             return $em;
         };
 
