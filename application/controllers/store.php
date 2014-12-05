@@ -87,7 +87,6 @@ class Store extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = EasyShop\Entities\EsCat::CUSTOM_TYPE_OTHERS;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
@@ -360,7 +359,7 @@ class Store extends MY_Controller
             $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
             
             // Unset DEFAULT categories with no products fetched (due to being custom categorized)
-            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+            if( (int)$result['filtered_product_count'] === 0){
                 unset($parentCat[$idCat]);
                 break;
             }
@@ -697,32 +696,7 @@ class Store extends MY_Controller
 
         return $bannerData;
     }
-    
-    /**
-     *  NOT YET USED !!!
-     *  Fetch custom categories and initial products for first load of page.
-     *
-     *  @return array
-     */
-    private function getVendorCustomCatAndProd($memberId)
-    {
-        $em = $this->serviceContainer['entity_manager'];
-        $prodLimit = $this->vendorProdPerPage;
 
-        $customCat = $em->getRepository("EasyShop\Entities\EsMemberCat")
-                        ->getCustomCategoriesArray($memberId);
-
-        foreach( $customCat as $category ){
-            $result[$category["id_memcat"]] = array(
-                "name" => $category["cat_name"],
-                "is_featured" => $category["is_featured"],
-                "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
-            );
-        }
-
-        return $result;
-    }
 
     /**
      *  Handles Vendor Contact Detail View
