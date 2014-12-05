@@ -70,6 +70,9 @@
     /********************* END DEACTIVATE ACCOUNT **************************/
 
     /********************* START CHANGE PASSWORD ***********************/
+     jQuery.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
+     }, "Must contain numbers and letters");    
 
      $("#changePassForm").validate({
          rules: {
@@ -81,7 +84,8 @@
             password: {
                 required: true,
                 minlength: 6,
-                maxlength:25
+                maxlength:25,
+                alphanumeric: true
                 },
             confirmPassword: {
                 required: true,
