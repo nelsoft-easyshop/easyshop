@@ -29,9 +29,11 @@
                                 <a class="color-default" target="_blank" href="/item/<?=html_escape($product['slug'])?>">
                                     <?=html_escape($product['name'])?>
                                 </a>
-                                <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                                <?PHP if (count($soldTransactionDetails['product']) > 1) : ?>
+                                    <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                                 <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox" value="<?=$product['idOrderProduct']?>">
                                 <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
+                                    <?PHP endif; ?>
                                 <?PHP endif; ?>
                             </p>
                             <p class="item-amount">
@@ -226,11 +228,11 @@
                             </div>
                         <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                         <div class="trans-btn-wrapper trans-btn-con2">
-                                    <?php
+                                <?php
                                 $attr = ['class' => 'transac_response'];
                                 echo form_open('',$attr);
                                 ?>
-                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled" disabled="disabled">
+                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled" >
                                 <input type="hidden" name="cash_on_delivery" value="<?=$product['idOrderProduct']?>">
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
