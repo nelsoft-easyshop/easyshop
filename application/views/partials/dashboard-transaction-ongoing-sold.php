@@ -232,7 +232,7 @@
                                 $attr = ['class' => 'transac_response'];
                                 echo form_open('',$attr);
                                 ?>
-                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled" >
+                                <input type="button" value="Completed" class="btn btn-default-3 txt_buttons transac_response_btn tx_cod enabled" <?=count($soldTransactionDetails['product']) > 1 ? 'disabled="disabled"' : '' ?>>
                                 <input type="hidden" name="cash_on_delivery" value="<?=$product['idOrderProduct']?>">
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
