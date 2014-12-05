@@ -2746,7 +2746,7 @@ class Memberpage extends MY_Controller
         $jsonResponse = ['isSuccessful' => false,
                          'errors' => [],
                         ];          
-        if($this->input->post()){
+        if($this->input->post() && $memberId){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');            
@@ -2781,6 +2781,19 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonResponse);
     }
     
+    /**
+     * Update the store setting category order
+     *
+     * @return JSON
+     */
+    public function updateStoreCategoryOrder()
+    {
+        $memberId = $this->session->userdata('member_id');         
+        if($this->input->post() && $memberId){
+            $categoryData = json_decode($this->input->post('categoryData'));
+            print_r($categoryData);
+        }
+    }
 
 }
 

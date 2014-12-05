@@ -1404,7 +1404,14 @@
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
             return {order: order++, categoryid: $(el).data('categoryid')}
         });
- 
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreCategoryOrder',
+            data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
+            success: function(data){ 
+                
+            },
+        });
     });
 
 
