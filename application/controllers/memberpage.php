@@ -2788,10 +2788,19 @@ class Memberpage extends MY_Controller
      */
     public function updateStoreCategoryOrder()
     {
-        $memberId = $this->session->userdata('member_id');         
+        $memberId = $this->session->userdata('member_id'); 
+        $entityManager =  $this->serviceContainer['entity_manager'];
         if($this->input->post() && $memberId){
             $categoryData = json_decode($this->input->post('categoryData'));
-            print_r($categoryData);
+            $categoryNames = [];
+            foreach($categoryData as $category){
+                $categoryNames[] = $category->name;
+            }
+            $categories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                        ->getCustomCategoriesObject($memberId, $categoryNames);
+            print_r($categories);
+           
+            
         }
     }
 
