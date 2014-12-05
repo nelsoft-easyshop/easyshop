@@ -30,7 +30,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
             event.preventDefault();
             var password = $("#deactivatePassword").val();
             var username = $("#deactivateUsername").val();
@@ -101,7 +101,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
             event.preventDefault();
             var newPassword = $("#password").val();
             var confirmPassword = $("#confirmPassword").val();
