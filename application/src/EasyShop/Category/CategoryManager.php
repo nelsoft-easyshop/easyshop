@@ -245,13 +245,14 @@ class CategoryManager
 
     
      /**
-     *  Get parent category of products uploaded by user
+     * Get parent category of products uploaded by user
      *
-     *  @param integer $memberId
+     * @param integer $memberId
+     * @param bool $noIndex
      *
-     *  @return array
+     * @return array
      */
-    public function getAllUserProductParentCategory($memberId)
+    public function getAllUserProductParentCategory($memberId, $noIndex = false)
     {
         $defaultCatImg = "assets/images/default_icon_small.png";
         $vendorCategories = array();
@@ -287,7 +288,8 @@ class CategoryManager
                     'cat_link' => '/category/' . $vendorCategory['p_cat_slug'],
                     'cat_img' => $categoryImage,
                     'cat_type' => EsCat::CUSTOM_TYPE,
-                    'isActive' => FALSE
+                    'isActive' => FALSE,
+                    'categoryId' => $vendorCategory['parent_cat'],
                 );
             }
             // For products whose parent is 'PARENT'
@@ -301,7 +303,8 @@ class CategoryManager
                     'cat_link' => '',
                     'cat_img' => $defaultCatImg,
                     'cat_type' => EsCat::CUSTOM_TYPE,
-                    'isActive' => FALSE
+                    'isActive' => FALSE,
+                    'categoryId' => $vendorCategory['parent_cat'],
                 );
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
@@ -313,6 +316,10 @@ class CategoryManager
             $temp = $vendorCategories[1];
             unset($vendorCategories[1]);
             $vendorCategories[1] = $temp;
+        }
+
+        if($noIndex){
+            $vendorCategories = array_values($vendorCategories);
         }
 
         return $vendorCategories;

@@ -2608,11 +2608,13 @@ class Memberpage extends MY_Controller
             $response['colors'] = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
-            
+            $response['storeCategories'] = $this->serviceContainer['category_manager']
+                                                ->getAllUserProductParentCategory($memberId, true);
         }
         echo json_encode($response);
     }
     
+
     /**
      * Returns all the payment accounts of the logged-in user
      *

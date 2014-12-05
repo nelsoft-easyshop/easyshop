@@ -1360,6 +1360,8 @@
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
                     var colorList = [];
+                    var categoryViewList = [];
+                    var categoryDraggableList = []
                     var currentColorId = $('#current-store-color-id').val();
                     var isCurrentColorSet = false;
 
@@ -1379,7 +1381,19 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
+                    
+                    $.each(jsonResponse.storeCategories, function(index, category) {
+                        var html =  '<div class="div-cat">'+category.name+'</div>';
+                        categoryViewList.push(html);
+                        html = '<li><i class="fa fa-sort"></i>'+category.name+'</li>';
+                        categoryDraggableList.push(html);
+                    });
+                    $('.store-category-view').append( categoryViewList.join('') );
+                    $('.store-category-draggable').append( categoryDraggableList.join('') );
                 
+          
+                    console.log(jsonResponse.storeCategories);
+                    
                     isStoreSetupInitialized = true;
                 }
             });
