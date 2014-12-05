@@ -5,7 +5,6 @@
     bootstrap3: true,
     };
     $('#password').pwstrength(options);
-    $("#payment-account").find(".progress-bar").css("background-color","red");
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
