@@ -124,8 +124,8 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 <script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript">
     var jsonCity = <?php echo $cities;?>;
 </script>
