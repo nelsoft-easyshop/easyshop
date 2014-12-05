@@ -1,5 +1,6 @@
 (function ($) {
-    
+    var hashedUrl = window.location.hash;
+
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -1763,8 +1764,17 @@
         $(this).removeClass('input-error');
     });
 
-    
-    
+    if (hashedUrl === "#ongoing-bought-transaction") {
+        $('#my-store-menu-trigger').trigger('click');
+        $('.id-transactions-trigger').addClass('selected');
+        $('.transaction-title-bought').trigger('click');
+    }
+    else if (hashedUrl === "#ongoing-sold-transaction") {
+        $('#my-store-menu-trigger').trigger('click');
+        $('.id-transactions-trigger').addClass('selected');
+        $('.transaction-title-sold').trigger('click');
+    }
+
 }(jQuery));
 
 
