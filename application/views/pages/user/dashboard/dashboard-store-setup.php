@@ -100,7 +100,7 @@
         <div class="div-store-setup">
             <p class="panel-setup-title">STORE QUICK RESPONSE CODE</p>
             <div class="div-setup-content">
-                <button class="btn btn-default-1 btn-deactivate printQrCode" data-url="<?=base_url()?>memberpage/generateQrCode">
+                <button class="btn btn-default-1 btn-deactivate printQrCode" data-url="/memberpage/generateQrCode">
                    GENERATE MY STORE QR CODE
                 </button>
                 <p class="p-note-setting">
