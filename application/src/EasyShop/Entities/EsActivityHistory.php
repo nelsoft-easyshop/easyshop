@@ -45,7 +45,15 @@ class EsActivityHistory
      */
     private $activityType;
 
-
+    /**
+     * @var \EasyShop\Entities\EsMember
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
+     * })
+     */
+    private $member;
 
     /**
      * Get idActivityHistory
@@ -124,5 +132,28 @@ class EsActivityHistory
     public function getActivityType()
     {
         return $this->activityType;
+    }
+
+    /**
+     * Set member
+     *
+     * @param \EasyShop\Entities\EsMember $member
+     * @return EsProduct
+     */
+    public function setMember(\EasyShop\Entities\EsMember $member = null)
+    {
+        $this->member = $member;
+
+        return $this;
+    }
+
+    /**
+     * Get member
+     *
+     * @return \EasyShop\Entities\EsMember 
+     */
+    public function getMember()
+    {
+        return $this->member;
     }
 }
