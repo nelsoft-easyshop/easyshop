@@ -1359,13 +1359,10 @@ class Payment extends MY_Controller{
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
 
-        $imageArray = array(
-            "/assets/images/landingpage/templates/header-img.png"
-            , "/assets/images/appbar.home.png"
-            , "/assets/images/appbar.message.png"
-            , "/assets/images/landingpage/templates/facebook.png"
-            , "/assets/images/landingpage/templates/twitter.png"
-        );
+        $this->config->load('email', true);
+        $imageArray = $this->config->config['images'];
+        $imageArray[] = "/assets/images/appbar.home.png";
+        $imageArray[] = "/assets/images/appbar.message.png";
 
         $sender = intval($this->xmlmap->getFilenameID($xmlfile,'message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
