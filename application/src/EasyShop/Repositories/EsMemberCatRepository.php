@@ -5,9 +5,7 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsMemberCat;
-use EasyShop\Entities\EsMemberProdcat;
-use EasyShop\Entities\EsProduct;
-use EasyShop\Entities\EsMember;
+
 
 class EsMemberCatRepository extends EntityRepository
 {
