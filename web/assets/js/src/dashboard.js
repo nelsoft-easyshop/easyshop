@@ -1342,7 +1342,7 @@
                     $('.edit-'+field).slideToggle( "fast" );
                     var currentSettingContainer = $('.current-'+field);
                     currentSettingContainer.slideToggle( "fast" );
-                    var displayHtml = response.updatedValue;
+                    var displayHtml = escapeHtml(response.updatedValue);
                     if(field == 'store-slug'){
                         var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
                         displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
