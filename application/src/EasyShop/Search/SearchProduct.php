@@ -332,7 +332,7 @@ class SearchProduct
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($productId);
             $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                          ->getSecondaryImage($productId);
+                                              ->getSecondaryImage($productId);
             $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
             $product->secondaryImageDirectory = null;
