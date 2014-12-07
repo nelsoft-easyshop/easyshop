@@ -187,10 +187,7 @@
                                 </div>
                                 
                                 <div>
-                                    <br/>
-                                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat-new">
-                                    <i class="fa fa-plus"></i> Add Category
-                                    </button>
+                                    <br/>   
                                     <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
                                     <i class="icon-edit"></i> Edit
                                     </button>
@@ -215,19 +212,21 @@
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
                                Cancel
                             </button>
+                            <br/>
                         </div>
                     </div>
+                    <div class="alert alert-danger" id="store-category-error" role="alert" style="display:none">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        We cannot update you categories right now. Try again later.
+                    </div>
                 </div>
+                <!--
                 <div class="edit-store-cat-new">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
                             <input type="text" class="text-info text-required" value="Professional Services"/>
-                             <!--DISPLAY WHEN ERROR -->
                             <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
                             <span class="val-error">Please enter at least 6 characters.</span>
-
-                            <!--DISPLAY WHEN OK
-                            <span class="val-success-url"><i class="fa fa-check"></i></span>-->
                         </div>
                         <div class="col-md-5">
                             <button class="btn btn-setting-save-btn">
@@ -239,6 +238,7 @@
                         </div>
                     </div>
                 </div>
+                -->
                 <p class="p-note-setting">
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
                 </p>

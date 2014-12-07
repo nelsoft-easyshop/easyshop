@@ -626,6 +626,7 @@
     });
 
     $( "#cancel-edit-store-cat" ).click(function() {
+        $('#store-category-error').hide();
         $( "#btn-edit-store-cat" ).trigger( "click" );
     });
 
@@ -1387,9 +1388,12 @@
                             currentColorClass = 'selected';
                             isCurrentColorSet = true;
                         }
-                        var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+color.name+'" data-id="'+color.idStoreColor+'" ' +
-                                           'style="background: #'+color.hexadecimal+'; text-transform: uppercase;" ' +
-                                           'id="color-item-'+color.idStoreColor+'">' +color.name + icon +
+                        var escapedColorName = escapeHtml(color.name);
+                        var escapedColorHex = escapeHtml(color.hexadecimal);
+                        var escapedColorId = escapeHtml(color.idStoreColor);
+                        var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+escapedColorName+'" data-id="'+escapedColorId+'" ' +
+                                           'style="background: #'+escapedColorHex+'; text-transform: uppercase;" ' +
+                                           'id="color-item-'+escapedColorId+'">' + escapedColorName + icon +
                                         '</li>';
                         colorList.push(listHtml);
                     });
@@ -1404,6 +1408,8 @@
 
     
     $('#category-order-save').on('click', function(){
+        var errorContainer = $('#store-category-error');
+        errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var categoryDraggableList =  $('.store-category-draggable li');
         var categoryOrderData = [];
@@ -1422,6 +1428,9 @@
                     createCategoryList(response.categoryData);
                     $('#cancel-edit-store-cat').trigger('click');
                 }
+                else{
+                    errorContainer.fadeIn();
+                }
             },
         });
     });
@@ -1438,7 +1447,8 @@
             if(categoryIdentifier == 0){
                 categoryIdentifier = index + '_new';
             }
-            html = '<li data-categoryid="'+categoryIdentifier+'" data-categoryname="'+category.name+'"><i class="fa fa-sort"></i>'+category.name+'</li>';
+            var escapedName = escapeHtml(category.name);
+            html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'</li>';
             categoryDraggableList.push(html);
         });
         $('.store-category-view').html('');
