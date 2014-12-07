@@ -1,5 +1,10 @@
 (function ($) {
 
+    var options = {
+        minChar: 8,
+        bootstrap3: true,
+    };
+    $('#password').pwstrength(options);
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
@@ -126,10 +131,6 @@
                     else {
                         alert(obj.error);
                     }
-                    $("#password").val("");
-                    $("#confirmPassword").val("");
-                    $("#currentPassword").val("");                    
-                    $( "#cancel-edit-password" ).trigger( "click" );                         
                 },
             });   
 
