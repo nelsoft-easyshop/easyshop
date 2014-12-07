@@ -2790,9 +2790,10 @@ class Memberpage extends MY_Controller
         $memberId = $this->session->userdata('member_id'); 
         $entityManager =  $this->serviceContainer['entity_manager'];
         $isSucessful = false;
-        $jsonResponse = ['isSuccessful' =>  false,
-                         'categoryData' => [],
-                        ];
+        $jsonResponse = [
+            'isSuccessful' =>  false,
+            'categoryData' => [],
+        ];
         if($this->input->post() && $memberId){
             $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['idMember' => $memberId]);
