@@ -1,8 +1,8 @@
 (function ($) {
 
     var options = {
-    minChar: 8,
-    bootstrap3: true,
+        minChar: 8,
+        bootstrap3: true,
     };
     $('#password').pwstrength(options);
     $(".pass-container").css("display","block");
