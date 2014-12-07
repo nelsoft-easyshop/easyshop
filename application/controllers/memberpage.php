@@ -2798,7 +2798,7 @@ class Memberpage extends MY_Controller
             $hasCategoryError = false;
             foreach($categoryData as $category){
                 $indexedCategoryData[$category->categoryid] = $category;
-                if(empty(trim($category->name))){
+                if(trim($category->name) !== ""){
                     $hasCategoryError = true;
                     break;
                 }
