@@ -378,12 +378,14 @@ textarea {
 
 .vendor-profile-img {
     display: block;
+    height: 110px;
     margin: auto;
     width: 110px;
 }
 
 .vendor-profile-img-con {
     position: relative;
+    height: 108px;
 }
 
 .vendor-profile-photo-wrapper {
@@ -400,9 +402,15 @@ textarea {
 }
 
 .vendor-profile-img-con img {
+    bottom: 0;
     height: auto;
-    max-width: 109px;
+    left: 0;
+    margin: auto;
+    max-width: 111px;
     max-height: 110px;
+    position: absolute;
+    right: 0;
+    top: 0;
     width: auto;
 }
 
@@ -491,9 +499,9 @@ textarea {
     cursor: pointer;
     height: 108px;
     position: absolute;
-    top: -2px;
+    top: 0px;
     width: 111px;
-
+    z-index: 1;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -507,7 +515,9 @@ textarea {
 }
 
 .edit-profile-photo img {
+    position: relative;
     max-width: 38px;
+    z-index: 1;
 }
 
 .edit-profile-photo span {
@@ -834,6 +844,7 @@ textarea {
 }
 
 .sticky-nav .vendor-profile-img-con {
+    background-color: #e2e2e2;
     border-radius: 4px;
     display: inline-block;
     height: 30px;

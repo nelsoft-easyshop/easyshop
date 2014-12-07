@@ -185,7 +185,7 @@
                         <p>
                             You have made a successful purchase on Easyshop.ph. An e-mail has been sent to you and the people from whom you purchased
                             regarding the status of your transaction. Please complete any necessary steps that are stated and thank you for using Easyshop.ph.
-                            You may view your pending transactions by clicking <a style='text-decoration:underline; color:#f48000' href='/me?me=pending'>here </a>
+                            You may view your pending transactions by clicking <a style='text-decoration:underline; color:#f48000' href='/me#ongoing-bought-transaction'>here </a>
                         </p>
                     </div>
                 <?php else: ?>
