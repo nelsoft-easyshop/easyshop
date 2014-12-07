@@ -5,6 +5,7 @@ if (!defined('BASEPATH')){
 }
 
 use EasyShop\Entities\EsAddress as EsAddress; 
+use EasyShop\Category\CategoryManager as CategoryManager;
     
 class Store extends MY_Controller
 {
@@ -87,7 +88,6 @@ class Store extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = EasyShop\Entities\EsCat::CUSTOM_TYPE_OTHERS;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
@@ -130,15 +130,15 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                //Determine active Div for first load
-                foreach($viewData['defaultCatProd'] as $catId => $catDetails){
-                    if( isset($productView['isSearching']) ){
-                        $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
-                    }
-                    else{
-                        $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
-                    }
+                if(isset($productView['isSearching']) && isset($viewData['defaultCatProd'][0])){
+                    $viewData['defaultCatProd'][0]['isActive'] = true;
                 }
+                else{
+                    reset($viewData['defaultCatProd']);
+                    $firstCategoryId = key($viewData['defaultCatProd']);
+                    $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
+                }
+
                 
                 // Load View
                 $headerData = array_merge($headerData, $bannerData);
@@ -360,7 +360,7 @@ class Store extends MY_Controller
             $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
             
             // Unset DEFAULT categories with no products fetched (due to being custom categorized)
-            if( (int)$result['filtered_product_count'] === 0 && (int)$categoryProperties['cat_type'] === 2 ){
+            if( (int)$result['filtered_product_count'] === 0){
                 unset($parentCat[$idCat]);
                 break;
             }
@@ -697,32 +697,7 @@ class Store extends MY_Controller
 
         return $bannerData;
     }
-    
-    /**
-     *  NOT YET USED !!!
-     *  Fetch custom categories and initial products for first load of page.
-     *
-     *  @return array
-     */
-    private function getVendorCustomCatAndProd($memberId)
-    {
-        $em = $this->serviceContainer['entity_manager'];
-        $prodLimit = $this->vendorProdPerPage;
 
-        $customCat = $em->getRepository("EasyShop\Entities\EsMemberCat")
-                        ->getCustomCategoriesArray($memberId);
-
-        foreach( $customCat as $category ){
-            $result[$category["id_memcat"]] = array(
-                "name" => $category["cat_name"],
-                "is_featured" => $category["is_featured"],
-                "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
-            );
-        }
-
-        return $result;
-    }
 
     /**
      *  Handles Vendor Contact Detail View
@@ -938,7 +913,7 @@ class Store extends MY_Controller
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
-        $catType = $this->input->get('catType');
+        $catType = $this->input->get('catType') ?  $this->input->get('catType') : CategoryManager::CATEGORY_DEFAULT_TYPE;
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
@@ -985,7 +960,7 @@ class Store extends MY_Controller
         }
 
         switch($catType){
-            case 0: // Search
+            case CategoryManager::CATEGORY_SEARCH_TYPE: 
                 if($rawOrderBy > 1){
                     $parameter['sortby'] = $orderSearch;
                     $parameter['sorttype'] = $order;
@@ -1004,17 +979,13 @@ class Store extends MY_Controller
                 $products = $search['collection']; 
                 $productCount = $search['count'];;
                 break;
-            case 1: // Custom Categories
+            case CategoryManager::CATEGORY_CUSTOM_TYPE: 
                 $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
-            case 2: // Default Categories
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
-                break;
-            default: // Default Categories
+            case CategoryManager::CATEGORY_DEFAULT_TYPE: 
+            default:
                 $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
