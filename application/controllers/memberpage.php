@@ -1114,7 +1114,7 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function vendorStoreDesc()
+    public function updatedStoreDescription()
     {
         $serverResponse = array(
             'result' => 'fail',
