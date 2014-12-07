@@ -6,13 +6,38 @@ use EasyShop\Entities\EsMemberCat;
 use EasyShop\Entities\EsCat;
 
 /**
- *  Promo class
+ *  CategoryManager class
  *
  *  @author Ryan Vasquez
  *  @author stephenjanz
+ *  @author Sam Gavinio <samgavinio@easyshop.ph>
  */
 class CategoryManager
 {
+    
+    /**
+     * Search type
+     *
+     * @var integer
+     */
+    const CATEGORY_SEARCH_TYPE = 0;
+    
+    /**
+     * Custom category type 
+     *
+     * @var integer
+     */
+    const CATEGORY_CUSTOM_TYPE = 1;
+    
+    
+    /**
+     * Default category type 
+     *
+     * @var integer
+     */
+    const CATEGORY_DEFAULT_TYPE = 2;
+    
+    
     /**
      *  Entity Manager Instance
      *

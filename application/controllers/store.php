@@ -5,6 +5,7 @@ if (!defined('BASEPATH')){
 }
 
 use EasyShop\Entities\EsAddress as EsAddress; 
+use EasyShop\Category\CategoryManager as CategoryManager;
     
 class Store extends MY_Controller
 {
@@ -912,7 +913,7 @@ class Store extends MY_Controller
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
-        $catType = $this->input->get('catType') ?  $this->input->get('catType') : 0;
+        $catType = $this->input->get('catType') ?  $this->input->get('catType') : CategoryManager::CATEGORY_DEFAULT_TYPE;
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
@@ -959,7 +960,7 @@ class Store extends MY_Controller
         }
 
         switch($catType){
-            case 0: // Search
+            case CategoryManager::CATEGORY_SEARCH_TYPE: 
                 if($rawOrderBy > 1){
                     $parameter['sortby'] = $orderSearch;
                     $parameter['sorttype'] = $order;
@@ -978,17 +979,13 @@ class Store extends MY_Controller
                 $products = $search['collection']; 
                 $productCount = $search['count'];;
                 break;
-            case 1: // Custom Categories
+            case CategoryManager::CATEGORY_CUSTOM_TYPE: 
                 $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
                 break;
-            case 2: // Default Categories
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
-                break;
-            default: // Default Categories
+            case CategoryManager::CATEGORY_DEFAULT_TYPE: 
+            default:
                 $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
                 $products = $result['products'];
                 $productCount = $result['filtered_product_count'];
