@@ -30,7 +30,7 @@
                                     <?=html_escape($product['name'])?>
                                 </a>
                                 <?PHP if (count($soldTransactionDetails['product']) > 1) : ?>
-                                    <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
+                                    <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $product['idOrderProductStatus'] === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                                 <input type="checkbox" id="orderProduct_<?=$product['idOrderProduct']?>" class="css-checkbox order-checkbox" value="<?=$product['idOrderProduct']?>">
                                 <label for="orderProduct_<?=$product['idOrderProduct']?>" class="css-label"></label>
                                     <?PHP endif; ?>
