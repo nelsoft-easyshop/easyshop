@@ -331,12 +331,19 @@ class SearchProduct
             $product = $productManager->getProductDetails($productId);
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getDefaultImage($productId);
+            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                          ->getSecondaryImage($productId);
             $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-            if($productImage != NULL){
+            $product->secondaryImageDirectory = null;
+            $product->secondaryImageFileName = null;
+            if($productImage !== null){
                 $product->directory = $productImage->getDirectory();
                 $product->imageFileName = $productImage->getFilename();
+            }
+            if($secondaryProductImage !== null){
+                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
 
             $products[] = $product;

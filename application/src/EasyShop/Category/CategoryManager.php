@@ -225,20 +225,20 @@ class CategoryManager
                                 ->getDefaultImage($productId);       
             $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                               ->getSecondaryImage($productId);
-            if(!$objImage){
-                $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
-            }
-            else{
+            $product->directory = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $product->imageFileName = \EasyShop\Entities\EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            $product->secondaryImageDirectory = null;
+            $product->secondaryImageFileName = null;
+            if($objImage !== null){
                 $product->directory = $objImage->getDirectory();
                 $product->imageFileName = $objImage->getFilename();
             }
-            $product->secondaryImageDirectory = null;
-            $product->secondaryImageFileName = null;
-            if($secondaryProductImage){
+            if($secondaryProductImage !== null){
                 $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
                 $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
+
+            
             $categoryProducts[] = $product;
         }
 

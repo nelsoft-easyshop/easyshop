@@ -912,7 +912,7 @@ class Store extends MY_Controller
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
-        $catType = $this->input->get('catType');
+        $catType = $this->input->get('catType') ?  $this->input->get('catType') : 0;
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
