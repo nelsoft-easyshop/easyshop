@@ -212,7 +212,12 @@
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
                                Cancel
                             </button>
+                            <br/>
                         </div>
+                    </div>
+                    <div class="alert alert-danger" id="store-category-error" role="alert" style="display:none">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        We cannot update you categories right now. Try again later.
                     </div>
                 </div>
                 <!--

@@ -626,6 +626,7 @@
     });
 
     $( "#cancel-edit-store-cat" ).click(function() {
+        $('#store-category-error').hide();
         $( "#btn-edit-store-cat" ).trigger( "click" );
     });
 
@@ -1404,6 +1405,8 @@
 
     
     $('#category-order-save').on('click', function(){
+        var errorContainer = $('#store-category-error');
+        errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var categoryDraggableList =  $('.store-category-draggable li');
         var categoryOrderData = [];
@@ -1421,6 +1424,9 @@
                 if(response.isSuccessful){
                     createCategoryList(response.categoryData);
                     $('#cancel-edit-store-cat').trigger('click');
+                }
+                else{
+                    errorContainer.fadeIn();
                 }
             },
         });
