@@ -274,6 +274,9 @@ class Kernel
 
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
+        
+
+        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
@@ -283,17 +286,25 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
+        
         $container['string_utility'] = function ($c) {
             $htmlPurifier = new \HTMLPurifier();
             return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
+        
         $container['hash_utility'] = function($c) {
             $encrypt = new CI_Encrypt();
             return new \EasyShop\Utility\HashUtility($encrypt);
         };
+        
         $container['url_utility'] = function ($c) {
             return new \EasyShop\Utility\UrlUtility();
         };
+        
+        $container['sort_utility'] = function ($c) use ($container){         
+            return new \EasyShop\Utility\SortUtility();
+        };           
+        
 
         $socialMediaConfig = require APPPATH . 'config/oauth.php';
         $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
@@ -332,7 +343,7 @@ class Kernel
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
-            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager);
+            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $container['sort_utility']);
         };
         
         $container['config_loader'] = function ($c) {

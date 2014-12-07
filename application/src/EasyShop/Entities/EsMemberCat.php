@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberCat
  *
  * @ORM\Table(name="es_member_cat", indexes={@ORM\Index(name="fk_es_member_cat_1_idx", columns={"member_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberCatRepository")
  */
 class EsMemberCat
 {
@@ -52,6 +52,12 @@ class EsMemberCat
      */
     private $member;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sort_order", type="integer", nullable=false)
+     */
+    private $sortOrder = '0';
 
 
     /**
@@ -155,4 +161,30 @@ class EsMemberCat
     {
         return $this->member;
     }
+    
+    /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     * @return EsMemberCat
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+        return $this;
+    }
+
+    /**
+     * Get sortOrder
+     *
+     * @return integer 
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    
 }
+
+

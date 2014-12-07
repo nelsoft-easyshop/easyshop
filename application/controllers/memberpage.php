@@ -2597,6 +2597,7 @@ class Memberpage extends MY_Controller
     /**
      * Gets the store settings
      *
+     * @return JSON
      */
     public function getStoreSettings()
     {
@@ -2606,11 +2607,13 @@ class Memberpage extends MY_Controller
             $response['colors'] = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
-            
+            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
+                                                             ->getAllUserProductParentCategory($memberId));
         }
         echo json_encode($response);
     }
     
+
     /**
      * Returns all the payment accounts of the logged-in user
      *
@@ -2742,7 +2745,7 @@ class Memberpage extends MY_Controller
         $jsonResponse = ['isSuccessful' => false,
                          'errors' => [],
                         ];          
-        if($this->input->post()){
+        if($this->input->post() && $memberId){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');            
@@ -2777,6 +2780,92 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonResponse);
     }
     
+    /**
+     * Update the store setting category order
+     *
+     * @return JSON
+     */
+    public function updateStoreCategories()
+    {
+        $memberId = $this->session->userdata('member_id'); 
+        $entityManager =  $this->serviceContainer['entity_manager'];
+        $isSucessful = false;
+        $jsonResponse = [
+            'isSuccessful' =>  false,
+            'categoryData' => [],
+        ];
+        if($this->input->post() && $memberId){
+            $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->findOneBy(['idMember' => $memberId]);
+            $categoryData = json_decode($this->input->post('categoryData'));
+            $indexedCategoryData = [];
+            $hasCategoryError = false;
+            foreach($categoryData as $category){
+                $indexedCategoryData[$category->categoryid] = $category;
+                if(empty(trim($category->name))){
+                    $hasCategoryError = true;
+                    break;
+                }
+            }
+
+            if(!$hasCategoryError){
+                $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                                ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                $categoryDataResult = [];
+                foreach($savedCategories as $savedCategory){
+                    $memberCategoryId = $savedCategory->getIdMemcat(); 
+                    if( isset($indexedCategoryData[$memberCategoryId]) ){
+                        $currentCategory = $indexedCategoryData[$memberCategoryId];
+                        $savedCategory->setCatName($currentCategory->name);
+                        $savedCategory->setSortOrder($currentCategory->order);
+                        $categoryDataResult[] = $this->createCategoryStdObject($currentCategory->name,
+                                                                            $currentCategory->order,
+                                                                            $memberCategoryId);
+                        unset($indexedCategoryData[$memberCategoryId]);
+                    }
+                }
+                $newMemberCategories = [];
+                foreach($indexedCategoryData as $index=>$newCategory){
+                    $newMemberCategories[$index] = new EasyShop\Entities\EsMemberCat();
+                    $newMemberCategories[$index]->setMember($member);
+                    $newMemberCategories[$index]->setCatName($newCategory->name);
+                    $newMemberCategories[$index]->setSortOrder($newCategory->order);
+                    $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                    $entityManager->persist($newMemberCategories[$index]);
+                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategories[$index]->getCatName(),
+                                                                        $newMemberCategories[$index]->getSortOrder(),
+                                                                        $newMemberCategories[$index]->getIdMemcat());
+                }
+                $entityManager->flush();
+                
+                $jsonResponse['isSuccessful'] =  true;
+                $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
+                    return $sortArgumentA->order - $sortArgumentB->order;
+                });
+                $jsonResponse['categoryData'] =  array_values($categoryDataResult);
+            }
+        }
+        
+        echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Creates a category standard object 
+     *
+     * @param string $name
+     * @param integer $order
+     * @param integer $id
+     * @return stdClass
+     */
+    private function createCategoryStdObject($name, $order, $id)
+    {
+        $singleCategoryData = new \stdClass();
+        $singleCategoryData->name =  $name;
+        $singleCategoryData->order =  $order;
+        $singleCategoryData->memberCategoryId =  $id;   
+        
+        return $singleCategoryData;
+    }
 
 }
 

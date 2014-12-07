@@ -638,9 +638,7 @@
         $( "#btn-edit-store-cat-new" ).trigger( "click" );
     });
 
-    $(function() {
-        $('.category_sort').sortable();
-    });
+
     
     $('.feedback-from-seller').click(function() {
         $(this).toggleClass("active-bar",0);
@@ -1344,7 +1342,7 @@
                     $('.edit-'+field).slideToggle( "fast" );
                     var currentSettingContainer = $('.current-'+field);
                     currentSettingContainer.slideToggle( "fast" );
-                    var displayHtml = response.updatedValue;
+                    var displayHtml = escapeHtml(response.updatedValue);
                     if(field == 'store-slug'){
                         var escapedUrl = config.base_url + escapeHtml(response.updatedValue);
                         displayHtml =   '<a href="' + escapedUrl  +'" > ' + escapedUrl +'</a>';
@@ -1377,6 +1375,7 @@
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
                     var colorList = [];
+           
                     var currentColorId = $('#current-store-color-id').val();
                     var isCurrentColorSet = false;
 
@@ -1396,12 +1395,58 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
-                
+                    createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
                 }
             });
         }
     });
+
+    
+    $('#category-order-save').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var categoryDraggableList =  $('.store-category-draggable li');
+        var categoryOrderData = [];
+        var order = 0;
+        var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
+            var $el = $(el);
+            return {order: order++, categoryid: $el.data('categoryid'), name: $el.data('categoryname')}
+        });
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreCategories',
+            data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful){
+                    createCategoryList(response.categoryData);
+                    $('#cancel-edit-store-cat').trigger('click');
+                }
+            },
+        });
+    });
+    
+    
+    function createCategoryList(categoryData)
+    {
+        var categoryViewList = [];
+        var categoryDraggableList = [];
+        $.each(categoryData, function(index, category) {
+            var html =  '<div class="div-cat">'+category.name+'</div>';
+            categoryViewList.push(html);
+            var categoryIdentifier = category.memberCategoryId;
+            if(categoryIdentifier == 0){
+                categoryIdentifier = index + '_new';
+            }
+            html = '<li data-categoryid="'+categoryIdentifier+'" data-categoryname="'+category.name+'"><i class="fa fa-sort"></i>'+category.name+'</li>';
+            categoryDraggableList.push(html);
+        });
+        $('.store-category-view').html('');
+        $('.store-category-draggable').html('');
+        $('.store-category-view').append( categoryViewList.join('') );
+        $('.store-category-draggable').append( categoryDraggableList.join('') );
+        $('.store-category-draggable').sortable();
+    }
 
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');

@@ -305,6 +305,11 @@ function ItemListAjax(CatDiv,page)
           $( ".panel-item" ).fadeIn( "fast" );
         });
     
+        $('.search-bar-input').keyup(function(){
+           var string = $(this).val();
+           $('.search-bar-input').val(string);
+        });
+        
     });
 
 })(jQuery);
