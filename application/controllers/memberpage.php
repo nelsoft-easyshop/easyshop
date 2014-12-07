@@ -2859,6 +2859,7 @@ class Memberpage extends MY_Controller
         $singleCategoryData->name =  $name;
         $singleCategoryData->order =  $order;
         $singleCategoryData->memberCategoryId =  $id;   
+        
         return $singleCategoryData;
     }
 
