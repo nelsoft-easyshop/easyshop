@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/assets/css/qr-code-print.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
 </head>
 
-<body>
+<body onload="window.print();window.location.replace('/me')">
 <section class="qr-code-wrapper">
     <div class="container text-center">
         <div class="row">
