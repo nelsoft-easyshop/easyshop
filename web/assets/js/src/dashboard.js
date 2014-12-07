@@ -1,5 +1,6 @@
 (function ($) {
-    
+    var hashedUrl = window.location.hash;
+
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -1429,19 +1430,7 @@
 
     $('#setup').on('click','.printQrCode', function() {
         var url = $(this).data("url");
-        $.ajax({
-            url: url,
-            dataType: 'html',
-            success: function(json) {
-                var originalContents = $(document.body).html();
-                $(document.body).html(json);
-                window.print();
-                location.reload();
-            },
-            error: function(e) {
-                alert("Action failed, please try again");
-            }
-        });
+        window.location.replace(url);
     });
 
     $(".add-bank-account").click(function() {
@@ -1752,6 +1741,18 @@
     $('.payment-account-container').on('change', '.edit-bank select', function(){
         $(this).removeClass('input-error');
     });
+
+
+    if (hashedUrl === "#ongoing-bought-transaction") {
+        $('#my-store-menu-trigger').trigger('click');
+        $('.id-transactions-trigger').addClass('selected');
+        $('.transaction-title-bought').trigger('click');
+    }
+    else if (hashedUrl === "#ongoing-sold-transaction") {
+        $('#my-store-menu-trigger').trigger('click');
+        $('.id-transactions-trigger').addClass('selected');
+        $('.transaction-title-sold').trigger('click');
+    }
 
 }(jQuery));
 
