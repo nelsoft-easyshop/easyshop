@@ -381,7 +381,7 @@ $(function(){
 		
 		
 		
-		$.post('/memberpage/vendorStoreDesc', $(form).serializeArray(), function(data){
+		$.post('/memberpage/updatedStoreDescription', $(form).serializeArray(), function(data){
 			thisbtn.attr('disabled', false);
 			thisbtn.val('Save');
 			
