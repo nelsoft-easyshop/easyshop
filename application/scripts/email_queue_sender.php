@@ -15,8 +15,7 @@
      * Email params
      */
     $configEmail = require(__DIR__ . "/../config/email_swiftmailer.php");
-
-
+    
     echo "\nFetching queued emails...\n"; 
 
     $dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
@@ -53,10 +52,10 @@
         echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
         
         # SEND EMAIL
-        $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+        $transport = Swift_SmtpTransport::newInstance($configEmail['smtp_host'], $configEmail['smtp_port'], $configEmail['smtp_crypto'])
                                         ->setUsername($configEmail['smtp_user'])
                                         ->setPassword($configEmail['smtp_pass']);
-        
+
         $mailer = Swift_Mailer::newInstance($transport);
         
         $message = Swift_Message::newInstance($emailData['subject'])
