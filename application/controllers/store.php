@@ -129,15 +129,15 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                //Determine active Div for first load
-                foreach($viewData['defaultCatProd'] as $catId => $catDetails){
-                    if( isset($productView['isSearching']) ){
-                        $viewData['defaultCatProd'][$catId]['isActive'] = intval($catId) === 0;
-                    }
-                    else{
-                        $viewData['defaultCatProd'][$catId]['isActive'] = $viewData['defaultCatProd'][$catId]['hasMostProducts'];
-                    }
+                if(isset($productView['isSearching']) && isset($viewData['defaultCatProd'][0])){
+                    $viewData['defaultCatProd'][0]['isActive'] = true;
                 }
+                else{
+                    reset($viewData['defaultCatProd']);
+                    $firstCategoryId = key($viewData['defaultCatProd']);
+                    $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
+                }
+
                 
                 // Load View
                 $headerData = array_merge($headerData, $bannerData);
