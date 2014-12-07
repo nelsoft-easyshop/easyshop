@@ -235,6 +235,7 @@ class EsCatRepository extends EntityRepository
             $query->setParameter($count++, $param);
         }
         $uploadsPerCategory = $query->getResult();
+
         return $uploadsPerCategory;
     }
 }
