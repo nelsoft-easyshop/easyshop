@@ -38,7 +38,7 @@ class Product extends MY_Controller {
                                         ->getShippingDetailsByProductId($productId);
 
             $isButtonClickable = true;
-            if((int) $product->getIsPromote() === $productManager::PRODUCT_IS_PROMOTE && (!$product->getEndPromo())){
+            if((int) $product->getIsPromote() === EasyShop\Entities\EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                 $isButtonClickable = $this->promoConfig[$product->getPromoType()]['viewable_button_product_page'];
             }
 
