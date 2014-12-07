@@ -106,7 +106,12 @@ class Kernel
                
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            $controllerList = require(APPPATH . 'config/param/controllers.php');
+        
+            $controllerConfigPath = APPPATH . 'config/param/controllers.php';
+            $controllerList = array();
+            if(file_exists($controllerConfigPath)){
+                $controllerList = require($controllerConfigPath);
+            }
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
