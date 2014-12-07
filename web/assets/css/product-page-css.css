@@ -1442,6 +1442,7 @@ body{
     background: transparent;
     border: none;
     cursor: pointer;
+    line-height: 30px;
     padding: 7px 12px;
     width: 110%;
 }

@@ -93,16 +93,21 @@ class EsLocationLookupRepository extends EntityRepository
         $result = $qbResult->getResult();
 
         foreach($result as $key => $value){
+            $locationName = $value->getLocation();
+            if(strpos($value->getLocation(), "(") && $isJsonReturn){
+                $locationName = substr_replace($value->getLocation(), "", strpos($value->getLocation(), "("));
+            }
+            
             $locationType = intval($value->getType());
             if($locationType === 0){ 
-                $data['countryName'] = $value->getLocation();
-                $data['countryId'] =  $value->getidLocation();
+                $data['countryName'] = $locationName;
+                $data['countryId'] =  $locationName;
             }
             else if($locationType === 3){
-                $data['stateRegionLookup'][$value->getidLocation()] = $value->getLocation();
+                $data['stateRegionLookup'][$value->getidLocation()] = $locationName;
             }
             else if($locationType === 4){
-                $data['cityLookup'][$value->getParent()->getIdLocation()][$value->getidLocation()] = $value->getLocation();
+                $data['cityLookup'][$value->getParent()->getIdLocation()][$value->getidLocation()] = $locationName;
             }
         }
 
