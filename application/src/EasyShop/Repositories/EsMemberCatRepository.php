@@ -56,7 +56,7 @@ class EsMemberCatRepository extends EntityRepository
                            ->from('EasyShop\Entities\EsMemberCat', 'mc')
                            ->where('mc.member = :memberId');
         $queryBuilder->setParameter('memberId', $memberId); 
-        if(!empty($categoryNameFilter)){
+        if(!empty($categoryIdFilters)){
             $queryBuilder->andWhere('mc.catName IN (:categoryIds)')
                          ->setParameter('categoryIds', $categoryIdFilters);
         }
