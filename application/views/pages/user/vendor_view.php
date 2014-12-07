@@ -132,12 +132,6 @@
 
                         <?=$arrCat['product_html_data'];?>
 
-                      <!--   <div class="clear"></div>
-                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
-                            <center>
-                                <?php echo $arrCat['pagination']?> 
-                            </center>
-                        </div> -->
                    <?php endif;?>
 
                 </div>
