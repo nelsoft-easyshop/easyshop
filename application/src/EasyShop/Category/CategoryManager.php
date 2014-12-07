@@ -316,8 +316,8 @@ class CategoryManager
                 $vendorCategories[$parentId] = array(
                     'name' => $categoryName,
                     'slug' => '',
-                    'child_cat' => array($parentId),
-                    'products' => array(),
+                    'child_cat' => [ $parentId ],
+                    'products' => [],
                     'product_count' => 0,
                     'cat_link' => '',
                     'cat_img' => $defaultCatImg,
