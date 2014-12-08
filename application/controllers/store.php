@@ -88,6 +88,7 @@ class Store extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+                    $productView['defaultCatProd'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
@@ -115,8 +116,7 @@ class Store extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 $viewData = array(
-                  //"customCatProd" => $this->getUserDefaultCategoryProducts($arrVendorDetails['id_member'], "custom")['parentCategory'],
-                    "customCatProd" => array(), // REMOVE THIS UPON IMPLEMENTATION OF CUSTOM CATEGORIES
+                    "customCatProd" => [],
                     "defaultCatProd" => $productView['defaultCatProd'],
                     "product_condition" => $this->lang->line('product_condition'),
                     "isLoggedIn" => $headerData['logged_in'],
@@ -359,8 +359,9 @@ class Store extends MY_Controller
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
             $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
             
-            // Unset DEFAULT categories with no products fetched (due to being custom categorized)
-            if( (int)$result['filtered_product_count'] === 0){
+            if( (int)$result['filtered_product_count'] === 0 && 
+                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_DEFAULT_TYPE 
+            ){
                 unset($parentCat[$idCat]);
                 break;
             }
@@ -909,21 +910,21 @@ class Store extends MY_Controller
      */
     public function vendorLoadProducts()
     {
-        $prodLimit = 12;
+        $prodLimit = $this->vendorProdPerPage;
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
-        $catType = $this->input->get('catType') ?  $this->input->get('catType') : CategoryManager::CATEGORY_DEFAULT_TYPE;
+        $catType = $this->input->get('catType');
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
-        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
+        $isCount = intval($this->input->get('count')) === 1;
 
         $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
         $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
         $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
 
-        $parameter = json_decode($this->input->get('queryString'),TRUE);
+        $parameter = json_decode($this->input->get('queryString'),true);
 
         $em = $this->serviceContainer["entity_manager"];
         $searchProductService = $this->serviceContainer['search_product'];
