@@ -383,7 +383,6 @@ class CategoryManager
                 'child_cat' => [ $customCat['id_memcat'] ],
                 'products' => []
                 'isActive' => false,
-                'cat_type' => self::CATEGORY_CUSTOM_TYPE,
             );
         }
 
