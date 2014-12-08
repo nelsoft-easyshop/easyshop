@@ -499,7 +499,6 @@
 
     var requestSales = function($page, $requestType, $container, $dateFrom, $dateTo)
     {
-        console.log($container);
         var $urlRequest = $('#sales-request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
@@ -1306,7 +1305,6 @@
 
     var getTransactionDetails = function ($page, $requestType, $container)
     {
-        console.log($container);
         $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
