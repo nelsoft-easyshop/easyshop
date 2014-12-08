@@ -2187,28 +2187,6 @@ html[xmlns] .slides {display: block;}
     text-transform: uppercase;
 }
 
-.progress {
-  height: 20px;
-  margin-bottom: 15px;
-  overflow: visible;
-  background-color: #eaeaea;
-  border-radius: 0;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-.progress-bar {
-  float: left;
-  width: 0;
-  height: 100%;
-  font-size: 12px;
-  line-height: 20px;
-  color: #fff;
-  text-align: center;
-  background-color: #428bca;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
 
 .progress-bar-custom {
   background-color: #ff893b;
