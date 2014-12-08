@@ -380,9 +380,10 @@ class CategoryManager
             $customCategories[$customCat['id_memcat']] = array(
                 'name' => $customCat['cat_name'],
                 'is_featured' => $customCat['is_featured'],
-                'child_cat' => array($customCat['id_memcat']),
-                'products' => array(),
-                'isActive' => FALSE
+                'child_cat' => [ $customCat['id_memcat'] ],
+                'products' => []
+                'isActive' => false,
+                'cat_type' => self::CATEGORY_CUSTOM_TYPE,
             );
         }
 
