@@ -307,6 +307,11 @@ class EsMember
     const DEFAULT_ACTIVE = 0;    
 
     /**
+     *  @var int
+     */
+    const DEFAULT_STORE_COLOR = 1;        
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
