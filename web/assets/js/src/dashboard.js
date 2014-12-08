@@ -1614,6 +1614,7 @@
     });
 
     $('.cancel-add-bank').on('click', function(){
+        $('#payment-create-error').hide();
         var $bankDropdown = $('.bank-dropdown');
         var $accountName = $('.account-name-input');
         var $accountNumber = $('.account-number-input');
@@ -1622,7 +1623,7 @@
         $accountNumber.removeClass('input-error');
         $bankDropdown.val(0);
         $accountName.val('');
-        $accountName.val('');
+        $accountNumber.val('');
     });
     
     $('.payment-account-container').on('click', '.btn-set-default', function(){
