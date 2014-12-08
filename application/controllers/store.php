@@ -913,7 +913,7 @@ class Store extends MY_Controller
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
-        $catType = $this->input->get('catType') ?  $this->input->get('catType') : CategoryManager::CATEGORY_DEFAULT_TYPE;
+        $catType = ($this->input->get('catType') && $this->input->get('catType') !== "undefined")?  $this->input->get('catType') : CategoryManager::CATEGORY_DEFAULT_TYPE;
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
@@ -958,7 +958,6 @@ class Store extends MY_Controller
                 $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }
-
         switch($catType){
             case CategoryManager::CATEGORY_SEARCH_TYPE: 
                 if($rawOrderBy > 1){
