@@ -969,8 +969,10 @@ class Store extends MY_Controller
                 if($condition != ""){
                     $parameter['condition'] = $condition;
                 }
-                if(is_numeric($lprice) && is_numeric($uprice)){
+                if(is_numeric($lprice)){
                     $parameter['startprice'] = $lprice;
+                }
+                if(is_numeric($uprice)){
                     $parameter['endprice'] = $uprice;
                 }
                 $parameter['seller'] = "seller:".$vendorName;
