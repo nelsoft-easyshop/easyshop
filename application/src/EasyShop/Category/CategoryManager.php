@@ -339,6 +339,7 @@ class CategoryManager
                 $vendorCategories[$parentId]['products'] = [];
                 $vendorCategories[$parentId]['product_count'] = 0;
                 $vendorCategories[$parentId]['isActive'] = false;
+                $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_DEFAULT_TYPE;
                 $vendorCategories[$parentId]['categoryId'] = $parentId;
                 $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0;
                 $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
@@ -374,6 +375,7 @@ class CategoryManager
                 'child_cat' => [ $customCat['id_memcat'] ],
                 'products' => [],
                 'isActive' => false,
+                 $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_CUSTOM_TYPE,
             );
         }
 

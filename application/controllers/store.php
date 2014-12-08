@@ -88,6 +88,7 @@ class Store extends MY_Controller
                     $productView['defaultCatProd'][0]['products'] = $searchProduct; 
                     $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
                     $productView['defaultCatProd'][0]['json_subcat'] = "{}";
+                    $productView['defaultCatProd'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
@@ -358,7 +359,9 @@ class Store extends MY_Controller
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
             $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
             
-            if( (int)$result['filtered_product_count'] === 0){
+            if( (int)$result['filtered_product_count'] === 0 && 
+                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_DEFAULT_TYPE 
+            ){
                 unset($parentCat[$idCat]);
                 break;
             }
