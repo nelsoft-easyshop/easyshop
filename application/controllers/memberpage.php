@@ -2648,14 +2648,15 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                         'newId' => 0,
-                         'isDefault' => false,
-                        ];               
+            'errors' => [],
+            'newId' => 0,
+            'isDefault' => false,
+        ];               
         if($this->input->post()){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]); 
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
             $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
@@ -2742,17 +2743,19 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
         
-        $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                        ];          
+        $jsonResponse = [
+            'isSuccessful' => false,
+            'errors' => [],
+        ];          
         if($this->input->post() && $memberId){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
-                                     ->setMethod('POST');            
+                                     ->setMethod('POST');                          
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]);                       
             $formBuild->add('account-id', 'text', array('constraints' => $rules['account-id']));                         
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
-            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number'] ));
             $formData['account-bank-id'] = (int)$this->input->post('bank-id');
             $formData['account-name'] = $this->input->post('account-name');
             $formData['account-number'] = $this->input->post('account-number');
