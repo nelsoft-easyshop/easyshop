@@ -2813,7 +2813,7 @@ class Memberpage extends MY_Controller
 
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                                                 ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 
