@@ -1776,7 +1776,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1794,7 +1794,7 @@ class Memberpage extends MY_Controller
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                              $transactionNumber,
                                               $paymentMethod
@@ -1812,7 +1812,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1830,7 +1830,7 @@ class Memberpage extends MY_Controller
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
