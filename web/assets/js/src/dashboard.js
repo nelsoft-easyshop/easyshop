@@ -985,10 +985,11 @@
                             error.insertAfter(element);
                         },
                         submitHandler: function(form){
+                            var serializedData = $(form).serializeArray();
+                            serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
                             input.attr('disabled',false);
                             textarea.attr('disabled', false);
-
-                            $.post('/memberpage/addShippingComment', $(form).serializeArray(), function(data){
+                            $.post('/memberpage/addShippingComment', serializedData, function(data){
                                 submitbtn.attr('disabled', false);
                                 submitbtn.val('Save');
 
@@ -1060,6 +1061,7 @@
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
         var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
         var data = form.serializeArray();
+        data.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
@@ -1124,8 +1126,10 @@
         var form = thisbtn.closest('form');
         var thismethod = thisbtn.siblings('input[name="method"]');
         var status = thisbtn.closest('.item-list-panel').find('.status-class');
+        var serializedData = $(form).serializeArray();
+        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
 
-        $.post('/memberpage/rejectItem', $(form).serializeArray(), function(data) {
+        $.post('/memberpage/rejectItem', serializedData, function(data) {
             try{
                 var obj = jQuery.parseJSON(data);
             }
@@ -1193,7 +1197,9 @@
                         econt.html('Please rate this user!');
                     }
                     else {
-                        $.post('/memberpage/addFeedback',form.serialize(),function(data) {
+                        var serializedData = $(form).serializeArray();
+                        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+                        $.post('/memberpage/addFeedback', serializedData,function(data) {
                             if (parseInt(data) === 1) {
                                 alert('Your feedback has been submitted.');
                                 btn.remove();
@@ -1270,6 +1276,13 @@
         searchForTransaction($container, $searchFor, $value, $container);
     });
 
+    $('#transactions').on('click', '.transaction-button-head', function() {
+        var $container = $(this).data('method');
+        var $page = 1;
+
+        getTransactionDetails($page, $container, $container);
+    });
+
     var searchForTransaction = function ($requestType, $searchFor, $value, $container)
     {
         var $ajaxRequest = $.ajax({
@@ -1294,7 +1307,7 @@
     var getTransactionDetails = function ($page, $requestType, $container)
     {
         console.log($container);
-        var $ajaxRequest = $.ajax({
+        $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
