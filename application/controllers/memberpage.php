@@ -572,27 +572,28 @@ class Memberpage extends MY_Controller
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         );
-        $isVendor = $this->input->post('vendor') ? true : false;
         $vendorLink = html_escape($this->input->post('url'));
         $memberId = $this->session->userdata('member_id');
-        
+
+
         $uploadResult = $this->serviceContainer["assets_uploader"]->uploadUserAvatar($memberId, key($_FILES), $cropCoordinates);
         $member = $uploadResult['member'];
   
         $redirectUrl = '/';
         if($member !== null){
-            $vendorLink .= (trim($vendorLink) === "") ? "" : "/".$vendorLink;
-            $redirectUrl = '/'. ($isVendor ? $member->getSlug().$vendorLink : 'me');
+            $redirectUrl = '/'.$member->getSlug().'/'.$vendorLink;
         }      
         if(empty($uploadResult['error']) && $member){
             redirect($redirectUrl);
         }
 
-        $data = ['allowedFileTypes' => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
-                    'maxSize' => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
-                    'maxHeight' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
-                    'maxWidth' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
-                    'redirectUrl' => $redirectUrl,];
+        $data = [
+            'allowedFileTypes' => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+            'maxSize' => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+            'maxHeight' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            'maxWidth' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            'redirectUrl' => $redirectUrl,
+        ];
         $this->load->view('errors/uploadError', $data);
     }
 
