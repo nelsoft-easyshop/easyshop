@@ -72,11 +72,11 @@ class EsMemberListener implements EventSubscriber
         }
 
         if ($event->hasChangedField('isEmailVerify')) {
-            $this->changeSet['isEmailVerify'] = $entity->getIsEmailVerify();
+            $this->changeSet['isEmailVerify'] = $entity->getIsEmailVerify() ? "Verified" : "Unverified";
         }
 
         if ($event->hasChangedField('gender')) {
-            $this->changeSet['gender'] = $entity->getGender();
+            $this->changeSet['gender'] = $entity->getGender() ? "Female" : "Male";
         }
 
         if ($event->hasChangedField('email')) {
