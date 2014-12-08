@@ -1307,7 +1307,7 @@
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
-                page : 0,
+                page : 1,
                 value : $value,
                 searchFor : $searchFor,
                 request : $requestType
