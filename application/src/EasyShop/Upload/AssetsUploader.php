@@ -164,8 +164,15 @@ class AssetsUploader
         $fileSuperGlobal = $_FILES;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->findOneBy(['idMember' => $memberId]);
         
-        $result = ['error' => array(), 'member' => null];
-        $filenames = ['usersize', '150x150', '60x60'];
+        $result = [
+            'error' => array(),
+            'member' => null
+        ];
+        $filenames = [
+            'usersize', 
+            '150x150', 
+            '60x60'
+        ];
 
         if($member){
             $imagePath = $member->getImgurl();
@@ -243,7 +250,7 @@ class AssetsUploader
                 $this->imageLibrary->clear();
             }
       
-            if(strtolower($this->environment) !== 'development' || true){
+            if(strtolower($this->environment) !== 'development'){
                 try{
                     $this->awsUploader->uploadFile($imagePath.'/'.$filenames[0].'.png', $imagePath."/".$filenames[0].".png");
                     $this->awsUploader->uploadFile($imagePath.'/'.$filenames[1].'.png', $imagePath."/".$filenames[1].".png");
