@@ -119,6 +119,14 @@ $lang['EsMember'] = [
         'storeName' => 'Store Name',
         'password' => 'Password',
         'contactno' => 'Contact Number',
+        'isEmailVerify' => 'Email Verification',
+        'gender' => 'Gender',
+        'email' => 'Email Address',
+        'birthday' => 'Birthday',
+        'fullname' => 'Fullname',
+        'storeDesc' => 'Store Description',
+        'slug' => 'Store URL',
+        'website' => 'Website',
     ];
 
 $lang['update_information'] = "You have updated your :phrase on :date"
