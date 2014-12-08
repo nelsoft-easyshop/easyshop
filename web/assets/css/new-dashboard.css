@@ -252,8 +252,15 @@ a{
     background: #bebebe !important
 }
 
-.progress-bar{
+.progress-bar2{
     background: #3aab99 !important;
+    float: left;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    box-shadow: none;
 }
 
 .p-stat-title{
