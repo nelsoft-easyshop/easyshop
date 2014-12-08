@@ -988,34 +988,39 @@
                             serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
                             input.attr('disabled',false);
                             textarea.attr('disabled', false);
-                            $.post('/memberpage/addShippingComment', serializedData, function(data){
-                                submitbtn.attr('disabled', false);
-                                submitbtn.val('Save');
+                            $.ajax({
+                                url : '/memberpage/addShippingComment',
+                                method : 'POST',
+                                data : serializedData,
+                                success : function (data) {
+                                    submitbtn.attr('disabled', false);
+                                    submitbtn.val('Save');
 
-                                try{
-                                    var obj = jQuery.parseJSON(data);
-                                }
-                                catch(e){
-                                    alert('An error was encountered while processing your data. Please try again later.');
-                                    return false;
-                                }
-
-                                if (obj.result === 'success') {
-                                    shipmentContainer.find('input[name="courier"]').val(courier.val());
-                                    shipmentContainer.find('input[name="tracking_num"]').val(tracking_num.val());
-                                    shipmentContainer.find('input[name="delivery_date"]').val(delivery_date.val());
-                                    shipmentContainer.find('input[name="expected_date"]').val(expected_date.val());
-                                    shipmentContainer.find('input[name="comment"]').val(textarea.val());
-                                    shipmentContainer.find('input[name="is_new"]').val(1);
-                                    textarea.attr('data-value', htmlDecode(textarea.val()));
-                                    textarea.attr('disabled', true);
-
-                                    if(thisbtn.hasClass('isform')) {
-                                        txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                    try{
+                                        var obj = jQuery.parseJSON(data);
                                     }
-                                    $.modal.close();
-                                }else{
-                                    alert(obj.error);
+                                    catch(e){
+                                        alert('An error was encountered while processing your data. Please try again later.');
+                                        return false;
+                                    }
+
+                                    if (obj.result === 'success') {
+                                        shipmentContainer.find('input[name="courier"]').val(courier.val());
+                                        shipmentContainer.find('input[name="tracking_num"]').val(tracking_num.val());
+                                        shipmentContainer.find('input[name="delivery_date"]').val(delivery_date.val());
+                                        shipmentContainer.find('input[name="expected_date"]').val(expected_date.val());
+                                        shipmentContainer.find('input[name="comment"]').val(textarea.val());
+                                        shipmentContainer.find('input[name="is_new"]').val(1);
+                                        textarea.attr('data-value', htmlDecode(textarea.val()));
+                                        textarea.attr('disabled', true);
+
+                                        if(thisbtn.hasClass('isform')) {
+                                            txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                        }
+                                        $.modal.close();
+                                    }else{
+                                        alert(obj.error);
+                                    }
                                 }
                             });
                             submitbtn.attr('disabled', true);
@@ -1059,41 +1064,45 @@
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
         var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
-        var data = form.serializeArray();
-        data.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+        var serializedData = form.serializeArray();
+        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
-
-        $.post("/memberpage/transactionResponse", data, function(data) {
-            try {
-                var serverResponse = jQuery.parseJSON(data);
-            }
-            catch (e) {
-                alert('An error was encountered while processing your data. Please try again later.');
-                txResponseBtn.val(buttonText);
-                txResponseBtn.addClass('enabled').removeClass('loading');
-                return false;
-            }
-
-            if (serverResponse.result !== 'success') {
-                alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
-                txResponseBtn.val(buttonText);
-                txResponseBtn.addClass('enabled').removeClass('loading');
-            }
-            else{
-                if(txResponseBtn.hasClass('tx_forward')){
-                    txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
-                }else if(txResponseBtn.hasClass('tx_return')){
-                    txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
-                }else if(txResponseBtn.hasClass('tx_cod')){
-                    alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+        $.ajax({
+            url : '/memberpage/transactionResponse',
+            method : 'POST',
+            data : serializedData,
+            success : function (data) {
+                try {
+                    var serverResponse = jQuery.parseJSON(data);
                 }
-                txResponseBtn.val('Successful');
-                txResponseBtn.parent().parent().find('.txt_buttons').hide();
+                catch (e) {
+                    alert('An error was encountered while processing your data. Please try again later.');
+                    txResponseBtn.val(buttonText);
+                    txResponseBtn.addClass('enabled').removeClass('loading');
+                    return false;
+                }
+
+                if (serverResponse.result !== 'success') {
+                    alert('Sorry we cannot process your request at this time. Please try again in a few minutes.');
+                    txResponseBtn.val(buttonText);
+                    txResponseBtn.addClass('enabled').removeClass('loading');
+                }
+                else{
+                    if(txResponseBtn.hasClass('tx_forward')){
+                        txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                    }else if(txResponseBtn.hasClass('tx_return')){
+                        txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                    }else if(txResponseBtn.hasClass('tx_cod')){
+                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                    }
+                    txResponseBtn.val('Successful');
+                    txResponseBtn.parent().parent().find('.txt_buttons').hide();
+                }
+                txResponseBtn.addClass('enabled');
             }
-            txResponseBtn.addClass('enabled');
         });
     });
 
@@ -1128,29 +1137,34 @@
         var serializedData = $(form).serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
 
-        $.post('/memberpage/rejectItem', serializedData, function(data) {
-            try{
-                var obj = jQuery.parseJSON(data);
-            }
-            catch(e){
-                alert('An error was encountered while processing your data. Please try again later.');
-                return false;
-            }
-            thisbtn.attr('disabled', false);
-
-            if(obj.result === 'success'){
-                if ( thisbtn.hasClass('reject') ) {
-                    thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
-                    thismethod.val('unreject');
-                    status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
-                }else if ( thisbtn.hasClass('unreject') ){
-                    thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
-                    thismethod.val('reject');
-                    status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
+        $.ajax({
+            url : '/memberpage/rejectItem',
+            method : 'POST',
+            data : serializedData,
+            success : function (data) {
+                try{
+                    var obj = jQuery.parseJSON(data);
                 }
-            }
-            else{
-                alert(obj.error);
+                catch(e){
+                    alert('An error was encountered while processing your data. Please try again later.');
+                    return false;
+                }
+                thisbtn.attr('disabled', false);
+
+                if(obj.result === 'success'){
+                    if ( thisbtn.hasClass('reject') ) {
+                        thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
+                        thismethod.val('unreject');
+                        status.replaceWith('<span class="trans-status-pending status-class">ITEM REJECTED</span>');
+                    }else if ( thisbtn.hasClass('unreject') ){
+                        thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
+                        thismethod.val('reject');
+                        status.replaceWith('<span class="trans-status-pending status-class">ITEM UNREJECTED</span>');
+                    }
+                }
+                else{
+                    alert(obj.error);
+                }
             }
         });
         thisbtn.attr('disabled', true);
@@ -1198,13 +1212,18 @@
                     else {
                         var serializedData = $(form).serializeArray();
                         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
-                        $.post('/memberpage/addFeedback', serializedData,function(data) {
-                            if (parseInt(data) === 1) {
-                                alert('Your feedback has been submitted.');
-                                btn.remove();
-                            }
-                            else {
-                                alert('An error was encountered. Try again later.');
+                        $.ajax({
+                            url : '/memberpage/transactionResponse',
+                            method : 'POST',
+                            data : serializedData,
+                            success : function (data) {
+                                if (parseInt(data) === 1) {
+                                    alert('Your feedback has been submitted.');
+                                    btn.remove();
+                                }
+                                else {
+                                    alert('An error was encountered. Try again later.');
+                                }
                             }
                         });
                         $.modal.close();
@@ -1284,7 +1303,7 @@
 
     var searchForTransaction = function ($requestType, $searchFor, $value, $container)
     {
-        var $ajaxRequest = $.ajax({
+        $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
