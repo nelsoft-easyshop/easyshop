@@ -238,12 +238,13 @@ jQuery(document).ready(function(){
 			 	jQuery.post('/register/signup', jQuery(form).serializeArray(), function(data){
 					jQuery('#register_form1_loadingimg').hide();
 					thisbtn.attr('disabled', false);
+					console.log(data);
 					try{
 						var serverResponse = jQuery.parseJSON(data);
 					}
 					catch(e){
-						alert('We are currently encountering a problem. Please try again later.');
-						window.location.reload(true);
+						// alert('We are currently encountering a problem. Please try again later.');
+						//window.location.reload(true);
 						return;
 					}
 					
