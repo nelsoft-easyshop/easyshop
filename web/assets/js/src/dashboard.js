@@ -1301,11 +1301,10 @@
                 page : $page,
                 request : $requestType
             },
-            beforeSend: function(){
-                $("#" + $container).html($('#hidden-paginate-loader').html());
+            beforeSend: function() {
+                $("#" + $container).empty();
             },
             success: function(requestResponse) {
-                $("#" + $container).empty();
                 var $response = $.parseJSON(requestResponse);
                 $("#" + $container).append($response.html);
             }
