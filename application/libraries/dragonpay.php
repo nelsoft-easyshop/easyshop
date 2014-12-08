@@ -53,7 +53,6 @@ class DragonPay {
     function getTxnToken($amount,$description,$email,$txnId)
     {
         $errorCodes = $this->errorCodes;
-         
         $ccy = 'PHP';
         $param = array(
             'merchantId' => $this->merchantId,
@@ -63,7 +62,8 @@ class DragonPay {
             'ccy' => $ccy,
             'description' => $description,
             'email' => $email,
-            'mode'=>'1'
+            'mode'=>'1',
+            'param1' => 'Easyshop'
             );
         $client = new nusoap_client($this->url, 'wsdl');
         $result = $client->call('GetTxnToken',$param);
@@ -71,7 +71,8 @@ class DragonPay {
 
         if(strlen($token) <= 3){
             return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
-        }else{
+        }
+        else{
             return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'&mode=7"}';
         }
     }
