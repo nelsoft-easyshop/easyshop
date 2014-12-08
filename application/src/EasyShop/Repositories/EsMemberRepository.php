@@ -13,6 +13,22 @@ use Doctrine\ORM\Query as Query;
 class EsMemberRepository extends EntityRepository
 {
 
+    public function storeMemberVerifCode($memberId, $emailCode, $mobileCode, $mobile, $email)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('member_id','member_id');
+
+        $sql = " CALL `es_sp_storeVerifcode` (:member_id, :emailcode, :mobilecode, :mobile, :email)";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId);
+        $query->setParameter('emailcode', $emailCode);
+        $query->setParameter('mobilecode', $mobileCode);
+        $query->setParameter('mobile', $mobile);
+        $query->setParameter('email', $email);
+        $uploadsPerCategory = $query->getResult();
+        return $uploadsPerCategory;        
+    }
     /**
      * Return member Entity based on Hydration option passed by asArray parameter
      * @param bool $asArray
