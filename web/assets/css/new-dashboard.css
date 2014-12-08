@@ -249,7 +249,9 @@ a{
 }
 
 .progress{
-    background: #bebebe !important
+    background: #bebebe !important;
+    margin-top :10px;
+    margin-bottom: 4px;
 }
 
 .progress-bar2{
