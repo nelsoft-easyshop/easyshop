@@ -14,7 +14,13 @@ class EsProductImage
 {
 
     const IMAGE_UNAVAILABLE_DIRECTORY =  'assets/product/unavailable/';
+    
     const IMAGE_UNAVAILABLE_FILE =  'unavailable_product_img.jpg';
+    
+    const DEFAULT_IMAGE_DIRECTORY = 'assets/product/default/';
+    
+    const DEFAULT_IMAGE_FILE = 'default_product_img.jpg';
+    
 
     /**
      * @var integer
@@ -175,8 +181,17 @@ class EsProductImage
      */
     public function getDirectory()
     {
-        $this->explodeImagePath();
         return $this->directory;
+    }
+    
+    /**
+     * Set the path of the image
+     *
+     * @param string $directory
+     */
+    public function setDirectory($directory)
+    {
+        return $this->directory = $directory;
     }
     
     /**
@@ -186,33 +201,17 @@ class EsProductImage
      */
     public function getFilename()
     {
-        $this->explodeImagePath();
         return $this->filename;
     }
-    
+   
     /**
-     * Separates the image directory and file name
+     * Set the path of the image
      *
+     * @param string $filename
      */
-    private function explodeImagePath()
+    public function setFilename($filename)
     {
-        if($this->directory === '' && $this->filename === ''){
-            if(trim($this->productImagePath) === ''){
-                $this->directory = 'assets/product/default/';
-                $this->filename = 'default_product_img.jpg';
-            }
-            else{
-                if(file_exists($this->productImagePath)){
-                    $reversedPath = strrev($this->productImagePath);
-                    $this->directory = substr($this->productImagePath,0,strlen($reversedPath)-strpos($reversedPath,'/'));
-                    $this->filename  = substr($this->productImagePath,strlen($reversedPath)-strpos($reversedPath,'/'),strlen($reversedPath));
-                }
-                else{
-                    $this->directory = self::IMAGE_UNAVAILABLE_DIRECTORY;
-                    $this->filename = self::IMAGE_UNAVAILABLE_FILE;
-                }
-            }                
-        }
+        return $this->filename = $filename;
     }
     
     

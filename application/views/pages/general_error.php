@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="img-404">
-                <img src="/assets/images/404page.png" alt="404 error">
+                <img src="<?php echo getAssetsDomain() ?>assets/images/404page.png" alt="404 error">
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
@@ -27,7 +27,7 @@
             </div>
             <div class="link-404">
                 <a href="/">
-                    <img src="/assets/images/img-arrow-left.png" alt="return to homepage">Return to <strong>HOMEPAGE</strong>
+                    <img src="<?php echo getAssetsDomain() ?>assets/images/img-arrow-left.png" alt="return to homepage">Return to <strong>HOMEPAGE</strong>
                 </a>
             </div>
         </div>

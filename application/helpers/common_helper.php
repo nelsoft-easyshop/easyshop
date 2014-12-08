@@ -9,7 +9,18 @@
 *    Has since then been relocated to a helper file to allow for smooth transition
 *    just in case CI is updated to a newer version or the framework is changed.
 */ 
- 
+
+if ( ! function_exists('getAssetsDomain'))
+{
+    function getAssetsDomain()
+    {
+        $CI =& get_instance(); 
+        $CI->load->config('assets', true);
+        return $CI->config->item('assetsBaseUrl','assets');
+    }
+
+}
+
  
 /**
 * Strips unwanted characters for title url encoding

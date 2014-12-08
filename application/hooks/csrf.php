@@ -4,51 +4,35 @@
  */
 class CSRF_Protection
 {
-      /**
-       * Holds CI instance
-       *
-       * @var CI instance
-       */
-      private $CI;
+    /**
+     * Holds CI instance
+     *
+     * @var CI instance
+     */
+    private $CI;
+    
+    /**
+     * Name used to store token on session
+     *
+     * @var string
+     */
+    private static $token_name = 'csrfname';
      
-      /**
-       * Name used to store token on session
-       *
-       * @var string
-       */
-      private static $token_name = 'csrfname';
-     
-      /**
-       * Stores the token
-       *
-       * @var string
-       */
-      private static $token;
-     
-      
-      
-      /**
-       * list of URLs to bypass
-       *
-       * @var string[]
-       */
-      private $bypassUrls = array("/payment/dragonPayPostBack", "/payment/ipn2", "/payment/pesoPayDataFeed");
-      
-      /**
-       * List of first segment URLs to bypass
-       *
-       * @var string[]
-       */
-      private $bypassFirstSegments = array("webservice", "mobile");
-      
-     
-      public function __construct()
-      {
+    /**
+     * Stores the token
+     *
+     * @var string
+     */
+    private static $token;
+    
+    
+    public function __construct()
+    {
         $this->CI =& get_instance();
-      }
+    }
       
       
-      /**
+    /**
      * Generates a CSRF token and stores it on session. Only one token per session is generated.
      * This must be tied to a post-controller hook, and before the hook
      * that calls the inject_tokens method().
@@ -91,7 +75,7 @@ class CSRF_Protection
             $csrfConfig = $this->CI->config->item('csrf');
             
             $firstUrlSegment = reset($this->CI->uri->segment_array());
-
+            
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
             }
@@ -140,3 +124,5 @@ class CSRF_Protection
       $this->CI->output->_display($output);
     }    
 }
+
+

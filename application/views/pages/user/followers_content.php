@@ -8,8 +8,8 @@
                     <div class="follower-div">
                         <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                             <div class="div-img-cover">
-                                <img src="<?=$value->bannerImage ;?>" class="img-follower-cover"/>
-                                <img src="<?=$value->avatarImage;?>" class="vendor-follower-img"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->bannerImage ;?>" class="img-follower-cover"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->avatarImage;?>" class="vendor-follower-img"/>
                                 <div class="cover-overlay"></div>
                             </div>
                         </a>

@@ -11,7 +11,7 @@
                 </h1>
                 <div>
                     By:
-                        <span class="product-profile-photo"><img src="<?=$avatarImage?>"></span>
+                        <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$avatarImage?>"></span>
                        <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                                 <?php foreach($productImages as $image): ?>
                                     <li>
                                         <a href="javascript:void(0);">
-                                            <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
+                                            <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
                                         </a>
                                     </li>
                                 <?php endforeach;?>
@@ -47,7 +47,7 @@
                 <div class="col-md-9">
                     <div class="prod-gallery-container">
                         <div class="prod_con_gal text-center">
-                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
+                            <img src="<?php echo getAssetsDomain().$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
             <div class="mobile-product-gallery">
                 <div id="mobile-product-gallery" class="owl-carousel">
                         <div> 
-                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
+                            <img src="<?php echo getAssetsDomain().$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                         <div class="owl-controls">
                             <div class="owl-prev">prev</div>

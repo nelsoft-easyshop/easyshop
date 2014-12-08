@@ -98,7 +98,7 @@
                     <a data-node="<?=$value['src']?>" data-div="main_slide_<?=$key;?>" title="Remove this photo" class="removePic imglink" href="javascript:void(0)">X</a> 
                     <a data-node="<?=$value['src']?>" data-div="main_slide_<?=$key;?>" title="Move this photo up" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a> 
                     <a data-node="<?=$value['src']?>" data-div="main_slide_<?=$key;?>" title="Move this photo down" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a>
-                    <div><img data-node="<?=$value['src']?>" data-div="main_slide_<?=$key;?>" 
+                    <div><img data-node="<?php echo getAssetsDomain().'.'.$value['src']?>" data-div="main_slide_<?=$key;?>" 
                       data-ratiox="<?=explode(',' ,$value['imagemap']['coordinate'])[0]?>"
                       data-ratioy="<?=explode(',' ,$value['imagemap']['coordinate'])[1]?>"
                       data-ratioxx="<?=explode(',' ,$value['imagemap']['coordinate'])[2]?>"

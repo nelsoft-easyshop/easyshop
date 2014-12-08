@@ -5,7 +5,7 @@
 
 			
 			    <span class="post_item_img_con">
-				    <img src="/<?php echo $draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
+				    <img src="<?php echo getAssetsDomain()?><?php echo $draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
 			    </span>
 			</div>
 			<p><small>Last modified : <?php echo date_format(date_create($draft_product['lastmodifieddate']),'Y-m-d')?></small></p>

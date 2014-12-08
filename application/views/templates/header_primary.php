@@ -85,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="<?=$user_details->profileImage;?>">
+                                                    <img src="<?php echo getAssetsDomain(); ?><?=$user_details->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user_details->getUsername()); ?>
@@ -120,7 +120,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
-                                                <img src="/assets/images/img-login-icon.png" alt="login">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
@@ -142,9 +142,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <span>EasyShop.ph</span>
                                 <a href="/" title="EasyShop.ph Website">
                                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
+                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
                                     <?php else: ?>
-                                        <img src="/assets/images/img_logo.png" alt="Online Shopping">
+                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Online Shopping">
                                     <?php endif; ?>
                                 </a>
                             </h1>
@@ -277,7 +277,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <a href="javascript:void(0)">NEW ARRIVALS</a>
                                                     <ul class="nav-2nd-level">
                                                         <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
-
                                                             <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
                                                         <?php endforeach; ?>
                                                     </ul>
@@ -306,7 +305,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                             <?php $storeName = $topSeller['details']->getStoreName(); ?>
                                                                             <?php echo html_escape(($storeName && strlen(trim($storeName)) > 0) ? $storeName : $topSeller['details']->getUsername()); ?>
                                                                         </div>
-
                                                                     </a>
                                                                 <?php endif; ?>
                                                             <?php endforeach; ?>

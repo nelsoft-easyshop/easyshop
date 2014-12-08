@@ -3,9 +3,9 @@
         <div class="home_cat_product_title <?php echo $section['category_detail']['css_class']?>">
             <a href="/<?= $section['category_detail']['url']?>">
                 <?PHP if(strlen(trim($section['category_detail']['imagepath'])) > 0): ?>
-                    <img src="/assets/<?php echo substr($section['category_detail']['imagepath'], 0, strpos($section['category_detail']['imagepath'],'.'))?>_small<?php echo substr($section['category_detail']['imagepath'], strpos($section['category_detail']['imagepath'],'.'))?>" >
+                    <img src="<?php echo getAssetsDomain() ?>assets/<?php echo substr($section['category_detail']['imagepath'], 0, strpos($section['category_detail']['imagepath'],'.'))?>_small<?php echo substr($section['category_detail']['imagepath'], strpos($section['category_detail']['imagepath'],'.'))?>" >
                 <?PHP else: ?>
-                     <img src="/assets/images/img_icon_partner_small.png" >
+                     <img src="<?php echo getAssetsDomain() ?>assets/images/img_icon_partner_small.png" >
                 <?PHP endif; ?>
                <h2><?php echo html_escape($section['category_detail']['name']); ?></h2>    
             </a>
@@ -41,7 +41,7 @@
 			<?PHP if(isset($main_panel['id_product'])): ?>
 			    <a href="<?= "/item/".$main_panel['slug']; ?>">                        
 				<span class="elec_slide_img_con">
-				<img class="cat2_slide_prod" src="/<?= $main_panel['path'].'/'.$main_panel['file']; ?>" />
+				<img class="cat2_slide_prod" src="<?php echo getAssetsDomain() ?><?= $main_panel['path'].'/'.$main_panel['file']; ?>" />
 				</span>
 			    </a>                      
 			    <span class="electronics_slider_price_con">
@@ -59,7 +59,7 @@
 			<?PHP elseif(isset($main_panel['src'])): ?>
                  
 			    <span class="elec_slide_img_con">
-			      <img class="cat2_slide_prod" src="/<?PHP echo $main_panel['src']; ?>"  usemap="<?php echo isset($main_panel['imagemap'])?'#'.$idx.'_image_map_sec':''?>" />
+			      <img class="cat2_slide_prod" src="<?php echo getAssetsDomain() ?><?PHP echo $main_panel['src']; ?>"  usemap="<?php echo isset($main_panel['imagemap'])?'#'.$idx.'_image_map_sec':''?>" />
 			    </span>
 			   
 			    <?PHP if(isset($main_panel['imagemap'])): ?>
@@ -95,7 +95,7 @@
                             </div>
                             <a href="<?= "/item/".$product['slug']; ?>">
                                 <span>
-                                    <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                                    <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                                 </span>
                             </a>
                         </div>
@@ -116,7 +116,7 @@
                             </div>
                             <a href="<?= "/item/".$product['slug']; ?>">
                                 <span>
-                                    <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                                    <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                                 </span>
                             </a>
                             
@@ -144,7 +144,7 @@
                     </div>
                     <a href="<?= "/item/".$product['slug']; ?>">
                         <span>
-                            <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                            <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                         </span>
                     </a>
                 </div>
@@ -163,7 +163,7 @@
                     </div>
                     <a href="<?= "/item/".$product['slug']; ?>">
                         <span>
-                            <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                            <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                         </span>
                     </a>
                 </div>
@@ -188,7 +188,7 @@
                     </div>
                     <a href="<?= "/item/".$product['slug']; ?>">
                         <span>
-                            <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                            <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                         </span>
                     </a>
                 </div>
@@ -207,7 +207,7 @@
                     </div>
                     <a href="<?= "/item/".$product['slug']; ?>">
                         <span>
-                            <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                            <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                         </span>
                     </a>
                 </div>
@@ -227,7 +227,7 @@
                     </div>
                     <a href="<?= "/item/".$product['slug']; ?>">
                         <span>
-                            <img src="/<?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
+                            <img src="<?php echo getAssetsDomain() ?><?php echo $product['path'];?>categoryview/<?php echo $product['file']?>" alt="ipad mini">
                         </span>
                     </a>
                 </div>

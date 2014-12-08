@@ -38,7 +38,7 @@
 			<tr>
 				<td style="text-align: center;">
 					<a href="https://easyshop.ph/" style="outline: none; border: 0;">
-						<img src="header-img.png" style="width: 600px; height: 129px;" alt="Easyshop.ph">
+						<img src="<?php echo getAssetsDomain() ?>header-img.png" style="width: 600px; height: 129px;" alt="Easyshop.ph">
 					</a>
 				</td>
 			</tr>
@@ -52,9 +52,8 @@
 			<tr>
 				<td style="background: #3C475C;	padding: 20px; border-bottom: 5px solid #F18200;">
 					<div class="socialMedia" style="width: 160px; margin: 0 auto;">
-						<a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"><img src="facebook.png" style="width: 50px;" alt="Share us on Facebook"></a>
-						<!--<a href="#"><img src="googleplus.png" style="width: 50px;" alt="Connect with Google+"></a>-->
-						<a href="https://twitter.com/EasyShopPH"><img src="twitter.png" style="width: 50px;" alt="Tweet us on Twitter"></a>
+						<a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"><img src="<?php echo getAssetsDomain() ?>facebook.png" style="width: 50px;" alt="Share us on Facebook"></a>
+						<a href="https://twitter.com/EasyShopPH"><img src="<?php echo getAssetsDomain() ?>twitter.png" style="width: 50px;" alt="Tweet us on Twitter"></a>
 					</div>
 					<p style="color: #ffffff; text-align: center;">Copyright &copy; 2014 Easyshop.ph</p>
 				</td>
