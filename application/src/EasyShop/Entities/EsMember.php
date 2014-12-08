@@ -266,7 +266,7 @@ class EsMember
      *   @ORM\JoinColumn(name="store_color_id", referencedColumnName="id_store_color")
      * })
      */
-    private $storeColor;
+    private $storeColor = '1';
     
     
     /**
