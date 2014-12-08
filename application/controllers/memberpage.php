@@ -1849,75 +1849,6 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Get all transaction data
-     * @return mixed
-     */
-    private function getTransactionDetails()
-    {
-        $memberId = $this->session->userdata('member_id');
-
-        $transaction = [
-            'ongoing' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, 0, $this->transactionRowCount),
-                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, true, 0, $this->transactionRowCount)
-            ],
-            'complete' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, 0, $this->transactionRowCount),
-                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false, 0, $this->transactionRowCount)
-            ]
-        ];
-
-        $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
-        $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
-        $ongoingBoughtTransactionData = [
-            'transaction' => $transaction['ongoing']['bought'],
-            'count' => $ongoingBoughtTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $ongoingBoughtTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
-
-        $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
-        $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
-        $ongoingSoldTransactionData = [
-            'transaction' => $transaction['ongoing']['sold'],
-            'count' => $ongoingSoldTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $ongoingSoldTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
-
-        $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
-        $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
-        $completeBoughtTransactionsData = [
-            'transaction' => $transaction['complete']['bought'],
-            'count' => $completeBoughtTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $completeBoughtTransactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
-
-        $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
-        $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
-        $completeSoldTransactionsData = [
-            'transaction' => $transaction['complete']['sold'],
-            'count' => $completeSoldTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $completeSoldTransactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
-
-        $data = [
-            'ongoing' => [
-                'bought' => $ongoingBoughtTransactionView,
-                'sold' => $ongoingSoldTransactionView,
-            ],
-            'complete' => [
-                'bought' => $completeBoughtTransactionView,
-                'sold' => $completeSoldTransactionView,
-            ]
-        ];
-
-        return $data;
-    }
-
-    /**
      * display dashboard view
      * @return view
      */
@@ -2088,7 +2019,6 @@ class Memberpage extends MY_Controller
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
                 'salesView' => $salesView,
-                'transactionInfo' => $this->getTransactionDetails(),
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
