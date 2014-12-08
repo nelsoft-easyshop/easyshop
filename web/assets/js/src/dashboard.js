@@ -1314,10 +1314,11 @@
                 page : $page,
                 request : $requestType
             },
-            beforeSend: function() {
-                $("#" + $container).empty();
+            beforeSend: function(){
+                $("#" + $container).html($('#hidden-paginate-loader').html());
             },
             success: function(requestResponse) {
+                $("#" + $container).empty();
                 var $response = $.parseJSON(requestResponse);
                 $("#" + $container).append($response.html);
             }
@@ -1352,7 +1353,7 @@
             data: postData,
             success: function(data){ 
                 var response = $.parseJSON(data);
-                if(response.isSuccessful == 'true'){
+                if(response.isSuccessful){
                     $('.edit-'+field).slideToggle( "fast" );
                     var currentSettingContainer = $('.current-'+field);
                     currentSettingContainer.slideToggle( "fast" );
@@ -1366,7 +1367,7 @@
                 }
                 else{
                     var failMessageContainer = $("#fail-message-"+field);
-                    failMessageContainer.html(response.errors);
+                    failMessageContainer.html(escapeHtml(response.errors));
                     failMessageContainer.show();
                     $("#fail-icon-"+field).show();
                 }
@@ -1627,6 +1628,7 @@
     });
 
     $('.cancel-add-bank').on('click', function(){
+        $('#payment-create-error').hide();
         var $bankDropdown = $('.bank-dropdown');
         var $accountName = $('.account-name-input');
         var $accountNumber = $('.account-number-input');
@@ -1635,7 +1637,7 @@
         $accountNumber.removeClass('input-error');
         $bankDropdown.val(0);
         $accountName.val('');
-        $accountName.val('');
+        $accountNumber.val('');
     });
     
     $('.payment-account-container').on('click', '.btn-set-default', function(){

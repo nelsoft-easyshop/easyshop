@@ -2410,7 +2410,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storename')){
@@ -2435,7 +2435,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store name is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
@@ -2457,7 +2457,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storeslug')){
@@ -2484,7 +2484,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store link is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
@@ -2578,14 +2578,15 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                         'newId' => 0,
-                         'isDefault' => false,
-                        ];               
+            'errors' => [],
+            'newId' => 0,
+            'isDefault' => false,
+        ];               
         if($this->input->post()){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]); 
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
             $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
@@ -2672,17 +2673,19 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
         
-        $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                        ];          
+        $jsonResponse = [
+            'isSuccessful' => false,
+            'errors' => [],
+        ];          
         if($this->input->post() && $memberId){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
-                                     ->setMethod('POST');            
+                                     ->setMethod('POST');                          
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]);                       
             $formBuild->add('account-id', 'text', array('constraints' => $rules['account-id']));                         
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
-            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number'] ));
             $formData['account-bank-id'] = (int)$this->input->post('bank-id');
             $formData['account-name'] = $this->input->post('account-name');
             $formData['account-number'] = $this->input->post('account-number');
@@ -2740,7 +2743,7 @@ class Memberpage extends MY_Controller
 
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                                                 ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 

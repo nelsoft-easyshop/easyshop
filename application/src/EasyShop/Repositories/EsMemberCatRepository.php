@@ -55,12 +55,12 @@ class EsMemberCatRepository extends EntityRepository
                            ->where('mc.member = :memberId');
         $queryBuilder->setParameter('memberId', $memberId); 
         if(!empty($categoryIdFilters)){
-            $queryBuilder->andWhere('mc.catName IN (:categoryIds)')
+            $queryBuilder->andWhere('mc.idMemcat IN (:categoryIds)')
                          ->setParameter('categoryIds', $categoryIdFilters);
         }
+
         $customCategories = $queryBuilder->getQuery()
-                                         ->getResult();
-                                         
+                                         ->getResult();                      
         return $customCategories;
     }
   
