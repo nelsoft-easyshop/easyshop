@@ -9,8 +9,8 @@ $config = [
                         'postback_url' => 'http://staging.easyshop.ph/payment/dragonPayPostBack',
                     ],
                     'Easydeal' => [
-                        'return_url' => 'http://staging.easyshop.ph/payment/dragonPayReturn',
-                        'postback_url' => 'http://staging.easyshop.ph/payment/dragonPayPostBack',                    ]
+                        'return_url' => 'http://staging.easydeal.ph/payment/dragonPayReturn',
+                        'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack',                    ]
                 ]
             ]
         ],
@@ -22,8 +22,8 @@ $config = [
                         'postback_url' => 'https://www.easyshop.ph/payment/dragonPayPostBack',
                     ],
                     'Easydeal' => [
-                        'return_url' => 'https://www.easyshop.ph/payment/dragonPayReturn',
-                        'postback_url' => 'https://www.easyshop.ph/payment/dragonPayPostBack',
+                        'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
+                        'postback_url' => 'https://www.easydeal.ph/payment/dragonPayPostBack',
                     ]
                 ]
             ]
