@@ -915,13 +915,13 @@ class Store extends MY_Controller
         $page = $this->input->get('page');
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
-        $isCount = intval($this->input->get('count')) === 1 ? TRUE : FALSE;
+        $isCount = intval($this->input->get('count')) === 1;
 
         $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
         $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
         $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
 
-        $parameter = json_decode($this->input->get('queryString'),TRUE);
+        $parameter = json_decode($this->input->get('queryString'),true);
 
         $em = $this->serviceContainer["entity_manager"];
         $searchProductService = $this->serviceContainer['search_product'];
