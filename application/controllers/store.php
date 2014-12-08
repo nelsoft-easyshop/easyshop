@@ -907,7 +907,7 @@ class Store extends MY_Controller
      */
     public function vendorLoadProducts()
     {
-        $prodLimit = 12;
+        $prodLimit = $this->vendorProdPerPage;
         $vendorId = $this->input->get('vendorId');
         $vendorName = $this->input->get('vendorName');
         $catId = json_decode($this->input->get('catId'), true);
