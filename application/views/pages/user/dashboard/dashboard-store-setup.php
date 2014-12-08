@@ -104,7 +104,7 @@
                    GENERATE MY STORE QR CODE
                 </button>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Generate your store QR code and spread the word about your store. Your QR code points to your store page and can be scanned by most smartphones for easier access.
                 </p>
             </div>
         </div>
@@ -240,7 +240,8 @@
                 </div>
                 -->
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Arrange the order of the categories in your store page based on your preference. The first category will always appear first
+                    when someone views your store.
                 </p>
             </div>
         </div>

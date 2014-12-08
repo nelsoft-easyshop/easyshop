@@ -20,7 +20,8 @@
         "bshaffer/oauth2-server-php": "v1.3",
         "facebook/php-sdk-v4" : "4.0.*",
         "google/apiclient": "1.0.*@beta",
-        "noiselabs/nusoap-bundle": "dev-master"
+        "noiselabs/nusoap-bundle": "dev-master",
+        "php-curl-class/php-curl-class": "~2.1"
     },
     "repositories": [
         {

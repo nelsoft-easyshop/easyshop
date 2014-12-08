@@ -548,7 +548,6 @@ function processAttributes()
     });
 
     // Load tinyMCE plugin
-    var maxDescriptionLength = 65000
     $(function() {
         tinyMCE.init({ 
             mode : "specific_textareas",
@@ -559,34 +558,6 @@ function processAttributes()
             plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
             toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
             relative_urls: false,
-            setup: function(editor) {
-                editor.on('focusout', function(e) {
-                    var content = tinyMCE.get('prod_description').getContent();
-                    if ( tinyMCE.get('prod_description').getContent().length >= maxDescriptionLength ){
-                        tinyMCE.get('prod_description').setContent(content.substring(0, maxDescriptionLength));
-                        $('#prod_description').val(content.substring(0, maxDescriptionLength));
-                    }
-                    else{
-                        $('#prod_description').val(content);
-                    }
-                });
-
-                editor.on('keyDown', function(editor, evt) {
-                    var key = editor.keyCode;
-                    var ctrlKey = editor.ctrlKey;
-                    if ( tinyMCE.get('prod_description').getContent().length >= maxDescriptionLength 
-                         && key != 8 
-                         && key != 46 
-                         && key != 37 
-                         && key != 38 
-                         && key != 39 
-                         && key != 40 
-                         && !(ctrlKey && (key == 65 || key == 88) )){
-                        editor.preventDefault();
-                        return false;
-                    }
-                });
-            }
         });
     });
 

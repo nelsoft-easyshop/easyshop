@@ -229,6 +229,11 @@ a{
     border: solid red 1px;
 }
 
+.progress-account{
+    margin-top: 0px !important;
+    border-radius: 0px;
+}
+
 .div-progress-container-text{
     margin-top: 4px;
     text-align: right;
@@ -249,11 +254,20 @@ a{
 }
 
 .progress{
-    background: #bebebe !important
+    background: #bebebe !important;
+    margin-top :10px;
+    margin-bottom: 4px;
 }
 
-.progress-bar{
+.progress-bar2{
     background: #3aab99 !important;
+    float: left;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    box-shadow: none;
 }
 
 .p-stat-title{
