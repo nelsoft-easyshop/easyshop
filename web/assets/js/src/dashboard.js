@@ -1339,7 +1339,7 @@
             data: postData,
             success: function(data){ 
                 var response = $.parseJSON(data);
-                if(response.isSuccessful == 'true'){
+                if(response.isSuccessful){
                     $('.edit-'+field).slideToggle( "fast" );
                     var currentSettingContainer = $('.current-'+field);
                     currentSettingContainer.slideToggle( "fast" );
@@ -1353,7 +1353,7 @@
                 }
                 else{
                     var failMessageContainer = $("#fail-message-"+field);
-                    failMessageContainer.html(response.errors);
+                    failMessageContainer.html(escapeHtml(response.errors));
                     failMessageContainer.show();
                     $("#fail-icon-"+field).show();
                 }

@@ -2480,7 +2480,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storename')){
@@ -2505,7 +2505,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store name is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
@@ -2527,7 +2527,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storeslug')){
@@ -2554,7 +2554,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store link is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
