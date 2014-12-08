@@ -333,8 +333,9 @@ class CategoryManager
                     'memberCategoryId' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0,
                 ];
             }
-            // For products whose parent is 'PARENT'
-            else if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) === 1 ) {
+            else if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && 
+                     intval($vendorCategory['parent_cat']) === EasyShop\Entities\EsCat::MAIN_PARENT_CATEGORY 
+            ){
                 $parentId = $vendorCategory['parent_cat'];
                 $categoryName = 'Others';
                 $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
