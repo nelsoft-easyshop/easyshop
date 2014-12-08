@@ -89,5 +89,154 @@ class EsCatRepository extends EntityRepository
         
         return $results;
     }
+    
+    /**
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the adjececny list implementation
+     *
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getUserCategoriesUsingAdjacencyList($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_cat','parent_cat');
+        $rsm->addScalarResult('cat_id','cat_id');
+        $rsm->addScalarResult('prd_count','prd_count');
+        $rsm->addScalarResult('p_cat_name','p_cat_name');
+        $rsm->addScalarResult('p_cat_slug','p_cat_slug');
+        $rsm->addScalarResult('p_cat_img','p_cat_img');
+
+        $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId);
+        $uploadsPerCategory = $query->getResult();
+        return $uploadsPerCategory;
+    }
+        
+        
+    /**
+     * Get parent categories(default) of products uploaded by a specific user
+     * using the nested set implementation
+     *
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getUserCategoriesUsingNestedSet($memberId)
+    {
+        $em = $this->_em;
+        $parentCategories = $em->createQueryBuilder()
+                                ->select('n') 
+                                ->from('EasyShop\Entities\EsCategoryNestedSet','n')
+                                ->innerJoin('n.originalCategory', 'c', 'WITH', 'c.idCat != 1 AND c.parent = 1')
+                                ->getQuery()
+                                ->getResult();
+        $mainCategoryList = [];
+        foreach($parentCategories as $category){
+            $categoryId = $category->getOriginalCategory()->getIdCat();
+            $mainCategoryList[$categoryId]['nestedTableLeft'] = $category->getLeft();
+            $mainCategoryList[$categoryId]['nestedTableRight'] = $category->getRight();
+        }                        
+        
+        $count = 1;
+        $wherePartialQuery = '';
+        $casePartialQuery = '';
+        $bindedParameters = [];
+
+        $numberOfMainCategories = count($mainCategoryList);
+       
+        $whereClauseCounter = 0;
+        $caseClauseCounter = 0;
+        foreach($mainCategoryList as  $index => $mainCategory){
+            $casePartialQuery .= "WHEN (es_category_nested_set.left > :param".($caseClauseCounter)." AND es_category_nested_set.right < :param".($caseClauseCounter+1).") 
+                                 THEN :param".($caseClauseCounter+2)." "; 
+            $bindedParameters[$caseClauseCounter] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$caseClauseCounter+1] = $mainCategory['nestedTableRight'];
+            $bindedParameters[$caseClauseCounter+2] = $index;
+            $caseClauseCounter += 3;
+            $adjustedIndex = 3*$numberOfMainCategories + $whereClauseCounter;
+            $wherePartialQuery .= " (es_category_nested_set.left > :param".($adjustedIndex+1)." AND es_category_nested_set.right < :param".($adjustedIndex+2).") OR";
+            $bindedParameters[$adjustedIndex+1] = $mainCategory['nestedTableLeft'];
+            $bindedParameters[$adjustedIndex+2] = $mainCategory['nestedTableRight'];
+            $whereClauseCounter += 2;
+        }
+        $wherePartialQuery = rtrim($wherePartialQuery, 'OR');
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_id','parent_id');
+        $rsm->addScalarResult('children','children');
+        $sql = "SELECT 
+                    GROUP_CONCAT(es_category_nested_set.original_category_id) as children, 
+                    CASE
+                        ".$casePartialQuery." 
+                    END as parent_id
+                FROM es_category_nested_set
+                WHERE ".$wherePartialQuery." GROUP BY parent_id";
+              
+        $query = $em->createNativeQuery($sql, $rsm);
+        foreach($bindedParameters as $index => $param){
+            $query->setParameter('param'.$index, $param);
+        }
+        $mainCategoryChildrenList = $query->getResult();
+        $reindexedMainCategoryChildrenList = [];
+     
+        foreach($mainCategoryChildrenList as $mainCategory){
+            $reindexedMainCategoryChildrenList[$mainCategory['parent_id']] = $mainCategory;
+        }
+        $mainCategoryChildrenList = $reindexedMainCategoryChildrenList;
+        
+        foreach($mainCategoryList as $categoryId => $mainCategory){
+            if(!isset($mainCategoryChildrenList[$categoryId])){
+                $mainCategoryChildrenList[$categoryId] = ['children' => '', 
+                                                          'parent_id' => $categoryId,
+                                                         ];
+            }
+        } 
+       
+        $casePartialQuery = "";
+        $bindParameters = [];
+        foreach($mainCategoryChildrenList as  $index => $childList){
+            $categoryString =  rtrim($childList['parent_id'].','.$childList['children'],',');
+            $childrenArray = explode(',',$categoryString);
+            $qmarks = implode(',', array_fill(0, count($childrenArray), '?'));
+            $casePartialQuery .= " WHEN es_product.cat_id IN (".$qmarks.") THEN ? "; 
+            $bindParameters = array_merge($bindParameters, $childrenArray);
+            $bindParameters[] = $childList['parent_id'];
+        }
+        
+        $sql = "SELECT count(es_product.id_product) as productCount,
+                CASE
+                    ".$casePartialQuery."
+                    ELSE 1
+                END as parent_id,
+                es_cat.id_cat, 
+                IF(es_cat.id_cat != 1,es_cat.name,'NULL') as name,
+                IF(es_cat.id_cat != 1, es_cat.slug, 'null') as slug,
+                es_cat_img.path as image        
+                FROM es_product 
+                LEFT JOIN es_cat ON es_cat.id_cat = es_product.cat_id
+                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
+                WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
+                GROUP BY es_product.cat_id
+               ";
+
+        $bindParameters[] = $memberId;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('productCount','prd_count');
+        $rsm->addScalarResult('parent_id','parent_cat');
+        $rsm->addScalarResult('id_cat','cat_id');
+        $rsm->addScalarResult('name','p_cat_name');
+        $rsm->addScalarResult('slug','p_cat_slug');
+        $rsm->addScalarResult('image','p_cat_img');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $count = 1;
+        foreach($bindParameters as $param){
+            $query->setParameter($count++, $param);
+        }
+        $uploadsPerCategory = $query->getResult();
+
+        return $uploadsPerCategory;
+    }
 }
 

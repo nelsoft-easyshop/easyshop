@@ -1594,7 +1594,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .pop-image-container .attr-image img {
     height: auto;
-    max-height: 300px;
+    max-height: 280px;
     max-width: 300px;
     width: auto;
 }

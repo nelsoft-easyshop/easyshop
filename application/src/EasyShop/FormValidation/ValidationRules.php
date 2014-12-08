@@ -163,7 +163,32 @@ class ValidationRules
                                 new Assert\Length(['min' => '3',
                                                    'max' => '25']),
                                 ],
-        
+                    'category_name' => [
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '3',
+                                                   'max' => '50']),
+                                ],
+            ],
+            'payment_account' => [
+                    'account-bank-id' => [
+                                new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a bank.",
+                                                    ]),
+                            ],
+                    'account-name' => [
+                                new Assert\NotBlank([ "message" => "The account name cannot be blank",]),
+                            ],
+                    'account-number' => [
+                                new Assert\NotBlank([ "message" => "The account number cannot be blank",]),
+                            ],
+                      
+                    'account-id' => [
+                                new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "This account is invalid.",
+                                                    ]),
+                    ],
             ],
         );
     }

@@ -1,5 +1,10 @@
 (function ($) {
 
+    var options = {
+        minChar: 8,
+        bootstrap3: true,
+    };
+    $('#password').pwstrength(options);
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
@@ -30,7 +35,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
             event.preventDefault();
             var password = $("#deactivatePassword").val();
             var username = $("#deactivateUsername").val();
@@ -70,6 +75,9 @@
     /********************* END DEACTIVATE ACCOUNT **************************/
 
     /********************* START CHANGE PASSWORD ***********************/
+     jQuery.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
+     }, "Must contain numbers and letters");    
 
      $("#changePassForm").validate({
          rules: {
@@ -81,7 +89,8 @@
             password: {
                 required: true,
                 minlength: 6,
-                maxlength:25
+                maxlength:25,
+                alphanumeric: true
                 },
             confirmPassword: {
                 required: true,
@@ -101,7 +110,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
             event.preventDefault();
             var newPassword = $("#password").val();
             var confirmPassword = $("#confirmPassword").val();
@@ -126,10 +135,6 @@
                     else {
                         alert(obj.error);
                     }
-                    $("#password").val("");
-                    $("#confirmPassword").val("");
-                    $("#currentPassword").val("");                    
-                    $( "#cancel-edit-password" ).trigger( "click" );                         
                 },
             });   
 

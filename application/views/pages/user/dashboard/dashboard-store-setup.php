@@ -182,16 +182,19 @@
                        <div class="form-group">
                             <label class="col-sm-3 control-label">Current Order : </label>
                             <div class="col-sm-9 col-with-radio">
-                                <div class="div-cat">Clothing &amp; Accessories</div>
-                                <div class="div-cat">Electronics &amp; Gadgets</div>
-                                <div class="div-cat">Toys, Hobbies &amp; Collection</div>
-                                <br/>
-                                <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat-new">
-                                   <i class="fa fa-plus"></i> Add Category
-                                </button>
-                                <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
-                                   <i class="icon-edit"></i> Edit
-                                </button>
+
+                                <div class="store-category-view">
+                                </div>
+                                
+                                <div>
+                                    <br/>   
+                                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
+                                    <i class="icon-edit"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -200,31 +203,30 @@
                    <div class="form-group">
                         <label class="col-sm-3 control-label">Reorder List : </label>
                         <div class="col-sm-5 col-with-radio">
-                            <ul class="category_sort list">
-                                <li><i class="fa fa-sort"></i> Clothing &amp; Accessories</li>
-                                <li><i class="fa fa-sort"></i> Electronics &amp; Gadgets</li>
-                                <li><i class="fa fa-sort"></i> Toys, Hobbies &amp; Collection</li>
+                            <ul class="category_sort list store-category-draggable">
                             </ul> 
                             <p class="note-category">Drag the category items to reorder</p>
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn" id="category-order-save">
                                Save Changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
                                Cancel
                             </button>
+                            <br/>
                         </div>
                     </div>
+                    <div class="alert alert-danger" id="store-category-error" role="alert" style="display:none">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        We cannot update you categories right now. Try again later.
+                    </div>
                 </div>
+                <!--
                 <div class="edit-store-cat-new">
                     <div class="row">
                         <div class="col-md-5 col-inline-textbtn">
                             <input type="text" class="text-info text-required" value="Professional Services"/>
-                             <!--DISPLAY WHEN ERROR -->
                             <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
                             <span class="val-error">Please enter at least 6 characters.</span>
-
-                            <!--DISPLAY WHEN OK
-                            <span class="val-success-url"><i class="fa fa-check"></i></span>-->
                         </div>
                         <div class="col-md-5">
                             <button class="btn btn-setting-save-btn">
@@ -236,6 +238,7 @@
                         </div>
                     </div>
                 </div>
+                -->
                 <p class="p-note-setting">
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
                 </p>
