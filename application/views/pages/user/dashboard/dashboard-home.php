@@ -27,7 +27,7 @@
                             <div class="div-progress-bar-container" align="right">
                                 <div class="progress progress-account">
                                     <span class="span-account-progress-text-small">Account Progress: <?=$profilePercentage; ?>%</span>
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                    <div class="progress-bar2" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
                                         <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
                                     </div>
                                 </div>
