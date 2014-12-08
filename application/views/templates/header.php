@@ -140,13 +140,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a class="prevent" href="/me?me=pending">On-going Transactions</a>
+                                    <a class="prevent" href="/me#pending">On-going Transactions</a>
                                 </li>
                                 <li>
                                     <a class="prevent" href="/?view=basic">Easyshop.ph</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/me?me=settings">Settings</a>
+                                    <a class="prevent" href="/me#settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/login/logout">Logout</a>
