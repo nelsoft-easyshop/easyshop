@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 
 class Payment extends MY_Controller{
 
@@ -1028,8 +1029,7 @@ class Payment extends MY_Controller{
     {
         header("Content-Type:text/plain");
 
-        $paymentType = $this->PayMentDragonPay; 
-
+        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $txnId = $this->input->post('txnid');
         $refNo = $this->input->post('refno');
         $status =  $this->input->post('status');
@@ -1041,7 +1041,7 @@ class Payment extends MY_Controller{
         $orderId = $payDetails['id_order'];
         $member_id = $payDetails['buyer_id'];
         $itemList = json_decode($payDetails['data_response'],true); 
-        $postBackCount = $payDetails['postbackcount']; 
+        $postBackCount = (int) $payDetails['postbackcount']; 
 
         $address = $this->memberpage_model->get_member_by_id($member_id);  
 
@@ -1049,45 +1049,40 @@ class Payment extends MY_Controller{
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
 
-        if(strtolower($status) == "p" || strtolower($status) == "s"){
-
-            if($postBackCount == "0"){
-
-                foreach ($itemList as $key => $value) {               
+        if(strtolower($status) === "p" || strtolower($status) === "s"){
+            if($postBackCount === 0){
+                foreach ($itemList as $value) {
                     $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
-                    $this->product_model->update_soldout_status($value['id']);            
+                    $this->product_model->update_soldout_status($value['id']);
                 }
-
-                $locked = $this->lockItem($toBeLocked,$orderId,'delete'); 
+                $locked = $this->lockItem($toBeLocked, $orderId, 'delete'); 
             }
 
-            $orderStatus = (strtolower($status) == "s" ? 0 : 99); 
+            $orderStatus = (strtolower($status) === "s") ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus,0);
 
-            if($postBackCount == "0"){
+            if($postBackCount === 0){
                 // send email to buyer
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice),TRUE,FALSE);  
+                $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], true,  false);
             }
 
-            if(strtolower($status) == "s"){ 
+            if(strtolower($status) === "s"){ 
                 // send email to seller
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice),FALSE,TRUE);  
+                $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], false, true);
             }
-
-        }elseif(strtolower($status) == "f" ){
-
-            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-            $orderId = $this->payment_model->cancelTransaction($txnId,true);
-            $orderHistory = array(
-                'order_id' => $orderId,
-                'order_status' => 2,
-                'comment' => 'Dragonpay transaction failed: ' . $message
-                );
+        }
+        elseif(strtolower($status) === "f" ){
+            $locked = $this->lockItem($toBeLocked, $orderId, 'delete');
+            $orderId = $this->payment_model->cancelTransaction($txnId, true);
+            $orderHistory = [
+                    'order_id' => $orderId,
+                    'order_status' => EsOrderStatus::STATUS_VOID,
+                    'comment' => 'Dragonpay transaction failed: ' . $message
+                ];
             $this->payment_model->addOrderHistory($orderHistory);
         }
 
-        echo 'result=OK'; 
-
+        echo 'result=OK';
     }
 
 
