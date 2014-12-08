@@ -286,18 +286,17 @@ class CategoryManager
      */
     public function getAllUserProductParentCategory($memberId)
     {
-        $defaultCatImg = "assets/images/default_icon_small.png";
-        $vendorCategories = array();
-
+        $defaultCategoryImage = "assets/images/default_icon_small.png";
+        $vendorCategories = [];
         $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
-                                            ->getNestedSetCategoryCount();
+                                           ->getNestedSetCategoryCount();
         if($categoryNestedSetCount === 0){
-                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                            ->getUserCategoriesUsingAdjacencyList($memberId);
+            $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                        ->getUserCategoriesUsingAdjacencyList($memberId);
         }
         else{
-                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                            ->getUserCategoriesUsingNestedSet($memberId);
+            $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                        ->getUserCategoriesUsingNestedSet($memberId);
         }    
         
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
@@ -308,50 +307,41 @@ class CategoryManager
         }
 
         foreach( $rawVendorCategories as $vendorCategory ){
-            if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) !== 1 ){
-                $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
-                if( $vendorCategory['p_cat_img'] !== "" && file_exists($catImg)){
-                    $categoryImage = $catImg;
+            $parentId = (int)$vendorCategory['parent_cat'];
+            $categoryName = $vendorCategory['p_cat_name'];
+            $hasNoParent = !isset($vendorCategories[$parentId]);
+            $isCategoryMainParent = $parentId === EsCat::MAIN_PARENT_CATEGORY;
+            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
+            
+            if($hasNoParent){
+                $vendorCategories[$parentId] = [];
+                if( !$isCategoryMainParent ){
+                    $categoryImage = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                    if($vendorCategory['p_cat_img'] !== "" && file_exists($categoryImage)){
+                        $categoryImage = $defaultCategoryImage;
+                    }
+                    $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
+                    $vendorCategories[$parentId]['cat_link'] = '/category/' . $vendorCategory['p_cat_slug'];
+                    $vendorCategories[$parentId]['cat_img'] = $categoryImage;
+                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : 0;
+                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
-                else{
-                    $categoryImage = $defaultCatImg;
+                else if( $hasNoParent && $isCategoryMainParent){
+                    $categoryName = 'Others';
+                    $vendorCategories[$parentId]['slug'] = "";
+                    $vendorCategories[$parentId]['cat_link'] = "";
+                    $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;
+                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : PHP_INT_MAX;
+                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
-                $parentId = $vendorCategory['parent_cat'];
-                $categoryName = $vendorCategory['p_cat_name'];
-                $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
-                $vendorCategories[$parentId] = [
-                    'name' => $categoryName,
-                    'slug' => $vendorCategory['p_cat_slug'],
-                    'child_cat' => [ $parentId ],
-                    'products' => [],
-                    'product_count' => 0,
-                    'cat_link' => '/category/' . $vendorCategory['p_cat_slug'],
-                    'cat_img' => $categoryImage,
-                    'isActive' => false,
-                    'categoryId' => $parentId,
-                    'sortOrder' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] :  0,
-                    'memberCategoryId' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0,
-                ];
-            }
-            else if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && 
-                     intval($vendorCategory['parent_cat']) === EasyShop\Entities\EsCat::MAIN_PARENT_CATEGORY 
-            ){
-                $parentId = $vendorCategory['parent_cat'];
-                $categoryName = 'Others';
-                $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
-                $vendorCategories[$parentId] = [
-                    'name' => $categoryName,
-                    'slug' => '',
-                    'child_cat' => [ $parentId ],
-                    'products' => [],
-                    'product_count' => 0,
-                    'cat_link' => '',
-                    'cat_img' => $defaultCatImg,
-                    'isActive' => false,
-                    'categoryId' => $parentId,
-                    'sortOrder' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] :  PHP_INT_MAX,
-                    'memberCategoryId' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0,
-                ];
+                $vendorCategories[$parentId]['name'] = $categoryName;
+                $vendorCategories[$parentId]['child_cat'] = [ $parentId ];
+                $vendorCategories[$parentId]['products'] = [];
+                $vendorCategories[$parentId]['product_count'] = 0;
+                $vendorCategories[$parentId]['isActive'] = false;
+                $vendorCategories[$parentId]['categoryId'] = $parentId;
+                $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0;
+                $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
             $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
@@ -382,7 +372,7 @@ class CategoryManager
                 'name' => $customCat['cat_name'],
                 'is_featured' => $customCat['is_featured'],
                 'child_cat' => [ $customCat['id_memcat'] ],
-                'products' => []
+                'products' => [],
                 'isActive' => false,
             );
         }
