@@ -319,7 +319,7 @@ class CategoryManager
                 $parentId = $vendorCategory['parent_cat'];
                 $categoryName = $vendorCategory['p_cat_name'];
                 $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
-                $vendorCategories[$parentId] = array(
+                $vendorCategories[$parentId] = [
                     'name' => $categoryName,
                     'slug' => $vendorCategory['p_cat_slug'],
                     'child_cat' => [ $parentId ],
@@ -331,14 +331,14 @@ class CategoryManager
                     'categoryId' => $parentId,
                     'sortOrder' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] :  0,
                     'memberCategoryId' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0,
-                );
+                ];
             }
             // For products whose parent is 'PARENT'
             else if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) === 1 ) {
                 $parentId = $vendorCategory['parent_cat'];
                 $categoryName = 'Others';
                 $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
-                $vendorCategories[$parentId] = array(
+                $vendorCategories[$parentId] = [
                     'name' => $categoryName,
                     'slug' => '',
                     'child_cat' => [ $parentId ],
@@ -350,7 +350,7 @@ class CategoryManager
                     'categoryId' => $parentId,
                     'sortOrder' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] :  PHP_INT_MAX,
                     'memberCategoryId' => $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0,
-                );
+                ];
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
             $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
