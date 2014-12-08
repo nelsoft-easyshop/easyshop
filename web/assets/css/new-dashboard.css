@@ -229,6 +229,11 @@ a{
     border: solid red 1px;
 }
 
+.progress-account{
+    margin-top: 0px !important;
+    border-radius: 0px;
+}
+
 .div-progress-container-text{
     margin-top: 4px;
     text-align: right;
