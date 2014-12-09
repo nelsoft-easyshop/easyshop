@@ -440,7 +440,8 @@ class EsProductRepository extends EntityRepository
                                 ->leftJoin('EasyShop\Entities\EsBrand','b',
                                                     'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
-                                ->andWhere('p.isDelete = 0');
+                                ->andWhere('p.isDelete = 0')
+                                ->andWhere('m.isActive = 1');
  
         if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
             $qbResult = $qbResult->andWhere(
