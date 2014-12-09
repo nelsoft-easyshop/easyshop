@@ -38,6 +38,8 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-delivery" ).addClass( "selectedM" );
+        $('#delivery-address-error').hide();
+        $('#delivery-address-success').hide();
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -537,6 +539,13 @@
     });
 
     $( "#btn-edit-password" ).click(function() {
+        $('#password-change-error').hide();
+        $('#password-change-success').hide();
+        $('#currentPassword').val('');
+        $password = $('#password');
+        $password.val('');
+        $password.trigger('keyup');
+        $('#confirmPassword').val('');
         $( ".current-password" ).slideToggle( "fast" );
         $( ".edit-password" ).slideToggle( "fast" );
     });

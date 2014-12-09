@@ -122,6 +122,16 @@
                         <input type="submit" class="btn btn-lg btn-save-dashboard" name="c_deliver_address_btn" id="saveDeliverAddressBtn" value="Save Changes"/>
                     </div>
                 </div>
+                
+                <div class="alert alert-danger" style="display:none" role="alert" id="delivery-address-error">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Please fix the errors in the delivery address you have provided.
+                </div>
+                
+                <div class="alert alert-success" style="display:none" role="alert" id="delivery-address-success">
+                    Delivery address updated successfully.
+                </div>
+                
             <?php echo form_close();?>
         </div>
     </div>
