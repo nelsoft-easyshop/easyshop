@@ -5,9 +5,11 @@
     var verifyspan = $('.activateActions');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
-
      $("#activateAccountForm").validate({
          rules: {
+            username: {
+                required: true,
+                },            
             password: {
                 required: true,
                 },
@@ -27,24 +29,38 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
 
             verifyspan.hide();
-            loadingimg.show();                          
+            loadingimg.show();                                         
             event.preventDefault();
             var postData = $("#activateAccountForm").serializeArray();
             $.ajax({
                 type: 'get',
                 data: postData,
                 url: "/memberpage/doReactivateAccount",                
-                success: function(data) {                      
-                    var obj = jQuery.parseJSON(data); 
-                    if(obj.result === "success") {
-                        login(obj.username,$("#password").val());
+                success: function(data) {        
+                    try{              
+                        var obj = jQuery.parseJSON(data); 
+                        if(obj.result === "success") {
+                            login($("#username").val(),$("#password").val());
+                        }
+                        else {
+                            $('#invalidCredentials').modal({       
+                                onShow: function(){
+                                    $(".invalidCredentialsMessage").html("Sorry, but you have entered invalid credentials");
+                                }
+                             });
+                        }
                     }
-                    else {
-                        alert("Invalid Password");
-                    }
+                    catch(e){                         
+                        $('#invalidCredentials').modal({       
+                            onShow: function(){
+                                $(".invalidCredentialsMessage").html("An error was encountered while processing your data. Please try again later.");
+                            }
+                         });                        
+                    }                    
+
                 },
             });            
         }
