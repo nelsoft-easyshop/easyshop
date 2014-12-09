@@ -320,7 +320,6 @@ class AssetsUploader
                     $config['y_axis'] = $cropData['y'];
                     $this->imageLibrary->initialize($config);  
                     $this->imageLibrary->image_process_gd('crop');
-                    $this->imageLibrary->clear();
                     $config['x_axis'] = $config['y_axis'] = '';
                 }
 
@@ -329,9 +328,7 @@ class AssetsUploader
                 $config['height'] = self::USER_BANNER_HEIGHT;
                 $this->imageLibrary->initialize($config);
                 $this->imageLibrary->resize(); 
-                $this->imageLibrary->clear();
-                
-                
+
                 if(strtolower($this->environment) !== 'development'){
                     try{
                         $this->awsUploader->uploadFile($imagePath.'/banner.png', $imagePath.'/banner.png');
