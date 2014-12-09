@@ -1797,7 +1797,7 @@ class Memberpage extends MY_Controller
                                               true,
                                               $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
-                                             $transactionNumber,
+                                              $transactionNumber,
                                               $paymentMethod
                                           ),
                     'count' => $ongoingSoldTransactionsCount,
