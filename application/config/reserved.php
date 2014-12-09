@@ -4,6 +4,7 @@ $config = [
     'easyshop',
     'easydeal',
     'easyshopping',
+    'admin',
 ];
         
 /* End of file reserved.php */
