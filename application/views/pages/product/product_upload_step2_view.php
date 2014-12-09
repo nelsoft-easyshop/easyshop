@@ -236,7 +236,7 @@
                                     Product Details: <font color="red">*</font>
                                 </div>
                                 <div class="col-xs-12 col-sm-10 col-md-10">
-                                    <textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea>
+                                    <textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($cleanDescription))?$cleanDescription:'';?></textarea>
                                 </div>
                                 <!-- end of Description -->
                                 <div class="clear"></div>
