@@ -332,7 +332,7 @@ class AssetsUploader
                 $this->imageLibrary->clear();
                 
                 
-                if(strtolower($this->environment) !== 'development' || true){
+                if(strtolower($this->environment) !== 'development'){
                     try{
                         $this->awsUploader->uploadFile($imagePath.'/banner.png', $imagePath.'/banner.png');
                     } catch(\Exception $e){
