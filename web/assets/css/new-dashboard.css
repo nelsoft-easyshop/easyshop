@@ -1045,6 +1045,7 @@ a{
 .panel-feedback-item{
     border: solid #f4f4f4 1px;
     background: #f4f4f4;
+    padding: 15px 20px;
 }
 
 .total-sale-amount,
