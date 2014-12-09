@@ -43,7 +43,7 @@ class Register extends MY_Controller
      */
     public function signup()
     {
-        $serverResponse = array(
+        $signUpResponse = array(
             'result' => 0,
             'error' => array()
         );
@@ -69,77 +69,37 @@ class Register extends MY_Controller
             $this->emailNotification->setRecipient($serverResponse["member"]->getEmail());
             $this->emailNotification->setSubject($this->lang->line('registration_subject'));
             $this->emailNotification->setMessage($message);
-            $this->emailNotification->sendMail();
+            $emailResult = (bool) $this->emailNotification->sendMail();
 
             $data = [
                 "memberId" => $serverResponse["member"]->getIdMember(),
                 "emailCode" => $emailCode,
                 "mobileCode" => $this->rand_alphanumeric(6),
-                "email" => 1,
+                "email" => ($emailResult) ? 1 : 0,
             ];
-            $this->accountManager->storeMemberVerifCode($data);
+            $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
+            $isRegistrationSuccess = true;
+            if(is_null($serverResponse["member"]) || !$serverResponse["member"]) {
+                $signUpResponse["error"] = "Database registration failure <br>";
+                $isRegistrationSuccess = false;
+            }
+            if(!$emailResult) {
+                $signUpResponse["error"] = "Failed to send verification email. Please verify in user page upon logging in.";
+            }
+            if(!$isVerifCodeSuccess) {
+                $signUpResponse["error"] = "Database verifcode error <br>";
+            }            
+            if($isRegistrationSuccess && $isVerifCodeSuccess) {
+                $signUpResponse["result"] = 1;
+            }
+            else {
+                $signUpResponse["result"] = 0;
+
+            }
+
         }
-        // if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
-        //     $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
-        //     $data['username'] = $this->input->post('username');
-        //     $data['password'] = $this->input->post('password');
-        //     $data['email'] = $this->input->post('email');
-        //     $data['mobile'] = substr($this->input->post('mobile'),1);
 
-        //     $registrationFlag = false;
-
-            //GENERATE MOBILE CONFIRMATION CODE
-            // $temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
-            //GENERATE HASH FOR EMAIL VERIFICATION
-            // $temp['emailcode'] = sha1($this->session->userdata('session_id').time());
-            // $temp['member_id'] = $data['member_id'];
-
-        //     // Send notification email to user, max try = 3
-        //     $data['emailcode'] = $temp['emailcode'];
-        //     $emailCount = 0;
-        //     do{
-        //         $emailResult = $this->register_model->sendNotification($data, 'signup');
-        //         $emailCount++;
-        //     }while(!$emailResult && $emailCount < 3);
-
-        //     $temp['email'] = $emailResult ? 1 : 0;
-
-        //     //Store verification details and increase limit count when necessary
-        //     $result = $this->register_model->store_verifcode($temp);
-
-        //     // If verification code failed to enter database
-        //     if(!$result){
-        //         array_push($serverResponse['error'], 'Database verifcode error <br>');
-        //     }
-        //     // If registration failed
-        //     if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
-        //         array_push($serverResponse['error'], 'Database registration failure <br>');
-        //         $registrationFlag = false;
-        //     }else{
-        //         $registrationFlag = true;
-        //     }
-        //     if(!$emailResult){
-        //         array_push($serverResponse['error'], 'Failed to send verification email. Please verify in user page upon logging in.');
-        //     }
-
-        //     if( $registrationFlag && $result ){
-        //         $serverResponse['result'] = 1;
-        //     }
-        //     else{
-        //         $serverResponse['result'] = 0;
-        //     }
-
-        // }
-        // else{
-        //     if( !($this->input->post('register_form1')) ){
-        //         array_push($serverResponse['error'], 'Failed to submit form.');
-        //     }
-        //     if( !($this->form_validation->run('landing_form')) ){
-        //         array_push($serverResponse['error'], 'Failed to validate form.');
-        //     }
-        // }
-
-        echo json_encode($serverResponse);
+        echo json_encode($signUpResponse);
     }
 
 
