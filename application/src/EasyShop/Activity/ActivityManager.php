@@ -37,7 +37,7 @@ class ActivityManager
         $entityLanguange = $this->languageLoader->getLine($entityLine);
         foreach ($modifiedArray as $key => $value) {
             $fieldLanguage = $entityLanguange[$key];
-            $buildStringArray[] = $fieldLanguage." : ".$value;
+            $buildStringArray[] = ucfirst(strtolower($fieldLanguage))." : ".$value;
         }
         $returnString = str_replace(":phrase", implode(', ', $buildStringArray), $unParsePhrase);
 
