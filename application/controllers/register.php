@@ -57,11 +57,23 @@ class Register extends MY_Controller
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
                                                             );        
+            $emailCode = sha1($serverResponse["member"]->getEmail().time());
+            $this->load->library('parser');
+            $parseData = array(
+                'user' => $serverResponse["member"]->getUserName(),
+                'hash' => $this->encrypt->encode($serverResponse["member"]->getEmail().'|'.$serverResponse["member"]->getUserName().'|'.$emailCode),
+                'site_url' => site_url('register/email_verification')
+            );
+            $this->emailNotification = $this->serviceContainer['email_notification'];
+            $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
+            $this->emailNotification->setRecipient($serverResponse["member"]->getEmail());
+            $this->emailNotification->setSubject($this->lang->line('registration_subject'));
+            $this->emailNotification->setMessage($message);
+            $this->emailNotification->sendMail();
 
-                                                              
             $data = [
                 "memberId" => $serverResponse["member"]->getIdMember(),
-                "emailCode" => sha1($serverResponse["member"]->getEmail().time()),
+                "emailCode" => $emailCode,
                 "mobileCode" => $this->rand_alphanumeric(6),
                 "email" => 1,
             ];
