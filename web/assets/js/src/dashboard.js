@@ -166,6 +166,11 @@
         $(this).next('.on-going-transaction-list-bought').slideToggle();
         $('.on-going-transaction-list-sold').slideUp();
         $('.transaction-title-sold').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 300);
+        
     });
 
     $('.transaction-title-sold').click(function() {
@@ -173,13 +178,21 @@
         $(this).next('.on-going-transaction-list-sold').slideToggle();
         $('.on-going-transaction-list-bought').slideUp();
         $('.transaction-title-bought').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 300);
     });
 
-        $('.transaction-title-bought-completed').click(function() {
+    $('.transaction-title-bought-completed').click(function() {
         $(this).toggleClass("active-bar",0);
         $(this).next('.on-going-transaction-list-bought-completed').slideToggle();
         $('.on-going-transaction-list-sold-completed').slideUp();
         $('.transaction-title-sold-completed').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 500);
     });
 
     $('.transaction-title-sold-completed').click(function() {
@@ -187,6 +200,10 @@
         $(this).next('.on-going-transaction-list-sold-completed').slideToggle();
         $('.on-going-transaction-list-bought-completed').slideUp();
         $('.transaction-title-bought-completed').removeClass("active-bar");
+        
+         $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 500);
     });
 
     $('.sales-title-total').click(function() {
