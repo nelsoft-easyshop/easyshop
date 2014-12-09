@@ -1134,38 +1134,7 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-    /**
-     *  Used to modify store name in vendor page
-     *
-     *  @return JSON
-     */
-    public function vendorStoreName()
-    {
-        $serverResponse = array(
-            'result' => false,
-            'error' => 'Failed to submit form'
-        );
 
-        if($this->input->post('store_name_hidden')){
-            $storeName = $this->input->post('store_name');
-            $memberId = $this->session->userdata('member_id');
-            $userMgr = $this->serviceContainer['user_manager'];
-
-            $isStorenameAvailable = $userMgr->setUser->setStoreName($memberId, $storeName);
-
-            $serverResponse['result'] = $isStorenameAvailable;
-            $serverResponse['error'] = $isStorenameAvailable ? '' : 'Store name already used!';
-
-            if($isStorenameAvailable){
-                $em = $this->serviceContainer['entity_manager'];
-                $currUser = $em->find('EasyShop\Entities\EsMember',$memberId);
-                $serverResponse['username'] = $currUser->getUsername();
-                $serverResponse['storename'] = $currUser->getStoreName();
-            }
-        }
-
-        echo json_encode($serverResponse);
-    }
 
     /**
      *  Used for uploading banner in vendor page. 
@@ -1652,79 +1621,7 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonData);
     }
     
-    /**
-     *  Handles details in vendorpage
-     *
-     *  @return JSON
-     */
-    public function updateVendorDetails()
-    {
-        $memberId = $this->session->userdata('member_id');
-        $um = $this->serviceContainer['user_manager'];
 
-        $formValidation = $this->serviceContainer['form_validation'];
-        $formFactory = $this->serviceContainer['form_factory'];
-        $formErrorHelper = $this->serviceContainer['form_error_helper'];
-
-        $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
-                            ->setMethod('POST')
-                            ->add('store_name', 'text')
-                            ->add('mobile', 'text', array('constraints' => $rules['mobile']))
-                            ->add('city', 'text')
-                            ->add('stateregion', 'text')
-                            ->getForm();
-
-        $form->submit([
-            'store_name' => $this->input->post('store_name'),
-            'mobile' => $this->input->post('mobile'),
-            'city' => $this->input->post('city'),
-            'stateregion' => $this->input->post('stateregion')
-        ]);
-
-        if( $form->isValid() ){
-            $formData = $form->getData();
-            $validStoreName = (string)$formData['store_name'];
-            $validMobile = (string)$formData['mobile'];
-            $validCity = $formData['city'];
-            $validStateRegion = $formData['stateregion'];
-
-            $um->setUser($memberId)
-               ->setStoreName($validStoreName)
-               ->setMobile($validMobile)
-               ->setMemberMisc([
-                    'setLastmodifieddate' => new DateTime('now')
-                ]);
-
-            if( $validCity === "0" && $validStateRegion === "0" ){
-                $um->deleteAddressTable(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
-            }
-            else{
-                $um->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT);
-            }
-
-            $boolResult = $um->save();
-
-            $serverResponse = [
-                'result' => $boolResult,
-                'error' => $boolResult ? '' : $um->errorInfo(),
-                'new_data' => $boolResult ? [
-                                    "store_name" => $validStoreName
-                                    , "mobile" => $validMobile
-                                    , "state_region_id" => $validStateRegion
-                                    , "city_id" => $validCity
-                                ] : []
-            ];
-        }
-        else{
-            $serverResponse = [
-                'result' => false,
-                'error' => $formErrorHelper->getFormErrors($form)
-            ];
-        }
-
-        echo json_encode($serverResponse);
-    }
 
  
     public function removeUserImage()
@@ -1797,7 +1694,7 @@ class Memberpage extends MY_Controller
                                               true,
                                               $this->transactionRowCount * $page,
                                               $this->transactionRowCount,
-                                             $transactionNumber,
+                                              $transactionNumber,
                                               $paymentMethod
                                           ),
                     'count' => $ongoingSoldTransactionsCount,
@@ -2160,20 +2057,26 @@ class Memberpage extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-            ->findOneBy([
-                'idMember' => $getData[0],
-                'isActive' => 0
-            ]);
-
-        if($this->input->get("activateAccountButton") && $member) {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
-            $result = [
-                "username" => $member->getUsername(),
-                "result" => "success"
-            ];
-            echo json_encode($result);
+        $authenticationResult = $this->accountManager
+                                     ->authenticateMember($this->input->get('username'), 
+                                                          $this->input->get('password'), 
+                                                          false, 
+                                                          true);  
+        $isActivationRequestValid = $authenticationResult['member']
+                                    && $authenticationResult['member']->getIdMember() === (int)$getData[0] 
+                                    && (bool)$authenticationResult['member']->getIsActive() === false ;
+        $response = false;
+        if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
+            $this->em
+                 ->getRepository('EasyShop\Entities\EsMember')
+                 ->accountActivation($authenticationResult["member"], true);          
+            $response = true;
         }
+
+        $result = [
+            "result" => ($response) ? "success" : "error",
+        ];
+        echo json_encode($result);        
     }
 
     /**
