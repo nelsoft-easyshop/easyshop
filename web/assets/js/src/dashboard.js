@@ -1830,10 +1830,10 @@
 
     $( document ).ready(function() {
         var $tab = $('#page-tab').val();
-        handleUrlHashes($tab);
+        handleUrlTabs($tab);
     });
 
-    function handleUrlHashes(tab)
+    function handleUrlTabs(tab)
     {
         if (tab === "ongoing") {
             $('#my-store-menu-trigger').trigger('click');
