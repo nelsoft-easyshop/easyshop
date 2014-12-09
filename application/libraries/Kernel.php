@@ -68,6 +68,9 @@ class Kernel
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsAddressListener($container['activity_manager'])
+            );
+            $em->getEventManager()->addEventSubscriber(
                 new \EasyShop\Doctrine\Listeners\EsMemberListener($container['activity_manager'])
             );
 
