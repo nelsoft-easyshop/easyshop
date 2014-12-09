@@ -42,15 +42,15 @@ class EsAddressListener implements EventSubscriber
             return;
         }
 
-        if ((int)$entity->getStateregion()->getIdLocation() != 0) {
+        if ((int)$entity->getStateregion()->getIdLocation() !== 0) {
             $this->changeSet['stateregion'] = $entity->getStateregion()->getLocation();
         }
 
-        if ((int)$entity->getCity()->getIdLocation() != 0) {
+        if ((int)$entity->getCity()->getIdLocation() !== 0) {
             $this->changeSet['city'] = $entity->getCity()->getLocation();
         }
 
-        if ((int)$entity->getCountry()->getIdLocation() != 0) {
+        if ((int)$entity->getCountry()->getIdLocation() !== 0) {
             $this->changeSet['country'] = $entity->getCountry()->getLocation();
         }
 
