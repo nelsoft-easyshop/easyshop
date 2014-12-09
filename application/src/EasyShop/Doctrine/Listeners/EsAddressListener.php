@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsMemberListener implements EventSubscriber
+class EsAddressListener implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -57,6 +57,42 @@ class EsMemberListener implements EventSubscriber
         $entity = $event->getEntity();
         if ( !$entity instanceOf EsAddress) {
             return;
+        }
+
+        if ($event->hasChangedField('stateregion')) {
+            $this->changeSet['stateregion'] = $entity->getStateregion()->getLocation();
+        }
+
+        if ($event->hasChangedField('city')) {
+            $this->changeSet['city'] = $entity->getCity()->getLocation();
+        }
+
+        if ($event->hasChangedField('country')) {
+            $this->changeSet['country'] = $entity->getCountry()->getLocation();
+        }
+
+        if ($event->hasChangedField('address')) {
+            $this->changeSet['address'] = $entity->getAddress();
+        }
+
+        if ($event->hasChangedField('telephone')) {
+            $this->changeSet['telephone'] = $entity->getTelephone();
+        }
+
+        if ($event->hasChangedField('mobile')) {
+            $this->changeSet['mobile'] = $entity->getMobile();
+        }
+
+        if ($event->hasChangedField('consignee')) {
+            $this->changeSet['consignee'] = $entity->getConsignee();
+        }
+
+        if ($event->hasChangedField('lat') && (int)$entity->getLat() != 0) {
+            $this->changeSet['lat'] = $entity->getLat();
+        }
+
+        if ($event->hasChangedField('lng') && (int)$entity->getLat() != 0) {
+            $this->changeSet['lng'] = $entity->getLng();
         }
     }
 
