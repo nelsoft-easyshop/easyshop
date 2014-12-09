@@ -1,5 +1,5 @@
 <div class="col-xs-3 no-padding col-left-wing">
-    <div class="left-wing-contact">
+    <div class="left-wing-contact" id="user-detail-partial">
         <div class="panel-contact-details">
             <p class="panel-title-contact">
                 Details
@@ -57,13 +57,6 @@
                         <input type="hidden" id="postContactNo" value="<?php echo html_escape($contactNo)?>"/>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/fax.png" width="32px" height="32px" /></i></td>
-                    <td class="td-contact-detail">
-                        <p class="text-contact">+61 3 8376 6284</p>
-                        <input type="text" class="input-detail" placeholder="Fax Number..." value=" +61 3 8376 6284">
-                    </td>
-                </tr> -->
                 <tr id="addressRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
                     <td class="td-contact-detail">
@@ -89,13 +82,6 @@
                         </select>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/mail.png" width="32px" height="32px" /></i></td>
-                    <td class="td-contact-detail">
-                        <p class="text-contact"><?php echo html_escape($member->getSupportEmail()); ?></p>
-                        <input type="email" class="input-detail" placeholder="Email Address..." name="supportEmail" value="<?php echo html_escape($member->getSupportEmail()); ?>">
-                    </td>
-                </tr> -->
                 <tr id="websiteRow">
                     <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
@@ -114,58 +100,6 @@
                 <?php echo form_close(); ?>
             </table>
             <br/>
-            <!--
-            <center>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/fb64.png" width="32" height="32" rel="tooltip" data-toggle="tooltip" title="Facebook" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/twitter64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Twitter" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/googleplus64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Google+" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/linkedin64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="LinkedIn" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/skype64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="Skype" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-                <span class="span-social-media">
-                    <a href="#">
-                        <img src="/assets/images/youtube64.png" width="32" height="32"  rel="tooltip" data-toggle="tooltip" title="YouTube" data-placement="bottom">
-                    </a>
-                    <script>
-                        $('[rel=tooltip]').tooltip() 
-                   </script>
-                </span>
-            </center>
-            -->
         </div>
     </div>
 </div>
