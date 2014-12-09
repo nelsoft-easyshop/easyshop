@@ -1018,7 +1018,88 @@ class Store extends MY_Controller
 
         echo json_encode($serverResponse);
     }
-  
+
+    /**
+     *  Handles details in vendorpage
+     *
+     *  @return JSON
+     */
+    public function updateStoreBannerDetails()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $um = $this->serviceContainer['user_manager'];
+
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $formErrorHelper = $this->serviceContainer['form_error_helper'];
+
+        $rules = $formValidation->getRules('personal_info');
+        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                            ->setMethod('POST')
+                            ->add('store_name', 'text')
+                            ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                            ->add('city', 'text')
+                            ->add('stateregion', 'text')
+                            ->getForm();
+
+        $form->submit([
+            'store_name' => $this->input->post('store_name'),
+            'mobile' => $this->input->post('mobile'),
+            'city' => $this->input->post('city'),
+            'stateregion' => $this->input->post('stateregion')
+        ]);
+
+        if( $form->isValid() ){
+            $formData = $form->getData();
+            $validStoreName = (string)$formData['store_name'];
+            $validMobile = (string)$formData['mobile'];
+            $validCity = $formData['city'];
+            $validStateRegion = $formData['stateregion'];
+
+            $um->setUser($memberId)
+               ->setStoreName($validStoreName)
+               ->setMobile($validMobile)
+               ->setMemberMisc([
+                    'setLastmodifieddate' => new DateTime('now')
+                ]);
+
+            if( $validCity === "0" && $validStateRegion === "0" ){
+                $um->deleteAddressTable(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
+            }
+            else{
+                $um->setAddressTable($validStateRegion, $validCity, "", EasyShop\Entities\EsAddress::TYPE_DEFAULT);
+            }
+
+            $boolResult = $um->save();
+            if(!$boolResult){
+                $errors = $um->errorInfo();
+                $newData = [];
+            }
+            else{
+                $errors = '';
+                $newData = [
+                    "store_name" => $validStoreName,
+                    "mobile" => $validMobile,
+                    "state_region_id" => $validStateRegion,
+                    "city_id" => $validCity,
+                ];
+            }
+           
+            $serverResponse = [
+                'result' => $boolResult,
+                'error' => $errors,
+                'new_data' => $newData,
+            ];
+        }
+        else{
+            $serverResponse = [
+                'result' => false,
+                'error' => $formErrorHelper->getFormErrors($form)
+            ];
+        }
+
+        echo json_encode($serverResponse);
+    }
 
 }
 
