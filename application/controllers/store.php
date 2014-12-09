@@ -731,7 +731,7 @@ class Store extends MY_Controller
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                ->findOneBy(['slug' => $sellerslug]);
 
-        $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
+        $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
         $data['isEditable'] = $viewerId === intval($member->getIdMember());
@@ -801,12 +801,10 @@ class Store extends MY_Controller
                 ($regionSelect === '' && $citySelect === '' && $streetAddressTrimmed === '')
             );
             
+            $um->setUser($member->getIdMember());
             if($form->isValid() && $isAddressValid && $data['isEditable']){
-                $um->setUser($member->getIdMember());
                 $formData = $form->getData();
-                $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
-                            ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
-
+                
                 $um->setStoreName($formData['shop_name'])
                     ->setMobile($formData['contact_number'])
                     ->setMemberMisc([
@@ -814,7 +812,7 @@ class Store extends MY_Controller
                         'setLastmodifieddate' => date_create(date("Y-m-d H:i:s"))
                     ]);
 
-                if($addr !== null && !$formData['street_address'] && !$formData['region'] && !$formData['city']){
+                if(!$formData['street_address'] && !$formData['region'] && !$formData['city']){
                     $um->deleteAddressTable(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
                 }
                 else{
@@ -842,7 +840,7 @@ class Store extends MY_Controller
                 else{
                     $um->save();
                     $data['isValid'] = true;
-                    $data['validatedStoreName'] = !$formData['shop_name'] ? $member->getUsername() : $member->getStoreName();
+                    $data['validatedStoreName'] = $member->getStoreName();
                     $data['validatedContactNo'] = !$formData['contact_number'] ? "" : '0' . $member->getContactno();
                     $data['validatedWebsite'] = $formData['website'];
                     $data['validatedStreetAddr'] = $formData['street_address'] ? $formData['street_address'] . ", " : "Location not set ";
