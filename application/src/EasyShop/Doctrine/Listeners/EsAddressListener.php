@@ -3,8 +3,8 @@
 namespace EasyShop\Doctrine\Listeners;
 
 use Doctrine\ORM\Events;
-use Doctrine\ORM\UnitOfWork;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\OnFlushEventArgs as OnFlushEventArgs;
+use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsActivityType as EsActivityType;
@@ -42,8 +42,45 @@ class EsAddressListener implements EventSubscriber
         if ( ! $entity instanceOf EsAddress ) {
             return;
         }
-    }
 
+        if ((int)$entity->getStateregion()->getIdLocation() != 0) {
+            $this->changeSet['stateregion'] = $entity->getStateregion()->getLocation();
+        }
+
+        if ((int)$entity->getCity()->getIdLocation() != 0) {
+            $this->changeSet['city'] = $entity->getCity()->getLocation();
+        }
+
+        if ((int)$entity->getCountry()->getIdLocation() != 0) {
+            $this->changeSet['country'] = $entity->getCountry()->getLocation();
+        }
+
+        if ((string)$entity->getAddress() !== "") {
+            $this->changeSet['address'] = $entity->getAddress();
+        }
+
+        if ((string)$entity->getTelephone() !== "") {
+            $this->changeSet['telephone'] = $entity->getTelephone();
+        }
+
+        if ((string)$entity->getMobile() !== "") {
+            $this->changeSet['mobile'] = $entity->getMobile();
+        }
+
+        if ((string)$entity->getConsignee() !== "") {
+            $this->changeSet['consignee'] = $entity->getConsignee();
+        }
+
+        if ((int)$entity->getLat() !== 0) {
+            $this->changeSet['lat'] = $entity->getLat();
+        }
+
+        if ((int)$entity->getLat() !== 0) {
+            $this->changeSet['lng'] = $entity->getLng();
+        }
+
+        $this->saveActivity($event);
+    }
 
     /**
      * The preUpdate event occurs before the database update operations to entity data.
@@ -53,7 +90,6 @@ class EsAddressListener implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $event)
     {
         $em = $event->getEntityManager();
-        $uow = $em->getUnitOfWork();
         $entity = $event->getEntity();
         if ( !$entity instanceOf EsAddress) {
             return;
@@ -103,9 +139,17 @@ class EsAddressListener implements EventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $event)
     {
+        $this->saveActivity($event);
+    }
+
+    /**
+     * Trigger save activity
+     * @param  LifecycleEventArgs $event
+     */
+    private function saveActivity(LifecycleEventArgs $event)
+    {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        $phrase = "";
         if ( $entity instanceOf EsAddress) {
             if(count($this->changeSet) > 0){
                 $member = $em->getRepository('EasyShop\Entities\EsMember')
