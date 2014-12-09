@@ -215,7 +215,7 @@
 
 
 <div id="activated-modal" style="display:none; height: 100px;">
-    <h2>Deactivated Account</h2>
+    <h2 class="deactivate-modal-title">Deactivated Account</h2>
     <div id="activated-message">
             You have successfully deactivated your account.<br/><br/> If you have been unsatisfied with <a href="#">EasyShop</a> as an e-Commerce platform, please send us an email at <a href="#">info@easyshop.ph</a> to let us know how we can improve our website further.<br/><br/> Have a nice day!
     </div>
