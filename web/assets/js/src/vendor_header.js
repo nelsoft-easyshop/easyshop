@@ -127,10 +127,46 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     $("#contactContainer").html((mobileNumber == "") ? "N/A" : mobileNumber);
 
                     // Update custom attr origval for "Cancel" functionality
-                    $("#storeNameTxt").attr('data-origval', escapeHtml(data.new_data.store_name));
-                    $("#mobileNumberTxt").attr('data-origval', data.new_data.mobile);
-                    $(".stateregionselect").attr('data-origval', data.new_data.state_region_id);
-                    $(".cityselect").attr('data-origval',data.new_data.city_id);
+                    var escapedStoreName = escapeHtml(data.new_data.store_name);
+                    var escapedMobile = escapeHtml(data.new_data.mobile);
+                    var validatedRegionId = parseInt(data.new_data.state_region_id);
+                    var validatedCityId = parseInt(data.new_data.city_id);
+                    
+                    $("#storeNameTxt").attr('data-origval', escapedStoreName);
+                    $("#mobileNumberTxt").attr('data-origval', escapedMobile);
+                    $(".stateregionselect").attr('data-origval', validatedRegionId);
+                    $(".cityselect").attr('data-origval', validatedCityId);
+                    
+                    var userDetailsContainer = $('#user-detail-partial');
+                    if(userDetailsContainer.length){
+                        
+                        $('#storeName').val(escapedStoreName);
+                        $('#postStoreName').val(escapedStoreName);
+                        $('#validatedStoreName').html(escapedStoreName);
+                        
+                        $('#contactNo').val(escapedMobile);
+                        $('#postContactNo').val(escapedMobile);
+                        $('#validatedContactNo').html(escapedMobile);
+                        
+                        $('#streetAddr').val('');
+                        $('#validatedStreetAddr').val('');
+                        $('#postStreetAddr').val('');
+                        
+                        $('#regionSelect').val(validatedRegionId);  
+                        var regionName = $('#regionSelect :selected').html();
+                        $('#postRegion').val(regionName);
+                        
+                        setTimeout(function() {
+                            $('#citySelect').val(validatedCityId);
+                            var cityName = $('#citySelect :selected').html();
+                            $('#postCity').val(validatedCityId);
+                            $('#full-address-display').html(cityName+','+regionName);
+                        }, 300);
+
+                        $('#editIconOpen').trigger('click');
+                    }
+                 
+                    
                 }
                 else{
                     // Display error
