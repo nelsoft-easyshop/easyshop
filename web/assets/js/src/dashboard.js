@@ -38,6 +38,8 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-delivery" ).addClass( "selectedM" );
+        $('#delivery-address-error').hide();
+        $('#delivery-address-success').hide();
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -164,6 +166,11 @@
         $(this).next('.on-going-transaction-list-bought').slideToggle();
         $('.on-going-transaction-list-sold').slideUp();
         $('.transaction-title-sold').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 300);
+        
     });
 
     $('.transaction-title-sold').click(function() {
@@ -171,13 +178,21 @@
         $(this).next('.on-going-transaction-list-sold').slideToggle();
         $('.on-going-transaction-list-bought').slideUp();
         $('.transaction-title-bought').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 300);
     });
 
-        $('.transaction-title-bought-completed').click(function() {
+    $('.transaction-title-bought-completed').click(function() {
         $(this).toggleClass("active-bar",0);
         $(this).next('.on-going-transaction-list-bought-completed').slideToggle();
         $('.on-going-transaction-list-sold-completed').slideUp();
         $('.transaction-title-sold-completed').removeClass("active-bar");
+        
+        $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 500);
     });
 
     $('.transaction-title-sold-completed').click(function() {
@@ -185,6 +200,10 @@
         $(this).next('.on-going-transaction-list-sold-completed').slideToggle();
         $('.on-going-transaction-list-bought-completed').slideUp();
         $('.transaction-title-bought-completed').removeClass("active-bar");
+        
+         $('html, body').animate({
+            scrollTop: $(".transaction-tabs").offset().top
+        }, 500);
     });
 
     $('.sales-title-total').click(function() {
@@ -537,6 +556,13 @@
     });
 
     $( "#btn-edit-password" ).click(function() {
+        $('#password-change-error').hide();
+        $('#password-change-success').hide();
+        $('#currentPassword').val('');
+        $password = $('#password');
+        $password.val('');
+        $password.trigger('keyup');
+        $('#confirmPassword').val('');
         $( ".current-password" ).slideToggle( "fast" );
         $( ".edit-password" ).slideToggle( "fast" );
     });
@@ -1434,6 +1460,8 @@
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
                     createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
+                    $('.store-setup-loading').hide();
+                    $('.store-setup-ajax').fadeIn();
                 }
             });
         }
@@ -1553,7 +1581,7 @@
                     $('.bank-dropdown').append(bankOptionString);
                     $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
                         var templateClone =  template.clone();
-                        templateClone.css('display', 'block');
+                        templateClone.addClass('appended-payment-account');
                         templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
@@ -1564,9 +1592,9 @@
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
                         }    
                         $('.payment-account-container').append(templateClone);
-                            
                     });
-                
+                    $('.payment-account-loading').hide();
+                    $('.appended-payment-account').fadeIn();
                     isPaymentAccountInitialized = true;
                 }
             });   
