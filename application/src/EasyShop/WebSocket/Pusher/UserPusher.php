@@ -46,7 +46,7 @@ class UserPusher
                                           ->findBy(['member' => $userId]);
         $data = $dataContainer->getData();
         foreach ($authenticatedSessions as $authenticatedSession) {
-            $data['session_id'] = $authenticatedSession->getSession()->getId();
+            $data['session_id'] = $authenticatedSession->getSession()->getSessionId();
             $this->socket->send(json_encode($data));
         }
         
