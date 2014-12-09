@@ -139,7 +139,7 @@ $lang['EsAddress'] = [
         'mobile' => 'Mobile Number',
         'consignee' => 'Consignee Full name',
         'lat' => 'Latitude Location',
-        'lng' => 'Longitude',
+        'lng' => 'Longitude Location',
     ];
 
 $lang['update_information'] = "You have updated your :phrase"
