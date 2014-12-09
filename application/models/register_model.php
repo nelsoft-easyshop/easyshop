@@ -110,7 +110,7 @@ class Register_model extends CI_Model
         $reservedKeywords = $this->config->item('reserved');
         $isRestricted = false;
         foreach($reservedKeywords as $keyword){
-            if(strpos($username, $keyword) !== false){
+            if(strpos(strtolower($username), $keyword) !== false){
                 $isRestricted = true;
                 break;
             }
