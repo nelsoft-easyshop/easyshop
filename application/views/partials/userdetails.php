@@ -1,5 +1,5 @@
 <div class="col-xs-3 no-padding col-left-wing">
-    <div class="left-wing-contact">
+    <div class="left-wing-contact" id="user-detail-partial">
         <div class="panel-contact-details">
             <p class="panel-title-contact">
                 Details
@@ -57,13 +57,13 @@
                         <input type="hidden" id="postContactNo" value="<?php echo html_escape($contactNo)?>"/>
                     </td>
                 </tr>
-
+                
                 <tr id="addressRow">
                     <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
-                        <p class="text-contact"><?php echo html_escape($validatedStreetAddr . $validatedCity . $validatedRegion); ?></p>
+                        <p class="text-contact" id="full-address-display"><?php echo html_escape($validatedStreetAddr . $validatedCity . $validatedRegion); ?></p>
                         <input type="hidden" id="validatedStreetAddr" value="<?php echo html_escape($validatedStreetAddr)?>"/>
                         <input type="hidden" id="validatedCity" value="<?php echo html_escape($validatedCity)?>"/>
                         <input type="hidden" id="validatedRegion" value="<?php echo html_escape($validatedRegion)?>"/>

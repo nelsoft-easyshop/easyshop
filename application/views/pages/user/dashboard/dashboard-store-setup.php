@@ -108,7 +108,13 @@
                 </p>
             </div>
         </div>
-        <div class="div-store-setup">
+        
+        <div class="div-store-setup store-setup-loading" style="text-align:center">
+            <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+        </div>
+        
+        
+        <div class="div-store-setup store-setup-ajax" style="display:none">
             <p class="panel-setup-title">My Theme</p>
             <div class="div-setup-content">
                 <div class="current-store-theme">
@@ -174,7 +180,7 @@
                 </p>
             </div>
         </div>
-        <div class="div-store-setup">
+        <div class="div-store-setup store-setup-ajax" style="display:none">
             <p class="panel-setup-title">CATEGORIES</p>
             <div class="div-store-content">
                 <div class="current-store-cat">
@@ -220,30 +226,13 @@
                         We cannot update you categories right now. Try again later.
                     </div>
                 </div>
-                <!--
-                <div class="edit-store-cat-new">
-                    <div class="row">
-                        <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="Professional Services"/>
-                            <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-                        </div>
-                        <div class="col-md-5">
-                            <button class="btn btn-setting-save-btn">
-                                Submit
-                            </button>
-                            <button class="btn btn-setting-cancel-btn" id="cancel-store-cat-new">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                -->
                 <p class="p-note-setting">
                     Arrange the order of the categories in your store page based on your preference. The first category will always appear first
                     when someone views your store.
                 </p>
             </div>
         </div>
+        
     </div>
 </div>
+
