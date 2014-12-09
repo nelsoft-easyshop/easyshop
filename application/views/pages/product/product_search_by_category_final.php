@@ -14,7 +14,7 @@ $_SESSION['start'] = "0";
 <section class="top_margin">
     <div class="wrapper">
         <div class="prod_categories">
-            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
+            <div class="nav_title">Categories <img src="<?php echo getAssetsDomain(); ?>assets/images/img_arrow_down.png"></div>
             <?php echo $category_navigation; ?>
         </div>
         <div class="prob_cat_nav">  
@@ -134,7 +134,7 @@ $_SESSION['start'] = "0";
                         <a class="cc2_title" href="/category/<?php echo $rows['slug'];?>">
                             <span><?php echo html_escape($rows['name']);?></span></a>
                             <?PHP if(count($rows['popular'])>0): ?>
-                            <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="/<?= $rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
+                            <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?php echo getAssetsDomain(); ?><?= $rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
                             <div class="cc2_prod_name"><a href="<?PHP echo "/item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
                             <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
                             <?PHP endif; ?>
@@ -193,7 +193,7 @@ $_SESSION['start'] = "0";
 
 
                             <span class="prod_img_container">
-                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="/<?php echo $items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
+                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo getAssetsDomain(); ?><?php echo $items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
                             </span>
                         </span>
                     </a>
@@ -363,7 +363,7 @@ $(document).ready(function() {
                         data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type, parameters:'<?php echo  json_encode($_GET); ?>', csrfname : csrftoken},
                         type: 'post',
                         dataType: 'JSON',
-                        onLoading:jQuery(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
+                        onLoading:jQuery(".loading_products").html('<img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader.gif" />').show(),
                         success: function(d) {
                             if(d == "0"){
                                 ajax_is_on = true;

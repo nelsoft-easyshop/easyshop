@@ -23,13 +23,13 @@
                     <a href="/item/<?=$value->getSlug(); ?>">
                      
                         <?php if(isset($value->secondaryImage)): ?>
-                            <div class="div-rec-product-image hover-prod-image" style="background: #fff url(/<?=$value->directory.'small/'.$value->secondaryImage; ?>) center no-repeat; background-size: cover; "></div>
+                            <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo getAssetsDomain().$value->directory.'small/'.$value->secondaryImage; ?>) center no-repeat; background-size: cover; "></div>
 
                             <div class="div-rec-product-image main-prod-image">
                         <?php else: ?>
                             <div class="div-rec-product-image">
                         <?php endif; ?>
-                                <div class="image-handler" style="background: #fff url(/<?=$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
+                                <div class="image-handler" style="background: #fff url(<?php echo getAssetsDomain().$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
                                 
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                                     <span>
                                         <div class="store-logo-container ">
                                             <div class="span-store-logo">
-                                                <img src="<?=$value->ownerAvatar; ?>" class="store-logo">
+                                                <img src="<?php echo getAssetsDomain().'.'.$value->ownerAvatar; ?>" class="store-logo">
                                             </div>
                                         </div>
                                     </span>

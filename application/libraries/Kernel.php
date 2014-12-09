@@ -67,6 +67,9 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
+            $em->getEventManager()->addEventListener(
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
+            );
             return $em;
         };
 
@@ -280,8 +283,6 @@ class Kernel
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
         
-
-        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
@@ -439,6 +440,30 @@ class Kernel
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
+        $awsConfig = require_once(APPPATH . "config/param/aws.php");
+        $container["aws_uploader"] = function($c) use ($awsConfig, $container){
+            $awsClient =  \Aws\S3\S3Client::factory(array( 'key' => $awsConfig['s3']['key'],
+                                                        'secret' => $awsConfig['s3']['secret']
+                                                ));
+            return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
+        };
+
+        $container['assets_uploader'] = function($c) use ($container){
+            $uploadLibrary = new CI_Upload();
+            $imageLibrary = new MY_Image_lib();
+            return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
+                                                        $container["aws_uploader"],
+                                                        $container["config_loader"],
+                                                        $uploadLibrary,
+                                                        $imageLibrary,
+                                                        ENVIRONMENT);
+        };
+        
+        $container["image_utility"] = function($c) use ($container){
+            $imageLibrary = new CI_Image_lib();
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };
+        
         // Review product
         $container['review_product_service'] = function ($c) use ($container) {
             return new \EasyShop\Review\ReviewProductService(

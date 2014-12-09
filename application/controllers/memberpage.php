@@ -2,6 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+    
+use \Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 /**
  *  Memberpage controller
@@ -565,43 +567,35 @@ class Memberpage extends MY_Controller
      */
     public function upload_img()
     {
-        $data = array(
+        $cropCoordinates = array(
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         );
-        $isVendor = $this->input->post('vendor') ? true : false;
         $vendorLink = html_escape($this->input->post('url'));
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        
-        //echo error may be here: $result['error']
-        $result = $this->memberpage_model->upload_img($uid, $data);
-        
-        if($isVendor){
-            $temp = $this->memberpage_model->get_member_by_id($uid);
+        $memberId = $this->session->userdata('member_id');
+
+
+        $uploadResult = $this->serviceContainer["assets_uploader"]->uploadUserAvatar($memberId, key($_FILES), $cropCoordinates);
+        $member = $uploadResult['member'];
+  
+        $redirectUrl = '/';
+        if($member !== null){
+            $redirectUrl = '/'.$member->getSlug().'/'.$vendorLink;
+        }      
+        if(empty($uploadResult['error']) && $member){
+            redirect($redirectUrl);
         }
 
-        if(isset($result['error'])){
-            echo "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
-            }
-            else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
-            }
-        }
-        else{
-            if($isVendor){
-                redirect($temp['userslug'] . "/" . $vendorLink);
-            }
-            else{
-                redirect('me');
-            }
-        }
+        $data = [
+            'allowedFileTypes' => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+            'maxSize' => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+            'maxHeight' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            'maxWidth' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            'redirectUrl' => $redirectUrl,
+        ];
+        $this->load->view('errors/uploadError', $data);
     }
 
     /**
@@ -1172,28 +1166,31 @@ class Memberpage extends MY_Controller
      */
     public function banner_upload()
     {
-        $data = array(
+        $cropData = array(
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         );
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        $result = $this->memberpage_model->banner_upload($uid, $data);
-        $data = $this->memberpage_model->get_member_by_id($uid);
-
+        $memberId = $this->session->userdata('member_id');
         $vendorLink = html_escape($this->input->post('url'));
+  
+        $uploadResult = $this->serviceContainer['assets_uploader']->uploadUserBanner($memberId,key($_FILES), $cropData);
+        $member = $uploadResult['member'];
 
-        if(isset($result['error'])){
-            print "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            print "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$data['userslug']."'},3000);</script>";
+        if(empty($uploadResult['error']) && $member){
+            redirect("/".$member->getSlug(). "/" . $vendorLink);
         }
-        else{
-            redirect($data['userslug'] . "/" . $vendorLink);
-        }
+        
+        
+        $redirectUrl = '/'. ($member !== null ? $member->getSlug() : "");
+        $data = ['allowedFileTypes' => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+                    'maxSize' => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+                    'maxHeight' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+                    'maxWidth' => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+                    'redirectUrl' => $redirectUrl,];
+        $this->load->view('errors/uploadError', $data);
+     
     }
         
     /**

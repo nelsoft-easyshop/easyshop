@@ -36,8 +36,8 @@
                     <div class="field">
                           <label>Confirm New Password:</label>
                           <input id="cpassword" name="cpassword" type="password" maxlength="100" disabled="true">
-                          <img src="/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-                          <img src="/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+                          <img src="<?php echo getAssetsDomain() ?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+                          <img src="<?php echo getAssetsDomain() ?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
                           <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                           <input id="wsx" name="wsx" type="hidden" value="<?php echo $user["username"]; ?>"/>
                     </div>

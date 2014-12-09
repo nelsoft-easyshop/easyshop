@@ -6,6 +6,12 @@ use Easyshop\Product\ProductManager as ProductManager;
 use Easyshop\Promo\PromoManager as PromoManager;
 use Easyshop\Cart\CartInterface as CartInterface;
 
+
+/**
+ * Cart Manager Class
+ *
+ * @author Sam Gavinio <samgavinio@easyshop.ph>
+ */
 class CartManager
 {
 

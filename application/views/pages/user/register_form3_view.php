@@ -18,7 +18,7 @@
         </div>
         <div class="success_content">
           <div>
-            <p><img src="/assets/images/img_success.png" ><?php echo $member_username?></p>
+            <p><img src="<?php echo getAssetsDomain()?>assets/images/img_success.png" ><?php echo $member_username?></p>
           </div>
           <div>
 			<br>

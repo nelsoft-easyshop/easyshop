@@ -28,9 +28,9 @@
                         <div class="img-wrapper-div">
                             <span class="img-wrapper-span">
                             <?php if(reset($row)['status'] == "sender"): ?>
-                                <img data="<?=reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
+                                <img data="<?php echo getAssetsDomain().'.'.reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
                             <?php else: ?>
-                                <img data="<?=reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
+                                <img data="<?php echo getAssetsDomain().'.'.reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
                             <?php endif; ?>
                             <?php $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : ""); ?>
                             </span>
@@ -57,16 +57,16 @@
     </div>
     <div id="msg_inbox_container" class = "msg_container">
         <div id="msg_field">
-            <!-- <img id="msg_loader" src="/assets/images/orange_loader.gif"> -->
+
         </div>
         <div id="msg_textarea">
             <textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
-            <button id="send_btn" data="">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
+            <button id="send_btn" data="">Reply</button><img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_bar_loader.gif">
         </div>
     </div>
 </div>
 <div id="modal-background">
-    <img src="/assets/images/horizontal_loading.gif">
+    <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif">
 </div>
 <div id="modal-container">
     <div id="modal-div-header">
@@ -317,7 +317,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         else {
             html += '<span class="float_right">';
         }
-        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img+'/60x60.png"></span></span>';
         html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
@@ -352,7 +352,7 @@ function specific_msgs()
         } else {
             html += '<span class="float_right">';
         }
-        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img+'/60x60.png"></span></span>';
         html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
@@ -404,10 +404,10 @@ function onFocus_Reload(msgs)
             html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
             html +='<td class=" sorting_1">';
             if (Nav_msg.status == "sender") {
-                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src="'+ config.assetsDomain + Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'"></span></div>';
             }
             else {
-                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src="'+ config.assetsDomain + Nav_msg.sender_img+'/60x60.png" data="'+Nav_msg.recipient_img+'"></span></div>';
             }
             span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
             html +='</td>';

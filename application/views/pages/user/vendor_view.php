@@ -105,13 +105,15 @@
                 </div>
 
                 <?php foreach($customCatProd as $catId => $arrCat):?>
+
                 <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
                     id="cus-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' 
                     style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" 
                     data-productcount="<?=$arrCat['non_categorized_count']?>"
                     data-catType="<?php echo $arrCat['cat_type']?>"
                 >
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
+                    <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif"></div>
+
 
                     <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
                         <span>No items available for this category.</span>
@@ -128,6 +130,7 @@
                 <?php endforeach;?>
 
                 <?php foreach($defaultCatProd as $catId => $arrCat):?>
+
                     <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
                         id="def-<?php echo $catId?>"
                         data-catId='<?php echo $arrCat['json_subcat']?>' 
@@ -136,11 +139,12 @@
                         data-productcount="<?=$arrCat['non_categorized_count']?>"
                         data-catType="<?php echo $arrCat['cat_type']?>"
                     >
-                        <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
+                        <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif"></div>
 
                         <?php if($arrCat['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
                         <?php else:?>
+
 
                             <?=$arrCat['product_html_data'];?>
 

@@ -28,7 +28,7 @@ class MY_Controller extends CI_Controller
         }
         
         if (isset ($this->kernel)) {
-            
+
             /* This way service container is more accessible to child classes */
             $this->serviceContainer = $this->kernel->serviceContainer;
             $this->load->helper('view_helper');
