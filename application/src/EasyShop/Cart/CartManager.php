@@ -91,7 +91,7 @@ class CartManager
             $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                ->getSeller($productId);
         }       
-        if((int)$seller->getIsActive() === 1){
+        if((int)$seller->getIsActive() !== 1){
             return false;
         }
         
