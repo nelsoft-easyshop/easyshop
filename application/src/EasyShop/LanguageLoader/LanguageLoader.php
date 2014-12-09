@@ -32,5 +32,5 @@ class LanguageLoader
     {
         return $this->languageLoaderImplementation->getLanguageLine($line);
     }
-    
 }
+
