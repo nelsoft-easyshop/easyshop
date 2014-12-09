@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    You can give your store a different name other than you're registered username. Improve you're store's visibility and branding by giving you're store a name that other people can easily recognize and remember.
+                    You can give your store a different name other than your registered username. Improve your store's visibility and branding by giving your store a name that other people can easily recognize and remember.
                 </p>
             </div>
         </div>
