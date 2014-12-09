@@ -2,12 +2,8 @@
 <div class="div-tab">
     <div class="div-member-stats">
              <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
-               <a href="<?=$bannerImage;?>" class="lightbox_trigger">
                <img src="<?=$bannerImage;?>" class="img-follower-cover " />
-               </a>
-                <a href="<?=$avatarImage; ?>" class="lightbox_trigger">
-                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
-                </a>
+                <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
             </div>
         <div class="clear"></div>
         <div class="div-stats">
@@ -27,7 +23,7 @@
                             <div class="div-progress-bar-container" align="right">
                                 <div class="progress progress-account">
                                     <span class="span-account-progress-text-small">Account Progress: <?=$profilePercentage; ?>%</span>
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                    <div class="progress-bar2" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
                                         <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
                                     </div>
                                 </div>

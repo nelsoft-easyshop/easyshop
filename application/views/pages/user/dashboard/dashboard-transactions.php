@@ -17,7 +17,7 @@
     <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
         <div class="col-md-12" id="on-going-transaction">
             <div class="row">
-                <div class="transaction-title-bought">
+                <div class="transaction-title-bought transaction-button-head" data-method="ongoing-bought">
                     <span class="trans-title">Bought</span>
                     <span class="count"><?=$ongoingBoughtTransactionsCount?></span>
                 </div>
@@ -46,7 +46,6 @@
                             <div class="clear"></div>
                         </div>
                         <div id="ongoing-bought">
-                            <?=$transactionInfo['ongoing']['bought']?>
                         </div>
                     <?PHP else : ?>
                         <br/>
@@ -56,7 +55,7 @@
                     <?PHP endif; ?>
                 </div>
             <!---------------------------------------------------------------ongoing sold starts here---------------------------------------------------------------->
-                <div class="transaction-title-sold mrgn-top-12">
+                <div class="transaction-title-sold mrgn-top-12 transaction-button-head" data-method="ongoing-sold">
                     <span class="trans-title">Sold</span>
                     <span class="count"><?=$ongoingSoldTransactionsCount?></span>
                 </div>
@@ -85,7 +84,6 @@
                             <div class="clear"></div>
                         </div>
                     <div id="ongoing-sold">
-                        <?=$transactionInfo['ongoing']['sold']?>
                     </div>
                     <?PHP else : ?>
                         <br/>
@@ -99,7 +97,7 @@
     <!---------------------------------------------------------------completed bought starts here---------------------------------------------------------------->
         <div class="col-md-12" id="completed-transaction">
             <div class="row">
-                <div class="transaction-title-bought-completed">
+                <div class="transaction-title-bought-completed transaction-button-head" data-method="complete-bought">
                     <span class="trans-title">Bought</span>
                     <span class="count"><?=$completeBoughtTransactionsCount?></span>
                 </div>
@@ -122,7 +120,6 @@
                         <div class="clear"></div>
                     </div>
                     <div id="complete-bought">
-                        <?=$transactionInfo['complete']['bought']?>
                     </div>
                     <?PHP else : ?>
                         <br/>
@@ -132,7 +129,7 @@
                     <?PHP endif; ?>
                 </div>
             <!---------------------------------------------------------------completed sold starts here---------------------------------------------------------------->
-                <div class="transaction-title-sold-completed mrgn-top-12">
+                <div class="transaction-title-sold-completed mrgn-top-12 transaction-button-head" data-method="complete-sold">
                     <span class="trans-title">Sold</span>
                     <span class="count"><?=$completeSoldTransactionsCount?></span>
                 </div>
@@ -155,7 +152,6 @@
                         <div class="clear"></div>
                     </div>
                     <div id="complete-sold">
-                        <?=$transactionInfo['complete']['sold']?>
                     </div>
                     <?PHP else : ?>
                         <br/>

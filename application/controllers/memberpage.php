@@ -1852,75 +1852,6 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Get all transaction data
-     * @return mixed
-     */
-    private function getTransactionDetails()
-    {
-        $memberId = $this->session->userdata('member_id');
-
-        $transaction = [
-            'ongoing' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, true, 0, $this->transactionRowCount),
-                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, true, 0, $this->transactionRowCount)
-            ],
-            'complete' => [
-                'bought' => $this->transactionManager->getBoughtTransactionDetails($memberId, false, 0, $this->transactionRowCount),
-                'sold' => $this->transactionManager->getSoldTransactionDetails($memberId, false, 0, $this->transactionRowCount)
-            ]
-        ];
-
-        $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
-        $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
-        $ongoingBoughtTransactionData = [
-            'transaction' => $transaction['ongoing']['bought'],
-            'count' => $ongoingBoughtTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $ongoingBoughtTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
-
-        $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
-        $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
-        $ongoingSoldTransactionData = [
-            'transaction' => $transaction['ongoing']['sold'],
-            'count' => $ongoingSoldTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $ongoingSoldTransactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
-
-        $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
-        $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
-        $completeBoughtTransactionsData = [
-            'transaction' => $transaction['complete']['bought'],
-            'count' => $completeBoughtTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $completeBoughtTransactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
-
-        $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
-        $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
-        $completeSoldTransactionsData = [
-            'transaction' => $transaction['complete']['sold'],
-            'count' => $completeSoldTransactionsCount,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-        $completeSoldTransactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
-
-        $data = [
-            'ongoing' => [
-                'bought' => $ongoingBoughtTransactionView,
-                'sold' => $ongoingSoldTransactionView,
-            ],
-            'complete' => [
-                'bought' => $completeBoughtTransactionView,
-                'sold' => $completeSoldTransactionView,
-            ]
-        ];
-
-        return $data;
-    }
-
-    /**
      * display dashboard view
      * @return view
      */
@@ -2091,7 +2022,6 @@ class Memberpage extends MY_Controller
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
                 'salesView' => $salesView,
-                'transactionInfo' => $this->getTransactionDetails(),
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
@@ -2480,7 +2410,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storename')){
@@ -2505,7 +2435,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store name is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
@@ -2527,7 +2457,7 @@ class Memberpage extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
-        $jsonResponse = ['isSuccessful' => 'false',
+        $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
         if($this->input->post('storeslug')){
@@ -2554,7 +2484,7 @@ class Memberpage extends MY_Controller
                         $jsonResponse['errors'] = 'This store link is not available';
                     }
                 }
-                $jsonResponse['isSuccessful'] = $isUpdated ? 'true' : 'false';
+                $jsonResponse['isSuccessful'] = $isUpdated;
             }
             else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form))[0];
@@ -2648,14 +2578,15 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                         'newId' => 0,
-                         'isDefault' => false,
-                        ];               
+            'errors' => [],
+            'newId' => 0,
+            'isDefault' => false,
+        ];               
         if($this->input->post()){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]); 
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
             $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
@@ -2742,17 +2673,19 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
         $entityManager = $this->serviceContainer['entity_manager'];
         
-        $jsonResponse = ['isSuccessful' => false,
-                         'errors' => [],
-                        ];          
+        $jsonResponse = [
+            'isSuccessful' => false,
+            'errors' => [],
+        ];          
         if($this->input->post() && $memberId){
             $rules = $formValidation->getRules('payment_account');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
-                                     ->setMethod('POST');            
+                                     ->setMethod('POST');                          
+            $rules['account-number'][] = new EasyShop\FormValidation\Constraints\IsAccountNumberUnique(['memberId' => $memberId]);                       
             $formBuild->add('account-id', 'text', array('constraints' => $rules['account-id']));                         
             $formBuild->add('account-bank-id', 'text', array('constraints' => $rules['account-bank-id']));
             $formBuild->add('account-name', 'text', array('constraints' => $rules['account-name']));
-            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number']));
+            $formBuild->add('account-number', 'text', array('constraints' => $rules['account-number'] ));
             $formData['account-bank-id'] = (int)$this->input->post('bank-id');
             $formData['account-name'] = $this->input->post('account-name');
             $formData['account-number'] = $this->input->post('account-number');
@@ -2810,7 +2743,7 @@ class Memberpage extends MY_Controller
 
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                                                 ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 

@@ -1,3 +1,4 @@
+
 <style>
     .activated-container{
         height: 220px !Important;
@@ -9,6 +10,8 @@
         }
     }
 </style>
+
+
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
         <ul>
@@ -61,7 +64,7 @@
                     </div>
                 </div>
                  <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    You will receive all notifications from EasyShop.ph through your email. Make sure that your e-mail address is active and that you have verified your account.
                 </p>
             </div>
         </div>
@@ -194,6 +197,7 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="div-account-setting">
             <p class="panel-setting-title">Connect with easydeal.ph</p>
             <div class="div-setting-content">
@@ -205,6 +209,7 @@
                 </p>
             </div>
         </div>
+        -->
     </div>
 </div>
 
