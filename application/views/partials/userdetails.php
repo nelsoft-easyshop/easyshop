@@ -62,7 +62,7 @@
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
-                        <p class="text-contact"><?php echo html_escape($validatedStreetAddr . $validatedCity . $validatedRegion); ?></p>
+                        <p class="text-contact" id="full-address-display"><?php echo html_escape($validatedStreetAddr . $validatedCity . $validatedRegion); ?></p>
                         <input type="hidden" id="validatedStreetAddr" value="<?php echo html_escape($validatedStreetAddr)?>"/>
                         <input type="hidden" id="validatedCity" value="<?php echo html_escape($validatedCity)?>"/>
                         <input type="hidden" id="validatedRegion" value="<?php echo html_escape($validatedRegion)?>"/>

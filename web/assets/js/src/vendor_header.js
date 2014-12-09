@@ -152,11 +152,17 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         $('#validatedStreetAddr').val('');
                         $('#postStreetAddr').val('');
                         
+                        $('#regionSelect').val(validatedRegionId);  
+                        var regionName = $('#regionSelect :selected').html();
+                        $('#postRegion').val(regionName);
                         
-                        $('#regionSelect').val(validatedRegionId);                        
-                        $('#citySelect').val(validatedCityId);
-                        
-                        
+                        setTimeout(function() {
+                            $('#citySelect').val(validatedCityId);
+                            var cityName = $('#citySelect :selected').html();
+                            $('#postCity').val(validatedCityId);
+                            $('#full-address-display').html(cityName+','+regionName);
+                        }, 300);
+
                         $('#editIconOpen').trigger('click');
                     }
                  
