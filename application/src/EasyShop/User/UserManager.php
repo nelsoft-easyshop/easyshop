@@ -219,33 +219,7 @@ class UserManager
         return $this;
     }
 
-    /**
-     *  Set storename in es_member table
-     *
-     *  @return object
-     */
-    public function setStoreName($storeName)
-    {
-        $storeName = trim($storeName);
-        $objUsedStoreName = array();
 
-        if( strlen($storeName) > 0 ){
-            $objUsedStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                       ->getUsedStoreName($this->memberId,$storeName);
-        }
-        
-        // If store name is not yet used, set user's storename to $storeName
-        if( empty($objUsedStoreName) ){
-            $this->memberEntity->setStoreName($storeName);
-            $this->em->persist($this->memberEntity);
-        }
-        else{
-            $this->err['storename'] = "Store name already used!";
-            $this->hasError = TRUE;
-        }
-
-        return $this;
-    }
 
 
     /**
