@@ -61,7 +61,8 @@ class Register extends MY_Controller
             $this->load->library('parser');
             $parseData = array(
                 'user' => $serverResponse["member"]->getUserName(),
-                'hash' => $this->encrypt->encode($serverResponse["member"]->getEmail().'|'.$serverResponse["member"]->getUserName().'|'.$emailCode),
+                'hash' => $this->encrypt
+                                ->encode($serverResponse["member"]->getEmail().'|'.$serverResponse["member"]->getUserName().'|'.$emailCode),
                 'site_url' => site_url('register/email_verification')
             );
             $this->emailNotification = $this->serviceContainer['email_notification'];
