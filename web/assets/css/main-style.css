@@ -392,7 +392,6 @@ textarea {
     background-color: #e2e2e2;
     border: 2px solid #fff;
     border-radius: 4px;
-    display: table-cell;
     height: 108px;
     overflow: hidden;
     position: relative;
@@ -406,7 +405,7 @@ textarea {
     height: auto;
     left: 0;
     margin: auto;
-    max-width: 111px;
+    max-width: 105px;
     max-height: 110px;
     position: absolute;
     right: 0;
