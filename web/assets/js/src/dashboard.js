@@ -378,9 +378,11 @@
         var $dateFrom = $("#"+$container).find(".date-from").val();
         var $dateTo = $("#"+$container).find(".date-to").val();
         var $requestType = $mainContainer.find("#request-type-container").val();
+        var $netTotal = $("#"+$container).find("#net-total-container").val();
 
         if($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).length > 0 && $dateFrom == "" && $dateTo == ""){
             $("#" + $container + " > .sales-container").html($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).html());
+            $("#" + $container + " > .p-stat-total").html("&#8369; "+$netTotal);
         }
         else{
             requestSales($page, $requestType, $container, $dateFrom, $dateTo);
@@ -394,9 +396,11 @@
         var $requestType = $this.data('request');
         var $dateFrom = $("#"+$container).find(".date-from").val();
         var $dateTo = $("#"+$container).find(".date-to").val();
+        var $netTotal = $("#"+$container).find("#net-total-container").val();
 
         if($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).length > 0 && $dateFrom == "" && $dateTo == ""){
             $("#" + $container + " > .sales-container").html($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).html());
+            $("#" + $container + " > .p-stat-total").html("&#8369; "+$netTotal);
         }
         else{
             requestSales($page, $requestType, $container, $dateFrom, $dateTo);
