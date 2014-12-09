@@ -42,9 +42,8 @@
             var list = "<option value=''>Select City</option>";
             var data = window.cities[parseInt(regionValue)];
             var city = $("#postCity" ).val();
-            var formattedCity = city.substring(0, city.length - 2);
             for(var key in data){
-                list += "<option value='" + data[key] + "' " + (data[key] == formattedCity ? "selected>" : ">") + data[key] + "</option>";
+                list += "<option value='" + key + "' " + (key == city ? "selected>" : ">") + data[key] + "</option>";
             }
         }
 
