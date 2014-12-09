@@ -75,25 +75,6 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Qr code generator view
-     */
-    public function generateQrCode()
-    {
-        if(!$this->session->userdata('member_id')){
-            redirect('/', 'refresh');
-        }
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->session->userdata('member_id'));
-        $storeLink = base_url() . $member->getSlug();
-        $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
-        $data = [
-            'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
-        ];
-
-        $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
-    }
-
-    /**
      *  Class Index. Renders Memberpage
      */
     public function index()
@@ -102,7 +83,7 @@ class Memberpage extends MY_Controller
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
         }
-        $data['tab'] = $this->input->get('me');
+        $data['tab'] = $this->input->get('tab');
         $data = array_merge($data, $this->fill_view());
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
@@ -124,6 +105,26 @@ class Memberpage extends MY_Controller
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
+    }
+    
+    /**
+     * Qr code generator view
+     *
+     */
+    public function generateQrCode()
+    {
+        if(!$this->session->userdata('member_id')){
+            redirect('/', 'refresh');
+        }
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($this->session->userdata('member_id'));
+        $storeLink = base_url() . $member->getSlug();
+        $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
+        $data = [
+            'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
+            'slug' => $member->getSlug()
+        ];
+
+        $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
     }
 
     /**
@@ -1874,7 +1875,6 @@ class Memberpage extends MY_Controller
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
-
         if($member){
             $address = $esAddressRepo->findOneBy([
                                         'idMember' => $memberId,
@@ -2030,7 +2030,8 @@ class Memberpage extends MY_Controller
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
             $dashboardData['dashboardHomeView'] = $dashboardHomeView;
-
+            $dashboardData['tab'] = $this->input->get('tab');
+            
             $headerData['metadescription'] = "";
             $headerData['title'] = "Dashboard | Easyshop.ph";
             $headerData['user_details'] = $this->fillUserDetails();
