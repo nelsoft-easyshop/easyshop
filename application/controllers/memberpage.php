@@ -2160,20 +2160,24 @@ class Memberpage extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+        $member = $this->accountManager
+                       ->authenticateMember($this->input->get('username'), $this->input->get('password'), false, true);  
+        $isActivationRequestValid = $this->em->getRepository('EasyShop\Entities\EsMember')
             ->findOneBy([
                 'idMember' => $getData[0],
-                'isActive' => 0
+                'isActive' => 0,
             ]);
 
-        if($this->input->get("activateAccountButton") && $member) {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member, true);          
-            $result = [
-                "username" => $member->getUsername(),
-                "result" => "success"
-            ];
-            echo json_encode($result);
+        $response = false;
+        if($this->input->get("activateAccountButton") && $isActivationRequestValid && $member["member"]) {
+            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($member["member"], true);          
+            $response = true;
         }
+
+        $result = [
+            "result" => ($response) ? "success" : "error",
+        ];
+        echo json_encode($result);        
     }
 
     /**
