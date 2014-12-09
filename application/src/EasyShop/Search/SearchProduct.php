@@ -229,21 +229,21 @@ class SearchProduct
     public function filterProductByDefaultParameter($filterParameter,$productIds = [])
     { 
         $acceptableFilter = [
-                                'seller',
-                                'category',
-                                'brand',
-                                'condition',
-                                'location',
-                                'sortby',
-                                'sorttype',
-                            ]; 
+            'seller',
+            'category',
+            'brand',
+            'condition',
+            'location',
+            'sortby',
+            'sorttype',
+        ]; 
         $notExplodableFilter = [
-                                'seller'
-                                ,'category'
-                                ,'q_str'
-                                ,'sortby'
-                                ,'sorttype'
-                            ];
+            'seller'
+            ,'category'
+            ,'q_str'
+            ,'sortby'
+            ,'sorttype'
+        ];
 
         $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
         $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
