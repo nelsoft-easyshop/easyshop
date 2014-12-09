@@ -56,19 +56,16 @@ class Register extends MY_Controller
                                                                 $this->input->post("password"),
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
-                                                            );         
+                                                            );        
 
-            print_r($serverResponse);
-            exit();
-
-            // $result = $this->register_model->store_verifcode($temp);
-            $this->em->getRepository('EasyShop\Entities\EsMember')->storeMemberVerifCode(
-                                                                                $serverResponse["member"]->getIdMember(),
-                                                                                sha1($serverResponse["member"]->getEmail().time()),
-                                                                                sha1($serverResponse["member"]->getContactno().time()),
-                                                                                $serverResponse["member"]->getContactno(),
-                                                                                $serverResponse["member"]->getEmail()
-                                                                                        );
+                                                              
+            $data = [
+                "memberId" => $serverResponse["member"]->getIdMember(),
+                "emailCode" => sha1($serverResponse["member"]->getEmail().time()),
+                "mobileCode" => $this->rand_alphanumeric(6),
+                "email" => 1,
+            ];
+            $this->accountManager->storeMemberVerifCode($data);
         }
         // if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
         //     $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
@@ -199,7 +196,7 @@ class Register extends MY_Controller
             {
             if($method == 'validate_captcha')
                 $callback_result = $this->$model->$method( $postdata, $this->session->userdata('captcha_word'));
-            else	 
+            else     
                 $callback_result = $this->$model->$method( $postdata );
             }
             return $callback_result;
@@ -299,7 +296,7 @@ class Register extends MY_Controller
         $result = false;
         $username = $this->input->post('wsx');
         $cur_password = $this->input->post('cur_password');
-        $password = $this->input->post('password');			
+        $password = $this->input->post('password');         
 
         $dataval = array('login_username' => $username, 'login_password' => $cur_password);
         $this->accountManager = $this->serviceContainer['account_manager'];            
