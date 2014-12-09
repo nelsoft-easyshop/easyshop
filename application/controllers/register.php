@@ -51,36 +51,36 @@ class Register extends MY_Controller
         if($this->input->post()) {
             $this->accountManager = $this->serviceContainer['account_manager'];    
             $this->em = $this->serviceContainer['entity_manager'];            
-            $serverResponse = $this->accountManager->registerMember(
+            $registeredMember = $this->accountManager->registerMember(
                                                                 $this->input->post("username"),
                                                                 $this->input->post("password"),
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
                                                             );        
-            $emailCode = sha1($serverResponse["member"]->getEmail().time());
+            $emailCode = sha1($registeredMember["member"]->getEmail().time());
             $this->load->library('parser');
             $parseData = array(
-                'user' => $serverResponse["member"]->getUserName(),
+                'user' => $registeredMember["member"]->getUserName(),
                 'hash' => $this->encrypt
-                                ->encode($serverResponse["member"]->getEmail().'|'.$serverResponse["member"]->getUserName().'|'.$emailCode),
+                                ->encode($registeredMember["member"]->getEmail().'|'.$registeredMember["member"]->getUserName().'|'.$emailCode),
                 'site_url' => site_url('register/email_verification')
             );
             $this->emailNotification = $this->serviceContainer['email_notification'];
             $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
-            $this->emailNotification->setRecipient($serverResponse["member"]->getEmail());
+            $this->emailNotification->setRecipient($registeredMember["member"]->getEmail());
             $this->emailNotification->setSubject($this->lang->line('registration_subject'));
             $this->emailNotification->setMessage($message);
             $emailResult = (bool) $this->emailNotification->sendMail();
 
             $data = [
-                "memberId" => $serverResponse["member"]->getIdMember(),
+                "memberId" => $registeredMember["member"]->getIdMember(),
                 "emailCode" => $emailCode,
                 "mobileCode" => $this->rand_alphanumeric(6),
                 "email" => ($emailResult) ? 1 : 0,
             ];
             $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
             $isRegistrationSuccess = true;
-            if(is_null($serverResponse["member"]) || !$serverResponse["member"]) {
+            if(is_null($registeredMember["member"]) || !$registeredMember["member"]) {
                 $signUpResponse["error"] = "Database registration failure <br>";
                 $isRegistrationSuccess = false;
             }
