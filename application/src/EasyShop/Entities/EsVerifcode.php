@@ -84,7 +84,7 @@ class EsVerifcode
     /**
      *  @var int
      */
-    const DEFAULT_MOBILE_COUNT = 1;     
+    const DEFAULT_MOBILE_COUNT = 0;     
 
     /**
      * Get idVerifcode
