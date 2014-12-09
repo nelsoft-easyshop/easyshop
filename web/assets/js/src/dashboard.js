@@ -1860,6 +1860,8 @@
     });
 
     $( document ).ready(function() {
+        $("#mobileNumber").numeric()
+        $("#consigneeMobile").numeric();
         var $tab = $('#page-tab').val();
         handleUrlTabs($tab);
     });
