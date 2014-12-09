@@ -3,7 +3,6 @@
 namespace EasyShop\Doctrine\Listeners;
 
 use Doctrine\ORM\Events;
-use Doctrine\ORM\UnitOfWork;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use EasyShop\Entities\EsMember as EsMember; 
@@ -52,7 +51,6 @@ class EsMemberListener implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $event)
     {
         $em = $event->getEntityManager();
-        $uow = $em->getUnitOfWork();
         $entity = $event->getEntity();
         if ( !$entity instanceOf EsMember) {
             return;
