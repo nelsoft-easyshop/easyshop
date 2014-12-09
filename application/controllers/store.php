@@ -492,7 +492,7 @@ class Store extends MY_Controller
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
                                                 ->getVendorDetails($sellerslug);
-        $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0 ? TRUE : FALSE;
+        $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $bannerData['storeColorScheme'] = $member->getStoreColor();
         $bannerData['isLoggedIn'] = $headerData['logged_in'];
@@ -666,7 +666,7 @@ class Store extends MY_Controller
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
                                                 ->getVendorDetails($sellerslug);
-        $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0 ? TRUE : FALSE;
+        $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $headerData = array_merge($headerData, $bannerData);
         $this->load->view('templates/header_alt', $headerData);
@@ -695,7 +695,7 @@ class Store extends MY_Controller
         $followers = $EsVendorSubscribe->getFollowers($sellerId);
         $bannerData = array(
                   "arrVendorDetails" => $arrVendorDetails 
-                , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0 ? TRUE : FALSE 
+                , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0
                 , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId)
                 , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId,"banner")
                 , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId)) ? TRUE : FALSE
@@ -728,11 +728,8 @@ class Store extends MY_Controller
         $viewerId = intval($this->session->userdata('member_id'));
         $um = $this->serviceContainer['user_manager'];
         
-
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                ->findOneBy(['slug' => $sellerslug]);
-
-        $um->setUser($member->getIdMember());
 
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName() === "" || $member->getStoreName() === null ? $member->getUsername() : $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
@@ -805,13 +802,17 @@ class Store extends MY_Controller
             );
             
             if($form->isValid() && $isAddressValid && $data['isEditable']){
+                $um->setUser($member->getIdMember());
                 $formData = $form->getData();
                 $addr = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsAddress')
                             ->findOneBy(['idMember' => $member->getIdMember(), 'type' => EsAddress::TYPE_DEFAULT]);
 
                 $um->setStoreName($formData['shop_name'])
                     ->setMobile($formData['contact_number'])
-                    ->setMemberMisc(['setWebsite' => $formData['website'], 'setLastmodifieddate' => date_create(date("Y-m-d H:i:s"))]);
+                    ->setMemberMisc([
+                        'setWebsite' => $formData['website'], 
+                        'setLastmodifieddate' => date_create(date("Y-m-d H:i:s"))
+                    ]);
 
                 if($addr !== null && !$formData['street_address'] && !$formData['region'] && !$formData['city']){
                     $um->deleteAddressTable(EasyShop\Entities\EsAddress::TYPE_DEFAULT);
@@ -821,17 +822,16 @@ class Store extends MY_Controller
                         $formData['region'], 
                         $formData['city'], 
                         $formData['street_address'],
-                        EasyShop\Entities\EsAddress::TYPE_DEFAULT,
-                        0,
-                        0,
-                        '',
-                        $formData['contact_number']
+                        EasyShop\Entities\EsAddress::TYPE_DEFAULT
                     );
-                    $city = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->find((int)$formData['city']);
 
-                    $region = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->find((int)$formData['region']);
+                    $city = $this->serviceContainer['entity_manager']
+                                 ->getRepository('EasyShop\Entities\EsLocationLookup')
+                                 ->find((int)$formData['city']);
+
+                    $region = $this->serviceContainer['entity_manager']
+                                   ->getRepository('EasyShop\Entities\EsLocationLookup')
+                                   ->find((int)$formData['region']);
                 }
 
                 if($um->errorInfo()){
