@@ -23,22 +23,23 @@ class ActivityManager
 
     /**
      * Construct phrase for activity log
-     * @param  array  $modifiedArray [description]
-     * @param  string $languangeLine [description]
+     * @param  array  $modifiedArray
+     * @param  string $languangeLine
+     * @param  string $entityLine
      * @return string
      */
-    public function constructActivityPhrase($modifiedArray, $languangeLine)
+    public function constructActivityPhrase($modifiedArray, $languangeLine, $entityLine)
     {   
         $returnString = "";
         $buildString = "";
         $buildStringArray = [];
         $unParsePhrase = $this->languageLoader->getLine($languangeLine); 
+        $entityLanguange = $this->languageLoader->getLine($entityLine);
         foreach ($modifiedArray as $key => $value) {
-            $fieldLanguage = $this->languageLoader->getLine('EsMember')[$key];
+            $fieldLanguage = $entityLanguange[$key];
             $buildStringArray[] = $fieldLanguage." : ".$value;
         }
-        $parseDateString = str_replace(":date", date("Y-m-d H:i:s"), $unParsePhrase);
-        $returnString = str_replace(":phrase", implode(', ', $buildStringArray), $parseDateString);
+        $returnString = str_replace(":phrase", implode(', ', $buildStringArray), $unParsePhrase);
 
         return $returnString;
     }
