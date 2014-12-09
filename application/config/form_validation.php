@@ -33,51 +33,12 @@ $config = array(
                         'label' => 'Email Address',
                         'rules' => 'trim|required|valid_email|callback_external_callbacks[register_model,validate_email]'
                         ),
-                    /*array(
-                            'field'   => 'captcha_word',
-                            'label'   => 'User Captcha',
-                            'rules'   => 'trim|required|callback_external_callbacks[register_model,validate_captcha]'
-                        ),*/
                     array(
                             'field'   => 'terms_checkbox',
                             'label'   => 'Terms and Conditions',
                             'rules'   => 'required'
                     ),
                 ),
-            /*'register_form2_a' => array(
-                    array(
-                            'field'   => 'register_mobile',
-                            'label'   => 'Mobile number',
-                            'rules' => 'trim|numeric|max_length[11]|matches[cregister_mobile]|callback_external_callbacks[register_model,checkifrequired,register_email]'
-                        ),
-                    array(
-                            'field' => 'cregister_mobile',
-                            'label' => 'Mobile Confirmation',
-                            'rules' => 'trim|matches[register_mobile]'
-                        ),
-                    array(
-                        'field' => 'register_email',
-                        'label' => 'Email Address',
-                        'rules' => 'trim|valid_email|matches[cregister_email]|callback_external_callbacks[register_model,checkifrequired,register_mobile]'
-                    ),
-                    array(
-                            'field' => 'cregister_email',
-                            'label' => 'Email Confirmation',
-                            'rules' => 'trim|matches[register_email]'
-                        ),
-                    array(
-                            'field'   => 'terms_checkbox',
-                            'label'   => 'Terms and Conditions',
-                            'rules'   => 'required'
-                    ),
-                ),
-            'register_form2_b' => array(
-                    array(
-                            'field'   => 'verification_code',
-                            'label'   => 'Verification Code',
-                            'rules'   => 'trim|required'
-                        ),
-                ),*/
             'personal_profile_main' => array(
                     array(
                         'field' => 'dateofbirth',
@@ -313,11 +274,6 @@ $config = array(
                         'label' => 'Courier',
                         'rules' => 'trim|required'
                     ),
-                    /*array(
-                        'field' => 'tracking_num',
-                        'label' => 'Tracking Number',
-                        'rules' => 'trim|required'
-                    ),*/
                     array(
                         'field' => 'delivery_date',
                         'label' => 'Delivery Date',
