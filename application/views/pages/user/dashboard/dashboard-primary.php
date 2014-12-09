@@ -90,6 +90,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="page-tab" value="<?php echo html_escape($tab); ?>"/>
 </section>
 <br/>
 
