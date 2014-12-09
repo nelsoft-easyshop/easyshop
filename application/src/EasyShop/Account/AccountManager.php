@@ -4,6 +4,7 @@ namespace EasyShop\Account;
 
 use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
+use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -250,6 +251,26 @@ class AccountManager
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
                 'member' => $member];
     }
+
+    public function storeMemberVerifCode($userData)
+    {
+         
+        $memberId = $this->em
+                          ->getRepository('EasyShop\Entities\EsMember')
+                          ->find($userData["memberId"]);
+
+        $verifCode = new EsVerifcode();     
+        $verifCode->setMember($memberId);
+        $verifCode->setEmailcode($userData["emailCode"]);
+        $verifCode->setMobilecode($userData["mobileCode"]);
+        $verifCode->setDate(new DateTime('now'));
+        $verifCode->setFpTimestamp(new DateTime('now'));
+        $verifCode->setEmailcount($userData["email"]);
+        $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
+        $this->em->persist($verifCode);
+        $this->em->flush();
+  
+    }    
     
     /**
      * Authentication implementation for accounts with old password hashing
@@ -309,6 +330,10 @@ class AccountManager
 
         return $result['hash'];
     }    
+
+
+
+
 
 
 
