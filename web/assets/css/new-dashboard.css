@@ -1550,7 +1550,9 @@ a{
     font-weight: bold;
 }
 
-
+#activated-modal{
+    min-height: 310px !important
+}
 
 #activated-message{
     font-size: 15px;
@@ -1565,7 +1567,19 @@ a{
 }
 
 .activated-container{
-    height: 200px important;
+    height: 200px !important;
+}
+
+.deactivated-container{
+    height: 250px !important;
+    max-height: 310px !important;
+}
+
+#activated-modal > .deactivate-modal-title {
+    font-size: 20px;
+    padding: 16px 20px;
+    font-weight: 900;
+    border-bottom: solid #e2e2e2 1px;
 }
 
 .activated-container h2{
