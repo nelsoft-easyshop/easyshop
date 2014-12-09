@@ -62,7 +62,7 @@
                                 window.location = "/login/logout";
                             }
                          });
-                        $('#activated-modal').parents("#simplemodal-container").addClass("activated-container");                                             
+                        $('#activated-modal').parents("#simplemodal-container").addClass("deactivated-container");                                                   
                     }
 
                 },
