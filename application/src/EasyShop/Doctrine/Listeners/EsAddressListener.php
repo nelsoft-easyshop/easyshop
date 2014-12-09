@@ -122,11 +122,11 @@ class EsAddressListener implements EventSubscriber
             $this->changeSet['consignee'] = $entity->getConsignee();
         }
 
-        if ($event->hasChangedField('lat') && (int)$entity->getLat() != 0) {
+        if ($event->hasChangedField('lat') && (int)$entity->getLat() !== 0) {
             $this->changeSet['lat'] = $entity->getLat();
         }
 
-        if ($event->hasChangedField('lng') && (int)$entity->getLat() != 0) {
+        if ($event->hasChangedField('lng') && (int)$entity->getLat() !== 0) {
             $this->changeSet['lng'] = $entity->getLng();
         }
     }
