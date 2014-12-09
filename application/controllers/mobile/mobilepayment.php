@@ -90,7 +90,7 @@ class mobilePayment extends MY_Controller
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
             $errorMessage = "You have no item in you cart";
-            if(!empty($cartData)){
+            if(empty($cartData) === false){
                 unset($cartData['total_items'],$cartData['cart_total']);
                 $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
                 $cartData = $dataCollection['cartData']; 
@@ -130,7 +130,7 @@ class mobilePayment extends MY_Controller
         $cartData = $dataCollection['cartData']; 
         $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
-        if(!empty($cartData)){
+        if(empty($cartData) === false){
             unset($cartData['total_items'],$cartData['cart_total']); 
             $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
             $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
@@ -164,7 +164,7 @@ class mobilePayment extends MY_Controller
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment');
 
-        if(!empty($cartData) && $this->input->post('paymentType')){
+        if(empty($cartData) === false && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
             if($this->input->post('paymentType') == "paypal"){
@@ -254,7 +254,7 @@ class mobilePayment extends MY_Controller
         $payerId = $this->input->post('PayerID');
         $token = $this->input->post('token');
         $cartData = unserialize($this->member->getUserdata()); 
-        if(!empty($cartData)){
+        if(empty($cartData) === false){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
 
