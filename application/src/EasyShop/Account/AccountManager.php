@@ -252,24 +252,35 @@ class AccountManager
                 'member' => $member];
     }
 
+    /**
+     * Stores member's verification code
+     *
+     * @param array $userData
+     * @return bool
+     */
     public function storeMemberVerifCode($userData)
     {
-         
-        $memberId = $this->em
-                          ->getRepository('EasyShop\Entities\EsMember')
-                          ->find($userData["memberId"]);
 
-        $verifCode = new EsVerifcode();     
-        $verifCode->setMember($memberId);
-        $verifCode->setEmailcode($userData["emailCode"]);
-        $verifCode->setMobilecode($userData["mobileCode"]);
-        $verifCode->setDate(new DateTime('now'));
-        $verifCode->setFpTimestamp(new DateTime('now'));
-        $verifCode->setEmailcount($userData["email"]);
-        $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
-        $this->em->persist($verifCode);
-        $this->em->flush();
-  
+        try{
+            $memberId = $this->em
+                              ->getRepository('EasyShop\Entities\EsMember')
+                              ->find($userData["memberId"]);
+
+            $verifCode = new EsVerifcode();     
+            $verifCode->setMember($memberId);
+            $verifCode->setEmailcode($userData["emailCode"]);
+            $verifCode->setMobilecode($userData["mobileCode"]);
+            $verifCode->setDate(new DateTime('now'));
+            $verifCode->setFpTimestamp(new DateTime('now'));
+            $verifCode->setEmailcount($userData["email"]);
+            $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
+            $this->em->persist($verifCode);
+            $this->em->flush();
+            return true;
+        }
+        catch(\Doctrine\ORM\Query\QueryException $e) {
+            return false;
+        }
     }    
     
     /**
