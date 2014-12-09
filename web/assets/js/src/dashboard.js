@@ -1461,6 +1461,8 @@
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
                     createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
+                    $('.store-setup-loading').hide();
+                    $('.store-setup-ajax').fadeIn();
                 }
             });
         }
@@ -1580,7 +1582,7 @@
                     $('.bank-dropdown').append(bankOptionString);
                     $.each(jsonResponse.paymentAccount, function(index, paymentAccount) {
                         var templateClone =  template.clone();
-                        templateClone.css('display', 'block');
+                        templateClone.addClass('appended-payment-account');
                         templateClone.find('.bank-name-container').html(escapeHtml(paymentAccount.bankName));
                         templateClone.find('.account-name-container').html(escapeHtml(paymentAccount.bankAccountName));
                         templateClone.find('.account-number-container').html(escapeHtml(paymentAccount.bankAccountNumber));
@@ -1591,9 +1593,9 @@
                             templateClone.find('.btn.btn-set-default').removeClass('btn-set-default').addClass('default-account');
                         }    
                         $('.payment-account-container').append(templateClone);
-                            
                     });
-                
+                    $('.payment-account-loading').hide();
+                    $('.appended-payment-account').fadeIn();
                     isPaymentAccountInitialized = true;
                 }
             });   
