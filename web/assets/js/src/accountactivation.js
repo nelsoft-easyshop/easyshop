@@ -27,7 +27,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
 
             verifyspan.hide();
             loadingimg.show();                          
