@@ -1,5 +1,4 @@
 (function ($) {
-    var hashedUrl = window.location.hash;
 
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
@@ -1828,18 +1827,31 @@
         $(this).removeClass('input-error');
     });
 
+    $( document ).ready(function() {
+        var $tab = $('#page-tab').val();
+        handleUrlTabs($tab);
+    });
 
-    if (hashedUrl === "#ongoing-bought-transaction") {
-        $('#my-store-menu-trigger').trigger('click');
-        $('.id-transactions-trigger').addClass('selected');
-        $('.transaction-title-bought').trigger('click');
+    function handleUrlTabs(tab)
+    {
+        if (tab === "ongoing") {
+            $('#my-store-menu-trigger').trigger('click');
+             setTimeout(function() {
+                 $('.id-transactions-trigger').trigger('click');
+            }, 500);
+            setTimeout(function() {
+                 $('.transaction-title-bought').trigger('click');
+            }, 1000);
+        }
+        else if(tab === "settings"){
+            $('#my-account-menu-trigger').trigger('click');
+             setTimeout(function() {
+                 $('.settings-trigger').trigger('click');
+            }, 500);
+        }
     }
-    else if (hashedUrl === "#ongoing-sold-transaction") {
-        $('#my-store-menu-trigger').trigger('click');
-        $('.id-transactions-trigger').addClass('selected');
-        $('.transaction-title-sold').trigger('click');
-    }
-
+    
+    
 }(jQuery));
 
 
