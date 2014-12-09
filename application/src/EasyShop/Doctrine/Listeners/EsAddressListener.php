@@ -3,7 +3,6 @@
 namespace EasyShop\Doctrine\Listeners;
 
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Event\OnFlushEventArgs as OnFlushEventArgs;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use EasyShop\Entities\EsAddress as EsAddress;
