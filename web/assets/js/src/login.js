@@ -12,6 +12,7 @@
         }
     });
     $(document).on('click','#sendReactivationLink',function (e) {
+        $('#login')[0].disabled = true;        
         $('#loading_img_activate').show();
         $("#deactivatedAccountPrompt").css("display","none");            
         $('#login_error').hide();
@@ -24,6 +25,7 @@
             data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
             success: function(data) {
+                $('#login')[0].disabled = false;                        
                 var obj = jQuery.parseJSON(data);   
                 $('#loading_img_activate').hide();
                 $('#login_error').show();                
