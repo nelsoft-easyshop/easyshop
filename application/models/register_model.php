@@ -97,24 +97,38 @@ class Register_model extends CI_Model
 		}
 	}
 	
-	/*
-	 *	Function used to check if username exists in registration page
-	 *	Checks for both username and slug fields under es_member table
-	 */
-	function validate_username($username)
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users', 'getUsernameOrSlug');
+    /**
+     * Function used to check if username exists in registration page
+     * Checks for both username and slug fields under es_member table
+     * 
+     * @param string $username
+     * @return boolean
+     */
+    public function validate_username($username)
+    {
+        $this->config->load('reserved', true);
+        $reservedKeywords = $this->config->item('reserved');
+        $isRestricted = false;
+        foreach($reservedKeywords as $keyword){
+            if(strpos($username, $keyword) !== false){
+                $isRestricted = true;
+                break;
+            }
+        }
+
+        $query = $this->xmlmap->getFilenameID('sql/users', 'getUsernameOrSlug');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $username);
-        $sth->execute();	
-		if($sth->rowcount() == 0){
-			return true;
-		}
-		else{
-			$this->form_validation->set_message('external_callbacks', 'Username already exists');
-			return false;
-		}
-	}
+        $sth->execute();
+        
+        if($sth->rowcount() == 0 && !$isRestricted){
+            return true;
+        }
+        else{
+            $this->form_validation->set_message('external_callbacks', 'Username already exists');
+            return false;
+        }
+    }
 	
 	// FOR FIRST TIME REGISTRATION ONLY
 	function validate_email($email)
