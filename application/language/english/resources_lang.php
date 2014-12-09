@@ -123,10 +123,23 @@ $lang['EsMember'] = [
         'gender' => 'Gender',
         'email' => 'Email Address',
         'birthday' => 'Birthday',
-        'fullname' => 'Fullname',
+        'fullname' => 'Full name',
         'storeDesc' => 'Store Description',
         'slug' => 'Store URL',
         'website' => 'Website',
+    ];
+
+$lang['EsAddress'] = [
+        'stateregion' => 'State Region',
+        'city' => 'City',
+        'country' => 'country',
+        'address' => 'Address',
+        'gender' => 'Gender',
+        'telephone' => 'Telephone Number',
+        'mobile' => 'Mobile Number',
+        'consignee' => 'Consignee Full name',
+        'lat' => 'Latitude Location',
+        'lng' => 'Longitude',
     ];
 
 $lang['update_information'] = "You have updated your :phrase"
