@@ -120,6 +120,15 @@ class EsAddress
      */
     const TYPE_DELIVERY = 1;
 
+    /**
+     * @var integer
+     */
+    const DEFAULT_LAT = 0;
+    /**
+     * @var integer
+     */
+    const DEFAULT_LNG = 0;
+
 
     /**
      * Get idAddress
