@@ -826,8 +826,17 @@ class UserManager
             }
         }
         $restrictedRoutes = array_unique(array_merge($restrictedRoutes , $this->reservedSlugs));
+
+        $resevedKeywords = $this->configLoader->getItem('reserved');
+        $isRestricted = false;
+        foreach($resevedKeywords as $keyword){
+            if(strpos($storeSlug, $keyword) !== false){
+                $isRestricted = true;
+                break;
+            }
+        }
         
-        if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes)){
+        if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes) && !$isRestricted){
             $memberEntity->setSlug($storeSlug);
             $memberEntity->setIsSlugChanged(true);
             $isSuccessful = true;
@@ -854,8 +863,17 @@ class UserManager
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
                                    ->getUsedStoreName($memberEntity->getIdMember(), $storename);
-   
-        if(empty($usersWithStorename)){
+        
+        $resevedKeywords = $this->configLoader->getItem('reserved');
+        $isRestricted = false;
+        foreach($resevedKeywords as $keyword){
+            if(strpos($storename, $keyword) !== false){
+                $isRestricted = true;
+                break;
+            }
+        }
+
+        if(empty($usersWithStorename) && !$isRestricted){
             $memberEntity->setStorename($storename);
             $isSuccessful = true;
             try{
