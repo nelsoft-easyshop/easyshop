@@ -48,68 +48,87 @@ class Register extends MY_Controller
             'error' => array()
         );
 
-        if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
-            $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
-            $data['username'] = $this->input->post('username');
-            $data['password'] = $this->input->post('password');
-            $data['email'] = $this->input->post('email');
-            $data['mobile'] = substr($this->input->post('mobile'),1);
+        if($this->input->post()) {
+            $this->accountManager = $this->serviceContainer['account_manager'];    
+            $this->em = $this->serviceContainer['entity_manager'];            
+            $serverResponse = $this->accountManager->registerMember(
+                                                                $this->input->post("username"),
+                                                                $this->input->post("password"),
+                                                                $this->input->post("email"),
+                                                                $this->input->post("mobile")
+                                                            );         
 
-            $registrationFlag = false;
+            print_r($serverResponse);
+            exit();
 
-            // REGISTER MEMBER IN DATABASE
-            $data['member_id'] = $this->register_model->signupMember_landingpage($data)['id_member'];
+            // $result = $this->register_model->store_verifcode($temp);
+            $this->em->getRepository('EasyShop\Entities\EsMember')->storeMemberVerifCode(
+                                                                                $serverResponse["member"]->getIdMember(),
+                                                                                sha1($serverResponse["member"]->getEmail().time()),
+                                                                                sha1($serverResponse["member"]->getContactno().time()),
+                                                                                $serverResponse["member"]->getContactno(),
+                                                                                $serverResponse["member"]->getEmail()
+                                                                                        );
+        }
+        // if (($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))) {
+        //     $data['fullname'] = $this->input->post('fullname') ? trim($this->input->post('fullname'))  : '';
+        //     $data['username'] = $this->input->post('username');
+        //     $data['password'] = $this->input->post('password');
+        //     $data['email'] = $this->input->post('email');
+        //     $data['mobile'] = substr($this->input->post('mobile'),1);
+
+        //     $registrationFlag = false;
 
             //GENERATE MOBILE CONFIRMATION CODE
-            $temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
+            // $temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
             //GENERATE HASH FOR EMAIL VERIFICATION
-            $temp['emailcode'] = sha1($this->session->userdata('session_id').time());
-            $temp['member_id'] = $data['member_id'];
+            // $temp['emailcode'] = sha1($this->session->userdata('session_id').time());
+            // $temp['member_id'] = $data['member_id'];
 
-            // Send notification email to user, max try = 3
-            $data['emailcode'] = $temp['emailcode'];
-            $emailCount = 0;
-            do{
-                $emailResult = $this->register_model->sendNotification($data, 'signup');
-                $emailCount++;
-            }while(!$emailResult && $emailCount < 3);
+        //     // Send notification email to user, max try = 3
+        //     $data['emailcode'] = $temp['emailcode'];
+        //     $emailCount = 0;
+        //     do{
+        //         $emailResult = $this->register_model->sendNotification($data, 'signup');
+        //         $emailCount++;
+        //     }while(!$emailResult && $emailCount < 3);
 
-            $temp['email'] = $emailResult ? 1 : 0;
+        //     $temp['email'] = $emailResult ? 1 : 0;
 
-            //Store verification details and increase limit count when necessary
-            $result = $this->register_model->store_verifcode($temp);
+        //     //Store verification details and increase limit count when necessary
+        //     $result = $this->register_model->store_verifcode($temp);
 
-            // If verification code failed to enter database
-            if(!$result){
-                array_push($serverResponse['error'], 'Database verifcode error <br>');
-            }
-            // If registration failed
-            if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
-                array_push($serverResponse['error'], 'Database registration failure <br>');
-                $registrationFlag = false;
-            }else{
-                $registrationFlag = true;
-            }
-            if(!$emailResult){
-                array_push($serverResponse['error'], 'Failed to send verification email. Please verify in user page upon logging in.');
-            }
+        //     // If verification code failed to enter database
+        //     if(!$result){
+        //         array_push($serverResponse['error'], 'Database verifcode error <br>');
+        //     }
+        //     // If registration failed
+        //     if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
+        //         array_push($serverResponse['error'], 'Database registration failure <br>');
+        //         $registrationFlag = false;
+        //     }else{
+        //         $registrationFlag = true;
+        //     }
+        //     if(!$emailResult){
+        //         array_push($serverResponse['error'], 'Failed to send verification email. Please verify in user page upon logging in.');
+        //     }
 
-            if( $registrationFlag && $result ){
-                $serverResponse['result'] = 1;
-            }
-            else{
-                $serverResponse['result'] = 0;
-            }
+        //     if( $registrationFlag && $result ){
+        //         $serverResponse['result'] = 1;
+        //     }
+        //     else{
+        //         $serverResponse['result'] = 0;
+        //     }
 
-        }
-        else{
-            if( !($this->input->post('register_form1')) ){
-                array_push($serverResponse['error'], 'Failed to submit form.');
-            }
-            if( !($this->form_validation->run('landing_form')) ){
-                array_push($serverResponse['error'], 'Failed to validate form.');
-            }
-        }
+        // }
+        // else{
+        //     if( !($this->input->post('register_form1')) ){
+        //         array_push($serverResponse['error'], 'Failed to submit form.');
+        //     }
+        //     if( !($this->form_validation->run('landing_form')) ){
+        //         array_push($serverResponse['error'], 'Failed to validate form.');
+        //     }
+        // }
 
         echo json_encode($serverResponse);
     }

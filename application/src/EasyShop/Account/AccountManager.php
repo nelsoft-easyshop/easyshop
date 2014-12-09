@@ -5,6 +5,7 @@ namespace EasyShop\Account;
 use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
 use Easyshop\Entities\EsMember;
+use Easyshop\Entities\EsStoreColor;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -87,7 +88,6 @@ class AccountManager
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
     }
-
 
     /**
      * Authenticate a web service client
@@ -215,7 +215,7 @@ class AccountManager
         $form->submit([ 'username' => $username,
                         'password' => $password,
                         'contactno' => $contactno,
-                        'email' => $email,
+                        'email' => $email
                     ]);
                     
         if ($form->isValid()) {
@@ -225,7 +225,11 @@ class AccountManager
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
             $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
-            
+                
+            $defaultStoreColor = $this->em
+                                      ->getRepository('EasyShop\Entities\EsStoreColor')
+                                      ->find(\EasyShop\Entities\EsMember::DEFAULT_STORE_COLOR);
+
             $member = new EsMember();
             $member->setUsername($validatedUsername);
             $member->setPassword($hashedPassword);
@@ -238,11 +242,11 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-
+            $member->setStoreColor($defaultStoreColor); 
             $this->em->persist($member);
             $this->em->flush();
         }
-    
+
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
                 'member' => $member];
     }
