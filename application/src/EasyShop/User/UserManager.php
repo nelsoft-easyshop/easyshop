@@ -219,7 +219,22 @@ class UserManager
         return $this;
     }
 
+    /**
+     *  Set storename in es_member table
+     *
+     *  @return object
+     */
+    public function setStoreName($storeName)
+    {
+        $storeName = trim($storeName);
+        $isSuccessful = $this->updateStorename($this->memberEntity, $storeName, false);
+        if(!$isSuccessful){
+            $this->err['storename'] = "Store name already used!";
+            $this->hasError = TRUE;
+        }
 
+        return $this;
+    }
 
 
     /**
@@ -823,9 +838,10 @@ class UserManager
      *
      * @param EasyShop\Entities\EsMember $memberEntity
      * @param string $storename
+     * @param bool $executeFlush
      * @return bool
      */
-    public function updateStorename($memberEntity, $storename)
+    public function updateStorename($memberEntity, $storename, $executeFlush = true)
     {
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -834,11 +850,13 @@ class UserManager
         if(empty($usersWithStorename) && !$isRestricted){
             $memberEntity->setStorename($storename);
             $isSuccessful = true;
-            try{
-                $this->em->flush();
-            }
-            catch(\Doctrine\ORM\Query\QueryException $e){
-                $isSuccessful = false;
+            if($executeFlush){
+                try{
+                    $this->em->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                }
             }
         }
         return $isSuccessful;
