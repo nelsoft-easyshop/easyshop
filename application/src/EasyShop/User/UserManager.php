@@ -826,8 +826,10 @@ class UserManager
             }
         }
         $restrictedRoutes = array_unique(array_merge($restrictedRoutes , $this->reservedSlugs));
+
+        $isRestricted = $this->isStringReservered($storeSlug);
         
-        if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes)){
+        if(empty($usersWithSlug) && !in_array($storeSlug, $restrictedRoutes) && !$isRestricted){
             $memberEntity->setSlug($storeSlug);
             $memberEntity->setIsSlugChanged(true);
             $isSuccessful = true;
@@ -854,8 +856,8 @@ class UserManager
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
                                    ->getUsedStoreName($memberEntity->getIdMember(), $storename);
-   
-        if(empty($usersWithStorename)){
+        $isRestricted = $this->isStringReservered($storename);
+        if(empty($usersWithStorename) && !$isRestricted){
             $memberEntity->setStorename($storename);
             $isSuccessful = true;
             try{
@@ -868,5 +870,23 @@ class UserManager
         return $isSuccessful;
     }
     
+    /**
+     * Checks if a string is reserved
+     *
+     * @param string $string
+     * @return boolean
+     */
+    public function isStringReservered($string)
+    {
+        $reservedKeywords = $this->configLoader->getItem('reserved');
+        $isRestricted = false;
+        foreach($reservedKeywords as $keyword){
+            if(strpos(strtolower($string), $keyword) !== false){
+                $isRestricted = true;
+                break;
+            }
+        }
+        return $isRestricted;
+    }
     
 }
