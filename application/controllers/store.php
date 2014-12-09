@@ -46,7 +46,7 @@ class Store extends MY_Controller
                 
         $vendorSlug = $this->uri->segment(1);
         $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
-                           ->findOneBy(['slug' => $vendorSlug]);
+                           ->findOneBy(['slug' => $vendorSlug, 'isActive' => true]);
 
         if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);

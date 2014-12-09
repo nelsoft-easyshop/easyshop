@@ -78,11 +78,23 @@ class CartManager
     public function validateSingleCartContent($productId, $options, $quantity)
     {
         $product = $this->productManager->getProductDetails($productId);
-        
+    
         if(!$product || (int)$product->getIsDraft() !== 0 || (int)$product->getIsDelete() !== 0 ){
             return false;
         }
-
+        
+        /**
+         * Fix for strange error when the member cannot be obtained from the product object
+         */
+        $seller = $product->getMember();
+        if(!$seller){
+            $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getSeller($productId);
+        }       
+        if((int)$seller->getIsActive() === 1){
+            return false;
+        }
+        
         $cartProductAttributes = array();
         $validatedCartOptions = array();
         $finalPrice = $product->getFinalPrice();
@@ -153,14 +165,6 @@ class CartManager
         $cartIndexName = $this->cart->getIndexName();
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                         ->getDefaultImage($productId);
-        /**
-         * Fix for strange error when the member cannot be obtained from the product object
-         */
-        $seller = $product->getMember();
-        if(!$seller){
-            $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                               ->getSeller($productId);
-        }       
         
         $itemData = array(
             'id' => $productId,
