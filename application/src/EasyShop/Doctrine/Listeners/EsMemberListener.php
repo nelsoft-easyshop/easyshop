@@ -29,21 +29,6 @@ class EsMemberListener implements EventSubscriber
     }
 
     /**
-    * The postPersist event occurs for an entity after the entity has been made persistent.
-    *
-    * @param LifecycleEventArgs $event
-    */
-    public function postPersist(LifecycleEventArgs $event)
-    {
-        $em = $event->getEntityManager();
-        $entity = $event->getEntity();
-
-        if ( ! $entity instanceOf EsMember ) {
-            return;
-        }
-    }
-
-    /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
      * @param  LifecycleEventArgs $event
@@ -108,6 +93,15 @@ class EsMemberListener implements EventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $event)
     {
+        $this->saveActivity($event);
+    }
+
+    /**
+     * Trigger save activity
+     * @param  LifecycleEventArgs $event
+     */
+    private function saveActivity(LifecycleEventArgs $event)
+    {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
         $phrase = "";
@@ -134,7 +128,6 @@ class EsMemberListener implements EventSubscriber
         return [
             Events::preUpdate,
             Events::postUpdate,
-            Events::postPersist,
         ];
     }
 }
