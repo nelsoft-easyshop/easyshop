@@ -134,7 +134,6 @@ $lang['EsAddress'] = [
         'city' => 'City',
         'country' => 'country',
         'address' => 'Address',
-        'gender' => 'Gender',
         'telephone' => 'Telephone Number',
         'mobile' => 'Mobile Number',
         'consignee' => 'Consignee Full name',
