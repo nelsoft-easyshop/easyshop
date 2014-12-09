@@ -39,7 +39,8 @@
                 type: 'get',
                 data: postData,
                 url: "/memberpage/doReactivateAccount",                
-                success: function(data) {        
+                success: function(data) {   
+                    
                     try{              
                         var obj = jQuery.parseJSON(data); 
                         if(obj.result === "success") {
@@ -60,7 +61,8 @@
                             }
                          });                        
                     }                    
-
+                    verifyspan.show();
+                    loadingimg.hide();   
                 },
             });            
         }
