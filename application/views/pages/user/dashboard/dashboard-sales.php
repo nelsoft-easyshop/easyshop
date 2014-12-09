@@ -5,6 +5,7 @@
 
 <div id="current-sales-container" class="sales-breakdown-container">
     <input id="request-type-container" type="hidden" value="<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>" /> 
+    <input id="net-total-container" type="hidden" value="<?=number_format($currentTotalSales,2,'.',',');?>" /> 
     <span class="p-label-stat">
         Total Amount : 
     </span>
@@ -83,6 +84,7 @@
 
 <div id="history-sales-container" class="payout-breakdown-container">
     <input id="request-type-container" type="hidden" value="<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>" /> 
+    <input id="net-total-container" type="hidden" value="<?=number_format($historyTotalSales,2,'.',',');?>" /> 
     <span class="p-label-stat">
         Payout Amount : 
     </span>
