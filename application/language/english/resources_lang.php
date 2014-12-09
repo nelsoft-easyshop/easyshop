@@ -129,6 +129,6 @@ $lang['EsMember'] = [
         'website' => 'Website',
     ];
 
-$lang['update_information'] = "You have updated your :phrase on :date"
+$lang['update_information'] = "You have updated your :phrase"
 ?>
 
