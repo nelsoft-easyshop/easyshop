@@ -86,9 +86,7 @@ class cart extends MY_Controller
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($this->member->getIdMember());
         $arrayCart = unserialize($member->getUserdata());
-        $cartData = empty($arrayCart) 
-                    ? [] 
-                    : unserialize($member->getUserdata());
+        $cartData = empty($arrayCart) ? [] : $arrayCart;
         $formattedCartContents = $this->apiFormatter->formatCart($cartData);
 
         print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
