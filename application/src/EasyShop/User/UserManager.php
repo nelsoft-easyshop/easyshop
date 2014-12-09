@@ -629,17 +629,29 @@ class UserManager
 
     /**
      * Update or insert address of the user
-     * @param string   $streetAddress   [description]
-     * @param integer  $region          [description]
-     * @param integer  $city            [description]
-     * @param integer  $memberId        [description]
-     * @param integer  $type            [description]
-     * @param string   $consignee       [description]
-     * @param string   $mobileNumber    [description]
-     * @param string   $telephoneNumber [description]
+     * @param string   $streetAddress
+     * @param integer  $region
+     * @param integer  $city
+     * @param integer  $memberId
+     * @param integer  $type
+     * @param string   $consignee
+     * @param string   $mobileNumber
+     * @param string   $telephoneNumber
      * @param interger $country
+     *
+     * @return array
      */
-    public function setAddress($streetAddress,$region,$city,$memberId,$consignee="",$mobileNumber="",$telephoneNumber = "", $lat = EsAddress::TYPE_DELIVERY, $lng = EsAddress::TYPE_DELIVERY, $country = 1, $type = EsAddress::TYPE_DELIVERY)
+    public function setAddress($streetAddress,
+                               $region,
+                               $city,
+                               $memberId,
+                               $consignee="",
+                               $mobileNumber="",
+                               $telephoneNumber = "", 
+                               $lat = EsAddress::DEFAULT_LAT, 
+                               $lng = EsAddress::DEFAULT_LNG, 
+                               $country = EsLocationLookup::PHILIPPINES_LOCATION_ID, 
+                               $type = EsAddress::TYPE_DELIVERY)
     { 
         $formValidation = $this->formValidation; 
         $formFactory = $this->formFactory;
