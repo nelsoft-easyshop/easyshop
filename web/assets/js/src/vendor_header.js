@@ -104,7 +104,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
-            url: '/memberpage/'+'updateVendorDetails',
+            url: '/store/updateStoreBannerDetails',
             data: "vendor_details=1&store_name="+storName+
                     "&mobile="+mobileNumber+
                     "&stateregion="+stateRegion+
