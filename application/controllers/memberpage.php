@@ -2161,13 +2161,18 @@ class Memberpage extends MY_Controller
         $getData = $hashUtility->decode($this->input->get('h'));
 
         $authenticationResult = $this->accountManager
-                       ->authenticateMember($this->input->get('username'), $this->input->get('password'), false, true);  
+                                     ->authenticateMember($this->input->get('username'), 
+                                                          $this->input->get('password'), 
+                                                          false, 
+                                                          true);  
         $isActivationRequestValid = $authenticationResult['member']
                                     && $authenticationResult['member']->getIdMember() === (int)$getData[0] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
         if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
-            $this->em->getRepository('EasyShop\Entities\EsMember')->accountActivation($authenticationResult["member"], true);          
+            $this->em
+                 ->getRepository('EasyShop\Entities\EsMember')
+                 ->accountActivation($authenticationResult["member"], true);          
             $response = true;
         }
 
