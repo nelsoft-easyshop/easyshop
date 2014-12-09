@@ -17,6 +17,13 @@ class IsAccountNumberUnique extends Constraint
      * @var integer
      */
     private $memberId;
+    
+    /**
+     * BillingInfo ID
+     *
+     * @var integer
+     */
+    private $accountId;
 
     /**
      * Constraint constructor
@@ -25,6 +32,10 @@ class IsAccountNumberUnique extends Constraint
      */
     public function __construct($options)
     {
+        $this->accountId = null;
+        if(isset($options['accountId'])){
+            $this->accountId = $options['accountId'];
+        }        
         if(is_int($options['memberId'])){
             $this->memberId = $options['memberId'];
         }
@@ -42,6 +53,16 @@ class IsAccountNumberUnique extends Constraint
     public function getMemberId()
     {
         return $this->memberId;
+    }
+    
+    /**
+     * Returns the accountId
+     *
+     * @return integer
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
     }
     
 }
