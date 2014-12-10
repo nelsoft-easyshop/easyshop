@@ -36,9 +36,11 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Telephone Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="<?php echo html_escape(($address) ? $address->getTelephone() : '')?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here">
-                        <!--DISPLAY WHEN OK-->
-                        <!-- <span class="val-success"><i class="fa fa-check"></i></span> -->
+                        <input type="text" class="text-info text-required" value="<?php echo html_escape(($address) ? $address->getTelephone() : '')?>" id="consigneeLandLine" name="c_telephone" placeholder="Enter your telephone number here (e.g. 123-1234)">
+                        <div id="errorsDivTelephone" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextTelephone"></span>
+                        </div>
                     </div>
                 </div>
                 

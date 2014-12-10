@@ -972,7 +972,7 @@
         var shipmentModal = $(this).parent().find('div.shipping-details');
         var shipmentContainer = $(this).parent().find('div.shipping-details-container');
         var thisbtn = $(this);
-        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var txStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var form = shipmentModal.find('.shipping_details_form');
         var submitbtn = $(form).find('.shipping_comment_submit');
         var input = $(form).find('input[type="text"]');
@@ -983,6 +983,11 @@
         var delivery_date = form.find('input[name="delivery_date"]');
         var expected_date = form.find('input[name="expected_date"]');
         var textarea = $(form).find('textarea');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        shipmentModal.find('input[name="order_product"]').val(orderProductIds);
 
         courier.val(shipmentContainer.find('input[name="courier"]').val());
         tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
@@ -1048,7 +1053,7 @@
                                         textarea.attr('disabled', true);
 
                                         if(thisbtn.hasClass('isform')) {
-                                            txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                            txStatus.replaceWith('<span class="trans-status-cod status-class">Item shipped</span>');
                                         }
                                         $.modal.close();
                                     }else{
@@ -1096,13 +1101,22 @@
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
-        var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
-        var serializedData = form.serializeArray();
-        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+        var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
+
+        if( txResponseBtn.hasClass('tx_return') ) {
+            var hiddenInputs = txResponseBtn.closest('.item-list-panel').find('.order-product-ids');
+            var orderProductIds = hiddenInputs.map(function() {
+                return this.value;
+            }).get().join('-');
+            txResponseBtn.closest('.item-list-panel').find('input[name="seller_response"]').val(orderProductIds);
+        }
+        var serializedData = form.serializeArray();
+        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+
         $.ajax({
             url : '/memberpage/transactionResponse',
             method : 'POST',
@@ -1127,7 +1141,7 @@
                     if(txResponseBtn.hasClass('tx_forward')){
                         txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                     }else if(txResponseBtn.hasClass('tx_return')){
-                        txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
                     }else if(txResponseBtn.hasClass('tx_cod')){
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                     }
