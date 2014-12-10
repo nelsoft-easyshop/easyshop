@@ -275,7 +275,10 @@ class Register extends MY_Controller
         $cur_password = $this->input->post('cur_password');
         $password = $this->input->post('password');         
 
-        $dataval = array('login_username' => $username, 'login_password' => $cur_password);
+        $dataval = [
+            'login_username' => $username, 
+            'login_password' => $cur_password
+        ];
         $this->accountManager = $this->serviceContainer['account_manager'];            
         $row = $this->accountManager->authenticateMember($username, $cur_password);
 
