@@ -1006,6 +1006,12 @@ $string = '<typeNode>
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
 
+        if(isset($pageContent['mainSlide'][0]) === false){
+            $temp = $pageContent['mainSlide'];
+            $pageContent['mainSlide'] = [];
+            $pageContent['mainSlide'][] = $temp;
+        }
+
         // banner images
         $bannerImages = [];
         foreach ($pageContent['mainSlide'] as $key => $value) {
