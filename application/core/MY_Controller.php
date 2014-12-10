@@ -216,7 +216,7 @@ class MY_Controller extends CI_Controller
             array_push($temp, $x);
         }
         $array = $temp; 
-    }
+    }  
     
     /**
      *  Authentication method for webservice
