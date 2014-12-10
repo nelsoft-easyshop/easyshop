@@ -31,7 +31,7 @@
                 </button>
                 <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
                 <div id="verifyEmail" style="<?php echo $member->getIsEmailVerify() == 0 && trim($member->getEmail()) !== ''?'':'display:none;'?>"  <?php echo (trim($member->getEmail())==''?'':'disabled');?>>
-                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
+                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Resend Email Verification</span>
                 </div>
                 <div id="verifiedEmail" style="<?php echo $member->getIsEmailVerify() == 0?'display:none;':''?>">
                     <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
