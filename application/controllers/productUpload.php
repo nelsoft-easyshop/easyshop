@@ -1290,11 +1290,28 @@ class productUpload extends MY_Controller
     }
     
     /**
-     * Handler for additional info in product uploads
-     * Update billing info, CoD and meetup in product table
-     * Upload shipping details if for delivery
-     *
-     */
+    * Handler for additional info in product uploads
+    * Update billing info, CoD and meetup in product table
+    * Upload shipping details if for delivery
+    *
+    */
+    public function newStep4()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $deliveryOption = $this->input->post('delivery_option') 
+                          ? $this->input->post('delivery_option') : [];
+        $shipWithinDays = trim($this->input->post('ship_within'));
+        $productId = $this->input->post('prod_h_id');
+        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
+        
+        $serverResponse = [
+            'result' => 'fail',
+            'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
+        ];
+
+        
+    }
+
     public function step4()
     {    
         $this->load->model('memberpage_model');
