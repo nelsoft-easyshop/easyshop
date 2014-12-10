@@ -69,6 +69,7 @@ class TransactionManager
                         if ( (bool) $product['courier'] === true &&  (bool) $product['datemodified']  === true ) {
                             $product['has_shipping_summary'] = true;
                         }
+                        $product['sellerStoreName'] = (bool) $product['sellerStoreName'] !== false ? $product['sellerStoreName'] : $product['seller'];
                         $boughtTransactionDetails[$definedKey]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
                     }
                     if ($product['attrName'] && $transaction['sellerId'] === $product['seller_id']) {
@@ -99,6 +100,7 @@ class TransactionManager
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
                 $soldTransactionDetails[$transaction['idOrder']]['userImage'] = $this->userManager->getUserImage($transaction['buyerId']);
+                $soldTransactionDetails[$transaction['idOrder']]['buyerStoreName'] = (bool) $transaction['buyerStoreName'] !== false ? $transaction['buyerStoreName'] : $transaction['buyer'];
                 $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
                 foreach ($orderProducts as $productKey => $product) {
                     if ( (int) $memberId !== (int) $product['seller_id']) {

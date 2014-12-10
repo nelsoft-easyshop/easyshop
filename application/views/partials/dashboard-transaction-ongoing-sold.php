@@ -109,7 +109,7 @@
                                         <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
                                     </span>
                                     <span class="transac-item-consignee-name">
-                                        <?=html_escape($soldTransactionDetails['buyerslug'])?>
+                                        <?=html_escape($soldTransactionDetails['buyerStoreName'])?>
                                     </span>
                                 </div>
                                 <div class="pos-rel">

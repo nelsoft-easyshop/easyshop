@@ -54,6 +54,7 @@ class EsOrderRepository extends EntityRepository
                                 shippingAdd.address as fulladd,
                                 o.isFlag,
                                 m.username as buyer,
+                                COALESCE(m.storeName, 0) as buyerStoreName,
                                 m.slug as buyerslug,
                                 pm.idPaymentMethod,
                                 pm.name as paymentMethod,

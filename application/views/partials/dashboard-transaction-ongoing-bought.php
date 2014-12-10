@@ -157,7 +157,7 @@
                                     <img src="<?=$boughtTransactionDetails['userImage']?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
-                                    <?=html_escape($product['sellerSlug'])?>
+                                    <?=html_escape($product['sellerStoreName'])?>
                                 </span>
                             </div>
                         </div>
