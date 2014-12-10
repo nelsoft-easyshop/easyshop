@@ -272,7 +272,7 @@ class AccountManager
             $verifCode->setMobilecode($userData["mobileCode"]);
             $verifCode->setDate(new DateTime('now'));
             $verifCode->setFpTimestamp(new DateTime('now'));
-            $verifCode->setEmailcount($userData["email"]);
+            $verifCode->setEmailcount((int)$userData["email"]);
             $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
             $this->em->persist($verifCode);
             $this->em->flush();
