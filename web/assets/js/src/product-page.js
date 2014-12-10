@@ -112,7 +112,8 @@
 
     function checkCombination($arraySelected)
     {            
-        var $addToCartButton = $('.prod-add-to-cart-btn');        
+        var $addToCartButton = $('.prod-add-to-cart-btn');
+        var $appendString = "";
         // check possible combination
         $.each($productCombQuantity, function(i, val) {
             $arrayCombination = val.product_attribute_ids;
@@ -134,9 +135,9 @@
                 }
                 else{
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
-                        $("#control-quantity").append('<option value="'+i+'">'+ i +'</option>');
+                        $appendString += '<option value="'+i+'">'+ i +'</option>';
                     };
-
+                    $("#control-quantity").append($appendString);
                     $addToCartButton.removeClass("disabled").addClass("enabled");
                     $(".availability-status").html("In Stock").removeClass("out-of-stock").addClass("in-stock");
                 }

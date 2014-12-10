@@ -75,7 +75,7 @@
                                     <?PHP endif; ?>
                                 </div>
                                 <?php if( $product['has_shipping_summary'] == 1 ):?>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12">
                                         <span class="strong-label shipment-detail-button">View shipment detail</span>
                                         <div class="shipping-details">
                                             <div class="shipping-details-wrapper">

@@ -49,7 +49,7 @@
 
 
     <select id="getPurchaseTransactionDetails">
-        SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as finalprice, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net,
+        SELECT o.id_order, buyer.username as buyer, buyer.store_name as buyer_store, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.store_name as seller_store, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as finalprice, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net,
             opa.attr_name, opa.attr_value, buyer.email as buyer_email, o.invoice_no,
             IF(badd.mobile='','N/A',CONCAT('0',badd.mobile)) as buyer_contactno, IF(seller.contactno='','N/A',CONCAT('0',seller.contactno)) as seller_contactno,
             l0.location as stateregion, l1.location as city, badd.address,COALESCE(badd.telephone, 'N/A') as buyer_telephone,
