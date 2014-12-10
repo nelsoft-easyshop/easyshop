@@ -10,7 +10,7 @@
             <div style="margin-top: 20px; font-size: 13px;">
                 
                 <p>
-                    Dear {buyer_name},
+                    Dear {buyer_store},
                 </p>
 
                 <p style="text-align:justify;text-justify:inter-word;">
@@ -77,7 +77,7 @@
                                                             Purchased from:
                                                         </td>
                                                         <td style="padding-left: 20px !important; text-align:right !important; padding-bottom:5px;  padding-top:10px; padding-right:7px; border-color: #ADAD85; border-width: 0px 0px 1px 0px; border-style:dotted;" align="right ">
-                                                            {seller} 
+                                                            {seller_store} 
                                                             <span>
                                                                 <a href="{store_link}{seller_slug}" style="text-decoration: none;">
                                                                     <img src="appbar.home.png" width="15" height="15"/>
