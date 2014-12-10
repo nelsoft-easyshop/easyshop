@@ -1249,7 +1249,7 @@ class Payment extends MY_Controller{
      * @param string $mode
      */
     public function paymentSuccess($mode = "easyshop")
-    {   
+    {
         if(strtolower($mode) === 'cashondelivery'){
             $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
@@ -1276,7 +1276,7 @@ class Payment extends MY_Controller{
         $response['message'] = (string)$this->session->flashdata('msg');
         $status = (string)$this->session->flashdata('status');
 
-        $response['completepayment'] = ($status == 's' ? true : false);
+        $response['completepayment'] = $status === 's';
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
         $response['itemList'] = json_decode($payDetails['data_response'],true);
         if($paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY && $status === 'f'){
@@ -1296,6 +1296,15 @@ class Payment extends MY_Controller{
         else{
             // google analytics data
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
+
+            // add storename in item list collection
+            foreach ($response['itemList'] as $key => $value) {
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy([
+                                            'username' => $value['seller_username']
+                                        ]);
+                $response['itemList'][$key]['store_name'] = $member->getStoreName();
+            }
         }
 
         $response['analytics'] =  $analytics;
