@@ -68,4 +68,12 @@ class StringUtility
     {
         return  $this->htmlPurifier->purify($string);
     }
+
+    public function removeNonUTF(&$string)
+    {
+        $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+        $string = preg_replace('/[^(\x20-\x7F)]*/','', $string);
+
+        return $string;
+    }
 }
