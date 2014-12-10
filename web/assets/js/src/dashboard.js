@@ -968,7 +968,7 @@
         var shipmentModal = $(this).parent().find('div.shipping-details');
         var shipmentContainer = $(this).parent().find('div.shipping-details-container');
         var thisbtn = $(this);
-        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var txStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var form = shipmentModal.find('.shipping_details_form');
         var submitbtn = $(form).find('.shipping_comment_submit');
         var input = $(form).find('input[type="text"]');
@@ -979,6 +979,11 @@
         var delivery_date = form.find('input[name="delivery_date"]');
         var expected_date = form.find('input[name="expected_date"]');
         var textarea = $(form).find('textarea');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        shipmentModal.find('input[name="order_product"]').val(orderProductIds);
 
         courier.val(shipmentContainer.find('input[name="courier"]').val());
         tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
@@ -1044,7 +1049,7 @@
                                         textarea.attr('disabled', true);
 
                                         if(thisbtn.hasClass('isform')) {
-                                            txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                            txStatus.replaceWith('<span class="trans-status-cod status-class">Item shipped</span>');
                                         }
                                         $.modal.close();
                                     }else{
