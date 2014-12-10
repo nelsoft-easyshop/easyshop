@@ -2022,14 +2022,16 @@ class Memberpage extends MY_Controller
             }             
             if($authenticatedMember) {
                 $this->load->library('encrypt');
-                $result = $this->encrypt->encode($member['member']->getIdMember());
-                $this->load->library('parser');
+                $hash = serialize([
+                    'memberId' => $member['member']->getIdMember(),
+                ]);                
+                $result = $this->encrypt->encode($hash);
                 $parseData = array(
                     'username' => $member['member']->getUsername(),
-                    'hash' => $this->encrypt->encode($member['member']->getIdMember()),
+                    'hash' => $result,
                     'site_url' => site_url('memberpage/showActivateAccount')
                 );        
-
+                $this->load->library('parser');
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
@@ -2063,7 +2065,7 @@ class Memberpage extends MY_Controller
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
-                                    && $authenticationResult['member']->getIdMember() === (int)$getData[0] 
+                                    && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
         if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
@@ -2088,13 +2090,13 @@ class Memberpage extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+        if ((int)($getData["memberId"]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
         else {
              $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy([
-                                    'idMember' => $getData[0],
+                                    'idMember' => $getData["memberId"],
                                     'isActive' => 0
                                 ]);
 
@@ -2108,7 +2110,7 @@ class Memberpage extends MY_Controller
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                     'relCanonical' => base_url(),
                     'username' => $member->getUsername(),
-                    'idMember' => $getData[0],            
+                    'idMember' => $getData["memberId"],            
                     'hash' => $this->input->get('h')            
                 );
                 $data = array_merge($data, $this->fill_header());
