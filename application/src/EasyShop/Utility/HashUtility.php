@@ -27,4 +27,20 @@ class HashUtility
 
         return $getData;
     }
+
+    /**
+     * Returns random Alpha-numeric strings based on the passed parameter string length
+     * @param int $length
+     * @return string
+     */
+    public function generateRandomAlphaNumeric($length)
+    {
+        $characters = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+        $string = '';
+        for ($i = 0; $i < $length; $i++) 
+        {
+              $string .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $string;
+    }        
 }
