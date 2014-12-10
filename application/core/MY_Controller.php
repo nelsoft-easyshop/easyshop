@@ -216,19 +216,7 @@ class MY_Controller extends CI_Controller
             array_push($temp, $x);
         }
         $array = $temp; 
-    }
-
-
-    function rand_alphanumeric($length)
-    {
-        $characters = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789';
-        $string = '';
-        for ($i = 0; $i < $length; $i++) 
-        {
-              $string .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $string;
-    }    
+    }  
     
     /**
      *  Authentication method for webservice
