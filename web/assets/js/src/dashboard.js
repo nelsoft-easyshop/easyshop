@@ -220,15 +220,15 @@
        $('.sales-title-total').removeClass("active-bar");
     });
 
-    $(".trans-item-info").click(function() {
+    $('#transactions').on('click', '.trans-item-info', function() {
         $(this).children("i").toggleClass("fa-minus-circle");
         $(this).next(".info-attributes").slideToggle();
     });
 
-    $(".view-delivery-lnk").click(function() {
+    $('#transactions').on('click', '.view-delivery-lnk', function() {
         $(this).next(".view-delivery-details").slideToggle();
     });
-    
+
     $( "#set-default" ).hover(function() {
         $( ".default-ad-explain" ).slideToggle( "slow" );
     });
