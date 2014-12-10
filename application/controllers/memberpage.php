@@ -1295,6 +1295,7 @@ class Memberpage extends MY_Controller
             echo json_encode($bank_names);
         }
     }
+    
     /**
      *  Fetch billing info/details of user
      *
@@ -1331,6 +1332,7 @@ class Memberpage extends MY_Controller
             echo '{"e":"0","d":"fail"}';
         }
     }
+    
     /**
      *  Used to update user's billing info
      *
@@ -1370,6 +1372,7 @@ class Memberpage extends MY_Controller
         }
         echo $return;
     }
+    
     /**
      *  Used to delete user's billing info
      */
