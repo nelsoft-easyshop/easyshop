@@ -395,6 +395,8 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
 
+        $entityManager = $this->serviceContainer['entity_manager'];
+
         $member_id =  $this->session->userdata('member_id');
         $remove = $this->payment_model->releaseAllLock($member_id);
         $qtySuccess = $this->resetPriceAndQty(); 
@@ -423,6 +425,16 @@ class Payment extends MY_Controller{
         $data['promoteSuccess'] = $promoteSuccess;
 
         if(!count($itemArray) <= 0){
+
+            // add storename in item list collection
+            foreach ($itemArray as $key => $value) {
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy([
+                                            'username' => $value['seller_username']
+                                        ]);
+                $itemArray[$key]['store_name'] = $member->getStoreName();
+            }
+
             $data['cat_item'] = $itemArray;
             $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
             $data['success'] = ($successCount == $itemCount ? true : false);
@@ -438,8 +450,8 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             // Get all available points
-            $data['maxPoint'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
-                            ->getMaxPoint(intval($member_id));
+            $data['maxPoint'] = $entityManager->getRepository('EasyShop\Entities\EsPoint')
+                                              ->getMaxPoint(intval($member_id));
             
             // Load view
             $this->load->view('templates/header', $header); 
