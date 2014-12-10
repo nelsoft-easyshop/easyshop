@@ -583,6 +583,20 @@ a{
     margin-top: -21px;
 }
 
+.div-meta-description .shipment-detail-button {
+    cursor: pointer;
+    border: 2px solid #565656;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 12px 4px 0 4px;
+    padding: 4px;
+}
+
+.div-meta-description .shipment-detail-button:hover {
+    color: #fff;
+    background-color: #565656;
+}
+
 .toggle-info{
     padding: 2px 5px;
     background: #565656;
