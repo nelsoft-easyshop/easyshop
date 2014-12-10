@@ -295,7 +295,7 @@
 
     $('#consigneeLandLine').on('keypress',function(e){
         var keyCode = event.keyCode;
-        if ( ! (keyCode >= 48 && keyCode <= 57) && keyCode !== 45) {
+        if ( ! (keyCode >= 48 && keyCode <= 57) && keyCode !== 45 && keyCode !== 43) {
               event.preventDefault();
         }
     });
