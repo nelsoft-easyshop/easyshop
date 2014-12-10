@@ -21,11 +21,22 @@ class IsAccountNumberUniqueValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $memberId = $constraint->getMemberId();
-        $paymentAccount = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
-                                   ->findOneBy([
-                                        'member' => $memberId, 
-                                        'bankAccountNumber' => $value,
-                                    ]);
+        $accountId =  $constraint->getAccountId();
+        
+        $queryBuilder = $this->em->createQueryBuilder()
+                                ->select('b')
+                                ->from('\EasyShop\Entities\EsBillingInfo', 'b')
+                                ->where('b.member = :member')
+                                ->andWhere('b.bankAccountNumber = :account_number')
+                                ->setParameter('member', $memberId)
+                                ->setParameter('account_number', $value);
+        if($accountId !== null){
+            $queryBuilder->andWhere('b.idBillingInfo != :idBillingInfo')
+                         ->setParameter('idBillingInfo', $accountId);
+        }
+        $paymentAccount = $queryBuilder->getQuery()
+                                        ->getOneOrNullResult();
+                       
         if($paymentAccount){   
             $this->context->addViolation(
                 $constraint->message,

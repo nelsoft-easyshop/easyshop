@@ -212,7 +212,7 @@ class SocialMediaManager
         $form->submit([ 'username' => $username]);
         if ($form->isValid()) {
             $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
-                                          ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
+                                           ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
             $member = new EsMember();
             $member->setUsername($username);
             $member->setFullname($fullname);
