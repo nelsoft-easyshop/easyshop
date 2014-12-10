@@ -451,7 +451,7 @@ class Payment extends MY_Controller{
 
             // Get all available points
             $data['maxPoint'] = $entityManager->getRepository('EasyShop\Entities\EsPoint')
-                                              ->getMaxPoint(intval($member_id));
+                                              ->getMaxPoint((int)$member_id);
             
             // Load view
             $this->load->view('templates/header', $header); 
