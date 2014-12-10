@@ -53,6 +53,7 @@
         
         <div class="div-store-setup payment-account-loading" style="text-align:center">
             <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+            <p class="loading-text">Loading your payment accounts...</p>
         </div>
 
         <div id="payment-account-template" class="bank-account-item mrgn-bttm-15" style="display:none">

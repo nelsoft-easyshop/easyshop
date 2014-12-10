@@ -55,12 +55,12 @@
                                         <?php $fu = $followed_users[$i]; ?>
                                         <div class="media pd-8-12 side-panel">
                                             <div class="pull-left media-image">
-                                                <a class="" target="_blank" href="/<?php echo html_escape($fu['userslug'])?>">
+                                                <a class="" href="/<?php echo html_escape($fu['userslug'])?>">
                                                     <img class="media-object" src="/<?php echo  $fu['imgurl']?>">
                                                 </a>
                                             </div>
                                             <div class="media-body">
-                                                <h5 class="title"><a target="_blank" href="/<?php echo html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
+                                                <h5 class="title"><a href="/<?php echo html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
                                                 <span class="sub-title"><?php echo $fu['datecreated']?></span>
                                             </div>              
                                             <hr style='margin-bottom: 3px;'/>
@@ -125,13 +125,13 @@
                         <div class="media table-bordered mrgn-bttm-8 product feature">
                             <div class="col-md-9 col-sm-9 media-sub media-content">
                                 <div class="pull-left media-image">
-                                    <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                    <a href="<?php echo "/item/" . $prod['slug']?>">
                                         <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                     </a>
                                 </div>
                                 <div class="media-body">
                                     <div class="content">
-                                        <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo $prod['product_name']?></a></h5>
+                                        <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo $prod['product_name']?></a></h5>
                                         <?php echo html_escape($prod['brief'])?>
                                     </div>
                                     <div class="condition m-screen l-screen">
@@ -156,7 +156,7 @@
                                         <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                                     <?php endif;?>
                                 </div>
-                                <div class="orange-btn"><a target="_blank" href="<?php echo  "/item/" . $prod['slug']?>">Buy Now</a></div>
+                                <div class="orange-btn"><a href="<?php echo  "/item/" . $prod['slug']?>">Buy Now</a></div>
                             </div>
                         </div>
                         <?php endforeach;?>
@@ -166,13 +166,13 @@
                             <div class="media table-bordered mrgn-bttm-8 product">
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                        <a href="<?php echo "/item/" . $prod['slug']?>">
                                             <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
                                         <div class="content">
-                                            <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
+                                            <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
                                             <?php echo html_escape($prod['brief'])?>
                                         </div>
                                         <div class="condition m-screen l-screen">
@@ -197,7 +197,7 @@
                                             <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                                         <?php endif;?>
                                     </div>
-                                    <div class="orange-btn"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
+                                    <div class="orange-btn"><a href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
                             <?php endforeach;?>
@@ -218,13 +218,13 @@
                             <div class="media table-bordered mrgn-bttm-8 product">
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                        <a href="<?php echo "/item/" . $prod['slug']?>">
                                             <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
                                         <div class="content">
-                                            <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
+                                            <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
                                             <?php echo html_escape($prod['brief'])?>
                                         </div>
                                         <div class="condition m-screen l-screen">
@@ -249,7 +249,7 @@
                                             <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                                         <?php endif;?>
                                     </div>
-                                    <div class="orange-btn"><a target="_blank" href="<?php echo  "/item/" . $prod['slug']?>">Buy Now</a></div>
+                                    <div class="orange-btn"><a href="<?php echo  "/item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
                             <?php endforeach;?>
@@ -270,13 +270,13 @@
                             <div class="media table-bordered mrgn-bttm-8 product">
                                 <div class="col-md-9 col-sm-9 media-sub media-content">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                        <a href="<?php echo "/item/" . $prod['slug']?>">
                                             <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
                                         <div class="content">
-                                            <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
+                                            <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
                                             <?php echo html_escape($prod['brief'])?>
                                         </div>
                                         <div class="condition m-screen l-screen">
@@ -301,7 +301,7 @@
                                             <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                                         <?php endif;?>
                                     </div>
-                                    <div class="orange-btn"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
+                                    <div class="orange-btn"><a href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
                             <?php endforeach;?>
@@ -329,14 +329,14 @@
                                     <?php foreach($followed_users as $fu):?>
                                         <div class="media pd-8-12 seller-container">
                                             <div class="pull-left media-image" >
-                                                <a target="_blank" href="/<?php echo html_escape($fu['vendor_name'])?>">
+                                                <a href="/<?php echo html_escape($fu['vendor_name'])?>">
                                                     <span>
                                                         <img class="media-object" src="/<?php echo $fu['imgurl']?>">
                                                     </span>
                                                 </a>
                                             </div>
                                             <div class="media-body">
-                                                <h5 class="title"><a target="_blank" href="/<?php echo html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
+                                                <h5 class="title"><a href="/<?php echo html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
                                                 <span class="sub-title"><span class='join-lbl'>Joined: </span><?php echo $fu['datecreated']?></span>
                                             </div>
                                         </div>
@@ -357,13 +357,13 @@
                                 <div class="media table-bordered mrgn-bttm-8 product">
                                     <div class="col-md-9 col-sm-9 media-sub media-content">
                                         <div class="pull-left media-image">
-                                            <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                            <a href="<?php echo "/item/" . $prod['slug']?>">
                                                 <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                             </a>
                                         </div>
                                         <div class="media-body">
                                             <div class="content">
-                                                <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                                <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
                                                 <?php echo html_escape($prod['brief'])?>
                                             </div>
                                             <div class="condition m-screen l-screen">
@@ -388,7 +388,7 @@
                                                 <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                                             <?php endif;?>
                                         </div>
-                                        <div class="orange-btn"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
+                                        <div class="orange-btn"><a href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
                                     </div>
                                 </div>
                                 <?php endforeach;?>
@@ -419,12 +419,12 @@
                             <?php foreach($popular_items as $prod):?>
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                        <a href="<?php echo "/item/" . $prod['slug']?>">
                                             <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                        <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
                                         <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',')?></span>
                                     </div>
                                 </div>
@@ -446,12 +446,12 @@
                             <?php foreach($promo_items as $prod):?>
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                                        <a href="<?php echo "/item/" . $prod['slug']?>">
                                             <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="title"><a target="_blank" href="<?php echo  "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                        <h5 class="title"><a href="<?php echo  "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
                                         <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',') ?></span>
                                     </div>
                                 </div>

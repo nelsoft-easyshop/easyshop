@@ -207,7 +207,7 @@
                                                 <?php foreach ($cat_item as $key => $value): ?>
                                                     <tr>
                                                         <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                            <?php echo html_escape($value['seller_username']); ?>
+                                                            <?php echo html_escape($value['store_name']); ?>
                                                         </td>
                                                         <td width="40%">
                                                             <?php echo html_escape($value['name']); ?>
@@ -264,7 +264,7 @@
                                                 <?php foreach ($cat_item as $key => $value): ?>
                                                     <tr>
                                                         <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                            <?php echo html_escape($value['seller_username']); ?>
+                                                            <?php echo html_escape($value['store_name']); ?>
                                                         </td>
                                                         <td width="40%">
                                                             <?php echo html_escape($value['name']); ?>
@@ -278,7 +278,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="border-top: 0px;">
-                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href=/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
                                                         </td>
                                                     </tr> 
                                                 <?php endforeach; ?>
@@ -321,7 +321,7 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                                 <tr>
                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                        <?php echo html_escape($value['seller_username']) ?>
+                                                        <?php echo html_escape($value['store_name']) ?>
                                                     </td>
                                                     <td width="40%">
                                                         <?php echo html_escape($value['name']) ?>
@@ -373,7 +373,7 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo html_escape($value['seller_username']) ?>
+                                                    <?php echo html_escape($value['store_name']) ?>
                                                 </td>
                                                 <td width="40%">
                                                     <?php echo html_escape($value['name']) ?>
@@ -425,7 +425,7 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo html_escape($value['seller_username']); ?>
+                                                    <?php echo html_escape($value['store_name']); ?>
                                                 </td>
                                                 <td width="40%">
                                                     <?php echo html_escape($value['name']); ?>
@@ -488,7 +488,7 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo html_escape($value['seller_username']); ?>
+                                                    <?php echo html_escape($value['store_name']); ?>
                                                 </td>
                                                 <td width="40%">
                                                     <?php echo html_escape($value['name']); ?>
@@ -582,7 +582,7 @@
                                                             <?php foreach ($cat_item as $key => $value): ?>
                                                                 <tr>
                                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                        <?php echo html_escape($value['seller_username']); ?>
+                                                                        <?php echo html_escape($value['store_name']); ?>
                                                                     </td>
                                                                     <td width="40%">
                                                                         <?php echo html_escape($value['name']); ?>
@@ -641,7 +641,7 @@
                                                             <?php foreach ($cat_item as $key => $value): ?>
                                                                 <tr>
                                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                        <?php echo $value['seller_username'] ?>
+                                                                        <?php echo $value['store_name'] ?>
                                                                     </td>
                                                                     <td width="40%">
                                                                         <?php echo html_escape($value['name']); ?>
@@ -692,7 +692,7 @@
                                                         <?php foreach ($cat_item as $key => $value): ?>
                                                             <tr>
                                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                    <?php echo $value['seller_username'] ?>
+                                                                    <?php echo $value['store_name'] ?>
                                                                 </td>
                                                                 <td width="40%">
                                                                     <?php echo html_escape($value['name']); ?>
@@ -745,7 +745,7 @@
                                                         <?php foreach ($cat_item as $key => $value): ?>
                                                         <tr>
                                                             <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                <?php echo html_escape($value['seller_username']); ?>
+                                                                <?php echo html_escape($value['store_name']); ?>
                                                             </td>
                                                             <td width="40%">
                                                                 <?php echo html_escape($value['name']); ?>
