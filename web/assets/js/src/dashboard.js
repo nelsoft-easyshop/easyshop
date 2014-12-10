@@ -1241,13 +1241,18 @@
                     else {
                         var serializedData = $(form).serializeArray();
                         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
-                        $.post('/memberpage/addFeedback', serializedData, function(data) {
-                            if (parseInt(data) === 1) {
-                                alert('Your feedback has been submitted.');
-                                btn.remove();
-                            }
-                            else {
-                                alert('An error was encountered. Try again later.');
+                        $.ajax({
+                            url : '/memberpage/addFeedback',
+                            method : 'POST',
+                            data : serializedData,
+                            success : function (data) {
+                                if (parseInt(data) === 1) {
+                                    alert('Your feedback has been submitted.');
+                                    btn.remove();
+                                }
+                                else {
+                                    alert('An error was encountered. Try again later.');
+                                }
                             }
                         });
                         $.modal.close();
