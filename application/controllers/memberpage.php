@@ -974,18 +974,19 @@ class Memberpage extends MY_Controller
                                             ->findOneBy(["orderProduct" => $orderProductEntity,
                                                 "member" => $memberEntity
                                             ]);
+                $shippingCommentEntitySize = count($shippingCommentEntity);
 
-                if( count($shippingCommentEntity) === 1 ){
+                if ( $shippingCommentEntitySize === 1 ) {
                     $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
                                                ->getExactShippingComment($postData);
                 }
 
-                if( count($orderProductEntity) === 1 ){
+                if( count($orderProductEntity) === 1 ) {
                     $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
                     $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
                     $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
 
-                    if( $boolAddShippingComment && ( count($shippingCommentEntity) === 0 || count($exactShippingComment) === 0 ) ){
+                    if( $boolAddShippingComment && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
                         $buyerEntity = $orderEntity->getBuyer();
                         $buyerEmail = $buyerEntity->getEmail();
                         $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
