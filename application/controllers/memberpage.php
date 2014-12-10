@@ -606,60 +606,6 @@ class Memberpage extends MY_Controller
     }
     
 
-    /**
-     *  Fetch all data needed when displaying the Member page
-     *  
-     *  @return array
-     */
-    public function fill_view()
-    {
-        $uid = $this->session->userdata('member_id');
-        $user_product_count = $this->memberpage_model->getUserItemCount($uid);
-        $um = $this->serviceContainer['user_manager'];
-
-        
-        $data = array(
-            'title' => 'Easyshop.ph - Member Profile',
-            'image_profile' => $um->getUserImage($uid),
-            'active_products' => $this->memberpage_model->getUserItems($uid,0),
-            'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-            'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
-            'active_count' => intval($user_product_count['active']),
-            'deleted_count' => intval($user_product_count['deleted']),
-            'sold_count' => intval($user_product_count['sold']),
-            'draft_count' => intval($user_product_count['draft'])
-        );
-        $data = array_merge($data, $this->memberpage_model->getLocationLookup());
-        $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-        $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
-        $data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
-        $data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-        $data['transaction'] = array(
-            'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 0),
-            'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
-            'complete' => array(
-                'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 1),
-                'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
-            )
-        );
-        $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
-        $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-        $data['sales'] = array(
-            'release' => $this->memberpage_model->getNextPayout($uid),
-            'balance' => $this->memberpage_model->getUserBalance($uid)
-        );
-
-        //If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
-        if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
-            $data['address']===$data['c_address'] ){
-            $data['show_default_address'] = false;
-        }
-        else{
-            $data['show_default_address'] = true;
-        }
-
-        return $data;
-    }
 
     /**
      *  Used to upload avatar image on both Member page and Vendor page
