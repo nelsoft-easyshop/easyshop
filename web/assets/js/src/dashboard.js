@@ -962,14 +962,6 @@
             changeYear: true
         });
 
-        $( ".modal_date" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            yearRange: '2013:2050',
-            dateFormat:"yy-M-dd"
-        }).on('keypress',function(){
-            return false;
-        });
     });
 
     $('#transactions').on('click', '.shipment-detail-button', function(e) {
@@ -998,6 +990,14 @@
             escClose: false,
             onShow: function() {
                 if ( thisbtn.hasClass('isform') ) {
+                    $( ".modal_date" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: '2013:2050',
+                        dateFormat:"yy-M-dd"
+                    }).on('keypress',function(){
+                        return false;
+                    });
                     form.validate({
                         rules:{
                             courier:{
