@@ -157,7 +157,7 @@
                 <?php if(!$hasNoItems): ?>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']?>" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="/assets/images/vendor-icons/<?php if($url_id=="0"){ echo "active-home"; }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
+                        <img src="/assets/images/home-icons/<?php if($url_id=="0"){ echo "active-home-".html_escape($colorHexadecimal); }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <?php endif; ?>
