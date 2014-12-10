@@ -191,7 +191,7 @@ class CMS
     $string = '<slide>
             <template>'.$value.'</template>
             <image>
-                <path>/assets/images/homeslider/unavailable_product_img.jpg</path>
+                <path>'.$type.'</path>
                 <target>/</target>
             </image>
 
