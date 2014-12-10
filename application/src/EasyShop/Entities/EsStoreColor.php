@@ -12,6 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsStoreColor
 {
+
+    /**
+     * @var integer
+     * 
+     */
+    const DEFAULT_COLOR_ID = 1;
+
     /**
      * @var integer
      *

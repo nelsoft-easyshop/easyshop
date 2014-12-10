@@ -92,7 +92,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="pos-1 pos-rtl z-index-dflt">
             <div class="nav-collapse top_links_right top_links_right_con">
                 <ul class="ul-li-fl-left">       
-                    <?php #echo uri_string();?>
                     <?php if(!$logged_in): ?>
                         <li><a href="/login" class="top_border prevent">Login</a></li> 
                         <li><a href="/register" class="prevent">Register</a></li> 
@@ -140,13 +139,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a class="prevent" href="/me?me=pending">On-going Transactions</a>
+                                    <a class="prevent" href="/me?tab=ongoing">On-going Transactions</a>
                                 </li>
                                 <li>
                                     <a class="prevent" href="/?view=basic">Easyshop.ph</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/me?me=settings">Settings</a>
+                                    <a class="prevent" href="/me?tab=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/login/logout">Logout</a>

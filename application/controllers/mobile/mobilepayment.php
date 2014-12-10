@@ -90,7 +90,7 @@ class mobilePayment extends MY_Controller
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
             $errorMessage = "You have no item in you cart";
-            if(!empty($cartData)){
+            if(empty($cartData) === false){
                 unset($cartData['total_items'],$cartData['cart_total']);
                 $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
                 $cartData = $dataCollection['cartData']; 
@@ -116,6 +116,51 @@ class mobilePayment extends MY_Controller
         print(json_encode($outputData,JSON_PRETTY_PRINT));
     }
 
+    
+    /**
+     * Review cart before proceeding on payment.
+     * @return json
+     */
+    public function reviewPayment()
+    {   
+        $apiFormatter = $this->serviceContainer['api_formatter'];
+        $checkoutService = $this->serviceContainer['checkout_service'];
+        
+        $this->paymentController = $this->loadController('payment');
+
+        $canContinue = true;
+        $errorMessage = "";
+        $paymentType = trim($this->input->post('paymentType'));
+        $mobileCartContents = $this->input->post('cartData') 
+                      ? json_decode($this->input->post('cartData')) 
+                      : [];
+
+        $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
+        $cartData = !empty(unserialize($this->member->getUserdata())) 
+                    ? unserialize($this->member->getUserdata()) 
+                    : [];
+        $errorMessage = "Please verify your email address.";
+        if((int)$this->member->getIsEmailVerify() > 0){
+            $errorMessage = "You have no item in you cart";
+            if(!empty($cartData)){
+                unset($cartData['total_items'],$cartData['cart_total']);
+                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+                $canContinue = $dataCollection['canContinue'];
+                $errorMessage = $dataCollection['errMsg'];
+                $validatedCart = $checkoutService->validateCartContent($this->member);
+                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
+            }
+        }
+
+        $outputData = [
+            'cartData' => $formattedCartContents,
+            'canContinue' => $canContinue,
+            'errorMessage' => $errorMessage,
+        ];
+
+        print(json_encode($outputData,JSON_PRETTY_PRINT));
+    }
+
     /**
      * Persist Cash on delivery payment
      * @return JSON
@@ -130,7 +175,7 @@ class mobilePayment extends MY_Controller
         $cartData = $dataCollection['cartData']; 
         $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
-        if(!empty($cartData)){
+        if(empty($cartData) === false){
             unset($cartData['total_items'],$cartData['cart_total']); 
             $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
             $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
@@ -164,7 +209,7 @@ class mobilePayment extends MY_Controller
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment');
 
-        if(!empty($cartData) && $this->input->post('paymentType')){
+        if(empty($cartData) === false && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
             if($this->input->post('paymentType') == "paypal"){
@@ -199,7 +244,7 @@ class mobilePayment extends MY_Controller
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
                     $message = "";
-                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['return_url'];
+                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
                 }
                 else{
                     $message = $requestData['m'];
@@ -254,7 +299,7 @@ class mobilePayment extends MY_Controller
         $payerId = $this->input->post('PayerID');
         $token = $this->input->post('token');
         $cartData = unserialize($this->member->getUserdata()); 
-        if(!empty($cartData)){
+        if(empty($cartData) === false){
             unset($cartData['total_items'],$cartData['cart_total']);
             $this->paymentController = $this->loadController('payment');
 

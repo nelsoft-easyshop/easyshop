@@ -106,7 +106,12 @@ class Kernel
                
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
-            $controllerList = require(APPPATH . 'config/param/controllers.php');
+        
+            $controllerConfigPath = APPPATH . 'config/param/controllers.php';
+            $controllerList = array();
+            if(file_exists($controllerConfigPath)){
+                $controllerList = require($controllerConfigPath);
+            }
             return new \EasyShop\User\UserManager($container['entity_manager']
                                                 ,$container['config_loader']
                                                 ,$container['form_validation']
@@ -274,6 +279,9 @@ class Kernel
 
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
+        
+
+        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
@@ -283,17 +291,25 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
+        
         $container['string_utility'] = function ($c) {
             $htmlPurifier = new \HTMLPurifier();
             return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
+        
         $container['hash_utility'] = function($c) {
             $encrypt = new CI_Encrypt();
             return new \EasyShop\Utility\HashUtility($encrypt);
         };
+        
         $container['url_utility'] = function ($c) {
             return new \EasyShop\Utility\UrlUtility();
         };
+        
+        $container['sort_utility'] = function ($c) use ($container){         
+            return new \EasyShop\Utility\SortUtility();
+        };           
+        
 
         $socialMediaConfig = require APPPATH . 'config/oauth.php';
         $container['social_media_manager'] = function ($c) use($socialMediaConfig, $container) {
@@ -330,8 +346,9 @@ class Kernel
         $container['category_manager'] = function ($c) use($container) {
             $em = $container['entity_manager'];
             $configLoader = $container['config_loader'];
-
-            return new \EasyShop\Category\CategoryManager($configLoader,$em);
+            $productManager = $container['product_manager'];
+            $promoManager = $container['promo_manager'];
+            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $container['sort_utility']);
         };
         
         $container['config_loader'] = function ($c) {
@@ -434,6 +451,17 @@ class Kernel
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
                             $container['entity_manager']
+                        );
+        };
+
+        // Checkout Service
+        $container['checkout_service'] = function ($c) use ($container) {
+            return new \EasyShop\Checkout\CheckoutService(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['promo_manager'],
+                            $container['cart_manager'],
+                            $container['payment_service']
                         );
         };
 

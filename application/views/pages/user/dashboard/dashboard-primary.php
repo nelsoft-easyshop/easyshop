@@ -5,7 +5,7 @@
 <link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
 <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/new-dashboard-transaction.css' rel="stylesheet" media='screen'/>
+
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">
@@ -23,18 +23,18 @@
                     <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
                     <div id="my-account-menu">
                         <ul class="sidebar-submenu submenu-my-account">
-                            <a href="#personal-information" ><li class="f-li">Personal Information</li></a>
-                            <a href="#delivery-address"><li class="m-li">Delivery Address</li></a>
-                            <a href="#payment-account"><li class="m-li m-li2">Payment Account</li></a>
-                            <a href="#account-settings"><li class="f-li f-a">Account Settings</li></a>
+                            <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
+                            <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
+                            <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
+                            <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>
                 </ul>
             </div>
             <div class="mobile-dashboard-menu">
                 <div class="row-fluid row-menu-mobile-res">
-                    <a href="#dashboard" class="dash-mobile-trigger">
-                        <div class="col-xs-4 col-dash-mobile ">
+                    <a  class="dash-mobile-trigger dashboard-home-mobile selectedM">
+                        <div class="col-xs-4 col-dash-mobile">
                             Dashboard
                         </div>
                     </a>
@@ -47,16 +47,16 @@
                 </div>
                 <div class="my-store-menu-mobile-cont">
                     <ul class="my-store-menu-mobile-ul">
-                        <a href="#transactions" class="dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
-                        <a href="#setup" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                        <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
+                        <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
                     </ul>
                 </div>
                 <div class="my-account-menu-mobile-cont">
                     <ul class="my-account-menu-mobile-ul">
-                        <a href="#personal-information" class="dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
-                        <a href="#delivery-address" class="dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
-                        <a href="#payment-account" class="dash-mobile-trigger"><li class="m-menu-setting">Payment Account</li></a>
-                        <a href="#account-settings" class="dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
+                        <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
+                        <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
+                        <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
+                        <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
             </div>
@@ -90,6 +90,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="page-tab" value="<?php echo html_escape($tab); ?>"/>
 </section>
 <br/>
 
@@ -117,18 +118,16 @@
 
 
 <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
-
-<script src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
-
+<script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
-<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
-<script src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
-<script src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript'  src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript">
     var jsonCity = <?php echo $cities;?>;
 </script>

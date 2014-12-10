@@ -12,7 +12,9 @@
         }
     });
     $(document).on('click','#sendReactivationLink',function (e) {
+        $('#login')[0].disabled = true;        
         $('#loading_img_activate').show();
+        $("#deactivatedAccountPrompt").css("display","none");            
         $('#login_error').hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');  
@@ -23,6 +25,7 @@
             data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
             success: function(data) {
+                $('#login')[0].disabled = false;                        
                 var obj = jQuery.parseJSON(data);   
                 $('#loading_img_activate').hide();
                 $('#login_error').show();                
@@ -31,6 +34,7 @@
                     $("#login_password").val("");
                     $("#deactivatePassword").val("");                        
                     $("#login_error").html("<span style='color:green'>Please check your email for the verification link we've just sent to complete the reactivation process of your account. We are looking forward to serving you again! Happy Shopping!</span>");
+
 
                 }
                 else{

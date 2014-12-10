@@ -92,7 +92,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <option value="1">On Seller's Page</option>
                     <option value="2">Main Page</option> 
                 </select>
-                <input type="text" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                <input type="text" class="search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
                 <input type="submit"  value="" class="submitSearch span_bg">
             </form>
         </div>
@@ -163,13 +163,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <a href="/me">Dashboard</a>
                     </li>
                     <li>
-                        <a href="/me?me=pending">On-going Transactions</a>
+                        <a href="/me?tab=ongoing">On-going Transactions</a>
                     </li>
                     <li>
                         <a href="/?view=basic">Easyshop.ph</a>
                     </li>
                     <li class="nav-dropdown-border">
-                        <a href="/me?me=settings">Settings</a>
+                        <a href="/me?tab=settings">Settings</a>
                     </li>
                     <li class="nav-dropdown-border pos-rel">
                         <a href="/messages">Message</a>
@@ -226,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <option value="1">On Seller's Page</option>
                         <option value="2">Main Page</option> 
                     </select>
-                    <input type="text" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                    <input type="text" class="ui-form-control search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>">
                     <input type="submit"  value="" class="submitSearch span_bg">
                 </form>
             </li>

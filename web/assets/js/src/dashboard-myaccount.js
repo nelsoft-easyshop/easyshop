@@ -1,5 +1,10 @@
 (function ($) {
 
+    var options = {
+        minChar: 8,
+        bootstrap3: true,
+    };
+    $('#password').pwstrength(options);
     $(".pass-container").css("display","block");
     $("div.pass-container").css("margin-left","0px");
     $("div.pass-container").css("width","100%");
@@ -30,7 +35,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
             event.preventDefault();
             var password = $("#deactivatePassword").val();
             var username = $("#deactivateUsername").val();
@@ -57,7 +62,7 @@
                                 window.location = "/login/logout";
                             }
                          });
-                        $('#activated-modal').parents("#simplemodal-container").addClass("activated-container");                                             
+                        $('#activated-modal').parents("#simplemodal-container").addClass("deactivated-container");                                                   
                     }
 
                 },
@@ -70,6 +75,9 @@
     /********************* END DEACTIVATE ACCOUNT **************************/
 
     /********************* START CHANGE PASSWORD ***********************/
+     jQuery.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
+     }, "Must contain numbers and letters");    
 
      $("#changePassForm").validate({
          rules: {
@@ -81,7 +89,8 @@
             password: {
                 required: true,
                 minlength: 6,
-                maxlength:25
+                maxlength:25,
+                alphanumeric: true
                 },
             confirmPassword: {
                 required: true,
@@ -101,7 +110,11 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form){
+         submitHandler: function(form, event){
+            var errorContainer = $('#password-change-error');
+            var succcessContainer =  $('#password-change-success');
+            errorContainer.hide();
+            succcessContainer.hide();
             event.preventDefault();
             var newPassword = $("#password").val();
             var confirmPassword = $("#confirmPassword").val();
@@ -120,16 +133,16 @@
                     actionGroupChangePass.show();
                     loadingimg.hide();
                     var obj = jQuery.parseJSON(data); 
-                    if(obj.result === "success") {                    
-                        alert("You have successfully changed your password");
+                    if(obj.result === "success") {      
+                       errorContainer.hide();
+                       succcessContainer.fadeIn();
+                       
                     }
                     else {
-                        alert(obj.error);
+                        errorContainer.html(obj.error);
+                        errorContainer.fadeIn();
+                        succcessContainer.hide();
                     }
-                    $("#password").val("");
-                    $("#confirmPassword").val("");
-                    $("#currentPassword").val("");                    
-                    $( "#cancel-edit-password" ).trigger( "click" );                         
                 },
             });   
 
@@ -216,10 +229,15 @@
 
     /************** Delivery Address ***************************/
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
+        $('#delivery-address-error').hide();
+        $('#delivery-address-success').hide();
         $("#saveDeliverAddressBtn").attr("value","Saving..");
         var postData = $("#deliverAddressForm").serializeArray()
         postData.push({ name: this.name, value: this.value });
         e.preventDefault();
+        if(parseInt($("#temp_clat").val()) !== 0 && parseInt($("temp_clng").val()) !== 0) {
+            $("#locationMarkedText").text("Location Marked");
+        }
         $.ajax({
             type: 'post',
             data: postData,
@@ -227,7 +245,7 @@
             success: function(data) {
                 $("#saveDeliverAddressBtn").attr("value","Save Changes");                
                 var obj = jQuery.parseJSON(data);
-                if(obj.errors) {
+                if(!obj.isSuccessful) {
                     if(typeof(obj.errors.consignee) !== "undefined") {
                         $("#errorsDivConsignee").css("display","block");
                         $("#errorTextConsignee").text(obj.errors.consignee[0]);
@@ -249,9 +267,13 @@
                     else {
                         $("#errorsDivStreetAddress").css("display","none");                                                
                     }
+                    $('#delivery-address-error').fadeIn();
+                    $('#delivery-address-success').hide();
                 }
                 else {
                     $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+                    $('#delivery-address-success').fadeIn();
+                    $('#delivery-address-error').hide();
                 }
             },
         });            
@@ -275,8 +297,10 @@
     
     /************* Personal Information **************/
     var formPersonalInfo = $("#formPersonalInfo");
-    formPersonalInfo.find( "#birthday-picker" ).datepicker({ dateFormat: "yy-mm-dd" });
+    formPersonalInfo.find( "#birthday-picker" ).datepicker({ changeMonth:true, changeYear:true, dateFormat: "yy-mm-dd" });
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
+        $("#errorIndicatorMobileNumber").css("display","none");        
+        $("#errorIndicatorBirthday").css("display","none");        
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
@@ -290,7 +314,7 @@
             type: 'post',
             data: {fullname:fullname, gender:gender, dateofbirth:bday, mobile: mobileNumber, csrfname : csrftoken},
             url: "/memberpage/edit_personal",
-            success: function(data) {
+            success: function(data) {                
                     $("#savePersonalInfo").text("SAVE CHANGES");
                     var obj = jQuery.parseJSON(data);
                     if(obj.result !== "success") {
@@ -299,9 +323,10 @@
                             $("#errorIndicatorMobileNumber").css("display","block");
                             $("#errorTextMobile").text(obj.error.mobile);
                         }
-                        else {
-                            $("#errorIndicatorMobileNumber").css("display","none");                            
-                        }                 
+                        if(obj.error.dateofbirth) {
+                            $("#errorIndicatorBirthday").css("display","block");
+                            $("#errorTextBirthday").text(obj.error.dateofbirth );                            
+                        }              
                     }
                     else {
                         $("#errorIndicatorMobileNumber").css("display","none");

@@ -38,6 +38,7 @@ class EsOrderRepository extends EntityRepository
             $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                 o.isFlag as isFlag,
                                 op.total as totalOrderProduct,
+                                o.total as transactionTotal,
                                 p.name as productname,
                                 m.fullname as fullname,
                                 op.orderQuantity as orderQuantity,
@@ -72,8 +73,8 @@ class EsOrderRepository extends EntityRepository
                     )
                 )
                 ->leftJoin('EasyShop\Entities\EsOrderShippingAddress', 'shippingAdd', 'with', "o.shippingAddressId = shippingAdd.idOrderShippingAddress")
-                ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
-                ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
+                ->leftJoin('EasyShop\Entities\EsLocationLookup', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
+                ->leftJoin('EasyShop\Entities\EsLocationLookup', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
                 ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
                 ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
                 ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
@@ -126,7 +127,8 @@ class EsOrderRepository extends EntityRepository
 
         $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                                             o.isFlag as isFlag, 
-                                                            op.total as total, 
+                                                            op.total as total,
+                                                            o.total as transactionTotal,
                                                             p.name as productname, 
                                                             m.fullname as fullname,
                                                             sm.idMember as sellerId,
@@ -306,6 +308,7 @@ class EsOrderRepository extends EntityRepository
         $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                                             o.isFlag as isFlag,
                                                             op.total as total,
+                                                            o.total as transactionTotal,
                                                             p.name as productname,
                                                             m.fullname as fullname,
                                                             sm.idMember as sellerId,
@@ -358,6 +361,7 @@ class EsOrderRepository extends EntityRepository
         $queryBuilder = $qb->select("IDENTITY(o.orderStatus) as orderStatus,
                                 o.isFlag as isFlag,
                                 op.total as totalOrderProduct,
+                                o.total as transactionTotal,
                                 p.name as productname,
                                 m.fullname as fullname,
                                 op.orderQuantity as orderQuantity,
@@ -392,8 +396,8 @@ class EsOrderRepository extends EntityRepository
                 )
             )
             ->leftJoin('EasyShop\Entities\EsOrderShippingAddress', 'shippingAdd', 'with', "o.shippingAddressId = shippingAdd.idOrderShippingAddress")
-            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
-            ->leftJoin('EasyShop\Entities\EsLocationLookUp', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
+            ->leftJoin('EasyShop\Entities\EsLocationLookup', 'stateRegion', 'with', 'shippingAdd.stateregion = stateRegion.idLocation')
+            ->leftJoin('EasyShop\Entities\EsLocationLookup', 'cityLocation', 'with', 'shippingAdd.city = cityLocation.idLocation')
             ->leftJoin('EasyShop\Entities\EsMember', 'm', 'with', 'o.buyer = m.idMember')
             ->innerJoin('EasyShop\Entities\EsProduct', 'p', 'with', 'op.product = p.idProduct')
             ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')

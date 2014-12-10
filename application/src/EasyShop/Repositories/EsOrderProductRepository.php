@@ -101,8 +101,8 @@ class EsOrderProductRepository extends EntityRepository
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder()
                                     ->select('
-                                        tbl_op.idOrderProduct, tbl_p.idProduct, tbl_p.name, tbl_op.orderQuantity, tbl_op.total as price,tbl_ops.idOrderProductStatus, tbl_p.slug,
-                                        tbl_psc.comment as shipping_comment, tbl_psc.courier, tbl_psc.trackingNum, tbl_psc.deliveryDate,
+                                        tbl_op.idOrderProduct, tbl_p.idProduct, tbl_p.name, tbl_op.orderQuantity, tbl_op.total as price,tbl_op.price as item_price,tbl_ops.idOrderProductStatus, tbl_p.slug,
+                                        tbl_op.handlingFee as handling_fee,tbl_psc.comment as shipping_comment, tbl_psc.courier, tbl_psc.trackingNum, tbl_psc.deliveryDate,
                                         tbl_psc.expectedDate, tbl_psc.datemodified, tbl_op.isReject, tbl_pi.productImagePath, tbl_opa.attrName,
                                         tbl_opa.attrValue, tbl_m.idMember as seller_id, tbl_m.username as seller, COALESCE(tbl_m_recipient.idMember, 0) as forMemberId,
                                         tbl_m.slug as sellerSlug

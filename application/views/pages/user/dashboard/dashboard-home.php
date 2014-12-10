@@ -1,14 +1,10 @@
 <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="div-member-stats">
-         <a href="<?=$bannerImage;?>" class="lightbox_trigger">
              <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
                <img src="<?=$bannerImage;?>" class="img-follower-cover " />
-                <a href="<?=$avatarImage; ?>" class="lightbox_trigger">
-                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
-                </a>
+                <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
             </div>
-        </a>
         <div class="clear"></div>
         <div class="div-stats">
             <div class="div-top-name">
@@ -27,7 +23,7 @@
                             <div class="div-progress-bar-container" align="right">
                                 <div class="progress progress-account">
                                     <span class="span-account-progress-text-small">Account Progress: <?=$profilePercentage; ?>%</span>
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
+                                    <div class="progress-bar2" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$profilePercentage; ?>%">
                                         <span class="sr-only"><?=$profilePercentage; ?>% Complete</span>
                                     </div>
                                 </div>
@@ -355,5 +351,13 @@
     <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>">
         <div id="page-1"><?=$historySales;?></div>
     </div>
+</div>
+
+<div id="hidden-paginate-loader">
+    <center>
+        <div id="loader-div">
+            <img src="/assets/images/loading/preloader-whiteBG.gif">
+        </div>
+    </center>
 </div>
 

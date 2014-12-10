@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    You can give your store a different name other than you're registered username. Improve you're store's visibility and branding by giving you're store a name that other people can easily recognize and remember.
+                    You can give your store a different name other than your registered username. Improve your store's visibility and branding by giving your store a name that other people can easily recognize and remember.
                 </p>
             </div>
         </div>
@@ -62,19 +62,25 @@
                 </div>
                 <div class="edit-store-url edit-store-slug">
                     <div class="row">
-                        <div class="col-md-6 col-inline-textbtn">
-                             <span class="setting-edit-url"><?php echo base_url(); ?></span> 
-                             <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
-                          
-                   
-                            <span class="val-error-icon-pass" id="fail-icon-store-slug" style="display:none">
-                                <i class="fa fa-times"></i>
-                            </span>
-                            <span class="val-error" id="fail-message-store-slug" style="display:none">
-                            </span>
-
-                            </span>
-                          
+                        <div class="col-md-7 col-inline-textbtn">
+                            <div class="div-url-container">
+                                <table>
+                                    <tr>
+                                        <td>
+                                             <span class="setting-edit-url"><?php echo base_url(); ?></span>
+                                        </td>
+                                        <td width="100%">
+                                            <input type="text" class="text-info-url text-required" id="input-store-slug" value="<?php echo html_escape($member->getSlug()); ?>"/>
+                                            <span class="val-error-icon-url" id="fail-icon-store-slug" style="display:none;">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                                <span class="val-error" id="fail-message-store-slug" style="display:none">
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-5 col-inline-btn-url">
                             <button class="btn btn-setting-save-btn save-store-setting" data-variable="store-slug">
@@ -94,15 +100,21 @@
         <div class="div-store-setup">
             <p class="panel-setup-title">STORE QUICK RESPONSE CODE</p>
             <div class="div-setup-content">
-                <button class="btn btn-default-1 btn-deactivate">
+                <button class="btn btn-default-1 btn-deactivate printQrCode" data-url="/memberpage/generateQrCode">
                    GENERATE MY STORE QR CODE
                 </button>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Generate your store QR code and spread the word about your store. Your QR code points to your store page and can be scanned by most smartphones for easier access.
                 </p>
             </div>
         </div>
-        <div class="div-store-setup">
+        
+        <div class="div-store-setup store-setup-loading" style="text-align:center">
+            <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+        </div>
+        
+        
+        <div class="div-store-setup store-setup-ajax" style="display:none">
             <p class="panel-setup-title">My Theme</p>
             <div class="div-setup-content">
                 <div class="current-store-theme">
@@ -168,7 +180,7 @@
                 </p>
             </div>
         </div>
-        <div class="div-store-setup">
+        <div class="div-store-setup store-setup-ajax" style="display:none">
             <p class="panel-setup-title">CATEGORIES</p>
             <div class="div-store-content">
                 <div class="current-store-cat">
@@ -176,16 +188,19 @@
                        <div class="form-group">
                             <label class="col-sm-3 control-label">Current Order : </label>
                             <div class="col-sm-9 col-with-radio">
-                                <div class="div-cat">Clothing &amp; Accessories</div>
-                                <div class="div-cat">Electronics &amp; Gadgets</div>
-                                <div class="div-cat">Toys, Hobbies &amp; Collection</div>
-                                <br/>
-                                <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat-new">
-                                   <i class="fa fa-plus"></i> Add Category
-                                </button>
-                                <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
-                                   <i class="icon-edit"></i> Edit
-                                </button>
+
+                                <div class="store-category-view">
+                                </div>
+                                
+                                <div>
+                                    <br/>   
+                                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
+                                    <i class="icon-edit"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -194,46 +209,30 @@
                    <div class="form-group">
                         <label class="col-sm-3 control-label">Reorder List : </label>
                         <div class="col-sm-5 col-with-radio">
-                            <ul class="category_sort list">
-                                <li><i class="fa fa-sort"></i> Clothing &amp; Accessories</li>
-                                <li><i class="fa fa-sort"></i> Electronics &amp; Gadgets</li>
-                                <li><i class="fa fa-sort"></i> Toys, Hobbies &amp; Collection</li>
+                            <ul class="category_sort list store-category-draggable">
                             </ul> 
                             <p class="note-category">Drag the category items to reorder</p>
-                            <button class="btn btn-setting-save-btn">
+                            <button class="btn btn-setting-save-btn" id="category-order-save">
                                Save Changes
                             </button>
                             <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
                                Cancel
                             </button>
+                            <br/>
                         </div>
                     </div>
-                </div>
-                <div class="edit-store-cat-new">
-                    <div class="row">
-                        <div class="col-md-5 col-inline-textbtn">
-                            <input type="text" class="text-info text-required" value="Professional Services"/>
-                             <!--DISPLAY WHEN ERROR -->
-                            <span class="val-error-icon-setup"><i class="fa fa-times"></i></span>
-                            <span class="val-error">Please enter at least 6 characters.</span>
-
-                            <!--DISPLAY WHEN OK
-                            <span class="val-success-url"><i class="fa fa-check"></i></span>-->
-                        </div>
-                        <div class="col-md-5">
-                            <button class="btn btn-setting-save-btn">
-                                Submit
-                            </button>
-                            <button class="btn btn-setting-cancel-btn" id="cancel-store-cat-new">
-                                Cancel
-                            </button>
-                        </div>
+                    <div class="alert alert-danger" id="store-category-error" role="alert" style="display:none">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        We cannot update you categories right now. Try again later.
                     </div>
                 </div>
                 <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                    Arrange the order of the categories in your store page based on your preference. The first category will always appear first
+                    when someone views your store.
                 </p>
             </div>
         </div>
+        
     </div>
 </div>
+
