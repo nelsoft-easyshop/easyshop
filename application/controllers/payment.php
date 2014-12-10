@@ -1298,6 +1298,7 @@ class Payment extends MY_Controller{
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
 
             // add storename in item list collection
+            $entityManager = $this->serviceContainer['entity_manager'];
             foreach ($response['itemList'] as $key => $value) {
                 $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                         ->findOneBy([
