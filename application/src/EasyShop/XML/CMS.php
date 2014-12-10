@@ -191,7 +191,7 @@ class CMS
     $string = '<slide>
             <template>'.$value.'</template>
             <image>
-                <path>/assets/images/homeslider/unavailable_product_img.jpg</path>
+                <path>'.$type.'</path>
                 <target>/</target>
             </image>
 
@@ -1005,6 +1005,12 @@ $string = '<typeNode>
     {
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
+
+        if(isset($pageContent['mainSlide'][0]) === false){
+            $temp = $pageContent['mainSlide'];
+            $pageContent['mainSlide'] = [];
+            $pageContent['mainSlide'][] = $temp;
+        }
 
         // banner images
         $bannerImages = [];

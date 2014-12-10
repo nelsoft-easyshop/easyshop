@@ -1402,7 +1402,6 @@ a{
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
-    z-index: 2 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
