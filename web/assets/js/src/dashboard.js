@@ -220,15 +220,15 @@
        $('.sales-title-total').removeClass("active-bar");
     });
 
-    $(".trans-item-info").click(function() {
+    $('#transactions').on('click', '.trans-item-info', function() {
         $(this).children("i").toggleClass("fa-minus-circle");
         $(this).next(".info-attributes").slideToggle();
     });
 
-    $(".view-delivery-lnk").click(function() {
+    $('#transactions').on('click', '.view-delivery-lnk', function() {
         $(this).next(".view-delivery-details").slideToggle();
     });
-    
+
     $( "#set-default" ).hover(function() {
         $( ".default-ad-explain" ).slideToggle( "slow" );
     });
@@ -367,6 +367,8 @@
         var $page = $this.data('page');
         var $requestType = $("#select-feedback-filter").val();
 
+        mainDashboardAnchorToTop();
+        
         if($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).length > 0){
              $("#feedback-view-container").html($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).html());
         }
@@ -399,6 +401,7 @@
         var $requestType = $mainContainer.find("#request-type-container").val();
         var $netTotal = $("#"+$container).find("#net-total-container").val();
 
+        mainDashboardAnchorToTop();
         if($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).length > 0 && $dateFrom == "" && $dateTo == ""){
             $("#" + $container + " > .sales-container").html($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).html());
             $("#" + $container + " > .p-stat-total").html("&#8369; "+$netTotal);
@@ -452,6 +455,7 @@
                 requestProduct($page, $textInput, $filterInput, $requestType, $container);
             }
         }
+        mainDashboardAnchorToTop();
     }
 
     /**
@@ -461,9 +465,9 @@
      * @param  string  $filterInput
      * @param  string  $requestType
      * @param  string $container
-     */
+     */    
     var requestProduct = function($page, $textInput, $filterInput, $requestType, $container, $searchByString)
-    {
+    {   
         var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
@@ -492,7 +496,7 @@
                     else{
                         $("#hidden-active-container-" + $filterInput).append($appendString);
                     }
-                }
+                }                
             }
         });
     }
@@ -1884,6 +1888,13 @@
                  $('.settings-trigger').trigger('click');
             }, 500);
         }
+    }
+    
+    function mainDashboardAnchorToTop()
+    {
+        $('html,body').animate({
+            scrollTop: $('.input-shop-link').offset().top
+        }, 700);
     }
     
     

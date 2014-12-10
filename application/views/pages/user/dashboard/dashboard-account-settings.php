@@ -1,4 +1,4 @@
-<!--
+
 <style>
     .activated-container{
         height: 220px !Important;
@@ -10,7 +10,7 @@
         }
     }
 </style>
--->
+
 
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
@@ -147,7 +147,8 @@
             <p class="panel-setting-title">Deactivate your account</p>
             <div class="div-setting-content">
                 <p class="p-deact-note-setting">
-                    Deactivating your account will disable your profile and remove your name and picture from most things you've shared on Easyshop. Some information may still be visible to others, such as your name in their friends list and messages you sent.
+                    Deactivating your account will make all of your products unavailable for purchase. However, other people with whom you have transacted with will keep a record of the details of your transactions.
+                    You will receive an email that contains a reactivation link should you wish to reactivate your account at a future time.
                 </p>
                 <div class="current-status">
                     <button class="btn btn-default-1 btn-deactivate" id="btn-edit-status">
