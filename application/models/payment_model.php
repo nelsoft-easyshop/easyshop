@@ -367,6 +367,10 @@ class payment_model extends CI_Model
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
+        $buyerStore = $row[0]['buyer_store'] === "" 
+                      ? $row[0]['buyer'] 
+                      : $row[0]['buyer_store'];
+
         $data = array(
             'id_order' => $row[0]['id_order'],
             'dateadded' => $row[0]['dateadded'],
@@ -377,26 +381,23 @@ class payment_model extends CI_Model
             'totalprice' => $row[0]['totalprice'],
             'invoice_no' => $row[0]['invoice_no'],
             'payment_method' => (int)$row[0]['payment_method_id'],
-            'buyer_store' => $row[0]['buyer_store'] === "" 
-                             ? $row[0]['buyer'] 
-                             : $row[0]['buyer_store'],
+            'buyer_store' => $buyerStore,
             'products' => [],
         );
 
         foreach($row as $value){
             $temp = $value;
-            
+            $sellerStore = $value['seller_store'] === "" 
+                           ? $value['seller']
+                           : $value['seller_store'];
+
             // Assemble data for buyer
             if(!isset($data['products'][$value['id_order_product']])){
                 $data['products'][$value['id_order_product']] = $temp;
                 $data['products'][$value['id_order_product']]['order_product_id'] = $temp['id_order_product'];
                 $data['products'][$value['id_order_product']]['seller_slug'] = $value['seller_slug'];
-                $data['products'][$value['id_order_product']]['seller_store'] = $value['seller_store'] === "" 
-                                                                                ? $value['seller']
-                                                                                : $value['seller_store'];
-                $data['products'][$value['id_order_product']]['buyer_store'] = $value['buyer_store'] === "" 
-                                                                                ? $value['buyer']
-                                                                                : $value['buyer_store'];
+                $data['products'][$value['id_order_product']]['seller_store'] = $sellerStore;
+                $data['products'][$value['id_order_product']]['buyer_store'] = $buyerStore;
             }
             
             // Assemble data for seller
@@ -405,12 +406,8 @@ class payment_model extends CI_Model
                 $data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
                 $data['seller'][$value['seller_id']]['totalprice'] = 0;
                 $data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], $temp );
-                $data['seller'][$value['seller_id']]['seller_store'] = $value['seller_store'] === "" 
-                                                                       ? $value['seller']
-                                                                       : $value['seller_store'];
-                $data['seller'][$value['seller_id']]['buyer_store'] = $value['buyer_store'] === "" 
-                                                                       ? $value['buyer']
-                                                                       : $value['buyer_store'];
+                $data['seller'][$value['seller_id']]['seller_store'] = $sellerStore;
+                $data['seller'][$value['seller_id']]['buyer_store'] = $buyerStore;
             }
             if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
                 $data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = $temp;
@@ -420,18 +417,26 @@ class payment_model extends CI_Model
             
             // Assemble attr array for buyer and seller
             if(!isset($data['products'][$value['id_order_product']]['attr'])){
-                $data['products'][$value['id_order_product']]['attr'] = array();
+                $data['products'][$value['id_order_product']]['attr'] = [];
             }
             if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'])){
-                $data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'] = array();
+                $data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'] = [];
             }
             if( (string)$temp['attr_name']!=='' && (string)$temp['attr_value']!=='' ){
                 array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
                 array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
-            }else{
+            }
+            else{
                 array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => 'Attribute', 'attr_value' => 'N/A'));
                 array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => 'Attribute','attr_value' => 'N/A'));
             }
+
+            unset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr_name']);
+            unset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr_value']);
+            unset($data['seller'][$value['seller_id']]['attr_name']);
+            unset($data['seller'][$value['seller_id']]['attr_value']);
+            unset($data['products'][$value['id_order_product']]['attr_name']);
+            unset($data['products'][$value['id_order_product']]['attr_value']);
         }
         return $data;
     }
