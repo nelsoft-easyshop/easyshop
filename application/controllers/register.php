@@ -44,61 +44,62 @@ class Register extends MY_Controller
     public function signup()
     {
         $signUpResponse = [
-            'result' => 0,
-            'error' => []
+            'result' => 0
         ];
 
         if($this->input->post()) {
             $this->accountManager = $this->serviceContainer['account_manager'];    
             $this->em = $this->serviceContainer['entity_manager'];            
-            $registeredMember = $this->accountManager->registerMember(
+            $registrationResult = $this->accountManager->registerMember(
                                                                 $this->input->post("username"),
                                                                 $this->input->post("password"),
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
                                                             );     
-
-            $emailCode = sha1($registeredMember["member"]->getEmail().time());
-            $this->load->library('parser');
-            $parseData = array(
-                'user' => $registeredMember["member"]->getUserName(),
-                'hash' => $this->encrypt
-                               ->encode($registeredMember["member"]->getEmail().'|'.$registeredMember["member"]->getUserName().'|'.$emailCode),
-                'site_url' => site_url('register/email_verification')
-            );
-            $this->emailNotification = $this->serviceContainer['email_notification'];
-            $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
-            $this->emailNotification->setRecipient($registeredMember["member"]->getEmail());
-            $this->emailNotification->setSubject($this->lang->line('registration_subject'));
-            $this->emailNotification->setMessage($message);
-            $emailResult = (bool) $this->emailNotification->sendMail();
-            $hashUtility = $this->serviceContainer['hash_utility'];
-            $data = [
-                "memberId" => $registeredMember["member"]->getIdMember(),
-                "emailCode" => $emailCode,
-                "mobileCode" => $hashUtility->generateRandomAlphaNumeric(6),
-                "email" => ($emailResult) ? $emailResult : false,
-            ];
-            $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
-            $isRegistrationSuccess = true;
-            if(is_null($registeredMember["member"]) || !$registeredMember["member"]) {
-                $signUpResponse["error"] = "Database registration failure <br>";
-                $isRegistrationSuccess = false;
-            }
-            if(!$emailResult) {
-                $signUpResponse["error"] = "Failed to send verification email. Please verify in user page upon logging in.";
-            }
-            if(!$isVerifCodeSuccess) {
-                $signUpResponse["error"] = "Database verifcode error <br>";
-            }            
-            if($isRegistrationSuccess && $isVerifCodeSuccess) {
-                $signUpResponse["result"] = 1;
+            if(!empty($registrationResult["errors"]) || $registrationResult["errors"] !== null) {
+                $signUpResponse["errors"] = $registrationResult["errors"];
             }
             else {
-                $signUpResponse["result"] = 0;
-
+                $emailCode = sha1($registrationResult["member"]->getEmail().time());
+                $this->load->library('parser');
+                $parseData = array(
+                    'user' => $registrationResult["member"]->getUserName(),
+                    'hash' => $this->encrypt
+                                   ->encode($registrationResult["member"]->getEmail().'|'.$registrationResult["member"]->getUserName().'|'.$emailCode),
+                    'site_url' => site_url('register/email_verification')
+                );
+                $this->emailNotification = $this->serviceContainer['email_notification'];
+                $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
+                $this->emailNotification->setRecipient($registrationResult["member"]->getEmail());
+                $this->emailNotification->setSubject($this->lang->line('registration_subject'));
+                $this->emailNotification->setMessage($message);
+                $emailResult = (bool) $this->emailNotification->sendMail();
+                $hashUtility = $this->serviceContainer['hash_utility'];
+                $data = [
+                    "memberId" => $registrationResult["member"]->getIdMember(),
+                    "emailCode" => $emailCode,
+                    "mobileCode" => $hashUtility->generateRandomAlphaNumeric(6),
+                    "email" => ($emailResult) ? $emailResult : false,
+                ];
+                $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
+                $isRegistrationSuccess = true;
+                if(is_null($registrationResult["member"]) || !$registrationResult["member"]) {
+                    $signUpResponse["dbError"] = "Database registration failure <br>";
+                    $isRegistrationSuccess = false;
+                }
+                if(!$emailResult) {
+                    $signUpResponse["dbError"] = "Failed to send verification email. Please verify in user page upon logging in.";
+                }
+                if(!$isVerifCodeSuccess) {
+                    $signUpResponse["dbError"] = "Database verifcode error <br>";
+                }            
+                if($isRegistrationSuccess && $isVerifCodeSuccess) {
+                    $signUpResponse["result"] = 1;
+                }
+                else {
+                    $signUpResponse["result"] = 0;
+                }
             }
-
         }
 
         echo json_encode($signUpResponse);
