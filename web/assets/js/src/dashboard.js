@@ -1242,7 +1242,7 @@
                         var serializedData = $(form).serializeArray();
                         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
                         $.ajax({
-                            url : '/memberpage/transactionResponse',
+                            url : '/memberpage/addFeedback',
                             method : 'POST',
                             data : serializedData,
                             success : function (data) {
