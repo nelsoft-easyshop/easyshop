@@ -1384,6 +1384,8 @@
             success: function(requestResponse) {
                 var $response = $.parseJSON(requestResponse);
                 $("#" + $container).append($response.html);
+                $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
+                $(".reject_btn").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
             }
         });
     }
