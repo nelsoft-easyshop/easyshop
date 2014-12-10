@@ -43,10 +43,10 @@ class Register extends MY_Controller
      */
     public function signup()
     {
-        $signUpResponse = array(
+        $signUpResponse = [
             'result' => 0,
-            'error' => array()
-        );
+            'error' => []
+        ];
 
         if($this->input->post()) {
             $this->accountManager = $this->serviceContainer['account_manager'];    
@@ -56,13 +56,14 @@ class Register extends MY_Controller
                                                                 $this->input->post("password"),
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
-                                                            );        
+                                                            );     
+
             $emailCode = sha1($registeredMember["member"]->getEmail().time());
             $this->load->library('parser');
             $parseData = array(
                 'user' => $registeredMember["member"]->getUserName(),
                 'hash' => $this->encrypt
-                                ->encode($registeredMember["member"]->getEmail().'|'.$registeredMember["member"]->getUserName().'|'.$emailCode),
+                               ->encode($registeredMember["member"]->getEmail().'|'.$registeredMember["member"]->getUserName().'|'.$emailCode),
                 'site_url' => site_url('register/email_verification')
             );
             $this->emailNotification = $this->serviceContainer['email_notification'];
@@ -71,12 +72,12 @@ class Register extends MY_Controller
             $this->emailNotification->setSubject($this->lang->line('registration_subject'));
             $this->emailNotification->setMessage($message);
             $emailResult = (bool) $this->emailNotification->sendMail();
-
+            $hashUtility = $this->serviceContainer['hash_utility'];
             $data = [
                 "memberId" => $registeredMember["member"]->getIdMember(),
                 "emailCode" => $emailCode,
-                "mobileCode" => $this->rand_alphanumeric(6),
-                "email" => ($emailResult) ? 1 : 0,
+                "mobileCode" => $hashUtility->generateRandomAlphaNumeric(6),
+                "email" => ($emailResult) ? $emailResult : false,
             ];
             $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
             $isRegistrationSuccess = true;
@@ -167,10 +168,12 @@ class Register extends MY_Controller
             }
             else
             {
-            if($method == 'validate_captcha')
-                $callback_result = $this->$model->$method( $postdata, $this->session->userdata('captcha_word'));
-            else     
-                $callback_result = $this->$model->$method( $postdata );
+                if($method == 'validate_captcha') {
+                    $callback_result = $this->$model->$method( $postdata, $this->session->userdata('captcha_word'));
+                }
+                else {
+                    $callback_result = $this->$model->$method( $postdata );
+                }
             }
             return $callback_result;
     }
