@@ -285,6 +285,15 @@
         return (code != 46);
     });
 
+
+    $('#consigneeLandLine').on('keypress',function(e){
+        var keyCode = event.keyCode;
+        if ( ! (keyCode >= 48 && keyCode <= 57) && keyCode != 45) {
+              event.preventDefault();
+        }
+    });
+
+
     $('.address_dropdown, .disabled_country').chosen({width:'200px'});
     $('.stateregionselect').on('change', function(){
 
