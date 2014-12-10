@@ -185,9 +185,7 @@ class SocialMediaController extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $data['member'] = $this->entityManager
                                ->getRepository('EasyShop\Entities\EsMember')
-                               ->findOneBy([
-                                   'idMember' => $getData['memberId']
-                               ]);
+                               ->find($getData['memberId']);
         $data['oauthProvider'] = $getData['socialMediaProvider'];
         $data['oauthId'] = $getData['socialMediaId'];
 
@@ -256,9 +254,7 @@ class SocialMediaController extends MY_Controller
         $getData = $hashUtility->decode($this->input->get('h'));
         $memberObj = $this->entityManager
                             ->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy([
-                                'idMember' => $getData['memberId']
-                            ]);
+                            ->find($getData['memberId']);
         $socialMediaProvider = $this->entityManager
                                     ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
                                     ->find($getData['socialMediaProvider']);
