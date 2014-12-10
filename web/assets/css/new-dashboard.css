@@ -15,6 +15,7 @@ a{
 
 .col-sidebar{
     padding-right: 0px;
+    padding-left: 0px;
 }
 
 .sidebar-dashboard{
@@ -1072,6 +1073,7 @@ a{
     border-collapse: collapse;
     margin-top: 10px;
     width:1800px;
+    max-width:1800px;
 }
 
 .table-total-sales  >thead  > tr > th{
@@ -1386,6 +1388,7 @@ a{
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
+    z-index: 2 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -1595,6 +1598,11 @@ a{
 
 }
 
+.loading-text{
+    font-size: 15px;
+    font-weight: 900;
+    color: #ff893a;
+}
 
 /** ============================= **/
 /** ====== transaction tab ====== **/
@@ -2276,8 +2284,14 @@ label.css-label {
     text-decoration: none;
     white-space: nowrap;
     line-height: 24px;
+    width: 100% !important;
 }
-
+.chosen-container,
+.chosen-container-single,
+.chosen-container-active,
+.chosen-with-drop{
+    width: 100% !important;
+}
 .chosen-container-single .chosen-drop{
     margin-top: -3px;
 }
@@ -2303,6 +2317,10 @@ label.css-label {
 }
 
 @media only screen and (max-width: 991px){
+    .no-items{
+        font-size: 15px;
+    }
+    
     .section-dashboard{
         margin-top: 0px;
     }

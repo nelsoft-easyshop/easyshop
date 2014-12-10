@@ -118,10 +118,10 @@
                             </tr>
                             <tr>
                                 <td width="50%" style="padding: 5px;">
-                                    <b>Name of Seller:</b>
+                                    <b>Store Name:</b>
                                 </td>
                                 <td width="50%" style="padding: 5px;">
-                                    <?php echo html_escape($value['seller_username']); ?>
+                                    <?php echo html_escape($value['store_name']); ?>
                                 </td>
                             </tr>
                             <tr>

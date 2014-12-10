@@ -357,6 +357,7 @@
     <center>
         <div id="loader-div">
             <img src="/assets/images/loading/preloader-whiteBG.gif">
+            <p class="loading-text">Loading data...</p>
         </div>
     </center>
 </div>

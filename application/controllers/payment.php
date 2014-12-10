@@ -397,6 +397,8 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
 
+        $entityManager = $this->serviceContainer['entity_manager'];
+
         $member_id =  $this->session->userdata('member_id');
         $remove = $this->payment_model->releaseAllLock($member_id);
         $qtySuccess = $this->resetPriceAndQty(); 
@@ -425,6 +427,16 @@ class Payment extends MY_Controller{
         $data['promoteSuccess'] = $promoteSuccess;
 
         if(!count($itemArray) <= 0){
+
+            // add storename in item list collection
+            foreach ($itemArray as $key => $value) {
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy([
+                                            'username' => $value['seller_username']
+                                        ]);
+                $itemArray[$key]['store_name'] = $member->getStoreName();
+            }
+
             $data['cat_item'] = $itemArray;
             $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
             $data['success'] = ($successCount == $itemCount ? true : false);
@@ -440,8 +452,8 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             // Get all available points
-            $data['maxPoint'] = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
-                            ->getMaxPoint(intval($member_id));
+            $data['maxPoint'] = $entityManager->getRepository('EasyShop\Entities\EsPoint')
+                                              ->getMaxPoint((int)$member_id);
             
             // Load view
             $this->load->view('templates/header', $header); 
@@ -1275,42 +1287,37 @@ class Payment extends MY_Controller{
      * @param string $mode
      */
     public function paymentSuccess($mode = "easyshop")
-    {   
-        if(strtolower($mode) == 'cashondelivery'){
-            $paymentType = $this->PayMentCashOnDelivery;
+    {
+        if(strtolower($mode) === 'cashondelivery'){
+            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
-        elseif (strtolower($mode) == 'debitcreditcard') {
-            $paymentType = $this->PayMentPesoPayCC;
+        elseif (strtolower($mode) === 'debitcreditcard'){
+            $paymentType = EsPaymentMethod::PAYMENT_PESOPAYCC;
         }
-        elseif (strtolower($mode) == 'dragonpay') {
-            $paymentType = $this->PayMentDragonPay;
+        elseif (strtolower($mode) === 'dragonpay') {
+            $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         }
-        elseif (strtolower($mode) == 'PayMentDirectBankDeposit') {
+        elseif (strtolower($mode) === 'paymentdirectbankdeposit') {
             $xmlResourceService = $this->serviceContainer['xml_resource'];
             $xmlfile =  $xmlResourceService->getContentXMLfile();
             $esAccountNumber = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
-//             $esBank = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
-            $paymentType = $this->PayMentPayPal;
+            $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
         }
-        elseif (strtolower($mode) == 'paypal') {
-            $paymentType = $this->PayMentPayPal;
+        elseif (strtolower($mode) === 'paypal'){
+            $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
         }
         else{
-            $paymentType = $this->PayMentCashOnDelivery;
+            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
 
-        // $txnId = ($this->session->flashdata('txnid') ? $this->session->flashdata('txnid') : urldecode($this->input->get('txnid')));
-        // $response['message'] = ($this->session->flashdata('msg') ? $this->session->flashdata('msg') : urldecode($this->input->get('msg')));
-        // $status = ($this->session->flashdata('status') ? $this->session->flashdata('status') : urldecode($this->input->get('status'))); 
+        $txnId = $response['txnid'] = (string)$this->session->flashdata('txnid'); 
+        $response['message'] = (string)$this->session->flashdata('msg');
+        $status = (string)$this->session->flashdata('status');
 
-        $txnId =  $response['txnid'] = $this->session->flashdata('txnid'); 
-        $response['message'] = $this->session->flashdata('msg');
-        $status = $this->session->flashdata('status');  
-
-        $response['completepayment'] = ($status == 's' ? true : false);
+        $response['completepayment'] = $status === 's';
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
         $response['itemList'] = json_decode($payDetails['data_response'],true);
-        if($paymentType == 3 && $status == 'f'){
+        if($paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY && $status === 'f'){
             $member_id =  $this->session->userdata('member_id'); 
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $prepareData = $this->processData($this->session->userdata('choosen_items'),$address);
@@ -1319,17 +1326,25 @@ class Payment extends MY_Controller{
         }
 
         $response['available'] = true;
-        if($txnId == ''){
+        if($txnId === ""){
             $response['available'] = false;
             $response['message'] = 'This section is not available.';
-            $analytics = array();
+            $analytics = [];
         }
         else{
-            #google analytics data
+            // google analytics data
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
-            #end of google analytics data
-        }
 
+            // add storename in item list collection
+            $entityManager = $this->serviceContainer['entity_manager'];
+            foreach ($response['itemList'] as $key => $value) {
+                $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->findOneBy([
+                                            'username' => $value['seller_username']
+                                        ]);
+                $response['itemList'][$key]['store_name'] = $member->getStoreName();
+            }
+        }
 
         $response['analytics'] =  $analytics;
         $response['invoice_no'] = $payDetails['invoice_no'];
@@ -1338,16 +1353,13 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
 
-        $this->load->view('templates/header', $data);
-        // $this->load->view('pages/payment/payment_response' ,$response);  
-        $this->load->view('pages/payment/payment_response_responsive' ,$response);  
-
         $socialMediaLinks = $this->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
 
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/payment/payment_response_responsive' ,$response);
         $this->load->view('templates/footer_full', $viewData); 
- 
    }
 
 
