@@ -1826,6 +1826,10 @@ a{
     margin: 0 auto;
 }
 
+.trans-left-panel .div-meta-description {
+    margin-bottom: 40px;
+}
+
 .trans-left-panel .info-main-cont {
     border-bottom: 1px solid #e2e2e2;
 }
@@ -1877,6 +1881,7 @@ label.css-label {
 }
 
 .trans-btn-wrapper button:first-child,
+.trans-btn-wrapper .reject_btn,
 .transac_response .transac_response_btn {
     margin-bottom: 6px;
 }
@@ -3004,7 +3009,7 @@ label.css-label {
 
 @media screen and (max-width: 480px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 210px;
+        margin-top: 200px;
     }
     .trans-btn-con1 .give-feedback-button,
     .trans-1btn  .give-feedback-button {
@@ -3012,7 +3017,7 @@ label.css-label {
     }
 
     .trans-left-panel {
-        margin-top: 180px;
+        margin-top: 160px;
     }
 
     .transac-title div {
@@ -3054,7 +3059,8 @@ label.css-label {
     }
 
     .trans-btn-wrapper button.btn,
-    .trans-btn-wrapper .transac_response_btn {
+    .trans-btn-wrapper .transac_response_btn,
+    .trans-btn-wrapper .reject_btn {
         float: left;
         width: 49%;
     }
@@ -3065,7 +3071,8 @@ label.css-label {
     }
 
     .btn.btn-default-1.isform.shipment-detail-button.txt_buttons,
-    .btn.btn-default-3.txt_buttons.transac_response_btn    {
+    .btn.btn-default-3.txt_buttons.transac_response_btn,
+    .btn.btn-default-1.transac_response_btn.tx_forward {
         margin-right: 2%;
     }
 
@@ -3085,6 +3092,24 @@ label.css-label {
 
     .feedback-content {
         padding: 0 15px;
+    }
+
+    .bank-account-item-btns .delete-account-btn span,
+    .bank-account-item-btns .edit-account-btn span {
+        display: none;
+    }
+
+    .bank-account-item-btns .btn {
+        font-size: 9px;
+    }
+
+    .bank-account-item-btns .btn i {
+        font-size: 12px;
+    }
+
+    .bank-account-item-btns .save-edit-btn,
+    .bank-account-item-btns .cancel-edit-btn {
+        width: 49%;
     }
 }
 
