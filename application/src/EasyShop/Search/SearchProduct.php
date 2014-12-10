@@ -147,6 +147,7 @@ class SearchProduct
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
         $productIdsReturn = []; 
+
         foreach ($productIds as $productId) {
             $promoPrice = $promoManager->hydratePromoDataExpress($productId);
             $price = round(floatval($promoPrice),2);
@@ -228,21 +229,21 @@ class SearchProduct
     public function filterProductByDefaultParameter($filterParameter,$productIds = [])
     { 
         $acceptableFilter = [
-                                'seller',
-                                'category',
-                                'brand',
-                                'condition',
-                                'location',
-                                'sortby',
-                                'sorttype',
-                            ]; 
+            'seller',
+            'category',
+            'brand',
+            'condition',
+            'location',
+            'sortby',
+            'sorttype',
+        ]; 
         $notExplodableFilter = [
-                                'seller'
-                                ,'category'
-                                ,'q_str'
-                                ,'sortby'
-                                ,'sorttype'
-                            ];
+            'seller'
+            ,'category'
+            ,'q_str'
+            ,'sortby'
+            ,'sorttype'
+        ];
 
         $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
         $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
@@ -317,7 +318,7 @@ class SearchProduct
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $sortOrder : $originalOrder;
 
-        $finalizedProductIds = $startPrice ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
+        $finalizedProductIds =  ($startPrice || $endPrice) ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
 
         $totalCount = count($finalizedProductIds);

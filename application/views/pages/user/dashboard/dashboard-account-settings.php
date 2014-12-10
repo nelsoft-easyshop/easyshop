@@ -1,4 +1,4 @@
-
+<!--
 <style>
     .activated-container{
         height: 220px !Important;
@@ -10,7 +10,7 @@
         }
     }
 </style>
-
+-->
 
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
@@ -125,6 +125,17 @@
                                 </span>
                             </div>
                         </div>
+
+                        <div class="alert alert-danger" style="display:none" role="alert" id="password-change-error">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            Error
+                        </div>
+                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="password-change-success">
+                            Password updated successfully
+                        </div>
+                
+                        
                     </form>
                 </div>
                 <p class="p-note-setting">
@@ -146,28 +157,6 @@
                 <div class="edit-status">
                     <p class="p-orange"> Are you sure you want to deactivate your account? </p>
                     <form class="form-horizontal" id="deactivateAccountForm">
-                       <!--<div class="form-group">
-                            <label class="col-sm-3 control-label">Reason for leaving : </label>
-                            <div class="col-sm-9 col-with-radio">
-                                <div class="div-reason-choice"><input type="radio" id="1" name="reason"/> <label class="lbl-radio" for="1">I don't find Easyshop useful.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="2" name="reason"/> <label class="lbl-radio" for="2">I get too many emails, invitations, and requests from Easyshop.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="3" name="reason"/> <label class="lbl-radio" for="3">I have a privacy concern.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="4" name="reason"/> <label class="lbl-radio" for="4">I spend too much time using Easyshop.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="5" name="reason"/> <label class="lbl-radio" for="5">I don't understand how to use Easyshop.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="6" name="reason"/> <label class="lbl-radio" for="6">I don't feel safe on Easyshop.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="7" name="reason"/> <label class="lbl-radio" for="7">My account was hacked.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="8" name="reason"/> <label class="lbl-radio" for="8">I have another Easyshop account.</label></div>
-                                <div class="div-reason-choice"><input type="radio" id="9" name="reason"/> <label class="lbl-radio" for="9">This is temporary. I'll be back.</label></div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Newsletter opt out : </label>
-                            <div class="col-sm-9 col-with-radio">
-                                <div class="div-reason-choice"><input type="checkbox" id="opt-out" name="opt-out"/> <label class="lbl-radio" for="opt-out">Opt out of receiving newsletters from Easyshop</label></div>
-                            </div>
-                        </div>
-                        -->
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
@@ -197,25 +186,12 @@
                 </div>
             </div>
         </div>
-        <!--
-        <div class="div-account-setting">
-            <p class="panel-setting-title">Connect with easydeal.ph</p>
-            <div class="div-setting-content">
-                <button class="btn btn-easydeal-btn">
-                   Connect to <img src="/assets/images/easydeal-logo.png" class="easydeal-btn-img"/>
-                </button>
-                <p class="p-note-setting">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-                </p>
-            </div>
-        </div>
-        -->
     </div>
 </div>
 
 
 <div id="activated-modal" style="display:none; height: 100px;">
-    <h2>Deactivated Account</h2>
+    <h2 class="deactivate-modal-title">Deactivated Account</h2>
     <div id="activated-message">
             You have successfully deactivated your account.<br/><br/> If you have been unsatisfied with <a href="#">EasyShop</a> as an e-Commerce platform, please send us an email at <a href="#">info@easyshop.ph</a> to let us know how we can improve our website further.<br/><br/> Have a nice day!
     </div>

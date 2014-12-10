@@ -62,7 +62,7 @@
                                 window.location = "/login/logout";
                             }
                          });
-                        $('#activated-modal').parents("#simplemodal-container").addClass("activated-container");                                             
+                        $('#activated-modal').parents("#simplemodal-container").addClass("deactivated-container");                                                   
                     }
 
                 },
@@ -111,6 +111,10 @@
                       
          },
          submitHandler: function(form, event){
+            var errorContainer = $('#password-change-error');
+            var succcessContainer =  $('#password-change-success');
+            errorContainer.hide();
+            succcessContainer.hide();
             event.preventDefault();
             var newPassword = $("#password").val();
             var confirmPassword = $("#confirmPassword").val();
@@ -129,11 +133,15 @@
                     actionGroupChangePass.show();
                     loadingimg.hide();
                     var obj = jQuery.parseJSON(data); 
-                    if(obj.result === "success") {                    
-                        alert("You have successfully changed your password");
+                    if(obj.result === "success") {      
+                       errorContainer.hide();
+                       succcessContainer.fadeIn();
+                       
                     }
                     else {
-                        alert(obj.error);
+                        errorContainer.html(obj.error);
+                        errorContainer.fadeIn();
+                        succcessContainer.hide();
                     }
                 },
             });   
@@ -221,6 +229,8 @@
 
     /************** Delivery Address ***************************/
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
+        $('#delivery-address-error').hide();
+        $('#delivery-address-success').hide();
         $("#saveDeliverAddressBtn").attr("value","Saving..");
         var postData = $("#deliverAddressForm").serializeArray()
         postData.push({ name: this.name, value: this.value });
@@ -235,7 +245,7 @@
             success: function(data) {
                 $("#saveDeliverAddressBtn").attr("value","Save Changes");                
                 var obj = jQuery.parseJSON(data);
-                if(obj.errors) {
+                if(!obj.isSuccessful) {
                     if(typeof(obj.errors.consignee) !== "undefined") {
                         $("#errorsDivConsignee").css("display","block");
                         $("#errorTextConsignee").text(obj.errors.consignee[0]);
@@ -257,9 +267,13 @@
                     else {
                         $("#errorsDivStreetAddress").css("display","none");                                                
                     }
+                    $('#delivery-address-error').fadeIn();
+                    $('#delivery-address-success').hide();
                 }
                 else {
                     $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+                    $('#delivery-address-success').fadeIn();
+                    $('#delivery-address-error').hide();
                 }
             },
         });            

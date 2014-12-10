@@ -5,6 +5,7 @@ namespace Easyshop\SocialMedia;
 use \DateTime;
 use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsMemberMerge;
+use EasyShop\Entities\EsStoreColor;
 use Facebook\FacebookSession;
 
 class SocialMediaManager
@@ -210,6 +211,8 @@ class SocialMediaManager
 
         $form->submit([ 'username' => $username]);
         if ($form->isValid()) {
+            $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
+                                           ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
             $member = new EsMember();
             $member->setUsername($username);
             $member->setFullname($fullname);
@@ -222,6 +225,7 @@ class SocialMediaManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setLastFailedLoginDatetime(new DateTime('now'));
             $member->setSlug('');
+            $member->setStoreColor($defaultStoreColor);
             $this->em->persist($member);
             $this->em->flush();
 

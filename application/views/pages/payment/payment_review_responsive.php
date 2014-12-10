@@ -207,10 +207,10 @@
                                                 <?php foreach ($cat_item as $key => $value): ?>
                                                     <tr>
                                                         <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                            <?php echo $value['seller_username'] ?>
+                                                            <?php echo html_escape($value['seller_username']); ?>
                                                         </td>
                                                         <td width="40%">
-                                                            <?php echo $value['name'] ?>
+                                                            <?php echo html_escape($value['name']); ?>
                                                         </td>
                                                         <td  width="15%" align="center">
                                                             <?php echo $value['qty'] ?>
@@ -264,10 +264,10 @@
                                                 <?php foreach ($cat_item as $key => $value): ?>
                                                     <tr>
                                                         <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                            <?php echo $value['seller_username'] ?>
+                                                            <?php echo html_escape($value['seller_username']); ?>
                                                         </td>
                                                         <td width="40%">
-                                                            <?php echo $value['name'] ?>
+                                                            <?php echo html_escape($value['name']); ?>
                                                         </td>
                                                         <td  width="15%" align="center">
                                                             <?php echo $value['qty'] ?>
@@ -321,10 +321,10 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                                 <tr>
                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                        <?php echo $value['seller_username'] ?>
+                                                        <?php echo html_escape($value['seller_username']) ?>
                                                     </td>
                                                     <td width="40%">
-                                                        <?php echo $value['name'] ?>
+                                                        <?php echo html_escape($value['name']) ?>
                                                     </td>
                                                     <td  width="15%" align="center">
                                                         <?php echo $value['qty'] ?>
@@ -373,10 +373,10 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo $value['seller_username'] ?>
+                                                    <?php echo html_escape($value['seller_username']) ?>
                                                 </td>
                                                 <td width="40%">
-                                                    <?php echo $value['name'] ?>
+                                                    <?php echo html_escape($value['name']) ?>
                                                 </td>
                                                 <td  width="15%" align="center">
                                                     <?php echo $value['qty'] ?>
@@ -425,10 +425,10 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo $value['seller_username'] ?>
+                                                    <?php echo html_escape($value['seller_username']); ?>
                                                 </td>
                                                 <td width="40%">
-                                                    <?php echo $value['name'] ?>
+                                                    <?php echo html_escape($value['name']); ?>
                                                 </td>
                                                 <td  width="15%" align="center">
                                                     <?php echo $value['qty'] ?>
@@ -488,10 +488,10 @@
                                             <?php foreach ($cat_item as $key => $value): ?>
                                             <tr>
                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo $value['seller_username'] ?>
+                                                    <?php echo html_escape($value['seller_username']); ?>
                                                 </td>
                                                 <td width="40%">
-                                                    <?php echo $value['name'] ?>
+                                                    <?php echo html_escape($value['name']); ?>
                                                 </td>
                                                 <td  width="15%" align="center">
                                                     <?php echo $value['qty'] ?>
@@ -582,10 +582,10 @@
                                                             <?php foreach ($cat_item as $key => $value): ?>
                                                                 <tr>
                                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                        <?php echo $value['seller_username'] ?>
+                                                                        <?php echo html_escape($value['seller_username']); ?>
                                                                     </td>
                                                                     <td width="40%">
-                                                                        <?php echo $value['name'] ?>
+                                                                        <?php echo html_escape($value['name']); ?>
                                                                     </td>
                                                                     <td  width="15%" align="center">
                                                                         <?php echo $value['qty'] ?>
@@ -644,10 +644,10 @@
                                                                         <?php echo $value['seller_username'] ?>
                                                                     </td>
                                                                     <td width="40%">
-                                                                        <?php echo $value['name'] ?>
+                                                                        <?php echo html_escape($value['name']); ?>
                                                                     </td>
                                                                     <td  width="15%" align="center">
-                                                                        <?php echo $value['qty'] ?>
+                                                                        <?php echo html_escape($value['qty']); ?>
                                                                     </td>
                                                                     <td align="right"  width="15%">
                                                                         <?php echo number_format($value['price'], 2, '.',',') ?>
@@ -695,10 +695,10 @@
                                                                     <?php echo $value['seller_username'] ?>
                                                                 </td>
                                                                 <td width="40%">
-                                                                    <?php echo $value['name'] ?>
+                                                                    <?php echo html_escape($value['name']); ?>
                                                                 </td>
                                                                 <td  width="15%" align="center">
-                                                                    <?php echo $value['qty'] ?>
+                                                                    <?php echo html_escape($value['qty']); ?>
                                                                 </td>
                                                                 <td align="right"  width="15%">
                                                                     <?php echo number_format($value['price'], 2, '.',',') ?>
@@ -745,10 +745,10 @@
                                                         <?php foreach ($cat_item as $key => $value): ?>
                                                         <tr>
                                                             <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                <?php echo $value['seller_username'] ?>
+                                                                <?php echo html_escape($value['seller_username']); ?>
                                                             </td>
                                                             <td width="40%">
-                                                                <?php echo $value['name'] ?>
+                                                                <?php echo html_escape($value['name']); ?>
                                                             </td>
                                                             <td  width="15%" align="center">
                                                                 <?php echo $value['qty'] ?>

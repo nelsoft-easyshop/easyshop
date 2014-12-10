@@ -244,7 +244,7 @@ class mobilePayment extends MY_Controller
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
                     $message = "";
-                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['return_url'];
+                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
                 }
                 else{
                     $message = $requestData['m'];

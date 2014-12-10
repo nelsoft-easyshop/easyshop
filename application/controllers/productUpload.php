@@ -237,6 +237,7 @@ class productUpload extends MY_Controller
      */
     public function step2edit2()
     {
+        $stringUtility = $this->serviceContainer['string_utility'];
         if($this->input->post('p_id')){
             $product_id = $response['p_id'] = $this->input->post('p_id');
         }
@@ -372,6 +373,7 @@ class productUpload extends MY_Controller
         $response['attributeArray'] = $attributeArray;
         $response['parent_to_last'] = $breadcrumbs;
         $response['product_details'] = $product;
+        $response['cleanDescription'] = $stringUtility->purifyHTML($product['description']);
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
         $response['maxImageSize'] = $this->maxFileSizeInMb;

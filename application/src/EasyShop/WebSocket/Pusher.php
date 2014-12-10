@@ -47,7 +47,7 @@ class Pusher
             $pusher = $this->serviceContainer['pusher'];
             $pusher->addData('messageCount', $result2['unread_msgs']);
             foreach ($authenticatedSessions as $authenticatedSession) {
-                $pusher->pushToUserSession($authenticatedSession->getSession()->getId());
+                $pusher->pushToUserSession($authenticatedSession->getSession()->getSessionId());
             }
         }
     }
