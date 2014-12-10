@@ -56,7 +56,7 @@ class Register extends MY_Controller
                                                                 $this->input->post("email"),
                                                                 $this->input->post("mobile")
                                                             );     
-            if(!empty($registrationResult["errors"]) || $registrationResult["errors"] !== null) {
+            if(!empty($registrationResult["errors"])) {
                 $signUpResponse["errors"] = $registrationResult["errors"];
             }
             else {
