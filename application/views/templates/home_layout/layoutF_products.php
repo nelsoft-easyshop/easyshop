@@ -2,13 +2,13 @@
     <div class="media table-bordered mrgn-bttm-8 product">
         <div class="col-md-9 col-sm-9 media-sub media-content">
             <div class="pull-left media-image">
-                <a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">
+                <a  href="<?php echo "/item/" . $prod['slug']?>">
                     <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                 </a>
             </div>
             <div class="media-body">
                 <div class="content">
-                    <h5 class="title"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
+                    <h5 class="title"><a  href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['name'])?></a></h5>
                     <?php echo html_escape($prod['brief'])?>
                 </div>
                 <div class="condition m-screen l-screen">
@@ -33,7 +33,7 @@
                     <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
                 <?php endif;?>
             </div>
-            <div class="orange-btn"><a target="_blank" href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
+            <div class="orange-btn"><a href="<?php echo "/item/" . $prod['slug']?>">Buy Now</a></div>
         </div>
     </div>
 <?php endforeach;?>
