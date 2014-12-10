@@ -2023,7 +2023,7 @@ class Memberpage extends MY_Controller
             if($authenticatedMember) {
                 $this->load->library('encrypt');
                 $hash = serialize([
-                    'hash' => $member['member']->getIdMember(),
+                    'memberId' => $member['member']->getIdMember(),
                 ]);                
                 $result = $this->encrypt->encode($hash);
                 $parseData = array(
@@ -2065,7 +2065,7 @@ class Memberpage extends MY_Controller
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
-                                    && $authenticationResult['member']->getIdMember() === (int)$getData["hash"] 
+                                    && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
         if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
@@ -2090,13 +2090,13 @@ class Memberpage extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        if ((int)($getData["hash"]) === 0 || !$this->input->get('h')) {
+        if ((int)($getData["memberId"]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
         else {
              $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy([
-                                    'idMember' => $getData["hash"],
+                                    'idMember' => $getData["memberId"],
                                     'isActive' => 0
                                 ]);
 
@@ -2110,7 +2110,7 @@ class Memberpage extends MY_Controller
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                     'relCanonical' => base_url(),
                     'username' => $member->getUsername(),
-                    'idMember' => $getData["hash"],            
+                    'idMember' => $getData["memberId"],            
                     'hash' => $this->input->get('h')            
                 );
                 $data = array_merge($data, $this->fill_header());
