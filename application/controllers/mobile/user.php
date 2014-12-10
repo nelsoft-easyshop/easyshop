@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 use EasyShop\Entities\EsAddress;
+use EasyShop\Entities\EsLocationLookup;
 
 class user extends MY_Controller 
 {
@@ -86,8 +87,17 @@ class user extends MY_Controller
         $region = ($this->input->post('region')) ? trim($this->input->post('region')) : "";
         $city = ($this->input->post('city')) ? trim($this->input->post('city')) : "";
         $memberId = $this->member->getIdMember();
-        $type = EsAddress::TYPE_DELIVERY;
-        $result = $userManager->setAddress($streetAddress,$region,$city,$memberId,$type,$consignee,$mobileNumber,$telephoneNumber);
+        $result = $userManager->setAddress($streetAddress,
+                                           $region,
+                                           $city,
+                                           $memberId,
+                                           $consignee,
+                                           $mobileNumber,
+                                           $telephoneNumber,
+                                           EsAddress::DEFAULT_LAT, 
+                                           EsAddress::DEFAULT_LNG, 
+                                           EsLocationLookup::PHILIPPINES_LOCATION_ID, 
+                                           EsAddress::TYPE_DELIVERY);
         unset($result['errors']);
 
         echo json_encode($result,JSON_PRETTY_PRINT);

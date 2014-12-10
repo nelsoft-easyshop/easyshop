@@ -50,6 +50,10 @@
             </div>
         </div>
         <div class="clear"></div>
+        
+        <div class="div-store-setup payment-account-loading" style="text-align:center">
+            <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+        </div>
 
         <div id="payment-account-template" class="bank-account-item mrgn-bttm-15" style="display:none">
             <div class="col-xs-8">

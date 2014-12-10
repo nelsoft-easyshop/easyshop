@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Mobile Number : </label>
                      <div class="col-sm-8">
-                        <input type="text" class="text-info text-required" value="<?php  echo html_escape(($address) ? ( $address->getMobile() !== '' ? ('0'.$address->getMobile()) : '' ) : '')?>" id="consigneeMobile" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
+                        <input type="text" class="text-info text-required" value="<?php  echo html_escape(($address) ? ( $address->getMobile() !== '' ? ('0'.$address->getMobile()) : '' ) : '')?>" id="consigneeMobile" maxlength="11" name="c_mobile" placeholder="Enter your 11 digit mobile number here">
                         <div id="errorsDivMobile" style="display:none;">
                             <span class="val-error-icon"><i class="fa fa-times"></i></span>
                             <span class="val-error" id="errorTextMobile"></span>
@@ -122,6 +122,16 @@
                         <input type="submit" class="btn btn-lg btn-save-dashboard" name="c_deliver_address_btn" id="saveDeliverAddressBtn" value="Save Changes"/>
                     </div>
                 </div>
+                
+                <div class="alert alert-danger" style="display:none" role="alert" id="delivery-address-error">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Please fix the errors in the delivery address you have provided.
+                </div>
+                
+                <div class="alert alert-success" style="display:none" role="alert" id="delivery-address-success">
+                    Delivery address updated successfully.
+                </div>
+                
             <?php echo form_close();?>
         </div>
     </div>

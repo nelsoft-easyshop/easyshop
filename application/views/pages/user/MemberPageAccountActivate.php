@@ -34,17 +34,23 @@
                         <br>
                         <form class="form-horizontal" id="activateAccountForm">
                             <div class="form-group">
+                                <label class="col-sm-5 control-label">Type your username: </label>
+                                <div class="col-sm-7">
+                                    <input type = "username"  id="username" name="username" class="text-info text-required" placeholder="Type your username here">
+                                </div> 
+                            </div>                            
+                            <div class="form-group">
                                 <label class="col-sm-5 control-label">Type your password : </label>
                                 <div class="col-sm-7">
                                     <input type = "hidden" name="h" value="<?php echo $hash; ?>">
                                     <input type = "hidden" name="userId" value="<?php echo $idMember; ?>">
-                                    <input type = "password"  id="password" name="password" class="text-info text-required" placeholder="Type your account password here">
+                                    <input type = "password"  id="password" name="password" class="text-info text-required" placeholder="Type your password here">
                                 </div> 
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">Confirm your password : </label>
                                 <div class="col-sm-7">
-                                    <input type = "password"  id="confirmPassword" name="confirmPassword" class="text-info text-required" placeholder="Confirm your account password here">
+                                    <input type = "password"  id="confirmPassword" name="confirmPassword" class="text-info text-required" placeholder="Confirm your password here">
                                 </div>
                             </div>
                             <div class="activateActions">
@@ -71,6 +77,14 @@
              Congratulations! You've just reactivated your account with EasyShop!
 
             <a href="/home">Click here</a> to go back to our Homepage and start browsing for your favourite items.
+        </div>
+    </div>
+</div>
+<div id="invalidCredentials" style="display:none; height: 100px;">
+    <div class="feedback-content">
+        <div id="activated-message" class="invalidCredentialsMessage">
+             Sorry, but you have entered invalid credentials
+
         </div>
     </div>
 </div>

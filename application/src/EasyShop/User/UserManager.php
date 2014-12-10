@@ -227,19 +227,8 @@ class UserManager
     public function setStoreName($storeName)
     {
         $storeName = trim($storeName);
-        $objUsedStoreName = array();
-
-        if( strlen($storeName) > 0 ){
-            $objUsedStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                       ->getUsedStoreName($this->memberId,$storeName);
-        }
-        
-        // If store name is not yet used, set user's storename to $storeName
-        if( empty($objUsedStoreName) ){
-            $this->memberEntity->setStoreName($storeName);
-            $this->em->persist($this->memberEntity);
-        }
-        else{
+        $isSuccessful = $this->updateStorename($this->memberEntity, $storeName, false);
+        if(!$isSuccessful){
             $this->err['storename'] = "Store name already used!";
             $this->hasError = TRUE;
         }
@@ -640,17 +629,29 @@ class UserManager
 
     /**
      * Update or insert address of the user
-     * @param string   $streetAddress   [description]
-     * @param integer  $region          [description]
-     * @param integer  $city            [description]
-     * @param integer  $memberId        [description]
-     * @param integer  $type            [description]
-     * @param string   $consignee       [description]
-     * @param string   $mobileNumber    [description]
-     * @param string   $telephoneNumber [description]
+     * @param string   $streetAddress
+     * @param integer  $region
+     * @param integer  $city
+     * @param integer  $memberId
+     * @param integer  $type
+     * @param string   $consignee
+     * @param string   $mobileNumber
+     * @param string   $telephoneNumber
      * @param interger $country
+     *
+     * @return array
      */
-    public function setAddress($streetAddress,$region,$city,$memberId,$consignee="",$mobileNumber="",$telephoneNumber = "", $lat = EsAddress::TYPE_DELIVERY, $lng = EsAddress::TYPE_DELIVERY, $country = 1, $type = EsAddress::TYPE_DELIVERY)
+    public function setAddress($streetAddress,
+                               $region,
+                               $city,
+                               $memberId,
+                               $consignee="",
+                               $mobileNumber="",
+                               $telephoneNumber = "", 
+                               $lat = EsAddress::DEFAULT_LAT, 
+                               $lng = EsAddress::DEFAULT_LNG, 
+                               $country = EsLocationLookup::PHILIPPINES_LOCATION_ID, 
+                               $type = EsAddress::TYPE_DELIVERY)
     { 
         $formValidation = $this->formValidation; 
         $formFactory = $this->formFactory;
@@ -849,9 +850,10 @@ class UserManager
      *
      * @param EasyShop\Entities\EsMember $memberEntity
      * @param string $storename
+     * @param bool $executeFlush
      * @return bool
      */
-    public function updateStorename($memberEntity, $storename)
+    public function updateStorename($memberEntity, $storename, $executeFlush = true)
     {
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -860,11 +862,13 @@ class UserManager
         if(empty($usersWithStorename) && !$isRestricted){
             $memberEntity->setStorename($storename);
             $isSuccessful = true;
-            try{
-                $this->em->flush();
-            }
-            catch(\Doctrine\ORM\Query\QueryException $e){
-                $isSuccessful = false;
+            if($executeFlush){
+                try{
+                    $this->em->flush();
+                }
+                catch(\Doctrine\ORM\Query\QueryException $e){
+                    $isSuccessful = false;
+                }
             }
         }
         return $isSuccessful;
