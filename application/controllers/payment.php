@@ -1412,7 +1412,7 @@ class Payment extends MY_Controller{
             $buyerData['msg_link'] = base_url() . "messages/#"; #user appended on template
             $buyerMsg = $this->parser->parse('emails/email_purchase_notification_buyer',$buyerData,true);
             $buyerSubject = $this->lang->line('notification_subject_buyer');
-            $buyerSmsMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+            $buyerSmsMsg = $buyerData['buyer_store'] . $this->lang->line('notification_txtmsg_buyer');
 
             $emailService->setRecipient($buyerEmail)
                          ->setSubject($buyerSubject)
@@ -1436,6 +1436,7 @@ class Payment extends MY_Controller{
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
+                'buyer_store' => $transactionData['buyer_store'],
                 'invoice_no' => $transactionData['invoice_no'],
                 'payment_msg_seller' => $transactionData['payment_msg_seller'],
                 'payment_method_name' => $transactionData['payment_method_name'],
@@ -1445,7 +1446,7 @@ class Payment extends MY_Controller{
 
             foreach($transactionData['seller'] as $seller_id => $seller){
                 $sellerEmail = $seller['email'];
-                $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
+                $sellerData = array_merge( $sellerData, $seller );
                 $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
                 $sellerData['buyer_slug'] = $transactionData['buyer_slug'];
 
@@ -1454,7 +1455,7 @@ class Payment extends MY_Controller{
                 $sellerData['store_link'] = base_url() . $sellerData['buyer_slug'];
                 $sellerData['msg_link'] = base_url() . "messages/#" . $sellerData['buyer_name'];
                 $sellerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$sellerData,true);
-                $sellerSmsMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
+                $sellerSmsMsg = $seller['seller_store'] . $this->lang->line('notification_txtmsg_seller');
 
                 $emailService->setRecipient($sellerEmail)
                              ->setSubject($sellerSubject)
