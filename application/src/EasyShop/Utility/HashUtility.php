@@ -23,7 +23,7 @@ class HashUtility
         $hash = html_escape($data);
         $enc = str_replace(" ", "+", $hash);
         $decrypted = $this->encrypt->decode($enc);
-        $getData = explode('~', $decrypted);
+        $getData = unserialize($decrypted);
 
         return $getData;
     }
