@@ -290,7 +290,7 @@ class CategoryManager
         $vendorCategories = [];
         $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                            ->getNestedSetCategoryCount();
-        if($categoryNestedSetCount === 0){
+        if((int)$categoryNestedSetCount === 0){
             $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getUserCategoriesUsingAdjacencyList($memberId);
         }
