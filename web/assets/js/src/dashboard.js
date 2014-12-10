@@ -1097,13 +1097,22 @@
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
-        var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
-        var serializedData = form.serializeArray();
-        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+        var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
+
+        if( txResponseBtn.hasClass('tx_return') ) {
+            var hiddenInputs = txResponseBtn.closest('.item-list-panel').find('.order-product-ids');
+            var orderProductIds = hiddenInputs.map(function() {
+                return this.value;
+            }).get().join('-');
+            txResponseBtn.closest('.item-list-panel').find('input[name="seller_response"]').val(orderProductIds);
+        }
+        var serializedData = form.serializeArray();
+        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+
         $.ajax({
             url : '/memberpage/transactionResponse',
             method : 'POST',
@@ -1128,7 +1137,7 @@
                     if(txResponseBtn.hasClass('tx_forward')){
                         txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                     }else if(txResponseBtn.hasClass('tx_return')){
-                        txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
                     }else if(txResponseBtn.hasClass('tx_cod')){
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                     }
