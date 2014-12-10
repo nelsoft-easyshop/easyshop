@@ -377,17 +377,26 @@ class payment_model extends CI_Model
             'totalprice' => $row[0]['totalprice'],
             'invoice_no' => $row[0]['invoice_no'],
             'payment_method' => (int)$row[0]['payment_method_id'],
-            'products' => array()
+            'buyer_store' => $row[0]['buyer_store'] === "" 
+                             ? $row[0]['buyer'] 
+                             : $row[0]['buyer_store'],
+            'products' => [],
         );
-        
+
         foreach($row as $value){
             $temp = $value;
             
             // Assemble data for buyer
             if(!isset($data['products'][$value['id_order_product']])){
-                $data['products'][$value['id_order_product']] = array_slice($temp,6,11);
+                $data['products'][$value['id_order_product']] = $temp;
                 $data['products'][$value['id_order_product']]['order_product_id'] = $temp['id_order_product'];
                 $data['products'][$value['id_order_product']]['seller_slug'] = $value['seller_slug'];
+                $data['products'][$value['id_order_product']]['seller_store'] = $value['seller_store'] === "" 
+                                                                                ? $value['seller']
+                                                                                : $value['seller_store'];
+                $data['products'][$value['id_order_product']]['buyer_store'] = $value['buyer_store'] === "" 
+                                                                                ? $value['buyer']
+                                                                                : $value['buyer_store'];
             }
             
             // Assemble data for seller
@@ -395,10 +404,16 @@ class payment_model extends CI_Model
                 $data['seller'][$value['seller_id']]['email'] = $value['seller_email'];
                 $data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
                 $data['seller'][$value['seller_id']]['totalprice'] = 0;
-                $data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], array_slice($temp,20,6) );
+                $data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], $temp );
+                $data['seller'][$value['seller_id']]['seller_store'] = $value['seller_store'] === "" 
+                                                                       ? $value['seller']
+                                                                       : $value['seller_store'];
+                $data['seller'][$value['seller_id']]['buyer_store'] = $value['buyer_store'] === "" 
+                                                                       ? $value['buyer']
+                                                                       : $value['buyer_store'];
             }
             if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
-                $data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,8);
+                $data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = $temp;
                 $data['seller'][$value['seller_id']]['totalprice'] += preg_replace('/\,/', '' , $value['net']);
                 $data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['order_product_id'] = $value['id_order_product'];
             }
