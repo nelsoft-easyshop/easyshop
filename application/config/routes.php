@@ -108,7 +108,7 @@ else {
     $route['(?i)sell/finishupload'] = 'productUpload/finishProductPreview'; #js
 
     # USER
-    $route['(?i)me'] = 'memberpage/newMemberpage';
+    $route['(?i)me'] = 'memberpage';
     $route['(?i)me/product/next'] = 'memberpage/productMemberPagePaginate';
     $route['(?i)me/product/delete-soft'] = 'memberpage/softDeleteProduct';
     $route['(?i)me/product/delete-hard'] = 'memberpage/hardDeleteProduct';
