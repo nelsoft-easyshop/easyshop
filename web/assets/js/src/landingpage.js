@@ -239,7 +239,7 @@ jQuery(document).ready(function(){
 					jQuery('#register_form1_loadingimg').hide();
 					thisbtn.attr('disabled', false);
 					try{
-						var serverResponse = jQuery.parseJSON(data);
+						var serverResponse = jQuery.parseJSON(data);	
 					}
 					catch(e){
 						alert('We are currently encountering a problem. Please try again later.');
@@ -259,8 +259,28 @@ jQuery(document).ready(function(){
                         jQuery('#success_register').submit();
 					}
 					else{
-						alert(serverResponse['error']);
-						thisbtn.attr('disabled',false);
+						if(typeof serverResponse["errors"].username !== "undefined") {
+							var field = jQuery('#username');
+							showx(jQuery('#username'));
+							jQuery('.username_availability').html('Username already exists.');
+							field.removeClass('pass');						
+						}
+						if(typeof serverResponse["errors"].contactno !== "undefined") {
+							var field = jQuery('#mobile');							
+							showx(jQuery('#mobile'));
+							jQuery('.mobile_availability').html('Mobile is already in use.');
+							field.removeClass('pass');
+							field.addClass('fail');					
+						}						
+						if(typeof serverResponse["errors"].email !== "undefined") {
+							var field = jQuery('#email');							
+							showx(jQuery('#email'));
+							jQuery('.email_availability').html('Email is already in use.');
+							field.removeClass('pass');			
+						}
+						if(typeof serverResponse["dbError"] !== "undefined") {
+							alert(serverResponse["dbError"]);
+						}
 						thisbtn.val('SEND');
 					}
 					

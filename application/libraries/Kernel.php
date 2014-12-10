@@ -479,6 +479,28 @@ class Kernel
                         );
         };
 
+        $container['language_loader'] = function ($c) {
+            $languageImplementation = new \EasyShop\LanguageLoader\CodeigniterLanguage();
+            return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
+        };
+
+        $container['activity_manager'] = function ($c) use ($container) { 
+            return new \EasyShop\Activity\ActivityManager(
+                            $container['language_loader']
+                        );
+        };
+
+        // Checkout Service
+        $container['checkout_service'] = function ($c) use ($container) {
+            return new \EasyShop\Checkout\CheckoutService(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['promo_manager'],
+                            $container['cart_manager'],
+                            $container['payment_service']
+                        );
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
