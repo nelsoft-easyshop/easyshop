@@ -229,7 +229,7 @@ class AccountManager
                 
             $defaultStoreColor = $this->em
                                       ->getRepository('EasyShop\Entities\EsStoreColor')
-                                      ->find(\EasyShop\Entities\EsMember::DEFAULT_STORE_COLOR);
+                                      ->find(\EasyShop\Entities\EsStoreColor::DEFAULT_COLOR_ID);
 
             $member = new EsMember();
             $member->setUsername($validatedUsername);
