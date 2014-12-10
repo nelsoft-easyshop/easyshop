@@ -30,6 +30,11 @@ class NewHomeWebService extends MY_Controller
     private $file;    
 
     /**
+     * The Mobile XML resource
+     */    
+    private $defaultIndex = 0;    
+
+    /**
      * Handles if the request is authenticated
      * @var bool
      */    
@@ -900,7 +905,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template); 
+        $string = $this->xmlCmsService->getString("sliderSection",$template, $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path); 
         $index = $index == 0 ? 1 : $index + 1;  
         $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
         if($addXml === true) {
@@ -1121,6 +1126,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSubSlider()
     {
+
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
