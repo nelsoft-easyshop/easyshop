@@ -945,7 +945,7 @@ class Memberpage extends MY_Controller
         $em = $this->serviceContainer['entity_manager'];
         $emailService = $this->serviceContainer['email_notification'];
         $orderProductIds[0] = $this->input->post('order_product');
-
+        $productShippingCommentRepo = $em->getRepository("EasyShop\Entities\EsProductShippingComment");
         if ( (bool) stripos($orderProductIds[0], '-')) {
             $productIds = explode('-', $orderProductIds[0]);
             $orderProductIds = $productIds;
@@ -966,7 +966,8 @@ class Memberpage extends MY_Controller
                 $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
                 $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
                 $orderProductEntity  = $this->esOrderProductRepo
-                                            ->findOneBy(["idOrderProduct" => $postData['order_product'],
+                                            ->findOneBy([
+                                                "idOrderProduct" => $postData['order_product'],
                                                 "seller" => $memberEntity,
                                                 "order" => $orderEntity
                                             ]);
@@ -977,11 +978,17 @@ class Memberpage extends MY_Controller
                 $shippingCommentEntitySize = count($shippingCommentEntity);
 
                 if ( $shippingCommentEntitySize === 1 ) {
-                    $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                               ->getExactShippingComment($postData);
+                    $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($postData);
                 }
 
                 if( count($orderProductEntity) === 1 ) {
+                    $doesShippingCommentExist = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
+                    if ($doesShippingCommentExist) {
+                        $esShippingComment = $productShippingCommentRepo->addShippingComment();
+                    }
+                    else {
+
+                    }
                     $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
                     $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
                     $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
