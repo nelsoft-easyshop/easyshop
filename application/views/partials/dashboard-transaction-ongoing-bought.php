@@ -104,17 +104,17 @@
                                                     Delivery Date:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['deliveryDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['deliveryDate'], 'Y - m - d')?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12 pd-bttm-10"></div>
                                                 <div class="col-md-4">
                                                     Expected Date of Arrival:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'Y - M - d')?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12">
-                                                    <textarea placeholder="Write your comment..." disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
+                                                    <textarea disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
                                                 </div>
                                                 <div class="clear"></div>
                                                 <div class="shipping-border"></div>
