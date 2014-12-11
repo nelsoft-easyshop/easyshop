@@ -57,7 +57,8 @@
 </div>
 
 <div>
-    <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s")))); ?>' >
+    <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
+    <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
 </div>
 
 <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>

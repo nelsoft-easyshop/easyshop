@@ -19,8 +19,8 @@ class CountDownSalePromo extends AbstractPromo
      * @var float
      *
      */
-    private static $percentagePerHour = 2.00;
-    
+    private static $percentagePerHour = 5.00;
+
     /**
      * Applies the count down sale calculations
      *
@@ -43,6 +43,8 @@ class CountDownSalePromo extends AbstractPromo
         $this->isEndPromo = $promoData['isEndPromo'];
         $this->persist();
 
+        $this->promoDataRestriction($this->product, $promoData['augmentedDiscount'], $this->isStartPromo);
+
         return $this->product;
     }
 
@@ -61,11 +63,11 @@ class CountDownSalePromo extends AbstractPromo
         $dateToday = $date->getTimestamp();
         $startDateTime = $startDate->getTimestamp();
         $endDateTime = $endDate->getTimestamp();
-        $promoDetails = array(
+        $promoDetails = [
             'isStartPromo' => false,
             'isEndPromo' => false,
             'promoPrice' => $price
-        );
+        ];
 
         if (($dateToday < $startDateTime) || ($endDateTime < $dateToday)) {
             $diffHours = 0;
@@ -83,8 +85,23 @@ class CountDownSalePromo extends AbstractPromo
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
         $promoDetails['isEndPromo'] = ($dateToday > $endDateTime) ? true : false;
+        $promoDetails['augmentedDiscount'] = $diffHours * self::$percentagePerHour;
 
         return $promoDetails;
+    }
+
+    /**
+     * Soft delete product if reached the max allowable discount
+     * @param $product
+     * @param $augmentedDiscount
+     * @param $isStartPromo
+     */
+    private function promoDataRestriction($product, $augmentedDiscount, $isStartPromo)
+    {
+        if (  (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
+            $product->setIsDelete(1);
+            $this->persist();
+        }
     }
 
 }
