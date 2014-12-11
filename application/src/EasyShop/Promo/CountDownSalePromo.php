@@ -2,8 +2,9 @@
 
 namespace EasyShop\Promo;
 
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Validator\Constraints\DateTime;
-
+use EasyShop\Entities\EsProduct;
 class CountDownSalePromo extends AbstractPromo
 {
 
@@ -84,7 +85,7 @@ class CountDownSalePromo extends AbstractPromo
         $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
-        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime) ? true : false;
+        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime);
         $promoDetails['augmentedDiscount'] = $diffHours * self::$percentagePerHour;
 
         return $promoDetails;
@@ -99,7 +100,7 @@ class CountDownSalePromo extends AbstractPromo
     private function promoDataRestriction($product, $augmentedDiscount, $isStartPromo)
     {
         if (  (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
-            $product->setIsDelete(1);
+            $product->setIsDelete(EsProduct::DELETE);
             $this->persist();
         }
     }

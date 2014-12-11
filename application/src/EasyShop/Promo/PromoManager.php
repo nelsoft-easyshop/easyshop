@@ -3,6 +3,7 @@
 namespace EasyShop\Promo;
 
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
+use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsPromo;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -271,6 +272,23 @@ class PromoManager
         $this->em->flush();
 
         return (int) $memberId === (int) $promo->getMemberId();
+    }
+
+    public function getActiveDataForTwelveDaysOfChristmasByDate($date)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tbl_product')
+            ->from('EasyShop\Entities\EsProduct', 'tbl_product')
+            ->where(':dateTime >= tbl_product.startdate')
+            ->andWhere(':dateTime <= tbl_product.enddate')
+            ->andWhere('tbl_product.isPromote = :isPromote')
+            ->andWhere('tbl_product.promoType = 1')
+            ->setParameter('dateTime', $date)
+            ->setParameter('isPromote', EsProduct::PRODUCT_IS_PROMOTE_ON)
+            ->getQuery();
+        $product = $query->getResult();
+
+        return $product[0];
     }
 }
 
