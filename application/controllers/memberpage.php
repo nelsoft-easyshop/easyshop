@@ -2436,6 +2436,25 @@ class Memberpage extends MY_Controller
     }
     
     /**
+     * Gets Delivery Address
+     *
+     * @return JSON
+     */
+    public function getDeliveryAddress()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['colors'] = $this->serviceContainer['entity_manager']
+                                       ->getRepository('EasyShop\Entities\EsStoreColor')
+                                       ->getAllColors(true);
+            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
+                                                             ->getAllUserProductParentCategory($memberId));
+        }
+        echo json_encode($response);
+    }
+
+    /**
      * Gets the store settings
      *
      * @return JSON

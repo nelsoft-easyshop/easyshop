@@ -76,7 +76,8 @@
                     <div id="personal-information">
                         <?php include("dashboard-personal-info.php");?>
                     </div>
-                    <div id="delivery-address">
+                    <div id="delivery-address" style="display:none;">
+                        
                         <?php include("dashboard-delivery-address.php");?>
                     </div>
                     <div id="account-settings">

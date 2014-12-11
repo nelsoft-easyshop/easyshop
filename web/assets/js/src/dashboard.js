@@ -31,7 +31,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
-    
+    //here1
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -40,6 +40,45 @@
         $( ".ma-delivery" ).addClass( "selectedM" );
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
+        var isDeliveryAddressInitializes = false;
+        if(!isDeliveryAddressInitializes){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getDeliveryAddress',
+                success: function(data){ 
+                    // var jsonResponse = $.parseJSON(data);
+                    // var unorderedList = $("#store-color-dropdown");
+                    // var colorList = [];
+           
+                    // var currentColorId = $('#current-store-color-id').val();
+                    // var isCurrentColorSet = false;
+
+                    // $.each(jsonResponse.colors, function(index, color) {
+                    //     var icon = '';
+                    //     var currentColorClass = '';
+                    //     if(!isCurrentColorSet && color.idStoreColor == currentColorId){
+                    //         icon = '<i class="fa fa-check pull-right"></i>';
+                    //         currentColorClass = 'selected';
+                    //         isCurrentColorSet = true;
+                    //     }
+                    //     var escapedColorName = escapeHtml(color.name);
+                    //     var escapedColorHex = escapeHtml(color.hexadecimal);
+                    //     var escapedColorId = escapeHtml(color.idStoreColor);
+                    //     var listHtml = '<li class="color-li '+currentColorClass+'" data-name="'+escapedColorName+'" data-id="'+escapedColorId+'" ' +
+                    //                        'style="background: #'+escapedColorHex+'; text-transform: uppercase;" ' +
+                    //                        'id="color-item-'+escapedColorId+'">' + escapedColorName + icon +
+                    //                     '</li>';
+                    //     colorList.push(listHtml);
+                    // });
+                    // unorderedList.append( colorList.join('') );
+                    // unorderedList.find('#color-item-'+currentColorId).append(' </i>');
+                    // createCategoryList(jsonResponse.storeCategories);
+                    // isStoreSetupInitialized = true;
+                    $('.delivery-setup-loading').hide();
+                    $('#deliverAddressDiv').fadeIn();
+                }
+            });
+        }        
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -1441,7 +1480,7 @@
         });
         $this.html(buttonHtml);
     });
-        
+    //here2
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         $('.dash-mobile-trigger').removeClass("selectedM");
