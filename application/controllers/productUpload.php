@@ -1380,9 +1380,8 @@ class productUpload extends MY_Controller
                                     }
                                 }
                             }
-                            sort($postProductIds);
-                            sort($productItemIds);
-                            if( $postProductIds == $productItemIds ){
+
+                            if(empty(array_diff($postProductIds,$productItemIds))){
                                 foreach( $shipPrice as $groupkey => $pricegroup ){
                                     foreach( $pricegroup as $inputkey => $price ){
                                         $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
