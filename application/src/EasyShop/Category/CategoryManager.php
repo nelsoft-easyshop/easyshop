@@ -311,7 +311,6 @@ class CategoryManager
             $categoryName = $vendorCategory['p_cat_name'];
             $hasNoParent = !isset($vendorCategories[$parentId]);
             $isCategoryMainParent = $parentId === EsCat::MAIN_PARENT_CATEGORY;
-            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
             
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];
@@ -320,6 +319,7 @@ class CategoryManager
                     if($vendorCategory['p_cat_img'] !== "" && file_exists($categoryImage)){
                         $categoryImage = $defaultCategoryImage;
                     }
+                    $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
                     $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
                     $vendorCategories[$parentId]['cat_link'] = '/category/' . $vendorCategory['p_cat_slug'];
                     $vendorCategories[$parentId]['cat_img'] = $categoryImage;
@@ -328,6 +328,7 @@ class CategoryManager
                 }
                 else if( $hasNoParent && $isCategoryMainParent){
                     $categoryName = 'Others';
+                    $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
                     $vendorCategories[$parentId]['slug'] = "";
                     $vendorCategories[$parentId]['cat_link'] = "";
                     $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;

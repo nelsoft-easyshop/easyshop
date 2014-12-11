@@ -8,11 +8,11 @@
                     <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
                 <?PHP else : ?>
                     <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
-                        <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
-                        <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
-                        <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php endif;?>
                 <?PHP endif; ?>
             </div>
@@ -225,7 +225,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            </div>
+                            <!-- </div> -->
                         <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                         <div class="trans-btn-wrapper trans-btn-con2">
                                 <?php
@@ -237,7 +237,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            </div>
+                            <!-- </div> -->
                         <?PHP endif; ?>
                         <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
@@ -278,7 +278,7 @@
                                     <?php echo form_close();?>
                                 </div>
                         <?PHP endif; ?>
-                       
+                       </div>
                     <?PHP endif; ?>
                 </div>
             </div>
