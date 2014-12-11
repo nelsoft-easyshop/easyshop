@@ -932,8 +932,8 @@ class NewHomeWebService extends MY_Controller
         $target = $this->input->get("target");
         $value = $this->input->get("value");
         $map = simplexml_load_file($this->tempHomefile);        
-        $this->config->load("image_path"); 
         if(!empty($_FILES['myfile']['name'])) {
+            $this->config->load("image_path"); 
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
@@ -955,7 +955,6 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $this->config->load("image_path");            
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
                 $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
