@@ -2,8 +2,10 @@
 
 namespace EasyShop\Repositories;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
+use EasyShop\Entities\EsProductShippingComment;
 
 class EsProductShippingCommentRepository extends EntityRepository
 {
@@ -37,5 +39,64 @@ class EsProductShippingCommentRepository extends EntityRepository
                     ->setParameter('member_id', $data['member_id']);
 
         return $query->getResult();
+    }
+
+    /**
+     * Add Shipping Comment
+     * @param $orderProduct Object
+     * @param $comment
+     * @param $member Object
+     * @param $courier
+     * @param $trackingNumber
+     * @param $expectedDate
+     * @param $deliveryDate
+     * @return EsProductShippingComment
+     */
+    public function addShippingComment($orderProduct, $comment, $member, $courier, $trackingNumber, $expectedDate, $deliveryDate)
+    {
+        $em = $this->_em;
+        $esProductShippingComment = new EsProductShippingComment();
+        $esProductShippingComment->setOrderProduct($orderProduct);
+        $esProductShippingComment->setComment($comment);
+        $esProductShippingComment->setMember($member);
+        $esProductShippingComment->setCourier($courier);
+        $esProductShippingComment->setTrackingNum($trackingNumber);
+        $esProductShippingComment->setExpectedDate(new DateTime($expectedDate));
+        $esProductShippingComment->setDeliveryDate(new DateTime($deliveryDate));
+        $esProductShippingComment->setDatemodified(new DateTime('now'));
+
+        $em->persist($esProductShippingComment);
+        $em->flush();
+
+        return $esProductShippingComment;
+    }
+
+    /**
+     * Update Shipping Comment
+     * @param $esProductShippingComment Object
+     * @param $orderProduct Object
+     * @param $comment
+     * @param $member Object
+     * @param $courier
+     * @param $trackingNumber
+     * @param $expectedDate
+     * @param $deliveryDate
+     * @return EsProductShippingComment
+     */
+    public function updateShippingComment($esProductShippingComment, $orderProduct, $comment, $member, $courier, $trackingNumber, $expectedDate, $deliveryDate)
+    {
+        $em = $this->_em;
+        $esProductShippingComment->setOrderProduct($orderProduct);
+        $esProductShippingComment->setComment($comment);
+        $esProductShippingComment->setMember($member);
+        $esProductShippingComment->setCourier($courier);
+        $esProductShippingComment->setTrackingNum($trackingNumber);
+        $esProductShippingComment->setExpectedDate(new DateTime($expectedDate));
+        $esProductShippingComment->setDeliveryDate(new DateTime($deliveryDate));
+        $esProductShippingComment->setDatemodified(new DateTime('now'));
+
+        $em->flush();
+
+        return $esProductShippingComment;
     }
 }
