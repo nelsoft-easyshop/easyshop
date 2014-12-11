@@ -298,7 +298,7 @@
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div> 
 
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
 <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>

@@ -382,7 +382,7 @@
     <input type="hidden" id="hidden-loadUrl" value="/cat/more/<?=$categorySlug .'?'. $_SERVER['QUERY_STRING']; ?>" />
 </div>
 
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
