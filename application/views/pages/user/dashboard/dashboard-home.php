@@ -295,7 +295,13 @@
             </div>
             
             <div id="feedbacks"> 
-                <?=$allFeedBackView; ?> 
+                <?php if($feedBackTotalCount > 0): ?>
+                    <?=$allFeedBackView; ?> 
+                <?php else:?>
+                    <div class="jumbotron no-items">
+                        <i class="icon-category"></i> No feedback for this category.
+                    </div>
+                <?php endif; ?>
             </div>
             <div id="sales">
                 <?=$salesView;?>
