@@ -923,32 +923,6 @@ a:focus {
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-
-
-.row-2{
-    margin-left: 0px;
-    margin-right: 0px;
-}
-
-.row-3{
-    margin-left: 0px;
-    margin-right: 0px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 figure {
   margin: 0;
 }
