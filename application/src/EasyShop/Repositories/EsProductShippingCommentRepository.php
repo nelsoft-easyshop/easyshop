@@ -61,8 +61,8 @@ class EsProductShippingCommentRepository extends EntityRepository
         $esProductShippingComment->setMember($member);
         $esProductShippingComment->setCourier($courier);
         $esProductShippingComment->setTrackingNum($trackingNumber);
-        $esProductShippingComment->setExpectedDate($expectedDate);
-        $esProductShippingComment->setDeliveryDate($deliveryDate);
+        $esProductShippingComment->setExpectedDate(new DateTime($expectedDate));
+        $esProductShippingComment->setDeliveryDate(new DateTime($deliveryDate));
         $esProductShippingComment->setDatemodified(new DateTime('now'));
 
         $em->persist($esProductShippingComment);
@@ -91,8 +91,8 @@ class EsProductShippingCommentRepository extends EntityRepository
         $esProductShippingComment->setMember($member);
         $esProductShippingComment->setCourier($courier);
         $esProductShippingComment->setTrackingNum($trackingNumber);
-        $esProductShippingComment->setExpectedDate($expectedDate);
-        $esProductShippingComment->setDeliveryDate($deliveryDate);
+        $esProductShippingComment->setExpectedDate(new DateTime($expectedDate));
+        $esProductShippingComment->setDeliveryDate(new DateTime($deliveryDate));
         $esProductShippingComment->setDatemodified(new DateTime('now'));
 
         $em->flush();

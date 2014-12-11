@@ -982,18 +982,18 @@ class Memberpage extends MY_Controller
                 }
 
                 if( count($orderProductEntity) === 1 ) {
-                    $doesShippingCommentExist = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
-                    if ($doesShippingCommentExist) {
-                        $esShippingComment = $productShippingCommentRepo->addShippingComment();
+                    $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
+                    if ($esShippingComment) {
+                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     else {
-
+                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
                     }
-                    $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
-                    $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
-                    $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
+                    $doesShippingCommentModified = (bool) $newEsShippingComment;
+                    $serverResponse['result'] = $doesShippingCommentModified ? 'success' : 'fail';
+                    $serverResponse['error'] = $doesShippingCommentModified ? '' : 'Failed to insert in database.';
 
-                    if( $boolAddShippingComment && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
+                    if( $doesShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
                         $buyerEntity = $orderEntity->getBuyer();
                         $buyerEmail = $buyerEntity->getEmail();
                         $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
