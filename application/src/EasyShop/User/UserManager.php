@@ -658,12 +658,11 @@ class UserManager
         $rules = $formValidation->getRules('user_shipping_address'); 
         $data['isSuccessful'] = false;
         if(intval($type)===EsAddress::TYPE_DELIVERY){
-
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
                                 ->add('consignee', 'text', array('constraints' => $rules['consignee']))
                                 ->add('mobile_number', 'text', array('constraints' => $rules['mobile_number']))
-                                ->add('telephone_number', 'text')
+                                ->add('telephone_number', 'text', array('constraints' => $rules['telephone_number']))
                                 ->add('street_address', 'text', array('constraints' => $rules['street_address']))
                                 ->add('region', 'text', array('constraints' => $rules['region'])) 
                                 ->add('city', 'text', array('constraints' => $rules['city']))
@@ -672,7 +671,7 @@ class UserManager
             $form->submit([ 
                 'consignee' => $consignee,
                 'mobile_number' => $mobileNumber,
-                'telephone_number' => $streetAddress,
+                'telephone_number' => $telephoneNumber,
                 'street_address' => $streetAddress,
                 'region' => $region,
                 'city' => $city,

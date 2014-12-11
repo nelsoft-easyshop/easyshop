@@ -267,11 +267,18 @@
                     else {
                         $("#errorsDivStreetAddress").css("display","none");                                                
                     }
+                    if( typeof(obj.errors.telephone_number) !== "undefined") {
+                        $("#errorsDivTelephone").css("display","block");
+                        $("#errorTextTelephone").text(obj.errors.telephone_number[0]);                   
+                    }                    
+                    else {
+                        $("#errorTextTelephone").css("display","none");                                                
+                    }                    
                     $('#delivery-address-error').fadeIn();
                     $('#delivery-address-success').hide();
                 }
                 else {
-                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress, #errorsDivTelephone").css("display","none");
                     $('#delivery-address-success').fadeIn();
                     $('#delivery-address-error').hide();
                 }
@@ -284,6 +291,15 @@
         var code = e.keyCode || e.which;
         return (code != 46);
     });
+
+
+    $('#consigneeLandLine').on('keypress',function(e){
+        var keyCode = event.keyCode;
+        if ( ! (keyCode >= 48 && keyCode <= 57) && keyCode !== 45 && keyCode !== 43) {
+              event.preventDefault();
+        }
+    });
+
 
     $('.address_dropdown, .disabled_country').chosen({width:'200px'});
     $('.stateregionselect').on('change', function(){
