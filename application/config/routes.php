@@ -176,8 +176,7 @@ else {
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
-    
-    $route['christmas-promo'] = 'home/christmasPromo';
+
 }
 
 /* End of file routes.php */
