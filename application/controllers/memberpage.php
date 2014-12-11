@@ -989,11 +989,11 @@ class Memberpage extends MY_Controller
                     else {
                         $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
                     }
-                    $doesShippingCommentModified = (bool) $newEsShippingComment;
-                    $serverResponse['result'] = $doesShippingCommentModified ? 'success' : 'fail';
-                    $serverResponse['error'] = $doesShippingCommentModified ? '' : 'Failed to insert in database.';
+                    $isShippingCommentModified = (bool) $newEsShippingComment;
+                    $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
+                    $serverResponse['error'] = $isShippingCommentModified ? '' : 'Failed to insert in database.';
 
-                    if( $doesShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
+                    if( $isShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
                         $buyerEntity = $orderEntity->getBuyer();
                         $buyerEmail = $buyerEntity->getEmail();
                         $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
