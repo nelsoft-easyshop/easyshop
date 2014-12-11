@@ -64,64 +64,40 @@
                 <h3 class="align-center padding-top-30">Hurry! Check out these selected items from our exclusive sellers!</h3>
 
                 <div class="row-fluid padding-top-30"> 
-                    <div class="span4 box seller-list">
+                    <div class="span6 box seller-list text-center div-box-con">
                         <a href="/frluxxeproducts" target="_blank">
                             <img src="/assets/images/promo-images/item1.jpg">
-                            <p>FRLUXXEPRODUCTS</p>
+                            <p class="box-seller-name">FRLUXXEPRODUCTS</p>
                         </a>
                     </div>
-                    <div class="span4 box seller-list">
+                    <div class="span6 box seller-list text-center div-box-con">
+                        <div class="dc-tag">12%</div>
                         <a href="/GaronGenMerch" target="_blank">
                             <img src="/assets/images/promo-images/item2.jpg">
-                         <p>Garon Gen Merch</p>
                         </a>
-                    </div>
-                    <div class="span4 box seller-list">
-                        <a href="/jsdonline" target="_blank">
-                            <img src="/assets/images/promo-images/item3.jpg">
-                            <p>JSD Online Shopping</p>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="row-fluid"> 
-                    <div class="span4 box seller-list">
-                        <a href="/kaiserdom" target="_blank">
-                            <img src="/assets/images/promo-images/item4.jpg">
-                            <p>Kaiserdom</p>
-                        </a>
-                    </div>
-                    <div class="span4 box seller-list">
-                        <a href="/lifeup101" target="_blank">
-                            <img src="/assets/images/promo-images/item5.jpg">
-                         <p>LifeStyle Upgrade 101</p>
-                        </a>
-                    </div>
-                    <div class="span4 box seller-list">
-                        <a href="/sjeternal" target="_blank">
-                            <img src="/assets/images/promo-images/item6.jpg">
-                            <p>SjEternal</p>
-                        </a>
+                        <div>
+                            <div class="price">Php 1,200.00</div>
+                            <div class="timer">
+                                <div class="timer-time">
+                                    <span>24</span>
+                                    <span>60</span>
+                                    <span>60</span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="timer-txt">
+                                    <span>hours</span>
+                                    <span>minutes</span>
+                                    <span>seconds</span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                 </div>
 
-                <div class="row-fluid"> 
-                    <div class="span4 box seller-list">
-                        <a href="/superstarbabies" target="_blank">
-                            <img src="/assets/images/promo-images/item7.jpg">
-                            <p>Super Starbabies</p>
-                        </a>
-                    </div>
-
-                    <div class="span4 box seller-list">
-                        <a href="/ckkmobile" target="_blank">
-                            <img src="/assets/images/promo-images/item8.jpg">
-                            <p>ckkmobile</p>
-                        </a>
-                    </div>
-                </div>
 
             </div>
         </section>
