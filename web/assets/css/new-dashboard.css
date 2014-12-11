@@ -589,7 +589,7 @@ a{
     border: 2px solid #565656;
     border-radius: 4px;
     display: inline-block;
-    margin: 12px 4px 0 4px;
+    margin: 12px 4px 35px;
     padding: 4px;
 }
 
@@ -1834,10 +1834,6 @@ a{
     margin: 0 auto;
 }
 
-.trans-left-panel .div-meta-description {
-    margin-bottom: 40px;
-}
-
 .trans-left-panel .info-main-cont {
     border-bottom: 1px solid #e2e2e2;
 }
@@ -2938,12 +2934,13 @@ label.css-label {
 
 @media screen and (max-width: 768px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 150px;
+        margin-top: 150px !important;
     }
 
-    .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
         margin-top: 120px;
     }
+
     .trans-right-panel {
         position: absolute;
     }
@@ -3027,14 +3024,14 @@ label.css-label {
 
 @media screen and (max-width: 480px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 200px;
+        margin-top: 200px !important;
     }
     .trans-btn-con1 .give-feedback-button,
     .trans-1btn  .give-feedback-button {
         width: 100% !important;
     }
 
-    .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
         margin-top: 160px;
     }
 

@@ -127,12 +127,6 @@
             </div>
         </div>
     </div>
-    <!-- Display this markup if there are no available data
-    <br/>
-    <div class="jumbotron no-items">
-        <i class="icon-category"></i> No feedback for this category.
-    </div>
-    -->
 <?php endforeach; ?>
 <center>
     <?=$pagination; ?>
