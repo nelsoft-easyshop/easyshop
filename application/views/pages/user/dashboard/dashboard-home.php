@@ -3,14 +3,19 @@
     <div class="div-member-stats">
              <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
                <img src="<?=$bannerImage;?>" class="img-follower-cover " />
-                <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
+                <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
+                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
+                </a>
             </div>
         <div class="clear"></div>
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
                     <div class="col-md-5 col-xs-12">
-                        <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
+                        <p class="p-username"><span class="icon-profile"></span> 
+                            <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"><?=html_escape($member->getUserName());?>
+                            </a>
+                        </p>
                     </div>
                     <div class="col-md-7 col-xs-12">
                         <div class="row">
