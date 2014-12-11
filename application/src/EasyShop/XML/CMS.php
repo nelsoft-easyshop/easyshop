@@ -1018,7 +1018,7 @@ $string = '<typeNode>
             $bannerImages[] = array(
                             'name' => '0',
                             'image' => $value['value'],
-                            'target' => $baseUrl.$value['imagemap']['target'],
+                            'target' => $value['imagemap']['target'],
                             'actionType' => $value['actionType'],
                         );
         }
