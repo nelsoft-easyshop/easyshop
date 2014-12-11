@@ -2,6 +2,10 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+
 class productUpload extends MY_Controller 
 {
     public $max_file_size_mb;
@@ -1303,129 +1307,152 @@ class productUpload extends MY_Controller
     }
     
     /**
-     * Handler for additional info in product uploads
-     * Update billing info, CoD and meetup in product table
-     * Upload shipping details if for delivery
-     *
-     */
+    * Handler for additional info in product uploads
+    * Update billing info, CoD and meetup in product table
+    * Upload shipping details if for delivery
+    */
     public function step4()
-    {    
-        $this->load->model('memberpage_model');
-        $memberID =  $this->session->userdata('member_id');
-        $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        $shipWithinDays = trim($this->input->post('ship_within'));
+    {
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
+        $esProductItemRepo = $this->em->getRepository('EasyShop\Entities\EsProductItem'); 
+        $esLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup'); 
+        $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
 
-        $serverResponse = array(
-            'result' => 'fail',
-            'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
-        );
-        
-        if( $this->input->post('prod_h_id') && (in_array("meetup", $deliveryOption) || in_array("delivery", $deliveryOption)) ){
-            $productID = $this->input->post('prod_h_id');
-            $billingID = (int)$this->input->post('billing_info_id');
-            $isMeetup = in_array("meetup", $deliveryOption) ? 1:0;
-            $isDelivery = in_array("delivery", $deliveryOption) ? true:false;
-            $isCOD = strtolower($this->input->post('allow_cod')) === 'on' ? 1:0;
-            
-            $isEdit = $this->input->post('is_edit') ? true:false;
-            
-            # Check if billing id is owned by user in database
-            if( $billingID !== 0 ){
-                $payment_accounts = $this->memberpage_model->get_billing_info($memberID);
-                if(!(array_key_exists($billingID,$payment_accounts))){
-                    $serverResponse['error'] = 'Billing ID database mismatch!';
-                    echo json_encode($serverResponse);
-                    exit();
-                }
-            }
-            
-            # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
-            $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
-            foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = $arr['id_product_item'];
-            }
-            
-            # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
-            $this->product_model->deleteShippingSummaryOnEdit($dbProductItemID);
-            
-            $myProceedVar = true;
-            
-            # If delivery option "for delivery" is selected
-            if($isDelivery){
-                # DeliveryCost can be one of the ff: free, details, or off
-                $deliveryCost = $this->input->post('prod_delivery_cost');
-                if( $deliveryCost === "free" ){
-                    $locationID = 1; #FOR PHILIPPINES
-                    $priceValue = 0; #FREE
-                    foreach( $dbProductItemID as $attrCombinationID ){
-                        $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                        $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
-                    }
-                # If shipping details provided, start verification of details
-                }else if( $deliveryCost === "details"){
-                    $shipPrice = $this->input->post('shipprice');
-                    $shipLoc = $this->input->post('shiploc');
-                    $shipAttr = $this->input->post('shipattr');
-                    
-                    #Fetch client ProductItemID based on submitted(checked) attributes
-                    $clientProductItemID = array();
-                    foreach( $shipAttr  as $grouparr){
-                        foreach( $grouparr as $pid){
-                            if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = $pid;
-                            }
+        $memberId = $this->session->userdata('member_id');
+        $deliveryOption = $this->input->post('delivery_option') 
+                          ? $this->input->post('delivery_option') : [];
+        $shipWithinDays = trim($this->input->post('ship_within')) !== ""
+                          ? trim($this->input->post('ship_within'))
+                          : null;
+        $productId = (int) $this->input->post('prod_h_id');
+        $billingId = (int) $this->input->post('billing_info_id');
+        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
+        $isMeetup = in_array("meetup", $deliveryOption);
+        $isDelivery = in_array("delivery", $deliveryOption);
+        $deliveryCost = trim($this->input->post('prod_delivery_cost'));
+        $shipPrice = $this->input->post('shipprice');
+        $shipLoc = $this->input->post('shiploc');
+        $shipAttr = $this->input->post('shipattr');
+        $isCanContinue = false;
+        $productItemIds = [];
+        $postProductIds = [];
+        $serverResponse = [
+            'result' => "fail",
+            'error' => "Operation Start."
+        ];
+   
+        try {
+            $product = $esProductRepo->findOneBy([
+                            'idProduct' => $productId,
+                            'member' => $memberId,
+                       ]);
+            if($product){
+                if($isMeetup || $isDelivery){
+                    if($billingId !== 0){
+                        $bankInfo = $esBillingInfoRepo->findOneBy([
+                                        'idBillingInfo' => $billingId,
+                                        'member' => $memberId,
+                                    ]);
+                        if(!$bankInfo){
+                            throw new Exception("Billing ID mismatch.");
                         }
                     }
+                    $productShippingManager->deleteProductShippingInfo($productId);
+                    $isCanContinue = true;
+                    if($isDelivery){
+                        $productItems = $esProductItemRepo->findBy(['product' => $productId]);
+                        foreach ($productItems as $item) {
+                            $productItemIds[] = $item->getIdProductItem();
+                        }
 
-                    // Reorder array values for proper checking of equality
-                    sort($clientProductItemID);
-                    sort($dbProductItemID);
-                    
-                    #If ProductItemID matches for client and server, also verifies that all attributes have been checked
-                    #or provided with a shipping location
-                    if( $clientProductItemID == $dbProductItemID ){
-                        # Cycle through each price and check if 
-                        foreach( $shipPrice as $groupkey => $pricegroup ){
-                            foreach( $pricegroup as $inputkey => $price ){
-                                $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                    #check if shipping location is provided for the price
-                                    if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                        # Check if attributes are provided for that group
-                                        if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                            # -- ALGO START FOR INSERTION TO DATABASE --
-                                            # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
-                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                    $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
+                        if( $deliveryCost === "free" ){
+                            $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
+                            foreach( $productItemIds as $itemIds ){
+                                $shippingHead = new EsProductShippingHead();
+                                $shippingHead->setLocation($location);
+                                $shippingHead->setPrice(0);
+                                $shippingHead->setProduct($product);
+                                $this->em->persist($shippingHead);
+
+                                $productItem = $esProductItemRepo->find($itemIds);
+
+                                $shippingDetails = new EsProductShippingDetail();
+                                $shippingDetails->setShipping($shippingHead);
+                                $shippingDetails->setProductItem($productItem);
+                                $this->em->persist($shippingDetails);
+                            }
+                            $this->em->flush();
+                        }
+                        elseif($deliveryCost === "details"){
+                            foreach( $shipAttr  as $attr){
+                                foreach( $attr as $itemId){
+                                    if( !(in_array((int)$itemId,$postProductIds)) ){
+                                        $postProductIds[] = $itemId;
+                                    }
+                                }
+                            }
+
+                            if(empty(array_diff($postProductIds,$productItemIds))){
+                                foreach( $shipPrice as $groupkey => $pricegroup ){
+                                    foreach( $pricegroup as $inputkey => $price ){
+                                        $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
+                                        if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
+                                            if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
+                                                if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
+                                                    foreach( $shipAttr[$groupkey] as $attrCombinationId){
+                                                        $productItem = $esProductItemRepo->find($attrCombinationId);
+                                                        foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
+                                                            $location = $esLookupRepo->find($locationId);
+                                                            $shippingHead = new EsProductShippingHead();
+                                                            $shippingHead->setLocation($location);
+                                                            $shippingHead->setPrice($priceValue);
+                                                            $shippingHead->setProduct($product);
+                                                            $this->em->persist($shippingHead);
+
+                                                            $shippingDetails = new EsProductShippingDetail();
+                                                            $shippingDetails->setShipping($shippingHead);
+                                                            $shippingDetails->setProductItem($productItem);
+                                                            $this->em->persist($shippingDetails);
+                                                        }
+                                                    }
+                                                    $this->em->flush();
                                                 }
                                             }
                                         }
+                                        else{
+                                            throw new Exception("Price Invalid."); 
+                                        }
                                     }
-                                }else{
-                                    $serverResponse['error'] = "Invalid price provided";
-                                    echo json_encode($serverResponse);
-                                    exit();
                                 }
                             }
                         }
-                    }else{
-                        $serverResponse['error'] = "Please provide shipping details for all item properties.";
-                        $myProceedVar = false;
+                    }
+
+                    if($isCanContinue){
+                        $product->setIsCod($isAllowCod);
+                        $product->setBillingInfoId($billingId);
+                        $product->setIsMeetup($isMeetup);
+                        $product->setShipsWithinDays($shipWithinDays);
+                        $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
+                        $this->em->flush();
+                        $serverResponse['result'] = 'success';
+                        $serverResponse['error'] = '';
                     }
                 }
+                else{
+                    throw new Exception("Incomplete Details submitted. Please select at least one delivery option.");
+                }
             }
-            // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
-            if($myProceedVar){
-                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
-                $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
-            }
+            else{
+                throw new Exception("Invalid operation this is not your product.");
+            } 
         }
-        
+        catch (Exception $e) {
+            // you may want to react on the Exception here
+            $serverResponse['error'] = $e->getMessage();
+        }
+
         echo json_encode($serverResponse);
     }
 
