@@ -1,12 +1,9 @@
 
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/style.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<style type="text/css">
-.res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
-    font-size: 0.85em;
-}
-</style>
+
 
 <div class="clear"></div>
 <div class="mrgn-top-35"></div>

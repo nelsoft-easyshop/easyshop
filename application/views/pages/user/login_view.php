@@ -1,4 +1,5 @@
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <div class="clear mrgn-top-35 display-ib"></div>
 
@@ -15,7 +16,6 @@
                 </div>
             </div>               
             <div class="col-md-12 text-center pd-top-30 pd-bttm-30">
-                <!--<p><strong>"loremipsum.dolor@yahoo.com"</strong> is not associated with any easyshop.ph account.</p>-->
                 Too many failed login attempts.
                 <strong><p id="lockoutDuration"></p></strong>
             </div>

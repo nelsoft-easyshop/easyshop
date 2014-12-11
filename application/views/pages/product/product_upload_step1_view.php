@@ -1,5 +1,6 @@
 <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <style type="text/css">
   /* Overlay */
   #simplemodal-overlay {

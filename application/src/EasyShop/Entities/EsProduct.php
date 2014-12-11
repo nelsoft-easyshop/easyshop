@@ -1357,7 +1357,7 @@ class EsProduct
     }
     
     /**
-     * Set promoType
+     * Set shipsWithinDays
      *
      * @param integer $shipsWithinDays
      * @return EsProduct
