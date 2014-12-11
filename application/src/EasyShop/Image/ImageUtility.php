@@ -47,6 +47,7 @@ class ImageUtility
         $config['width'] = $dimension[0];
         $config['height'] = $dimension[1]; 
 
+        $this->imageLibrary->clear();        
         $this->imageLibrary->initialize($config); 
         $this->imageLibrary->resize();
         $this->imageLibrary->clear();        
@@ -78,6 +79,7 @@ class ImageUtility
         $this->imageLibrary->image_process_gd('crop');
         $this->imageLibrary->clear();
     }
+
 }
 
 
