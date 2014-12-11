@@ -1112,6 +1112,18 @@ class Payment extends MY_Controller{
             $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
             $curl = new Curl();
             $curl->post($curlUrl, $this->input->post());
+
+                log_message('error', 'EASYDEAL => '. json_encode($curlUrl));
+                log_message('error', 'EASYDEAL => '. json_encode($this->input->post()));
+                log_message('error', 'EASYDEAL => '. json_encode($paymentConfig));
+                
+
+            if ($curl->error) {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->error_code . ': ' . $curl->error_message);
+            }
+            else {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->response);
+            }
         }
         else{
             show_404();
