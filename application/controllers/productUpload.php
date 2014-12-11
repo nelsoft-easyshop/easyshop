@@ -735,8 +735,8 @@ class productUpload extends MY_Controller
                             $nameOfFileArray = explode('_', $value['image']);
                             $fileType = end(explode('.', $value['image']));
                             unset($nameOfFileArray[0]);
-                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray); 
-                            array_push($arrayNameOnly, $value['image']);
+                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray);
+                            $arrayNameOnly[] = $value['image'];
                             $imageid = $this->product_model->addNewProductImage($other_path_directory.$newOtherName,$fileType,$product_id,0);
                         }
                         $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
@@ -805,7 +805,8 @@ class productUpload extends MY_Controller
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
         $style_id = 1;
         $brand_valid = false;
-        $otherBrand = ""; $primaryName ="";
+        $otherBrand = "";
+        $primaryName = "";
         $username = $this->user_model->getUserById($memberId)['username'];
         $dir = './assets/product/'; 
         $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
