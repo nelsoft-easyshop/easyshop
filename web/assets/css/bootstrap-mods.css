@@ -6,24 +6,21 @@
   content: "\e014";
 }
 
+
 a {
-  color: inherit;
+  color: #494949;
   text-decoration: none;
 }
 a:hover {
-  color: inherit;
+  color: #f18200;
   text-decoration: underline;
 }
 a:hover,
 a:focus {
-  color: inherit;
-  text-decoration: inherit;
+  color: #f18200;
+  text-decoration: underline;
 }
-a:focus {
-  outline: inherit;
-  outline: inherit;
-  outline-offset: inherit;
-}
+
 
 
 .btn:focus,

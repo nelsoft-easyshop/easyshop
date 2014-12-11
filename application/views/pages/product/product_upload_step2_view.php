@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
 <script type="text/javascript">

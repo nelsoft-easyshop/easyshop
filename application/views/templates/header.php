@@ -15,6 +15,7 @@
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
     
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>

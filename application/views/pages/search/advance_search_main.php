@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
-
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
