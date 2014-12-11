@@ -557,24 +557,26 @@ class productUpload extends MY_Controller
      */
     public function step2_2() # function for processing the adding of new item
     {
+        $stringUtility = $this->serviceContainer['string_utility'];
+
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
         $cat_id = $this->input->post('id');
-        $otherCategory = $this->input->post('otherCategory');
-        $brand_id =  $this->input->post('prod_brand'); 
+        $otherCategory = $stringUtility->removeNonUTF($this->input->post('otherCategory'));
+        $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $brand_valid = false;
         $otherBrand = '';
-        $product_title = trim($this->input->post('prod_title'));
-        $product_brief = trim($this->input->post('prod_brief_desc'));
+        $product_title = trim($stringUtility->removeNonUTF($this->input->post('prod_title')));
+        $product_brief = trim($stringUtility->removeNonUTF($this->input->post('prod_brief_desc')));
         $product_description =  substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
-        $product_condition = $this->input->post('prod_condition');
-        $sku = trim($this->input->post('prod_sku'));
-        $keyword = trim($this->input->post('prod_keyword'));
+        $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
+        $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
+        $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
         $style_id = 1;
         $member_id =  $this->session->userdata('member_id');
         $tempDirectory = $this->session->userdata('tempDirectory');
@@ -584,7 +586,7 @@ class productUpload extends MY_Controller
 
         if(intval($brand_id,10) == 1){
             $brand_valid = true;
-            $otherBrand = $this->input->post('brand_sch');
+            $otherBrand = $stringUtility->removeNonUTF($this->input->post('brand_sch'));
             $brand_id = 1;
         }
         else{
@@ -722,18 +724,22 @@ class productUpload extends MY_Controller
 
                 # start of saving other/custom attribute 
                 foreach ($attributes as $key => $valuex) {
-                    $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                    $attrName = $stringUtility->removeNonUTF($key);
+                    $attrName = $attrName === "" ? "no name" : $attrName;
+                    $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$attrName);
                     foreach ($valuex as $keyvalue => $value) {
                         $imageid = 0;
+                        $attributeValue = $stringUtility->removeNonUTF($value['value']);
+                        $attributeValue = $attributeValue === "" ? "no value" : $attributeValue;
                         if($value['image'] != ""){ 
                             $nameOfFileArray = explode('_', $value['image']);
                             $fileType = end(explode('.', $value['image']));
                             unset($nameOfFileArray[0]);
-                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray); 
-                            array_push($arrayNameOnly, $value['image']);
+                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray);
+                            $arrayNameOnly[] = $value['image'];
                             $imageid = $this->product_model->addNewProductImage($other_path_directory.$newOtherName,$fileType,$product_id,0);
                         }
-                        $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+                        $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
                     }
                 }
                 #end of other 
@@ -778,26 +784,29 @@ class productUpload extends MY_Controller
      */
     public function step2edit2Submit()
     {
+        $stringUtility = $this->serviceContainer['string_utility'];
+
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $product_id = $this->input->post('p_id');
         $memberId = $this->session->userdata('member_id');
         $cat_id = $this->input->post('id');
-        $product_title = trim($this->input->post('prod_title'));
-        $product_brief = trim($this->input->post('prod_brief_desc'));
+        $product_title = trim($stringUtility->removeNonUTF($this->input->post('prod_title')));
+        $product_brief = trim($stringUtility->removeNonUTF($this->input->post('prod_brief_desc')));
         $product_description = substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
-        $product_condition = $this->input->post('prod_condition');
-        $otherCategory = html_escape($this->input->post('otherCategory')); 
-        $sku = trim($this->input->post('prod_sku'));
-        $brand_id =  $this->input->post('prod_brand'); 
-        $keyword = trim($this->input->post('prod_keyword'));
+        $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
+        $otherCategory = html_escape($stringUtility->removeNonUTF($this->input->post('otherCategory'))); 
+        $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
+        $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
+        $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
         $style_id = 1;
         $brand_valid = false;
-        $otherBrand = ""; $primaryName ="";
+        $otherBrand = "";
+        $primaryName = "";
         $username = $this->user_model->getUserById($memberId)['username'];
         $dir = './assets/product/'; 
         $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
@@ -864,7 +873,7 @@ class productUpload extends MY_Controller
   
         if(intval($brand_id,10) == 1){
             $brand_valid = true;
-            $otherBrand = $this->input->post('brand_sch');
+            $otherBrand = $stringUtility->removeNonUTF($this->input->post('brand_sch'));
             $brand_id = 1;
         }
         else{
@@ -967,9 +976,13 @@ class productUpload extends MY_Controller
 
             # start of saving other/custom attribute 
             foreach ($attributes as $key => $valuex) {
-                $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                $attrName = $stringUtility->removeNonUTF($key);
+                $attrName = $attrName === "" ? "no name" : $attrName;
+                $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$attrName);
                 foreach ($valuex as $keyvalue => $value) {
                     $imageid = 0;
+                        $attributeValue = $stringUtility->removeNonUTF($value['value']);
+                        $attributeValue = $attributeValue === "" ? "no value" : $attributeValue;
                     if($value['image'] != ""){ 
                         $nameOfFileArray = explode('_', $value['image']);
                         $fileType = end(explode('.', $value['image']));
@@ -978,7 +991,7 @@ class productUpload extends MY_Controller
                         array_push($arrayNameOnly, $value['image']);
                         $imageid = $this->product_model->addNewProductImage($originalPath.'other/'.$newOtherName,$fileType,$product_id,0);
                     }
-                    $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+                    $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
                 }
             }
             directory_copy($tempDirectory, $originalPath,$product_id,$arrayNameOnly); 
