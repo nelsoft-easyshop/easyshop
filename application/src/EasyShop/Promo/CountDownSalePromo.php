@@ -97,7 +97,7 @@ class CountDownSalePromo extends AbstractPromo
      */
     private function promoDataRestriction($product, $augmentedDiscount)
     {
-        if (  (int) $augmentedDiscount >= (int) $product->getDiscount() ) {
+        if (  (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 ) {
             $product->setIsDelete(1);
             $this->persist();
         }
