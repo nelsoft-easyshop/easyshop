@@ -33,3 +33,6 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
+
+/bower_components/
+/node_modules/
