@@ -25,14 +25,14 @@ $config = array(
         '1' => array(
             'implementation' => 'EasyShop\Promo\CountDownSalePromo',
             'calculation_id' => '1',
-            'purchase_limit' => 1,
+            'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(
                             'cdb'=>'Credit or Debit Card',
                             'paypal'=>'Paypal'
             ),
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
-            'cart_solo_restriction' => true,
+            'cart_solo_restriction' => false,
             'option' => array(),
             'viewable_button_product_page' =>true,
         ),
