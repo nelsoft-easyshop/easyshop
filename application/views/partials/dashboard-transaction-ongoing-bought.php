@@ -75,7 +75,7 @@
                                     <?PHP endif; ?>
                                 </div>
                                 <?php if( $product['has_shipping_summary'] == 1 ):?>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12">
                                         <span class="strong-label shipment-detail-button">View shipment detail</span>
                                         <div class="shipping-details">
                                             <div class="shipping-details-wrapper">
@@ -111,7 +111,7 @@
                                                     Expected Date of Arrival:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'Y - M - d')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'Y - m - d')?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <textarea disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>

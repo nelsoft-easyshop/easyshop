@@ -6,7 +6,7 @@ use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
 use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
-use Easyshop\Entities\EsStoreColor;
+use Easyshop\Entities\EsStoreColor as EsStoreColor;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -226,11 +226,8 @@ class AccountManager
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
             $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
-                
-            $defaultStoreColor = $this->em
-                                      ->getRepository('EasyShop\Entities\EsStoreColor')
-                                      ->find(\EasyShop\Entities\EsStoreColor::DEFAULT_COLOR_ID);
-
+            $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find(EsStoreColor::DEFAULT_COLOR_ID);
             $member = new EsMember();
             $member->setUsername($validatedUsername);
             $member->setPassword($hashedPassword);
