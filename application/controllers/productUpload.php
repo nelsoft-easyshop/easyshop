@@ -1297,9 +1297,8 @@ class productUpload extends MY_Controller
     * Handler for additional info in product uploads
     * Update billing info, CoD and meetup in product table
     * Upload shipping details if for delivery
-    *
     */
-    public function newStep4()
+    public function step4()
     {
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
         $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
@@ -1343,7 +1342,7 @@ class productUpload extends MY_Controller
                                         'member' => $memberId,
                                     ]);
                         if(!$bankInfo){
-                            throw new Exception("Billing ID mismatch."); 
+                            throw new Exception("Billing ID mismatch.");
                         }
                     }
                     $productShippingManager->deleteProductShippingInfo($productId);
@@ -1422,13 +1421,14 @@ class productUpload extends MY_Controller
                         $product->setBillingInfoId($billingId);
                         $product->setIsMeetup($isMeetup);
                         $product->setShipsWithinDays($shipWithinDays);
+                        $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
                         $this->em->flush();
                         $serverResponse['result'] = 'success';
+                        $serverResponse['error'] = '';
                     }
                 }
                 else{
-                    $serverResponse['error'] = 'Incomplete Details submitted. 
-                                                Please select at least one delivery option.';
+                    throw new Exception("Incomplete Details submitted. Please select at least one delivery option.");
                 }
             }
             else{
@@ -1440,127 +1440,6 @@ class productUpload extends MY_Controller
             $serverResponse['error'] = $e->getMessage();
         }
 
-        echo json_encode($serverResponse);
-    }
-
-    public function step4()
-    {    
-        $this->load->model('memberpage_model');
-        $memberID =  $this->session->userdata('member_id');
-        $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        $shipWithinDays = trim($this->input->post('ship_within'));
-
-        $serverResponse = array(
-            'result' => 'fail',
-            'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
-        );
-        
-        if( $this->input->post('prod_h_id') && (in_array("meetup", $deliveryOption) || in_array("delivery", $deliveryOption)) ){
-            $productID = $this->input->post('prod_h_id');
-            $billingID = (int)$this->input->post('billing_info_id');
-            $isMeetup = in_array("meetup", $deliveryOption) ? 1:0;
-            $isDelivery = in_array("delivery", $deliveryOption) ? true:false;
-            $isCOD = strtolower($this->input->post('allow_cod')) === 'on' ? 1:0;
-            
-            $isEdit = $this->input->post('is_edit') ? true:false;
-            
-            # Check if billing id is owned by user in database
-            if( $billingID !== 0 ){
-                $payment_accounts = $this->memberpage_model->get_billing_info($memberID);
-                if(!(array_key_exists($billingID,$payment_accounts))){
-                    $serverResponse['error'] = 'Billing ID database mismatch!';
-                    echo json_encode($serverResponse);
-                    exit();
-                }
-            }
-            
-            # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
-            $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
-            foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = $arr['id_product_item'];
-            }
-            
-            # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
-            $this->product_model->deleteShippingSummaryOnEdit($dbProductItemID);
-            
-            $myProceedVar = true;
-            
-            # If delivery option "for delivery" is selected
-            if($isDelivery){
-                # DeliveryCost can be one of the ff: free, details, or off
-                $deliveryCost = $this->input->post('prod_delivery_cost');
-                if( $deliveryCost === "free" ){
-                    $locationID = 1; #FOR PHILIPPINES
-                    $priceValue = 0; #FREE
-                    foreach( $dbProductItemID as $attrCombinationID ){
-                        $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                        $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
-                    }
-                # If shipping details provided, start verification of details
-                }else if( $deliveryCost === "details"){
-                    $shipPrice = $this->input->post('shipprice');
-                    $shipLoc = $this->input->post('shiploc');
-                    $shipAttr = $this->input->post('shipattr');
-                    
-                    #Fetch client ProductItemID based on submitted(checked) attributes
-                    $clientProductItemID = array();
-                    foreach( $shipAttr  as $grouparr){
-                        foreach( $grouparr as $pid){
-                            if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = $pid;
-                            }
-                        }
-                    }
-
-                    // Reorder array values for proper checking of equality
-                    sort($clientProductItemID);
-                    sort($dbProductItemID);
-                    
-                    #If ProductItemID matches for client and server, also verifies that all attributes have been checked
-                    #or provided with a shipping location
-                    if( $clientProductItemID == $dbProductItemID ){
-                        # Cycle through each price and check if 
-                        foreach( $shipPrice as $groupkey => $pricegroup ){
-                            foreach( $pricegroup as $inputkey => $price ){
-                                $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                    #check if shipping location is provided for the price
-                                    if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                        # Check if attributes are provided for that group
-                                        if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                            # -- ALGO START FOR INSERTION TO DATABASE --
-                                            # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
-                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                    $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }else{
-                                    $serverResponse['error'] = "Invalid price provided";
-                                    echo json_encode($serverResponse);
-                                    exit();
-                                }
-                            }
-                        }
-                    }else{
-                        $serverResponse['error'] = "Please provide shipping details for all item properties.";
-                        $myProceedVar = false;
-                    }
-                }
-            }
-            // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
-            if($myProceedVar){
-                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
-                $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
-            }
-        }
-        
         echo json_encode($serverResponse);
     }
 
