@@ -64,8 +64,26 @@ class StringUtility
         return preg_replace('/\s+/','-', $string);
     }
 
+    /**
+     * Purify HTML
+     * @param  string $string
+     * @return string
+     */
     public function purifyHTML($string)
     {
         return  $this->htmlPurifier->purify($string);
+    }
+
+    /**
+     * Remove non utf character in string  
+     * @param  string $string
+     * @return string
+     */
+    public function removeNonUTF($string)
+    {
+        $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+        $string = preg_replace('/[^(\x20-\x7F)]*/','', $string);
+
+        return $string;
     }
 }
