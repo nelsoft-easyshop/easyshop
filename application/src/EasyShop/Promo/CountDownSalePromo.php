@@ -43,7 +43,7 @@ class CountDownSalePromo extends AbstractPromo
         $this->isEndPromo = $promoData['isEndPromo'];
         $this->persist();
 
-        $this->promoDataRestriction($this->product, $promoData['augmentedDiscount']);
+        $this->promoDataRestriction($this->product, $promoData['augmentedDiscount'], $this->isStartPromo);
 
         return $this->product;
     }
@@ -92,12 +92,13 @@ class CountDownSalePromo extends AbstractPromo
 
     /**
      * Soft delete product if reached the max allowable discount
-     * @param $product object
+     * @param $product
      * @param $augmentedDiscount
+     * @param $isStartPromo
      */
-    private function promoDataRestriction($product, $augmentedDiscount)
+    private function promoDataRestriction($product, $augmentedDiscount, $isStartPromo)
     {
-        if (  (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 ) {
+        if (  (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
             $product->setIsDelete(1);
             $this->persist();
         }
