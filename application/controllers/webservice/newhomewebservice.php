@@ -932,7 +932,7 @@ class NewHomeWebService extends MY_Controller
         $target = $this->input->get("target");
         $value = $this->input->get("value");
         $map = simplexml_load_file($this->tempHomefile);        
-
+        $this->config->load("image_path"); 
         if(!empty($_FILES['myfile']['name'])) {
             $filename = date('yhmdhs');
             $file_ext = explode('.', $_FILES['myfile']['name']);
