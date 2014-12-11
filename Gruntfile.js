@@ -26,10 +26,11 @@ module.exports = function (grunt) {
         },
         uglify : {
             js: {
-                files: {
-                    'web/assets/js/src/vendor/jquery.min.js': ['web/assets/js/src/vendor/jquery.js'],
-                    'web/assets/js/src/vendor/bootstrap.min.js': ['web/assets/js/src/vendor/bootstrap.js']
-                }
+                cwd: 'web/assets/js/src',
+                src: '**/*.js',
+                dest: 'web/assets/js/min/', 
+                expand: true, 
+                flatten: false
             }
         }        
     });
