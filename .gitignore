@@ -36,3 +36,4 @@ application/logs/*
 
 /bower_components/
 /node_modules/
+/web/assets/js/min
