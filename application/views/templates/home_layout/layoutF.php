@@ -9,7 +9,7 @@
 </style>
 
 <div class="clear"></div>
-<!-- <div class="mrgn-top-35"></div> -->
+<div class="mrgn-top-35"></div>
 <div class="res_wrapper feeds-cont">
     <div class="">
         <!-- LEFT PANEL --> 
