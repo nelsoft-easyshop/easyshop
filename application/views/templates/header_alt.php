@@ -280,5 +280,5 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </div>
 
-<script type="text/javascript" src="/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
+<script type="text/javascript" src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
 

@@ -1,0 +1,251 @@
+.res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
+    font-size: 0.85em;
+}
+
+.search-choice-close:before {
+  content: "\e014";
+}
+
+
+a {
+  color: #494949;
+  text-decoration: none;
+}
+a:hover {
+  color: #f18200;
+  text-decoration: underline;
+}
+a:hover,
+a:focus {
+  color: #f18200;
+  text-decoration: underline;
+}
+
+
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: inherit;
+  outline: inherit;
+  outline-offset: inherit;
+}
+
+.row-2 {
+    margin-left: -35px;
+    margin-right: -35px;
+}
+
+.row-3 {
+    margin-left: -18px;
+    margin-right: -18px;
+}
+
+.res_wrapper {
+    margin:0 auto;
+    max-width: 980px;
+    position: relative;
+    width: 100%;
+}
+
+.res_wrapper.wrapper {
+  font-size: 1em;
+  width: 100%;
+}
+
+header {
+  min-width: inherit !important;
+}
+
+/*** modal container ****/
+#simplemodal-container {
+    padding: 5px;
+}
+.simplemodal-container.draft_container {
+    font-size: 0.75em;
+    max-width: 60em !important;
+    min-width: inherit !important;
+    width: 100% !important;
+}
+.draft_container {
+    top: 60px !important;
+}
+
+.draft_items_container {
+    overflow-x: scroll;
+    height: 500px; 
+    padding-right: 10px;
+}
+
+.add_category_submit {
+    text-align: center;
+}
+/*** end of modal ***/
+
+.search_box #main_search {
+  height: 41px;
+}
+
+.footer_panel .about_footer {
+  margin-left: 0px;
+}
+
+.signup input.subscribe_email {
+  height: 39px;
+}
+
+
+.simplemodal-wrap {
+  overflow: inherit !important;
+}
+
+#simplemodal-data h3 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.draft_items_container {
+  font-size: 1.2em;
+}
+
+.tooltips {
+  text-decoration: none;
+}
+
+.tooltips span {
+  font-size: 0.85em;
+}
+
+a.tooltips span {
+    line-height: 20px;
+}
+
+.required {
+  font-size: 0.85em;
+}
+
+.ui-dialog-title {
+    margin-right: 3%;
+    vertical-align: middle;
+    width: 90% !important;
+}
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
+    left: 25% !important;
+    width: 50% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close {
+    position: absolute;
+}
+
+.alert.ui-dialog-content.ui-widget-content b {
+    font-weight: normal;
+}
+
+.price_details {
+  border-top: 1px solid #DBD8D7;
+  border-bottom: 1px solid #DBD8D7;
+  margin-bottom: 30px;
+}
+
+.step4_prod_preview .price_box, 
+.step4_prod_preview .availability, 
+.step4_prod_preview .buy_box {
+  float: left;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.step4_prod_preview .buy_box {
+    padding: 1px;
+}
+
+.step4_prod_preview .id-class {
+    height: 50px;
+    line-height: 50px;
+}
+
+.step4_prod_preview .product_option_preview {
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+
+.footer_panel {
+    clear: both;
+}
+
+.feeds-cont div[class*="col-"] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#feed-catlist nav ul > li {
+  width: 102.2%;
+}
+
+#feed-catlist nav ul > li > p {
+  height: 54px;
+  width: 100%;
+}
+
+#feed-catlist nav ul > li > p span {
+  height: 53px;
+  line-height: 53px;
+  font-size: 0.85em;
+  width: 160px;
+
+}
+@media only screen and (max-width : 979px) { 
+    /**** moblie LOGO ***/
+    .logo {
+        float: none !important;
+        text-align: center;
+    }
+}
+@media only screen and (max-width : 62em) { /*** 992px ***/
+  .prod_con_gal {
+    max-width: 400px;
+  }
+
+  .feed-mid-panel .row-2 {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+@media (max-width: 767px) {
+
+/*** Footer ***/
+    .about_footer .border-left {
+        border-left: 0px;
+        border-top: 1px solid #cecece;
+        padding-bottom: 0.85em;
+    }
+
+    .about_footer .pd-lr-20 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+@media only screen and (min-width: 481px) {
+  /*** modal ***/
+    #simplemodal-container {
+        width: 60% !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    /*** UI dialog box ***/
+  .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
+    left: 10% !important;
+    width: 80% !important;
+  }
+}
+
+@media only screen and (max-width : 20em) {
+    /*** modal ***/
+    #simplemodal-container {
+        width: 95% !important;
+    }
+}
