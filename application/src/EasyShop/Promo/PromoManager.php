@@ -274,6 +274,11 @@ class PromoManager
         return (int) $memberId === (int) $promo->getMemberId();
     }
 
+    /**
+     * Get active product for twelve days of Christmas promo
+     * @param $date
+     * @return EsProduct
+     */
     public function getActiveDataForTwelveDaysOfChristmasByDate($date)
     {
         $qb = $this->em->createQueryBuilder();
@@ -286,9 +291,9 @@ class PromoManager
             ->setParameter('dateTime', $date)
             ->setParameter('isPromote', EsProduct::PRODUCT_IS_PROMOTE_ON)
             ->getQuery();
-        $product = $query->getResult();
+        $product = $query->getOneOrNullResult();
 
-        return $product[0];
+        return $product;
     }
 }
 

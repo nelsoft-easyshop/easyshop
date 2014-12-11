@@ -172,7 +172,7 @@
                             <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromo::BUY_AT_ZERO && $product->getStartPromo() == 1): ?>
                                 <!--Changed button tag-->
                                 <input type="button" id='send_registration' data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
-                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</spadn>
+                                <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>

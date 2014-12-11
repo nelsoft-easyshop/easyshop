@@ -589,7 +589,7 @@ a{
     border: 2px solid #565656;
     border-radius: 4px;
     display: inline-block;
-    margin: 12px 4px 0 4px;
+    margin: 12px 4px 35px;
     padding: 4px;
 }
 
@@ -1402,6 +1402,7 @@ a{
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
+    z-index:1003 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -1831,10 +1832,6 @@ a{
     border-radius: 4px;
     border: 1px solid #e2e2e2;
     margin: 0 auto;
-}
-
-.trans-left-panel .div-meta-description {
-    margin-bottom: 40px;
 }
 
 .trans-left-panel .info-main-cont {
@@ -2347,13 +2344,12 @@ label.css-label {
         display: inline-block !important;
         width: 100%;
         text-align: center;
+        margin-top: -1px;
     }
     
     .col-dash-mobile{
         padding-right: 0px;
         padding-left:0px;
-        border-top: solid #e2e2e2 1px;
-        border-bottom: solid #e2e2e2 1px;
         padding-top: 10px;
         padding-bottom: 10px;
         text-transform: uppercase;
@@ -2372,8 +2368,8 @@ label.css-label {
         position:absolute;
         z-index:555;
         width: 100%;
-        padding: 0px 20px;
-        margin-top: 5px;
+        padding: 0px 0px;
+        margin-top: 0px;
         display: none;
        
     }
@@ -2382,21 +2378,18 @@ label.css-label {
         position:absolute;
         z-index:555;
         width: 100%;
-        padding: 0px 20px;
-        margin-top: 5px;
+        padding: 0px 0px;
+        margin-top: 0px;
         display: none;
-        
     }
     
     .my-store-menu-mobile-ul{
         border-top: solid #ff893a 3px;
-        border-bottom: solid #ff893a 3px;
         box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
     .my-account-menu-mobile-ul{
         border-top: solid #ff893a 3px;
-        border-bottom: solid #ff893a 3px;
         box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
@@ -2937,12 +2930,13 @@ label.css-label {
 
 @media screen and (max-width: 768px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 150px;
+        margin-top: 150px !important;
     }
 
-    .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
         margin-top: 120px;
     }
+
     .trans-right-panel {
         position: absolute;
     }
@@ -3026,14 +3020,14 @@ label.css-label {
 
 @media screen and (max-width: 480px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 200px;
+        margin-top: 200px !important;
     }
     .trans-btn-con1 .give-feedback-button,
     .trans-1btn  .give-feedback-button {
         width: 100% !important;
     }
 
-    .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
         margin-top: 160px;
     }
 

@@ -10,9 +10,18 @@ class TwelveDaysOfChristmas extends MY_Controller
         $this->promoManager = $this->serviceContainer['promo_manager'];
     }
 
-    public function getData()
+    /**
+     * Retrieve page for twelve Days Of Christmas Promo
+     */
+    public function twelveDaysOfChristmasPromo()
     {
-        $promoData = $this->promoManager->getActiveDataForTwelveDaysOfChristmasByDate(new DateTime('now'));
+        $product = $this->promoManager->getActiveDataForTwelveDaysOfChristmasByDate(new DateTime('now'));
+        $this->promoManager->hydratePromoData($product);
+        $promoData = [
+            'product' => $product,
+            'image' => $this->em->getRepository('EasyShop\Entities\EsProductImage')->getDefaultImage($product->getIdProduct())
+        ];
 
+        $this->load->view('/pages/web/christmas-promo', $promoData);
     }
 }
