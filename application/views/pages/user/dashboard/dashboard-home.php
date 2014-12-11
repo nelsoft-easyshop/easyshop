@@ -39,10 +39,12 @@
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
-                        <div class="form-shop-link">
-                            <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?=$member->getSlug();?>"/>
-                            <span class="icon-web"></span>
-                        </div>
+                        <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
+                            <div class="form-shop-link">
+                                <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"/>
+                                <span class="icon-web"></span>
+                            </div>
+                        </a>
                         <div class="div-stat-summary">
                             <div class="row">
                                 <div class="col-xs-3" align="center">
