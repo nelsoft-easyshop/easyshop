@@ -1308,8 +1308,8 @@ class productUpload extends MY_Controller
         $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
 
         $memberId = $this->session->userdata('member_id');
-        $deliveryOption = (array) $this->input->post('delivery_option') 
-                                  ? $this->input->post('delivery_option') : [];
+        $deliveryOption = $this->input->post('delivery_option') 
+                          ? $this->input->post('delivery_option') : [];
         $shipWithinDays = trim($this->input->post('ship_within')) !== ""
                           ? trim($this->input->post('ship_within'))
                           : null;
