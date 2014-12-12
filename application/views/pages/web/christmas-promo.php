@@ -141,7 +141,7 @@
         </section>
 
         <section class="copyright">
-            <p>Copyright © 2014 Easyshop.ph<br>All rights reserved.</p>
+            <p>Copyright &copy; 2014 Easyshop.ph<br>All rights reserved.</p>
         </section>
     </footer>
 

@@ -93,6 +93,7 @@ class TwelveDaysOfChristmas extends MY_Controller
         foreach ($vendorDataContainer as $date => $vendorData) {
             if ($dateTimeToday === $date) {
                 $featuredVendorData = $vendorData;
+                break;
             }
         }
 
