@@ -86,7 +86,9 @@ class EsVendorSubscribeRepository extends EntityRepository
         }
 
         $sql = "SELECT id_member
-                FROM es_member  a  
+                FROM es_member  a
+                LEFT JOIN es_product p
+                ON a.id_member = p.member_id
                 WHERE a.id_member NOT IN (:member_id,:viewer_id)
                 AND a.id_member NOT IN (
                     SELECT vendor_id from es_vendor_subscribe where member_id = :viewer_id
@@ -94,7 +96,12 @@ class EsVendorSubscribeRepository extends EntityRepository
                 AND a.id_member NOT IN (
                     SELECT member_id from es_vendor_subscribe where vendor_id = :member_id
                 )
+                AND p.is_delete = 0 
+                AND p.is_draft = 0
+                AND a.is_active = 1
                 $addQuery
+                GROUP BY a.id_member
+                HAVING count(p.id_product) >= 5
                 ORDER BY RAND()
                 LIMIT :per_page";
 
