@@ -66,13 +66,13 @@ class CountDownSalePromo extends AbstractPromo
             'isEndPromo' => false,
             'promoPrice' => $price
         ];
-        $His = strtotime(date('H:i:s', $dateToday));
+        $timeNow = strtotime(date('H:i:s', $dateToday));
         $discountPerHour = 0;
 
         foreach ($option as $promoPeriod) {
-            if ( strtotime($promoPeriod['start']) <= $His ) {
+            if ( strtotime($promoPeriod['start']) <= $timeNow ) {
                 $start_date = new DateTime($promoPeriod['start']);
-                if ($His <= strtotime($promoPeriod['end'])) {
+                if ($timeNow <= strtotime($promoPeriod['end'])) {
                     $since_start = $start_date->diff(new DateTime(date('H:i:s', $dateToday)));
                 }
                 else {
