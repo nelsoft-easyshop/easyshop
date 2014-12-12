@@ -62,12 +62,20 @@
                     </div>
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($product) && $product->getStartPromo()) : ?>
-                            <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
+                            <?PHP if ($product->getIsDelete()) : ?>
+                                <div class="dc-tag sold-out"> SOLD </div>
+                            <?PHP else : ?>
+                                <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
+                            <?PHP endif; ?>
                             <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
                                 <img src="/assets/images/promo-images/<?=$featuredVendor['productImageUrl']?>">
                             </a>
                             <div>
-                                <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                <?PHP if ($product->getIsDelete()) : ?>
+                                    <div class="price"> &nbsp; </div>
+                                <?PHP else : ?>
+                                    <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                <?PHP endif; ?>
                             </div>
                         <?PHP else : ?>
                             <div>
