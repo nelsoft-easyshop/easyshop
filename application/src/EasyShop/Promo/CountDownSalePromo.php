@@ -72,7 +72,7 @@ class CountDownSalePromo extends AbstractPromo
         foreach ($option as $promoPeriod) {
             if ( strtotime($promoPeriod['start']) <= $His ) {
                 $start_date = new DateTime($promoPeriod['start']);
-                if ($His <=strtotime($promoPeriod['end'])) {
+                if ($His <= strtotime($promoPeriod['end'])) {
                     $since_start = $start_date->diff(new DateTime($His));
                 }
                 else {
