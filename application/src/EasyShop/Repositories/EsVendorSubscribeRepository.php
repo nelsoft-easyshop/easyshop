@@ -4,6 +4,8 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository; 
 use Doctrine\ORM\Query\ResultSetMapping;
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsMember as EsMember;
 
 // NOTE
 // If a user follows another, add their ids to this table
@@ -81,12 +83,14 @@ class EsVendorSubscribeRepository extends EntityRepository
         $rsm->addScalarResult('id_member','id_member'); 
 
         $addQuery = "";
-        if(!empty($ids)){
+        if(empty($ids) === false){
             $addQuery = " AND a.id_member NOT IN (:ids) ";
         }
 
         $sql = "SELECT id_member
-                FROM es_member  a  
+                FROM es_member  a
+                LEFT JOIN es_product p
+                ON a.id_member = p.member_id
                 WHERE a.id_member NOT IN (:member_id,:viewer_id)
                 AND a.id_member NOT IN (
                     SELECT vendor_id from es_vendor_subscribe where member_id = :viewer_id
@@ -94,27 +98,35 @@ class EsVendorSubscribeRepository extends EntityRepository
                 AND a.id_member NOT IN (
                     SELECT member_id from es_vendor_subscribe where vendor_id = :member_id
                 )
+                AND p.is_delete = :is_delete 
+                AND p.is_draft = :is_draft
+                AND a.is_active = :member_active
                 $addQuery
+                GROUP BY a.id_member
+                HAVING count(p.id_product) >= 5
                 ORDER BY RAND()
                 LIMIT :per_page";
 
         $query = $em->createNativeQuery($sql,$rsm)
-                        ->setParameter('member_id', $memberId)
-                        ->setParameter('viewer_id', $viewerId)
-                        ->setParameter('per_page', $perPage);
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('viewer_id', $viewerId)
+                    ->setParameter('is_delete', EsProduct::ACTIVE)
+                    ->setParameter('is_draft', EsProduct::ACTIVE)
+                    ->setParameter('member_active', EsMember::DEFAULT_ACTIVE)
+                    ->setParameter('per_page', $perPage);
 
-        if(!empty($ids)){
+        if(empty($ids) === false){
             $query = $query->setParameter('ids', $ids);
         }
 
         $result = $query->getResult();
         $memberIds = [];
-        foreach ($result as $key => $value) {
+        foreach ($result as $value) {
             $memberIds[] = $value['id_member'];
         }
 
         $resultMembers = $em->getRepository('EasyShop\Entities\EsMember')
-                        ->findBy(['idMember' => $memberIds]); 
+                            ->findBy(['idMember' => $memberIds]); 
 
         return $resultMembers;
     }
