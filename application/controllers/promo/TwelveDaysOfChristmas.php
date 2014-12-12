@@ -42,51 +42,51 @@ class TwelveDaysOfChristmas extends MY_Controller
         $vendorDataContainer = [
             '2014-12-14' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item1.jpg'
             ],
             '2014-12-15' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item2.jpg'
             ],
             '2014-12-16' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item3.jpg'
             ],
             '2014-12-17' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item4.jpg'
             ],
             '2014-12-18' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item5.jpg'
             ],
             '2014-12-19' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item6.jpg'
             ],
             '2014-12-20' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item7.jpg'
             ],
             '2014-12-21' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item8.jpg'
             ],
             '2014-12-22' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item9.jpg'
             ],
             '2014-12-23' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item10.jpg'
             ],
             '2014-12-24' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item11.jpg'
             ],
             '2014-12-25' => [
                 'slug' => '',
-                'imageUrl' => ''
+                'imageUrl' => 'item12.jpg'
             ],
         ];
         $featuredVendorData = [];
