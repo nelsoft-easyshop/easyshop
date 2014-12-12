@@ -47,7 +47,7 @@
         <div class="container single-image-before"></div>
 
         <div class="single-image">
-            <img src="/assets/images/promo-images/header-xmas.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
+            <img src="/assets/images/promo-images/header-banner.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
 
         </div>
 
@@ -66,14 +66,15 @@
             <div class="row-fluid padding-top-30">
                 <div class="span6 box seller-list text-center div-box-con">
                     <a href="/frluxxeproducts" target="_blank">
-                        <img src="/assets/images/promo-images/item1.jpg">
-                        <p class="box-seller-name">FRLUXXEPRODUCTS</p>
+                        <img src="/assets/images/promo-images/seller1.jpg">
+                        <p class="box-seller-name">Barbie Forever</p>
                     </a>
                 </div>
                 <div class="span6 box seller-list text-center div-box-con">
-                    <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
+                    <div class="dc-tag sold-out"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
                     <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
-                        <img src="/<?=$image->getProductImagePath()?>">
+                    <!-- <img src="/<?=$image->getProductImagePath()?>"> -->
+                        <img src="/assets/images/promo-images/item1.jpg" alt="">
                     </a>
                     <div>
                         <div class="price">Php <?=number_format( $product->getFinalPrice(), 0, '.', ',')?></div>
@@ -102,6 +103,41 @@
         </div>
     </section>
 
+    <section>
+        <div class="container load-animate">
+            <div class="row-fluid">
+                <div class="span12 box">
+
+                <div class="row-fluid">
+                    <div class="span12 padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                        <h1 class="align-center">PROMO MECHANICS</h1>
+                        <p >1. One item will be assigned per day, starting from Dec. 14 until Dec. 25. One stock only so <strong>FIRST COME, FIRST SERVE</strong> policy will be observed.</p><br>
+                        <p >2. Items will be on a countdown sale. A percentage of the original item price will be off per hour passed until the item is sold. Countdown will start at 12:00 AM each day.  So it is possible for anyone to buy the item for up to 99% off!</p><br>
+                        <p>Percentage breakdown:</p>
+                        <ul>
+                            <li>12AM-1AM – 1% off per hour</li>
+                            <li>1AM-5AM – 2% off per hour</li>
+                            <li>5AM-10AM – 3% off per hour</li>
+                            <li>10AM-2PM- 4% off per hour</li>
+                            <li>2PM-6PM- 5% off per hour</li>
+                            <li>6PM-9PM – 6% off per hour</li>
+                            <li>9PM-12MN – 7% off per hour</li>
+                        </ul><br>
+                        <p>3. Once the item is bought, it will no longer be available to other buyers.</p><br>
+                        <p><strong>PAYMENT METHOD: PayPal, DragonPay or COD</strong></p><br>
+                        <p>Also, Watch out for these sellers for the scheduled dates of their sale.</p>
+                        <ul>
+                            <li>Barbieforever – Dec. 14, 15, 16</li>
+                            <li>Airborne Technologies – Dec. 17, 23, 24</li>
+                            <li>Michaela – Dec. 19, 20, 21, 22</li>
+                            <li>Sanson Cellshop – Dec. 18 & 25</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <section class="newsletter">
         <div class="container load-animate">
