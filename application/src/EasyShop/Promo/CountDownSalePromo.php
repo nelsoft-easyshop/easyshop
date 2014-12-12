@@ -40,7 +40,7 @@ class CountDownSalePromo extends AbstractPromo
         $this->isStartPromo = $promoData['isStartPromo'];
         $this->isEndPromo = $promoData['isEndPromo'];
         $this->persist();
-        $this->promoDataRestriction($this->product, $promoData['augmentedDiscount'], $this->isStartPromo);
+        $this->deleteExpired($this->product, $promoData['augmentedDiscount'], $this->isStartPromo);
         return $this->product;
     }
 
@@ -89,7 +89,7 @@ class CountDownSalePromo extends AbstractPromo
      * @param $augmentedDiscount
      * @param $isStartPromo
      */
-    private function promoDataRestriction($product, $augmentedDiscount, $isStartPromo)
+    private function deleteExpired($product, $augmentedDiscount, $isStartPromo)
     {
         if ( (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
             $product->setIsDelete(EsProduct::DELETE);

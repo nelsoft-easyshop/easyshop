@@ -37,9 +37,8 @@ class PromoManager
 
     /**
      * Constructor
-     *
-     * @param EasyShop\ConfigLoader\ConfigLoader $configLoader
-     * @param Doctrine\ORM\EntityManager $em
+     * @param ConfigLoader $configLoader
+     * @param \Doctrine\ORM\EntityManager $em
      */
     public function __construct(ConfigLoader $configLoader, \Doctrine\ORM\EntityManager $em)
     {
@@ -181,7 +180,7 @@ class PromoManager
 
             if(isset($opt['puchase_limit'])){
                 $soldCount = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                    ->getSoldCount($product->product_id, $startDatetime, $endDatetime);
+                                      ->getSoldCount($product->product_id, $startDatetime, $endDatetime);
                 $promoQuantityLimit = $option['purchase_limit'] - $soldCount;
                 $promoQuantityLimit = ($promoQuantityLimit >= 0) ? $promoQuantityLimit : 0;
             }
@@ -203,11 +202,11 @@ class PromoManager
     public function registerMemberForBuyAtZero($productId, $memberId)
     {
         $isAccountRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
-                                            ->findOneBy([
-                                                'productId' => $productId,
-                                                'memberId' => $memberId,
-                                                'promoType' => EsPromo::BUY_AT_ZERO
-                                            ]);
+                                        ->findOneBy([
+                                            'productId' => $productId,
+                                            'memberId' => $memberId,
+                                            'promoType' => EsPromo::BUY_AT_ZERO
+                                        ]);
         if (!$isAccountRegistered) {
             $promo = new EsPromo();
             $promo->setMemberId($memberId);
@@ -283,14 +282,14 @@ class PromoManager
     {
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tbl_product')
-            ->from('EasyShop\Entities\EsProduct', 'tbl_product')
-            ->where(':dateTime >= tbl_product.startdate')
-            ->andWhere(':dateTime <= tbl_product.enddate')
-            ->andWhere('tbl_product.isPromote = :isPromote')
-            ->andWhere('tbl_product.promoType = 1')
-            ->setParameter('dateTime', $date)
-            ->setParameter('isPromote', EsProduct::PRODUCT_IS_PROMOTE_ON)
-            ->getQuery();
+                    ->from('EasyShop\Entities\EsProduct', 'tbl_product')
+                    ->where(':dateTime >= tbl_product.startdate')
+                    ->andWhere(':dateTime <= tbl_product.enddate')
+                    ->andWhere('tbl_product.isPromote = :isPromote')
+                    ->andWhere('tbl_product.promoType = 1')
+                    ->setParameter('dateTime', $date)
+                    ->setParameter('isPromote', EsProduct::PRODUCT_IS_PROMOTE_ON)
+                    ->getQuery();
         $product = $query->getOneOrNullResult();
 
         return $product;
