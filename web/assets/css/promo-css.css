@@ -1517,6 +1517,10 @@ section.slideshow { margin-bottom: 30px;}
 
 
 /** christmas promo **/
+.btn.btn-primary {
+    color: #fff;
+}
+
 .box-seller-name {
     height: 27px;
     line-height: 27px !important;
