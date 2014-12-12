@@ -120,8 +120,10 @@
                     <form method="post" id="register" action="/subscribe" class="newsletter-form">
                         <div class="row-fluid">
                             <fieldset>
-                                <input id="useremail" class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                <button class="btn btn-primary" type="submit">SUBSCRIBE</button>
+                                <?php echo form_open('/subscribe');?>
+                                <input type="text" id="useremail" class="span6" name="email" placeholder="Your e-mail here">
+                                <input type="submit" value="subscribe" class="btn btn-primary" name="subscribe_btn">
+                                <?php echo form_close();?>
                             </fieldset>
                         </div>
                         <div>
