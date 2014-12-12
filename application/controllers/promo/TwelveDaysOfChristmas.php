@@ -17,18 +17,15 @@ class TwelveDaysOfChristmas extends MY_Controller
     {
         $dateTimeToday = new DateTime('now');
         $product = $this->promoManager->getActiveDataForTwelveDaysOfChristmasByDate($dateTimeToday);
-        $image = false;
         if ($product) {
-            $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')->getDefaultImage($product->getIdProduct());
             $this->promoManager->hydratePromoData($product);
         }
         $promoData = [
             'product' => $product,
-            'image' => $image,
             'featuredVendor' => $this->getFeaturedVendorData($dateTimeToday)
         ];
-        $this->load->view('/pages/web/christmas-promo', $promoData);
 
+        $this->load->view('/pages/web/christmas-promo', $promoData);
     }
 
     /**
@@ -40,58 +37,72 @@ class TwelveDaysOfChristmas extends MY_Controller
     {
         $dateTimeToday = $dateTimeToday->format('Y-m-d');
         $vendorDataContainer = [
-            '2014-12-14' => [
-                'slug' => '',
-                'imageUrl' => 'item1.jpg'
+            '2014-12-12' => [
+                'slug' => 'barbieforever',
+                'vendorImageUrl' => 'item1.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-15' => [
-                'slug' => '',
-                'imageUrl' => 'item2.jpg'
+                'slug' => 'barbieforever',
+                'vendorImageUrl' => 'item2.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-16' => [
-                'slug' => '',
-                'imageUrl' => 'item3.jpg'
+                'slug' => 'barbieforever',
+                'vendorImageUrl' => 'item3.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-17' => [
-                'slug' => '',
-                'imageUrl' => 'item4.jpg'
+                'slug' => 'airbornetechnologies',
+                'vendorImageUrl' => 'item4.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-18' => [
-                'slug' => '',
-                'imageUrl' => 'item5.jpg'
+                'slug' => 'sansoncellshop',
+                'vendorImageUrl' => 'item5.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-19' => [
-                'slug' => '',
-                'imageUrl' => 'item6.jpg'
+                'slug' => '05272014',
+                'vendorImageUrl' => 'item6.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-20' => [
-                'slug' => '',
-                'imageUrl' => 'item7.jpg'
+                'slug' => '05272014',
+                'vendorImageUrl' => 'item7.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-21' => [
-                'slug' => '',
-                'imageUrl' => 'item8.jpg'
+                'slug' => '05272014',
+                'vendorImageUrl' => 'item8.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-22' => [
-                'slug' => '',
-                'imageUrl' => 'item9.jpg'
+                'slug' => '05272014',
+                'vendorImageUrl' => 'item9.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-23' => [
-                'slug' => '',
-                'imageUrl' => 'item10.jpg'
+                'slug' => 'airbornetechnologies',
+                'vendorImageUrl' => 'item10.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-24' => [
-                'slug' => '',
-                'imageUrl' => 'item11.jpg'
+                'slug' => 'airbornetechnologies',
+                'vendorImageUrl' => 'item11.jpg',
+                'productImageUrl' => ''
             ],
             '2014-12-25' => [
-                'slug' => '',
-                'imageUrl' => 'item12.jpg'
+                'slug' => 'sansoncellshop',
+                'vendorImageUrl' => 'item12.jpg',
+                'productImageUrl' => ''
             ],
         ];
         $featuredVendorData = [];
         foreach ($vendorDataContainer as $date => $vendorData) {
             if ($dateTimeToday === $date) {
+                $vendorData['member'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                 ->findOneBy(['slug' => $vendorData['slug']]);
                 $featuredVendorData = $vendorData;
                 break;
             }

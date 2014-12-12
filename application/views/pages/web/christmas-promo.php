@@ -65,41 +65,48 @@
 
             <div class="row-fluid padding-top-30">
                 <div class="span6 box seller-list text-center div-box-con">
-                    <a href="/frluxxeproducts" target="_blank">
-                        <img src="/assets/images/promo-images/seller1.jpg">
-                        <p class="box-seller-name">Barbie Forever</p>
-                    </a>
-                </div>
-                <div class="span6 box seller-list text-center div-box-con">
-                    <div class="dc-tag sold-out"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
-                    <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
-                    <!-- <img src="/<?=$image->getProductImagePath()?>"> -->
-                        <img src="/assets/images/promo-images/item1.jpg" alt="">
-                    </a>
-                    <div>
-                        <div class="price">Php <?=number_format( $product->getFinalPrice(), 0, '.', ',')?></div>
-                        <div class="timer">
-                            <div class="timer-time">
-                                <span>24</span>
-                                <span>60</span>
-                                <span>60</span>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="timer-txt">
-                                <span>hours</span>
-                                <span>minutes</span>
-                                <span>seconds</span>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="clear"></div>
+                    <?PHP if ($featuredVendor['member']) : ?>
+                        <a href="/<?=$featuredVendor['member']->getSlug()?>" target="_blank">
+                            <img src="/assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>">
+                            <p class="box-seller-name"><?=$featuredVendor['member']->getStoreName()?></p>
+                        </a>
+                    <?PHP else : ?>
+                        <div>
+                            VENDOR NOT AVAILABLE
                         </div>
-                    </div>
-
+                    <?PHP endif; ?>
                 </div>
-
+                    <div class="span6 box seller-list text-center div-box-con">
+                        <?PHP if ($product && $product->getStartPromo()) : ?>
+                        <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
+                        <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
+                            <img src="/<?=$featuredVendor['productImageUrl']?>">
+                        </a>
+                        <div>
+                            <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                            <div class="timer">
+                                <div class="timer-time">
+                                    <span>24</span>
+                                    <span>60</span>
+                                    <span>60</span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="timer-txt">
+                                    <span>hours</span>
+                                    <span>minutes</span>
+                                    <span>seconds</span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <?PHP else : ?>
+                            <div>
+                                ITEM NOT AVAILABLE
+                            </div>
+                        <?PHP endif; ?>
+                    </div>
             </div>
-
-
         </div>
     </section>
 
@@ -130,7 +137,7 @@
                             <li>Barbieforever – Dec. 14, 15, 16</li>
                             <li>Airborne Technologies – Dec. 17, 23, 24</li>
                             <li>Michaela – Dec. 19, 20, 21, 22</li>
-                            <li>Sanson Cellshop – Dec. 18 & 25</li>
+                            <li>Sanson Cellshop – Dec. 18 &amp; 25</li>
                         </ul>
                     </div>
                 </div>
@@ -148,8 +155,10 @@
                     <form method="post" id="register" action="/subscribe" class="newsletter-form">
                         <div class="row-fluid">
                             <fieldset>
-                                <input id="useremail" class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                <button class="btn btn-primary" type="submit">SUBSCRIBE</button>
+                                <?php echo form_open('/subscribe');?>
+                                <input type="text" id="useremail" class="span6" name="email" placeholder="Your e-mail here">
+                                <input type="submit" value="subscribe" class="btn btn-primary" name="subscribe_btn">
+                                <?php echo form_close();?>
                             </fieldset>
                         </div>
                         <div>
