@@ -233,7 +233,7 @@
 
     });
     $("#deliverAddressForm").on('keyup','#consigneeMobile, #consigneeName, #deliveryAddress',function (e) {
-        $("#errorsDivConsignee, #errorsDivMobile").css("display","none");
+        $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
 
     });    
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
