@@ -107,16 +107,33 @@ class productUpload extends MY_Controller
         
         $data = $this->fill_view();
         $data['$render_searchbar'] = false; 
-        $this->load->view('templates/header', $data); 
+        
 
         if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
+            $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
+            $this->load->view('templates/footer'); 
         }
         else{
-            $this->load->view('pages/product/product_upload_error');
+
+            $headerData = [
+                'title' => 'Verify your account to proceed | Easyshop.ph',
+                'user_details' => $this->fillUserDetails(),
+                'homeContent' =>  $this->fillCategoryNavigation(),
+            ];
+            $headerData = array_merge($headerData, $this->fill_header());
+
+            $this->load->view('templates/header_primary', $headerData);
+            $this->load->view('errors/email-verification');
+            $socialMediaLinks = $this->config->load('social_media_links', TRUE);
+
+            $footerData['facebook'] = $socialMediaLinks["facebook"];
+            $footerData['twitter'] = $socialMediaLinks["twitter"];     
+        
+            $this->load->view('templates/footer_primary', $footerData);
         }
 
-        $this->load->view('templates/footer'); 
+        
     }
 
     /**
