@@ -303,16 +303,17 @@ class CategoryManager
                                      ->getCustomCategoriesArray($memberId);      
         $indexedMemberCategoriesByName = [];
         foreach($memberCategories as $category){
-            $indexedMemberCategoriesByName[$category['cat_name']] = $category;
+            $cleanedCategoryName = strtolower(str_replace(' ', '', $category['cat_name']));
+            $indexedMemberCategoriesByName[$cleanedCategoryName] = $category;
         }
 
         foreach( $rawVendorCategories as $vendorCategory ){
             $parentId = (int)$vendorCategory['parent_cat'];
             $categoryName = $vendorCategory['p_cat_name'];
+            $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
             $hasNoParent = !isset($vendorCategories[$parentId]);
             $isCategoryMainParent = $parentId === EsCat::MAIN_PARENT_CATEGORY;
-            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
-            
+            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];
                 if( !$isCategoryMainParent ){
@@ -323,15 +324,17 @@ class CategoryManager
                     $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
                     $vendorCategories[$parentId]['cat_link'] = '/category/' . $vendorCategory['p_cat_slug'];
                     $vendorCategories[$parentId]['cat_img'] = $categoryImage;
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : 0;
+                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : 0;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
                 else if( $hasNoParent && $isCategoryMainParent){
                     $categoryName = 'Others';
+                    $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
+                    $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
                     $vendorCategories[$parentId]['slug'] = "";
                     $vendorCategories[$parentId]['cat_link'] = "";
                     $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : PHP_INT_MAX;
+                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : PHP_INT_MAX;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
                 $vendorCategories[$parentId]['name'] = $categoryName;
@@ -341,7 +344,7 @@ class CategoryManager
                 $vendorCategories[$parentId]['isActive'] = false;
                 $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_DEFAULT_TYPE;
                 $vendorCategories[$parentId]['categoryId'] = $parentId;
-                $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['id_memcat'] : 0;
+                $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
                 $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
             }
             $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
@@ -351,7 +354,7 @@ class CategoryManager
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-
+     
         return $vendorCategories;
     }
 
