@@ -184,11 +184,11 @@
         <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
-                <a href="#active-items" class="active-me"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
-                <a href="#deleted-items"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
-                <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
-                <a href="#feedbacks"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
-                <a href="#sales"><li>Sales</li></a>
+                <a id="button-active-item" href="#active-items" class="active-me"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
+                <a id="button-deleted-item" href="#deleted-items" class="<?=($deletedProductCount > 0) ? 'can-request' : '' ?>"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
+                <a id="button-draft-item" href="#draft-items" class="<?=($draftedProductCount > 0) ? 'can-request' : '' ?>"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
+                <a id="button-feedback" href="#feedbacks" class="<?=($feedBackTotalCount > 0) ? 'can-request' : '' ?>"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
+                <a id="button-sales" href="#sales" class="can-request"><li>Sales</li></a>
             </ul>
         </div>
         </div>
@@ -254,9 +254,7 @@
                         </div>
                     </div>
                     
-                    <div id="deleted-product-container">
-                    <?=$deletedProductView; ?>
-                    </div>
+                    <div id="deleted-product-container"></div>
                <?php else:?> 
                     <div class="jumbotron no-items">
                         <i class="icon-category"></i>No items for this category
@@ -289,9 +287,7 @@
                         </div>
                     </div>
                 
-                    <div id="drafted-product-container">
-                        <?=$draftedProductView;?>
-                    </div>
+                    <div id="drafted-product-container"></div>
                 <?php else:?> 
                     <div class="jumbotron no-items">
                         <i class="icon-category"></i>No items for this category
@@ -308,9 +304,7 @@
                     </div>
                 <?php endif; ?>
             </div>
-            <div id="sales">
-                <?=$salesView;?>
-            </div>
+            <div id="sales"></div>
         </div>
     </div>
 </div>
@@ -326,31 +320,19 @@
         <div id="hidden-active-container-new"></div>
     </div>
     <div id="hidden-deleted-container">
-        <div id="hidden-deleted-container-default">
-            <div id="page-1">
-                <?=$deletedProductView;?>
-            </div>
-        </div>
+        <div id="hidden-deleted-container-default"></div>
         <div id="hidden-deleted-container-lastmodified"></div>
         <div id="hidden-deleted-container-new"></div>
     </div>
     <div id="hidden-drafted-container">
-        <div id="hidden-drafted-container-default">
-            <div id="page-1">
-                <?=$draftedProductView;?>
-            </div>
-        </div>
+        <div id="hidden-drafted-container-default"></div>
         <div id="hidden-drafted-container-lastmodified"></div>
         <div id="hidden-drafted-container-new"></div>
     </div>
 </div>
 
 <div id="hidden-feedback-container">
-    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>">
-        <div id="page-1">
-            <?=$feedBackView; ?>
-        </div>
-    </div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>"></div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER;?>"> </div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER;?>"></div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER;?>"></div>
@@ -358,12 +340,8 @@
 </div>
 
 <div id="hidden-sales-container">
-    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>">
-        <div id="page-1"><?=$currentSales;?></div>
-    </div>
-    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>">
-        <div id="page-1"><?=$historySales;?></div>
-    </div>
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>"></div>
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>"></div>
 </div>
 
 <div id="hidden-paginate-loader">
