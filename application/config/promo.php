@@ -32,7 +32,50 @@ $config = [
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
-            'option' => [],
+            'option' => [
+                0 => [
+                    'start' => '00:00:00',
+                    'end' => '00:59:59',
+                    'discount' => 1,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                1 => [
+                    'start' => '01:00:00',
+                    'end' => '04:59:59',
+                    'discount' => 2,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                2 => [
+                    'start' => '05:00:00',
+                    'end' => '09:59:59',
+                    'discount' => 3,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                3 => [
+                    'start' => '10:00:00',
+                    'end' => '13:59:59',
+                    'discount' => 4,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                4 => [
+                    'start' => '14:00:00',
+                    'end' => '17:59:59',
+                    'discount' => 5,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                5 => [
+                    'start' => '18:00:00',
+                    'end' => '20:59:59',
+                    'discount' => 6,
+                    'purchase_limit' => PHP_INT_MAX
+                ],
+                6 => [
+                    'start' => '21:00:00',
+                    'end' => '23:59:59',
+                    'discount' => 7,
+                    'purchase_limit' => PHP_INT_MAX
+                ]
+            ],
             'viewable_button_product_page' =>true,
         ],
         /* Fix discount sale */

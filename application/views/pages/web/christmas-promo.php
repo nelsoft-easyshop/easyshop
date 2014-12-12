@@ -72,7 +72,7 @@
                 </div>
                 <div class="span6 box seller-list text-center div-box-con">
                     <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
-                    <a href="/<?=html_escape($product->getSlug())?>" target="_blank">
+                    <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
                         <img src="/<?=$image->getProductImagePath()?>">
                     </a>
                     <div>
