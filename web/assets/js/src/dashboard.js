@@ -251,14 +251,14 @@
         }, 500);
     });
 
-    $('.sales-title-total').click(function() {
+    $("#sales").on("click", ".sales-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.sales-breakdown-container').slideToggle();
         $('.payout-breakdown-container').slideUp();
         $('.payout-title-total').removeClass("active-bar");
     });
 
-    $('.payout-title-total').click(function() {
+    $("#sales").on("click", ".payout-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
@@ -280,6 +280,67 @@
 
     $( ".map-trigger" ).click(function() {
         $( ".map-container" ).slideToggle( "slow" );
+    });
+
+    $('.idTabs').idTabs({
+        click: function(id, all, container, settings){
+            var $button;
+            var $page = 1;
+            var $parentContainer;
+            var $textInput;
+            var $filterInput;
+            var $requestType;
+            var $container;
+            if(id == "#deleted-items" || id == "#draft-items"){ 
+                if(id == "#deleted-items"){
+                    $button = $("#button-deleted-item");
+                }
+                else if(id == "#draft-items"){
+                    $button = $("#button-draft-item");
+                }
+                if($button.hasClass('can-request')){
+                    $parentContainer = $(id);
+                    $textInput = $parentContainer.find('.search-field').val();
+                    $filterInput = $parentContainer.find('.search-filter').val();
+                    $requestType = $parentContainer.find('.request-type').val();
+                    $container = $parentContainer.find('.container-id').val();
+                    $button.removeClass('can-request');
+
+                    isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
+                }
+            }
+            else if(id == "#feedbacks"){
+                $button = $("#button-feedback");
+                if($button.hasClass('can-request')){
+                    $requestType = $("#select-feedback-filter").val();
+                    requestFeedback($page, $requestType);
+                    $button.removeClass('can-request');
+                }
+            }
+            else if(id == "#sales"){
+                $button = $("#button-sales");
+                if($button.hasClass('can-request')){
+                    var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $("#first-sales-request-url").val(),
+                        beforeSend: function(){ 
+                            $("#sales").html($('#hidden-paginate-loader').html());
+                        },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d); 
+                            $("#sales").html($response.salesView);
+                            $("#sales-1").html('<div id="page-1">'+$response.currentSales+'</div>');
+                            $("#sales-4").html('<div id="page-1">'+$response.historySales+'</div>');
+                            $( ".date-picker-sales" ).datepicker({
+                                changeMonth: true,
+                                changeYear: true
+                            });
+                        }
+                    });
+                    $button.removeClass('can-request');
+                }
+            }
+        }
     });
 
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {

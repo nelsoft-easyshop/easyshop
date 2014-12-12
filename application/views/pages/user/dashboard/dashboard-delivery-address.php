@@ -67,7 +67,40 @@
                             </select>
                             <span class="span-label-address">City</span>
                         </div>
-                
+
+                 <div class="form-group">
+                    <label class="col-sm-3 control-label">Address : </label>
+                    <div class="col-sm-4">
+                        <select class="text-info text-address address_dropdown stateregionselect" id="deliver_stateregion" name="c_stateregion" data-status="<?php echo $consigneeStateRegionId?>">
+                            <option value="">--Select State/Region--</option>
+                            <?php foreach($stateRegionLists as $srkey=>$stateregion):?>
+                                <option class="echo" value="<?php echo $srkey?>" <?php echo $consigneeStateRegionId == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
+                            <?php endforeach;?>
+                        </select>
+                        <input type="hidden" name="cstateregion_orig" value="<?php echo $consigneeStateRegionId?>">
+                        <span class="span-label-address">State/Region</span>
+                        <div id="errorsRegionDiv" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextRegion"></span>
+                        </div>                        
+                    </div>
+                    <div class="col-sm-4 col-city">
+                        <select class="text-info text-address address_dropdown cityselect stateregionselect" id="delivery_city" name="c_city" data-status="<?php echo $consigneeCityId?>">
+                            <option value="">--- Select City ---</option>
+                            <option class="optionclone" value="" style="display:none;" disabled></option>
+                            <?php if($consigneeCityId != '' && $consigneeStateRegionId != ''):?>
+                                <?php foreach($cityLookup[$consigneeStateRegionId] as $lockey=>$city):?>
+                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $consigneeCityId == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                                <?php endforeach;?>
+                            <?php endif;?>
+                        </select>
+                        <input type="hidden" name="ccity_orig" value="<?php echo $consigneeCityId?>">                        
+                        <span class="span-label-address">City</span>
+                        <div id="errorsCityDiv" style="display:none;">
+                            <span class="val-error-icon"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextCity"></span>
+                        </div>                          
+
                     </div>
                     
                     <div class="form-group">
