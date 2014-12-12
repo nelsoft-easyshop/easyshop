@@ -1776,8 +1776,6 @@ class Memberpage extends MY_Controller
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
-        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
-        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
@@ -1787,13 +1785,6 @@ class Memberpage extends MY_Controller
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
         if($member){
-            $address = $esAddressRepo->findOneBy([
-                                        'idMember' => $memberId,
-                                        'type' => EsAddress::TYPE_DELIVERY
-                                    ]);
-            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = ($address && $address->getStateregion()) ? $address->getStateregion()->getIdLocation() : 0;
-            $cityId = ($address && $address->getCity()) ? $address->getCity()->getIdLocation() : 0;
 
             $paginationData['isHyperLink'] = false;
 
@@ -1912,12 +1903,6 @@ class Memberpage extends MY_Controller
                 'avatarImage' => $userAvatarImage,
                 'bannerImage' => $userBannerImage,
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                'stateRegionLists' => $locationLookup["stateRegionLookup"],
-                'cities' => $locationLookup["json_city"],
-                'cityLookup' => $locationLookup["cityLookup"],
-                'address' => $address,
-                'consigneeStateRegionId' => $stateRegionId,
-                'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
                 'followingCount' => $userFollowing['count'],
                 'productCount' => $userProductCount,
@@ -2449,14 +2434,28 @@ class Memberpage extends MY_Controller
      */
     public function getDeliveryAddress()
     {
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');        
         $memberId = $this->session->userdata('member_id');
         $response = [];
+
         if($memberId){
-            $response['colors'] = $this->serviceContainer['entity_manager']
-                                       ->getRepository('EasyShop\Entities\EsStoreColor')
-                                       ->getAllColors(true);
-            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
-                                                             ->getAllUserProductParentCategory($memberId));
+            $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
+            $stateregionID =  ($address["address"] && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
+            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
+
+            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
+            $response = [
+                "address" => $address["address"],
+                "cities" =>  $locationLookup["json_city"],
+                "consigneeCityLookup" =>  $consigneeCityLookup,
+                "cityLookup" =>  $locationLookup["cityLookup"],
+                "stateRegionLists" => $locationLookup["stateRegionLookup"],
+                "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                "consigneeStateRegionId" => $stateregionID,
+                "consigneeCityId" =>  ($address["address"] && (int) $address["city"] !== 0) ? $address["city"] : 0
+            ];
+
         }
         echo json_encode($response);
     }
