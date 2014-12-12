@@ -22,8 +22,10 @@ class TwelveDaysOfChristmas extends MY_Controller
                 'product' => $product,
                 'image' => $this->em->getRepository('EasyShop\Entities\EsProductImage')->getDefaultImage($product->getIdProduct())
             ];
+            $this->load->view('/pages/web/christmas-promo', $promoData);
         }
-
-        $this->load->view('/pages/web/christmas-promo', $promoData);
+        else {
+            show_404();
+        }
     }
 }
