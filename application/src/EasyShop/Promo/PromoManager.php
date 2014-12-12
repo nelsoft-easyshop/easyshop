@@ -83,6 +83,7 @@ class PromoManager
                     $promoObject = new $promoImplementation($product);
                     $promoObject->setOptions($promoOptions);
                     $product = $promoObject->apply();
+                    $this->em->flush($product);
                 }
 
             }
