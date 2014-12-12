@@ -232,7 +232,7 @@
         $("#errorsRegionDiv, #errorsCityDiv").css("display","none");
 
     });
-    $("#deliverAddressForm").on('keyup','#consigneeMobile, #consigneeName',function (e) {
+    $("#deliverAddressForm").on('keyup','#consigneeMobile, #consigneeName, #deliveryAddress',function (e) {
         $("#errorsDivConsignee, #errorsDivMobile").css("display","none");
 
     });    
