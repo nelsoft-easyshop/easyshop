@@ -13,46 +13,46 @@
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352.00000000000006</coordinate>
-            <target>/mobile/product/deals</target>
+            <target>https://www.easyshop.ph/mobile/product/deals</target>
         </imagemap>
         <actionType>show product list</actionType>
     </mainSlide>
 
     <section>
-        <name>watches</name>
+        <name>electronics-gadgets</name>
         <bgcolor>#fc6142</bgcolor>
         <type>theme 1</type>
 
         <boxContent>
-            <value>arbutus-soho-712-rff</value>
+            <value>apple-iphone-5c-32gb</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>kronen-sohne-royal-carving-116</value>
+            <value>beats-mixr-on-ear-headphone-red</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
-            <value>arbutus-madison-ave-804-rbf</value>
+            <value>kj-star-wireless-mobile-phone-monopod</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
-            <value>kronen-sohne-aviator-020</value>
+            <value>gmate-18000mah-powerbank</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>
         </boxContent> 
 
         <boxContent>
-            <value>kronen-sohne-royal-carving-119</value>
+            <value>action-camcorder-hd-720p</value>
             <type>product</type>
             <target></target>
             <actionType>show product details</actionType>

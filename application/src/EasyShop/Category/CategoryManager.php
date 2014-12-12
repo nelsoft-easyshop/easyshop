@@ -312,6 +312,7 @@ class CategoryManager
             $hasNoParent = !isset($vendorCategories[$parentId]);
             $isCategoryMainParent = $parentId === EsCat::MAIN_PARENT_CATEGORY;
             $isMemberCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
+            
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];
                 if( !$isCategoryMainParent ){
@@ -327,11 +328,10 @@ class CategoryManager
                 }
                 else if( $hasNoParent && $isCategoryMainParent){
                     $categoryName = 'Others';
-                    $isOtherCategorySet = isset($indexedMemberCategoriesByName[$categoryName]);
                     $vendorCategories[$parentId]['slug'] = "";
                     $vendorCategories[$parentId]['cat_link'] = "";
                     $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;
-                    $sortOrder = $isOtherCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : PHP_INT_MAX;
+                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$categoryName]['sort_order'] : PHP_INT_MAX;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
                 $vendorCategories[$parentId]['name'] = $categoryName;

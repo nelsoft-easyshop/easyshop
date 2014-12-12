@@ -435,6 +435,16 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full', $viewData);
     }
 
+    
+    /**
+     * Christmas Promo temporary page
+     *
+     */
+    public function christmasPromo()
+    {
+        $this->load->view('pages/web/christmas-promo');
+    }
+    
 
 }
 

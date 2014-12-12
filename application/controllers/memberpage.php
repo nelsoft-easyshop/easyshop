@@ -956,7 +956,7 @@ class Memberpage extends MY_Controller
         $em = $this->serviceContainer['entity_manager'];
         $emailService = $this->serviceContainer['email_notification'];
         $orderProductIds[0] = $this->input->post('order_product');
-        $productShippingCommentRepo = $em->getRepository("EasyShop\Entities\EsProductShippingComment");
+
         if ( (bool) stripos($orderProductIds[0], '-')) {
             $productIds = explode('-', $orderProductIds[0]);
             $orderProductIds = $productIds;
@@ -977,8 +977,7 @@ class Memberpage extends MY_Controller
                 $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
                 $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
                 $orderProductEntity  = $this->esOrderProductRepo
-                                            ->findOneBy([
-                                                "idOrderProduct" => $postData['order_product'],
+                                            ->findOneBy(["idOrderProduct" => $postData['order_product'],
                                                 "seller" => $memberEntity,
                                                 "order" => $orderEntity
                                             ]);
@@ -989,22 +988,16 @@ class Memberpage extends MY_Controller
                 $shippingCommentEntitySize = count($shippingCommentEntity);
 
                 if ( $shippingCommentEntitySize === 1 ) {
-                    $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($postData);
+                    $exactShippingComment = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
+                                               ->getExactShippingComment($postData);
                 }
 
                 if( count($orderProductEntity) === 1 ) {
-                    $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
-                    if ($esShippingComment) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
-                    }
-                    else {
-                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
-                    }
-                    $isShippingCommentModified = (bool) $newEsShippingComment;
-                    $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
-                    $serverResponse['error'] = $isShippingCommentModified ? '' : 'Failed to insert in database.';
+                    $boolAddShippingComment = $this->payment_model->addShippingComment($postData);
+                    $serverResponse['result'] = $boolAddShippingComment ? 'success' : 'fail';
+                    $serverResponse['error'] = $boolAddShippingComment ? '' : 'Failed to insert in database.';
 
-                    if( $isShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
+                    if( $boolAddShippingComment && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
                         $buyerEntity = $orderEntity->getBuyer();
                         $buyerEmail = $buyerEntity->getEmail();
                         $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
@@ -2275,16 +2268,11 @@ class Memberpage extends MY_Controller
                     $newMemberCategories[$index]->setSortOrder($newCategory->order);
                     $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
                     $entityManager->persist($newMemberCategories[$index]);
+                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategories[$index]->getCatName(),
+                                                                        $newMemberCategories[$index]->getSortOrder(),
+                                                                        $newMemberCategories[$index]->getIdMemcat());
                 }
                 $entityManager->flush();
-                
-                foreach($newMemberCategories as $newMemberCategory){
-                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
-                                                    $newMemberCategory->getSortOrder(),
-                                                    $newMemberCategory->getIdMemcat());
-                }
-                
-                
                 
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {

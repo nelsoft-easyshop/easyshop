@@ -10,7 +10,7 @@
 
 <div class="clear"></div>
 <div class="mrgn-top-35"></div>
-<div class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'res_wrapper feeds-cont christmas-theme-fixed-con' : 'res_wrapper feeds-cont'?>">
+<div class="res_wrapper feeds-cont">
     <div class="">
         <!-- LEFT PANEL --> 
         <div class="col-md-3 col-sm-12 l-screen feed-left-panel">

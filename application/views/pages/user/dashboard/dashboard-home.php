@@ -3,19 +3,14 @@
     <div class="div-member-stats">
              <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
                <img src="<?=$bannerImage;?>" class="img-follower-cover " />
-                <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
-                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
-                </a>
+                <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
             </div>
         <div class="clear"></div>
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
                     <div class="col-md-5 col-xs-12">
-                        <p class="p-username"><span class="icon-profile"></span> 
-                            <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"><?=html_escape($member->getUserName());?>
-                            </a>
-                        </p>
+                        <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
                     </div>
                     <div class="col-md-7 col-xs-12">
                         <div class="row">
@@ -44,12 +39,10 @@
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
-                        <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
-                            <div class="form-shop-link">
-                                <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"/>
-                                <span class="icon-web"></span>
-                            </div>
-                        </a>
+                        <div class="form-shop-link">
+                            <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?=$member->getSlug();?>"/>
+                            <span class="icon-web"></span>
+                        </div>
                         <div class="div-stat-summary">
                             <div class="row">
                                 <div class="col-xs-3" align="center">
@@ -300,13 +293,7 @@
             </div>
             
             <div id="feedbacks"> 
-                <?php if($feedBackTotalCount > 0): ?>
-                    <?=$allFeedBackView; ?> 
-                <?php else:?>
-                    <div class="jumbotron no-items">
-                        <i class="icon-category"></i> No feedback for this category.
-                    </div>
-                <?php endif; ?>
+                <?=$allFeedBackView; ?> 
             </div>
             <div id="sales">
                 <?=$salesView;?>

@@ -1516,68 +1516,6 @@ section.slideshow { margin-bottom: 30px;}
 .mb20 { margin-bottom: 20px ;}
 
 
-/** christmas promo **/
-.box-seller-name {
-    height: 27px;
-    line-height: 27px !important;
-}
-
-.div-box-con {
-    overflow: hidden;
-    position: relative;
-}
-
-.dc-tag {
-    background-color: #00a388;
-    border-radius: 90px;
-    color: #fff;
-    display: inline-block;
-    font-size: 12px;
-    height: 55px;
-    line-height: 55px;
-    left: 10px;
-    position: absolute;
-    top: 10px;
-    width: 55px;
-}
-
-.price {
-    float: left;
-    font-size: 24px;
-    line-height: 50px;
-    width: 60%;
-}
-
-.timer {
-    background-color: #ff893b;
-    color: #fff;
-    float: left;
-    height: 45px;
-    padding-top: 5px;
-    width: 40%;
-}
-
-.timer div > span {
-    float: left;
-    text-align: center;
-    width: 33.33333%
-}
-
-.timer-time {
-    font-size: 20px;
-    font-weight: 900;
-}
-
-.timer-txt {
-    font-size: 11px;
-    font-weight: normal;
-    text-transform: uppercase;
-}
-
-.timer-txt span {
-    line-height: 12px;
-}
-
 /* Media Queries */
 
 /* Full slideshow */
@@ -1597,12 +1535,6 @@ section.slideshow { margin-bottom: 30px;}
 	.single-image-caption-iphone { margin-top: -240px; }
 	.page .single-image-caption { margin-top: -105px;}
 	.about-us .single-image-caption { margin-top: -230px; }
-}
-
-@media (min-width: 767px) and (max-width: 979px) {
-    .timer-txt {
-        font-size: 9px;
-    }
 }
 
 
@@ -1681,11 +1613,6 @@ section.slideshow { margin-bottom: 30px;}
 	.single-image-after, .single-image-before { padding: 0}
 
 	.some-list a { display: inline-block; }
-
-    .timer {
-        height: 40px;
-        padding-top: 10px;
-    }
 }
 
 
@@ -1693,20 +1620,6 @@ section.slideshow { margin-bottom: 30px;}
 	a.twitter {  background-position: 760px 0; }
 	a.facebook {  background-position: 760px -50px; }
 	.nav-tabs>li>a { padding-right: 10px; padding-left: 10px; font-size: 13px}
-
-    .timer-txt {
-        font-size: 9px;
-    }
-}
-
-@media (max-width: 320px) {
-    .dc-tag {
-        left: 5px;
-        top: 5px;
-    }
-    .timer-txt {
-        font-size: 8px;
-    }
 }
 
 
