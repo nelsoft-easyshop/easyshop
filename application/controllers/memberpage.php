@@ -2440,7 +2440,7 @@ class Memberpage extends MY_Controller
                 "stateRegionLists" => $locationLookup["stateRegionLookup"],
                 "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
                 "consigneeStateRegionId" => $stateregionID,
-                "consigneeCityId" =>  ($address["address"] && (int) $address["city"] !== 0) ? $address["city"] : 0
+                "consigneeCityId" =>  ($address["address"] !== null && (int) $address["city"] !== 0) ? $address["city"] : 0
             ];
 
         }
