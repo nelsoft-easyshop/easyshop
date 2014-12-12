@@ -37,7 +37,7 @@ class TwelveDaysOfChristmas extends MY_Controller
     {
         $dateTimeToday = $dateTimeToday->format('Y-m-d');
         $vendorDataContainer = [
-            '2014-12-14' => [
+            '2014-12-12' => [
                 'slug' => 'barbieforever',
                 'vendorImageUrl' => 'seller1.jpg',
                 'productImageUrl' => 'item1.jpg'
