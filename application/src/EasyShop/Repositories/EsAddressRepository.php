@@ -15,7 +15,7 @@ class EsAddressRepository extends EntityRepository
     }
 
     /**
-     * Retrieved consignee address
+     * Retrieves consignee address
      * @param int $memberId
      * @param string $type
      * @param bool $asArray
