@@ -52,9 +52,11 @@
                     var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
                     var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
                     var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
+                    var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
                     $("#consigneeName").val(escapeHtml(consignee));
                     $("#consigneeMobile").val(escapeHtml(mobile));
                     $("#consigneeLandLine").val(escapeHtml(telephone));
+                    $("#deliveryAddress").val(escapeHtml(consigneeAddress));
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
