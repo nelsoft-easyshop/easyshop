@@ -73,7 +73,7 @@ class CountDownSalePromo extends AbstractPromo
             if ( strtotime($promoPeriod['start']) <= $His ) {
                 $start_date = new DateTime($promoPeriod['start']);
                 if ($His <= strtotime($promoPeriod['end'])) {
-                    $since_start = $start_date->diff(new DateTime($His));
+                    $since_start = $start_date->diff(new DateTime(date('H:i:s', $dateToday)));
                 }
                 else {
                     $since_start = $start_date->diff(new DateTime($promoPeriod['end']));
