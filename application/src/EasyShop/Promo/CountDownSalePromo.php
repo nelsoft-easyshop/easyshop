@@ -57,7 +57,7 @@ class CountDownSalePromo extends AbstractPromo
      * @param $option
      * @return array
      */
-    public static function getPromoData($price, $startDate, $endDate, $discount, $option = array())
+    public static function getPromoData($price, $startDate, $endDate, $discount, $option)
     {
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
@@ -71,36 +71,32 @@ class CountDownSalePromo extends AbstractPromo
         $timeNow = strtotime(date('H:i:s', $dateToday));
         $discountPerHour = 0;
 
-        foreach ($option as $promoPeriod) {
-            if ( strtotime($promoPeriod['start']) <= $timeNow ) {
-                $startTime = new DateTime($promoPeriod['start']);
-                if ($timeNow <= strtotime($promoPeriod['end'])) {
-                    $sinceStart = $startTime->diff(new DateTime(date('H:i:s', $dateToday)));
-                }
-                else {
-                    $sinceStart = $startTime->diff(new DateTime($promoPeriod['end']));
-                }
-                $discountPerHour = $discountPerHour + (($sinceStart->h + 1) * $promoPeriod['discount']);
-            }
-        }
-
-        if (($dateToday < $startDateTime) || ($endDateTime < $dateToday)) {
-            $diffHours = 0;
-        }
-        else if ($dateToday > $endDateTime) {
-            $diffHours = self::$maxHourDifferential;
-            $promoDetails['isStartPromo'] = true;
-        }
-        else {
+        if ($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
             $diffHours = floor(($dateToday - $startDateTime) / 3600.0);
             $promoDetails['isStartPromo'] = true;
+            if ( isset($option) ) {
+                foreach ($option as $promoPeriod) {
+                    if ( strtotime($promoPeriod['start']) <= $timeNow ) {
+                        $startTime = new DateTime($promoPeriod['start']);
+                        if ($timeNow <= strtotime($promoPeriod['end'])) {
+                            $sinceStart = $startTime->diff(new DateTime(date('H:i:s', $dateToday)));
+                        }
+                        else {
+                            $sinceStart = $startTime->diff(new DateTime($promoPeriod['end']));
+                        }
+                        $discountPerHour = $discountPerHour + (($sinceStart->h + 1) * $promoPeriod['discountPerHour']);
+                    }
+                }
+            }
+            else {
+                $discountPerHour = $diffHours * self::$percentagePerHour;
+            }
         }
 
         $promoPrice = $price - (($discountPerHour / 100.0) * $price);
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
         $promoDetails['isEndPromo'] = ($dateToday > $endDateTime);
-        // $promoDetails['augmentedDiscount'] = $diffHours * self::$percentagePerHour;
         $promoDetails['augmentedDiscount'] = $discountPerHour;
         return $promoDetails;
     }

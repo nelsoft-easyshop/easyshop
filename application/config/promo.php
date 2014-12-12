@@ -36,43 +36,43 @@ $config = [
                 0 => [
                     'start' => '00:00:00',
                     'end' => '00:59:59',
-                    'discount' => 1,
+                    'discountPerHour' => 1,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 1 => [
                     'start' => '01:00:00',
                     'end' => '04:59:59',
-                    'discount' => 2,
+                    'discountPerHour' => 2,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 2 => [
                     'start' => '05:00:00',
                     'end' => '09:59:59',
-                    'discount' => 3,
+                    'discountPerHour' => 3,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 3 => [
                     'start' => '10:00:00',
                     'end' => '13:59:59',
-                    'discount' => 4,
+                    'discountPerHour' => 4,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 4 => [
                     'start' => '14:00:00',
                     'end' => '17:59:59',
-                    'discount' => 5,
+                    'discountPerHour' => 5,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 5 => [
                     'start' => '18:00:00',
                     'end' => '20:59:59',
-                    'discount' => 6,
+                    'discountPerHour' => 6,
                     'purchase_limit' => PHP_INT_MAX
                 ],
                 6 => [
                     'start' => '21:00:00',
                     'end' => '23:59:59',
-                    'discount' => 7,
+                    'discountPerHour' => 7,
                     'purchase_limit' => PHP_INT_MAX
                 ]
             ],
