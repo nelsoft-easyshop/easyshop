@@ -110,7 +110,7 @@ class CountDownSalePromo extends AbstractPromo
     private function deleteExpired($product, $augmentedDiscount, $isStartPromo)
     {
         if ( (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
-            $product->setIsDelete(EsProduct::DELETE);
+            $product->isExpired = true;
         }
     }
 }

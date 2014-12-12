@@ -81,7 +81,6 @@ class PromoManager
                     $promoObject = new $promoImplementation($product);
                     $promoObject->setOptions($promoOptions);
                     $product = $promoObject->apply();
-                    $this->em->flush($product);
                 }
             }
         }
@@ -96,6 +95,12 @@ class PromoManager
             $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
         }
         $product->setDiscountPercentage($percentage);
+
+        if (isset($product->isExpired) && $product->isExpired) {
+            $product->setIsDelete(EsProduct::DELETE);
+            $this->em->flush($product);
+        }
+
     }
 
     /**
