@@ -68,7 +68,7 @@
                                 <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
                             <?PHP endif; ?>
                             <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
-                                <img alt ="<?=html_escape($product->getName())?> Image" src="/assets/images/promo-images/<?= isset($featuredVendor['productImageUrl']) ? $featuredVendor['productImageUrl'] : ''?>">
+                                <img alt ="<?=html_escape($product->getName())?> Image" src="/assets/images/promo-images/<?= isset($featuredVendor['productImageUrl']) ? $featuredVendor['productImageUrl'] . '?1.0' : ''?>">
                             </a>
                             <div>
                                 <?PHP if ($product->getIsDelete()) : ?>
