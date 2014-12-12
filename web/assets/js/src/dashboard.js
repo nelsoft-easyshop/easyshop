@@ -31,7 +31,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
-    
+
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -40,6 +40,52 @@
         $( ".ma-delivery" ).addClass( "selectedM" );
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
+        $.ajax({
+            type: "get",
+            url: '/memberpage/getDeliveryAddress',
+            success: function(data){ 
+                var serverResponse = jQuery.parseJSON(data);
+                jsonCity = jQuery.parseJSON(serverResponse.cities);
+                var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
+                var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
+                var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
+                var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
+                $("#consigneeName").val(escapeHtml(consignee));
+                $("#consigneeMobile").val(escapeHtml(mobile));
+                $("#consigneeLandLine").val(escapeHtml(telephone));
+                $("#deliveryAddress").val(escapeHtml(consigneeAddress));
+                var consigneeStateRegion = serverResponse.consigneeStateRegionId;
+                var stateRegionDropDown = $("#deliver_stateregion");
+                var dropDownTemplate = "";
+                $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
+                    dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                });  
+                stateRegionDropDown.append(dropDownTemplate);                         
+                stateRegionDropDown.val(consigneeStateRegion);
+                var cityDropDown = $("#delivery_city");
+                dropDownTemplate = "";
+                if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
+                    $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
+                        dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
+                    }); 
+                    cityDropDown.append(dropDownTemplate);                                                
+                }
+                cityDropDown.val(serverResponse.consigneeCityId);
+                var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
+                var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
+                if(serverResponse.address && (parseInt(lat) !== 0 || parseInt(lng) !== 0 )) {
+                    $("#locationMarkedText").text("Location marked");
+                }
+                else {
+                    $("#locationMarkedText").text("Location not marked");
+                }
+                $("#map_clat, #temp_clat").val(lat);
+                $("#map_clng, #temp_clng").val(lng);
+                $('.address_dropdown, .disabled_country').chosen({width:'200px'});                                          
+                $('.delivery-setup-loading').hide();
+                $('#deliverAddressDiv').fadeIn();
+            }
+        });
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -1502,7 +1548,7 @@
         });
         $this.html(buttonHtml);
     });
-        
+
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         $('.dash-mobile-trigger').removeClass("selectedM");

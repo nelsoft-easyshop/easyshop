@@ -76,7 +76,8 @@
                     <div id="personal-information">
                         <?php include("dashboard-personal-info.php");?>
                     </div>
-                    <div id="delivery-address">
+                    <div id="delivery-address" style="display:none;">
+                        
                         <?php include("dashboard-delivery-address.php");?>
                     </div>
                     <div id="account-settings">
@@ -122,15 +123,13 @@
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
-<script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.sortable.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+<script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type='text/javascript'  src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript">
-    var jsonCity = <?php echo $cities;?>;
-</script>
+
 
 
