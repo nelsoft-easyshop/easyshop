@@ -56,18 +56,19 @@
                 $("#deliveryAddress").val(escapeHtml(consigneeAddress));
                 var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                 var stateRegionDropDown = $("#deliver_stateregion");
-                var dropDownTemplate;
+                var dropDownTemplate = "";
                 $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
-                    dropDownTemplate = '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
-                    stateRegionDropDown.append(dropDownTemplate);
-                });           
+                    dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                });  
+                stateRegionDropDown.append(dropDownTemplate);                         
                 stateRegionDropDown.val(consigneeStateRegion);
-                var cityDropDown = $("#delivery_city");  
+                var cityDropDown = $("#delivery_city");
+                dropDownTemplate = "";
                 if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
                     $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
-                        dropDownTemplate = '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
-                        cityDropDown.append(dropDownTemplate);
-                    });                             
+                        dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
+                    }); 
+                    cityDropDown.append(dropDownTemplate);                                                
                 }
                 cityDropDown.val(serverResponse.consigneeCityId);
                 var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
