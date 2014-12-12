@@ -37,7 +37,7 @@ class TwelveDaysOfChristmas extends MY_Controller
     {
         $dateTimeToday = $dateTimeToday->format('Y-m-d');
         $vendorDataContainer = [
-            '2014-12-14' => [
+            '2014-12-12' => [
                 'slug' => 'barbieforever',
                 'vendorImageUrl' => 'seller1.jpg',
                 'productImageUrl' => 'item1.jpg'
@@ -98,17 +98,13 @@ class TwelveDaysOfChristmas extends MY_Controller
                 'productImageUrl' => 'item12.jpg'
             ],
         ];
-        $featuredVendorData = [];
-
-        foreach ($vendorDataContainer as $date => $vendorData) {
-            $featuredVendorData['productImageUrl'] = 'default.jpg';
-            if ($dateTimeToday === $date) {
-                $vendorData['member'] = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                 ->findOneBy(['slug' => $vendorData['slug']]);
-                $featuredVendorData = $vendorData;
-                break;
-            }
+        $vendorOfTheDay = [];
+        if (isset($vendorDataContainer[$dateTimeToday])) {
+            $vendorOfTheDay = $vendorDataContainer[$dateTimeToday];
+            $vendorOfTheDay['member'] = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                 ->findOneBy(['slug' => $vendorOfTheDay['slug']]);
         }
-        return $featuredVendorData;
+
+        return $vendorOfTheDay;
     }
 }

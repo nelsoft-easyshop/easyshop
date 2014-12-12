@@ -176,7 +176,7 @@ class PromoManager
 
             if(isset($opt['puchase_limit'])){
                 $soldCount = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                    ->getSoldCount($product->product_id, $startDatetime, $endDatetime);
+                                      ->getSoldCount($product->product_id, $startDatetime, $endDatetime);
                 $promoQuantityLimit = $option['purchase_limit'] - $soldCount;
                 $promoQuantityLimit = ($promoQuantityLimit >= 0) ? $promoQuantityLimit : 0;
             }

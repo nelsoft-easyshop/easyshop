@@ -50,9 +50,9 @@
                 <div class="row-fluid padding-top-30">
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($featuredVendor['member'])) : ?>
-                            <a href="/<?=$featuredVendor['member']->getSlug()?>" target="_blank">
+                            <a href="/<?=html_escape($featuredVendor['member']->getSlug())?>" target="_blank">
                                 <img src="/assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>">
-                                <p class="box-seller-name"><?=$featuredVendor['member']->getStoreName()?></p>
+                                <p class="box-seller-name"><?=html_escape($featuredVendor['member']->getStoreName())?></p>
                             </a>
                         <?PHP else : ?>
                             <div>
