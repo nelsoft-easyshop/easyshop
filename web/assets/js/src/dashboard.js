@@ -31,7 +31,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
-    //here1
+
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -1492,7 +1492,7 @@
         });
         $this.html(buttonHtml);
     });
-    //here2
+
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         $('.dash-mobile-trigger').removeClass("selectedM");
