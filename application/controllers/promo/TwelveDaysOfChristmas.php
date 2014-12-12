@@ -37,69 +37,70 @@ class TwelveDaysOfChristmas extends MY_Controller
     {
         $dateTimeToday = $dateTimeToday->format('Y-m-d');
         $vendorDataContainer = [
-            '2014-12-12' => [
+            '2014-12-14' => [
                 'slug' => 'barbieforever',
-                'vendorImageUrl' => 'item1.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller1.jpg',
+                'productImageUrl' => 'item1.jpg'
             ],
             '2014-12-15' => [
                 'slug' => 'barbieforever',
-                'vendorImageUrl' => 'item2.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller1.jpg',
+                'productImageUrl' => 'item2.jpg'
             ],
             '2014-12-16' => [
                 'slug' => 'barbieforever',
-                'vendorImageUrl' => 'item3.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller1.jpg',
+                'productImageUrl' => 'item3.jpg'
             ],
             '2014-12-17' => [
                 'slug' => 'airbornetechnologies',
-                'vendorImageUrl' => 'item4.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller2.jpg',
+                'productImageUrl' => 'item4.jpg'
             ],
             '2014-12-18' => [
                 'slug' => 'sansoncellshop',
-                'vendorImageUrl' => 'item5.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller3.jpg',
+                'productImageUrl' => 'item5.jpg'
             ],
             '2014-12-19' => [
                 'slug' => '05272014',
-                'vendorImageUrl' => 'item6.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller4.jpg',
+                'productImageUrl' => 'item6.jpg'
             ],
             '2014-12-20' => [
                 'slug' => '05272014',
-                'vendorImageUrl' => 'item7.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller4.jpg',
+                'productImageUrl' => 'item7.jpg'
             ],
             '2014-12-21' => [
                 'slug' => '05272014',
-                'vendorImageUrl' => 'item8.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller4.jpg',
+                'productImageUrl' => 'item8.jpg'
             ],
             '2014-12-22' => [
                 'slug' => '05272014',
-                'vendorImageUrl' => 'item9.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller4.jpg',
+                'productImageUrl' => 'item9.jpg'
             ],
             '2014-12-23' => [
                 'slug' => 'airbornetechnologies',
-                'vendorImageUrl' => 'item10.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller2.jpg',
+                'productImageUrl' => 'item10.jpg'
             ],
             '2014-12-24' => [
                 'slug' => 'airbornetechnologies',
-                'vendorImageUrl' => 'item11.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller2.jpg',
+                'productImageUrl' => 'item11.jpg'
             ],
             '2014-12-25' => [
                 'slug' => 'sansoncellshop',
-                'vendorImageUrl' => 'item12.jpg',
-                'productImageUrl' => ''
+                'vendorImageUrl' => 'seller3.jpg',
+                'productImageUrl' => 'item12.jpg'
             ],
         ];
         $featuredVendorData = [];
         foreach ($vendorDataContainer as $date => $vendorData) {
+            $featuredVendorData['productImageUrl'] = 'default.jpg';
             if ($dateTimeToday === $date) {
                 $vendorData['member'] = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                  ->findOneBy(['slug' => $vendorData['slug']]);

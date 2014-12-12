@@ -65,7 +65,7 @@
 
             <div class="row-fluid padding-top-30">
                 <div class="span6 box seller-list text-center div-box-con">
-                    <?PHP if ($featuredVendor['member']) : ?>
+                    <?PHP if (isset($featuredVendor['member'])) : ?>
                         <a href="/<?=$featuredVendor['member']->getSlug()?>" target="_blank">
                             <img src="/assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>">
                             <p class="box-seller-name"><?=$featuredVendor['member']->getStoreName()?></p>
@@ -77,28 +77,13 @@
                     <?PHP endif; ?>
                 </div>
                     <div class="span6 box seller-list text-center div-box-con">
-                        <?PHP if ($product && $product->getStartPromo()) : ?>
+                        <?PHP if (isset($product) && $product->getStartPromo()) : ?>
                         <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
                         <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
-                            <img src="/<?=$featuredVendor['productImageUrl']?>">
+                            <img src="/assets/images/promo-images/<?=$featuredVendor['productImageUrl']?>">
                         </a>
                         <div>
                             <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
-                            <div class="timer">
-                                <div class="timer-time">
-                                    <span>24</span>
-                                    <span>60</span>
-                                    <span>60</span>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="timer-txt">
-                                    <span>hours</span>
-                                    <span>minutes</span>
-                                    <span>seconds</span>
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
                         </div>
                         <?PHP else : ?>
                             <div>
