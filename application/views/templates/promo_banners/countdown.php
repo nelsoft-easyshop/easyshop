@@ -16,7 +16,7 @@
                                     <?php if($product->getStartPromo()): ?>
                                         <p class="p-time-left">TIME REMAINING <span class="span-per-hour-rate">2% PER HOUR</span></p>
                                     <?php else: ?>
-                                        <p class="p-time-left">2% OFF STARTS IN </p>
+                                        <p class="p-time-left">PROMO STARTS IN </p>
                                     <?php endif; ?>
                                     <table id="table-countdown" align="center">
                                         <tr>
