@@ -60,9 +60,7 @@
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
-
                         stateRegionDropDown.append('<option class="echo" value="'+index+'">' + stateRegion + '</option>');
-
                     });           
                     stateRegionDropDown.val(consigneeStateRegion);
                     var cityDropDown = $("#delivery_city");  
