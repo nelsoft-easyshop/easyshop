@@ -2428,7 +2428,7 @@ class Memberpage extends MY_Controller
 
         if($memberId){
             $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
-            $stateregionID =  ($address["address"] && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
+            $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
 
             $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
