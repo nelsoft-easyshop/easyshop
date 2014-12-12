@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-8">
-                            <input type="text" class="text-info text-address" id="deliveryAddress" value="Brgy. San Roque, Evergreen Village" name="c_address" placeholder="Enter your street address here">
+                            <input type="text" class="text-info text-address" id="deliveryAddress" value="" name="c_address" placeholder="Enter your street address here">
                             <span class="span-label-address">Street Address</span>
                             <div id="errorsDivStreetAddress" style="display:none;">
                                 <span class="val-error-icon"><i class="fa fa-times"></i></span>
