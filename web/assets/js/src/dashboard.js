@@ -286,6 +286,10 @@
                             $("#sales").html($response.salesView);
                             $("#sales-1").html('<div id="page-1">'+$response.currentSales+'</div>');
                             $("#sales-4").html('<div id="page-1">'+$response.historySales+'</div>');
+                            $( ".date-picker-sales" ).datepicker({
+                                changeMonth: true,
+                                changeYear: true
+                            });
                         }
                     });
                     $button.removeClass('can-request');
