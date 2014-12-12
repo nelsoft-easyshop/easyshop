@@ -367,7 +367,7 @@ class payment_model extends CI_Model
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
-        $buyerStore = $row[0]['buyer_store'] === "" 
+        $buyerStore = $row[0]['buyer_store'] === "" || is_null($row[0]['buyer_store']) 
                       ? $row[0]['buyer'] 
                       : $row[0]['buyer_store'];
 
@@ -387,7 +387,7 @@ class payment_model extends CI_Model
 
         foreach($row as $value){
             $temp = $value;
-            $sellerStore = $value['seller_store'] === "" 
+            $sellerStore = $value['seller_store'] === "" || is_null($value['seller_store'])
                            ? $value['seller']
                            : $value['seller_store'];
 
