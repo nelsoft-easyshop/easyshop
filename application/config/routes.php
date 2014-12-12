@@ -160,6 +160,7 @@ else {
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';

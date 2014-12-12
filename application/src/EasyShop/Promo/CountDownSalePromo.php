@@ -1,9 +1,8 @@
 <?php
-
 namespace EasyShop\Promo;
-
-use Symfony\Component\Validator\Constraints\DateTime;
-
+use Doctrine\ORM\Mapping\Entity;
+use EasyShop\Entities\EsProduct;
+use DateTime;
 class CountDownSalePromo extends AbstractPromo
 {
 
@@ -19,8 +18,8 @@ class CountDownSalePromo extends AbstractPromo
      * @var float
      *
      */
-    private static $percentagePerHour = 2.00;
-    
+    private static $percentagePerHour = 5.00;
+
     /**
      * Applies the count down sale calculations
      *
@@ -35,12 +34,13 @@ class CountDownSalePromo extends AbstractPromo
             $this->product->getPrice(),
             $this->startDateTime,
             $this->endDateTime,
-            $this->product->getDiscount()
+            $this->product->getDiscount(),
+            $this->option
         );
-
         $this->promoPrice = $promoData['promoPrice'];
         $this->isStartPromo = $promoData['isStartPromo'];
         $this->isEndPromo = $promoData['isEndPromo'];
+        $this->deleteExpired($this->product, $promoData['augmentedDiscount'], $this->isStartPromo);
         $this->persist();
 
         return $this->product;
@@ -48,6 +48,7 @@ class CountDownSalePromo extends AbstractPromo
 
     /**
      * Calculates Promo Price and Checks if promo has started and if promo promo has ended.
+     * NOTE : Commented lines are formula use for the normal countdown sale
      * @param $price
      * @param $startDate
      * @param $endDate
@@ -61,11 +62,26 @@ class CountDownSalePromo extends AbstractPromo
         $dateToday = $date->getTimestamp();
         $startDateTime = $startDate->getTimestamp();
         $endDateTime = $endDate->getTimestamp();
-        $promoDetails = array(
+        $promoDetails = [
             'isStartPromo' => false,
             'isEndPromo' => false,
             'promoPrice' => $price
-        );
+        ];
+        $timeNow = strtotime(date('H:i:s', $dateToday));
+        $discountPerHour = 0;
+
+        foreach ($option as $promoPeriod) {
+            if ( strtotime($promoPeriod['start']) <= $timeNow ) {
+                $start_date = new DateTime($promoPeriod['start']);
+                if ($timeNow <= strtotime($promoPeriod['end'])) {
+                    $since_start = $start_date->diff(new DateTime(date('H:i:s', $dateToday)));
+                }
+                else {
+                    $since_start = $start_date->diff(new DateTime($promoPeriod['end']));
+                }
+                $discountPerHour = $discountPerHour + (($since_start->h + 1) * $promoPeriod['discount']);
+            }
+        }
 
         if (($dateToday < $startDateTime) || ($endDateTime < $dateToday)) {
             $diffHours = 0;
@@ -78,13 +94,27 @@ class CountDownSalePromo extends AbstractPromo
             $diffHours = floor(($dateToday - $startDateTime) / 3600.0);
             $promoDetails['isStartPromo'] = true;
         }
-
-        $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
+//        $promoPrice = $price - (($diffHours * self::$percentagePerHour / 100.0) * $price);
+        $promoPrice = $price - (($discountPerHour / 100.0) * $price);
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
-        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime) ? true : false;
+        $promoDetails['isEndPromo'] = ($dateToday > $endDateTime);
+//        $promoDetails['augmentedDiscount'] = $diffHours * self::$percentagePerHour;
+        $promoDetails['augmentedDiscount'] = $discountPerHour;
 
         return $promoDetails;
     }
 
+    /**
+     * Soft delete product if reached the max allowable discount
+     * @param $product
+     * @param $augmentedDiscount
+     * @param $isStartPromo
+     */
+    private function deleteExpired($product, $augmentedDiscount, $isStartPromo)
+    {
+        if ( (int) $augmentedDiscount >= (int) $product->getDiscount() && (int) $product->getDiscount() !== 0 && $isStartPromo ) {
+            $product->setIsDelete(EsProduct::DELETE);
+        }
+    }
 }
