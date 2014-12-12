@@ -69,7 +69,7 @@ class CountDownSalePromo extends AbstractPromo
             'promoPrice' => $price
         ];
         $timeNow = strtotime(date('H:i:s', $dateToday));
-        $discountPerHour = 0;
+        $totalDiscountPercentage = 0;
 
         if ($dateToday >= $startDateTime && $dateToday <= $endDateTime) {
             $diffHours = floor(($dateToday - $startDateTime) / 3600.0);
@@ -84,20 +84,20 @@ class CountDownSalePromo extends AbstractPromo
                         else {
                             $sinceStart = $startTime->diff(new DateTime($promoPeriod['end']));
                         }
-                        $discountPerHour = $discountPerHour + (($sinceStart->h + 1) * $promoPeriod['discountPerHour']);
+                        $totalDiscountPercentage = $totalDiscountPercentage + (($sinceStart->h + 1) * $promoPeriod['discountPerHour']);
                     }
                 }
             }
             else {
-                $discountPerHour = $diffHours * self::$percentagePerHour;
+                $totalDiscountPercentage = $diffHours * self::$percentagePerHour;
             }
         }
 
-        $promoPrice = $price - (($discountPerHour / 100.0) * $price);
+        $promoPrice = $price - (($totalDiscountPercentage / 100.0) * $price);
         $promoPrice = ($promoPrice <= 0) ? 0.01 : $promoPrice;
         $promoDetails['promoPrice'] = $promoPrice;
         $promoDetails['isEndPromo'] = ($dateToday > $endDateTime);
-        $promoDetails['augmentedDiscount'] = $discountPerHour;
+        $promoDetails['augmentedDiscount'] = $totalDiscountPercentage;
         return $promoDetails;
     }
 
