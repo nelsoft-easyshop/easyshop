@@ -20,7 +20,7 @@
             <div class="add_product_category">
                <br/><br/>
                <p><h2>Verify your e-mail address to carry out a transaction.</h2></p>
-               <p><a href = "/me?me=myinfo">You may also resend the verification e-mail by going to your member page.</a></p>
+               <p><a href = "/me?tab=settings">You may also resend the verification e-mail by going to your member page.</a></p>
                <br/><br/><br/><br/><br/><br/>
             </div>
 
