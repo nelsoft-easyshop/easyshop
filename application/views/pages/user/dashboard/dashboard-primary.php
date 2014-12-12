@@ -107,6 +107,7 @@
     <input type="hidden" id="request-url-resotre" value="/me/product/restore" />
     <input type="hidden" id="feedback-request-url" value="/me/feedback/next" />
     <input type="hidden" id="sales-request-url" value="/me/sales/next" />
+    <input type="hidden" id="first-sales-request-url" value="/me/sales" />
     <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
         <input type="hidden" id="editTextProductId" name="p_id" value="" />
         <input type="hidden" id="editTextCategoryId" name="hidden_attribute" value="" />

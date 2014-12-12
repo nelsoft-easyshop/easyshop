@@ -1819,92 +1819,22 @@ class Memberpage extends MY_Controller
             $deleteConditions = [EsProduct::DELETE];
             $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
             $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            $userDeletedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions); 
-            $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
-            $deletedProductsData = [
-                'products' => $userDeletedProducts,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
             
             $deleteConditions = [EsProduct::ACTIVE];
             $draftConditions = [EsProduct::DRAFT];
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            $userDraftedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
-            $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
-            $draftedProductsData = [
-                'products' => $userDraftedProducts,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
             
             $profilePercentage = $userManager->getProfileCompletePercent($member);  
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
 
             $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
             $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
-            $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
-                                                                      EsMemberFeedback::TYPE_ALL,
-                                                                      $feedbackLimit);
-            // add user image on each feedback
-           foreach ($feedbacks as $key => $feedback) {
-                $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
-                $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
-            }
-            $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
-            $feedbacksData = [
-                'feedbacks' => $feedbacks,
-                'memberId' => $memberId,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
+            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
 
-            $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
-            $allFeedBackViewData['feedBackView'] = $feedBackView;
-            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
-
-            $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
-                                                                            EsOrderProductStatus::FORWARD_SELLER,
-                                                                            $salesPerPage);
-            $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
-                                                                                    EsOrderProductStatus::FORWARD_SELLER);
-            $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
-                                                                                      EsOrderProductStatus::FORWARD_SELLER);
-            $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
-            $currentSalesViewData  = [
-                'sales' => $currentSales,
-                'type' => EsOrderProductStatus::FORWARD_SELLER,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
-
-            $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
-                                                                            EsOrderProductStatus::PAID_FORWARDED,
-                                                                            $salesPerPage);
-            $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
-                                                                                    EsOrderProductStatus::PAID_FORWARDED);
-            $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
-                                                                                      EsOrderProductStatus::PAID_FORWARDED);
-            $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
-            $historySalesViewData = [
-                'sales' => $historySales,
-                'type' => EsOrderProductStatus::PAID_FORWARDED,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
-
-            $salesViewData = [
-                'currentSales' => $currentSalesView,
-                'currentTotalSales' => $currentTotalSales,
-                'historySales' => $historySalesView,
-                'historyTotalSales' => $historyTotalSales,
-            ];
-            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
             $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
             $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
             $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
             $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
-
-            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
             $member->validatedStoreName = $member->getStoreName();
 
             $dashboardHomeData = [
@@ -1926,13 +1856,10 @@ class Memberpage extends MY_Controller
                 'draftedProductCount' => $userDraftedProductCount,
                 'soldProductCount' => $userSoldProductCount,
                 'activeProductView' => $activeProductView,
-                'deletedProductView' => $deletedProductView,
-                'draftedProductView' => $draftedProductView,
                 'memberRating' => $memberRating,
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
-                'salesView' => $salesView,
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
@@ -1959,6 +1886,66 @@ class Memberpage extends MY_Controller
         else{
             redirect('/login', 'refresh');
         }
+    }
+
+    /**
+     * Request first sales page
+     * @return json
+     */
+    public function requestSalesPage()
+    {
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+
+        $memberId = $this->session->userdata('member_id');
+        $salesPerPage = $this->salesPerPage;
+
+        $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                EsOrderProductStatus::FORWARD_SELLER,
+                                                                $salesPerPage);
+        $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::FORWARD_SELLER);
+        $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::FORWARD_SELLER);
+
+        $paginationData['isHyperLink'] = false;
+        $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
+        $currentSalesViewData  = [
+            'sales' => $currentSales,
+            'type' => EsOrderProductStatus::FORWARD_SELLER,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
+
+        $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                        EsOrderProductStatus::PAID_FORWARDED,
+                                                                        $salesPerPage);
+        $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::PAID_FORWARDED);
+        $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::PAID_FORWARDED);
+        $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
+        $historySalesViewData = [
+            'sales' => $historySales,
+            'type' => EsOrderProductStatus::PAID_FORWARDED,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
+
+        $salesViewData = [
+            'currentSales' => $currentSalesView,
+            'currentTotalSales' => $currentTotalSales,
+            'historySales' => $historySalesView,
+            'historyTotalSales' => $historyTotalSales,
+        ];
+        $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+
+        $returnArray = [
+            'salesView' => $salesView,
+            'currentSales' => $currentSalesView,
+            'historySales' => $historySalesView,
+        ];
+
+        echo json_encode($returnArray);
     }
 
     /**
