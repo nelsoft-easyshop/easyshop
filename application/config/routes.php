@@ -115,6 +115,7 @@ else {
     $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
     $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
     $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
+    $route['(?i)me/sales'] = 'memberpage/requestSalesPage';
     $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
