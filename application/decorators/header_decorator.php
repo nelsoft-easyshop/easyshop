@@ -11,8 +11,12 @@ class Header_decorator extends Viewdecorator
     /**
      * Generate header data
      *
+     * @param string $title
+     * @param string $metadescription
+     * @param string $relCanonical
+     * @param boolean $renderSearchbar
      */
-    public function view($title = "", $metadescription = "" , $relCanonical = "")
+    public function view($title = "", $metadescription = "" , $relCanonical = "", $renderSearchbar = true)
     {
         $cartManager = $this->serviceContainer['cart_manager'];
         $cartImplementation = $cartManager->getCartObject();
@@ -60,6 +64,7 @@ class Header_decorator extends Viewdecorator
         $this->view_data['metadescription'] = $metadescription;
         $this->view_data['relCanonical'] = $relCanonical;
         $this->view_data['menu'] = $menu;
+        $this->view_data['renderSearchbar'] = $renderSearchbar;
     }
 }
 
