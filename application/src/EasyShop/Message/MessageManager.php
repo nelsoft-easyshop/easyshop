@@ -25,7 +25,7 @@ class MessageManager {
      * @param $userMessage
      * @return boolean
      */
-    function send($sender, $recipient, $userMessage)
+    public function send($sender, $recipient, $userMessage)
     {
         $senderObj = $this->em->getRepository('EasyShop\Entities\EsMember')
                                         ->find($sender);
@@ -42,5 +42,5 @@ class MessageManager {
 
         return $message ? TRUE : FALSE;
     }
-
+    
 }
