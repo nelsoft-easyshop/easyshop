@@ -39,13 +39,14 @@ class Home extends MY_Controller
             'relCanonical' => base_url(),
         );
 
-        $data = array_merge($headerData, $this->fill_header());
-
-        if( $data['logged_in'] && $view !== 'basic'){
-            $this->load->view('templates/header', $data);
-            $data = array_merge($data, $this->getFeed());            
-            $data['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-            $this->load->view("templates/home_layout/layoutF",$data);
+        if( $this->session->userdata('member_id') && $view !== 'basic'){
+            $bodyData = $this->getFeed();   
+            $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
+                                                                    'cat_items' =>  $this->getcat()
+                                                                ], true );
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
+            $this->load->view("templates/home_layout/layoutF",$bodyData);
             $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
@@ -53,12 +54,11 @@ class Home extends MY_Controller
             $sliderSection = $homeContent['slider']; 
             $homeContent['slider'] = array();
             foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
+                $sliderView = $this->load->view($slide['template'],$slide, true);
                 array_push($homeContent['slider'], $sliderView);
             }
             $data['homeContent'] = $homeContent;
-    
-            $this->load->spark('decorator');        
+            $this->load->spark('decorator');  
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/home/home_primary', $data);
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
