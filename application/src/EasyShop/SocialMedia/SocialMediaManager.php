@@ -44,11 +44,11 @@ class SocialMediaManager
     private $googleClient;
 
     /**
-     * Oauth Configuration
+     * Config Loader 
      *
-     * @var mixed
+     * @var EasyShop\Core\ConfigLoader
      */
-    private $oauthConfig;
+    private $configLoader;
 
     /**
      * String utility
@@ -88,7 +88,7 @@ class SocialMediaManager
         $this->googleClient = $googleClient;
         $this->em = $em;
         $this->userManager = $userManager;
-        $this->oauthConfig = $configLoader->getItem('oauth');
+        $this->configLoader = $configLoader;
         $this->stringUtility = $stringUtility;
         $this->formValidation = $formValidation;
         $this->formFactory = $formFactory;
@@ -131,10 +131,11 @@ class SocialMediaManager
      */
     public function getAccount($account)
     {
+        $oauthConfig = $this->configLoader->getItem('oauth');
         switch ($account) {
             case self::FACEBOOK :
                 session_start();
-                $facebookConfig = $this->oauthConfig['facebook']['key'];
+                $facebookConfig = $oauthConfig['facebook']['key'];
                 FacebookSession::setDefaultApplication($facebookConfig['appId'], $facebookConfig['secret']);
                 $session = $this->fbRedirectLoginHelper->getSessionFromRedirect();
                 $userProfile = (new \Facebook\FacebookRequest(
@@ -467,4 +468,13 @@ class SocialMediaManager
         return self::GOOGLE;
     }
 
+    /**
+     *  Return social media links
+     *  @return string[]
+     */
+    public function getSocialMediaLinks()
+    {
+        return $this->configLoader->getItem('social_media_links');       
+    }
+    
 }
