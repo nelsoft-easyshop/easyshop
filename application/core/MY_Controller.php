@@ -82,17 +82,7 @@ class MY_Controller extends CI_Controller
         return $data;
     }
     
-    /**
-     * Generates the category navigation
-     * 
-     * @return mixed
-     */
-    public function fillCategoryNavigation()
-    {
-        return $this->serviceContainer['xml_cms']->getHomeData(true);
-    }
-
-    
+   
     /**
      * Authenticates the user based on the remember-me cookie
      *
