@@ -178,7 +178,8 @@ else {
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
-
+    
+    $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 }
 
 /* End of file routes.php */
