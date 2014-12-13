@@ -262,7 +262,7 @@ class EsCatRepository extends EntityRepository
         $parentCategories = $em->createQueryBuilder()
                                 ->select('c') 
                                 ->from('EasyShop\Entities\EsCat','c')
-                                ->where('c.parent != :parentId')
+                                ->where('c.parent = :parentId')
                                 ->setParameter('parentId', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID )
                                 ->getQuery()
                                 ->getResult();
