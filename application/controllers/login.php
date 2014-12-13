@@ -183,48 +183,53 @@ class Login extends MY_Controller
 
     public function identify()
     {
-        $data = array(
+        $headerData = [
             'title' => 'Forgot Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
             'render_searchbar' => false,
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
             
-        $temp['toggle_view'] = "";
+        $bodyData['toggle_view'] = "";
         if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
                 $email = $this->input->post('email');
                 $result = $this->register_model->check_registered_email($email);
             if (isset($result['username'])){
                 // Send email and update database 
                 if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
-                    $temp['toggle_view'] = "1";
+                    $bodyData['toggle_view'] = "1";
                 }else{
-                    $temp['toggle_view'] = "3";		
+                    $bodyData['toggle_view'] = "3";		
                 }
             }else{
-                $temp['toggle_view'] = "2";
+                $bodyData['toggle_view'] = "2";
             }
         }
-        $this->load->view('pages/user/forgotpass', $temp);
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/forgotpass', $bodyData);
         $this->load->view('templates/footer');	
     }
 
     public function resetconfirm()
     {
-        $data = array(
-                'title' => 'Reset Password | Easyshop.ph',
-                'render_searchbar' => false,
-        );
-        $response['toggle_view'] = '';
+        $headerData = [
+            'title' => 'Reset Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+            'render_searchbar' => false,
+        ];
+        $bodyData['toggle_view'] = '';
         if($this->input->post()){
-            $response['toggle_view'] = $this->input->post('tgv');
+            $bodyData['toggle_view'] = $this->input->post('tgv');
         }
         else{
-            $response['hash'] = $this->input->get('confirm');
+            $bodyData['hash'] = $this->input->get('confirm');
         }      
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);		
-        $this->load->view('pages/user/forgotpass_confirm', $response);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));	
+        $this->load->view('pages/user/forgotpass_confirm', $bodyData);
         $this->load->view('templates/footer');
     }
 

@@ -90,8 +90,7 @@ class Memberpage extends MY_Controller
         $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
         $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
         $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-
-        $headerData = $this->fill_header();
+        
         $memberId = $this->session->userdata('member_id');
         $feedbackLimit = $this->feedbackLimit;
         $salesPerPage = $this->salesPerPage;
@@ -1701,14 +1700,11 @@ class Memberpage extends MY_Controller
             }
             else {
                 $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-                $data = array(
+                $bodyData = [
                     'username' => $member->getUsername(),
                     'idMember' => $getData["memberId"],            
                     'hash' => $this->input->get('h')            
-                );
-                $data = array_merge($data, $this->fill_header());
-             
-             
+                ];
                 $headerData = [
                     'title' =>  "Reactivate you account | Easyshop.ph",
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
@@ -1716,7 +1712,7 @@ class Memberpage extends MY_Controller
     
                 $this->load->spark('decorator');    
                 $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
-                $this->load->view('pages/user/MemberPageAccountActivate', $data);
+                $this->load->view('pages/user/MemberPageAccountActivate', $bodyData);
                 $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));           
             }            
         }
