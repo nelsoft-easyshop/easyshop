@@ -33,13 +33,13 @@ class Home extends MY_Controller
     public function index() 
     {
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $data = array(
+        $headerData = array(
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         );
 
-        $data = array_merge($data, $this->fill_header());
+        $data = array_merge($headerData, $this->fill_header());
 
         if( $data['logged_in'] && $view !== 'basic'){
             $this->load->view('templates/header', $data);
@@ -49,10 +49,6 @@ class Home extends MY_Controller
             $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
-            $em = $this->serviceContainer["entity_manager"];
-            $categoryManager = $this->serviceContainer['category_manager']; 
-            $userManager = $this->serviceContainer['user_manager']; 
-            $esCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
             $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
             $sliderSection = $homeContent['slider']; 
             $homeContent['slider'] = array();
@@ -61,24 +57,11 @@ class Home extends MY_Controller
                 array_push($homeContent['slider'], $sliderView);
             }
             $data['homeContent'] = $homeContent;
-
-            if($data['logged_in']){
-                $memberId = $this->session->userdata('member_id');
-                $data['logged_in'] = true;
-                $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                           ->find($memberId);
-                $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
-            }
-            $parentCategory = $esCatRepository->findBy(['parent' => 1]);
-            $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
-
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/header_primary', $data);
+    
+            $this->load->spark('decorator');        
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary', $viewData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
 
     }

@@ -1108,7 +1108,7 @@ class NewHomeWebService extends MY_Controller
     public function fetchPreviewSlider()
     {
 
-        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(true);
 
         $sliderSection = $homeContent['slider']; 
         $homeContent['slider'] = [];

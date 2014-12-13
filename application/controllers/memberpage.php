@@ -255,18 +255,14 @@ class Memberpage extends MY_Controller
             $dashboardData['dashboardHomeView'] = $dashboardHomeView;
             $dashboardData['tab'] = $this->input->get('tab');
             
-            $headerData['metadescription'] = "";
-            $headerData['title'] = "Dashboard | Easyshop.ph";
-            $headerData['user_details'] = $this->fillUserDetails();
-            $headerData['homeContent'] = $this->fillCategoryNavigation();
-
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $footerData['facebook'] = $socialMediaLinks["facebook"];
-            $footerData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/header_primary', $headerData);
+            $headerData = [
+                'title' =>  "Dashboard | Easyshop.ph",
+            ];
+    
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/user/dashboard/dashboard-primary',$dashboardData);
-            $this->load->view('templates/footer_primary', $footerData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
         else{
             redirect('/login', 'refresh');
@@ -1706,30 +1702,22 @@ class Memberpage extends MY_Controller
             else {
                 $view = $this->input->get('view') ? $this->input->get('view') : NULL;
                 $data = array(
-                    'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-                    'relCanonical' => base_url(),
                     'username' => $member->getUsername(),
                     'idMember' => $getData["memberId"],            
                     'hash' => $this->input->get('h')            
                 );
                 $data = array_merge($data, $this->fill_header());
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $em = $this->serviceContainer["entity_manager"];
-                if($data['logged_in']){
-                    $memberId = $this->session->userdata('member_id');
-                    $data['logged_in'] = true;
-                    $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                               ->find($memberId);
-                    $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
-                }                
-                $data["homeContent"] = $this->serviceContainer['xml_cms']->getHomeData(true);        
-                $viewData['facebook'] = $socialMediaLinks["facebook"];
-                $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-                $this->load->view('templates/header_primary', $data);
+             
+             
+                $headerData = [
+                    'title' =>  "Reactivate you account | Easyshop.ph",
+                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+                ];
+    
+                $this->load->spark('decorator');    
+                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
                 $this->load->view('pages/user/MemberPageAccountActivate', $data);
-                $this->load->view('templates/footer_primary', $viewData);                    
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));           
             }            
         }
     }

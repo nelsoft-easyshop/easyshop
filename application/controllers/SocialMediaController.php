@@ -189,14 +189,11 @@ class SocialMediaController extends MY_Controller
         $data['oauthProvider'] = $getData['socialMediaProvider'];
         $data['oauthId'] = $getData['socialMediaId'];
 
-        $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-        $footerData = [
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"]
-        ];
+
         $this->load->view('templates/header_new', $data);
         $this->load->view('pages/user/SocialMediaMerge', $data);
-        $this->load->view('templates/footer_primary', $footerData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
+        
     }
 
     /**
@@ -308,14 +305,9 @@ class SocialMediaController extends MY_Controller
             'email'=> $getData['email']
         ];
         
-        $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-        $footerData = [
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"],
-        ];
         $this->load->view('templates/header_new', $data);
         $this->load->view('pages/user/SocialMediaRegistration', $userData);
-        $this->load->view('templates/footer_primary', $footerData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
     }
 
     /**

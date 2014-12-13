@@ -334,21 +334,17 @@ class product extends MY_Controller
             }
 
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
-            $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
-            $headerData['title'] = html_escape($product->getName()). " | Easyshop.ph";
-            $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
-            $headerData['homeContent'] = $this->fillCategoryNavigation();
-      
-            
-            $headerData = array_merge($headerData, $this->fill_header());
 
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $footerData['facebook'] = $socialMediaLinks["facebook"];
-            $footerData['twitter'] = $socialMediaLinks["twitter"];
+            $headerData = [
+                'title' =>  html_escape($product->getName()). " | Easyshop.ph",
+                'metadescription' => es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT),
+                'relCanonical' => base_url().'item/'.$itemSlug,
+            ];
 
-            $this->load->view('templates/header_primary', $headerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/productpage_primary', $viewData);
-            $this->load->view('templates/footer_primary',$footerData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));    
         }
         else{
             show_404();
