@@ -329,10 +329,6 @@ class product extends MY_Controller
                             'url' => base_url() .'item/' . $product->getSlug()
                         ];
 
-            if($this->session->userdata('member_id')) {
-                $headerData['user_details'] = $this->fillUserDetails();
-            }
-
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
 
             $headerData = [

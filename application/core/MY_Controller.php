@@ -92,23 +92,6 @@ class MY_Controller extends CI_Controller
         return $this->serviceContainer['xml_cms']->getHomeData(true);
     }
 
-    /**
-     * Generates the user data for the header
-     * 
-     * @return mixed
-     */
-    public function fillUserDetails()
-    {
-            $em = $this->serviceContainer["entity_manager"];
-            $userManager = $this->serviceContainer['user_manager'];
-            $memberId = $this->session->userdata('member_id');
-            $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                              ->find($memberId);
-            $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
-
-            return $userDetails;
-    }
-    
     
     /**
      * Authenticates the user based on the remember-me cookie
