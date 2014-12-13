@@ -4,11 +4,11 @@
  * Decorator class (an implementation of the decorator pattern for CI)
  * 
  * This class is integrated into the project using CI's package manager
- * sparks. However, sparks has long since been unsupported and now pales
- * in comparison compared to PHP's other package managers. Because of this
- * this class will be maintained as part of the application itself rather
- * than as a spark package and will therefore be versioned along with the 
- * project source code.
+ * sparks with some effort. Sparks has long since been unsupported and 
+ * now pales in comparison compared to PHP's other package managers. Because
+ * of this, this class will be maintained as part of the application itself
+ * rather than as a spark package and will therefore be versioned along with
+ * the project source code.
  *
  * @source https://github.com/ccschmitz/codeigniter-decorator
  * @author Chris Schmitz <ccschmitz@gmail.com>
