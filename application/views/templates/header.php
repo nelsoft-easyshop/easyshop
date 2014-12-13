@@ -111,13 +111,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php else: ?>
                         <li>
                             <a href="/messages" class="msgs_link prevent">
-                                <span class="span_bg img_msgs_cntr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'msg_icon_zero' : '';?>"></span>
-                                <span id="unread-messages-count" class="msg_countr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'unread-messages-count-hide' : '';?>">
-                                    <?PHP echo $msgs['unread_msgs'];?>
+                                <span class="span_bg img_msgs_cntr <?PHP echo $unreadMessageCount === 0 ? 'msg_icon_zero' : '';?>"></span>
+                                <span id="unread-messages-count" class="msg_countr <?PHP echo $unreadMessageCount === 0 ? 'unread-messages-count-hide' : '';?>">
+                                    <?PHP echo $unreadMessageCount ;?>
                                 </span>
                             </a>
-                            <a href="/<?php echo html_escape($user['slug']); ?>" class="top_link_name prevent">
-                                <?php echo html_escape($user['username']); ?>
+                            <a href="/<?php echo html_escape($user->getSlug()); ?>" class="top_link_name prevent">
+                                <?php echo html_escape($user->getUsername()); ?>
                             </a>
                         </li>
                         <li class="txt_res_hide">
