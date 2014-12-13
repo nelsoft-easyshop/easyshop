@@ -29,18 +29,22 @@ class Login extends MY_Controller
      * Renders the login page
      *
      */
-    function index() 
+    public function index() 
     {
-        $facebookScope = $this->config->item('facebook', 'oauth');
-        $googleScope = $this->config->item('google', 'oauth');
-        $data = array(
+        $headerData = [
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $response['url'] = $this->session->userdata('uri_string');
-        $response['facebook_login_url'] = $this->socialMediaManager->getLoginUrl(1, $facebookScope['permission_to_access']);
-        $response['google_login_url'] = $this->socialMediaManager->getLoginUrl(2, $googleScope['permission_to_access']);
+            'relCanonical' => base_url().'login',
+            'renderSearchbar' => false,
+        ];
+        $bodyData['url'] = $this->session->userdata('uri_string');
+        $facebookScope = $this->config->item('facebook', 'oauth');
+        $googleScope = $this->config->item('google', 'oauth');
+        $bodyData['facebook_login_url'] = $this->socialMediaManager
+                                                ->getLoginUrl(1, $facebookScope['permission_to_access']);
+        $bodyData['google_login_url'] = $this->socialMediaManager
+                                             ->getLoginUrl(2, $googleScope['permission_to_access']);
+
         if($this->input->post('login_form')){
             $row = array();
             if($this->form_validation->run('login_form')){
@@ -53,17 +57,17 @@ class Login extends MY_Controller
                 exit();
             }
             else{
-                $response['form_error'] = 'Invalid username or password';
+                $bodyData['form_error'] = 'Invalid username or password';
                 if(array_key_exists('timeoutLeft', $row) && $row['timeoutLeft'] >= 1){
-                    $response['loginFail'] = true;
-                    $response['timeoutLeft'] = $row['timeoutLeft'];
+                    $bodyData['loginFail'] = true;
+                    $bodyData['timeoutLeft'] = $row['timeoutLeft'];
                 }
             }  
         }
-        $data['render_searchbar'] = false;
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/user/login_view',$response);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/login_view',$bodyData);
         $this->load->view('templates/footer');
       }
 
@@ -141,10 +145,7 @@ class Login extends MY_Controller
                 $em->flush();
             }
             else{ 
-                // log failed attempt
                 $this->throttleService->logFailedAttempt($uname);
-
-                // set new timeout
                 $this->throttleService->updateMemberAttempt($uname);
                 $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
                 $row['o_message'] = $row["errors"][0]["login"];
@@ -177,10 +178,11 @@ class Login extends MY_Controller
         if(trim($referrer))
             redirect('/'.$referrer);
         else
-            redirect('/login');		
+            redirect('/login');
     }
 
-    public function identify(){
+    public function identify()
+    {
         $data = array(
             'title' => 'Forgot Password | Easyshop.ph',
             'render_searchbar' => false,
