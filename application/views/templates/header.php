@@ -206,8 +206,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </a>
             </div>
         <?php endif; ?>
-        
-        <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
+       
+        <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
                 <div>
                 <span class="main_srch_img_con"></span>
@@ -215,12 +215,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 
                 <select name="category" id="category">
                     <option value="1">All Categories</option>
-                    <?php
-                        foreach ($category_search as $keyrow):
-                        $selected = ($this->input->get('category') && $this->input->get('category') == $keyrow['id_cat'])?"selected":"";
-                    ?>
-                        <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>">
-                            <?php echo $keyrow['name']; ?>
+                    <?php foreach ($categories as $category): ?>
+                        <?php $isSelected = $this->input->get('category') && (int)$this->input->get('category') === (int)$category->getIdCat(); ?>
+                        <option <?php $isSelected ? 'selected' : '' ?> value="<?php  echo $category->getIdCat() ?>">
+                            <?php echo html_escape($category->getName()); ?>
                         </option>
                     <?php endforeach;?>
                 </select>
