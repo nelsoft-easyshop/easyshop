@@ -14,7 +14,5 @@
     </div>
 </div>
 <br/> 
-<div id="feedback-view-container">
-    <?=$feedBackView; ?>
-</div>
+<div id="feedback-view-container"></div>
 

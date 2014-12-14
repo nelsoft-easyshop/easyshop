@@ -278,6 +278,9 @@ class product extends MY_Controller
                 }
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
                 $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
+                if( $product->getIsDelete() ) {
+                    show_404();
+                }
             }
 
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
