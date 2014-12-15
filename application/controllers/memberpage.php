@@ -1464,7 +1464,12 @@ class Memberpage extends MY_Controller
         }
         switch ($requestType) {
             case 'ongoing-bought':
-                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $ongoingBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           true,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1482,7 +1487,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
                 break;
             case 'ongoing-sold':
-                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $ongoingSoldTransactionsCount = $this->transactionManager
+                                                     ->getSoldTransactionCount(
+                                                         $memberId,
+                                                         true,
+                                                         $paymentMethod
+                                                     );
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1500,7 +1510,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
                 break;
             case 'complete-bought':
-                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $completeBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           false,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
                     'transaction' => $this->transactionManager
@@ -1518,7 +1533,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
                 break;
             case 'complete-sold':
-                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $completeSoldTransactionsCount = $this->transactionManager
+                                                      ->getSoldTransactionCount(
+                                                          $memberId,
+                                                          false,
+                                                          $paymentMethod
+                                                      );
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
