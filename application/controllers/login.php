@@ -183,6 +183,11 @@ class Login extends MY_Controller
             redirect('/login');
     }
 
+    /**
+     * Display the reset password page
+     *
+     * @return View
+     */
     public function identify()
     {
         $headerData = [
@@ -201,7 +206,7 @@ class Login extends MY_Controller
                 if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
                     $bodyData['toggle_view'] = "1";
                 }else{
-                    $bodyData['toggle_view'] = "3";		
+                    $bodyData['toggle_view'] = "3";
                 }
             }else{
                 $bodyData['toggle_view'] = "2";
