@@ -179,19 +179,19 @@ class product extends MY_Controller
             }
         }
 
-        $data = array( 
+        $headerData = [
             'title' => 'Easyshop.ph - All Categories',  
-            'categories' => $categories
-            ); 
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data); 
-        $this->load->view('pages/product/all_categories_view', $data); 
+        ]; 
+        
+        $bodyData = [
+            'categories' => $categories,
+        ];
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/footer_full', $viewData);     
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/product/all_categories_view', $bodyData); 
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**
@@ -338,11 +338,7 @@ class product extends MY_Controller
                 'metadescription' => es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT),
                 'relCanonical' => base_url().'item/'.$itemSlug,
             ];
-
-            $this->load->spark('decorator');    
-            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/product/productpage_primary', $viewData);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));    
+   
         }
         else{
             show_404();
