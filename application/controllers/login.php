@@ -29,18 +29,24 @@ class Login extends MY_Controller
      * Renders the login page
      *
      */
-    function index() 
+    public function index() 
     {
-        $facebookScope = $this->config->item('facebook', 'oauth');
-        $googleScope = $this->config->item('google', 'oauth');
-        $data = array(
+        $headerData = [
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $response['url'] = $this->session->userdata('uri_string');
-        $response['facebook_login_url'] = $this->socialMediaManager->getLoginUrl(1, $facebookScope['permission_to_access']);
-        $response['google_login_url'] = $this->socialMediaManager->getLoginUrl(2, $googleScope['permission_to_access']);
+            'relCanonical' => base_url().'login',
+            'renderSearchbar' => false,
+        ];
+        $bodyData['url'] = $this->session->userdata('uri_string');
+        $facebookScope = $this->config->item('facebook', 'oauth');
+        $googleScope = $this->config->item('google', 'oauth');
+        $bodyData['facebook_login_url'] = $this->socialMediaManager
+                                                ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::FACEBOOK, 
+                                                              $facebookScope['permission_to_access']);
+        $bodyData['google_login_url'] = $this->socialMediaManager
+                                             ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::GOOGLE,
+                                                           $googleScope['permission_to_access']);
+
         if($this->input->post('login_form')){
             $row = array();
             if($this->form_validation->run('login_form')){
@@ -53,17 +59,17 @@ class Login extends MY_Controller
                 exit();
             }
             else{
-                $response['form_error'] = 'Invalid username or password';
+                $bodyData['form_error'] = 'Invalid username or password';
                 if(array_key_exists('timeoutLeft', $row) && $row['timeoutLeft'] >= 1){
-                    $response['loginFail'] = true;
-                    $response['timeoutLeft'] = $row['timeoutLeft'];
+                    $bodyData['loginFail'] = true;
+                    $bodyData['timeoutLeft'] = $row['timeoutLeft'];
                 }
             }  
         }
-        $data['render_searchbar'] = false;
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/user/login_view',$response);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/login_view',$bodyData);
         $this->load->view('templates/footer');
       }
 
@@ -141,10 +147,7 @@ class Login extends MY_Controller
                 $em->flush();
             }
             else{ 
-                // log failed attempt
                 $this->throttleService->logFailedAttempt($uname);
-
-                // set new timeout
                 $this->throttleService->updateMemberAttempt($uname);
                 $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
                 $row['o_message'] = $row["errors"][0]["login"];
@@ -177,52 +180,63 @@ class Login extends MY_Controller
         if(trim($referrer))
             redirect('/'.$referrer);
         else
-            redirect('/login');		
+            redirect('/login');
     }
 
-    public function identify(){
-        $data = array(
+    /**
+     * Display the reset password page
+     *
+     * @return View
+     */
+    public function identify()
+    {
+        $headerData = [
             'title' => 'Forgot Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
             'render_searchbar' => false,
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
             
-        $temp['toggle_view'] = "";
+        $bodyData['toggle_view'] = "";
         if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
                 $email = $this->input->post('email');
                 $result = $this->register_model->check_registered_email($email);
             if (isset($result['username'])){
                 // Send email and update database 
                 if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
-                    $temp['toggle_view'] = "1";
+                    $bodyData['toggle_view'] = "1";
                 }else{
-                    $temp['toggle_view'] = "3";		
+                    $bodyData['toggle_view'] = "3";
                 }
             }else{
-                $temp['toggle_view'] = "2";
+                $bodyData['toggle_view'] = "2";
             }
         }
-        $this->load->view('pages/user/forgotpass', $temp);
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/forgotpass', $bodyData);
         $this->load->view('templates/footer');	
     }
 
     public function resetconfirm()
     {
-        $data = array(
-                'title' => 'Reset Password | Easyshop.ph',
-                'render_searchbar' => false,
-        );
-        $response['toggle_view'] = '';
+        $headerData = [
+            'title' => 'Reset Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+            'render_searchbar' => false,
+        ];
+        $bodyData['toggle_view'] = '';
         if($this->input->post()){
-            $response['toggle_view'] = $this->input->post('tgv');
+            $bodyData['toggle_view'] = $this->input->post('tgv');
         }
         else{
-            $response['hash'] = $this->input->get('confirm');
+            $bodyData['hash'] = $this->input->get('confirm');
         }      
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);		
-        $this->load->view('pages/user/forgotpass_confirm', $response);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));	
+        $this->load->view('pages/user/forgotpass_confirm', $bodyData);
         $this->load->view('templates/footer');
     }
 

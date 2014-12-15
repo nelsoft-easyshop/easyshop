@@ -446,8 +446,11 @@ class Payment extends MY_Controller{
             $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
             $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
  
-            $header['title'] = 'Payment Review | Easyshop.ph';
-            $header = array_merge($header,$this->fill_header()); 
+
+            $headerData = [
+                'title' => 'Payment Review | Easyshop.ph',
+            ];
+            
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$address);
 
@@ -456,7 +459,8 @@ class Payment extends MY_Controller{
                                               ->getMaxPoint((int)$member_id);
             
             // Load view
-            $this->load->view('templates/header', $header); 
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }
@@ -1350,16 +1354,15 @@ class Payment extends MY_Controller{
         $response['invoice_no'] = $payDetails['invoice_no'];
         $response['total'] = $payDetails['total'];
         $response['dateadded'] = $payDetails['dateadded'];
-        $data['title'] = 'Payment | Easyshop.ph';
-        $data = array_merge($data,$this->fill_header());
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/header', $data);
+        $headerData = [
+            'title' => 'Payment Review | Easyshop.ph',
+        ];
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
-        $this->load->view('templates/footer_full', $viewData); 
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
    }
 
 
@@ -1435,11 +1438,14 @@ class Payment extends MY_Controller{
                 break;
         }
 
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        
         // Send email to buyer
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
-            $socialMediaLinks = $this->getSocialMediaLinks();
+            
             $buyerData['facebook'] = $socialMediaLinks["facebook"];
             $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
@@ -1469,8 +1475,7 @@ class Payment extends MY_Controller{
 
         // Send email to seller of each product - once per seller
         if($sellerFlag){
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $sellerData = array(
+            $sellerData = [
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
@@ -1480,7 +1485,7 @@ class Payment extends MY_Controller{
                 'payment_method_name' => $transactionData['payment_method_name'],
                 'facebook' => $socialMediaLinks["facebook"],
                 'twitter' => $socialMediaLinks["twitter"]
-            );
+            ];
 
             foreach($transactionData['seller'] as $seller_id => $seller){
                 $sellerEmail = $seller['email'];

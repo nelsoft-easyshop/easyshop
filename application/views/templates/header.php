@@ -15,7 +15,6 @@
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
     
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -112,13 +111,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php else: ?>
                         <li>
                             <a href="/messages" class="msgs_link prevent">
-                                <span class="span_bg img_msgs_cntr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'msg_icon_zero' : '';?>"></span>
-                                <span id="unread-messages-count" class="msg_countr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'unread-messages-count-hide' : '';?>">
-                                    <?PHP echo $msgs['unread_msgs'];?>
+                                <span class="span_bg img_msgs_cntr <?PHP echo $unreadMessageCount === 0 ? 'msg_icon_zero' : '';?>"></span>
+                                <span id="unread-messages-count" class="msg_countr <?PHP echo $unreadMessageCount === 0 ? 'unread-messages-count-hide' : '';?>">
+                                    <?PHP echo $unreadMessageCount ;?>
                                 </span>
                             </a>
-                            <a href="/<?php echo html_escape($user['slug']); ?>" class="top_link_name prevent">
-                                <?php echo html_escape($user['username']); ?>
+                            <a href="/<?php echo html_escape($user->getSlug()); ?>" class="top_link_name prevent">
+                                <?php echo html_escape($user->getUsername()); ?>
                             </a>
                         </li>
                         <li class="txt_res_hide">
@@ -207,8 +206,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </a>
             </div>
         <?php endif; ?>
-        
-        <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
+       
+        <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
                 <div>
                 <span class="main_srch_img_con"></span>
@@ -216,12 +215,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 
                 <select name="category" id="category">
                     <option value="1">All Categories</option>
-                    <?php
-                        foreach ($category_search as $keyrow):
-                        $selected = ($this->input->get('category') && $this->input->get('category') == $keyrow['id_cat'])?"selected":"";
-                    ?>
-                        <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>">
-                            <?php echo $keyrow['name']; ?>
+                    <?php foreach ($categories as $category): ?>
+                        <?php $isSelected = $this->input->get('category') && (int)$this->input->get('category') === (int)$category->getIdCat(); ?>
+                        <option <?php $isSelected ? 'selected' : '' ?> value="<?php  echo $category->getIdCat() ?>">
+                            <?php echo html_escape($category->getName()); ?>
                         </option>
                     <?php endforeach;?>
                 </select>

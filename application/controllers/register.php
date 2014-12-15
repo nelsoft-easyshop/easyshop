@@ -29,17 +29,21 @@ class Register extends MY_Controller
                 redirect('/?view=basic');
             }
         }
-        $data = [
+        $headerData = [
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
-            'redirect_url' => $url,
-            'is_promo' =>$is_promo
         ];
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $data['facebook'] = $socialMediaLinks["facebook"];
-        $data['twitter'] = $socialMediaLinks["twitter"];        
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('pages/user/register', $data);
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        $bodyData = [
+            'redirect_url' => $url,
+            'is_promo' => $is_promo,
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+        ];
+      
+        $this->load->spark('decorator');    
+        $this->load->view('pages/user/register',  array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
     }
 
 
@@ -189,18 +193,10 @@ class Register extends MY_Controller
     {
         $data['title'] = 'Easyshop.ph - Thank You';
         $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
-        $socialMediaLinks = $this->getSocialMediaLinks();        
+        $socialMediaLinks = $this->serviceContainer['social_media_manager'] 
+                                 ->getSocialMediaLinks();        
         if(!($referrer)){
-            $data['title'] = 'Page not found';
-            $data = array_merge($data,$this->fill_header());
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/general_error');
-
-
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/footer_full', $viewData);
+            show_404();
         }
         else{
             if ($referrer === 'landingpage') {
@@ -307,7 +303,8 @@ class Register extends MY_Controller
 
         $this->load->library('encrypt');
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
 
@@ -321,19 +318,23 @@ class Register extends MY_Controller
         $username = $getdata[1];
         $hash = $getdata[2];
 
-        $data = array(
+        $headerData = [
             'title' => 'Easyshop.ph - Email Verification',
+            'metadescription' => '',
+            'relCanonical' => '',
+            'renderSearchbar' => false,
+        ];         
+        
+        $data = [ 
             'member_username' => $username,
             'email' => $email,
-            'render_logo' => false,
-            'render_searchbar' => false
-        );
-        $data = array_merge($data, $this->fill_header());
+        ];
 
         $member_id = $this->register_model->get_memberid($username)['id_member'];
 
         if($member_id === 0){
-            $this->load->view('templates/header', $data);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/user/err_email_verif', $data);
             $this->load->view('templates/footer_full', $viewData);
             return;
@@ -347,7 +348,8 @@ class Register extends MY_Controller
         
             if($data_val['is_email_verify'] == 1){
                 $data['verification_msg'] = $this->lang->line('expired_email_verification');
-                $this->load->view('templates/header', $data);
+                $this->load->spark('decorator');    
+                $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
                 $this->load->view('pages/user/register_form3_view', $data);
                 $this->load->view('templates/footer_full', $viewData);
                 return;
@@ -361,14 +363,14 @@ class Register extends MY_Controller
             $this->register_model->update_verification_status($temp);
             
             $data['verification_msg'] = $this->lang->line('success_email_verification');
-            $data['render_searchbar'] = false;
-            $data['render_logo'] = false;
-            $this->load->view('templates/header', $data);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/user/register_form3_view', $data);
             $this->load->view('templates/footer_full', $viewData);
         }
         else{
-            $this->load->view('templates/header', $data);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/user/err_email_verif', $data);
             $this->load->view('templates/footer_full', $viewData);
         }
