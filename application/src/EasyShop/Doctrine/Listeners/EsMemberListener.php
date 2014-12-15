@@ -20,12 +20,20 @@ class EsMemberListener implements EventSubscriber
     private $activityManager;
 
     /**
+     * Language Loader Instance
+     *
+     * @var Easyshop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+
+    /**
      * Constructor.
      * 
      */
-    public function __construct($activityManager)
+    public function __construct($activityManager, $languageLoader)
     {
         $this->activityManager = $activityManager;
+        $this->languageLoader = $languageLoader;
     }
 
     /**
@@ -109,11 +117,12 @@ class EsMemberListener implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
+                $unparsedPhrase = $this->languageLoader
+                                       ->getLine($activityType->getActivityPhrase());
                 $phrase = $this->activityManager
                                ->constructActivityPhrase($this->changeSet,
-                                                         $activityType->getActivityPhrase(),
+                                                         $unparsedPhrase,
                                                          'EsMember');
-
                 if($phrase !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $phrase, $entity);

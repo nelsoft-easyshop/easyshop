@@ -52,10 +52,6 @@ class EsProductListener implements EventSubscriber
         if ($event->hasChangedField('lastmodifieddate')) {
             $this->changeSet['lastmodifieddate'] = $entity->getLastmodifieddate();
         }
-
-        if ($event->hasChangedField('createddate')) {
-            $this->changeSet['createddate'] = $entity->getCreateddate();
-        }
     }
 
     /**
@@ -83,21 +79,17 @@ class EsProductListener implements EventSubscriber
                                    ->find(EsActivityType::PRODUCT_UPDATE);
                 $phraseArray = $this->languageLoader
                                     ->getLine($activityType->getActivityPhrase());
+
                 $phraseValue = "";
-                if(isset($this->changeSet['createddate'])){
-                    $phraseValue = $phraseArray['upload'];
+                if ((int)$entity->getIsDelete() === (int)EsProduct::FULL_DELETE) {
+                    $phraseValue = $phraseArray['trash'];
                 }
-                else{
-                    if ($entity->getIsDelete() === EsProduct::FULL_DELETE) {
-                        $phraseValue = $phraseArray['trash'];
-                    }
-                    elseif ($entity->getIsDelete() === EsProduct::DELETE) {
-                        $phraseValue = $phraseArray['delete'];
-                    }
-                    elseif ($entity->getIsDelete() === EsProduct::ACTIVE
-                            && $entity->getIsDraft() === EsProduct::ACTIVE) { 
-                        $phraseValue = $phraseArray['active'];
-                    }
+                elseif ((int)$entity->getIsDelete() === (int)EsProduct::DELETE) {
+                    $phraseValue = $phraseArray['delete'];
+                }
+                elseif ((int)$entity->getIsDelete() === (int)EsProduct::ACTIVE
+                        && (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) { 
+                    $phraseValue = $phraseArray['update'];
                 }
                 $phrase = $this->activityManager
                                ->constructActivityPhrase(['name' => $entity->getName()],
