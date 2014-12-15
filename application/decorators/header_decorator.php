@@ -21,7 +21,7 @@ class Header_decorator extends Viewdecorator
         $cartManager = $this->serviceContainer['cart_manager'];
         $cartImplementation = $cartManager->getCartObject();
         
-        $loggedIn = false;
+        $isLoggedIn = false;
         $member = null;
         $memberId = $this->session->userdata('member_id');
         $unreadMessageCount = 0;
@@ -29,7 +29,7 @@ class Header_decorator extends Viewdecorator
         $cartSize = 0;
         
         if(!empty($memberId) || $this->check_cookie()){
-            $loggedIn = true;
+            $isLoggedIn = true;
             $member = $this->serviceContainer['entity_manager']
                            ->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
@@ -53,7 +53,7 @@ class Header_decorator extends Viewdecorator
         $menu = $this->serviceContainer['xml_cms']
                      ->getMenuData();
                                  
-        $this->view_data['logged_in'] = $loggedIn;
+        $this->view_data['logged_in'] = $isLoggedIn;
         $this->view_data['user'] = $member;
         $this->view_data['cartSize'] = $cartSize;
         $this->view_data['cartItems'] = $cart;
