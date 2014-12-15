@@ -2016,6 +2016,8 @@ class Memberpage extends MY_Controller
                     'site_url' => site_url('memberpage/showActivateAccount')
                 );        
                 $imageArray = $this->config->config['images'];
+                $imageArray[] = "/assets/images/appbar.home.png";
+                $imageArray[] = "/assets/images/appbar.message.png";
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
