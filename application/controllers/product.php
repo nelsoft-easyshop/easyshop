@@ -307,29 +307,29 @@ class product extends MY_Controller
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
-            $viewData = [
-                            'product' => $product,
-                            'breadCrumbs' => $breadcrumbs,
-                            'ownerAvatar' => $avatarImage,
-                            'imagesView' => $imagesView,
-                            'productAttributes' => $productAttributes,
-                            'productCombinationQuantity' => json_encode($productCombination),
-                            'shippingInfo' => $shippingDetails,
-                            'shiploc' => $shippingLocation,
-                            'paymentMethod' => $paymentMethod,
-                            'isBuyButtonViewable' => $isBuyButtonViewable,
-                            'isLoggedIn' => $this->session->userdata('session'),
-                            'viewerId' => $viewerId,
-                            'canPurchase' => $canPurchase,
-                            'userData' => $product->getMember(),
-                            'bannerView' => $bannerView, 
-                            'reviewDetailsView' => $reviewDetailsView,
-                            'recommendedView' => $recommendedView,
-                            'noMoreSelection' => $noMoreSelection, 
-                            'needToSelect' => $needToSelect,
-                            'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                            'url' => base_url() .'item/' . $product->getSlug()
-                        ];
+            $bodyData = [
+                'product' => $product,
+                'breadCrumbs' => $breadcrumbs,
+                'ownerAvatar' => $avatarImage,
+                'imagesView' => $imagesView,
+                'productAttributes' => $productAttributes,
+                'productCombinationQuantity' => json_encode($productCombination),
+                'shippingInfo' => $shippingDetails,
+                'shiploc' => $shippingLocation,
+                'paymentMethod' => $paymentMethod,
+                'isBuyButtonViewable' => $isBuyButtonViewable,
+                'isLoggedIn' => $this->session->userdata('session'),
+                'viewerId' => $viewerId,
+                'canPurchase' => $canPurchase,
+                'userData' => $product->getMember(),
+                'bannerView' => $bannerView, 
+                'reviewDetailsView' => $reviewDetailsView,
+                'recommendedView' => $recommendedView,
+                'noMoreSelection' => $noMoreSelection, 
+                'needToSelect' => $needToSelect,
+                'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                'url' => base_url() .'item/' . $product->getSlug()
+            ];
 
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
 
@@ -338,6 +338,11 @@ class product extends MY_Controller
                 'metadescription' => es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT),
                 'relCanonical' => base_url().'item/'.$itemSlug,
             ];
+
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/product/productpage_primary', $bodyData); 
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
    
         }
         else{
