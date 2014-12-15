@@ -22,3 +22,7 @@ class Footer_decorator extends Viewdecorator
 
 }
 
+
+/* End of file footer_decorator.php */
+/* Location: ./application/decorators/footer_decorator.php */
+
