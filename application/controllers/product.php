@@ -425,9 +425,10 @@ class product extends MY_Controller
         $this->load->config('protected_category', TRUE);
         $category_id = $this->config->item('promo', 'protected_category');
         $this->load->library('xmlmap');
-        $data = $this->fill_header();
-        $data['title'] = 'Deals | Easyshop.ph';
-        $data['metadescription'] = 'Get the best price offers for the day at Easyshop.ph.';
+        $headerData = [
+            'title' => 'Deals | Easyshop.ph',
+            'metadescription' => 'Get the best price offers for the day at Easyshop.ph.',
+        ];
         
         $banner_data = array();
         $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
@@ -437,7 +438,8 @@ class product extends MY_Controller
         #$categoryId = $this->config->item('peak_hour_promo', 'protected_category');
         #$view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
 
-        $this->load->view('templates/header', $data); 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
     }
@@ -449,14 +451,17 @@ class product extends MY_Controller
      */
     public function post_and_win_promo()
     {
-        $data = $this->fill_header();
-        $data['title'] = 'Post and Win | Easyshop.ph';
+        $headerData = [
+            'title' => 'Post and Win | Easyshop.ph',
+        ];
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $socialData['facebook'] = $socialMediaLinks["facebook"];
         $socialData['twitter'] = $socialMediaLinks["twitter"];
 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/post_and_win_view', $socialData);
         $this->load->view('templates/footer');
     }
