@@ -21,3 +21,4 @@ class Footer_decorator extends Viewdecorator
     }
 
 }
+
