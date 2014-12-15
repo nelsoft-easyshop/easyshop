@@ -16,7 +16,7 @@
         <?php if(isset($subCategory)): ?>
             <h3>Categories</h3>
             <ul>
-                <?php foreach ($subCategory as $key => $value):?>
+                <?php foreach ($subCategory as $value):?>
                     <li style="border:0px">
                         <a class="cbx" data-head="category" data-value="<?=$value->getIdCat()?>" >
                             <input type='radio' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
@@ -30,7 +30,7 @@
             <?php foreach ($attributes as $attrName => $attrListValue):?>
                 <h3><?= html_escape($attrName); ?></h3>
                 <ul>
-                <?php foreach ($attrListValue as $key => $value):?>
+                <?php foreach ($attrListValue as $value):?>
                     <li style="border:0px">
                         <a class="cbx" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                             <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" >
@@ -72,11 +72,11 @@
                     <label>Location:</label>
                     <select title="Select item location" name="location" id="selectLocation" class="advsrchLocation">
                         <option value="">- All -</option>
-                            <?php foreach($locatioList['area'] as $island=>$loc):?>
-                                <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=($this->input->get('location') == $locatioList['islandkey'][$island])?'selected':'';?> ><?php echo $island;?></option>
-                                    <?php foreach($loc as $region=>$subloc):?>
-                                        <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=($this->input->get('location') == $locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-                                            <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                        <?php foreach($locatioList['area'] as $island=>$loc):?>
+                            <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=($this->input->get('location') == $locatioList['islandkey'][$island])?'selected':'';?> ><?php echo $island;?></option>
+                                <?php foreach($loc as $region=>$subloc):?>
+                                    <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=($this->input->get('location') == $locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
                                                 <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?=($this->input->get('location') == $id_cityprov)?'selected':'';?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
                                         <?php endforeach;?>
                                 <?php endforeach;?>
@@ -116,7 +116,7 @@
             <?php if(isset($products)): ?>
                 <?php if(count($products)>0): ?>
                     <?php 
-                    foreach ($products as $key => $value):
+                    foreach ($products as $value):
                         $productEntity = $value;
                         $productName = html_escape($productEntity->getName());
                         $productSlug = $productEntity->getSlug();
@@ -293,7 +293,7 @@
                         <div id="paste-product">
                             <?php if(isset($products)): ?>
                                 <?php if(count($products)>0): ?>
-                                    <?php foreach ($products as $key => $value): ?>  
+                                    <?php foreach ($products as $value): ?>  
                                     <?php
                                         $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
@@ -388,7 +388,7 @@
                 <p class="h3-cat-title">Categories</p>
                 <?php if(isset($subCategory)): ?>
                     <ul class="list-unstyled">
-                    <?php foreach ($subCategory as $key => $value):?>
+                    <?php foreach ($subCategory as $value):?>
                         <li>
                             <a class="cbx" data-head="q_cat" data-value="<?=$value->getIdCat()?>" >
                                 <input type='checkbox' class='adv_catpanel' value="<?=html_escape($value->getIdCat())?>"> 
@@ -403,7 +403,7 @@
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
                         <p class="h3-cat-title"><?= html_escape($attrName) ?></p>
                         <ul class="list-unstyled">
-                        <?php foreach ($attrListValue as $key => $value):?>
+                        <?php foreach ($attrListValue as $value):?>
                            <li>
                                 <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?=html_escape(strtolower($value))?>" >
                                     <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >

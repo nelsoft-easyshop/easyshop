@@ -39,7 +39,7 @@
                                 <?php foreach ($attributes as $attrName => $attrListValue):?>
                                 <h3><?= html_escape($attrName); ?></h3>
                                     <ul>
-                                    <?php foreach ($attrListValue as $key => $value):?>
+                                    <?php foreach ($attrListValue as $value):?>
                                         <li style="border:0px">
                                             <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                                                 <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
@@ -69,7 +69,7 @@
 
                                 <div id="product_content">
                                     <?php 
-                                    foreach ($products as $key => $value):
+                                    foreach ($products as $value):
                                         $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
@@ -164,7 +164,7 @@
                     <br/>
                     <div id="paste-product">
                         <?php if($productCount > 0): ?>
-                            <?php foreach ($products as $key => $value): ?>
+                            <?php foreach ($products as $value): ?>
                             <?php
                                 $productEntity = $value;
                                 $productName = html_escape($productEntity->getName());
@@ -268,9 +268,9 @@
                     <input class="rprice" type="button" value=">>"/>
                     <?php if($productCount > 0): ?>
                         <?php foreach ($attributes as $attrName => $attrListValue):?>
-                         <h3 class="title h3-filter"><?= html_escape($attrName); ?></h3> 
+                         <h3 class="title h3-filter"><?=html_escape($attrName); ?></h3> 
                         <ul class="list-unstyled"> 
-                            <?php foreach ($attrListValue as $key => $value):?>
+                            <?php foreach ($attrListValue as $value):?>
                             <li>
                                 <a class="cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)) ?>" >
                                     <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
