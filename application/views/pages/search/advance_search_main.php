@@ -16,7 +16,7 @@
         <?php if(isset($subCategory)): ?>
             <h3>Categories</h3>
             <ul>
-                <?php foreach ($subCategory as $key => $value):?>
+                <?php foreach ($subCategory as $value):?>
                     <li style="border:0px">
                         <a class="cbx" data-head="category" data-value="<?=$value->getIdCat()?>" >
                             <input type='radio' class='adv_catpanel' name='_subcat' value="<?=html_escape($value->getIdCat())?>"> 
@@ -30,10 +30,10 @@
             <?php foreach ($attributes as $attrName => $attrListValue):?>
                 <h3><?= html_escape($attrName); ?></h3>
                 <ul>
-                <?php foreach ($attrListValue as $key => $value):?>
+                <?php foreach ($attrListValue as $value):?>
                     <li style="border:0px">
                         <a class="cbx" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
-                            <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" >
+                            <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" >
                             <label for="cbx"><?= html_escape(ucfirst($value)); ?></label>
                         </a>
                     </li>
@@ -51,13 +51,15 @@
             <div class="inputRow">
                 <span class="adv_is">   
                     <label>Keyword: </label>
-                    <input type="text" name="q_str" id="keywordTxt" value="<?=html_escape($this->input->get('q_str'))?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
+                    <input type="text" name="q_str" id="keywordTxt" value="<?=isset($getParameter['q_str']) ? html_escape($getParameter['q_str']) : ''?>" size="30" maxlength="300" placeholder="Enter keywords or item number" />
                 </span>
                 <span class="adv_is">
                     <select name="category" id="selectCat" title="Select item category">
                         <option value="1">- All -</option>
                         <?php foreach ($parentCategory as $key => $value): ?>
-                            <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
+                            <option value="<?php echo $value->getIdCat();?>" <?=(isset($getParameter['category']) && (int)$getParameter['category'] === (int)$value->getIdCat()) ? 'selected' : '';?> >
+                                <?=html_escape($value->getName());?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -66,18 +68,18 @@
             <div class="inputRow">
                 <span class="adv_us">
                     <label>Seller:</label>
-                    <input type="text" name="seller" id="sellerTxt" value="<?=html_escape($this->input->get('seller'))?>" size="30" maxlength="30" placeholder="Search for a seller's item" />
+                    <input type="text" name="seller" id="sellerTxt" value="<?=isset($getParameter['seller']) ? html_escape($getParameter['seller']) : '' ?>" size="30" maxlength="30" placeholder="Search for a seller's item" />
                 </span>
                 <span class="adv_us">
                     <label>Location:</label>
                     <select title="Select item location" name="location" id="selectLocation" class="advsrchLocation">
                         <option value="">- All -</option>
-                            <?php foreach($locatioList['area'] as $island=>$loc):?>
-                                <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=($this->input->get('location') == $locatioList['islandkey'][$island])?'selected':'';?> ><?php echo $island;?></option>
-                                    <?php foreach($loc as $region=>$subloc):?>
-                                        <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=($this->input->get('location') == $locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-                                            <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?=($this->input->get('location') == $id_cityprov)?'selected':'';?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                        <?php foreach($locatioList['area'] as $island=>$loc):?>
+                            <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$locatioList['islandkey'][$island]) ? 'selected' : '';?> ><?php echo $island;?></option>
+                                <?php foreach($loc as $region=>$subloc):?>
+                                    <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$id_cityprov)?'selected':'';?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
                                         <?php endforeach;?>
                                 <?php endforeach;?>
                         <?php endforeach;?>
@@ -90,15 +92,15 @@
                     <select title="Select item condition" name="condition" id="selectCondition" class="prod_condition">
                     <option value="">- All -</option>
                         <?php foreach($defaultCondition as $con): ?>
-                            <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo $con; ?></option>
+                            <option value="<?php echo $con;?>" <?=(isset($getParameter['condition']) && strtolower($con) === strtolower($getParameter['condition'])) ? 'selected' : '';?> ><?php echo html_escape($con); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </span>
                 <span class="adv_us">
                     <label>Price:</label>
-                    <input type="text" name="startprice" class="priceField" id="price1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                    <input type="text" name="startprice" class="priceField" id="price1" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                     to
-                    <input type="text" name="endprice" class="priceField" id="price2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                    <input type="text" name="endprice" class="priceField" id="price2" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                 </span>
             </div>
         </div> 
@@ -116,7 +118,7 @@
             <?php if(isset($products)): ?>
                 <?php if(count($products)>0): ?>
                     <?php 
-                    foreach ($products as $key => $value):
+                    foreach ($products as $value):
                         $productEntity = $value;
                         $productName = html_escape($productEntity->getName());
                         $productSlug = $productEntity->getSlug();
@@ -229,7 +231,7 @@
                                             <select name="category" id="selectCat" class="form-control input-sm no-border" title="Select item category">
                                                 <option value="1">- All -</option>
                                                 <?php foreach ($parentCategory as $key => $value): ?>
-                                                    <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('q_cat')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
+                                                    <option value="<?php echo $value->getIdCat();?>" <?=isset($getParameter['category']) && ((int)$getParameter['category'] === (int)$value->getIdCat())?'selected':'';?> ><?php echo html_escape($value->getName());?></option>
                                                 <?php endforeach; ?>
                                             </select> 
                                         </td>
@@ -237,7 +239,7 @@
                                     <tr>
                                         <td class="td-search-label">Seller: </td>
                                         <td class="td-search-input">
-                                            <input type="text" name="seller" class="form-control no-border input-sm" id="sellerTxt" value="<?=html_escape($this->input->get('seller'))?>" size="30" maxlength="30" placeholder="Search for a seller's item" />
+                                            <input type="text" name="seller" class="form-control no-border input-sm" id="sellerTxt" value="<?=isset($getParameter['seller']) ? html_escape($getParameter['seller']) : ''?>" size="30" maxlength="30" placeholder="Search for a seller's item" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -245,12 +247,12 @@
                                         <td class="td-search-input">
                                             <select title="Select item location" name="location" id="selectLocation" class="advsrchLocation form-control input-sm no-border">
                                                 <option value="">- All -</option>
-                                                    <?php foreach($locatioList['area'] as $island=>$loc):?>
-                                                        <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=($this->input->get('location') == $locatioList['islandkey'][$island])?'selected':'';?> ><?php echo $island;?></option>
-                                                            <?php foreach($loc as $region=>$subloc):?>
-                                                                <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=($this->input->get('location') == $locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-                                                                    <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                                        <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?=($this->input->get('location') == $id_cityprov)?'selected':'';?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                                <?php foreach($locatioList['area'] as $island=>$loc):?>
+                                                    <option value="<?php echo $locatioList['islandkey'][$island];?>" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$locatioList['islandkey'][$island]) ? 'selected' : '';?> ><?php echo $island;?></option>
+                                                        <?php foreach($loc as $region=>$subloc):?>
+                                                            <option value="<?php echo $locatioList['regionkey'][$region];?>" style="margin-left:15px;" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$locatioList['regionkey'][$region])?'selected':'';?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                                                <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                                        <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?=(isset($getParameter['location']) && (int)$getParameter['location'] === (int)$id_cityprov)?'selected':'';?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
                                                                 <?php endforeach;?>
                                                         <?php endforeach;?>
                                                 <?php endforeach;?>
@@ -263,7 +265,7 @@
                                             <select title="Select item condition" name="condition" id="selectCondition" class="prod_condition form-control input-sm no-border">
                                                 <option value="">- All -</option>
                                                 <?php foreach($defaultCondition as $con): ?>
-                                                    <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo $con; ?></option>
+                                                    <option value="<?php echo $con;?>" <?=(isset($getParameter['condition']) && strtolower($con) === strtolower($getParameter['condition'])) ? 'selected' : '';?> ><?php echo html_escape($con); ?></option>
                                                 <?php endforeach; ?>
                                             </select> 
                                         </td>
@@ -271,9 +273,9 @@
                                     <tr>
                                         <td class="td-search-label">Price: </td>
                                         <td class="td-search-input">
-                                            <input type="text" name="startprice" class="priceField" id="mprice1" value="<?=$this->input->get('startprice')?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
+                                            <input type="text" name="startprice" class="priceField" id="mprice1" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength="10" size="6" placeholder="Min" title="Minimum price">
                                             to
-                                            <input type="text" name="endprice" class="priceField" id="mprice2" value="<?=$this->input->get('endprice')?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+                                            <input type="text" name="endprice" class="priceField" id="mprice2" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
                                         </td>
                                     </tr> 
                                     <tr>
@@ -293,7 +295,7 @@
                         <div id="paste-product">
                             <?php if(isset($products)): ?>
                                 <?php if(count($products)>0): ?>
-                                    <?php foreach ($products as $key => $value): ?>  
+                                    <?php foreach ($products as $value): ?>  
                                     <?php
                                         $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
@@ -388,7 +390,7 @@
                 <p class="h3-cat-title">Categories</p>
                 <?php if(isset($subCategory)): ?>
                     <ul class="list-unstyled">
-                    <?php foreach ($subCategory as $key => $value):?>
+                    <?php foreach ($subCategory as $value):?>
                         <li>
                             <a class="cbx" data-head="q_cat" data-value="<?=$value->getIdCat()?>" >
                                 <input type='checkbox' class='adv_catpanel' value="<?=html_escape($value->getIdCat())?>"> 
@@ -403,10 +405,10 @@
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
                         <p class="h3-cat-title"><?= html_escape($attrName) ?></p>
                         <ul class="list-unstyled">
-                        <?php foreach ($attrListValue as $key => $value):?>
+                        <?php foreach ($attrListValue as $value):?>
                            <li>
                                 <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?=html_escape(strtolower($value))?>" >
-                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
                                     <label for="cbx"><?=html_escape(ucfirst($value));?></label>
                                 </a>
                             </li>
