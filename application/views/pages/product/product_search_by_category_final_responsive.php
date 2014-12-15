@@ -361,8 +361,8 @@
                             <?php foreach ($attrListValue as $key => $value):?>
                                 <li>
                                     <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
+                                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
+                                        <label class="cbx-label" for="cbx"><?=ucfirst(html_escape($value));?></label>
                                     </a>
                                 </li>
                             <?php endforeach; ?>

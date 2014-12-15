@@ -57,7 +57,7 @@
                     <select name="category" id="selectCat" title="Select item category">
                         <option value="1">- All -</option>
                         <?php foreach ($parentCategory as $key => $value): ?>
-                            <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
+                            <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('category')==$value->getIdCat())?'selected':'';?> ><?=html_escape($value->getName());?></option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -90,7 +90,7 @@
                     <select title="Select item condition" name="condition" id="selectCondition" class="prod_condition">
                     <option value="">- All -</option>
                         <?php foreach($defaultCondition as $con): ?>
-                            <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo $con; ?></option>
+                            <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo html_escape($con); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -229,7 +229,7 @@
                                             <select name="category" id="selectCat" class="form-control input-sm no-border" title="Select item category">
                                                 <option value="1">- All -</option>
                                                 <?php foreach ($parentCategory as $key => $value): ?>
-                                                    <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('q_cat')==$value->getIdCat())?'selected':'';?> ><?php echo $value->getName();?></option>
+                                                    <option value="<?php echo $value->getIdCat();?>" <?=($this->input->get('q_cat')==$value->getIdCat())?'selected':'';?> ><?php echo html_escape($value->getName());?></option>
                                                 <?php endforeach; ?>
                                             </select> 
                                         </td>
@@ -263,7 +263,7 @@
                                             <select title="Select item condition" name="condition" id="selectCondition" class="prod_condition form-control input-sm no-border">
                                                 <option value="">- All -</option>
                                                 <?php foreach($defaultCondition as $con): ?>
-                                                    <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo $con; ?></option>
+                                                    <option value="<?php echo $con;?>" <?=(strtolower($con) == strtolower($this->input->get('condition')))?'selected':'';?> ><?php echo html_escape($con); ?></option>
                                                 <?php endforeach; ?>
                                             </select> 
                                         </td>
@@ -406,7 +406,7 @@
                         <?php foreach ($attrListValue as $key => $value):?>
                            <li>
                                 <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?=html_escape(strtolower($value))?>" >
-                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
                                     <label for="cbx"><?=html_escape(ucfirst($value));?></label>
                                 </a>
                             </li>
