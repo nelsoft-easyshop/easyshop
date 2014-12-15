@@ -98,18 +98,15 @@ class EsProductListener implements EventSubscriber
                             && $entity->getIsDraft() === EsProduct::ACTIVE) { 
                         $phraseValue = $phraseArray['active'];
                     }
-                    echo $entity->getIsDelete();
-                    echo $entity->getIsDraft();
-                    echo $phraseValue;
-                    exit();
                 }
                 $phrase = $this->activityManager
                                ->constructActivityPhrase(['name' => $entity->getName()],
                                                          $phraseValue,
                                                          'EsProduct');
-
-                $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $entity->getMember());
+                if($phrase !== ""){
+                    $em->getRepository('EasyShop\Entities\EsActivityHistory')
+                       ->createAcitivityLog($activityType, $phrase, $entity->getMember());
+                }
            }
         }
     }
