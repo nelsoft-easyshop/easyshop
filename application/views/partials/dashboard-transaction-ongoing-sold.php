@@ -1,4 +1,5 @@
 <div class="transaction-item">
+<?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
@@ -41,16 +42,16 @@
                             </p>
                             <div class="div-meta-description">
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Status : </span>
                                         <?PHP if (intval($soldTransactionDetails['orderStatus']) === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                             <?PHP if (intval($product['isReject']) === 1) : ?>
@@ -293,4 +294,10 @@
             <?=$pagination; ?>
         </center>
     </div>
+<?PHP else : ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>
+        There are no transactions for this category.
+    </div>
+<?PHP endif; ?>
 </div>

@@ -85,10 +85,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user_details->profileImage;?>">
+                                                    <img src="/<?=$user->profileImage;?>">
                                                 </div>
-                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
-                                                    <?php echo html_escape($user_details->getUsername()); ?>
+                                                <a href="/<?=$user->getSlug();?>" class="header-seller-name">
+                                                    <?php echo html_escape($user->getUsername()); ?>
                                                 </a>
                                                 <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                 <ul class="default-nav-dropdown">
@@ -99,17 +99,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <a href="/me?tab=ongoing">On-going Transactions</a>
                                                     </li>
                                                     <li>
-                                                        <a href="/?view=basic">Easyshop.ph</a>
+                                                        <a href="/?view=basic">Go to homepage</a>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a href="/me?tab=settings">Settings</a>
                                                     </li>
                                                     <li class="nav-dropdown-border pos-rel">
                                                         <a href="/messages">Messages</a>
-                                                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                        <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                        <?=$msgs['unread_msgs'];?>
-                                                        </div>
+                                                        <?php if((int)$unreadMessageCount !== 0) : ?>
+                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                                <?php echo $unreadMessageCount; ?>
+                                                            </div>
                                                         <?php endif;?>
                                                     </li>
                                                     <li class="nav-dropdown-border">
@@ -250,7 +250,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <div class="col-md-80p border-right">                                                    
                                                             <h2>popular categories</h2>
                                                             <div class="mrgn-left-neg-14">
-                                                                <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
+                                                                <?PHP foreach ($menu['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
                                                                     <div class="col-md-3">
                                                                         <a href="/category/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                         <ul class="cat-sub-list">
@@ -265,7 +265,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <div class="col-md-20p">
                                                             <h2>other categories</h2>
                                                             <ul class="other-cat-con">
-                                                                <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
+                                                                <?PHP foreach ($menu['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
                                                                 <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
                                                                 <?PHP endforeach; ?>
                                                             </ul>
@@ -276,7 +276,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <li class="mobile-menu-nav-hide">
                                                     <a href="javascript:void(0)">NEW ARRIVALS</a>
                                                     <ul class="nav-2nd-level">
-                                                        <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
+                                                        <?php foreach( $menu['menu']['newArrivals']['arrival']  as $newArrival): ?>
 
                                                             <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
                                                         <?php endforeach; ?>
@@ -285,7 +285,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <li class="mobile-menu-nav-hide">
                                                     <a href="javascript:void(0)">TOP PRODUCTS</a>
                                                     <ul class="nav-2nd-level">
-                                                        <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
+                                                        <?php foreach( $menu['menu']['topProducts']as $topProduct): ?>
                                                             <?php if($topProduct): ?>
                                                                 <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
                                                             <?php endif; ?>
@@ -296,7 +296,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <a href="javascript:void(0)">TOP SELLERS</a>
                                                     <ul class="nav-2nd-level top-seller-list">
                                                         <li>
-                                                            <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
+                                                            <?php foreach($menu['menu']['topSellers'] as $topSeller): ?>
                                                                 <?php if($topSeller['details']): ?>
                                                                     <a href="/<?php echo $topSeller['details']->getSlug() ?>">
                                                                         <div class="top-seller-profile-photo">
@@ -373,10 +373,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <?php if(isset($logged_in) && $logged_in): ?>
                                                     <div class="new-user-nav-dropdown">
                                                         <div class="login-profile-con">
-                                                            <img src="/<?=$user_details->profileImage;?>">
+                                                            <img src="/<?=$user->profileImage;?>">
                                                         </div>
-                                                        <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
-                                                            <?php echo html_escape($user_details->getUsername()) ;?>
+                                                        <a href="/<?=$user->getSlug();?>" class="header-seller-name" style="color:#4370cc">
+                                                            <?php echo html_escape($user->getUsername()) ;?>
                                                         </a>
                                                         <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                         <ul class="default-nav-dropdown">

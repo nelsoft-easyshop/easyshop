@@ -1400,8 +1400,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1410,8 +1412,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1420,8 +1424,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1430,8 +1436,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {
@@ -1455,7 +1463,7 @@
         var $container = $(this).data('method');
         var $page = 1;
 
-        getTransactionDetails($page, $container, $container);
+        getTransactionDetails($page, $container, $container, '', '');
     });
 
     var searchForTransaction = function ($requestType, $searchFor, $value, $container)
@@ -1479,14 +1487,16 @@
         });
     }
 
-    var getTransactionDetails = function ($page, $requestType, $container)
+    var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
     {
         $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
                 page : $page,
-                request : $requestType
+                request : $requestType,
+                value : $value,
+                searchFor : $searchFor
             },
             beforeSend: function() {
                 $("#" + $container).empty();

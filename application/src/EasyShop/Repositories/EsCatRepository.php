@@ -247,10 +247,29 @@ class EsCatRepository extends EntityRepository
         }
         $uploadsPerCategory = $query->getResult();
 
-        
-        
-        
         return $uploadsPerCategory;
     }
+
+    
+    /**
+     * Get the first level categories
+     *
+     * @return EasyShop\Entities\EsCat[]
+     */
+    public function getParentCategories()
+    {
+        $em = $this->_em;
+        $parentCategories = $em->createQueryBuilder()
+                                ->select('c') 
+                                ->from('EasyShop\Entities\EsCat','c')
+                                ->where('c.parent = :parentId')
+                                ->setParameter('parentId', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID )
+                                ->getQuery()
+                                ->getResult();
+        return $parentCategories;
+   }
+
 }
+
+
 

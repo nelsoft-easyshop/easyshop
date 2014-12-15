@@ -68,11 +68,11 @@
                                     </div> 
                                     <div class="row row-action-mobile">
                                         <div class="col-md-12">
-                                            <?php if($product->getIsDelete() === 0): ?>
+                                            <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
                                             <button class="btn btn-action-edit btn-edit-product"
                                             data-productid="<?=$product->getIdProduct(); ?>"
                                             data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                            data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                             >
                                                 <i class="icon-edit"></i>edit
                                             </button>
@@ -81,7 +81,7 @@
                                                 <i class="icon-delete"></i>Restore
                                             </button>
                                             <?php endif; ?> 
-                                            <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
+                                            <button data-id=<?=$product->getIdProduct(); ?> class="<?=(int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT ? 'hard-delete' : 'soft-delete';?> btn btn-action-delete btn-delete">
                                                 <i class="icon-delete"></i>delete
                                             </button> 
                                         </div>
@@ -97,11 +97,11 @@
                                 <?php endfor; ?>
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
-                                <?php if($product->getIsDelete() === 0): ?>
+                                <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
                                 <button class="btn btn-action-edit btn-edit-product"
                                 data-productid="<?=$product->getIdProduct(); ?>"
                                 data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                 >
                                     <i class="icon-edit"></i>edit
                                 </button>
@@ -110,7 +110,7 @@
                                     <i class="icon-delete"></i>Restore
                                 </button>
                                 <?php endif; ?>
-                                <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
+                                <button data-id=<?=$product->getIdProduct(); ?> class="<?=(int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT ? 'hard-delete' : 'soft-delete';?> btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
                                 </button> 
                             </td>
@@ -118,7 +118,7 @@
                         <tr class="tr-attributes-drop">
                             <td></td>
                             <td colspan="2" class="td-attributes">
-                                <?php if(!empty($product->attributes)): ?>
+                                <?php if(empty($product->attributes) === false): ?>
                                 <div class="info-main-cont">
                                     <div class="toggle-info more-info-attribute">
                                         <i class="info-item-icon fa fa-plus-circle"></i> <span class="text-info-icon">more info</span>

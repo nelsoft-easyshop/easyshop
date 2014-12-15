@@ -351,13 +351,14 @@ class TransactionManager
     /**
      * Get the total number of bought transaction
      * @param $memberId
-     * @param $isOngoing
+     * @param bool $isOngoing
+     * @param string $paymentMethod
      * @return int
      */
-    public function getBoughtTransactionCount($memberId, $isOngoing = true)
+    public function getBoughtTransactionCount($memberId, $isOngoing = true, $paymentMethod = '')
     {
         $boughtTransactionDetails = [];
-        $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing);
+        $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing, $paymentMethod);
 
         foreach ($getUserBoughtTransactions as $transaction) {
             if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
@@ -389,13 +390,14 @@ class TransactionManager
     /**
      * Get Sold transaction details
      * @param $memberId
-     * @param $isOngoing
+     * @param bool $isOngoing
+     * @param string $paymentMethod
      * @return int
      */
-    public function getSoldTransactionCount ($memberId, $isOngoing = true)
+    public function getSoldTransactionCount ($memberId, $isOngoing = true, $paymentMethod = '')
     {
         $soldTransactionDetails = array();
-        $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing);
+        $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing, $paymentMethod);
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;

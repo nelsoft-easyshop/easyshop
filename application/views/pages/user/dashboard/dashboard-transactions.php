@@ -21,7 +21,7 @@
                     <span class="trans-title">Bought</span>
                     <span class="count"><?=$ongoingBoughtTransactionsCount?></span>
                 </div>
-                <div class="on-going-transaction-list-bought">
+                <div class="on-going-transaction-list-bought list-container">
                     <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
                             <div class="col-md-9 transaction-top-btns">
@@ -59,7 +59,7 @@
                     <span class="trans-title">Sold</span>
                     <span class="count"><?=$ongoingSoldTransactionsCount?></span>
                 </div>
-                <div class="on-going-transaction-list-sold">
+                <div class="on-going-transaction-list-sold list-container">
                     <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
                             <div class="col-md-9 transaction-top-btns">
@@ -101,7 +101,7 @@
                     <span class="trans-title">Bought</span>
                     <span class="count"><?=$completeBoughtTransactionsCount?></span>
                 </div>
-                <div class="on-going-transaction-list-bought-completed">
+                <div class="on-going-transaction-list-bought-completed list-container">
                     <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
                         <div class="col-md-9 transaction-top-btns">
@@ -133,7 +133,7 @@
                     <span class="trans-title">Sold</span>
                     <span class="count"><?=$completeSoldTransactionsCount?></span>
                 </div>
-                <div class="on-going-transaction-list-sold-completed">
+                <div class="on-going-transaction-list-sold-completed list-container">
                     <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
                         <div class="col-md-9">
