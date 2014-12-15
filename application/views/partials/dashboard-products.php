@@ -18,16 +18,24 @@
                             </td>
                             <td class="td-meta-info">
                                 <p class="item-list-name">
-                                    <?php if($product->getName()): ?>
-                                    <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
-                                        <?php if(strlen($product->getName()) > 40): ?>
-                                            <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
-                                        <?php else: ?>
-                                            <?=html_escape($product->getName());?>
-                                        <?php endif; ?>
-                                    </a>
+                                    <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
+                                            <?php if(strlen($product->getName()) > 40): ?>
+                                                <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
+                                            <?php else: ?>
+                                                <?=html_escape($product->getName());?>
+                                            <?php endif; ?>
                                     <?php else: ?>
-                                        (NO NAME)
+                                        <?php if($product->getName()): ?>
+                                        <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
+                                            <?php if(strlen($product->getName()) > 40): ?>
+                                                <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
+                                            <?php else: ?>
+                                                <?=html_escape($product->getName());?>
+                                            <?php endif; ?>
+                                        </a>
+                                        <?php else: ?>
+                                            (NO NAME)
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
