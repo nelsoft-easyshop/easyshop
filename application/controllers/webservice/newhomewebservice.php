@@ -907,12 +907,28 @@ class NewHomeWebService extends MY_Controller
         $template = $this->input->get("template");
         $string = $this->xmlCmsService->getString("sliderSection",$template, $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path); 
         $index = $index == 0 ? 1 : $index + 1;  
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
-        if($addXml === true) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+
+        $this->config->load('image_dimensions', true);        
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];        
+        $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);   
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                                                        $string,'/map/sliderSection/slide[last()]', 
+                                                        "\t\t",
+                                                        "\n");  
+        if($defaultTemplateSliderCount > 1 && $addXml) {
+            for ($i=$defaultTemplateSliderCount - 1; $i > 0 ; $i--) { 
+                $string = $this->xmlCmsService->getString("subSliderSection", 
+                                                            $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path, 
+                                                            "", 
+                                                            "", 
+                                                            $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->target);     
+                $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]/image[last()]',"\t\t\t","\n");
+            }            
         }
+
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);
     }    
 
     /**
