@@ -95,14 +95,14 @@ class product extends MY_Controller
             $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getParentCategoryRecursive($categoryId);
 
-            $data = array( 
+            $headerData = [
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
                 'relCanonical' => base_url().'category/'.$categorySlug ,
-                ); 
-            $data = array_merge($data, $this->fill_header());
+            ];
 
-            $this->load->view('templates/header', $data); 
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
             $this->load->view('templates/footer'); 
         }
@@ -221,7 +221,6 @@ class product extends MY_Controller
      */
     public function item($itemSlug = '')
     {
-        $headerData = $this->fill_header(); 
 
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
@@ -319,10 +318,10 @@ class product extends MY_Controller
                             'shiploc' => $shippingLocation,
                             'paymentMethod' => $paymentMethod,
                             'isBuyButtonViewable' => $isBuyButtonViewable,
-                            'isLoggedIn' => $headerData['logged_in'],
+                            'isLoggedIn' => $this->session->userdata('session'),
                             'viewerId' => $viewerId,
                             'canPurchase' => $canPurchase,
-                            'userData' => $headerData['user'],
+                            'userData' => $product->getMember(),
                             'bannerView' => $bannerView, 
                             'reviewDetailsView' => $reviewDetailsView,
                             'recommendedView' => $recommendedView,
