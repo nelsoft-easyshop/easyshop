@@ -61,7 +61,9 @@
                                     </a>
                                 </center>
                             </div>
-                            <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
+                            <div style='text-align:center !important;'>
+                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
+                            </div>
                         </form>
                     </div>
                 </div>
