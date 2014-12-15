@@ -61,7 +61,6 @@ class Store extends MY_Controller
             }
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
-                $headerData = $this->fill_header();
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
 
                 if ($bannerData['hasNoItems']){
@@ -109,17 +108,20 @@ class Store extends MY_Controller
                 //HEADER DATA
                 $storeColor = $memberEntity->getStoreColor();
                 $bannerData['storeColorScheme'] = $storeColor;
-                $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-                $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-                $headerData['relCanonical'] = base_url().$vendorSlug;
-                $bannerData['isLoggedIn'] = $headerData['logged_in'];
+                $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
                 $bannerData['vendorLink'] = "";
+
+                $headerData = [
+                    'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+                    'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+                    'relCanonical' => base_url().$vendorSlug,
+                ];
 
                 $viewData = array(
                     "customCatProd" => [],
                     "defaultCatProd" => $productView['defaultCatProd'],
                     "product_condition" => $this->lang->line('product_condition'),
-                    "isLoggedIn" => $headerData['logged_in'],
+                    "isLoggedIn" => $this->session->userdata('usersession'),
                     "prodLimit" => $this->vendorProdPerPage,
                     "storeColorScheme" => $storeColor,
                 );
@@ -139,10 +141,8 @@ class Store extends MY_Controller
                     $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
                 }
 
-                
-                // Load View
-                $headerData = array_merge($headerData, $bannerData);
-                $this->load->view('templates/header_alt', $headerData);
+                $this->load->spark('decorator');    
+                $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);

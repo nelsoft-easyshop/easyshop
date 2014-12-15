@@ -41,7 +41,7 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="login_box ">
                         <div style="text-align:center;">
-                            <p>You are currently signed-in as <b><?php echo $user["username"]; ?></b>. </p>
+                            <p>You are currently signed-in as <b><?php echo html_escape($user->getUsername()); ?></b>. </p>
                             <p>If you wish to sign-in as another user, <a href='/login/logout' class="orange2">click here.</a> </p>
                         </div>
                     </div>

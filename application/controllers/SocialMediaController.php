@@ -178,19 +178,18 @@ class SocialMediaController extends MY_Controller
             redirect('/login', 'refresh');
         }
 
-        $data = [
+        $headerData = [
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];
-        $data = array_merge($data, $this->fill_header());
         $data['member'] = $this->entityManager
                                ->getRepository('EasyShop\Entities\EsMember')
                                ->find($getData['memberId']);
         $data['oauthProvider'] = $getData['socialMediaProvider'];
         $data['oauthId'] = $getData['socialMediaId'];
 
-
-        $this->load->view('templates/header_new', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaMerge', $data);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         
@@ -291,11 +290,11 @@ class SocialMediaController extends MY_Controller
             redirect('/', 'refresh');
         }
 
-        $data = [
+        $headerData = [
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];
-        $data = array_merge($data, $this->fill_header());
+        
         $userData = [
             'social_media_type'=> $getData['socialMediaProvider'],
             'social_media_id'=> $getData['socialMediaId'],
@@ -305,7 +304,8 @@ class SocialMediaController extends MY_Controller
             'email'=> $getData['email']
         ];
         
-        $this->load->view('templates/header_new', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_new',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaRegistration', $userData);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
     }

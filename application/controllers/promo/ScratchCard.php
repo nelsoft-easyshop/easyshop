@@ -1,5 +1,5 @@
 <?PHP
-use Doctrine\ORM\Query\ResultSetMapping;
+
 class ScratchCard extends MY_Controller
 {
 
@@ -21,17 +21,19 @@ class ScratchCard extends MY_Controller
      */
     public function scratchCardPromo()
     {
-        $data = $this->fill_header();
-        $data['title'] = 'Scratch to Win | Easyshop.ph';
-        $data['metadescription'] = 'Scratch-to-win-promo';
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $headerData = [
+            'title' => 'Scratch to Win | Easyshop.ph',
+            'metadescription' => 'Scratch-to-win-promo',
+        ];
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
         
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/scratchAndWin', $banner_data = array(), TRUE);
 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
     }
@@ -67,12 +69,15 @@ class ScratchCard extends MY_Controller
         if (!($this->input->get('code'))) {
             redirect('/Scratch-And-Win', 'refresh');
         }
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];
-        $data = $this->fill_header();
-        $data['title'] = 'Scratch to Win | Easyshop.ph';
-        $data['metadescription'] = 'Scratch-to-win-promo';
+
+        $headerData = [
+            'title' => 'Scratch to Win | Easyshop.ph',
+            'metadescription' => 'Scratch-to-win-promo'
+        ];
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
         $viewData['product'] = $this->promoManager->validateCodeForScratchAndWin($this->input->get('code'));
         $viewData['code'] = $this->input->get('code');
@@ -97,7 +102,8 @@ class ScratchCard extends MY_Controller
         }
         $viewData['gadgets_galore'] = $product;
 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
     }
