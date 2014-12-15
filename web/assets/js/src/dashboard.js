@@ -370,7 +370,7 @@
         isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
     });
 
-    $(".search-field").keyup(function(event){
+    $(document.body).on('keydown','.search-field',function () {
         if(event.keyCode == 13){
             var $this = $(this);
             var $page = 1;
