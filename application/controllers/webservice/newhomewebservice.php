@@ -970,7 +970,6 @@ class NewHomeWebService extends MY_Controller
                 $imageUtility = $this->serviceContainer['image_utility'];
                 if($subIndex >= $subSliderCount) {
                     $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                    print_r($tempDimensions);
                     $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
                     reset($imageDimensionsConfig["mainSlider"]["$template"]);                
                 }
