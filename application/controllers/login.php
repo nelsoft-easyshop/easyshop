@@ -41,9 +41,11 @@ class Login extends MY_Controller
         $facebookScope = $this->config->item('facebook', 'oauth');
         $googleScope = $this->config->item('google', 'oauth');
         $bodyData['facebook_login_url'] = $this->socialMediaManager
-                                                ->getLoginUrl(1, $facebookScope['permission_to_access']);
+                                                ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::FACEBOOK, 
+                                                              $facebookScope['permission_to_access']);
         $bodyData['google_login_url'] = $this->socialMediaManager
-                                             ->getLoginUrl(2, $googleScope['permission_to_access']);
+                                             ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::GOOGLE,
+                                                           $googleScope['permission_to_access']);
 
         if($this->input->post('login_form')){
             $row = array();
