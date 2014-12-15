@@ -131,6 +131,7 @@ class ValidationRules
                     'mobile_number' => array(
                                 new Assert\NotBlank(),
                                 new CustomAssert\IsValidMobile(),
+                                new CustomAssert\IsMobileUnique(),
                     ),
                     'telephone_number' => array(
                                 new CustomAssert\IsValidTelephone()
