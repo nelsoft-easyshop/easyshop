@@ -370,7 +370,7 @@
         isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
     });
 
-    $(".search-field").keyup(function(event){
+    $(document.body).on('keydown','.search-field',function (event) {
         if(event.keyCode == 13){
             var $this = $(this);
             var $page = 1;
@@ -946,101 +946,102 @@
         $(".ma-settings").addClass("selectedM");
     });
     
-    $('#sc-selection-trigger').click(function() {
+    $(document).on("click", "#sc-selection-trigger",function () {
         $('.hide-selection-cont').slideToggle("fast");
     });
     
-    $('#hide-date').click(function() {
+    $(document).on("click", "#hide-date",function () {
         $('#th-date').toggle();
         $('.td-date').toggle();
     });
     
-    $('#hide-trans').click(function() {
+
+    $(document).on("click", "#hide-trans",function () {
         $('#th-trans').toggle();
         $('.td-trans').toggle();
     });
     
-    $('#hide-base-price').click(function() {
+    $(document).on("click", "#hide-base-price",function () {
         $('#th-base-price').toggle();
         $('.td-base-price').toggle();
     });
     
-    $('#hide-quantity').click(function() {
+    $(document).on("click", "#hide-quantity",function () {
         $('#th-quantity').toggle();
         $('.td-quantity').toggle();
     });
-    
-    $('#hide-handling').click(function() {
+
+    $(document).on("click", "#hide-handling",function () {
         $('#th-handling').toggle();
         $('.td-handling').toggle();
     });
     
-    $('#hide-total').click(function() {
+    $(document).on("click", "#hide-total",function () {
         $('#th-total').toggle();
         $('.td-total').toggle();
     });
     
-    $('#hide-es-charge').click(function() {
+    $(document).on("click", "#hide-es-charge",function () {
         $('#th-es-charge').toggle();
         $('.td-es-charge').toggle();
     });
-    
-    $('#hide-payment').click(function() {
+
+    $(document).on("click", "#hide-payment",function () {
         $('#th-payment').toggle();
         $('.td-payment').toggle();
     });
     
-    $('#hide-net').click(function() {
+    $(document).on("click", "#hide-net",function () {
         $('#th-net').toggle();
         $('.td-net').toggle();
     });
     
-    $('#sc-p-selection-trigger').click(function() {
+    $(document).on("click", "#sc-p-selection-trigger",function () {
         $('.hide-p-selection-cont').slideToggle("fast");
         
     });
     
-    $('#hide-p-date').click(function() {
+    $(document).on("click", "#hide-p-date",function () {
         $('#th-p-date').toggle();
         $('.td-p-date').toggle();
     });
     
-    $('#hide-p-trans').click(function() {
+    $(document).on("click", "#hide-p-trans",function () { 
         $('#th-p-trans').toggle();
         $('.td-p-trans').toggle();
     });
     
-    $('#hide-p-base-price').click(function() {
+    $(document).on("click", "#hide-p-base-price",function () { 
         $('#th-p-base-price').toggle();
         $('.td-p-base-price').toggle();
     });
     
-    $('#hide-p-quantity').click(function() {
+    $(document).on("click", "#hide-p-quantity",function () {
         $('#th-p-quantity').toggle();
         $('.td-p-quantity').toggle();
     });
     
-    $('#hide-p-handling').click(function() {
+    $(document).on("click", "#hide-p-handling",function () {
         $('#th-p-handling').toggle();
         $('.td-p-handling').toggle();
     });
     
-    $('#hide-p-total').click(function() {
+    $(document).on("click", "#hide-p-total",function () {
         $('#th-p-total').toggle();
         $('.td-p-total').toggle();
     });
     
-    $('#hide-p-es-charge').click(function() {
+    $(document).on("click", "#hide-p-es-charge",function () {
         $('#th-p-es-charge').toggle();
         $('.td-p-es-charge').toggle();
     });
     
-    $('#hide-p-payment').click(function() {
+    $(document).on("click", "#hide-p-payment",function () {
         $('#th-p-payment').toggle();
         $('.td-p-payment').toggle();
     });
     
-    $('#hide-p-net').click(function() {
+    $(document).on("click", "#hide-p-net",function () {
         $('#th-p-net').toggle();
         $('.td-p-net').toggle();
     });
