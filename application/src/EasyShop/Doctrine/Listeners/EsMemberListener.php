@@ -113,8 +113,11 @@ class EsMemberListener implements EventSubscriber
                                ->constructActivityPhrase($this->changeSet,
                                                          $activityType->getActivityPhrase(),
                                                          'EsMember');
-                $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $entity);
+
+                if($phrase !== ""){
+                    $em->getRepository('EasyShop\Entities\EsActivityHistory')
+                       ->createAcitivityLog($activityType, $phrase, $entity);
+                }
            }
         }
     }
