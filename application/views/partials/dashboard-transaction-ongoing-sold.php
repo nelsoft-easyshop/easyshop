@@ -41,16 +41,16 @@
                             </p>
                             <div class="div-meta-description">
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Status : </span>
                                         <?PHP if (intval($soldTransactionDetails['orderStatus']) === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                             <?PHP if (intval($product['isReject']) === 1) : ?>

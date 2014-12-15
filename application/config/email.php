@@ -17,7 +17,7 @@ $config = Array(
             'images' => [
                 "/assets/images/landingpage/templates/header-img.png",
                 "/assets/images/landingpage/templates/facebook.png",
-                "/assets/images/landingpage/templates/twitter.png"
+                "/assets/images/landingpage/templates/twitter.png",
             ]
         );
 

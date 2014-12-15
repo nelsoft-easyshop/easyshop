@@ -1683,6 +1683,7 @@ class Memberpage extends MY_Controller
             }             
             if($authenticatedMember) {
                 $this->load->library('encrypt');
+                $this->load->library('parser');
                 $hash = serialize([
                     'memberId' => $member['member']->getIdMember(),
                 ]);                
@@ -1692,12 +1693,14 @@ class Memberpage extends MY_Controller
                     'hash' => $result,
                     'site_url' => site_url('memberpage/showActivateAccount')
                 );        
-                $this->load->library('parser');
+                $imageArray = $this->config->config['images'];
+                $imageArray[] = "/assets/images/appbar.home.png";
+                $imageArray[] = "/assets/images/appbar.message.png";
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
                 $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
-                $this->emailNotification->setMessage($message);
+                $this->emailNotification->setMessage($message,$imageArray);
                 $this->emailNotification->sendMail();
                 $this->em->getRepository('EasyShop\Entities\EsMember')
                          ->accountActivation($member['member'], false);
