@@ -147,7 +147,7 @@ $lang['EsProduct'] = [
 
 $lang['update_information'] = "You have updated your :phrase.";
 $lang['update_product'] = [
-        'update' => 'You have successfully modified you item :phrase.',
+        'update' => 'You have successfully add one product to your active listing :phrase.',
         'trash' => 'You have successfully deleted permanently your item :phrase.',
         'delete' => 'You have moved your product to deleted items :phrase.',
         'active' => 'You have moved your product to active items :phrase.',
