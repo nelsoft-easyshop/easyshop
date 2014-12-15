@@ -30,7 +30,7 @@ class EsProductListener implements EventSubscriber
      * Constructor.
      * 
      */
-    public function __construct($activityManager, languageLoader)
+    public function __construct($activityManager, $languageLoader)
     {
         $this->activityManager = $activityManager;
         $this->languageLoader = $languageLoader;
@@ -95,17 +95,21 @@ class EsProductListener implements EventSubscriber
                         $phraseValue = $phraseArray['delete'];
                     }
                     elseif ($entity->getIsDelete() === EsProduct::ACTIVE
-                            && $entity->getIsDraft() === EsProduct::ACTIVE) {
+                            && $entity->getIsDraft() === EsProduct::ACTIVE) { 
                         $phraseValue = $phraseArray['active'];
                     }
+                    echo $entity->getIsDelete();
+                    echo $entity->getIsDraft();
+                    echo $phraseValue;
+                    exit();
                 }
                 $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
+                               ->constructActivityPhrase(['name' => $entity->getName()],
                                                          $phraseValue,
                                                          'EsProduct');
 
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $entity);
+                   ->createAcitivityLog($activityType, $phrase, $entity->getMember());
            }
         }
     }
