@@ -331,7 +331,7 @@ class product extends MY_Controller
                 'url' => base_url() .'item/' . $product->getSlug()
             ];
 
-            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
+            $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getBrief();
 
             $headerData = [
                 'title' =>  html_escape($product->getName()). " | Easyshop.ph",
