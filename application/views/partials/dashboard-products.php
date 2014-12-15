@@ -72,7 +72,7 @@
                                             <button class="btn btn-action-edit btn-edit-product"
                                             data-productid="<?=$product->getIdProduct(); ?>"
                                             data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                            data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                             >
                                                 <i class="icon-edit"></i>edit
                                             </button>
@@ -101,7 +101,7 @@
                                 <button class="btn btn-action-edit btn-edit-product"
                                 data-productid="<?=$product->getIdProduct(); ?>"
                                 data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                 >
                                     <i class="icon-edit"></i>edit
                                 </button>
