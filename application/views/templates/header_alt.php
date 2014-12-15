@@ -18,6 +18,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>

@@ -175,12 +175,8 @@ class Store extends MY_Controller
         $viewerId = $this->session->userdata('member_id');
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
         $memberId = $bannerData['arrVendorDetails']['id_member'];
-        $headerData = $this->fill_header();
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         $bannerData['vendorLink'] = "about";
-        $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/followers';
 
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
@@ -212,7 +208,7 @@ class Store extends MY_Controller
         $followerData['followerCount'] = $bannerData["followerCount"];
         $followerData['storeName'] = strlen($bannerData['arrVendorDetails']['store_name']) > 0 ? $bannerData['arrVendorDetails']['store_name'] : $bannerData['arrVendorDetails']['username'];
         $followerData['followers'] = $followers['followers'];
-        $followerData['isLoggedIn'] = $headerData['logged_in'] ? TRUE : FALSE;
+        $followerData['isLoggedIn'] = $this->session->userdata('usersession');
         $followerData['viewerId'] = $viewerId;
         $followerData['memberId'] = $memberId;
         $followerData['page'] = 0; 
@@ -248,8 +244,14 @@ class Store extends MY_Controller
         $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
 
         // Load View
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $headerData = [
+            'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/followers',
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/followers' ,$followerData);
         $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
@@ -259,7 +261,6 @@ class Store extends MY_Controller
     {
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
-        $data = $this->fill_header();
         $pageOffset = $this->input->get('page') - 1; // start count page in 1.
         $viewerId = $this->session->userdata('member_id');
         $memberId = $this->input->get('vendorId'); 
@@ -282,7 +283,7 @@ class Store extends MY_Controller
         }
 
         $followerData['followers'] = $followers['followers'];
-        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['isLoggedIn'] = $this->session->userdata('usersession');
         $followerData['viewerId'] = $viewerId; 
         $followerData['page'] = $pageOffset;
 
@@ -484,10 +485,11 @@ class Store extends MY_Controller
             $orderRelations = $this->serviceContainer['entity_manager']
                                    ->getRepository('EasyShop\Entities\EsOrder')
                                    ->getOrderRelations($viewerId, $idMember, true);
+            $viewer = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($viewerId);
         }
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
-        $headerData = $this->fill_header();
-        
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
@@ -495,20 +497,23 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('session');
         $bannerData['vendorLink'] = "about";
-        $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/about';
+        
+        $headerData = [
+            'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/about'
+        ];
 
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
                                                'feedbackTabs' => $feedbackTabs,
                                                'member' => $member,
-                                               'viewer' => $headerData['user'],
+                                               'viewer' => $viewer,
                                                'orderRelations' => $orderRelations,
                                                'isEditable' =>  $bannerData['isEditable'],
                                                'userDetails' => $userDetails,
@@ -647,31 +652,36 @@ class Store extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
-       
-        $headerData = $this->fill_header();
         $viewerId = $this->session->userdata('member_id');
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                    ->findOneBy(['slug' => $sellerslug]);                                  
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/contact';
         $bannerData['vendorLink'] = "contact";
-        $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
                                                 ->getVendorDetails($sellerslug);
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $headerData = [
+            'title' => 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph',
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/contact',
+        ];
+
+        $bodyData = [
+            'userDetails' => $userDetails,
+            'seller' => $member,
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner',$bannerData);
-        $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
+        $this->load->view('pages/user/contact', $bodyData);
         $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
     }
 
