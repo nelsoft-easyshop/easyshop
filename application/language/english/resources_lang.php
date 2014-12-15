@@ -150,7 +150,6 @@ $lang['update_product'] = [
         'update' => 'You have successfully added one product to your active listing :phrase.',
         'trash' => 'You have deleted permanently your item :phrase.',
         'delete' => 'You have moved your product to deleted items :phrase.',
-        'active' => 'You have moved your product to active items :phrase.',
     ];
 ?>
 
