@@ -30,7 +30,7 @@
                       
          },
          submitHandler: function(form, event){
-
+            $('#password-change-error').hide();
             verifyspan.hide();
             loadingimg.show();                                         
             event.preventDefault();
@@ -47,11 +47,7 @@
                             login($("#username").val(),$("#password").val());
                         }
                         else {
-                            $('#invalidCredentials').modal({       
-                                onShow: function(){
-                                    $(".invalidCredentialsMessage").html("Sorry, but you have entered invalid credentials");
-                                }
-                             });
+                            $('#password-change-error').fadeIn();
                         }
                     }
                     catch(e){                         

@@ -61,7 +61,13 @@
                                     </a>
                                 </center>
                             </div>
-                            <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
+                            <div style='text-align:center !important;'>
+                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
+                            </div>
+                            <div class="alert alert-danger" style="display:none;" role="alert" id="password-change-error">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                Sorry, but you have entered invalid credentials
+                            </div>                            
                         </form>
                     </div>
                 </div>
