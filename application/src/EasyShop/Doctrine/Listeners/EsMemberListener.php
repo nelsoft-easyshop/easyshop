@@ -111,7 +111,7 @@ class EsMemberListener implements EventSubscriber
                                    ->find(EsActivityType::INFORMATION_UPDATE);
                 $phrase = $this->activityManager
                                ->constructActivityPhrase($this->changeSet,
-                                                         'update_information',
+                                                         $activityType->getActivityPhrase(),
                                                          'EsMember');
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
                    ->createAcitivityLog($activityType, $phrase, $entity);
