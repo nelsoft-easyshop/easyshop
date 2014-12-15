@@ -4,9 +4,9 @@
 
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
-<div class="container-non-responsive bg-product-section">
+<div class="container bg-product-section">
     <div class="row row-products">
-        <div class="col-xs-3 no-padding col-left-wing">
+        <div class="col-md-3 no-padding col-left-wing">
             <div class="left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-9 col-products">
+        <div class="col-md-9 col-products">
             <div class="div-products">
                 <div class="div-product-view-option">
                     <table class="p-view color-default pull-left">
