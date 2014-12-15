@@ -19,7 +19,7 @@
                 $catObj = $objProduct->getCat();
                 $immediateCat = $catObj->getIdCat() === 1 ? html_escape($objProduct->getCatOtherName()) : html_escape($catObj->getName());
             ?>
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 thumb">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 thumb">
                     <div class="panel-item">
                         <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                             <div class="div-item">
