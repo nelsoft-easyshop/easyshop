@@ -303,7 +303,7 @@ class EsMember
     /**
      *  @var string
      */
-    const DEFAULT_ACTIVE = 0;    
+    const DEFAULT_ACTIVE = 1;
 
     /**
      * @var \Doctrine\Common\Collections\Collection

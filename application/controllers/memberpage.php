@@ -1542,6 +1542,67 @@ class Memberpage extends MY_Controller
     }
 
 
+
+    /**
+     * Request first sales page
+     * @return json
+     */
+    public function requestSalesPage()
+    {
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+
+        $memberId = $this->session->userdata('member_id');
+        $salesPerPage = $this->salesPerPage;
+
+        $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                EsOrderProductStatus::FORWARD_SELLER,
+                                                                $salesPerPage);
+        $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::FORWARD_SELLER);
+        $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::FORWARD_SELLER);
+
+        $paginationData['isHyperLink'] = false;
+        $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
+        $currentSalesViewData  = [
+            'sales' => $currentSales,
+            'type' => EsOrderProductStatus::FORWARD_SELLER,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
+
+        $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                        EsOrderProductStatus::PAID_FORWARDED,
+                                                                        $salesPerPage);
+        $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::PAID_FORWARDED);
+        $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::PAID_FORWARDED);
+        $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
+        $historySalesViewData = [
+            'sales' => $historySales,
+            'type' => EsOrderProductStatus::PAID_FORWARDED,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
+
+        $salesViewData = [
+            'currentSales' => $currentSalesView,
+            'currentTotalSales' => $currentTotalSales,
+            'historySales' => $historySalesView,
+            'historyTotalSales' => $historyTotalSales,
+        ];
+        $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+
+        $returnArray = [
+            'salesView' => $salesView,
+            'currentSales' => $currentSalesView,
+            'historySales' => $historySalesView,
+        ];
+
+        echo json_encode($returnArray);
+    }
+
     /**
      * update product is_delete to 1 
      * @return json
@@ -2014,6 +2075,39 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
     
+    /**
+     * Gets Delivery Address
+     *
+     * @return JSON
+     */
+    public function getDeliveryAddress()
+    {
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');        
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+
+        if($memberId){
+            $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
+            $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
+            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
+
+            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
+            $response = [
+                "address" => $address["address"],
+                "cities" =>  $locationLookup["json_city"],
+                "consigneeCityLookup" =>  $consigneeCityLookup,
+                "cityLookup" =>  $locationLookup["cityLookup"],
+                "stateRegionLists" => $locationLookup["stateRegionLookup"],
+                "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                "consigneeStateRegionId" => $stateregionID,
+                "consigneeCityId" =>  ($address["address"] !== null && (int) $address["city"] !== 0) ? $address["city"] : 0
+            ];
+
+        }
+        echo json_encode($response);
+    }
+
     /**
      * Gets the store settings
      *
