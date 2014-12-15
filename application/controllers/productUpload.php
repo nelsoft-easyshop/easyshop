@@ -682,10 +682,8 @@ class productUpload extends MY_Controller
             $otherBrand = '';
         } 
         
-        if($isNotSavingAsDraft){
-            if (!in_array($product_condition, $this->lang->line('product_condition'))){
-                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
-            }
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         if($isNotSavingAsDraft){
@@ -903,6 +901,10 @@ class productUpload extends MY_Controller
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         // Loading Combinations
