@@ -16,14 +16,19 @@ class Register extends MY_Controller
     }
 
     public function index()
-    {
+    {    
         $url = 'landingpage';
-        $is_promo = FALSE;
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== FALSE) {
+        $is_promo = false;
+        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
             $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
             $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = TRUE;
-         }
+            $is_promo = true;
+        }
+        else{
+            if($this->session->userdata('usersession')){
+                redirect('/?view=basic');
+            }
+        }
         $headerData = [
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
@@ -72,11 +77,12 @@ class Register extends MY_Controller
                                    ->encode($registrationResult["member"]->getEmail().'|'.$registrationResult["member"]->getUserName().'|'.$emailCode),
                     'site_url' => site_url('register/email_verification')
                 ];
+                $imageArray = $this->config->config['images'];                
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
                 $this->emailNotification->setRecipient($registrationResult["member"]->getEmail());
                 $this->emailNotification->setSubject($this->lang->line('registration_subject'));
-                $this->emailNotification->setMessage($message);
+                $this->emailNotification->setMessage($message, $imageArray);
                 $emailResult = (bool) $this->emailNotification->sendMail();
                 $hashUtility = $this->serviceContainer['hash_utility'];
                 $data = [

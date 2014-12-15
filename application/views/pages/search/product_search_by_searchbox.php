@@ -32,18 +32,18 @@
                         <div class="left_attribute">
                             <?php if($productCount > 0): ?>
                                 <h3>Price</h3>
-                                <input type="text" id="price1" class="priceField" value="<?= html_escape(($this->input->get('startprice')?$this->input->get('startprice'):'')); ?>" maxlength=9 size=6>
+                                <input type="text" id="price1" class="priceField" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength=9 size=6>
                                 to
-                                <input type="text" id="price2" class="priceField" value="<?= html_escape(($this->input->get('startprice')?$this->input->get('endprice'):'')) ?>" maxlength=9 size=6> 
+                                <input type="text" id="price2" class="priceField" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength=9 size=6> 
                                 <input class="price" type="button" value=">>"/>
 
                                 <?php foreach ($attributes as $attrName => $attrListValue):?>
                                 <h3><?= html_escape($attrName); ?></h3>
                                     <ul>
-                                    <?php foreach ($attrListValue as $key => $value):?>
+                                    <?php foreach ($attrListValue as $value):?>
                                         <li style="border:0px">
                                             <a class="cbx" data-head="<?= html_escape(strtolower($attrName))?>" data-value="<?= html_escape(strtolower($value)); ?>" >
-                                                <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
+                                                <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                                                 <label for="cbx"><?= html_escape(ucfirst($value));?></label>
                                             </a>
                                         </li>
@@ -70,7 +70,7 @@
 
                                 <div id="product_content">
                                     <?php 
-                                    foreach ($products as $key => $value):
+                                    foreach ($products as $value):
                                         $productEntity = $value;
                                         $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
@@ -165,7 +165,7 @@
                     <br/>
                     <div id="paste-product">
                         <?php if($productCount > 0): ?>
-                            <?php foreach ($products as $key => $value): ?>
+                            <?php foreach ($products as $value): ?>
                             <?php
                                 $productEntity = $value;
                                 $productName = html_escape($productEntity->getName());
@@ -263,18 +263,18 @@
                 </div>
                 <div class="modal-body no-border">
                     <h3 class="h3-filter-price">Price</h3>
-                    <input type="text" id="rprice1" class="priceField" value="<?=( html_escape($this->input->get('startprice')?$this->input->get('startprice'):''))?>" maxlength=9 size=6>
+                    <input type="text" id="rprice1" class="priceField" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength=9 size=6>
                     to
-                    <input type="text" id="rprice2" class="priceField" value="<?=( html_escape($this->input->get('startprice')?$this->input->get('endprice'):'')) ?>" maxlength=9 size=6> 
+                    <input type="text" id="rprice2" class="priceField" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength=9 size=6> 
                     <input class="rprice" type="button" value=">>"/>
                     <?php if($productCount > 0): ?>
                         <?php foreach ($attributes as $attrName => $attrListValue):?>
-                         <h3 class="title h3-filter"><?= html_escape($attrName); ?></h3> 
+                         <h3 class="title h3-filter"><?=html_escape($attrName); ?></h3> 
                         <ul class="list-unstyled"> 
-                            <?php foreach ($attrListValue as $key => $value):?>
+                            <?php foreach ($attrListValue as $value):?>
                             <li>
                                 <a class="cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)) ?>" >
-                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
+                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName)); ?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                                     <label class="cbx-label" for="cbx"><?= html_escape(ucfirst($value));?></label>
                                 </a>
                             </li>

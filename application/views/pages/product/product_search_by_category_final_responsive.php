@@ -18,7 +18,7 @@
                         <div class="prod_cat_nav" id="prod_drop_nav">
                             <div id="cat_nav"class="category_nav">
                                 <ul>
-                                <?php foreach($parentCategory as $catKey => $catValue): ?>
+                                <?php foreach($parentCategory as $catValue): ?>
                                     <li class="<?=($catValue->getIdCat() == $breadcrumbs[0]['idCat'])?'active':'';?>">
                                         <a href="/category/<?=$catValue->getSlug();?>">
                                             <?=html_escape($catValue->getName());?>
@@ -51,19 +51,19 @@
             <div class="col-md-2 row-main row-left">
                 <div class="left_attribute"> 
                     <h3>Price</h3>
-                    <input type="text" id="price1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
+                    <input type="text" id="price1" class="priceField" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength=9 size=6>
                     to
-                    <input type="text" id="price2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
+                    <input type="text" id="price2" class="priceField" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength=9 size=6> 
                     <input class="price" type="button" value=">>"/>
 
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                    <h3><?=$attrName?></h3>
+                    <h3><?=html_escape($attrName)?></h3>
                         <ul>
-                        <?php foreach ($attrListValue as $key => $value):?>
+                        <?php foreach ($attrListValue as $value):?>
                             <li style="border:0px">
-                                <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <label for="cbx"><?=ucfirst($value);?></label>
+                                <a class="cbx" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
+                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                    <label for="cbx"><?=ucfirst(html_escape($value));?></label>
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -121,7 +121,7 @@
                 <div id="product_content" class="margin-left-42">
                     <?php if(count($products) > 0): ?>
                         <?php 
-                        foreach ($products as $key => $value):
+                        foreach ($products as $value):
                             $productEntity = $value;
                             $productName = html_escape($productEntity->getName());
                             $productSlug = $productEntity->getSlug();
@@ -223,7 +223,7 @@
                 </div>
                 <div id="paste-product">
                     <?php if(count($products) > 0): ?>
-                        <?php foreach ($products as $key => $value): ?>
+                        <?php foreach ($products as $value): ?>
                         <?php
                             $productEntity = $value;
                             $productName = html_escape($productEntity->getName());
@@ -350,20 +350,20 @@
             </div>
             <div class="modal-body no-border">
                 <h3 class="h3-filter-price">Price</h3>
-                <input type="text" id="rprice1" class="priceField" placeholder="Min" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
+                <input type="text" id="rprice1" class="priceField" placeholder="Min" value="<?=isset($getParameter['startprice']) ? $getParameter['startprice'] : '' ?>" maxlength=9 size=6>
                 to
-                <input type="text" id="rprice2" class="priceField" placeholder="Max" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
+                <input type="text" id="rprice2" class="priceField" placeholder="Max" value="<?=isset($getParameter['endprice']) ? $getParameter['endprice'] : '' ?>" maxlength=9 size=6> 
                 <input class="rprice" type="button" value=">>"/>
 
                 <?php if(count($products) > 0): ?>
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                        <h3 class="title h3-filter"><?=$attrName?></h3> 
+                        <h3 class="title h3-filter"><?=html_escape($attrName)?></h3> 
                         <ul class="list-unstyled">
-                            <?php foreach ($attrListValue as $key => $value):?>
+                            <?php foreach ($attrListValue as $value):?>
                                 <li>
-                                    <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                        <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
+                                    <a class="cbx" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
+                                        <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower(html_escape($attrName))?>" data-value="<?=strtolower(html_escape($value))?>" >
+                                        <label class="cbx-label" for="cbx"><?=ucfirst(html_escape($value));?></label>
                                     </a>
                                 </li>
                             <?php endforeach; ?>
