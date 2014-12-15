@@ -10,9 +10,7 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                // 'dbd'=>'Direct Bank Deposit',
                 'cod'=>'Cash on Delivery',
-                //'pesopaycdb'=>'Credit or Debit Card'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => true,
@@ -27,7 +25,9 @@ $config = [
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
                 'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal'
+                'paypal'=>'Paypal',
+                'dragonpay'=>'Dragon Pay',
+                'cod'=>'Cash on Delivery',
             ],
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
