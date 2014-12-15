@@ -833,7 +833,8 @@ class Memberpage extends MY_Controller
                         $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
                         $parseData['store_link'] = base_url() . $parseData['user_slug'];
                         $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                                 ->getSocialMediaLinks();
                         $parseData['facebook'] = $socialMediaLinks["facebook"];
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
 
@@ -1007,7 +1008,8 @@ class Memberpage extends MY_Controller
                         $imageArray = $this->config->config['images'];
 
                         $parseData = $postData;
-                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                                 ->getSocialMediaLinks();
                         $parseData = array_merge($parseData, [
                             "seller" => $memberEntity->getUsername(),
                             "store_link" => base_url() . $memberEntity->getSlug(),

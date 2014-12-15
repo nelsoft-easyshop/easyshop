@@ -208,7 +208,8 @@ class SocialMediaController extends MY_Controller
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
                                       ->findOneBy(['email' => $this->input->post('email')]);
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         if ($member) {
             $result = true;
             $this->load->library('parser');

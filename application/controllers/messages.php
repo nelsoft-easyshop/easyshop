@@ -116,7 +116,8 @@ class messages extends MY_Controller
                 $imageArray[] = "/assets/images/appbar.home.png";
                 $imageArray[] = "/assets/images/appbar.message.png";
 
-                $socialMediaLinks = $this->getSocialMediaLinks();
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();
                 $parseData = array(
                     'user' => $memberEntity->getUsername()
                     , 'recipient' => $qResult['username']
