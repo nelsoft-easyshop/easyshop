@@ -50,7 +50,7 @@ class Memberpage extends MY_Controller
      *
      * @var integer
      */
-    public $transactionRowCount = 1;
+    public $transactionRowCount = 10;
 
     /**
      *  Class Constructor
