@@ -1952,4 +1952,104 @@ td.td-view.p-view2.color-default{
     
 }
 
+/** Responsive vendor style **/
+@media only screen and (max-width : 979px) { 
+    .col-left-wing{
+        display: none;
+    }
+    
+    .div-products{
+        margin-left: 0px;
+        border: 0px;
+        padding-left: 0px;
+        padding-top: 10px;
+        min-height: 715px !important;
+    }
+    
+    .row-items{
+        padding-left: 0px;
+        padding: 0px 15px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
+        height: 253px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
+        height: 140px !important;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item{
+        height: 140px !important;
+    }
+    
+    .vendor-select-con{
+        margin-top: -40px;
+    }
+    
+    .form-select-default{
+        width: 132px;
+        margin-right: 0px;
+        font-size: 10px;
+    }
+    
+    .div-product-view-option{
+        margin-left: 0px;
+    }
+    
+    .icon-view{
+        margin-left: 5px;
+        margin-right: 0px;
+        font-size: 18px !important;
+    }
+    
+    .p-view2{
+        font-size: 12px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name > a{
+        font-size: 13px;
+    }
+}
+@media only screen and (max-width : 768px) { 
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
+        height: 253px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
+        height: 140px !important;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item{
+        height: 140px !important;
+    }
+    
+    .vendor-select-con{
+        margin-top: -40px;
+    }
+    
+    .form-select-default{
+        width: 132px;
+        margin-right: 0px;
+        font-size: 10px;
+    }
+    
+    .div-product-view-option{
+        margin-left: 0px;
+    }
+    
+    .icon-view{
+        margin-left: 5px;
+        margin-right: 0px;
+        font-size: 18px !important;
+    }
+    
+    .p-view2{
+        font-size: 12px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name > a{
+        font-size: 13px;
+    }
+}
 
