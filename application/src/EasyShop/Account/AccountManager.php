@@ -240,7 +240,7 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-            $member->setStoreColor($defaultStoreColor); 
+            $member->setStoreColor($storeColor); 
             $this->em->persist($member);
             $this->em->flush();
         }
