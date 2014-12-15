@@ -32,11 +32,11 @@ class Home extends MY_Controller
     public function index() 
     {
         $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $headerData = array(
+        $headerData = [
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
-        );
+        ];
 
         if( $this->session->userdata('member_id') && $view !== 'basic'){
             $bodyData = $this->getFeed();   
@@ -46,12 +46,12 @@ class Home extends MY_Controller
             $this->load->spark('decorator');  
             $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
             $this->load->view("templates/home_layout/layoutF",$bodyData);
-            $this->load->view('templates/footer', array('minborder' => true));
+            $this->load->view('templates/footer', ['minborder' => true]);
         }
         else{
             $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
             $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = array();
+            $homeContent['slider'] = [];
             foreach($sliderSection as $slide){
                 $sliderView = $this->load->view($slide['template'],$slide, true);
                 array_push($homeContent['slider'], $sliderView);
