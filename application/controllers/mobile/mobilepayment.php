@@ -136,13 +136,14 @@ class mobilePayment extends MY_Controller
                       : [];
 
         $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
-        $cartData = !empty(unserialize($this->member->getUserdata())) 
-                    ? unserialize($this->member->getUserdata()) 
+        $memberCartData = unserialize($this->member->getUserdata());
+        $cartData = empty($memberCartData) === false
+                    ? $memberCartData 
                     : [];
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
             $errorMessage = "You have no item in you cart";
-            if(!empty($cartData)){
+            if(empty($memberCartData) === false){
                 unset($cartData['total_items'],$cartData['cart_total']);
                 $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
                 $canContinue = $dataCollection['canContinue'];
