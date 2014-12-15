@@ -16,20 +16,25 @@ class Register extends MY_Controller
     }
 
     public function index()
-    {
+    {    
         $url = 'landingpage';
-        $is_promo = FALSE;
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== FALSE) {
+        $is_promo = false;
+        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
             $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
             $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = TRUE;
-         }
-        $data = array(
+            $is_promo = true;
+        }
+        else{
+            if($this->session->userdata('usersession')){
+                redirect('/?view=basic');
+            }
+        }
+        $data = [
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
             'redirect_url' => $url,
             'is_promo' =>$is_promo
-        );
+        ];
         $socialMediaLinks = $this->getSocialMediaLinks();
         $data['facebook'] = $socialMediaLinks["facebook"];
         $data['twitter'] = $socialMediaLinks["twitter"];        
