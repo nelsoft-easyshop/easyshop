@@ -2013,15 +2013,15 @@ td.td-view.p-view2.color-default{
 }
 @media only screen and (max-width : 768px) { 
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
-        height: 253px;
+        height: 227px;
     }
     
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
-        height: 140px !important;
+        height: 125px !important;
     }
     
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item{
-        height: 140px !important;
+        height: 125px !important;
     }
     
     .vendor-select-con{
@@ -2050,6 +2050,10 @@ td.td-view.p-view2.color-default{
     
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name > a{
         font-size: 13px;
+    }
+    
+    .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name{
+        margin-top: 3px;
     }
 }
 
