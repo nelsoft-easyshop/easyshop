@@ -86,6 +86,7 @@ class product_search extends MY_Controller {
         $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, false);
         $response['locatioList'] = $EsLocationLookupRepository->getLocation();
         $response['defaultCondition'] = $this->lang->line('product_condition');
+        $response['getParameter'] = $this->input->get();
 
         $data = array(
             'title' => 'Easyshop.com - Advanced Search',
