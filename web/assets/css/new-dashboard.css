@@ -588,9 +588,12 @@ a{
     cursor: pointer;
     border: 2px solid #565656;
     border-radius: 4px;
-    display: inline-block;
+    display: block !important;
     margin: 12px 4px 35px;
+    max-width: 200px;
     padding: 4px;
+    text-align: center;
+    width: auto !important;
 }
 
 .div-meta-description .shipment-detail-button:hover {
@@ -2968,6 +2971,11 @@ label.css-label {
 }
 
 @media screen and (max-width: 767px) {
+    .item-list-panel .div-meta-description .strong-label {
+         display: inline-block;
+         width: 88px;
+    }
+
     .bank-account-item {
         padding: 10px;
     }
@@ -3103,6 +3111,10 @@ label.css-label {
 
     .feedback-content {
         padding: 0 15px;
+    }
+
+    .status-class {
+        font-size: 10px;
     }
 
     .bank-account-item-btns .delete-account-btn span,
