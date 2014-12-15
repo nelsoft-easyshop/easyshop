@@ -1475,7 +1475,7 @@ class Payment extends MY_Controller{
 
         // Send email to seller of each product - once per seller
         if($sellerFlag){
-            $sellerData = array(
+            $sellerData = [
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
@@ -1485,7 +1485,7 @@ class Payment extends MY_Controller{
                 'payment_method_name' => $transactionData['payment_method_name'],
                 'facebook' => $socialMediaLinks["facebook"],
                 'twitter' => $socialMediaLinks["twitter"]
-            );
+            ];
 
             foreach($transactionData['seller'] as $seller_id => $seller){
                 $sellerEmail = $seller['email'];

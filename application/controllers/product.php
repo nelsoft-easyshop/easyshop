@@ -430,7 +430,7 @@ class product extends MY_Controller
             'metadescription' => 'Get the best price offers for the day at Easyshop.ph.',
         ];
         
-        $banner_data = array();
+        $banner_data = [];
         $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
