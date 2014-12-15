@@ -1681,7 +1681,12 @@ class Memberpage extends MY_Controller
         }
         switch ($requestType) {
             case 'ongoing-bought':
-                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $ongoingBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           true,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1699,7 +1704,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
                 break;
             case 'ongoing-sold':
-                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $ongoingSoldTransactionsCount = $this->transactionManager
+                                                     ->getSoldTransactionCount(
+                                                         $memberId,
+                                                         true,
+                                                         $paymentMethod
+                                                     );
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1717,7 +1727,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
                 break;
             case 'complete-bought':
-                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $completeBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           false,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
                     'transaction' => $this->transactionManager
@@ -1735,7 +1750,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
                 break;
             case 'complete-sold':
-                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $completeSoldTransactionsCount = $this->transactionManager
+                                                      ->getSoldTransactionCount(
+                                                          $memberId,
+                                                          false,
+                                                          $paymentMethod
+                                                      );
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
@@ -1776,8 +1796,6 @@ class Memberpage extends MY_Controller
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
-        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
-        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
 
         $headerData = $this->fill_header();
         $memberId = $this->session->userdata('member_id');
@@ -1787,13 +1805,6 @@ class Memberpage extends MY_Controller
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($memberId);
         if($member){
-            $address = $esAddressRepo->findOneBy([
-                                        'idMember' => $memberId,
-                                        'type' => EsAddress::TYPE_DELIVERY
-                                    ]);
-            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-            $stateRegionId = ($address && $address->getStateregion()) ? $address->getStateregion()->getIdLocation() : 0;
-            $cityId = ($address && $address->getCity()) ? $address->getCity()->getIdLocation() : 0;
 
             $paginationData['isHyperLink'] = false;
 
@@ -1819,92 +1830,22 @@ class Memberpage extends MY_Controller
             $deleteConditions = [EsProduct::DELETE];
             $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
             $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            $userDeletedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions); 
-            $paginationData['lastPage'] = ceil($userDeletedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
-            $deletedProductsData = [
-                'products' => $userDeletedProducts,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $deletedProductView = $this->load->view('partials/dashboard-products', $deletedProductsData, true);
             
             $deleteConditions = [EsProduct::ACTIVE];
             $draftConditions = [EsProduct::DRAFT];
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            $userDraftedProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
-            $paginationData['lastPage'] = ceil($userDraftedProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
-            $draftedProductsData = [
-                'products' => $userDraftedProducts,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $draftedProductView = $this->load->view('partials/dashboard-products', $draftedProductsData, true);
             
             $profilePercentage = $userManager->getProfileCompletePercent($member);  
             $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
 
             $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
             $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
-            $feedbacks = $esMemberFeedbackRepo->getUserFeedbackByType($memberId,
-                                                                      EsMemberFeedback::TYPE_ALL,
-                                                                      $feedbackLimit);
-            // add user image on each feedback
-           foreach ($feedbacks as $key => $feedback) {
-                $feedbacks[$key]['revieweeAvatarImage'] = $userManager->getUserImage($feedback['revieweeId'], "small");
-                $feedbacks[$key]['reviewerAvatarImage'] = $userManager->getUserImage($feedback['reviewerId'], "small");
-            }
-            $paginationData['lastPage'] = ceil($feedBackTotalCount / $feedbackLimit);
-            $feedbacksData = [
-                'feedbacks' => $feedbacks,
-                'memberId' => $memberId,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
+            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
 
-            $feedBackView = $this->load->view('partials/dashboard-feedback', $feedbacksData, true);
-            $allFeedBackViewData['feedBackView'] = $feedBackView;
-            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', $allFeedBackViewData, true);
-
-            $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
-                                                                            EsOrderProductStatus::FORWARD_SELLER,
-                                                                            $salesPerPage);
-            $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
-                                                                                    EsOrderProductStatus::FORWARD_SELLER);
-            $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
-                                                                                      EsOrderProductStatus::FORWARD_SELLER);
-            $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
-            $currentSalesViewData  = [
-                'sales' => $currentSales,
-                'type' => EsOrderProductStatus::FORWARD_SELLER,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
-
-            $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
-                                                                            EsOrderProductStatus::PAID_FORWARDED,
-                                                                            $salesPerPage);
-            $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
-                                                                                    EsOrderProductStatus::PAID_FORWARDED);
-            $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
-                                                                                      EsOrderProductStatus::PAID_FORWARDED);
-            $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
-            $historySalesViewData = [
-                'sales' => $historySales,
-                'type' => EsOrderProductStatus::PAID_FORWARDED,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
-
-            $salesViewData = [
-                'currentSales' => $currentSalesView,
-                'currentTotalSales' => $currentTotalSales,
-                'historySales' => $historySalesView,
-                'historyTotalSales' => $historyTotalSales,
-            ];
-            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
             $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
             $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
             $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
             $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
-
-            $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);            
             $member->validatedStoreName = $member->getStoreName();
 
             $dashboardHomeData = [
@@ -1912,12 +1853,6 @@ class Memberpage extends MY_Controller
                 'avatarImage' => $userAvatarImage,
                 'bannerImage' => $userBannerImage,
                 'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                'stateRegionLists' => $locationLookup["stateRegionLookup"],
-                'cities' => $locationLookup["json_city"],
-                'cityLookup' => $locationLookup["cityLookup"],
-                'address' => $address,
-                'consigneeStateRegionId' => $stateRegionId,
-                'consigneeCityId' => $cityId,
                 'followerCount' => $userFollowers['count'],
                 'followingCount' => $userFollowing['count'],
                 'productCount' => $userProductCount,
@@ -1926,13 +1861,10 @@ class Memberpage extends MY_Controller
                 'draftedProductCount' => $userDraftedProductCount,
                 'soldProductCount' => $userSoldProductCount,
                 'activeProductView' => $activeProductView,
-                'deletedProductView' => $deletedProductView,
-                'draftedProductView' => $draftedProductView,
                 'memberRating' => $memberRating,
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
-                'salesView' => $salesView,
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
@@ -1959,6 +1891,66 @@ class Memberpage extends MY_Controller
         else{
             redirect('/login', 'refresh');
         }
+    }
+
+    /**
+     * Request first sales page
+     * @return json
+     */
+    public function requestSalesPage()
+    {
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+
+        $memberId = $this->session->userdata('member_id');
+        $salesPerPage = $this->salesPerPage;
+
+        $currentSales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                EsOrderProductStatus::FORWARD_SELLER,
+                                                                $salesPerPage);
+        $currentTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::FORWARD_SELLER);
+        $currentSalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::FORWARD_SELLER);
+
+        $paginationData['isHyperLink'] = false;
+        $paginationData['lastPage'] = ceil($currentSalesCount / $salesPerPage);
+        $currentSalesViewData  = [
+            'sales' => $currentSales,
+            'type' => EsOrderProductStatus::FORWARD_SELLER,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $currentSalesView = $this->load->view('partials/dashboard-sales', $currentSalesViewData, true);
+
+        $historySales = $esOrderProductRepo->getOrderProductTransaction($memberId,
+                                                                        EsOrderProductStatus::PAID_FORWARDED,
+                                                                        $salesPerPage);
+        $historyTotalSales = $esOrderProductRepo->getSumOrderProductTransaction($memberId,
+                                                                                EsOrderProductStatus::PAID_FORWARDED);
+        $historySalesCount = $esOrderProductRepo->getCountOrderProductTransaction($memberId,
+                                                                                  EsOrderProductStatus::PAID_FORWARDED);
+        $paginationData['lastPage'] = ceil($historySalesCount / $salesPerPage);
+        $historySalesViewData = [
+            'sales' => $historySales,
+            'type' => EsOrderProductStatus::PAID_FORWARDED,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $historySalesView = $this->load->view('partials/dashboard-sales', $historySalesViewData, true);
+
+        $salesViewData = [
+            'currentSales' => $currentSalesView,
+            'currentTotalSales' => $currentTotalSales,
+            'historySales' => $historySalesView,
+            'historyTotalSales' => $historyTotalSales,
+        ];
+        $salesView = $this->load->view('pages/user/dashboard/dashboard-sales', $salesViewData, true);
+
+        $returnArray = [
+            'salesView' => $salesView,
+            'currentSales' => $currentSalesView,
+            'historySales' => $historySalesView,
+        ];
+
+        echo json_encode($returnArray);
     }
 
     /**
@@ -2043,12 +2035,14 @@ class Memberpage extends MY_Controller
                     'hash' => $this->encrypt->encode($member['member']->getIdMember()),
                     'site_url' => site_url('memberpage/showActivateAccount')
                 );        
-
+                $imageArray = $this->config->config['images'];
+                $imageArray[] = "/assets/images/appbar.home.png";
+                $imageArray[] = "/assets/images/appbar.message.png";
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
                 $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
-                $this->emailNotification->setMessage($message);
+                $this->emailNotification->setMessage($message,$imageArray);
                 $this->emailNotification->sendMail();
                 $this->em->getRepository('EasyShop\Entities\EsMember')
                          ->accountActivation($member['member'], false);
@@ -2442,6 +2436,39 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
     
+    /**
+     * Gets Delivery Address
+     *
+     * @return JSON
+     */
+    public function getDeliveryAddress()
+    {
+        $esAddressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+        $esLocationLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');        
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+
+        if($memberId){
+            $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
+            $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
+            $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
+
+            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
+            $response = [
+                "address" => $address["address"],
+                "cities" =>  $locationLookup["json_city"],
+                "consigneeCityLookup" =>  $consigneeCityLookup,
+                "cityLookup" =>  $locationLookup["cityLookup"],
+                "stateRegionLists" => $locationLookup["stateRegionLookup"],
+                "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                "consigneeStateRegionId" => $stateregionID,
+                "consigneeCityId" =>  ($address["address"] !== null && (int) $address["city"] !== 0) ? $address["city"] : 0
+            ];
+
+        }
+        echo json_encode($response);
+    }
+
     /**
      * Gets the store settings
      *

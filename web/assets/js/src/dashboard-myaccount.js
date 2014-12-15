@@ -228,6 +228,14 @@
     /**************** END GOOGLE MAPS ******************************/
 
     /************** Delivery Address ***************************/
+    $("#deliverAddressForm").on('change','#deliver_stateregion, #delivery_city',function (e) {
+        $("#errorsRegionDiv, #errorsCityDiv").css("display","none");
+
+    });
+    $("#deliverAddressForm").on('keyup','#consigneeMobile, #consigneeName, #deliveryAddress',function (e) {
+        $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+
+    });    
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
@@ -260,6 +268,20 @@
                     else {
                         $("#errorsDivMobile").css("display","none");                        
                     }
+                    if(typeof(obj.errors.region) !== "undefined") {
+                        $("#errorsRegionDiv").css("display","block");
+                        $("#errorTextRegion").text(obj.errors.region[0]);              
+                    }
+                    else {
+                        $("#errorsRegionDiv").css("display","none");                        
+                    }       
+                    if(typeof(obj.errors.city) !== "undefined") {
+                        $("#errorsCityDiv").css("display","block");
+                        $("#errorTextCity").text(obj.errors.city[0]);              
+                    }
+                    else {
+                        $("#errorsRegionDiv").css("display","none");                        
+                    }                                  
                     if( typeof(obj.errors.street_address) !== "undefined") {
                         $("#errorsDivStreetAddress").css("display","block");
                         $("#errorTextStreetAddress").text(obj.errors.street_address[0]);                   
@@ -278,7 +300,7 @@
                     $('#delivery-address-success').hide();
                 }
                 else {
-                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress, #errorsDivTelephone").css("display","none");
+                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress, #errorsDivTelephone, #errorsRegionDiv, #errorsCityDiv").css("display","none");
                     $('#delivery-address-success').fadeIn();
                     $('#delivery-address-error').hide();
                 }
@@ -301,7 +323,7 @@
     });
 
 
-    $('.address_dropdown, .disabled_country').chosen({width:'200px'});
+
     $('.stateregionselect').on('change', function(){
 
         var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
@@ -429,9 +451,7 @@
         var stateregionID = stateregionselect.find('option:selected').attr('value');
         var optionclone = cityselect.find('option.optionclone').clone();
         optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
-
         cityselect.find('option.echo').remove();
-        
         if(stateregionID in jsonCity){
             jQuery.each(jsonCity[stateregionID], function(k,v){
                 //optionclone.attr('value', k).html(v).show();

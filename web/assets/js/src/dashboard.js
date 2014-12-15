@@ -31,7 +31,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
-    
+    var isDeliveryAddressLoaded = false;
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -40,6 +40,55 @@
         $( ".ma-delivery" ).addClass( "selectedM" );
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
+        if(!isDeliveryAddressLoaded) {
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getDeliveryAddress',
+                success: function(data){ 
+                    var serverResponse = jQuery.parseJSON(data);
+                    jsonCity = jQuery.parseJSON(serverResponse.cities);
+                    var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
+                    var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
+                    var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
+                    var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
+                    $("#consigneeName").val(escapeHtml(consignee));
+                    $("#consigneeMobile").val(escapeHtml(mobile));
+                    $("#consigneeLandLine").val(escapeHtml(telephone));
+                    $("#deliveryAddress").val(escapeHtml(consigneeAddress));
+                    var consigneeStateRegion = serverResponse.consigneeStateRegionId;
+                    var stateRegionDropDown = $("#deliver_stateregion");
+                    var dropDownTemplate = "";
+                    $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
+                        dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                    });  
+                    stateRegionDropDown.append(dropDownTemplate);                         
+                    stateRegionDropDown.val(consigneeStateRegion);
+                    var cityDropDown = $("#delivery_city");
+                    dropDownTemplate = "";
+                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
+                        $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
+                            dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
+                        }); 
+                        cityDropDown.append(dropDownTemplate);                                                
+                    }
+                    cityDropDown.val(serverResponse.consigneeCityId);
+                    var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
+                    var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
+                    if(serverResponse.address && (parseInt(lat) !== 0 || parseInt(lng) !== 0 )) {
+                        $("#locationMarkedText").text("Location marked");
+                    }
+                    else {
+                        $("#locationMarkedText").text("Location not marked");
+                    }
+                    $("#map_clat, #temp_clat").val(lat);
+                    $("#map_clng, #temp_clng").val(lng);
+                    $('.address_dropdown, .disabled_country').chosen({width:'200px'});                                          
+                    $('.delivery-setup-loading').hide();
+                    $('#deliverAddressDiv').fadeIn();
+                }
+            });            
+        }
+        isDeliveryAddressLoaded = true;
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -206,14 +255,14 @@
         }, 500);
     });
 
-    $('.sales-title-total').click(function() {
+    $("#sales").on("click", ".sales-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.sales-breakdown-container').slideToggle();
         $('.payout-breakdown-container').slideUp();
         $('.payout-title-total').removeClass("active-bar");
     });
 
-    $('.payout-title-total').click(function() {
+    $("#sales").on("click", ".payout-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
@@ -235,6 +284,67 @@
 
     $( ".map-trigger" ).click(function() {
         $( ".map-container" ).slideToggle( "slow" );
+    });
+
+    $('.idTabs').idTabs({
+        click: function(id, all, container, settings){
+            var $button;
+            var $page = 1;
+            var $parentContainer;
+            var $textInput;
+            var $filterInput;
+            var $requestType;
+            var $container;
+            if(id == "#deleted-items" || id == "#draft-items"){ 
+                if(id == "#deleted-items"){
+                    $button = $("#button-deleted-item");
+                }
+                else if(id == "#draft-items"){
+                    $button = $("#button-draft-item");
+                }
+                if($button.hasClass('can-request')){
+                    $parentContainer = $(id);
+                    $textInput = $parentContainer.find('.search-field').val();
+                    $filterInput = $parentContainer.find('.search-filter').val();
+                    $requestType = $parentContainer.find('.request-type').val();
+                    $container = $parentContainer.find('.container-id').val();
+                    $button.removeClass('can-request');
+
+                    isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
+                }
+            }
+            else if(id == "#feedbacks"){
+                $button = $("#button-feedback");
+                if($button.hasClass('can-request')){
+                    $requestType = $("#select-feedback-filter").val();
+                    requestFeedback($page, $requestType);
+                    $button.removeClass('can-request');
+                }
+            }
+            else if(id == "#sales"){
+                $button = $("#button-sales");
+                if($button.hasClass('can-request')){
+                    var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $("#first-sales-request-url").val(),
+                        beforeSend: function(){ 
+                            $("#sales").html($('#hidden-paginate-loader').html());
+                        },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d); 
+                            $("#sales").html($response.salesView);
+                            $("#sales-1").html('<div id="page-1">'+$response.currentSales+'</div>');
+                            $("#sales-4").html('<div id="page-1">'+$response.historySales+'</div>');
+                            $( ".date-picker-sales" ).datepicker({
+                                changeMonth: true,
+                                changeYear: true
+                            });
+                        }
+                    });
+                    $button.removeClass('can-request');
+                }
+            }
+        }
     });
 
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
@@ -1290,8 +1400,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1300,8 +1412,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1310,8 +1424,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1320,8 +1436,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {
@@ -1345,7 +1463,7 @@
         var $container = $(this).data('method');
         var $page = 1;
 
-        getTransactionDetails($page, $container, $container);
+        getTransactionDetails($page, $container, $container, '', '');
     });
 
     var searchForTransaction = function ($requestType, $searchFor, $value, $container)
@@ -1369,14 +1487,16 @@
         });
     }
 
-    var getTransactionDetails = function ($page, $requestType, $container)
+    var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
     {
         $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
                 page : $page,
-                request : $requestType
+                request : $requestType,
+                value : $value,
+                searchFor : $searchFor
             },
             beforeSend: function(){
                 $("#" + $container).html($('#hidden-paginate-loader').html());
@@ -1441,7 +1561,7 @@
         });
         $this.html(buttonHtml);
     });
-        
+
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         $('.dash-mobile-trigger').removeClass("selectedM");

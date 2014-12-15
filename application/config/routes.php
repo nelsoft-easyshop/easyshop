@@ -115,6 +115,7 @@ else {
     $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
     $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
     $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
+    $route['(?i)me/sales'] = 'memberpage/requestSalesPage';
     $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
@@ -160,6 +161,7 @@ else {
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
@@ -176,7 +178,8 @@ else {
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
-
+    
+    $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 }
 
 /* End of file routes.php */

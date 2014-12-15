@@ -64,8 +64,8 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $getParameter = $this->input->get() ? $this->input->get() : array();
-            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+            $response['getParameter'] = $getParameter = $this->input->get() ? $this->input->get() : [];
+            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
 
@@ -81,16 +81,16 @@ class product extends MY_Controller
             $response['subCategoryList'] = $subCategoryList;
             $response['categorySlug'] = $categorySlug;
 
-            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
+            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false);
 
             $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
             $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
-                        'environment' => 'desktop'), TRUE );
+                        'environment' => 'desktop'), true );
 
             $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
                     array('parentCategory' =>  $response['parentCategory'],
-                        'environment' => 'mobile'), TRUE );
+                        'environment' => 'mobile'), true );
 
             $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getParentCategoryRecursive($categoryId);
@@ -278,6 +278,9 @@ class product extends MY_Controller
                 }
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
                 $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
+                if( $product->getIsDelete() ) {
+                    show_404();
+                }
             }
 
             $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);

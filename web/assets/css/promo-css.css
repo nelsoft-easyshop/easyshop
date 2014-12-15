@@ -1361,9 +1361,9 @@ a.link:hover { opacity: 0.9;  }
 	margin: 0; 
 }
 
-.load-animate {
-	opacity: 0;
-}
+/*.load-animate {
+	/*opacity: 0;
+*/
 
 ul.social-profiles li a { color: #7c7c7c; font-family: 'entypo'; opacity: 0.7; -webkit-transition:250ms ease-out; -moz-transition:250ms ease-out; transition:250ms ease-out; }
 ul.social-profiles li a:hover { opacity: 1; text-decoration: none; -webkit-transition:250ms ease-out; -moz-transition:250ms ease-out; transition:250ms ease-out; }
@@ -1520,6 +1520,7 @@ section.slideshow { margin-bottom: 30px;}
 .box-seller-name {
     height: 27px;
     line-height: 27px !important;
+    text-transform: uppercase;
 }
 
 .div-box-con {
@@ -1539,6 +1540,10 @@ section.slideshow { margin-bottom: 30px;}
     position: absolute;
     top: 10px;
     width: 55px;
+}
+
+.sold-out {
+    background-color: #F20000;
 }
 
 .price {
