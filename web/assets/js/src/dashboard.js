@@ -1279,7 +1279,7 @@
     $(document.body).on('click','.printTransactions', function() {
         var url = $(this).data("url");
         var isOngoing = $(this).data("isongoing");
-        var invoiceNo = $.trim($(this).closest(".search-transaction-num").val());
+        var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
         var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();
         var csrftoken = $("meta[name='csrf-token']").attr('content');                 
         $.ajax({
