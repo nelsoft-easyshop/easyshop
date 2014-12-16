@@ -1264,7 +1264,7 @@
         });
     });
 
-    $(document.body).on('click','.exportTransactions', function(){
+    $("#on-going-transaction, #completed-transaction").on('click','.exportTransactions', function(){
         var url = $(this).data("url");
         var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
         var isOngoing = $(this).data("isongoing");   
@@ -1272,11 +1272,7 @@
         document.location.href = url+"?invoiceNo="+invoiceNo+"&isOngoing="+isOngoing+"&paymentMethod="+paymentMethod;        
     });
 
-    $(document).ready(function(){
-        $("#transactions-trigger-li").trigger("click");
-        $(".trans-title").trigger("click");
-    });
-    $(document.body).on('click','.printTransactions', function() {
+    $("#on-going-transaction, #completed-transaction").on('click','.printTransactions', function() {
         var url = $(this).data("url");
         var isOngoing = $(this).data("isongoing");
         var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
