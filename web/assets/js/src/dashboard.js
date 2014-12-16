@@ -1266,7 +1266,7 @@
 
     $(document.body).on('click','.exportTransactions', function(){
         var url = $(this).data("url");
-        var invoiceNo = $(".search-transaction-num").val();   
+        var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
         var isOngoing = $(this).data("isongoing");   
         var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();                
         document.location.href = url+"?invoiceNo="+invoiceNo+"&isOngoing="+isOngoing+"&paymentMethod="+paymentMethod;        
