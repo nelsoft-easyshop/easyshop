@@ -586,21 +586,24 @@ class Memberpage extends MY_Controller
      */
     public function upload_img()
     {
-        $data = array(
+        $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-        );
+        ];
         $vendorLink = html_escape($this->input->post('url'));
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         
         $result = $this->memberpage_model->upload_img($uid, $data);
+        $image = $this->serviceContainer['user_manager']
+                       ->getUserImage($uid);
 
         $response = [
             'isSuccessful' => true,
+            'image' => $image,
         ];
         
         if(isset($result['error'])){

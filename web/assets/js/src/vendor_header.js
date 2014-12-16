@@ -318,7 +318,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                             if(xhrResponse.isSuccessful){
                                 var avatarImage = $('.vendor-profile-photo-wrapper').find('img');
                                 var currentImage = avatarImage.attr('src');
-                                avatarImage.attr('src',currentImage + '?timestamp=' + new Date().getTime() );
+                                avatarImage.attr('src',xhrResponse.image);
                                 $.modal.close();
                                 $('#banner-cancel-changes').trigger('click');
                             }
