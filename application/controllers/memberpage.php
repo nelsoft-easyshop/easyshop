@@ -460,7 +460,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
+                                                                                        true,
+                                                                                        0,
+                                                                                        10,
+                                                                                        $this->input->get("invoiceNo"));
 
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -512,7 +516,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
+                                                                                           true,
+                                                                                           0,
+                                                                                           10,
+                                                                                           $this->input->post("invoiceNo"));
         
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -568,7 +576,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
+                                                                                           true,
+                                                                                           0,
+                                                                                           10,
+                                                                                           $this->input->post("invoiceNo"));
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
@@ -588,7 +600,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
+                                                                                       true,
+                                                                                       0,
+                                                                                       10,
+                                                                                       $this->input->post("invoiceNo"));
 
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
