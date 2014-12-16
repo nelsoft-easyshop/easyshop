@@ -968,9 +968,15 @@ var previous,editSelectedValue,editSelectedId;
             $('.combination'+combinationcnt).append($('.select-control-panel-option').children().clone());
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
-                var selValue = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').text();
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option:contains('"+selValue+"')").prop('selected', true); 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option:contains('"+selValue+"')").attr('selected','selected');
+                var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
+                    return $(this).data('value') == selData;
+                }).attr('selected','selected');
+                
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
+                    return $(this).data('value') == selData;
+                }).prop('selected', true);
+
                 $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
             });
 
