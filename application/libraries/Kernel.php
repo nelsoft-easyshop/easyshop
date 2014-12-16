@@ -64,10 +64,27 @@ class Kernel
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
-        $container['entity_manager'] = function ($c) use ($dbConfig, $config){
+        $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
-
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
             return $em;
         };
 

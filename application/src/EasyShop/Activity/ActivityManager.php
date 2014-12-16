@@ -24,16 +24,14 @@ class ActivityManager
     /**
      * Construct phrase for activity log
      * @param  array  $modifiedArray
-     * @param  string $languangeLine
      * @param  string $entityLine
      * @return string
      */
-    public function constructActivityPhrase($modifiedArray, $languangeLine, $entityLine)
+    public function constructActivityPhrase($modifiedArray, $unParsePhrase, $entityLine)
     {   
         $returnString = "";
         $buildString = "";
         $buildStringArray = [];
-        $unParsePhrase = $this->languageLoader->getLine($languangeLine); 
         $entityLanguange = $this->languageLoader->getLine($entityLine);
         foreach ($modifiedArray as $key => $value) {
             $fieldLanguage = $entityLanguange[$key];
