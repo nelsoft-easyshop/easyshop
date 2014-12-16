@@ -1264,20 +1264,28 @@
         });
     });
 
-    $('#on-going-transaction').on('click','.exportTransactions', function(){
+    $(document.body).on('click','.exportTransactions', function(){
         var url = $(this).data("url");
-        var invoiceNo = $(".search-transaction-num").val();        
-        document.location.href = url+"?invoiceNo="+invoiceNo;        
+        var invoiceNo = $(".search-transaction-num").val();   
+        var isOngoing = $(this).data("isongoing");   
+        var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();                
+        document.location.href = url+"?invoiceNo="+invoiceNo+"&isOngoing="+isOngoing+"&paymentMethod="+paymentMethod;        
     });
 
-    $('#on-going-transaction').on('click','.printTransactions', function() {
+    $(document).ready(function(){
+        $("#transactions-trigger-li").trigger("click");
+        $(".trans-title").trigger("click");
+    });
+    $(document.body).on('click','.printTransactions', function() {
         var url = $(this).data("url");
-        var invoiceNo = $(".search-transaction-num").val();
+        var isOngoing = $(this).data("isongoing");
+        var invoiceNo = $.trim($(this).closest(".search-transaction-num").val());
+        var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();
         var csrftoken = $("meta[name='csrf-token']").attr('content');                 
         $.ajax({
             type: "post",
             url: url,
-            data: {invoiceNo : invoiceNo , 'csrfname': csrftoken},
+            data: {paymentMethod:paymentMethod, isOngoing:isOngoing, invoiceNo : invoiceNo , 'csrfname': csrftoken},
             dataType: 'html',
             success: function(json) {
                 var originalContents = $(document.body).html();
