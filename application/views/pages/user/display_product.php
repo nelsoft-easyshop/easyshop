@@ -122,7 +122,8 @@
                                     <?php echo $immediateCat?>
                                 </p>
                                 <div class="div-list-desc-container">
-                                    <?php echo $briefDesc;?>
+                                    
+                                    <?php echo html_escape((strlen($briefDesc)>75) ? substr_replace($briefDesc, "...", 75): $briefDesc) ;?>
                                 </div>
                                 <div class="actions-list">
                                     <div class="row">
