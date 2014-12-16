@@ -316,9 +316,14 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         },
                         success :function(xhrResponse) { 
                             if(xhrResponse.isSuccessful){
-                                var avatarImage = $('.vendor-profile-photo-wrapper').find('img');
-                                var currentImage = avatarImage.attr('src');
-                                avatarImage.attr('src',xhrResponse.image);
+                                if(formAction === 'banner_upload'){
+                                    var bannerImage = $('img.banner-image');
+                                    bannerImage.attr('src',xhrResponse.banner);
+                                }
+                                else if(formAction === 'upload_img'){
+                                    var avatarImage = $('img.avatar-image');
+                                    avatarImage.attr('src',xhrResponse.image);
+                                }
                                 $.modal.close();
                                 $('#banner-cancel-changes').trigger('click');
                             }

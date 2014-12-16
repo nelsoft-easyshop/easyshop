@@ -6,7 +6,7 @@
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg">
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -14,7 +14,7 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div class="vendor-profile-photo-wrapper">
-                                <img src="<?=$avatarImage?>" alt="Profile Photo">
+                                <img src="<?=$avatarImage?>" class="avatar-image" alt="Profile Photo">
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -113,7 +113,7 @@
                                 <div><a id="avatar_edit" href="javascript:void(0)">Upload Photo</a></div>
                                 <div><a id="avatar_remove" href="javascript:void(0)">Remove Photo</a></div>
                             </div>
-                            <img id="imageCropPreview" src="<?=$avatarImage?>" alt="Profile Photo">
+                            <img id="imageCropPreview" class="avatar-image" src="<?=$avatarImage?>" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
