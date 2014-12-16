@@ -1637,7 +1637,7 @@ td.td-view.p-view2.color-default{
     background: #ff3e1e;
     padding: 6px 0px;
     text-align: center !important;
-    margin-left:123px !important;
+    right: 0;
     margin-top:13px;
     font-size: 12px;
     width: 42px;
@@ -1767,7 +1767,9 @@ td.td-view.p-view2.color-default{
     background: #ff3d1f url("../images/img_arrow_down_white2.png") center no-repeat!important;
 }
 
-
+.actions-list{
+    display: none;
+}
 /* ----------------------------------------------------------------------------- */
 /* ------------------------------    FOOTER CSS   ------------------------------ */
 /* ----------------------------------------------------------------------------- */
@@ -2012,6 +2014,7 @@ td.td-view.p-view2.color-default{
     }
 }
 @media only screen and (max-width : 768px) { 
+
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
         height: 227px;
     }
@@ -2054,6 +2057,92 @@ td.td-view.p-view2.color-default{
     
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-item-name{
         margin-top: 3px;
+    }
+    
+    .list > .product-paging > .product-inner-container > .panel-list-item{
+        margin-left: 0px;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width : 500px) { 
+    .product-inner-container,
+    .product-paging{
+        min-height: 100px;
+    }
+    
+    .list > .product-paging > .product-inner-container > .panel-list-item{
+        margin-left: 0px;
+        width: 100%;
+        min-height: 110px;
+    }
+    
+    .td-list-price{
+        display: none;
+    }
+    
+    .td-list-image{
+        width: 30%;
+    }
+    
+    .span-space{
+        height: 108px !important;
+    }
+    
+    .td-list-item-info{
+        padding-top: 8px;
+        padding-right: 5px;
+        width: 70% !important;
+    }
+    
+    .p-list-item-name > a{
+        font-size: 13px;
+        margin-left: 5px;
+    }
+    
+    .p-list-item-category {
+        font-size: 10px;
+        line-height: 20px;
+        margin-top: -5px;
+         margin-left: 5px;
+    }
+    
+    .div-list-desc-container {
+        margin-left: 5px;
+        padding-top: 5px;
+        font-size: 10px;
+    }
+    
+    .actions-list{
+        display: inline-block;
+        width: 100%;
+    }
+    
+    .p-list-price-mobile{
+        display: inline-block;
+        font-size: 13px;
+        margin-left: 5px;
+    }
+    
+    .p-list-discount-mobile{
+        display: inline-block;
+        font-size: 10px;
+        margin-left: 5px;
+        margin-top: -10px;
+    }
+    
+    .btn-list-buy-now-mobile{
+        float: right !important;
+        margin-top: 4px !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+    }
+    
+    .span-discount-pin-list{
+        padding: 4px 0px;
+        margin-top: 5px;
+        font-size: 10px;
+        width: 30px
     }
 }
 
