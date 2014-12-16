@@ -1448,8 +1448,10 @@
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'transactionNumber';
+        var $page = 1;
+
         if (code === 13) {
-            searchForTransaction($container, $searchFor, $value, $container);
+            getTransactionDetails($page, $container, $container, $searchFor, $value);
         }
     });
 
@@ -1457,7 +1459,9 @@
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'paymentMethod';
-        searchForTransaction($container, $searchFor, $value, $container);
+        var $page = 1;
+
+        getTransactionDetails($page, $container, $container, $searchFor, $value);
     });
 
     $('#transactions').on('click', '.transaction-button-head', function() {
@@ -1466,27 +1470,6 @@
 
         getTransactionDetails($page, $container, $container, '', '');
     });
-
-    var searchForTransaction = function ($requestType, $searchFor, $value, $container)
-    {
-        $.ajax({
-            type: 'get',
-            url: 'memberpage/getTransactionsForPagination',
-            data: {
-                page : 1,
-                value : $value,
-                searchFor : $searchFor,
-                request : $requestType
-            },
-            beforeSend: function() {
-                $("#" + $container).empty();
-            },
-            success: function(requestResponse) {
-                var $response = $.parseJSON(requestResponse);
-                $("#" + $container).append($response.html);
-            }
-        });
-    }
 
     var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
     {
