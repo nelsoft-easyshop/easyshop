@@ -360,10 +360,12 @@ class Memberpage extends MY_Controller
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                        true,
+                                                                                        (bool)$this->input->get("isOngoing"),
                                                                                         0,
                                                                                         10,
-                                                                                        $this->input->get("invoiceNo"));
+                                                                                        $this->input->get("invoiceNo"),
+                                                                                        $this->input->get("paymentMethod")
+                                                                                        );
 
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -416,10 +418,12 @@ class Memberpage extends MY_Controller
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
-                                                                                           true,
-                                                                                           0,
-                                                                                           10,
-                                                                                           $this->input->post("invoiceNo"));
+                                                                                          (bool)$this->input->get("isOngoing"),
+                                                                                          0,
+                                                                                          10,
+                                                                                          $this->input->get("invoiceNo"),
+                                                                                          $this->input->get("paymentMethod"));
+
         
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -470,20 +474,20 @@ class Memberpage extends MY_Controller
      *  @return VIEW
      */
     public function printBuyTransactions()
-    {
-
+    {   
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
-                                                                                           true,
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'),
+                                                                                           (bool) $this->input->post("isOngoing"),
                                                                                            0,
                                                                                            10,
-                                                                                           $this->input->post("invoiceNo"));
+                                                                                           $this->input->post("invoiceNo"),
+                                                                                           $this->input->post("paymentMethod"));
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
+                $boughTransactions["transactions"][$key][] = ["attributes" => $attr];
             }
         }
 
@@ -500,15 +504,16 @@ class Memberpage extends MY_Controller
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                       true,
+                                                                                       (bool) $this->input->post("isOngoing"),
                                                                                        0,
                                                                                        10,
-                                                                                       $this->input->post("invoiceNo"));
+                                                                                       $this->input->post("invoiceNo"),
+                                                                                       $this->input->post("paymentMethod"));
 
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
-                    array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
+                    $soldTransaction["transactions"][$key][] = ["attributes" => $attr];                    
                 }
             }
            
