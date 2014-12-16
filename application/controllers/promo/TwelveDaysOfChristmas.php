@@ -25,7 +25,8 @@ class TwelveDaysOfChristmas extends MY_Controller
             'product' => $product,
             'featuredVendor' => $this->getFeaturedVendorData($dateTimeToday)
         ];
-        $this->load->view('/pages/web/christmas-promo', $promoData);
+
+        $this->load->view('/pages/promo/christmas-promo', $promoData);
     }
 
     /**

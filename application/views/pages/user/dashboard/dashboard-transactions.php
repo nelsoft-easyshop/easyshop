@@ -26,10 +26,10 @@
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
                             <div class="col-md-9 transaction-top-btns">
                                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
-                                <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions">
+                                <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions" data-isongoing = "1">
                                     <i class="icon-fax"></i> <span>Print</span>
                                 </button>
-                                <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions">
+                                <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions" data-isongoing = "1">
                                     <i class="icon-file"></i> <span>Export CSV</span>
                                 </button>
                             </div>
@@ -64,10 +64,10 @@
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
                             <div class="col-md-9 transaction-top-btns">
                                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
-                                <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions">
+                                <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions" data-isongoing = "1">
                                     <i class="icon-fax"></i> <span>Print</span>
                                 </button>
-                                <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportSellTransactions">
+                                <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportSellTransactions" data-isongoing = "1">
                                     <i class="icon-file"></i> <span>Export CSV</span>
                                 </button>
                             </div>
@@ -106,6 +106,12 @@
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
                         <div class="col-md-9 transaction-top-btns">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
+                            <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions" data-isongoing = "0">
+                                <i class="icon-fax"></i> <span>Print</span>
+                            </button>
+                            <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportBuyTransactions" data-isongoing = "0">
+                                <i class="icon-file"></i> <span>Export CSV</span>
+                            </button>                            
                         </div>
                         <div class="col-md-3 text-right">
                             <span>Payment Filter:</span>
@@ -138,6 +144,12 @@
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
                         <div class="col-md-9">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
+                            <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions" data-isongoing = "0">
+                                <i class="icon-fax"></i> <span>Print</span>
+                            </button>
+                            <button class="btn btn-default-3 exportTransactions" data-url="/memberpage/exportSellTransactions" data-isongoing = "0">
+                                <i class="icon-file"></i> <span>Export CSV</span>
+                            </button>                                 
                         </div>
                         <div class="col-md-3 text-right">
                             <span>Payment Filter:</span>
