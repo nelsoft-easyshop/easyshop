@@ -359,7 +359,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
+                                                                                        true,
+                                                                                        0,
+                                                                                        10,
+                                                                                        $this->input->get("invoiceNo"));
 
         foreach($soldTransaction["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -411,7 +415,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
+                                                                                           true,
+                                                                                           0,
+                                                                                           10,
+                                                                                           $this->input->post("invoiceNo"));
         
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -467,7 +475,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'));
+        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
+                                                                                           true,
+                                                                                           0,
+                                                                                           10,
+                                                                                           $this->input->post("invoiceNo"));
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
@@ -487,7 +499,11 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'));
+        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
+                                                                                       true,
+                                                                                       0,
+                                                                                       10,
+                                                                                       $this->input->post("invoiceNo"));
 
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
@@ -1681,7 +1697,12 @@ class Memberpage extends MY_Controller
         }
         switch ($requestType) {
             case 'ongoing-bought':
-                $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+                $ongoingBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           true,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1699,7 +1720,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-bought', $ongoingBoughtTransactionData, true);
                 break;
             case 'ongoing-sold':
-                $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+                $ongoingSoldTransactionsCount = $this->transactionManager
+                                                     ->getSoldTransactionCount(
+                                                         $memberId,
+                                                         true,
+                                                         $paymentMethod
+                                                     );
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
@@ -1717,7 +1743,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
                 break;
             case 'complete-bought':
-                $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+                $completeBoughtTransactionsCount = $this->transactionManager
+                                                       ->getBoughtTransactionCount(
+                                                           $memberId,
+                                                           false,
+                                                           $paymentMethod
+                                                       );
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
                     'transaction' => $this->transactionManager
@@ -1735,7 +1766,12 @@ class Memberpage extends MY_Controller
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-bought', $completeBoughtTransactionsData, true);
                 break;
             case 'complete-sold':
-                $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+                $completeSoldTransactionsCount = $this->transactionManager
+                                                      ->getSoldTransactionCount(
+                                                          $memberId,
+                                                          false,
+                                                          $paymentMethod
+                                                      );
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager

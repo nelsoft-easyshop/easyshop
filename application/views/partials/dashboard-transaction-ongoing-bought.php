@@ -1,4 +1,5 @@
 <div class="transaction-item">
+<?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $boughtTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
@@ -239,4 +240,10 @@
             <?=$pagination; ?>
         </center>
     </div>
+<?PHP else : ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>
+        There are no transactions for this category.
+    </div>
+<?PHP endif; ?>
 </div>
