@@ -88,12 +88,18 @@
                                     <input type="hidden" name="url" value="<?=$vendorLink?>">
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
-                                    <h1>Position and scale your photo</h1>
-                                    <div class="img-editor-container">
-                                        <img src="" id="user_image_prev">
+                                    <div class="avatar-modal-loading">
+                                        <img src="/assets/images/loading/preloader-whiteBG.gif"/>
                                     </div>
-                                    <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
-                                    <button class="btn btn-default-3">Apply</button>
+                                    
+                                    <div class="avatar-modal-content">
+                                        <h1>Position and scale your photo</h1>
+                                        <div class="img-editor-container">
+                                            <img src="" id="user_image_prev">
+                                        </div>
+                                        <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+                                        <button class="btn btn-default-3">Apply</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -184,4 +190,5 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
 <script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>

@@ -592,37 +592,23 @@ class Memberpage extends MY_Controller
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         );
-        $isVendor = $this->input->post('vendor') ? true : false;
         $vendorLink = html_escape($this->input->post('url'));
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         
-        //echo error may be here: $result['error']
         $result = $this->memberpage_model->upload_img($uid, $data);
+
+        $response = [
+            'isSuccessful' => true,
+        ];
         
-        if($isVendor){
-            $temp = $this->memberpage_model->get_member_by_id($uid);
+        if(isset($result['error'])){
+            $response['isSuccessful'] = false;
         }
 
-        if(isset($result['error'])){
-            echo "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
-            }
-            else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
-            }
-        }
-        else{
-            if($isVendor){
-                redirect($temp['userslug'] . "/" . $vendorLink);
-            }
-            else{
-                redirect('me');
-            }
-        }
+
+        echo json_encode($response);
     }
 
     /**
