@@ -74,7 +74,8 @@
                                 <?PHP if ($product->getIsDelete()) : ?>
                                     <div class="price"> &nbsp; </div>
                                 <?PHP else : ?>
-                                    <div class="timer">
+                                     <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                     <div class="timer">
                                         <table id="table-countdown" align="center">
                                             <tr>
                                                 <td class="td-time-num">
@@ -96,7 +97,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                   
                                 <?PHP endif; ?>
                             </div>
                         <?PHP else : ?>
