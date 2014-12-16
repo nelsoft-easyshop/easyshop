@@ -124,6 +124,22 @@
                                 <div class="div-list-desc-container">
                                     <?php echo $briefDesc;?>
                                 </div>
+                                <div class="actions-list">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <p class="p-list-price p-list-price-mobile"> P <?php echo $productPrice?> </p>
+                                            <div class="clear"></div>
+                                            <p class="p-list-discount p-list-discount-mobile">
+                                                <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
+                                            </p>
+                                        </div>
+                                        <div class="col-xs-6">
+                                             <a class="btn btn-default-1 btn-list-buy-now-mobile" target="_blank" href="/item/<?=$productSlug; ?>" >
+                                                <span class="fa icon-cart"></span> BUY NOW
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                             <td width="25%" class="td-list-price">
                                 <p class="p-list-price"> P <?php echo $productPrice?> </p>
