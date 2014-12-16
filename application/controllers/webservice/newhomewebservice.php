@@ -1214,13 +1214,9 @@ class NewHomeWebService extends MY_Controller
         $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);  
         if(array_key_exists((string)$template, $imageDimensionsConfig["templatesException"])) {
             $map = simplexml_load_file($this->tempHomefile);
-            foreach ($map->sliderSection->slide[$index]->image as $value) {
-                $newImageDirectory = ltrim ($value->path, '/');
-                $imageUtility->imageResize($newImageDirectory, $newImageDirectory, $imageDimensionsConfig["templatesException"]["$template"][0], false);  
-            }
+            $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["templatesException"]["$template"][0], false);              
             return;
         }
-
         if($subSliderCount >= $defaultTemplateSliderCount) {
             $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
             $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
