@@ -977,23 +977,12 @@ class NewHomeWebService extends MY_Controller
                 if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                     $this->cropImage($imgDirectory, $imgDimensions);
                 }
-                $imageData = $this->upload->data(); 
                 $template = $map->sliderSection->slide[$index]->template;
                 $subSliderCount = count($map->sliderSection->slide[$index]->image);
-
-                $this->config->load('image_dimensions', TRUE);
-                $imageDimensionsConfig = $this->config->config['image_dimensions'];
-                $imageUtility = $this->serviceContainer['image_utility'];
-                if($subIndex >= $subSliderCount) {
-                    $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-                    reset($imageDimensionsConfig["mainSlider"]["$template"]);                
-                }
-                else {
-                    $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subIndex];
-                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-                }
-
+                $this->initiateSliderResize($subSliderCount, 
+                                            $imgDirectory, 
+                                            $template,
+                                            $index);
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
                 $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
 
@@ -1184,43 +1173,56 @@ class NewHomeWebService extends MY_Controller
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
+
             $template = $map->sliderSection->slide[$index]->template;
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
-
-            $this->config->load('image_dimensions', true);
-            $imageDimensionsConfig = $this->config->config['image_dimensions'];
-            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);
-            $imageUtility = $this->serviceContainer['image_utility'];
-            if($subSliderCount >= $defaultTemplateSliderCount) {
-                $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"]["$template"]);                
-            }
-            else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount - 1];
-                $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-            }
-
+            $this->initiateSliderResize($subSliderCount, 
+                                        $imgDirectory, 
+                                        $template,
+                                        $index);    
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
-            if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
-                $map->sliderSection->slide[$index]->image->path = $value;
-                $map->sliderSection->slide[$index]->image->target = $target;
-                if($map->asXML($this->tempHomefile)) {
-                    return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($this->json);
-                }   
-            }
-            else {
-                $index = $index == 0 ? 1 : $index + 1;
-                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
+            $index = $index == 0 ? 1 : $index + 1;
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
 
-            }
+            
+        
             if($addXml === true) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
             }   
+        }
+    }
+
+    /**
+     *  Utilizes the logic for image resizeability
+     *  
+     *  @param int $subSliderCount
+     *  @param string $imgDirectory
+     *  @param string $template
+     */
+    public function initiateSliderResize($subSliderCount, 
+                                         $imgDirectory, 
+                                         $template,
+                                         $index)
+    {
+        $imageUtility = $this->serviceContainer['image_utility'];   
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];
+        $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);  
+        if(array_key_exists((string)$template, $imageDimensionsConfig["templatesException"])) {
+            $map = simplexml_load_file($this->tempHomefile);
+            $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["templatesException"]["$template"][0], false);              
+            return;
+        }
+        if($subSliderCount >= $defaultTemplateSliderCount) {
+            $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
+            $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
+            reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+        }
+        else {
+            $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount - 1];
+            $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
         }
     }
 
