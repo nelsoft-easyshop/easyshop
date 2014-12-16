@@ -141,6 +141,15 @@ $lang['EsAddress'] = [
         'lng' => 'Longitude Location',
     ];
 
-$lang['update_information'] = "You have updated your :phrase"
+$lang['EsProduct'] = [
+        'name' => 'Product Name',
+    ];
+
+$lang['update_information'] = "You have updated your :phrase.";
+$lang['update_product'] = [
+        'update' => 'You have successfully added one product to your active listing :phrase.',
+        'trash' => 'You have deleted permanently your item :phrase.',
+        'delete' => 'You have moved your product to deleted items :phrase.',
+    ];
 ?>
 
