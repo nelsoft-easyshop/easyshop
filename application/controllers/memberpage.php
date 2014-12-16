@@ -487,7 +487,7 @@ class Memberpage extends MY_Controller
         foreach($boughTransactions["transactions"] as $key => $value) {
             $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
             if(count($attr) > 0) {
-                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
+                $boughTransactions["transactions"][$key][] = ["attributes" => $attr];
             }
         }
 
@@ -513,7 +513,7 @@ class Memberpage extends MY_Controller
             foreach($soldTransaction["transactions"] as $key => $value) {
                 $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
                 if(count($attr) > 0) {
-                    array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
+                    $soldTransaction["transactions"][$key][] = ["attributes" => $attr];                    
                 }
             }
            
