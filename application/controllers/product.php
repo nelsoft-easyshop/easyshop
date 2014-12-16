@@ -35,7 +35,7 @@ class product extends MY_Controller
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
         $getParameter = $this->input->get() ? $this->input->get() : [];
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
+        $getParameter['category'] = $categoryId;
         $search = $searchProductService->getProductBySearch($getParameter); 
         $response['products'] = $search['collection'];
 
@@ -65,7 +65,7 @@ class product extends MY_Controller
             $categoryDescription = $categoryDetails->getDescription();
             
             $response['getParameter'] = $getParameter = $this->input->get() ? $this->input->get() : [];
-            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
+            $getParameter['category'] = $categoryId;
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
 
