@@ -34,13 +34,13 @@ class product extends MY_Controller
 
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = $this->input->get() ? $this->input->get() : array();
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+        $getParameter = $this->input->get() ? $this->input->get() : [];
+        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
         $search = $searchProductService->getProductBySearch($getParameter); 
         $response['products'] = $search['collection'];
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more', $response, true);
         $data['count'] = count($response['products']);
         echo json_encode($data);
     }

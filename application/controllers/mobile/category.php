@@ -84,14 +84,14 @@ class Category extends MY_Controller {
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
         $getParameter['page'] = $page;
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE); 
+        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true); 
         $search = $searchProductService->getProductBySearch($getParameter);
         $products = $search['collection'];
         $formattedRelatedItems = [];
 
         foreach ($products as $key => $value) {
             $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
-                                                ->formatDisplayItem($value->getIdProduct());
+                                            ->formatDisplayItem($value->getIdProduct());
         }  
 
         print(json_encode($formattedRelatedItems,JSON_PRETTY_PRINT));
