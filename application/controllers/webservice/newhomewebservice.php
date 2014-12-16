@@ -979,11 +979,10 @@ class NewHomeWebService extends MY_Controller
                 }
                 $template = $map->sliderSection->slide[$index]->template;
                 $subSliderCount = count($map->sliderSection->slide[$index]->image);
-                $this->checkForImageResizeability($subSliderCount, 
-                                                  $imgDirectory, 
-                                                  $template,
-                                                  $index,
-                                                  $subIndex);
+                $this->initiateSliderResize($subSliderCount, 
+                                            $imgDirectory, 
+                                            $template,
+                                            $index);
                 $map->sliderSection->slide[$index]->image[$subIndex]->path = $value;
                 $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
 
@@ -1177,10 +1176,10 @@ class NewHomeWebService extends MY_Controller
 
             $template = $map->sliderSection->slide[$index]->template;
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
-            $this->checkForImageResizeAbility($subSliderCount, 
-                                              $imgDirectory, 
-                                              $template,
-                                              $index);    
+            $this->initiateSliderResize($subSliderCount, 
+                                        $imgDirectory, 
+                                        $template,
+                                        $index);    
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
             $index = $index == 0 ? 1 : $index + 1;
             $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
@@ -1202,11 +1201,10 @@ class NewHomeWebService extends MY_Controller
      *  @param string $imgDirectory
      *  @param string $template
      */
-    public function checkForImageResizeAbility($subSliderCount, 
-                                               $imgDirectory, 
-                                               $template,
-                                               $index,
-                                               $subIndex = null)
+    public function initiateSliderResize($subSliderCount, 
+                                         $imgDirectory, 
+                                         $template,
+                                         $index)
     {
         $imageUtility = $this->serviceContainer['image_utility'];   
         $this->config->load('image_dimensions', true);
