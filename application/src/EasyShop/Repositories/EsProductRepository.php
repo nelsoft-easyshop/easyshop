@@ -461,7 +461,7 @@ class EsProductRepository extends EntityRepository
         if(isset($filterArray['category']) 
                 && $filterArray['category'] > 1){ 
             $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                        ->getChildCategoryRecursive($filterArray['category']);
+                                     ->getChildrenWithNestedSet($filterArray['category']);
             $qbResult = $qbResult->andWhere(
                                         $qb->expr()->in('p.cat', $categoryList)
                                     );
