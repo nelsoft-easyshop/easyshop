@@ -74,6 +74,28 @@
                                 <?PHP if ($product->getIsDelete()) : ?>
                                     <div class="price"> &nbsp; </div>
                                 <?PHP else : ?>
+                                    <div class="timer">
+                                        <table id="table-countdown" align="center">
+                                            <tr>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">DAYS</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">HOURS</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">MINUTES</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">SECONDS</td>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                     <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
                                 <?PHP endif; ?>
                             </div>
@@ -158,10 +180,15 @@
                 <p>Copyright &copy; 2014 Easyshop.ph<br>All rights reserved.</p>
             </section>
         </footer>
+        <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
+        <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
         <div id="fb-root"></div>
         <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     </body>
 </html>

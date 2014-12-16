@@ -8,7 +8,23 @@
                 ' <td class="td-time-num"><span class="span-time-num">{hnn}</span><span class="span-time-label">HOURS</td></td>'+
                 ' <td class="td-time-num"><span class="span-time-num">{mnn}</span><span class="span-time-label">MINUTES</td></td>' +
                 ' <td class="td-time-num"><span class="span-time-num">{snn}</span><span class="span-time-label">SECONDS</td></td>',
-            onExpiry: reload,
+            onExpiry: reload
         });
     });
+
+    function serverTime() {
+        var time = null;
+        $.ajax({url: '/home/getServerTime',
+            async: false, dataType: 'text',
+            success: function(text) {
+                time = new Date(text);
+            }, error: function(http, message, exc) {
+                time = new Date();
+            }});
+        return time;
+    }
+
+    function reload(){
+        window.location.reload();
+    }
 })(jQuery);
