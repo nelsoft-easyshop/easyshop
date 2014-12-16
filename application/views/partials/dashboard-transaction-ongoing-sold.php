@@ -1,4 +1,5 @@
 <div class="transaction-item">
+<?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
@@ -8,11 +9,11 @@
                     <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
                 <?PHP else : ?>
                     <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
-                        <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
-                        <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
-                        <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyer']?></span></div>
+                        <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
                     <?php endif;?>
                 <?PHP endif; ?>
             </div>
@@ -41,16 +42,16 @@
                             </p>
                             <div class="div-meta-description">
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Status : </span>
                                         <?PHP if (intval($soldTransactionDetails['orderStatus']) === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                             <?PHP if (intval($product['isReject']) === 1) : ?>
@@ -109,7 +110,7 @@
                                         <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
                                     </span>
                                     <span class="transac-item-consignee-name">
-                                        <?=html_escape($soldTransactionDetails['buyer'])?>
+                                        <?=html_escape($soldTransactionDetails['buyerStoreName'])?>
                                     </span>
                                 </div>
                                 <div class="pos-rel">
@@ -225,7 +226,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            </div>
+                            <!-- </div> -->
                         <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                         <div class="trans-btn-wrapper trans-btn-con2">
                                 <?php
@@ -237,7 +238,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            </div>
+                            <!-- </div> -->
                         <?PHP endif; ?>
                         <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
@@ -278,10 +279,11 @@
                                     <?php echo form_close();?>
                                 </div>
                         <?PHP endif; ?>
-                       
+                       </div>
                     <?PHP endif; ?>
                 </div>
             </div>
+            <input class="order-product-ids" type="hidden" value="<?=$product['idOrderProduct']?>">
             <div class="clear"></div>
         </div>
         <?PHP endforeach; ?>
@@ -292,4 +294,10 @@
             <?=$pagination; ?>
         </center>
     </div>
+<?PHP else : ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>
+        There are no transactions for this category.
+    </div>
+<?PHP endif; ?>
 </div>

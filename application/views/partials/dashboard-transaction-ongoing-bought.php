@@ -1,4 +1,5 @@
 <div class="transaction-item">
+<?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $boughtTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
@@ -29,16 +30,16 @@
                         </p>
                         <div class="div-meta-description">
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Status : </span>
                                     <?PHP if (intval($boughtTransactionDetails['isFlag']) === 0 && intval($boughtTransactionDetails['orderStatus']) === 0) : ?>
                                         <?PHP if ($product['isReject']) : ?>
@@ -75,7 +76,7 @@
                                     <?PHP endif; ?>
                                 </div>
                                 <?php if( $product['has_shipping_summary'] == 1 ):?>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12">
                                         <span class="strong-label shipment-detail-button">View shipment detail</span>
                                         <div class="shipping-details">
                                             <div class="shipping-details-wrapper">
@@ -104,17 +105,17 @@
                                                     Delivery Date:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['deliveryDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['deliveryDate'], 'Y - m - d')?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12 pd-bttm-10"></div>
                                                 <div class="col-md-4">
                                                     Expected Date of Arrival:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'jS \of F Y')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'Y - m - d')?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12">
-                                                    <textarea placeholder="Write your comment..." disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
+                                                    <textarea disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
                                                 </div>
                                                 <div class="clear"></div>
                                                 <div class="shipping-border"></div>
@@ -157,7 +158,7 @@
                                     <img src="<?=$boughtTransactionDetails['userImage']?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
-                                    <?=html_escape($product['seller'])?>
+                                    <?=html_escape($product['sellerStoreName'])?>
                                 </span>
                             </div>
                         </div>
@@ -239,4 +240,10 @@
             <?=$pagination; ?>
         </center>
     </div>
+<?PHP else : ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>
+        There are no transactions for this category.
+    </div>
+<?PHP endif; ?>
 </div>

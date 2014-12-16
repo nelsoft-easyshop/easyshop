@@ -2,6 +2,10 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+
 class productUpload extends MY_Controller 
 {
     public $max_file_size_mb;
@@ -28,17 +32,6 @@ class productUpload extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager']; 
     }
 
-    function fill_view()
-    {
-        $data = array(
-            'title' => 'Sell Product | Easyshop.ph',
-                    'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-            'render_searchbar' => false, 
-                );
-        $data = array_merge($data, $this->fill_header());
-
-        return $data;
-    }
 
     /**
      *  Display view for selecting category for the listing
@@ -98,19 +91,31 @@ class productUpload extends MY_Controller
         # getting first category level from database.
         $is_admin = (intval($userdetails['is_admin']) === 1);
         $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false,$is_admin);
-        
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        $this->load->view('templates/header', $data); 
 
-        if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
+        if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
+            $this->load->view('templates/footer'); 
         }
         else{
-            $this->load->view('pages/product/product_upload_error');
+            $headerData = [
+                'title' => 'Verify your account to proceed | Easyshop.ph',
+            ];
+
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/email-verification');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         }
 
-        $this->load->view('templates/footer'); 
+        
     }
 
     /**
@@ -145,10 +150,14 @@ class productUpload extends MY_Controller
      */
     public function step2()
     { 
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        $this->load->view('templates/header', $data); 
+        $headerData = [
+            'title' => 'Sell Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
+        ];  
         if($this->input->post('hidden_attribute')){ # if no item selected cant go to the link. it will redirect to step 1
+            $this->load->model("user_model");
             $id = $this->input->post('hidden_attribute'); 
             $response['memid'] = $this->session->userdata('member_id');
             $userdetails = $this->user_model->getUserById($response['memid']);
@@ -223,7 +232,9 @@ class productUpload extends MY_Controller
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
             }
-    
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
             $this->load->view('templates/footer');
         }else{
@@ -400,11 +411,14 @@ class productUpload extends MY_Controller
             mkdir($tempdirectory.'other/thumbnail/', 0777, true);
         }
 
-        $data = array('title'=>'Edit Product');
-        $data = array_merge($data,$this->fill_view());
-        $data['$render_searchbar'] = false; 
-
-        $this->load->view('templates/header', $data);   
+        $headerData = [
+                'title' => 'Edit Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+        ]; 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
@@ -619,24 +633,26 @@ class productUpload extends MY_Controller
      */
     public function step2_2() # function for processing the adding of new item
     {
+        $stringUtility = $this->serviceContainer['string_utility'];
+
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
         $cat_id = $this->input->post('id');
-        $otherCategory = $this->input->post('otherCategory');
-        $brand_id =  $this->input->post('prod_brand'); 
+        $otherCategory = $stringUtility->removeNonUTF($this->input->post('otherCategory'));
+        $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $brand_valid = false;
         $otherBrand = '';
-        $product_title = trim($this->input->post('prod_title'));
-        $product_brief = trim($this->input->post('prod_brief_desc'));
+        $product_title = trim($stringUtility->removeNonUTF($this->input->post('prod_title')));
+        $product_brief = trim($stringUtility->removeNonUTF($this->input->post('prod_brief_desc')));
         $product_description =  substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
-        $product_condition = $this->input->post('prod_condition');
-        $sku = trim($this->input->post('prod_sku'));
-        $keyword = trim($this->input->post('prod_keyword'));
+        $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
+        $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
+        $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
         $style_id = 1;
         $member_id =  $this->session->userdata('member_id');
         $tempDirectory = $this->session->userdata('tempDirectory');
@@ -645,7 +661,7 @@ class productUpload extends MY_Controller
 
         if(intval($brand_id,10) == 1){
             $brand_valid = true;
-            $otherBrand = $this->input->post('brand_sch');
+            $otherBrand = $stringUtility->removeNonUTF($this->input->post('brand_sch'));
             $brand_id = 1;
         }
         else{
@@ -659,10 +675,8 @@ class productUpload extends MY_Controller
             $otherBrand = '';
         } 
         
-        if($isNotSavingAsDraft){
-            if (!in_array($product_condition, $this->lang->line('product_condition'))){
-                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
-            }
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         if($isNotSavingAsDraft){
@@ -783,18 +797,22 @@ class productUpload extends MY_Controller
 
                 # start of saving other/custom attribute 
                 foreach ($attributes as $key => $valuex) {
-                    $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                    $attrName = $stringUtility->removeNonUTF($key);
+                    $attrName = $attrName === "" ? "no name" : $attrName;
+                    $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$attrName);
                     foreach ($valuex as $keyvalue => $value) {
                         $imageid = 0;
+                        $attributeValue = $stringUtility->removeNonUTF($value['value']);
+                        $attributeValue = $attributeValue === "" ? "no value" : $attributeValue;
                         if($value['image'] != ""){ 
                             $nameOfFileArray = explode('_', $value['image']);
                             $fileType = end(explode('.', $value['image']));
                             unset($nameOfFileArray[0]);
-                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray); 
-                            array_push($arrayNameOnly, $value['image']);
+                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray);
+                            $arrayNameOnly[] = $value['image'];
                             $imageid = $this->product_model->addNewProductImage($other_path_directory.$newOtherName,$fileType,$product_id,0);
                         }
-                        $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+                        $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
                     }
                 }
                 #end of other 
@@ -839,26 +857,29 @@ class productUpload extends MY_Controller
      */
     public function step2edit2Submit()
     {
+        $stringUtility = $this->serviceContainer['string_utility'];
+
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $product_id = $this->input->post('p_id');
         $memberId = $this->session->userdata('member_id');
         $cat_id = $this->input->post('id');
-        $product_title = trim($this->input->post('prod_title'));
-        $product_brief = trim($this->input->post('prod_brief_desc'));
+        $product_title = trim($stringUtility->removeNonUTF($this->input->post('prod_title')));
+        $product_brief = trim($stringUtility->removeNonUTF($this->input->post('prod_brief_desc')));
         $product_description = substr(trim($this->input->post('prod_description')), 0, 65000);
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
-        $product_condition = $this->input->post('prod_condition');
-        $otherCategory = html_escape($this->input->post('otherCategory')); 
-        $sku = trim($this->input->post('prod_sku'));
-        $brand_id =  $this->input->post('prod_brand'); 
-        $keyword = trim($this->input->post('prod_keyword'));
+        $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
+        $otherCategory = html_escape($stringUtility->removeNonUTF($this->input->post('otherCategory'))); 
+        $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
+        $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
+        $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
         $style_id = 1;
         $brand_valid = false;
-        $otherBrand = ""; $primaryName ="";
+        $otherBrand = "";
+        $primaryName = "";
         $username = $this->user_model->getUserById($memberId)['username'];
         $dir = './assets/product/'; 
         $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
@@ -873,6 +894,10 @@ class productUpload extends MY_Controller
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         // Loading Combinations
@@ -925,7 +950,7 @@ class productUpload extends MY_Controller
   
         if(intval($brand_id,10) == 1){
             $brand_valid = true;
-            $otherBrand = $this->input->post('brand_sch');
+            $otherBrand = $stringUtility->removeNonUTF($this->input->post('brand_sch'));
             $brand_id = 1;
         }
         else{
@@ -1028,9 +1053,13 @@ class productUpload extends MY_Controller
 
             # start of saving other/custom attribute 
             foreach ($attributes as $key => $valuex) {
-                $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                $attrName = $stringUtility->removeNonUTF($key);
+                $attrName = $attrName === "" ? "no name" : $attrName;
+                $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$attrName);
                 foreach ($valuex as $keyvalue => $value) {
                     $imageid = 0;
+                        $attributeValue = $stringUtility->removeNonUTF($value['value']);
+                        $attributeValue = $attributeValue === "" ? "no value" : $attributeValue;
                     if($value['image'] != ""){ 
                         $nameOfFileArray = explode('_', $value['image']);
                         $fileType = end(explode('.', $value['image']));
@@ -1039,7 +1068,7 @@ class productUpload extends MY_Controller
                         array_push($arrayNameOnly, $value['image']);
                         $imageid = $this->product_model->addNewProductImage($originalPath.'other/'.$newOtherName,$fileType,$product_id,0);
                     }
-                    $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+                    $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
                 }
             }
             directory_copy($tempDirectory, $originalPath,$product_id,$arrayNameOnly); 
@@ -1212,9 +1241,17 @@ class productUpload extends MY_Controller
         if($modal){ 
             $this->load->view('pages/product/product_upload_preview',$preview_data);
         }
-            else{
-            $data = $this->fill_view();
-            $this->load->view('templates/header', $data);
+        else{
+            
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
             $this->load->view('templates/footer');
         }
@@ -1272,7 +1309,6 @@ class productUpload extends MY_Controller
                 'shipping_summary' => $this->product_model->getShippingSummary($productID),
                 'shipping_preference' => $this->product_model->getShippingPreference($memberId)
             );
-            $data = array_merge($data, $this->fill_view());
             $data['json_check_data'] = json_encode($data['shipping_summary']['shipping_locations']);
             $data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
             
@@ -1280,7 +1316,15 @@ class productUpload extends MY_Controller
                 $data['is_edit'] = true;
             }
             
-            $this->load->view('templates/header', $data);
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
             $this->load->view('templates/footer');
         }
@@ -1290,129 +1334,153 @@ class productUpload extends MY_Controller
     }
     
     /**
-     * Handler for additional info in product uploads
-     * Update billing info, CoD and meetup in product table
-     * Upload shipping details if for delivery
-     *
-     */
+    * Handler for additional info in product uploads
+    * Update billing info, CoD and meetup in product table
+    * Upload shipping details if for delivery
+    */
     public function step4()
-    {    
-        $this->load->model('memberpage_model');
-        $memberID =  $this->session->userdata('member_id');
-        $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        $shipWithinDays = trim($this->input->post('ship_within'));
+    {
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
+        $esProductItemRepo = $this->em->getRepository('EasyShop\Entities\EsProductItem'); 
+        $esLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup'); 
+        $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
 
-        $serverResponse = array(
-            'result' => 'fail',
-            'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
-        );
-        
-        if( $this->input->post('prod_h_id') && (in_array("meetup", $deliveryOption) || in_array("delivery", $deliveryOption)) ){
-            $productID = $this->input->post('prod_h_id');
-            $billingID = (int)$this->input->post('billing_info_id');
-            $isMeetup = in_array("meetup", $deliveryOption) ? 1:0;
-            $isDelivery = in_array("delivery", $deliveryOption) ? true:false;
-            $isCOD = strtolower($this->input->post('allow_cod')) === 'on' ? 1:0;
-            
-            $isEdit = $this->input->post('is_edit') ? true:false;
-            
-            # Check if billing id is owned by user in database
-            if( $billingID !== 0 ){
-                $payment_accounts = $this->memberpage_model->get_billing_info($memberID);
-                if(!(array_key_exists($billingID,$payment_accounts))){
-                    $serverResponse['error'] = 'Billing ID database mismatch!';
-                    echo json_encode($serverResponse);
-                    exit();
-                }
-            }
-            
-            # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
-            $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
-            foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = $arr['id_product_item'];
-            }
-            
-            # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
-            $this->product_model->deleteShippingSummaryOnEdit($dbProductItemID);
-            
-            $myProceedVar = true;
-            
-            # If delivery option "for delivery" is selected
-            if($isDelivery){
-                # DeliveryCost can be one of the ff: free, details, or off
-                $deliveryCost = $this->input->post('prod_delivery_cost');
-                if( $deliveryCost === "free" ){
-                    $locationID = 1; #FOR PHILIPPINES
-                    $priceValue = 0; #FREE
-                    foreach( $dbProductItemID as $attrCombinationID ){
-                        $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                        $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
-                    }
-                # If shipping details provided, start verification of details
-                }else if( $deliveryCost === "details"){
-                    $shipPrice = $this->input->post('shipprice');
-                    $shipLoc = $this->input->post('shiploc');
-                    $shipAttr = $this->input->post('shipattr');
-                    
-                    #Fetch client ProductItemID based on submitted(checked) attributes
-                    $clientProductItemID = array();
-                    foreach( $shipAttr  as $grouparr){
-                        foreach( $grouparr as $pid){
-                            if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = $pid;
-                            }
+        $memberId = $this->session->userdata('member_id');
+        $deliveryOption = $this->input->post('delivery_option') 
+                          ? $this->input->post('delivery_option') : [];
+        $shipWithinDays = trim($this->input->post('ship_within')) !== ""
+                          ? trim($this->input->post('ship_within'))
+                          : null;
+        $productId = (int) $this->input->post('prod_h_id');
+        $billingId = (int) $this->input->post('billing_info_id');
+        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
+        $isMeetup = in_array("meetup", $deliveryOption);
+        $isDelivery = in_array("delivery", $deliveryOption);
+        $deliveryCost = trim($this->input->post('prod_delivery_cost'));
+        $shipPrice = $this->input->post('shipprice');
+        $shipLoc = $this->input->post('shiploc');
+        $shipAttr = $this->input->post('shipattr');
+        $isCanContinue = false;
+        $productItemIds = [];
+        $postProductIds = [];
+        $serverResponse = [
+            'result' => "fail",
+            'error' => "Operation Start."
+        ];
+   
+        try {
+            $product = $esProductRepo->findOneBy([
+                            'idProduct' => $productId,
+                            'member' => $memberId,
+                       ]);
+            if($product){
+                if($isMeetup || $isDelivery){
+                    if($billingId !== 0){
+                        $bankInfo = $esBillingInfoRepo->findOneBy([
+                                        'idBillingInfo' => $billingId,
+                                        'member' => $memberId,
+                                    ]);
+                        if(!$bankInfo){
+                            throw new Exception("Billing ID mismatch.");
                         }
                     }
+                    $productShippingManager->deleteProductShippingInfo($productId);
+                    $isCanContinue = true;
+                    if($isDelivery){
+                        $productItems = $esProductItemRepo->findBy(['product' => $productId]);
+                        foreach ($productItems as $item) {
+                            $productItemIds[] = $item->getIdProductItem();
+                        }
 
-                    // Reorder array values for proper checking of equality
-                    sort($clientProductItemID);
-                    sort($dbProductItemID);
-                    
-                    #If ProductItemID matches for client and server, also verifies that all attributes have been checked
-                    #or provided with a shipping location
-                    if( $clientProductItemID == $dbProductItemID ){
-                        # Cycle through each price and check if 
-                        foreach( $shipPrice as $groupkey => $pricegroup ){
-                            foreach( $pricegroup as $inputkey => $price ){
-                                $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                    #check if shipping location is provided for the price
-                                    if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                        # Check if attributes are provided for that group
-                                        if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                            # -- ALGO START FOR INSERTION TO DATABASE --
-                                            # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
-                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                    $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
+                        if( $deliveryCost === "free" ){
+                            $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
+                            foreach( $productItemIds as $itemIds ){
+                                $shippingHead = new EsProductShippingHead();
+                                $shippingHead->setLocation($location);
+                                $shippingHead->setPrice(0);
+                                $shippingHead->setProduct($product);
+                                $this->em->persist($shippingHead);
+
+                                $productItem = $esProductItemRepo->find($itemIds);
+
+                                $shippingDetails = new EsProductShippingDetail();
+                                $shippingDetails->setShipping($shippingHead);
+                                $shippingDetails->setProductItem($productItem);
+                                $this->em->persist($shippingDetails);
+                            }
+                            $this->em->flush();
+                        }
+                        elseif($deliveryCost === "details"){
+                            foreach( $shipAttr  as $attr){
+                                foreach( $attr as $itemId){
+                                    if( !(in_array((int)$itemId,$postProductIds)) ){
+                                        $postProductIds[] = $itemId;
+                                    }
+                                }
+                            }
+
+                            $difference = array_diff($postProductIds,$productItemIds);
+                            if(empty($difference) === true){
+                                foreach( $shipPrice as $groupkey => $pricegroup ){
+                                    foreach( $pricegroup as $inputkey => $price ){
+                                        $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
+                                        if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
+                                            if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
+                                                if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
+                                                    foreach( $shipAttr[$groupkey] as $attrCombinationId){
+                                                        $productItem = $esProductItemRepo->find($attrCombinationId);
+                                                        foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
+                                                            $location = $esLookupRepo->find($locationId);
+                                                            $shippingHead = new EsProductShippingHead();
+                                                            $shippingHead->setLocation($location);
+                                                            $shippingHead->setPrice($priceValue);
+                                                            $shippingHead->setProduct($product);
+                                                            $this->em->persist($shippingHead);
+
+                                                            $shippingDetails = new EsProductShippingDetail();
+                                                            $shippingDetails->setShipping($shippingHead);
+                                                            $shippingDetails->setProductItem($productItem);
+                                                            $this->em->persist($shippingDetails);
+                                                        }
+                                                    }
+                                                    $this->em->flush();
                                                 }
                                             }
                                         }
+                                        else{
+                                            throw new Exception("Price Invalid."); 
+                                        }
                                     }
-                                }else{
-                                    $serverResponse['error'] = "Invalid price provided";
-                                    echo json_encode($serverResponse);
-                                    exit();
                                 }
                             }
                         }
-                    }else{
-                        $serverResponse['error'] = "Please provide shipping details for all item properties.";
-                        $myProceedVar = false;
+                    }
+
+                    if($isCanContinue){
+                        $product->setIsCod($isAllowCod);
+                        $product->setBillingInfoId($billingId);
+                        $product->setIsMeetup($isMeetup);
+                        $product->setShipsWithinDays($shipWithinDays);
+                        $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
+                        $this->em->flush();
+                        $serverResponse['result'] = 'success';
+                        $serverResponse['error'] = '';
                     }
                 }
+                else{
+                    throw new Exception("Incomplete Details submitted. Please select at least one delivery option.");
+                }
             }
-            // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
-            if($myProceedVar){
-                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
-                $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
-            }
+            else{
+                throw new Exception("Invalid operation this is not your product.");
+            } 
         }
-        
+        catch (Exception $e) {
+            // you may want to react on the Exception here
+            $serverResponse['error'] = $e->getMessage();
+        }
+
         echo json_encode($serverResponse);
     }
 
@@ -1436,7 +1504,6 @@ class productUpload extends MY_Controller
         $productEntity = $productRepository->find($productId);
 
         if($productEntity){
-            $headerData = $this->fill_view();
             $product = $productManager->getProductDetails($productEntity);
             $productImages = $productImageRepository->getProductImages($productId);
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
@@ -1467,14 +1534,22 @@ class productUpload extends MY_Controller
             $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
 
             $mainViewData = [
-                        'product' => $product,
-                        'productBillingInfo' => $billingInfo,
-                        'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
-                        'shipping_summary' => $shippingDetails,
-                        'attr' => $shippingAttribute,
-                    ];
+                'product' => $product,
+                'productBillingInfo' => $billingInfo,
+                'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                'shipping_summary' => $shippingDetails,
+                'attr' => $shippingAttribute,
+            ];
+            
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
 
-            $this->load->view('templates/header', $headerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
         }

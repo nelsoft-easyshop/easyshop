@@ -2,12 +2,11 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 
-<section id="content">
-    <div class="main-slider-container">    
+    <div class="main-slider-container" style="padding: 50px !important;">    
     <div id="slider-edge">
         <div class="left-side-shadow"></div>
         <div class="right-side-shadow"></div>
-        <div id="bxslider" class="container">
+        <div id="bxslider">
             <ul class="bxslider">
                 <?php foreach($homeContent['slider'] as $slideView): ?>
                     <?php echo $slideView; ?>
@@ -17,8 +16,6 @@
     </div>
     </div>   
     <div class="lg-margin"></div>
-
-</section>
 <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/newhome.js" type="text/javascript"></script>

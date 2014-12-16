@@ -3,14 +3,19 @@
     <div class="div-member-stats">
              <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
                <img src="<?=$bannerImage;?>" class="img-follower-cover " />
-                <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
+                <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
+                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
+                </a>
             </div>
         <div class="clear"></div>
         <div class="div-stats">
             <div class="div-top-name">
                 <div class="row">
                     <div class="col-md-5 col-xs-12">
-                        <p class="p-username"><span class="icon-profile"> </span><?=html_escape($member->getUserName());?></p>
+                        <p class="p-username"><span class="icon-profile"></span> 
+                            <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"><?=html_escape($member->getUserName());?>
+                            </a>
+                        </p>
                     </div>
                     <div class="col-md-7 col-xs-12">
                         <div class="row">
@@ -39,10 +44,12 @@
                         <p class="p-stat-title">
                             Shop Link: 
                         </p>
-                        <div class="form-shop-link">
-                            <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?=$member->getSlug();?>"/>
-                            <span class="icon-web"></span>
-                        </div>
+                        <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
+                            <div class="form-shop-link">
+                                <input type="text" readonly="" class="input-shop-link" value="<?=base_url();?><?= html_escape($member->getSlug()) ;?>"/>
+                                <span class="icon-web"></span>
+                            </div>
+                        </a>
                         <div class="div-stat-summary">
                             <div class="row">
                                 <div class="col-xs-3" align="center">
@@ -177,11 +184,11 @@
         <div class="submenu-overflow">
         <div class="submenu-container">
             <ul class="submenu-ul idTabs">
-                <a href="#active-items" class="active-me"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
-                <a href="#deleted-items"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
-                <a href="#draft-items"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
-                <a href="#feedbacks"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
-                <a href="#sales"><li>Sales</li></a>
+                <a id="button-active-item" href="#active-items" class="active-me"><li>Active Items<span class="circle-total"><?=$activeProductCount;?></span></li></a>
+                <a id="button-deleted-item" href="#deleted-items" class="<?=($deletedProductCount > 0) ? 'can-request' : '' ?>"><li>Deleted Items<span class="circle-total deleted-span-circle"><?=$deletedProductCount;?></span></li></a>
+                <a id="button-draft-item" href="#draft-items" class="<?=($draftedProductCount > 0) ? 'can-request' : '' ?>"><li>Draft Items<span class="circle-total"><?=$draftedProductCount;?></span></li></a>
+                <a id="button-feedback" href="#feedbacks" class="<?=($feedBackTotalCount > 0) ? 'can-request' : '' ?>"><li>Feedbacks<span class="circle-total"><?=$feedBackTotalCount;?></span></li></a>
+                <a id="button-sales" href="#sales" class="can-request"><li>Sales</li></a>
             </ul>
         </div>
         </div>
@@ -247,9 +254,7 @@
                         </div>
                     </div>
                     
-                    <div id="deleted-product-container">
-                    <?=$deletedProductView; ?>
-                    </div>
+                    <div id="deleted-product-container"></div>
                <?php else:?> 
                     <div class="jumbotron no-items">
                         <i class="icon-category"></i>No items for this category
@@ -282,9 +287,7 @@
                         </div>
                     </div>
                 
-                    <div id="drafted-product-container">
-                        <?=$draftedProductView;?>
-                    </div>
+                    <div id="drafted-product-container"></div>
                 <?php else:?> 
                     <div class="jumbotron no-items">
                         <i class="icon-category"></i>No items for this category
@@ -293,11 +296,15 @@
             </div>
             
             <div id="feedbacks"> 
-                <?=$allFeedBackView; ?> 
+                <?php if($feedBackTotalCount > 0): ?>
+                    <?=$allFeedBackView; ?> 
+                <?php else:?>
+                    <div class="jumbotron no-items">
+                        <i class="icon-category"></i> No feedback for this category.
+                    </div>
+                <?php endif; ?>
             </div>
-            <div id="sales">
-                <?=$salesView;?>
-            </div>
+            <div id="sales"></div>
         </div>
     </div>
 </div>
@@ -313,31 +320,19 @@
         <div id="hidden-active-container-new"></div>
     </div>
     <div id="hidden-deleted-container">
-        <div id="hidden-deleted-container-default">
-            <div id="page-1">
-                <?=$deletedProductView;?>
-            </div>
-        </div>
+        <div id="hidden-deleted-container-default"></div>
         <div id="hidden-deleted-container-lastmodified"></div>
         <div id="hidden-deleted-container-new"></div>
     </div>
     <div id="hidden-drafted-container">
-        <div id="hidden-drafted-container-default">
-            <div id="page-1">
-                <?=$draftedProductView;?>
-            </div>
-        </div>
+        <div id="hidden-drafted-container-default"></div>
         <div id="hidden-drafted-container-lastmodified"></div>
         <div id="hidden-drafted-container-new"></div>
     </div>
 </div>
 
 <div id="hidden-feedback-container">
-    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>">
-        <div id="page-1">
-            <?=$feedBackView; ?>
-        </div>
-    </div>
+    <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_ALL;?>"></div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER;?>"> </div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER;?>"></div>
     <div id="feedback-<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER;?>"></div>
@@ -345,18 +340,15 @@
 </div>
 
 <div id="hidden-sales-container">
-    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>">
-        <div id="page-1"><?=$currentSales;?></div>
-    </div>
-    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>">
-        <div id="page-1"><?=$historySales;?></div>
-    </div>
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER; ?>"></div>
+    <div id="sales-<?=EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED; ?>"></div>
 </div>
 
 <div id="hidden-paginate-loader">
     <center>
         <div id="loader-div">
             <img src="/assets/images/loading/preloader-whiteBG.gif">
+            <p class="loading-text">Loading data...</p>
         </div>
     </center>
 </div>

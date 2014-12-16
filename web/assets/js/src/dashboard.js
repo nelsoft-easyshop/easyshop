@@ -31,7 +31,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
-    
+    var isDeliveryAddressLoaded = false;
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -40,6 +40,55 @@
         $( ".ma-delivery" ).addClass( "selectedM" );
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
+        if(!isDeliveryAddressLoaded) {
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getDeliveryAddress',
+                success: function(data){ 
+                    var serverResponse = jQuery.parseJSON(data);
+                    jsonCity = jQuery.parseJSON(serverResponse.cities);
+                    var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
+                    var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
+                    var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
+                    var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
+                    $("#consigneeName").val(escapeHtml(consignee));
+                    $("#consigneeMobile").val(escapeHtml(mobile));
+                    $("#consigneeLandLine").val(escapeHtml(telephone));
+                    $("#deliveryAddress").val(escapeHtml(consigneeAddress));
+                    var consigneeStateRegion = serverResponse.consigneeStateRegionId;
+                    var stateRegionDropDown = $("#deliver_stateregion");
+                    var dropDownTemplate = "";
+                    $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
+                        dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                    });  
+                    stateRegionDropDown.append(dropDownTemplate);                         
+                    stateRegionDropDown.val(consigneeStateRegion);
+                    var cityDropDown = $("#delivery_city");
+                    dropDownTemplate = "";
+                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
+                        $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
+                            dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
+                        }); 
+                        cityDropDown.append(dropDownTemplate);                                                
+                    }
+                    cityDropDown.val(serverResponse.consigneeCityId);
+                    var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
+                    var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
+                    if(serverResponse.address && (parseInt(lat) !== 0 || parseInt(lng) !== 0 )) {
+                        $("#locationMarkedText").text("Location marked");
+                    }
+                    else {
+                        $("#locationMarkedText").text("Location not marked");
+                    }
+                    $("#map_clat, #temp_clat").val(lat);
+                    $("#map_clng, #temp_clng").val(lng);
+                    $('.address_dropdown, .disabled_country').chosen({width:'200px'});                                          
+                    $('.delivery-setup-loading').hide();
+                    $('#deliverAddressDiv').fadeIn();
+                }
+            });            
+        }
+        isDeliveryAddressLoaded = true;
     });
     
     $( ".payment-address-trigger" ).click(function() {
@@ -206,35 +255,96 @@
         }, 500);
     });
 
-    $('.sales-title-total').click(function() {
+    $("#sales").on("click", ".sales-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.sales-breakdown-container').slideToggle();
         $('.payout-breakdown-container').slideUp();
         $('.payout-title-total').removeClass("active-bar");
     });
 
-    $('.payout-title-total').click(function() {
+    $("#sales").on("click", ".payout-title-total",function () {
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
        $('.sales-title-total').removeClass("active-bar");
     });
 
-    $(".trans-item-info").click(function() {
+    $('#transactions').on('click', '.trans-item-info', function() {
         $(this).children("i").toggleClass("fa-minus-circle");
         $(this).next(".info-attributes").slideToggle();
     });
 
-    $(".view-delivery-lnk").click(function() {
+    $('#transactions').on('click', '.view-delivery-lnk', function() {
         $(this).next(".view-delivery-details").slideToggle();
     });
-    
+
     $( "#set-default" ).hover(function() {
         $( ".default-ad-explain" ).slideToggle( "slow" );
     });
 
     $( ".map-trigger" ).click(function() {
         $( ".map-container" ).slideToggle( "slow" );
+    });
+
+    $('.idTabs').idTabs({
+        click: function(id, all, container, settings){
+            var $button;
+            var $page = 1;
+            var $parentContainer;
+            var $textInput;
+            var $filterInput;
+            var $requestType;
+            var $container;
+            if(id == "#deleted-items" || id == "#draft-items"){ 
+                if(id == "#deleted-items"){
+                    $button = $("#button-deleted-item");
+                }
+                else if(id == "#draft-items"){
+                    $button = $("#button-draft-item");
+                }
+                if($button.hasClass('can-request')){
+                    $parentContainer = $(id);
+                    $textInput = $parentContainer.find('.search-field').val();
+                    $filterInput = $parentContainer.find('.search-filter').val();
+                    $requestType = $parentContainer.find('.request-type').val();
+                    $container = $parentContainer.find('.container-id').val();
+                    $button.removeClass('can-request');
+
+                    isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
+                }
+            }
+            else if(id == "#feedbacks"){
+                $button = $("#button-feedback");
+                if($button.hasClass('can-request')){
+                    $requestType = $("#select-feedback-filter").val();
+                    requestFeedback($page, $requestType);
+                    $button.removeClass('can-request');
+                }
+            }
+            else if(id == "#sales"){
+                $button = $("#button-sales");
+                if($button.hasClass('can-request')){
+                    var $ajaxRequest = $.ajax({
+                        type: "get",
+                        url: $("#first-sales-request-url").val(),
+                        beforeSend: function(){ 
+                            $("#sales").html($('#hidden-paginate-loader').html());
+                        },
+                        success: function(d){ 
+                            var $response = $.parseJSON(d); 
+                            $("#sales").html($response.salesView);
+                            $("#sales-1").html('<div id="page-1">'+$response.currentSales+'</div>');
+                            $("#sales-4").html('<div id="page-1">'+$response.historySales+'</div>');
+                            $( ".date-picker-sales" ).datepicker({
+                                changeMonth: true,
+                                changeYear: true
+                            });
+                        }
+                    });
+                    $button.removeClass('can-request');
+                }
+            }
+        }
     });
 
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
@@ -260,7 +370,7 @@
         isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
     });
 
-    $(".search-field").keyup(function(event){
+    $(document.body).on('keydown','.search-field',function (event) {
         if(event.keyCode == 13){
             var $this = $(this);
             var $page = 1;
@@ -367,6 +477,8 @@
         var $page = $this.data('page');
         var $requestType = $("#select-feedback-filter").val();
 
+        mainDashboardAnchorToTop();
+        
         if($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).length > 0){
              $("#feedback-view-container").html($("#hidden-feedback-container > #feedback-" + $requestType + " > #page-" + $page).html());
         }
@@ -399,6 +511,7 @@
         var $requestType = $mainContainer.find("#request-type-container").val();
         var $netTotal = $("#"+$container).find("#net-total-container").val();
 
+        mainDashboardAnchorToTop();
         if($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).length > 0 && $dateFrom == "" && $dateTo == ""){
             $("#" + $container + " > .sales-container").html($("#hidden-sales-container > #sales-" + $requestType + " > #page-" + $page).html());
             $("#" + $container + " > .p-stat-total").html("&#8369; "+$netTotal);
@@ -452,6 +565,7 @@
                 requestProduct($page, $textInput, $filterInput, $requestType, $container);
             }
         }
+        mainDashboardAnchorToTop();
     }
 
     /**
@@ -461,9 +575,9 @@
      * @param  string  $filterInput
      * @param  string  $requestType
      * @param  string $container
-     */
+     */    
     var requestProduct = function($page, $textInput, $filterInput, $requestType, $container, $searchByString)
-    {
+    {   
         var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
@@ -492,7 +606,7 @@
                     else{
                         $("#hidden-active-container-" + $filterInput).append($appendString);
                     }
-                }
+                }                
             }
         });
     }
@@ -832,101 +946,102 @@
         $(".ma-settings").addClass("selectedM");
     });
     
-    $('#sc-selection-trigger').click(function() {
+    $(document).on("click", "#sc-selection-trigger",function () {
         $('.hide-selection-cont').slideToggle("fast");
     });
     
-    $('#hide-date').click(function() {
+    $(document).on("click", "#hide-date",function () {
         $('#th-date').toggle();
         $('.td-date').toggle();
     });
     
-    $('#hide-trans').click(function() {
+
+    $(document).on("click", "#hide-trans",function () {
         $('#th-trans').toggle();
         $('.td-trans').toggle();
     });
     
-    $('#hide-base-price').click(function() {
+    $(document).on("click", "#hide-base-price",function () {
         $('#th-base-price').toggle();
         $('.td-base-price').toggle();
     });
     
-    $('#hide-quantity').click(function() {
+    $(document).on("click", "#hide-quantity",function () {
         $('#th-quantity').toggle();
         $('.td-quantity').toggle();
     });
-    
-    $('#hide-handling').click(function() {
+
+    $(document).on("click", "#hide-handling",function () {
         $('#th-handling').toggle();
         $('.td-handling').toggle();
     });
     
-    $('#hide-total').click(function() {
+    $(document).on("click", "#hide-total",function () {
         $('#th-total').toggle();
         $('.td-total').toggle();
     });
     
-    $('#hide-es-charge').click(function() {
+    $(document).on("click", "#hide-es-charge",function () {
         $('#th-es-charge').toggle();
         $('.td-es-charge').toggle();
     });
-    
-    $('#hide-payment').click(function() {
+
+    $(document).on("click", "#hide-payment",function () {
         $('#th-payment').toggle();
         $('.td-payment').toggle();
     });
     
-    $('#hide-net').click(function() {
+    $(document).on("click", "#hide-net",function () {
         $('#th-net').toggle();
         $('.td-net').toggle();
     });
     
-    $('#sc-p-selection-trigger').click(function() {
+    $(document).on("click", "#sc-p-selection-trigger",function () {
         $('.hide-p-selection-cont').slideToggle("fast");
         
     });
     
-    $('#hide-p-date').click(function() {
+    $(document).on("click", "#hide-p-date",function () {
         $('#th-p-date').toggle();
         $('.td-p-date').toggle();
     });
     
-    $('#hide-p-trans').click(function() {
+    $(document).on("click", "#hide-p-trans",function () { 
         $('#th-p-trans').toggle();
         $('.td-p-trans').toggle();
     });
     
-    $('#hide-p-base-price').click(function() {
+    $(document).on("click", "#hide-p-base-price",function () { 
         $('#th-p-base-price').toggle();
         $('.td-p-base-price').toggle();
     });
     
-    $('#hide-p-quantity').click(function() {
+    $(document).on("click", "#hide-p-quantity",function () {
         $('#th-p-quantity').toggle();
         $('.td-p-quantity').toggle();
     });
     
-    $('#hide-p-handling').click(function() {
+    $(document).on("click", "#hide-p-handling",function () {
         $('#th-p-handling').toggle();
         $('.td-p-handling').toggle();
     });
     
-    $('#hide-p-total').click(function() {
+    $(document).on("click", "#hide-p-total",function () {
         $('#th-p-total').toggle();
         $('.td-p-total').toggle();
     });
     
-    $('#hide-p-es-charge').click(function() {
+    $(document).on("click", "#hide-p-es-charge",function () {
         $('#th-p-es-charge').toggle();
         $('.td-p-es-charge').toggle();
     });
     
-    $('#hide-p-payment').click(function() {
+    $(document).on("click", "#hide-p-payment",function () {
         $('#th-p-payment').toggle();
         $('.td-p-payment').toggle();
     });
     
-    $('#hide-p-net').click(function() {
+    $(document).on("click", "#hide-p-net",function () {
         $('#th-p-net').toggle();
         $('.td-p-net').toggle();
     });
@@ -962,21 +1077,13 @@
             changeYear: true
         });
 
-        $( ".modal_date" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            yearRange: '2013:2050',
-            dateFormat:"yy-M-dd"
-        }).on('keypress',function(){
-            return false;
-        });
     });
 
     $('#transactions').on('click', '.shipment-detail-button', function(e) {
         var shipmentModal = $(this).parent().find('div.shipping-details');
         var shipmentContainer = $(this).parent().find('div.shipping-details-container');
         var thisbtn = $(this);
-        var txStatus = $(this).parent().parent().parent().parent().find('span.status-class');
+        var txStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var form = shipmentModal.find('.shipping_details_form');
         var submitbtn = $(form).find('.shipping_comment_submit');
         var input = $(form).find('input[type="text"]');
@@ -987,6 +1094,11 @@
         var delivery_date = form.find('input[name="delivery_date"]');
         var expected_date = form.find('input[name="expected_date"]');
         var textarea = $(form).find('textarea');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        shipmentModal.find('input[name="order_product"]').val(orderProductIds);
 
         courier.val(shipmentContainer.find('input[name="courier"]').val());
         tracking_num.val(shipmentContainer.find('input[name="tracking_num"]').val());
@@ -998,6 +1110,14 @@
             escClose: false,
             onShow: function() {
                 if ( thisbtn.hasClass('isform') ) {
+                    $( ".modal_date" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: '2013:2050',
+                        dateFormat:"yy-M-dd"
+                    }).on('keypress',function(){
+                        return false;
+                    });
                     form.validate({
                         rules:{
                             courier:{
@@ -1044,7 +1164,7 @@
                                         textarea.attr('disabled', true);
 
                                         if(thisbtn.hasClass('isform')) {
-                                            txStatus.replaceWith('<span class="trans-status-pending status-class">Item shipped</span>');
+                                            txStatus.replaceWith('<span class="trans-status-cod status-class">Item shipped</span>');
                                         }
                                         $.modal.close();
                                     }else{
@@ -1092,13 +1212,22 @@
         var txResponseBtn = $(this);
         var form = txResponseBtn.closest('form.transac_response');
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
-        var alltxStatus = $(this).parent().parent().parent().parent().parent().parent().find('span.status-class');
-        var serializedData = form.serializeArray();
-        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+        var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
+
+        if( txResponseBtn.hasClass('tx_return') ) {
+            var hiddenInputs = txResponseBtn.closest('.item-list-panel').find('.order-product-ids');
+            var orderProductIds = hiddenInputs.map(function() {
+                return this.value;
+            }).get().join('-');
+            txResponseBtn.closest('.item-list-panel').find('input[name="seller_response"]').val(orderProductIds);
+        }
+        var serializedData = form.serializeArray();
+        serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
+
         $.ajax({
             url : '/memberpage/transactionResponse',
             method : 'POST',
@@ -1123,7 +1252,7 @@
                     if(txResponseBtn.hasClass('tx_forward')){
                         txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                     }else if(txResponseBtn.hasClass('tx_return')){
-                        txStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
                     }else if(txResponseBtn.hasClass('tx_cod')){
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                     }
@@ -1272,8 +1401,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1282,8 +1413,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'ongoing-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1292,8 +1425,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-bought';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1302,8 +1437,10 @@
         var $mainContainer = $this.parent().parent().parent().parent().parent();
         var $container = $mainContainer.attr('id');
         var $requestType = 'complete-sold';
+        var $searchFor = 'paymentMethod';
+        var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
-        getTransactionDetails($page, $requestType, $container);
+        getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {
@@ -1327,7 +1464,7 @@
         var $container = $(this).data('method');
         var $page = 1;
 
-        getTransactionDetails($page, $container, $container);
+        getTransactionDetails($page, $container, $container, '', '');
     });
 
     var searchForTransaction = function ($requestType, $searchFor, $value, $container)
@@ -1351,14 +1488,16 @@
         });
     }
 
-    var getTransactionDetails = function ($page, $requestType, $container)
+    var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
     {
         $.ajax({
             type: 'get',
             url: 'memberpage/getTransactionsForPagination',
             data: {
                 page : $page,
-                request : $requestType
+                request : $requestType,
+                value : $value,
+                searchFor : $searchFor
             },
             beforeSend: function() {
                 $("#" + $container).empty();
@@ -1366,6 +1505,8 @@
             success: function(requestResponse) {
                 var $response = $.parseJSON(requestResponse);
                 $("#" + $container).append($response.html);
+                $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
+                $(".reject_btn").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
             }
         });
     }
@@ -1420,7 +1561,7 @@
         });
         $this.html(buttonHtml);
     });
-        
+
     var isStoreSetupInitialized = false;
     $('#store-setup-tab').on('click', function(){
         $('.dash-mobile-trigger').removeClass("selectedM");
@@ -1883,6 +2024,13 @@
                  $('.settings-trigger').trigger('click');
             }, 500);
         }
+    }
+    
+    function mainDashboardAnchorToTop()
+    {
+        $('html,body').animate({
+            scrollTop: $('.input-shop-link').offset().top
+        }, 700);
     }
     
     

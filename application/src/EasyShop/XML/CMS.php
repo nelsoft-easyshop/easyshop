@@ -191,7 +191,7 @@ class CMS
     $string = '<slide>
             <template>'.$value.'</template>
             <image>
-                <path>/assets/images/homeslider/unavailable_product_img.jpg</path>
+                <path>'.$type.'</path>
                 <target>/</target>
             </image>
 
@@ -798,27 +798,18 @@ $string = '<typeNode>
         return $result;
     }
     
-
-    
     /**
-     * Returns the home page data
-     * 
-     * @param boolean $isCategoryNavigationOnly
+     * Returns the category navigation section
+     *
+     * @param boolean $isTemporaryFile
      * @return mixed
      */
-    /**
-     * Returns the home page data
-     * 
-     * @param boolean $isCategoryNavigationOnly
-     * @return mixed
-     */
-    public function getHomeData($isCategoryNavigationOnly = false, $doUseTemporaryFile = false)
+    public function getMenuData($isTemporaryFile = false)
     {
-        $homeXmlFile = (!$doUseTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
+        $homeXmlFile = (!$isTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
-        $homePageData = array();
-        $homePageData['categorySection'] = array();
+        $homePageData = [];
         $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
         $homePageData['menu']['topProducts']  = array();
         $homePageData['menu']['topSellers']  = array();
@@ -844,7 +835,6 @@ $string = '<typeNode>
             }
         }
         
-
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
@@ -860,10 +850,22 @@ $string = '<typeNode>
                                                                 ->findOneBy(['slug' => $category]);
         }
         $homePageData['categoryNavigation'] = $featuredCategory;
-        if($isCategoryNavigationOnly) {
-            return $homePageData;
-        }
-        //End Get Category Navigation
+
+        return $homePageData;
+    }
+
+    /**
+     * Returns the home page data
+     * 
+     * @param boolean $isTemporaryFile
+     * @return mixed
+     */
+    public function getHomeData($isTemporaryFile = false)
+    {
+        $homeXmlFile = (!$isTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
+        $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
+        
+        $homePageData['categorySection'] = [];
         
         if(isset($xmlContent['categorySection']['categorySlug'])){
             $temporary = $xmlContent['categorySection'];
@@ -878,8 +880,7 @@ $string = '<typeNode>
             if(!isset($categorySection["sub"])){
                 $categorySection["sub"] = [];
             }
-            
-            
+
             if(isset($categorySection['sub']['text'])){
                 $subTemporary = $categorySection['sub'];
                 $categorySection['sub'] = [ $subTemporary ];
@@ -1006,13 +1007,19 @@ $string = '<typeNode>
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
 
+        if(isset($pageContent['mainSlide'][0]) === false){
+            $temp = $pageContent['mainSlide'];
+            $pageContent['mainSlide'] = [];
+            $pageContent['mainSlide'][] = $temp;
+        }
+
         // banner images
         $bannerImages = [];
         foreach ($pageContent['mainSlide'] as $key => $value) {
             $bannerImages[] = array(
                             'name' => '0',
                             'image' => $value['value'],
-                            'target' => $baseUrl.$value['imagemap']['target'],
+                            'target' => $value['imagemap']['target'],
                             'actionType' => $value['actionType'],
                         );
         }

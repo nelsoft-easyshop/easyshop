@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+
 
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
     <h2 class="checkout_title">Payment Result</h2>
@@ -118,10 +120,10 @@
                             </tr>
                             <tr>
                                 <td width="50%" style="padding: 5px;">
-                                    <b>Name of Seller:</b>
+                                    <b>Store Name:</b>
                                 </td>
                                 <td width="50%" style="padding: 5px;">
-                                    <?php echo html_escape($value['seller_username']); ?>
+                                    <?php echo html_escape($value['store_name']); ?>
                                 </td>
                             </tr>
                             <tr>

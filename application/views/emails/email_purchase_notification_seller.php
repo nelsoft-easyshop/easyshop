@@ -9,7 +9,7 @@
              <br/>
             <div>
                 <p>
-                    <b style="font-weight:bold"><span style="color: #f18200;">{buyer_name}</span> purchased from you!</b>
+                    <b style="font-weight:bold"><span style="color: #f18200;">{buyer_store}</span> purchased from you!</b>
                     <!--FOR FULL WIDTH SCREEN SIZE-->
                    
                 </p>
@@ -30,7 +30,7 @@
             <div style="margin-top: 20px; font-size: 13px;">
                 
                 <p>
-                    Dear {seller_name},
+                    Dear {seller_store},
                 </p>
                 
                  <p>
@@ -72,7 +72,7 @@
                                             Sold To: 
                                         </td>
                                         <td align="left" style=" padding-left: 20px !important; padding-bottom:15px; width:20%;">
-                                            {buyer_name} 
+                                            {buyer_store} 
                                         </td>
                                         <td align="left" align="left" style="font-weight:bold; padding-bottom:15px !important; width:20%;">
                                             City: 

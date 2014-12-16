@@ -161,7 +161,7 @@
                     </div>
 
                     <div class="col-sm-12 col-md-7" align="center">
-                        <?php if($isLoggedIn && intval($userData['is_email_verify']) !== 1): ?>
+                        <?php if($isLoggedIn && (int)$userData->getIsEmailVerify() !== 1): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
@@ -275,7 +275,7 @@
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
 <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
 

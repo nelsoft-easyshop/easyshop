@@ -39,7 +39,7 @@ class Product extends MY_Controller {
 
             $isButtonClickable = true;
             if((int) $product->getIsPromote() === EasyShop\Entities\EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
-                $isButtonClickable = $this->promoConfig[$product->getPromoType()]['viewable_button_product_page'];
+                $isButtonClickable = $promoConfig[$product->getPromoType()]['viewable_button_product_page'];
             }
 
             $buttonLabel = "Add to Cart";

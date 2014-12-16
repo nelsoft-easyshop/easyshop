@@ -225,5 +225,36 @@ class ProductShippingLocationManager
         return $data;
     }
 
+    /**
+     * Delete all shipping information of individual product
+     * @param  integer $productId
+     */
+    public function deleteProductShippingInfo($productId)
+    {   
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                            ->find($productId);
+        
+        if(!$product){
+            throw new Exception("Product not exists.");
+        }
+
+        $shippingHeads = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
+                                  ->findBy([
+                                      'product' => $productId
+                                  ]);
+
+        foreach ($shippingHeads as $head) {
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->findBy([
+                                            'shipping' => $head->getIdShipping()
+                                        ]);
+            foreach ($shippingDetails as $detail) {
+                $this->em->remove($detail);
+            }
+            $this->em->remove($head);
+        }
+        $this->em->flush();
+    }
+
 }
 

@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
 <script type="text/javascript">
@@ -140,7 +141,7 @@
                                     Product Name: <font color="red">*</font>
                                 </div>
                                 <div class="col-xs-12 col-sm-10 col-md-10">
-                                    <input class="width-50p ui-form-control" type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
+                                    <input class="width-50p ui-form-control" type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?html_escape($product_details['name']):'';?>">
                                     <a  class="tooltips" href="javascript:void(0)">
                                         <img src="/assets/images/icon_qmark.png" alt="">
                                         <span class="lines_tooltip">
@@ -160,7 +161,7 @@
                                     <select name="prod_condition" id="prod_condition" class="width-50p ui-form-control">
                                         <option value="">--Select Condition--</option>          
                                         <?php foreach($this->lang->line('product_condition') as $x): ?>
-                                            <option value="<?php echo $x;?>" <?php if(isset($product_details['condition'])){echo ($product_details['condition'])===$x?'selected':'';}?>><?php echo $x; ?></option>
+                                            <option value="<?php echo $x;?>" <?php if(isset($product_details['condition'])){echo (html_escape($product_details['condition']))===$x?'selected':'';}?>><?php echo $x; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <a class="tooltips" href="javascript:void(0)">
@@ -285,7 +286,7 @@
                                     <span class="f11">(Seperated by spaces.)</span>
                                 </div>
                                 <div class="col-xs-12 col-sm-10 col-md-10">
-                                    <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>">
+                                    <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?html_escape($product_details['keywords']):'';?>">
                                     <a class="tooltips" href="javascript:void(0)">
                                         <img src="/assets/images/icon_qmark.png" alt="">
                                         <span>
@@ -316,7 +317,7 @@
                                             <!-- Brief of the product -->
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brief description:</div>
                                             <div class="col-xs-12 col-sm-10 col-md-10">
-                                                <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
+                                                <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?html_escape($product_details['brief']):'';?>">
                                                 <a class="tooltips" href="javascript:void(0)">
                                                     <img src="/assets/images/icon_qmark.png" alt="">
                                                     <span>Describe your item in a brief but precise way.</span>
@@ -329,7 +330,7 @@
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brand:</div> 
                                             <div class="col-xs-12 col-sm-10 col-md-10">
                                                 <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
-                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?trim($product_details['brandname']):''?>"/>
+                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?trim(html_escape($product_details['brandname'])):''?>"/>
                                                 <div class="brand_sch_loading"></div>
                                                 <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
                                             </div>
@@ -340,7 +341,7 @@
                                         <div class="pd-top-15">
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">SKU Code: </div> <!-- SKU of the product -->
                                             <div class="col-xs-12 col-sm-10 col-md-10">
-                                                <input class="width-50p ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
+                                                <input class="width-50p ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?html_escape($product_details['sku']):'';?>">
                                                 <a class="tooltips" href="javascript:void(0)"><img src="/assets/images/icon_qmark.png" alt="">
                                                     <span class="2lines_tooltip">Stock Keeping Unit: you can assign any code in order to keep track of your items</span>
                                                 </a>
@@ -363,7 +364,7 @@
                                                 <select class="" id="head-data" data-placeholder="(e.g Color, Size,...) ">
                                                     <option value="0" ></option> 
                                                     <?php foreach ($attributeArray as $key => $value):?>
-                                                        <option><?=ucfirst(strtolower($key));?></option> 
+                                                        <option><?=ucfirst(strtolower(html_escape($key)));?></option> 
                                                     <?php endforeach; ?>
                                                 </select> 
                                             </div>
@@ -430,13 +431,13 @@
                                                             </div>
                                                             <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                                 <?php foreach ($eachAttribute as $key => $value): ?>
-                                                                <span class="spanSelect<?=str_replace(' ', '', strtolower($key))?>">
-                                                                    <select disabled id="<?=str_replace(' ', '', strtolower($key))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower($key))?>">
+                                                                <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
+                                                                    <select disabled id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                         <?php foreach ($value as $key2 => $value2): ?>
-                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == $value2['value_name']) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>     
-                                                                    <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                                    <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
                                                                 </span>
                                                                 <?php endforeach;?> 
                                                             </div>
@@ -458,14 +459,14 @@
                                                 <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                     <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                                         <?php foreach ($eachAttribute as $key => $value): ?>
-                                                        <span class="spanSelect<?=str_replace(' ', '', strtolower($key))?>">
-                                                            <select id="<?=str_replace(' ', '', strtolower($key))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower($key))?>">
+                                                        <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
+                                                            <select id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                 <?php foreach ($value as $key2 => $value2): ?>
-                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
-                                                            <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                                                            <a class="remove-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-remove"></span></a>
+                                                            <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                            <a class="remove-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-remove"></span></a>
                                                         </span>
                                                         <?php endforeach;?>
                                                     <?php endif; ?>

@@ -15,6 +15,7 @@ a{
 
 .col-sidebar{
     padding-right: 0px;
+    padding-left: 0px;
 }
 
 .sidebar-dashboard{
@@ -583,6 +584,23 @@ a{
     margin-top: -21px;
 }
 
+.div-meta-description .shipment-detail-button {
+    cursor: pointer;
+    border: 2px solid #565656;
+    border-radius: 4px;
+    display: block !important;
+    margin: 12px 4px 35px;
+    max-width: 200px;
+    padding: 4px;
+    text-align: center;
+    width: auto !important;
+}
+
+.div-meta-description .shipment-detail-button:hover {
+    color: #fff;
+    background-color: #565656;
+}
+
 .toggle-info{
     padding: 2px 5px;
     background: #565656;
@@ -1072,6 +1090,7 @@ a{
     border-collapse: collapse;
     margin-top: 10px;
     width:1800px;
+    max-width:1800px;
 }
 
 .table-total-sales  >thead  > tr > th{
@@ -1386,6 +1405,7 @@ a{
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
+    z-index:1003 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -1595,6 +1615,11 @@ a{
 
 }
 
+.loading-text{
+    font-size: 15px;
+    font-weight: 900;
+    color: #ff893a;
+}
 
 /** ============================= **/
 /** ====== transaction tab ====== **/
@@ -1810,6 +1835,8 @@ a{
     border-radius: 4px;
     border: 1px solid #e2e2e2;
     margin: 0 auto;
+    padding: 0 5%;
+    width: 90%;
 }
 
 .trans-left-panel .info-main-cont {
@@ -1863,6 +1890,7 @@ label.css-label {
 }
 
 .trans-btn-wrapper button:first-child,
+.trans-btn-wrapper .reject_btn,
 .transac_response .transac_response_btn {
     margin-bottom: 6px;
 }
@@ -2276,8 +2304,14 @@ label.css-label {
     text-decoration: none;
     white-space: nowrap;
     line-height: 24px;
+    width: 100% !important;
 }
-
+.chosen-container,
+.chosen-container-single,
+.chosen-container-active,
+.chosen-with-drop{
+    width: 100% !important;
+}
 .chosen-container-single .chosen-drop{
     margin-top: -3px;
 }
@@ -2303,6 +2337,10 @@ label.css-label {
 }
 
 @media only screen and (max-width: 991px){
+    .no-items{
+        font-size: 15px;
+    }
+    
     .section-dashboard{
         margin-top: 0px;
     }
@@ -2311,13 +2349,12 @@ label.css-label {
         display: inline-block !important;
         width: 100%;
         text-align: center;
+        margin-top: -1px;
     }
     
     .col-dash-mobile{
         padding-right: 0px;
         padding-left:0px;
-        border-top: solid #e2e2e2 1px;
-        border-bottom: solid #e2e2e2 1px;
         padding-top: 10px;
         padding-bottom: 10px;
         text-transform: uppercase;
@@ -2336,8 +2373,8 @@ label.css-label {
         position:absolute;
         z-index:555;
         width: 100%;
-        padding: 0px 20px;
-        margin-top: 5px;
+        padding: 0px 0px;
+        margin-top: 0px;
         display: none;
        
     }
@@ -2346,21 +2383,18 @@ label.css-label {
         position:absolute;
         z-index:555;
         width: 100%;
-        padding: 0px 20px;
-        margin-top: 5px;
+        padding: 0px 0px;
+        margin-top: 0px;
         display: none;
-        
     }
     
     .my-store-menu-mobile-ul{
         border-top: solid #ff893a 3px;
-        border-bottom: solid #ff893a 3px;
         box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
     .my-account-menu-mobile-ul{
         border-top: solid #ff893a 3px;
-        border-bottom: solid #ff893a 3px;
         box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.75);
     }
     
@@ -2718,10 +2752,6 @@ label.css-label {
         margin-bottom: 0px;
     }
     
-    .col-city{
-        margin-top: 20px;
-    }
-    
     .form-group > .col-sm-5{
         margin-bottom: 15px;
     }
@@ -2834,14 +2864,12 @@ label.css-label {
 @media (min-width: 991px) and (max-width: 1200px) {
     .trans-left-panel .div-product-image {
         height: 145px;
-        width: 145px;
     }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
     .trans-left-panel .div-product-image {
         height: 185px;
-        width: 185px;
     }
 }
 
@@ -2899,14 +2927,15 @@ label.css-label {
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 150px;
+        margin-top: 150px !important;
     }
 
-    .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
         margin-top: 120px;
     }
+
     .trans-right-panel {
         position: absolute;
     }
@@ -2914,6 +2943,10 @@ label.css-label {
     .transaction-profile-wrapper {
         float: left;
         width: 50%;
+    }
+
+    .trans-left-panel .div-product-image {
+        height: 145px;
     }
 
     .trans-left-panel .info-main-cont {
@@ -2935,9 +2968,11 @@ label.css-label {
         right: 0;
     }
 
-}
+    .item-list-panel .div-meta-description .strong-label {
+         display: inline-block;
+         width: 88px;
+    }
 
-@media screen and (max-width: 767px) {
     .bank-account-item {
         padding: 10px;
     }
@@ -2990,15 +3025,15 @@ label.css-label {
 
 @media screen and (max-width: 480px) {
     .trans-left-panel.trans-btn-con1-1 {
-        margin-top: 210px;
+        margin-top: 200px !important;
     }
     .trans-btn-con1 .give-feedback-button,
     .trans-1btn  .give-feedback-button {
         width: 100% !important;
     }
 
-    .trans-left-panel {
-        margin-top: 180px;
+    .item-list-panel > div:nth-child(2) .trans-left-panel {
+        margin-top: 160px;
     }
 
     .transac-title div {
@@ -3029,8 +3064,7 @@ label.css-label {
     }
 
     .trans-left-panel .div-product-image {
-        height: 75px;
-        width: 75px;
+        height: 85px;
     }
 
     .trans-btn-wrapper {
@@ -3040,7 +3074,8 @@ label.css-label {
     }
 
     .trans-btn-wrapper button.btn,
-    .trans-btn-wrapper .transac_response_btn {
+    .trans-btn-wrapper .transac_response_btn,
+    .trans-btn-wrapper .reject_btn {
         float: left;
         width: 49%;
     }
@@ -3051,7 +3086,8 @@ label.css-label {
     }
 
     .btn.btn-default-1.isform.shipment-detail-button.txt_buttons,
-    .btn.btn-default-3.txt_buttons.transac_response_btn    {
+    .btn.btn-default-3.txt_buttons.transac_response_btn,
+    .btn.btn-default-1.transac_response_btn.tx_forward {
         margin-right: 2%;
     }
 
@@ -3072,6 +3108,28 @@ label.css-label {
     .feedback-content {
         padding: 0 15px;
     }
+
+    .status-class {
+        font-size: 10px;
+    }
+
+    .bank-account-item-btns .delete-account-btn span,
+    .bank-account-item-btns .edit-account-btn span {
+        display: none;
+    }
+
+    .bank-account-item-btns .btn {
+        font-size: 9px;
+    }
+
+    .bank-account-item-btns .btn i {
+        font-size: 12px;
+    }
+
+    .bank-account-item-btns .save-edit-btn,
+    .bank-account-item-btns .cancel-edit-btn {
+        width: 49%;
+    }
 }
 
 @media screen and (max-width: 320px) {
@@ -3080,7 +3138,6 @@ label.css-label {
     }
     .trans-left-panel .div-product-image {
         height: 55px;
-        width: 55px;
     }
 
     .view-delivery-details .col-md-6 span, .view-delivery-details .col-md-12 span {

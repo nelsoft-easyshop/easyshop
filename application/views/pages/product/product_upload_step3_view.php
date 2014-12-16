@@ -1,4 +1,5 @@
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link  type="text/css"  href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -119,14 +120,14 @@
                                 <div class="col-xs-12 col-sm-3">
                                     <label for="deposit_info">Deposit to: </label>
                                 </div>
-                                <div class="col-xs-12 col-sm-9">									
+                                <div class="col-xs-12 col-sm-9">
                                     <select id="deposit_info" class="form-control">
                                         <?php foreach($billing_info as $x): ?>
-                                            <option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo  html_escape($x['payment_type']).': '. html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
+                                            <option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
                                             </option>
                                         <?php endforeach; ?>
                                         <option value="0">ADD NEW PAYMENT ACCOUNT</option>
-                                    </select>									
+                                    </select>
                                 </div>
                             </div>
                             <?php $first_accnt = reset($billing_info);?>

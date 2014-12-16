@@ -114,6 +114,8 @@ class CodeigniterCart implements CartInterface
      */
     public function addContent($data)
     {
+        $data['brief'] = utf8_encode($data['brief'] );
+        $data['name'] = utf8_encode($data['name'] );
         return $this->cart->insert($data);
     }
     

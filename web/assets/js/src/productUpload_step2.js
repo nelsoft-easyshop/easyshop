@@ -1246,6 +1246,7 @@ var heightRatio = 538;
                             }
                         },
                         open: function() {
+                            $(this).parent().addClass('pop-up-fixed');
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                                 aspectRatio: widthRatio / heightRatio,
                                 setSelect: [ x1 / 2, y1, x2, y2 ],
@@ -1561,6 +1562,7 @@ var heightRatio = 538;
                         }
                     },
                     open: function() {
+                        $(this).parent().addClass('pop-up-fixed');
                         jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                             aspectRatio: widthRatio / heightRatio,
                             setSelect: [ x1 / 2, y1, x2, y2 ],

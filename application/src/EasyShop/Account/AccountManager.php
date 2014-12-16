@@ -4,7 +4,9 @@ namespace EasyShop\Account;
 
 use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
+use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
+use Easyshop\Entities\EsStoreColor as EsStoreColor;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -87,7 +89,6 @@ class AccountManager
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
     }
-
 
     /**
      * Authenticate a web service client
@@ -215,7 +216,7 @@ class AccountManager
         $form->submit([ 'username' => $username,
                         'password' => $password,
                         'contactno' => $contactno,
-                        'email' => $email,
+                        'email' => $email
                     ]);
                     
         if ($form->isValid()) {
@@ -225,7 +226,8 @@ class AccountManager
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
             $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
-            
+            $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
+                                   ->find(EsStoreColor::DEFAULT_COLOR_ID);
             $member = new EsMember();
             $member->setUsername($validatedUsername);
             $member->setPassword($hashedPassword);
@@ -238,14 +240,45 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-
+            $member->setStoreColor($storeColor); 
             $this->em->persist($member);
             $this->em->flush();
         }
-    
+
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
                 'member' => $member];
     }
+
+    /**
+     * Stores member's verification code
+     *
+     * @param array $userData
+     * @return bool
+     */
+    public function storeMemberVerifCode($userData)
+    {
+
+        try{
+            $memberId = $this->em
+                              ->getRepository('EasyShop\Entities\EsMember')
+                              ->find($userData["memberId"]);
+
+            $verifCode = new EsVerifcode();     
+            $verifCode->setMember($memberId);
+            $verifCode->setEmailcode($userData["emailCode"]);
+            $verifCode->setMobilecode($userData["mobileCode"]);
+            $verifCode->setDate(new DateTime('now'));
+            $verifCode->setFpTimestamp(new DateTime('now'));
+            $verifCode->setEmailcount((int)$userData["email"]);
+            $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
+            $this->em->persist($verifCode);
+            $this->em->flush();
+            return true;
+        }
+        catch(\Doctrine\ORM\Query\QueryException $e) {
+            return false;
+        }
+    }    
     
     /**
      * Authentication implementation for accounts with old password hashing
@@ -308,4 +341,9 @@ class AccountManager
 
 
 
+
+
+
+
 }
+

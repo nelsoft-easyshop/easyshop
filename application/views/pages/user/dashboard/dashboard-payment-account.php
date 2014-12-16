@@ -53,6 +53,7 @@
         
         <div class="div-store-setup payment-account-loading" style="text-align:center">
             <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+            <p class="loading-text">Loading your payment accounts...</p>
         </div>
 
         <div id="payment-account-template" class="bank-account-item mrgn-bttm-15" style="display:none">
@@ -91,8 +92,8 @@
             </div>
             <div class="col-xs-4 bank-account-item-btns">
                 <span class="btn btn-set-default">Default Account</span>
-                <span class="btn btn-default-1 mrgn-2 mrgn-top-10 edit-account-btn"><span class="icon-edit"></span> Edit</span>
-                <span class="btn btn-default-1 mrgn-top-10 delete-account-btn"><span class="icon-delete"></span> Delete</span>
+                <span class="btn btn-default-1 mrgn-2 mrgn-top-10 edit-account-btn"><i class="icon-edit"></i> <span>Edit</span></span>
+                <span class="btn btn-default-1 mrgn-top-10 delete-account-btn"><i class="icon-delete"></i> <span>Delete</span></span>
                 
                 <span class="btn btn-default-3 mrgn-2 mrgn-top-10 save-edit-btn" style="display:none">Save</span>
                 <span class="btn btn-default-1 mrgn-top-10 cancel-edit-btn" style="display:none">Cancel</span>

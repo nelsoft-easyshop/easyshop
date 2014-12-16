@@ -228,6 +228,14 @@
     /**************** END GOOGLE MAPS ******************************/
 
     /************** Delivery Address ***************************/
+    $("#deliverAddressForm").on('change','#deliver_stateregion, #delivery_city',function (e) {
+        $("#errorsRegionDiv, #errorsCityDiv").css("display","none");
+
+    });
+    $("#deliverAddressForm").on('keyup','#consigneeMobile, #consigneeName, #deliveryAddress',function (e) {
+        $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+
+    });    
     $("#deliverAddressForm").on('click','#saveDeliverAddressBtn',function (e) {
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
@@ -260,6 +268,20 @@
                     else {
                         $("#errorsDivMobile").css("display","none");                        
                     }
+                    if(typeof(obj.errors.region) !== "undefined") {
+                        $("#errorsRegionDiv").css("display","block");
+                        $("#errorTextRegion").text(obj.errors.region[0]);              
+                    }
+                    else {
+                        $("#errorsRegionDiv").css("display","none");                        
+                    }       
+                    if(typeof(obj.errors.city) !== "undefined") {
+                        $("#errorsCityDiv").css("display","block");
+                        $("#errorTextCity").text(obj.errors.city[0]);              
+                    }
+                    else {
+                        $("#errorsRegionDiv").css("display","none");                        
+                    }                                  
                     if( typeof(obj.errors.street_address) !== "undefined") {
                         $("#errorsDivStreetAddress").css("display","block");
                         $("#errorTextStreetAddress").text(obj.errors.street_address[0]);                   
@@ -267,11 +289,18 @@
                     else {
                         $("#errorsDivStreetAddress").css("display","none");                                                
                     }
+                    if( typeof(obj.errors.telephone_number) !== "undefined") {
+                        $("#errorsDivTelephone").css("display","block");
+                        $("#errorTextTelephone").text(obj.errors.telephone_number[0]);                   
+                    }                    
+                    else {
+                        $("#errorTextTelephone").css("display","none");                                                
+                    }                    
                     $('#delivery-address-error').fadeIn();
                     $('#delivery-address-success').hide();
                 }
                 else {
-                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress").css("display","none");
+                    $("#errorsDivConsignee, #errorsDivMobile, #errorsDivStreetAddress, #errorsDivTelephone, #errorsRegionDiv, #errorsCityDiv").css("display","none");
                     $('#delivery-address-success').fadeIn();
                     $('#delivery-address-error').hide();
                 }
@@ -285,7 +314,16 @@
         return (code != 46);
     });
 
-    $('.address_dropdown, .disabled_country').chosen({width:'200px'});
+
+    $('#consigneeLandLine').on('keypress',function(e){
+        var keyCode = event.keyCode;
+        if ( ! (keyCode >= 48 && keyCode <= 57) && keyCode !== 45 && keyCode !== 43) {
+              event.preventDefault();
+        }
+    });
+
+
+
     $('.stateregionselect').on('change', function(){
 
         var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
@@ -399,7 +437,7 @@
                 }
                 else {
                     $("#errorIndicatoreVerify").css("display","block");
-                    $("#errorTextVerify").text("You have exceeded the number of times to verify your mobile. Try again after 30 mins.");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
                 }
  
             },
@@ -413,9 +451,7 @@
         var stateregionID = stateregionselect.find('option:selected').attr('value');
         var optionclone = cityselect.find('option.optionclone').clone();
         optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
-
         cityselect.find('option.echo').remove();
-        
         if(stateregionID in jsonCity){
             jQuery.each(jsonCity[stateregionID], function(k,v){
                 //optionclone.attr('value', k).html(v).show();

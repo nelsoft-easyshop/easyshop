@@ -67,6 +67,7 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
+
             return $em;
         };
 
@@ -451,6 +452,17 @@ class Kernel
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
                             $container['entity_manager']
+                        );
+        };
+
+        $container['language_loader'] = function ($c) {
+            $languageImplementation = new \EasyShop\LanguageLoader\CodeigniterLanguage();
+            return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
+        };
+
+        $container['activity_manager'] = function ($c) use ($container) { 
+            return new \EasyShop\Activity\ActivityManager(
+                            $container['language_loader']
                         );
         };
 

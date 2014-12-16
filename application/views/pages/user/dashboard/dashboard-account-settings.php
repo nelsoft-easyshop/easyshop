@@ -1,4 +1,4 @@
-<!--
+
 <style>
     .activated-container{
         height: 220px !Important;
@@ -10,7 +10,7 @@
         }
     }
 </style>
--->
+
 
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
@@ -31,7 +31,7 @@
                 </button>
                 <img src="/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
                 <div id="verifyEmail" style="<?php echo $member->getIsEmailVerify() == 0 && trim($member->getEmail()) !== ''?'':'display:none;'?>"  <?php echo (trim($member->getEmail())==''?'':'disabled');?>>
-                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Verify Email</span>
+                    <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Resend Email Verification</span>
                 </div>
                 <div id="verifiedEmail" style="<?php echo $member->getIsEmailVerify() == 0?'display:none;':''?>">
                     <span class="val-error" style="color:green !important" id="verifiedEmailText"><strong>Verified</strong></span>
@@ -147,7 +147,8 @@
             <p class="panel-setting-title">Deactivate your account</p>
             <div class="div-setting-content">
                 <p class="p-deact-note-setting">
-                    Deactivating your account will disable your profile and remove your name and picture from most things you've shared on Easyshop. Some information may still be visible to others, such as your name in their friends list and messages you sent.
+                    Deactivating your account will make all of your products unavailable for purchase. However, other people with whom you have transacted with will keep a record of the details of your transactions.
+                    You will receive an email that contains a reactivation link should you wish to reactivate your account at a future time.
                 </p>
                 <div class="current-status">
                     <button class="btn btn-default-1 btn-deactivate" id="btn-edit-status">

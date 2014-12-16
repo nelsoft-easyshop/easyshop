@@ -111,6 +111,7 @@
         
         <div class="div-store-setup store-setup-loading" style="text-align:center">
             <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+            <p class="loading-text">Loading your theme and category list...</p>
         </div>
         
         
@@ -231,6 +232,12 @@
                     when someone views your store.
                 </p>
             </div>
+            <!-- Display this markup if there are no available categories
+            <br/>
+            <div class="jumbotron no-items">
+                <i class="icon-category"></i> No available category
+            </div>
+            -->
         </div>
         
     </div>

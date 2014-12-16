@@ -179,6 +179,7 @@ class EsCatRepository extends EntityRepository
             $query->setParameter('param'.$index, $param);
         }
         $mainCategoryChildrenList = $query->getResult();
+        
         $reindexedMainCategoryChildrenList = [];
      
         foreach($mainCategoryChildrenList as $mainCategory){
@@ -188,9 +189,10 @@ class EsCatRepository extends EntityRepository
         
         foreach($mainCategoryList as $categoryId => $mainCategory){
             if(!isset($mainCategoryChildrenList[$categoryId])){
-                $mainCategoryChildrenList[$categoryId] = ['children' => '', 
-                                                          'parent_id' => $categoryId,
-                                                         ];
+                $mainCategoryChildrenList[$categoryId] = [
+                    'children' => '', 
+                    'parent_id' => $categoryId,
+                ];
             }
         } 
        
@@ -205,21 +207,30 @@ class EsCatRepository extends EntityRepository
             $bindParameters[] = $childList['parent_id'];
         }
         
-        $sql = "SELECT count(es_product.id_product) as productCount,
-                CASE
-                    ".$casePartialQuery."
-                    ELSE 1
-                END as parent_id,
-                es_cat.id_cat, 
-                IF(es_cat.id_cat != 1,es_cat.name,'NULL') as name,
-                IF(es_cat.id_cat != 1, es_cat.slug, 'null') as slug,
-                es_cat_img.path as image        
-                FROM es_product 
-                LEFT JOIN es_cat ON es_cat.id_cat = es_product.cat_id
-                LEFT JOIN es_cat_img ON es_cat_img.id_cat = es_cat.id_cat
-                WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
-                GROUP BY es_product.cat_id
-               ";
+        $sql = "
+                SELECT A.productCount, 
+                       A.parent_id, 
+                       A.category_id as id_cat, 
+                       IF(parent.id_cat != 1,parent.name,'null') as name,
+                       IF(parent.id_cat != 1, parent.slug, 'null') as slug,
+                       es_cat_img.path as image  
+                FROM 
+                (
+                    SELECT 
+                        count(es_product.id_product) as productCount,
+                        CASE
+                            ".$casePartialQuery."
+                            ELSE 1
+                        END as parent_id,
+                        es_product.cat_id as category_id
+                    FROM es_product 
+                    WHERE es_product.is_draft = 0 AND es_product.is_delete = 0 AND es_product.member_id = ?
+                    GROUP BY es_product.cat_id
+                ) A
+                LEFT JOIN es_cat as parent ON parent.id_cat = A.parent_id
+                LEFT JOIN es_cat_img ON es_cat_img.id_cat = parent.id_cat
+        ";
+        
 
         $bindParameters[] = $memberId;
         $rsm = new ResultSetMapping();
@@ -238,5 +249,27 @@ class EsCatRepository extends EntityRepository
 
         return $uploadsPerCategory;
     }
+
+    
+    /**
+     * Get the first level categories
+     *
+     * @return EasyShop\Entities\EsCat[]
+     */
+    public function getParentCategories()
+    {
+        $em = $this->_em;
+        $parentCategories = $em->createQueryBuilder()
+                                ->select('c') 
+                                ->from('EasyShop\Entities\EsCat','c')
+                                ->where('c.parent = :parentId')
+                                ->setParameter('parentId', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID )
+                                ->getQuery()
+                                ->getResult();
+        return $parentCategories;
+   }
+
 }
+
+
 
