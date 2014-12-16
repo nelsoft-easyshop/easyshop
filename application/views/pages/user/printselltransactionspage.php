@@ -53,13 +53,13 @@
                                                 <?php echo $value["invoiceNo"] ?>
                                             </td>
                                             <td>
-                                               <?php echo $value["productname"] ?>
+                                               <?php echo html_escape($value["productname"]) ?>
                                             </td>
                                             <td>
                                                 <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
                                             </td>                                        
                                             <td>
-                                               <?php echo ucwords(strtolower($value["fullname"])) ?>
+                                               <?php echo ucwords(strtolower(html_escape($value["fullname"]))) ?>
                                             </td>     
                                             <td >
                                                 <?php echo $value["orderQuantity"] ?>
@@ -73,7 +73,7 @@
                                             <td style='text-align:left;'>
                                                 <?php if(isset($value["0"])): ?>
                                                         <?php foreach($value["0"]["attributes"] as $attr): ?>
-                                                            <?php echo ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])."<br/>" ?>
+                                                            <?php echo ucwords(html_escape($attr["attrName"])).":".ucwords(html_escape($attr["attrValue"]))."<br/>" ?>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
                                                         <?php echo "N/A" ?>
