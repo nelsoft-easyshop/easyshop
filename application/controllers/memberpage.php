@@ -1706,7 +1706,8 @@ class Memberpage extends MY_Controller
                                                        ->getBoughtTransactionCount(
                                                            $memberId,
                                                            true,
-                                                           $paymentMethod
+                                                           $paymentMethod,
+                                                           $transactionNumber
                                                        );
                 $paginationData['lastPage'] = ceil($ongoingBoughtTransactionsCount / $this->transactionRowCount);
                 $ongoingBoughtTransactionData = [
@@ -1729,7 +1730,8 @@ class Memberpage extends MY_Controller
                                                      ->getSoldTransactionCount(
                                                          $memberId,
                                                          true,
-                                                         $paymentMethod
+                                                         $paymentMethod,
+                                                         $transactionNumber
                                                      );
                 $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
@@ -1752,7 +1754,8 @@ class Memberpage extends MY_Controller
                                                        ->getBoughtTransactionCount(
                                                            $memberId,
                                                            false,
-                                                           $paymentMethod
+                                                           $paymentMethod,
+                                                           $transactionNumber
                                                        );
                 $paginationData['lastPage'] = ceil($completeBoughtTransactionsCount / $this->transactionRowCount);
                 $completeBoughtTransactionsData = [
@@ -1775,7 +1778,8 @@ class Memberpage extends MY_Controller
                                                       ->getSoldTransactionCount(
                                                           $memberId,
                                                           false,
-                                                          $paymentMethod
+                                                          $paymentMethod,
+                                                          $transactionNumber
                                                       );
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
                 $completeSoldTransactionsData = [

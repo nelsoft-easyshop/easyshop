@@ -1518,8 +1518,8 @@ section.slideshow { margin-bottom: 30px;}
 
 /** christmas promo **/
 .box-seller-name {
-    height: 27px;
-    line-height: 27px !important;
+    height: 34px;
+    line-height: 34px !important;
     text-transform: uppercase;
 }
 
@@ -1549,7 +1549,7 @@ section.slideshow { margin-bottom: 30px;}
 .price {
     float: left;
     font-size: 24px;
-    line-height: 50px;
+    line-height: 57px;
     width: 60%;
 }
 
@@ -1557,29 +1557,26 @@ section.slideshow { margin-bottom: 30px;}
     background-color: #ff893b;
     color: #fff;
     float: left;
-    height: 45px;
+    height: 52px;
     padding-top: 5px;
     width: 40%;
 }
 
-.timer div > span {
-    float: left;
-    text-align: center;
-    width: 33.33333%
-}
-
-.timer-time {
+.span-time-num {
     font-size: 20px;
     font-weight: 900;
 }
 
-.timer-txt {
+.span-time-label {
     font-size: 11px;
     font-weight: normal;
+    display: block;
+    height: 24px;
+    padding-bottom: 12px;
     text-transform: uppercase;
 }
 
-.timer-txt span {
+.span-time-label {
     line-height: 12px;
 }
 
