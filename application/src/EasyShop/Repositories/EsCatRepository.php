@@ -14,7 +14,8 @@ class EsCatRepository extends EntityRepository
      * @param  boolean $returnAsString
      * @return mixed
      */
-    public function getChildCategoryRecursive($categoryId = 1,$returnAsString = false)
+    public function getChildCategoryRecursive($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID,
+                                              $returnAsString = false)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -28,11 +29,12 @@ class EsCatRepository extends EntityRepository
                 END as categoryList
                 FROM
                 `es_cat` 
-                WHERE id_cat != 1 
+                WHERE id_cat != :rootCategory 
                 AND id_cat = :categoryId ;
         ", $rsm);
 
         $query->setParameter('categoryId', $categoryId); 
+        $query->setParameter('rootCategory', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID); 
         $results = $query->getOneOrNullResult();
         
         if($returnAsString){
@@ -47,7 +49,7 @@ class EsCatRepository extends EntityRepository
      * @param  integer $categoryId
      * @return array
      */
-    public function getNestedCategory($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
+    public function getChildrenWithNestedSet($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
     {
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('original_category_id', 'original_category_id');
