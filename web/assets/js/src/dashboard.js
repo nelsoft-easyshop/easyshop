@@ -1266,14 +1266,18 @@
 
     $('#on-going-transaction').on('click','.exportTransactions', function(){
         var url = $(this).data("url");
-        document.location.href = url;
+        var invoiceNo = $(".search-transaction-num").val();        
+        document.location.href = url+"?invoiceNo="+invoiceNo;        
     });
 
     $('#on-going-transaction').on('click','.printTransactions', function() {
         var url = $(this).data("url");
-
+        var invoiceNo = $(".search-transaction-num").val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');                 
         $.ajax({
+            type: "post",
             url: url,
+            data: {invoiceNo : invoiceNo , 'csrfname': csrftoken},
             dataType: 'html',
             success: function(json) {
                 var originalContents = $(document.body).html();
