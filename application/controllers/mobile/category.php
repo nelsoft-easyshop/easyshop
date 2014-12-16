@@ -74,17 +74,18 @@ class Category extends MY_Controller {
      */
     public function getCategoriesProduct()
     {
+        $searchProductService = $this->serviceContainer['search_product'];
+        $esCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
         $perPage = $this->per_page;
         $categorySlug = $this->input->get('slug');
         $page = ($this->input->get('page')) ? $this->input->get('page') : 0 ;
-        $category_array = $this->product_model->getCategoryBySlug($categorySlug);
-        $categoryId = $category_array['id_cat'];  
+        $category = $esCatRepository->findBy(['slug' => $categorySlug]);
+        $categoryId = $category->getIdCat();  
 
-        $searchProductService = $this->serviceContainer['search_product'];
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
         $getParameter['page'] = $page;
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true); 
+        $getParameter['category'] = $esCatRepository->getChildrenWithNestedSet($categoryId); 
         $search = $searchProductService->getProductBySearch($getParameter);
         $products = $search['collection'];
         $formattedRelatedItems = [];
