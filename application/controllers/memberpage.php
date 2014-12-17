@@ -383,7 +383,7 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $key => $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
-                         $prodSpecs .= ucwords($attr).":".ucwords($attrValue)." / ";
+                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                     }
                 }
                 else {
@@ -391,9 +391,9 @@ class Memberpage extends MY_Controller
                 }
             }
             fputcsv($output, array( $value["invoiceNo"]
-                                    , $value["productname"]
+                                    , html_escape($value["productname"])
                                     , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , $value["buyerStoreName"]
+                                    , html_escape($value["buyerStoreName"])
                                     , $value["orderQuantity"]
                                     , ucwords(strtolower($value["paymentMethod"]))
                                     , number_format((float)$value["totalOrderProduct"], 2, '.', '')
@@ -436,7 +436,7 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $key => $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
-                         $prodSpecs .= ucwords($attr).":".ucwords($attrValue)." / ";
+                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                     }
                 }
                 else {
@@ -445,9 +445,9 @@ class Memberpage extends MY_Controller
             }
 
             fputcsv($output, array( $value["invoiceNo"]
-                                    , $value["productname"]
+                                    , html_escape($value["productname"])
                                     , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , $value["fullname"]
+                                    , html_escape($value["fullname"])
                                     , $value["orderQuantity"]
                                     , ucwords(strtolower($value["paymentMethod"]))
                                     , number_format((float)$value["total"], 2, '.', '')
