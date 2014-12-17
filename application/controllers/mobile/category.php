@@ -71,7 +71,6 @@ class Category extends MY_Controller {
         $searchProductService = $this->serviceContainer['search_product'];
         $esCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        $perPage = $this->per_page;
         $categorySlug = $this->input->get('slug');
         $page = ($this->input->get('page')) ? $this->input->get('page') : 0 ;
         $category = $esCatRepository->findOneBy(['slug' => $categorySlug]);
