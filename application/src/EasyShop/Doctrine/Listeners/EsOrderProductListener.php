@@ -9,7 +9,7 @@ use EasyShop\Entities\EsOrderProduct as EsOrderProduct;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsOrderListener implements EventSubscriber
+class EsOrderProductListener implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -53,6 +53,10 @@ class EsOrderListener implements EventSubscriber
         if ($event->hasChangedField('status')) {
             $this->changeSet['status'] = $entity->getStatus();
         }
+
+        if ($event->hasChangedField('isReject')) {
+            $this->changeSet['isReject'] = $entity->getIsReject();
+        }
     }
 
     /**
@@ -77,28 +81,49 @@ class EsOrderListener implements EventSubscriber
         if ( $entity instanceOf EsOrderProduct) {
             if(count($this->changeSet) > 0){
                 $member = null;
-                $status = $entity->getStatus()->getIdOrderProductStatus();
+                $status = (int)$entity->getStatus()->getIdOrderProductStatus();
+                $isReject = (int)$entity->getIsReject();
+                $invoiceNo = $entity->getOrder()->getInvoiceNo();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
                 $phraseArray = $this->languageLoader
                                     ->getLine($activityType->getActivityPhrase());
 
-                if($status === EsOrderProductStatus::CASH_ON_DELIVERY){
-                    $member = $entity->getSeller();
-                    $unparsedPhrase = $phraseArray['completed'];
+                $unparsedPhrase = "";
+                if(isset($this->changeSet['status'])){
+                    if($status === EsOrderProductStatus::CASH_ON_DELIVERY){
+                        $member = $entity->getSeller();
+                        $unparsedPhrase = $phraseArray['completed'];
+                    }
+                    elseif($status === EsOrderProductStatus::RETURNED_BUYER){
+                        $member = $entity->getSeller();
+                        $unparsedPhrase = $phraseArray['item_cancel'];
+                    }
+                    elseif($status === EsOrderProductStatus::FORWARD_SELLER){
+                        $member = $entity->getOrder()->getBuyer();
+                        $unparsedPhrase = $phraseArray['item_received'];
+                    }
                 }
-                elseif($status === EsOrderProductStatus::RETURNED_BUYER){
-                    $member = $entity->getSeller();
-                    $unparsedPhrase = $phraseArray['item_cancel'];
+                elseif(isset($this->changeSet['isReject'])){
+                    $member = $entity->getOrder()->getBuyer();
+                    if($isReject === EsOrderProductStatus::IS_REJECT_NOT_ACTIVE){
+                        $unparsedPhrase = $phraseArray['item_unreject'];
+                    }
+                    else{
+                        $unparsedPhrase = $phraseArray['item_reject'];
+                    }
                 }
 
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase([],
-                                                         $unparsedPhrase,
-                                                         'EsOrder');
-                if($phrase !== ""){
-                    $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                if($unparsedPhrase !== ""){
+                    $phrase = $this->activityManager
+                                   ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
+                                                             $unparsedPhrase,
+                                                             'EsOrder');
+
+                    if($phrase !== ""){
+                        $em->getRepository('EasyShop\Entities\EsActivityHistory')
+                           ->createAcitivityLog($activityType, $phrase, $member);
+                    }
                 }
            }
         }
