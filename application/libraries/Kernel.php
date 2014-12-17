@@ -85,6 +85,12 @@ class Kernel
                     $container['language_loader']
                 )
             );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
             return $em;
         };
 
