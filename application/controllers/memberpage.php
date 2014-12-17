@@ -601,8 +601,6 @@ class Memberpage extends MY_Controller
                       ->getUserImage($uid);
 
         if((bool)$this->input->post('isAjax')){
-            var_dump((bool)$this->input->post('isAjax'));
-            exit();
             $member = $this->serviceContainer['entity_manager']
                            ->getRepository('EasyShop\Entities\EsMember')
                            ->find($uid);
