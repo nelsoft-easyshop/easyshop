@@ -37,3 +37,12 @@ application/logs/*
 /bower_components/
 /node_modules/
 /web/assets/js/min
+
+
+/sphinx/logs/*
+!/sphinx/logs/*.md
+/sphinx/data/*
+!/sphinx/logs/*.md
+
+
+
