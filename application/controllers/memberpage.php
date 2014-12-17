@@ -478,19 +478,18 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'),
-                                                                                           (bool) $this->input->post("isOngoing"),
-                                                                                           0,
-                                                                                           10,
-                                                                                           $this->input->post("invoiceNo"),
-                                                                                           $this->input->post("paymentMethod"));
-        foreach($boughTransactions["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                $boughTransactions["transactions"][$key][] = ["attributes" => $attr];
-            }
-        }
-
+        $boughTransactions["transactions"] = $this->transactionManager
+                                                   ->getBoughtTransactionDetails(
+                                                                                $this->session->userdata('member_id'),
+                                                                                (bool) $this->input->post("isOngoing"),
+                                                                                0,
+                                                                                10,
+                                                                                $this->input->post("invoiceNo"),
+                                                                                $this->input->post("paymentMethod")
+                                                                              );
+        echo "<pre>";
+        print_r($boughTransactions["transactions"]);
+        echo "</pre>";
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
