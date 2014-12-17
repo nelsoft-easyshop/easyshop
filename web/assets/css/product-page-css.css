@@ -1211,15 +1211,22 @@ body{
     height: 25px;
     margin: 0 4px;
     overflow: hidden;
+    position: relative;
     text-align: center;
     vertical-align: middle;
     width: 25px;
 }
 
 .product-profile-photo img {
+    bottom: 0;
     height: auto;
+    left: 0;
+    margin: auto;
     max-height: 25px;
     max-width: 25px;
+    position: absolute;
+    right: 0;
+    top: 0;
     width: auto;
 }
 
