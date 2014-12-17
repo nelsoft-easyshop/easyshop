@@ -361,7 +361,7 @@ class Memberpage extends MY_Controller
                                                                           $this->session->userdata('member_id'),
                                                                           (bool) $this->input->get("isOngoing"),
                                                                           0,
-                                                                          10,
+                                                                          PHP_INT_MAX,
                                                                           $this->input->get("invoiceNo"),
                                                                           $this->input->get("paymentMethod")
                                                                           );
@@ -413,7 +413,7 @@ class Memberpage extends MY_Controller
                                                                                 $this->session->userdata('member_id'),
                                                                                 (bool) $this->input->get("isOngoing"),
                                                                                 0,
-                                                                                10,
+                                                                                PHP_INT_MAX,
                                                                                 $this->input->get("invoiceNo"),
                                                                                 $this->input->get("paymentMethod")
                                                                               );      
@@ -468,7 +468,7 @@ class Memberpage extends MY_Controller
                                                                                 $this->session->userdata('member_id'),
                                                                                 (bool) $this->input->post("isOngoing"),
                                                                                 0,
-                                                                                10,
+                                                                                PHP_INT_MAX,
                                                                                 $this->input->post("invoiceNo"),
                                                                                 $this->input->post("paymentMethod")
                                                                               );
@@ -487,7 +487,7 @@ class Memberpage extends MY_Controller
                                                                           $this->session->userdata('member_id'),
                                                                           (bool) $this->input->post("isOngoing"),
                                                                           0,
-                                                                          10,
+                                                                          PHP_INT_MAX,
                                                                           $this->input->post("invoiceNo"),
                                                                           $this->input->post("paymentMethod")
                                                                           );  
