@@ -69,15 +69,15 @@
                                             <td >
                                                 PHP <?php echo number_format((float)$value["total"], 2, '.', '') ?>
                                             </td> 
-                                            <td>
-                                                <?php if(isset($value["0"])): ?>
-                                                        <?php foreach($value["0"]["attributes"] as $attr): ?>
-                                                            <?php echo ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])."<br/>" ?>
-                                                        <?php endforeach; ?>
-                                                    <?php else: ?>
-                                                        <?php echo "N/A" ?>
-                                                <?php endif; ?>
-                                            </td>                                      
+                                            <td style='text-align:left;'>
+                                                <?php foreach($value["product"] as $key => $value): ?>
+                                                    <?php if(isset($value["attr"]) && count($value["attr"] > 0)): ?>
+                                                            <?php foreach($value["attr"] as $attr => $attrValue ): ?>
+                                                                <?php echo ucwords($attr).":".ucwords($attrValue)."<br/>" ?>
+                                                            <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                 <?php endforeach; ?>
+                                            </td>                                       
                                         </tr>
                                         <?php endforeach; ?>
                                     </tr>
