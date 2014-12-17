@@ -1292,6 +1292,8 @@ class Payment extends MY_Controller{
      */
     public function paymentSuccess($mode = "easyshop")
     {
+        $entityManager = $this->serviceContainer['entity_manager'];
+
         if(strtolower($mode) === 'cashondelivery'){
             $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
@@ -1318,7 +1320,17 @@ class Payment extends MY_Controller{
         $response['message'] = (string)$this->session->flashdata('msg');
         $status = (string)$this->session->flashdata('status');
 
-        $response['completepayment'] = $status === 's';
+        $response['completepayment'] = false;
+        if(strtolower($status) === 's'){
+            $response['completepayment'] = true;
+            $order = $entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                   ->findOneBy(['transactionId' => $txnId]);
+            if($order){
+                $order->setDateadded(date_create(date("Y-m-d H:i:s")));
+                $entityManager->flush();
+            }
+        }
+
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
         $response['itemList'] = json_decode($payDetails['data_response'],true);
         if($paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY && $status === 'f'){
@@ -1340,7 +1352,6 @@ class Payment extends MY_Controller{
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
 
             // add storename in item list collection
-            $entityManager = $this->serviceContainer['entity_manager'];
             foreach ($response['itemList'] as $key => $value) {
                 $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                         ->findOneBy([
