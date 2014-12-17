@@ -74,7 +74,7 @@
                                                 <?php foreach($value["product"] as $key => $value): ?>
                                                     <?php if(isset($value["attr"]) && count($value["attr"] > 0)): ?>
                                                             <?php foreach($value["attr"] as $attr => $attrValue ): ?>
-                                                                <?php echo ucwords($attr).":".ucwords($attrValue)."<br/>" ?>
+                                                                <?php echo ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))."<br/>" ?>
                                                             <?php endforeach; ?>
                                                     <?php endif; ?>
                                                  <?php endforeach; ?>
