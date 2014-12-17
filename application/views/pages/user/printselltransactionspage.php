@@ -70,7 +70,7 @@
                                             <td >
                                                PHP <?php echo number_format((float)$value["totalOrderProduct"], 2, '.', '')  ?>
                                             </td>
-                                            <td style='text-align:left;'>
+                                            <td style='text-align:left;padding-left:2px;'>
                                                 <?php foreach($value["product"] as $key => $value): ?>
                                                     <?php if(isset($value["attr"]) && count($value["attr"] > 0)): ?>
                                                             <?php foreach($value["attr"] as $attr => $attrValue ): ?>
