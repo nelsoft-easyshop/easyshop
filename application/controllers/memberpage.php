@@ -475,9 +475,6 @@ class Memberpage extends MY_Controller
      */
     public function printBuyTransactions()
     {   
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $boughTransactions["transactions"] = $this->transactionManager
                                                    ->getBoughtTransactionDetails(
                                                                                 $this->session->userdata('member_id'),
@@ -496,9 +493,7 @@ class Memberpage extends MY_Controller
      */
     public function printSellTransactions()
     {
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
+
         $soldTransaction["transactions"] = $this->transactionManager
                                                 ->getSoldTransactionDetails(
                                                                           $this->session->userdata('member_id'),
