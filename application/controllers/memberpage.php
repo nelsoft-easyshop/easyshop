@@ -1851,7 +1851,6 @@ class Memberpage extends MY_Controller
             $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
             
             $profilePercentage = $userManager->getProfileCompletePercent($member);  
-            $userSoldProductCount = $esProductRepo->getUserSoldProductCount($memberId);
 
             $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
             $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
