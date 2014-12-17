@@ -46,7 +46,7 @@
 
                                     </thead>
                                     <tr style='text-align:center;'>
-                                      <?php foreach($transactions as $key => $value): ?>
+                                      <?php foreach($transactions as $value): ?>
                                         <tr style="text-align:center;border: black 1px solid;">
                                             <td>
                                                 <?php echo $value["invoiceNo"]; ?>
@@ -70,7 +70,7 @@
                                                 PHP <?php echo number_format((float)$value["total"], 2, '.', '') ?>
                                             </td> 
                                             <td style='text-align:left;padding-left:2px;'>
-                                                <?php foreach($value["product"] as $key => $value): ?>
+                                                <?php foreach($value["product"] as $value): ?>
                                                     <?php if(isset($value["attr"]) && count($value["attr"] > 0)): ?>
                                                             <?php foreach($value["attr"] as $attr => $attrValue ): ?>
                                                                 <?php echo ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))."<br/>" ?>
