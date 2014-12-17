@@ -503,20 +503,15 @@ class Memberpage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                       (bool) $this->input->post("isOngoing"),
-                                                                                       0,
-                                                                                       10,
-                                                                                       $this->input->post("invoiceNo"),
-                                                                                       $this->input->post("paymentMethod"));
-
-            foreach($soldTransaction["transactions"] as $key => $value) {
-                $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-                if(count($attr) > 0) {
-                    $soldTransaction["transactions"][$key][] = ["attributes" => $attr];                    
-                }
-            }
-           
+        $soldTransaction["transactions"] = $this->transactionManager
+                                              ->getSoldTransactionDetails(
+                                                  $this->session->userdata('member_id'),
+                                                  (bool) $this->input->post("isOngoing"),
+                                                  0,
+                                                  10,
+                                                  $this->input->post("invoiceNo"),
+                                                  $this->input->post("paymentMethod")
+                                              );  
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
     }
     
