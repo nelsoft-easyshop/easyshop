@@ -68,7 +68,7 @@ class EsProductReviewListener implements EventSubscriber
                                ->find(EsActivityType::FEEDBACK_UPDATE);
             $phraseArray = $this->languageLoader
                                 ->getLine($activityType->getActivityPhrase());
-            if((int)$entity->getPReviewid() != EsProductReview::PRODUCT_REVIEW_DEFAULT){
+            if((int)$entity->getPReviewid() !== EsProductReview::PRODUCT_REVIEW_DEFAULT){
                 $unparsedPhrase = $phraseArray['product']['reply'];
             }
             else{
