@@ -599,7 +599,7 @@ class Memberpage extends MY_Controller
         
         $result = $this->memberpage_model->upload_img($uid, $data);
         $image = $this->serviceContainer['user_manager']
-                       ->getUserImage($uid);
+                      ->getUserImage($uid);
 
         $response = [
             'isSuccessful' => true,
@@ -1175,8 +1175,6 @@ class Memberpage extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
         $result = $this->memberpage_model->banner_upload($uid, $data);
-        $data = $this->memberpage_model->get_member_by_id($uid);
-
         $banner = $this->serviceContainer['user_manager']
                        ->getUserImage($uid, 'banner');
 
