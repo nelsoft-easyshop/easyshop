@@ -52,13 +52,13 @@
                                                 <?php echo $value["invoiceNo"]; ?>
                                             </td>
                                             <td>
-                                                <?php echo $value["productname"]; ?>
+                                                <?php echo html_escape($value["productname"]); ?>
                                             </td>
                                             <td>
                                                 <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
                                             </td>    
                                             <td>
-                                                <?php echo $value["fullname"]; ?>
+                                                <?php echo html_escape($value["fullname"]); ?>
                                             </td>                                                                                 
                                             <td>
                                                 <?php echo $value["orderQuantity"]; ?>

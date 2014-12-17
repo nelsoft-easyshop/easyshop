@@ -165,6 +165,13 @@ p {
      transition: 		all 0.3s ease-in-out;	
 }
 
+.avatar-modal-loading {
+    position: absolute;
+    top: 35%;
+    left: 38%;
+    display: none;
+}
+
 .orange_btn3:hover {
     background-color: #ff4400;
     color: #fff;
