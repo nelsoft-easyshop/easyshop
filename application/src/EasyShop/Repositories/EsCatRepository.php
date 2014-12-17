@@ -51,6 +51,7 @@ class EsCatRepository extends EntityRepository
      */
     public function getChildrenWithNestedSet($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
     {
+        $this->em =  $this->_em;
         $rsm = new ResultSetMapping();
         $rsm->addScalarResult('original_category_id', 'original_category_id');
         $query = $this->em->createNativeQuery("
@@ -59,7 +60,7 @@ class EsCatRepository extends EntityRepository
             FROM
                 es_category_nested_set t1
                     LEFT JOIN
-                es_category_nested_set t2 ON t2.id_category_nested_set = :category_id
+                es_category_nested_set t2 ON t2.original_category_id = :category_id
             WHERE
                 t1.left > t2.left
                     AND t1.right < t2.right
@@ -67,7 +68,10 @@ class EsCatRepository extends EntityRepository
         $query->setParameter('category_id', $categoryId); 
         $results = $query->getArrayResult(); 
 
-        return array_column($results, 'original_category_id');
+        $resultIds = array_column($results, 'original_category_id');
+        $resultIds[] = $categoryId;
+
+        return $resultIds;
     }
 
     /**
