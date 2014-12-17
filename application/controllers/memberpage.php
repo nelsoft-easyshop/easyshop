@@ -356,23 +356,15 @@ class Memberpage extends MY_Controller
      */
     public function exportSellTransactions()
     {       
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                        (bool)$this->input->get("isOngoing"),
-                                                                                        0,
-                                                                                        10,
-                                                                                        $this->input->get("invoiceNo"),
-                                                                                        $this->input->get("paymentMethod")
-                                                                                        );
-
-        foreach($soldTransaction["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
-            }
-        }  
+        $soldTransaction["transactions"] = $this->transactionManager
+                                                ->getSoldTransactionDetails(
+                                                                          $this->session->userdata('member_id'),
+                                                                          (bool) $this->input->get("isOngoing"),
+                                                                          0,
+                                                                          10,
+                                                                          $this->input->get("invoiceNo"),
+                                                                          $this->input->get("paymentMethod")
+                                                                          );
 
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
@@ -388,18 +380,20 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
-            if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $attr) {
-                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+            foreach ($value["product"] as $key => $product) {
+                if(isset($product["attr"])) {
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                         $prodSpecs .= ucwords($attr).":".ucwords($attrValue)." / ";
+                    }
                 }
-            }
-            else {
-                $prodSpecs = "N/A";
+                else {
+                    $prodSpecs = "N/A";
+                }
             }
             fputcsv($output, array( $value["invoiceNo"]
                                     , $value["productname"]
                                     , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , $value["fullname"]
+                                    , $value["buyerStoreName"]
                                     , $value["orderQuantity"]
                                     , ucwords(strtolower($value["paymentMethod"]))
                                     , number_format((float)$value["totalOrderProduct"], 2, '.', '')
@@ -413,24 +407,16 @@ class Memberpage extends MY_Controller
      *  Export Buy transactions to CSV file
      */
     public function exportBuyTransactions()
-    {       
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
-                                                                                          (bool)$this->input->get("isOngoing"),
-                                                                                          0,
-                                                                                          10,
-                                                                                          $this->input->get("invoiceNo"),
-                                                                                          $this->input->get("paymentMethod"));
-
-        
-        foreach($boughTransactions["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
-            }
-        }      
+    {             
+        $boughTransactions["transactions"] = $this->transactionManager
+                                                   ->getBoughtTransactionDetails(
+                                                                                $this->session->userdata('member_id'),
+                                                                                (bool) $this->input->get("isOngoing"),
+                                                                                0,
+                                                                                10,
+                                                                                $this->input->get("invoiceNo"),
+                                                                                $this->input->get("paymentMethod")
+                                                                              );      
 
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
@@ -447,13 +433,15 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
-            if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $attr) {
-                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+            foreach ($value["product"] as $key => $product) {
+                if(isset($product["attr"])) {
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                         $prodSpecs .= ucwords($attr).":".ucwords($attrValue)." / ";
+                    }
                 }
-            }
-            else {
-                $prodSpecs = "N/A";
+                else {
+                    $prodSpecs = "N/A";
+                }
             }
 
             fputcsv($output, array( $value["invoiceNo"]
