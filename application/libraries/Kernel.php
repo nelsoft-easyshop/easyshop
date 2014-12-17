@@ -493,6 +493,13 @@ class Kernel
                             $container['payment_service']
                         );
         };
+        
+        $container['sphinx_client'] = function ($c) use ($container) {
+            $sphinxClient = new \SphinxClient();
+            $sphinxClient->SetMaxQueryTime(5000);
+            return $sphinxClient;
+        };
+
 
         /* Register services END */
         $this->serviceContainer = $container;
