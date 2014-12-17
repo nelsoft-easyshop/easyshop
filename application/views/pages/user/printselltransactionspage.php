@@ -59,7 +59,7 @@
                                                 <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
                                             </td>                                        
                                             <td>
-                                               <?php echo ucwords(strtolower($value["fullname"])) ?>
+                                               <?php echo ucwords(strtolower($value["buyerStoreName"])) ?>
                                             </td>     
                                             <td >
                                                 <?php echo $value["orderQuantity"] ?>
