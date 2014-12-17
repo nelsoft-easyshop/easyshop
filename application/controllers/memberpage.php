@@ -380,7 +380,7 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
-            foreach ($value["product"] as $key => $product) {
+            foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
                          $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
@@ -388,17 +388,18 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
+                    break;
                 }
             }
-            fputcsv($output, array( $value["invoiceNo"]
-                                    , html_escape($value["productname"])
-                                    , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , html_escape($value["buyerStoreName"])
-                                    , $value["orderQuantity"]
-                                    , ucwords(strtolower($value["paymentMethod"]))
-                                    , number_format((float)$value["totalOrderProduct"], 2, '.', '')
-                                    , $prodSpecs
-            ));
+            fputcsv($output, [$value["invoiceNo"]
+                              , html_escape($value["productname"])
+                              , $value["dateadded"]->format('Y-m-d H:i:s')
+                              , html_escape($value["buyerStoreName"])
+                              , $value["orderQuantity"]
+                              , ucwords(strtolower($value["paymentMethod"]))
+                              , number_format((float)$value["totalOrderProduct"], 2, '.', '')
+                              , $prodSpecs
+            ]);
             $prodSpecs = "";
         }
     }
@@ -409,7 +410,7 @@ class Memberpage extends MY_Controller
     public function exportBuyTransactions()
     {             
         $boughTransactions["transactions"] = $this->transactionManager
-                                                   ->getBoughtTransactionDetails(
+                                                  ->getBoughtTransactionDetails(
                                                                                 $this->session->userdata('member_id'),
                                                                                 (bool) $this->input->get("isOngoing"),
                                                                                 0,
@@ -433,7 +434,7 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
-            foreach ($value["product"] as $key => $product) {
+            foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
                          $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
@@ -441,18 +442,19 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
+                    break;
                 }
             }
 
-            fputcsv($output, array( $value["invoiceNo"]
-                                    , html_escape($value["productname"])
-                                    , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , html_escape($value["fullname"])
-                                    , $value["orderQuantity"]
-                                    , ucwords(strtolower($value["paymentMethod"]))
-                                    , number_format((float)$value["total"], 2, '.', '')
-                                    , $prodSpecs
-            ));
+            fputcsv($output, [ $value["invoiceNo"]
+                               , html_escape($value["productname"])
+                               , $value["dateadded"]->format('Y-m-d H:i:s')
+                               , html_escape($value["fullname"])
+                               , $value["orderQuantity"]
+                               , ucwords(strtolower($value["paymentMethod"]))
+                               , number_format((float)$value["total"], 2, '.', '')
+                               , $prodSpecs
+            ]);
             $prodSpecs = "";
         }
     }
@@ -464,7 +466,7 @@ class Memberpage extends MY_Controller
     public function printBuyTransactions()
     {   
         $boughTransactions["transactions"] = $this->transactionManager
-                                                   ->getBoughtTransactionDetails(
+                                                  ->getBoughtTransactionDetails(
                                                                                 $this->session->userdata('member_id'),
                                                                                 (bool) $this->input->post("isOngoing"),
                                                                                 0,
