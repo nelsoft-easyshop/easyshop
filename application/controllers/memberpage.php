@@ -487,9 +487,6 @@ class Memberpage extends MY_Controller
                                                                                 $this->input->post("invoiceNo"),
                                                                                 $this->input->post("paymentMethod")
                                                                               );
-        echo "<pre>";
-        print_r($boughTransactions["transactions"]);
-        echo "</pre>";
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
@@ -503,14 +500,14 @@ class Memberpage extends MY_Controller
         $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
         $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
         $soldTransaction["transactions"] = $this->transactionManager
-                                              ->getSoldTransactionDetails(
-                                                  $this->session->userdata('member_id'),
-                                                  (bool) $this->input->post("isOngoing"),
-                                                  0,
-                                                  10,
-                                                  $this->input->post("invoiceNo"),
-                                                  $this->input->post("paymentMethod")
-                                              );  
+                                                ->getSoldTransactionDetails(
+                                                                          $this->session->userdata('member_id'),
+                                                                          (bool) $this->input->post("isOngoing"),
+                                                                          0,
+                                                                          10,
+                                                                          $this->input->post("invoiceNo"),
+                                                                          $this->input->post("paymentMethod")
+                                                                          );  
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
     }
     
