@@ -166,14 +166,14 @@ $lang['update_product'] = [
     ];
 
 $lang['update_transaction'] = [
-        'buy' => 'you have purchased an item with :phrase',
+        'buy' => 'You have purchased an item with :phrase',
         'add_ship_detail' => 'You have added shipment details on order :phrase ',
         'edit_ship_detail' => 'You have modified shipment details on order :phrase',
         'item_received' => '',
-        'item_cancel' => '',
         'item_reject' => '',
         'item_unreject' => '',
-        'completed' => '',
+        'item_cancel' => 'You cancelled',
+        'completed' => 'You marked as completed',
     ];
 ?>
 
