@@ -303,9 +303,38 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    document.getElementById('form_image').action = '/memberpage/'+formAction;
-                    $('#form_image').submit();
-                    $.modal.close();
+                    var action = '/memberpage/'+formAction;
+                    $('#form_image').ajaxForm({
+                        url: action,
+                        dataType: "json",
+                        beforeSubmit : function(){
+                            $('.avatar-modal-content').hide();
+                            $('.avatar-modal-loading').fadeIn();
+                        },
+                        uploadProgress : function(event, position, total, percentComplete) {
+                            console.log(percentComplete);
+                        },
+                        success :function(xhrResponse) { 
+                            if(xhrResponse.isSuccessful){
+                                if(formAction === 'banner_upload'){
+                                    var bannerImage = $('img.banner-image');
+                                    bannerImage.attr('src',xhrResponse.banner);
+                                }
+                                else if(formAction === 'upload_img'){
+                                    var avatarImage = $('img.avatar-image');
+                                    avatarImage.attr('src',xhrResponse.image);
+                                }
+                                $.modal.close();
+                                $('#banner-cancel-changes').trigger('click');
+                            }
+                            else{
+                                $.modal.close();
+                                $('#banner-cancel-changes').trigger('click');
+                                alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                            }
+                            
+                        },
+                    }).submit(); 
                 });
 
                 if(imageUploadType  == "avatar"){
