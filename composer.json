@@ -21,7 +21,8 @@
         "facebook/php-sdk-v4" : "4.0.*",
         "google/apiclient": "1.0.*@beta",
         "noiselabs/nusoap-bundle": "dev-master",
-        "php-curl-class/php-curl-class": "~2.1"
+        "php-curl-class/php-curl-class": "~2.1",
+        "neutron/sphinxsearch-api": "dev-master"
     },
     "repositories": [
         {
