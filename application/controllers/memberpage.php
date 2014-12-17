@@ -592,7 +592,6 @@ class Memberpage extends MY_Controller
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
-        $vendorLink = html_escape($this->input->post('url'));
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -601,6 +600,15 @@ class Memberpage extends MY_Controller
         $image = $this->serviceContainer['user_manager']
                       ->getUserImage($uid);
 
+        if((bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
+        
         $response = [
             'isSuccessful' => true,
             'image' => $image,
@@ -1177,7 +1185,15 @@ class Memberpage extends MY_Controller
         $result = $this->memberpage_model->banner_upload($uid, $data);
         $banner = $this->serviceContainer['user_manager']
                        ->getUserImage($uid, 'banner');
-
+                       
+        if((bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
         $response = [
             'isSuccessful' => true,
             'banner' => $banner,
@@ -1186,8 +1202,8 @@ class Memberpage extends MY_Controller
         if(isset($result['error'])){
             $response['isSuccessful'] = false;
         }
+
         echo json_encode($response);
-    
     }
         
     /**
