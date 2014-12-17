@@ -42,7 +42,7 @@ application/logs/*
 /sphinx/logs/*
 !/sphinx/logs/*.md
 /sphinx/data/*
-!/sphinx/logs/*.md
+!/sphinx/data/*.md
 
 
 
