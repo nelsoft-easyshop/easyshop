@@ -388,8 +388,8 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
+                    break;
                 }
-                break;
             }
             fputcsv($output, [$value["invoiceNo"]
                               , html_escape($value["productname"])
@@ -442,8 +442,8 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
-                }
-                break;                
+                    break;
+                }               
             }
 
             fputcsv($output, [ $value["invoiceNo"]
