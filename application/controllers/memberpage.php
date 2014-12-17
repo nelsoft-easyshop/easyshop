@@ -1723,7 +1723,7 @@ class Memberpage extends MY_Controller
                                                          $paymentMethod,
                                                          $transactionNumber
                                                      );
-                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
@@ -1734,7 +1734,7 @@ class Memberpage extends MY_Controller
                                               $transactionNumber,
                                               $paymentMethod
                                           ),
-                    'count' => $ongoingSoldTransactionsCount,
+                    'count' => $ongoingSoldTransactionsCount["transactionsCount"],
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);
@@ -1874,16 +1874,16 @@ class Memberpage extends MY_Controller
                 'activeProductCount' => $userActiveProductCount,
                 'deletedProductCount' => $userDeletedProductCount,
                 'draftedProductCount' => $userDraftedProductCount,
-                'soldProductCount' => $userSoldProductCount,
+                'soldProductCount' => $ongoingSoldTransactionsCount["productCount"] + $completeSoldTransactionsCount["productCount"],
                 'activeProductView' => $activeProductView,
                 'memberRating' => $memberRating,
                 'feedBackTotalCount' => $feedBackTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
-                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount,
+                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
-                'completeSoldTransactionsCount' => $completeSoldTransactionsCount
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"]
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
