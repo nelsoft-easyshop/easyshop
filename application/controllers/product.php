@@ -236,6 +236,12 @@ class product extends MY_Controller
         $viewerId =  $this->session->userdata('member_id');
         
         if($productEntity && $productEntity->getMember()->getIsActive()){
+            if($viewerId){
+                if((int)$viewerId !== $productEntity->getMember()->getIdMember()){
+                    $productEntity->setClickcount($productEntity->getClickcount() + 1);
+                    $this->em->flush();
+                }
+            }
             $productId = $productEntity->getIdProduct();
             $categoryId = $productEntity->getCat()->getIdCat();
 
