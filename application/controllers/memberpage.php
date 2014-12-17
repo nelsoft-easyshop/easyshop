@@ -600,7 +600,7 @@ class Memberpage extends MY_Controller
         $image = $this->serviceContainer['user_manager']
                       ->getUserImage($uid);
 
-        if((bool)$this->input->post('isAjax') === false){
+        if((bool)$this->input->post('isAjax')){
             var_dump((bool)$this->input->post('isAjax'));
             exit();
             $member = $this->serviceContainer['entity_manager']
@@ -1188,7 +1188,7 @@ class Memberpage extends MY_Controller
         $banner = $this->serviceContainer['user_manager']
                        ->getUserImage($uid, 'banner');
                        
-        if((bool)$this->input->post('isAjax') === false){
+        if((bool)$this->input->post('isAjax')){
             $member = $this->serviceContainer['entity_manager']
                            ->getRepository('EasyShop\Entities\EsMember')
                            ->find($uid);
