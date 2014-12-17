@@ -157,7 +157,7 @@ $lang['update_product'] = [
     ];
 
 $lang['update_transaction'] = [
-        'buy' => 'You have purchase item :phrase'
+        'buy' => 'you have purchased an item with :phrase'
     ]
 ?>
 
