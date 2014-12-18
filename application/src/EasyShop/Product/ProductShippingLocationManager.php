@@ -45,8 +45,9 @@ class ProductShippingLocationManager
         ];
 
         $locationPriceArray = [];
-
-        $deliveryCount = $summaryCount = $freeCount = 0;
+        $deliveryCount = 0;
+        $summaryCount = 0;
+        $freeCount = 0;
 
         foreach($shippingDetails as $detail){
             $pid = (int)$detail['id_product_item'];
@@ -69,7 +70,7 @@ class ProductShippingLocationManager
             }
         }
 
-        $data['is_delivery'] = count($shippingDetails) === $deliveryCount ? false:true;
+        $data['is_delivery'] = count($shippingDetails) !== $deliveryCount;
 
         if( $data['is_delivery'] ){
             if( $freeCount > $summaryCount ){
@@ -80,17 +81,15 @@ class ProductShippingLocationManager
             }
 
             if( $data['has_shippingsummary'] ){
-
                 foreach( $shippingDetails as $detail ){
                     $pid = (int)$detail["id_product_item"];
                     $loc = (int)$detail["id_location"];
-                    $price = number_format($detail["price"], 2, '.', ',');
                     if( $loc !== 0 && $loc !== 1 ){
                         if( !in_array($loc, $data['shipping_locations'][$pid]) ){
                             $data['shipping_locations'][$pid][] = $loc;
                         }
                         if( !isset( $locationPriceArray[$pid][$loc] ) ){
-                            $locationPriceArray[$pid][$loc] = $price;
+                            $locationPriceArray[$pid][$loc] = number_format($detail["price"], 2, '.', ',');
                         }
                     }
                 }
