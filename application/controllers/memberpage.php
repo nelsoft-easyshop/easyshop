@@ -850,17 +850,17 @@ class Memberpage extends MY_Controller
                                 $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
                                 break;
                         }
-
-                        if($hasNotif){
-                            $emailService->setRecipient($parseData['email'])
-                                         ->setSubject($emailSubject)
-                                         ->setMessage($emailMsg, $imageArray)
-                                         ->sendMail();
-                            $smsService->setMobile($parseData['mobile'])
-                                       ->setMessage($smsMsg)
-                                       ->sendSms();
-                        }
                     }
+                }
+
+                if($hasNotif){
+                    $emailService->setRecipient($parseData['email'])
+                        ->setSubject($emailSubject)
+                        ->setMessage($emailMsg, $imageArray)
+                        ->sendMail();
+                    $smsService->setMobile($parseData['mobile'])
+                        ->setMessage($smsMsg)
+                        ->sendSms();
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
