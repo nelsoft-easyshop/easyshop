@@ -303,6 +303,11 @@ class EsMember
     /**
      *  @var string
      */
+    const DEFAULT_IMG_AVATAR = 'usersize.png';    
+
+    /**
+     *  @var string
+     */
     const DEFAULT_ACTIVE = 1; 
 
     /**

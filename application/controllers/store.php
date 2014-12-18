@@ -194,17 +194,16 @@ class Store extends MY_Controller
                                     ->getRepository('EasyShop\Entities\EsMember')
                                     ->find($uid); 
         $path = $memberObj->getImgurl();                           
-        if(trim($memberObj->getImgurl()) === ''){
+        if(trim($memberObj->getImgurl()) === '') {
             $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
         }   
-        if(!is_dir($path))
-        {
+        if(!is_dir($path)) {
             mkdir($path,0755,TRUE); 
         }          
-        $uploadReturn = $this->upload->uploadImage($path, $this->avatarImageFilname);  
-
+        $avatarFileName = $path."/".EsMember::DEFAULT_IMG_AVATAR;
+        $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_AVATAR);  
         if($data['w'] > 0 && $data['h'] > 0) {
-            $imageUtility->imageCrop($path.$this->avatarImageFilname,
+            $imageUtility->imageCrop($avatarFileName,
                                      $data["x"],
                                      $data["y"],
                                      $data["w"],
@@ -214,19 +213,19 @@ class Store extends MY_Controller
         $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];              
         if($uploadReturn["uploadData"]["image_width"] > 1024 || $uploadReturn["uploadData"]["image_width"] > 768) {
-            $imageUtility->imageResize($path.$this->avatarImageFilname, 
-                                       $path.$this->avatarImageFilname, 
+            $imageUtility->imageResize($avatarFileName, 
+                                       $avatarFileName, 
                                        $imageDimensionsConfig["usersize"]
                                        );
         }
 
-        $imageUtility->imageResize($path.$this->avatarImageFilname, 
-                                   $path.EsMember::DEFAULT_IMG_NORMAL_SIZE, 
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_NORMAL_SIZE, 
                                    $imageDimensionsConfig["normalsize"]
                                    );
 
-        $imageUtility->imageResize($path.$this->avatarImageFilname, 
-                                   $path.EsMember::DEFAULT_IMG_SMALL_SIZE, 
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
                                    $imageDimensionsConfig["smallsize"]
                                    );    
         $this->serviceContainer['entity_manager']
