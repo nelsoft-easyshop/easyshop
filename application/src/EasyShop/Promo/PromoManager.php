@@ -3,6 +3,7 @@ namespace EasyShop\Promo;
 use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsPromo;
+use EasyShop\Entities\EsPromoType;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -205,13 +206,13 @@ class PromoManager
                                         ->findOneBy([
                                             'productId' => $productId,
                                             'memberId' => $memberId,
-                                            'promoType' => EsPromo::BUY_AT_ZERO
+                                            'promoType' => EsPromoType::BUY_AT_ZERO
                                         ]);
         if (!$isAccountRegistered) {
             $promo = new EsPromo();
             $promo->setMemberId($memberId);
             $promo->setProductId($productId);
-            $promo->setPromoType(EsPromo::BUY_AT_ZERO);
+            $promo->setPromoType(EsPromoType::BUY_AT_ZERO);
             $promo->setCreatedAt(new \DateTime('now'));
 
             $this->em->persist($promo);
@@ -235,7 +236,7 @@ class PromoManager
                     ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
                     ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
                     ->setParameter('code', $code)
-                    ->setParameter('promoType', EsPromo::SCRATCH_AND_WIN)
+                    ->setParameter('promoType', EsPromoType::SCRATCH_AND_WIN)
                     ->getQuery();
         $result = $query->getResult();
 
