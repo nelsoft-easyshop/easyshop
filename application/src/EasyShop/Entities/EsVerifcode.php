@@ -81,6 +81,10 @@ class EsVerifcode
     private $member;
 
 
+    /**
+     *  @var int
+     */
+    const DEFAULT_MOBILE_COUNT = 0;     
 
     /**
      * Get idVerifcode

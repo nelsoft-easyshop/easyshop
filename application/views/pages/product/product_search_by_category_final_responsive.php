@@ -1,5 +1,6 @@
 <meta name="viewport" content="width=device-width, maximum-scale=1.0">
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
@@ -382,7 +383,7 @@
     <input type="hidden" id="hidden-loadUrl" value="/cat/more/<?=$categorySlug .'?'. $_SERVER['QUERY_STRING']; ?>" />
 </div>
 
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>

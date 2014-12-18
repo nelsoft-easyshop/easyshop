@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
-
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
@@ -429,7 +429,7 @@
     <input type="hidden" id="hidden-loadUrl" value="/advsrch/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div>
 
-<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script> 
+<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script> 
 <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

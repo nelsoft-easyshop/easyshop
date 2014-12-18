@@ -229,10 +229,12 @@ class ApiFormatter
 
     /**
      * Format cart array to display on mobile api
-     * @param  array $cartData
+     * @param  array   $cartData 
+     * @param  boolean $forPayment
+     * @param  string  $paymentType
      * @return array
      */
-    public function formatCart($cartData)
+    public function formatCart($cartData, $forPayment = false, $paymentType = "")
     { 
         $formattedCartContents = [];
         $finalCart = [];
@@ -289,6 +291,31 @@ class ApiFormatter
                     'isAvailable' => isset($cartItem['isAvailable']) ? $cartItem['isAvailable'] : "true",  
                     'mapAttributes' => $mappedAttributes
                 ];
+
+                if($forPayment){
+                    $formattedCartContents[$rowId]['error_message'] = [];
+                    if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
+                        $formattedCartContents[$rowId]['error_message'][] = "Not Available for selected payment type";
+                    }
+
+                    if(!$cartItem['hasNoSoloRestriction']){
+                        $formattedCartContents[$rowId]['error_message'][] = "This item can only be purchased individually.";
+                    }
+
+                    if(!$cartItem['hasNoPuchaseLimitRestriction']){
+                        $formattedCartContents[$rowId]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+                    }
+
+                    if(!$cartItem['isAvailableInLocation']){
+                        $formattedCartContents[$rowId]['error_message'][] = "This item is not available in your location.";
+                    }
+
+                    if(!$cartItem['isQuantityAvailable']){
+                        $formattedCartContents[$rowId]['error_message'][] = "The availability of this items is less than your desired quantity.";
+                    }
+
+                    $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
+                }
 
                 $format = $this->formatItem($cartItem['id']);
                 $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
