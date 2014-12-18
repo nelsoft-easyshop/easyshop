@@ -536,6 +536,7 @@ class Memberpage extends MY_Controller
 
         foreach($boughTransactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
+                $buyerName = $product["sellerStoreName"];
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
                          $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
@@ -550,13 +551,14 @@ class Memberpage extends MY_Controller
             fputcsv($output, [ $value["invoiceNo"]
                                , html_escape($value["productname"])
                                , $value["dateadded"]->format('Y-m-d H:i:s')
-                               , html_escape($value["fullname"])
+                               , html_escape($buyerName)
                                , $value["orderQuantity"]
                                , ucwords(strtolower($value["paymentMethod"]))
                                , number_format((float)$value["total"], 2, '.', '')
                                , $prodSpecs
             ]);
             $prodSpecs = "";
+            $buyerName = "";
         }
     }
 
@@ -1495,7 +1497,7 @@ class Memberpage extends MY_Controller
                                                          $paymentMethod,
                                                          $transactionNumber
                                                      );
-                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
@@ -1506,7 +1508,7 @@ class Memberpage extends MY_Controller
                                               $transactionNumber,
                                               $paymentMethod
                                           ),
-                    'count' => $ongoingSoldTransactionsCount,
+                    'count' => $ongoingSoldTransactionsCount["transactionsCount"],
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
                 $transactionView = $this->load->view('partials/dashboard-transaction-ongoing-sold', $ongoingSoldTransactionData, true);

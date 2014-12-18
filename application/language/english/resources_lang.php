@@ -165,6 +165,14 @@ $lang['update_product'] = [
         'delete' => 'You have moved your product to deleted items :phrase.',
     ];
 
+$lang['update_feedback'] = [
+        'product' => [
+            'review' => 'You have written a review on :phrase',
+            'reply' => 'You have given a reply on review of :phrase',
+        ],
+        'user' => 'You have given a feedback on :phrase', 
+    ];
+
 $lang['update_transaction'] = [
         'buy' => 'You have purchased an item with :phrase',
         'add_ship_detail' => 'You have added shipment details on order :phrase ',
