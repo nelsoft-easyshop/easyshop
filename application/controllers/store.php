@@ -197,12 +197,12 @@ class Store extends MY_Controller
         }   
         if(!is_dir($path))
         {
-          mkdir($path,0755,TRUE); 
+            mkdir($path,0755,TRUE); 
         }          
         $uploadReturn = $this->upload->uploadImage($path, $this->avatarImageFilname);  
 
         if($data['w'] > 0 && $data['h'] > 0) {
-            
+
         }
 
         if(!(bool)$this->input->post('isAjax')){
