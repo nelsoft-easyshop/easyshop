@@ -222,6 +222,7 @@ class product extends MY_Controller
     public function item($itemSlug = '')
     {
 
+        $httpRequest = $this->serviceContainer['http_request'];
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
@@ -233,11 +234,18 @@ class product extends MY_Controller
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                   ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
         $viewerId =  $this->session->userdata('member_id');
-        
+        $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($viewerId);
         if($productEntity && $productEntity->getMember()->getIsActive()){
             if($viewerId){
-                if((int)$viewerId !== $productEntity->getMember()->getIdMember()){
-                    $productEntity->setClickcount($productEntity->getClickcount() + 1);
+                $isIncrease = $productManager->increaseClickCount($productEntity, $viewerId);
+                if($isIncrease){
+                    $productHistoryView = new \EasyShop\Entities\EsProductHistoryView();
+                    $productHistoryView->setMember($viewer);
+                    $productHistoryView->setProduct($productEntity);
+                    $productHistoryView->setDateViewed(date_create());
+                    $productHistoryView->setIpAddress($httpRequest->getClientIp());
+                    $this->em->persist($productHistoryView);
                     $this->em->flush();
                 }
             }
