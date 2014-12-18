@@ -435,6 +435,7 @@ class Memberpage extends MY_Controller
 
         foreach($boughTransactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
+                $buyerName = $product["sellerStoreName"];
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
                          $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
@@ -449,13 +450,14 @@ class Memberpage extends MY_Controller
             fputcsv($output, [ $value["invoiceNo"]
                                , html_escape($value["productname"])
                                , $value["dateadded"]->format('Y-m-d H:i:s')
-                               , html_escape($value["fullname"])
+                               , html_escape($buyerName)
                                , $value["orderQuantity"]
                                , ucwords(strtolower($value["paymentMethod"]))
                                , number_format((float)$value["total"], 2, '.', '')
                                , $prodSpecs
             ]);
             $prodSpecs = "";
+            $buyerName = "";
         }
     }
 
