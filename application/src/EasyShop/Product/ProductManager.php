@@ -780,11 +780,11 @@ class ProductManager
 
     public function increaseClickCount($product, $memberId)
     {
-        $countViewed = $this->em->getRepository('EasyShop\Entities\EsProductHistoryView')
-                                ->getCountMemberViewInProduct($product->getIdProduct(), $memberId);
+        $numberOfViewsToday = $this->em->getRepository('EasyShop\Entities\EsProductHistoryView')
+                                ->getCountProductViewsByMemberToday($product->getIdProduct(), $memberId);
 
         if((int)$memberId !== $product->getMember()->getIdMember()
-            && $countViewed <= 0){
+            && $numberOfViewsToday <= 0){
             $product->setClickcount($product->getClickcount() + 1);
             $this->em->flush();
             return true;
