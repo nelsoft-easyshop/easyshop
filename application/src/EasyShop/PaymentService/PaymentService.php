@@ -28,6 +28,11 @@ use EasyShop\Entities\EsPoint;
  */
 class PaymentService
 {
+    const STATUS_FAIL = 'f';
+
+    const STATUS_SUCCESS = 's';
+
+    const STATUS_PENDING = 'p';
     /**
      * Error Codes
      *
