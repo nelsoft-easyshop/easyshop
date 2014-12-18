@@ -20,12 +20,20 @@ class EsAddressListener implements EventSubscriber
     private $activityManager;
 
     /**
+     * Language Loader Instance
+     *
+     * @var Easyshop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+
+    /**
      * Constructor.
      * 
      */
-    public function __construct($activityManager)
+    public function __construct($activityManager, $languageLoader)
     {
         $this->activityManager = $activityManager;
+        $this->languageLoader = $languageLoader;
     }
 
     /**
@@ -155,12 +163,16 @@ class EsAddressListener implements EventSubscriber
                              ->find($entity->getIdMember()->getIdMember());
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
+                $unparsedPhrase = $this->languageLoader
+                                       ->getLine($activityType->getActivityPhrase());
                 $phrase = $this->activityManager
                                ->constructActivityPhrase($this->changeSet,
-                                                         'update_information',
+                                                         $unparsedPhrase,
                                                          'EsAddress');
-                $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $member);
+                if($phrase !== ""){
+                    $em->getRepository('EasyShop\Entities\EsActivityHistory')
+                       ->createAcitivityLog($activityType, $phrase, $member);
+                }
            }
         }
     }

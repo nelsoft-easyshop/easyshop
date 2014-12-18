@@ -353,12 +353,13 @@ class TransactionManager
      * @param $memberId
      * @param bool $isOngoing
      * @param string $paymentMethod
+     * @param string $transactionNumber
      * @return int
      */
-    public function getBoughtTransactionCount($memberId, $isOngoing = true, $paymentMethod = '')
+    public function getBoughtTransactionCount($memberId, $isOngoing = true, $paymentMethod = '', $transactionNumber = '')
     {
         $boughtTransactionDetails = [];
-        $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing, $paymentMethod);
+        $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing, $paymentMethod, $transactionNumber);
 
         foreach ($getUserBoughtTransactions as $transaction) {
             if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
@@ -392,12 +393,14 @@ class TransactionManager
      * @param $memberId
      * @param bool $isOngoing
      * @param string $paymentMethod
-     * @return int
+     * @param string $transactionNumber
+     * @return Array
      */
-    public function getSoldTransactionCount ($memberId, $isOngoing = true, $paymentMethod = '')
+    public function getSoldTransactionCount ($memberId, $isOngoing = true, $paymentMethod = '', $transactionNumber = '')
     {
-        $soldTransactionDetails = array();
-        $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing, $paymentMethod);
+        $soldTransactionDetails = [];
+        $orderProductCount = 0;
+        $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing, $paymentMethod, $transactionNumber);
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
@@ -409,6 +412,7 @@ class TransactionManager
                     }
                     if (!isset($soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']])) {
                         $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
+                        $orderProductCount++;
                     }
                     if ($product['attrName']) {
                         $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
@@ -417,6 +421,9 @@ class TransactionManager
             }
         }
 
-        return count($soldTransactionDetails);
+        return [
+                "transactionsCount" => count($soldTransactionDetails),
+                "productCount" => $orderProductCount
+            ];
     }
 }

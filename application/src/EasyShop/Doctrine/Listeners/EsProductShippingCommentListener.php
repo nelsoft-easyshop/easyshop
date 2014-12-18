@@ -3,12 +3,12 @@
 namespace EasyShop\Doctrine\Listeners;
 
 use Doctrine\ORM\Events;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use EasyShop\Entities\EsMember as EsMember; 
+use EasyShop\Entities\EsProductShippingComment as EsProductShippingComment;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsMemberListener implements EventSubscriber
+class EsProductShippingCommentListener implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -37,6 +37,25 @@ class EsMemberListener implements EventSubscriber
     }
 
     /**
+    * The postPersist event occurs for an entity after the entity has been made persistent.
+    *
+    * @param LifecycleEventArgs $event
+    */
+    public function postPersist(LifecycleEventArgs $event)
+    {
+        $em = $event->getEntityManager();
+        $entity = $event->getEntity();
+
+        if ( ! $entity instanceOf EsProductShippingComment ) {
+            return;
+        }
+
+        $order = $entity->getOrderProduct()->getOrder();
+        $this->changeSet['invoiceNo'] = $order->getInvoiceNo();
+        $this->saveActivity($event);
+    }
+
+    /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
      * @param  LifecycleEventArgs $event
@@ -45,52 +64,38 @@ class EsMemberListener implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( !$entity instanceOf EsMember) {
+        if ( !$entity instanceOf EsProductShippingComment) {
             return;
         }
 
-        if ($event->hasChangedField('storeName')) {
-            $this->changeSet['storeName'] = $entity->getStoreName();
+        $modifiedCount = 0;
+
+        if ($event->hasChangedField('courier')) {
+            $modifiedCount += 1;
         }
 
-        if ($event->hasChangedField('password')) {
-            $this->changeSet['password'] = $entity->getPassword();
+        if ($event->hasChangedField('trackingNum')) {
+            $modifiedCount += 1;
         }
 
-        if ($event->hasChangedField('contactno')) {
-            $this->changeSet['contactno'] = $entity->getContactno();
+        if ($event->hasChangedField('comment')) {
+            $modifiedCount += 1;
         }
 
-        if ($event->hasChangedField('isEmailVerify')) {
-            $this->changeSet['isEmailVerify'] = $entity->getIsEmailVerify() ? "Verified" : "Unverified";
+        if ($event->hasChangedField('expectedDate')
+            && $entity->getExpectedDate()->format('Y-m-d') !== "-0001-11-30") {
+            $modifiedCount += 1;
         }
 
-        if ($event->hasChangedField('gender')) {
-            $this->changeSet['gender'] = $entity->getGender() ? "Female" : "Male";
+        if ($event->hasChangedField('deliveryDate')
+            && $entity->getDeliveryDate()->format('Y-m-d') !== "-0001-11-30") {
+            $modifiedCount += 1;
         }
 
-        if ($event->hasChangedField('email')) {
-            $this->changeSet['email'] = $entity->getEmail();
-        }
-
-        if ($event->hasChangedField('birthday')) {
-            $this->changeSet['birthday'] = $entity->getBirthday();
-        }
-
-        if ($event->hasChangedField('fullname')) {
-            $this->changeSet['fullname'] = $entity->getFullname();
-        }
-
-        if ($event->hasChangedField('storeDesc')) {
-            $this->changeSet['storeDesc'] = $entity->getStoreDesc();
-        }
-
-        if ($event->hasChangedField('slug')) {
-            $this->changeSet['slug'] = $entity->getSlug();
-        }
-
-        if ($event->hasChangedField('website')) {
-            $this->changeSet['website'] = $entity->getWebsite();
+        if($modifiedCount > 1){
+            $order = $entity->getOrderProduct()->getOrder();
+            $this->changeSet['invoiceNo'] = $order->getInvoiceNo();
+            $this->changeSet['modified'] = true;
         }
     }
 
@@ -112,20 +117,28 @@ class EsMemberListener implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        $phrase = "";
-        if ( $entity instanceOf EsMember) {
+        if ( $entity instanceOf EsProductShippingComment) {
             if(count($this->changeSet) > 0){
+                $member = $entity->getMember();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
-                                   ->find(EsActivityType::INFORMATION_UPDATE);
-                $unparsedPhrase = $this->languageLoader
+                                   ->find(EsActivityType::TRANSACTION_UPDATE);
+                $phraseArray = $this->languageLoader
                                        ->getLine($activityType->getActivityPhrase());
+                if(isset($this->changeSet['modified'])){
+                    $unparsedPhrase = $phraseArray['edit_ship_detail'];
+                    unset($this->changeSet['modified']);
+                }
+                else{
+                    $unparsedPhrase = $phraseArray['add_ship_detail'];
+                }
+
                 $phrase = $this->activityManager
                                ->constructActivityPhrase($this->changeSet,
                                                          $unparsedPhrase,
-                                                         'EsMember');
+                                                         'EsProductShippingComment');
                 if($phrase !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $entity);
+                       ->createAcitivityLog($activityType, $phrase, $member);
                 }
            }
         }
@@ -140,6 +153,7 @@ class EsMemberListener implements EventSubscriber
         return [
             Events::preUpdate,
             Events::postUpdate,
+            Events::postPersist,
         ];
     }
 }

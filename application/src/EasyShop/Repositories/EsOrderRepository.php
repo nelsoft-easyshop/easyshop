@@ -300,9 +300,10 @@ class EsOrderRepository extends EntityRepository
      * @param $uid
      * @param bool $isOngoing
      * @param string $paymentMethod
+     * @param string $transactionNumber
      * @return array
      */
-    public function getAllUserBoughtTransactions($uid, $isOngoing = true, $paymentMethod = '')
+    public function getAllUserBoughtTransactions($uid, $isOngoing = true, $paymentMethod = '', $transactionNumber ='')
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
         $qb = $this->_em->createQueryBuilder();
@@ -342,12 +343,14 @@ class EsOrderRepository extends EntityRepository
             ->andWhere('o.orderStatus IN(:orderStatus)')
             ->andWhere('o.buyer = :buyer_id')
             ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+            ->andWhere('o.invoiceNo LIKE :transNum ')
             ->orderBy('o.idOrder', "desc")
             ->setParameter('buyer_id', $uid)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
             ->setParameter('orderStatus', $orderStatus)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
             ->setParameter('paymentMethodLists', $paymentMethod)
+            ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->getQuery();
 
         return $queryBuilder->getResult();
@@ -358,9 +361,10 @@ class EsOrderRepository extends EntityRepository
      * @param $userId
      * @param bool $isOngoing
      * @param string $paymentMethod
+     * @param $transactionNumber
      * @return array
      */
-    public function getAllUserSoldTransactions($userId, $isOngoing = true, $paymentMethod = '')
+    public function getAllUserSoldTransactions($userId, $isOngoing = true, $paymentMethod = '', $transactionNumber)
     {
         $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
@@ -424,11 +428,13 @@ class EsOrderRepository extends EntityRepository
             ->andWhere('o.orderStatus != 2')
             ->andWhere('o.orderStatus IN (:orderStatus)')
             ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
+            ->andWhere('o.invoiceNo LIKE :transNum ')
             ->orderBy('o.idOrder', "desc")
             ->setParameter('sellerId', $userId)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
             ->setParameter('orderStatus', $orderStatus)
+            ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->setParameter('paymentMethodLists', $paymentMethod)
             ->getQuery();
 

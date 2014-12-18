@@ -1256,24 +1256,33 @@
                     }else if(txResponseBtn.hasClass('tx_cod')){
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                     }
-                    txResponseBtn.val('Successful');
+                    txResponseBtn.remove();
                     txResponseBtn.parent().parent().find('.txt_buttons').hide();
+                    txResponseBtn.parent().parent().find('.reject_item').remove();
                 }
                 txResponseBtn.addClass('enabled');
             }
         });
     });
 
-    $('#on-going-transaction').on('click','.exportTransactions', function(){
+    $("#on-going-transaction, #completed-transaction").on('click','.exportTransactions', function(){
         var url = $(this).data("url");
-        document.location.href = url;
+        var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
+        var isOngoing = $(this).data("isongoing");   
+        var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();                
+        document.location.href = url+"?invoiceNo="+invoiceNo+"&isOngoing="+isOngoing+"&paymentMethod="+paymentMethod;        
     });
 
-    $('#on-going-transaction').on('click','.printTransactions', function() {
+    $("#on-going-transaction, #completed-transaction").on('click','.printTransactions', function() {
         var url = $(this).data("url");
-
+        var isOngoing = $(this).data("isongoing");
+        var invoiceNo = $.trim($(this).parent().find(".search-transaction-num").val());
+        var paymentMethod = $(this).parent().parent().find(".select-filter-item").val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');                 
         $.ajax({
+            type: "post",
             url: url,
+            data: {paymentMethod:paymentMethod, isOngoing:isOngoing, invoiceNo : invoiceNo , 'csrfname': csrftoken},
             dataType: 'html',
             success: function(json) {
                 var originalContents = $(document.body).html();
@@ -1448,8 +1457,10 @@
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'transactionNumber';
+        var $page = 1;
+
         if (code === 13) {
-            searchForTransaction($container, $searchFor, $value, $container);
+            getTransactionDetails($page, $container, $container, $searchFor, $value);
         }
     });
 
@@ -1457,7 +1468,9 @@
         var $value = $(this).val();
         var $container =  $(this).attr('data');
         var $searchFor = 'paymentMethod';
-        searchForTransaction($container, $searchFor, $value, $container);
+        var $page = 1;
+
+        getTransactionDetails($page, $container, $container, $searchFor, $value);
     });
 
     $('#transactions').on('click', '.transaction-button-head', function() {
@@ -1466,27 +1479,6 @@
 
         getTransactionDetails($page, $container, $container, '', '');
     });
-
-    var searchForTransaction = function ($requestType, $searchFor, $value, $container)
-    {
-        $.ajax({
-            type: 'get',
-            url: 'memberpage/getTransactionsForPagination',
-            data: {
-                page : 1,
-                value : $value,
-                searchFor : $searchFor,
-                request : $requestType
-            },
-            beforeSend: function() {
-                $("#" + $container).empty();
-            },
-            success: function(requestResponse) {
-                var $response = $.parseJSON(requestResponse);
-                $("#" + $container).append($response.html);
-            }
-        });
-    }
 
     var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
     {

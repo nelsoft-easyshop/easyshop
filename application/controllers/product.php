@@ -34,13 +34,13 @@ class product extends MY_Controller
 
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = $this->input->get() ? $this->input->get() : array();
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+        $getParameter = $this->input->get() ? $this->input->get() : [];
+        $getParameter['category'] = $categoryId;
         $search = $searchProductService->getProductBySearch($getParameter); 
         $response['products'] = $search['collection'];
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more', $response, true);
         $data['count'] = count($response['products']);
         echo json_encode($data);
     }
@@ -65,7 +65,7 @@ class product extends MY_Controller
             $categoryDescription = $categoryDetails->getDescription();
             
             $response['getParameter'] = $getParameter = $this->input->get() ? $this->input->get() : [];
-            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
+            $getParameter['category'] = $categoryId;
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
 
@@ -222,6 +222,7 @@ class product extends MY_Controller
     public function item($itemSlug = '')
     {
 
+        $httpRequest = $this->serviceContainer['http_request'];
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
@@ -233,8 +234,21 @@ class product extends MY_Controller
         $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                   ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
         $viewerId =  $this->session->userdata('member_id');
-        
+        $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($viewerId);
         if($productEntity && $productEntity->getMember()->getIsActive()){
+            if($viewerId){
+                $isIncrease = $productManager->increaseClickCount($productEntity, $viewerId);
+                if($isIncrease){
+                    $productHistoryView = new \EasyShop\Entities\EsProductHistoryView();
+                    $productHistoryView->setMember($viewer);
+                    $productHistoryView->setProduct($productEntity);
+                    $productHistoryView->setDateViewed(date_create());
+                    $productHistoryView->setIpAddress($httpRequest->getClientIp());
+                    $this->em->persist($productHistoryView);
+                    $this->em->flush();
+                }
+            }
             $productId = $productEntity->getIdProduct();
             $categoryId = $productEntity->getCat()->getIdCat();
 
