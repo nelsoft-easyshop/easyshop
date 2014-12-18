@@ -44,11 +44,7 @@ class Upload
 
     public function uploadImage($uid, $data)
     {   
-        $memberObj = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->find($uid);    
-        var_dump($memberObj->getImgUrl());
-        // var_dump($uid);
-        // var_dump($data);
+        
     }
 }
 
