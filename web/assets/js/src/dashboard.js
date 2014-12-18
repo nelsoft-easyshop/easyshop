@@ -1256,9 +1256,9 @@
                     }else if(txResponseBtn.hasClass('tx_cod')){
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                     }
-                    txResponseBtn.hide();
+                    txResponseBtn.remove();
                     txResponseBtn.parent().parent().find('.txt_buttons').hide();
-                    txResponseBtn.parent().parent().find('.reject_item').hide();
+                    txResponseBtn.parent().parent().find('.reject_item').remove();
                 }
                 txResponseBtn.addClass('enabled');
             }
