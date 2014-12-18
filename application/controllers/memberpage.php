@@ -457,23 +457,15 @@ class Memberpage extends MY_Controller
      */
     public function exportSellTransactions()
     {       
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                        (bool)$this->input->get("isOngoing"),
-                                                                                        0,
-                                                                                        10,
-                                                                                        $this->input->get("invoiceNo"),
-                                                                                        $this->input->get("paymentMethod")
-                                                                                        );
-
-        foreach($soldTransaction["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                array_push($soldTransaction["transactions"][$key], ["attributes" => $attr]);
-            }
-        }  
+        $soldTransaction["transactions"] = $this->transactionManager
+                                                ->getSoldTransactionDetails(
+                                                                          $this->session->userdata('member_id'),
+                                                                          (bool) $this->input->get("isOngoing"),
+                                                                          0,
+                                                                          PHP_INT_MAX,
+                                                                          $this->input->get("invoiceNo"),
+                                                                          $this->input->get("paymentMethod")
+                                                                          );
 
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
@@ -489,23 +481,26 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($soldTransaction["transactions"] as $value) {
-            if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $attr) {
-                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+            foreach ($value["product"] as $product) {
+                if(isset($product["attr"])) {
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                    }
+                }
+                else {
+                    $prodSpecs = "N/A";
+                    break;
                 }
             }
-            else {
-                $prodSpecs = "N/A";
-            }
-            fputcsv($output, array( $value["invoiceNo"]
-                                    , $value["productname"]
-                                    , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , $value["fullname"]
-                                    , $value["orderQuantity"]
-                                    , ucwords(strtolower($value["paymentMethod"]))
-                                    , number_format((float)$value["totalOrderProduct"], 2, '.', '')
-                                    , $prodSpecs
-            ));
+            fputcsv($output, [$value["invoiceNo"]
+                              , html_escape($value["productname"])
+                              , $value["dateadded"]->format('Y-m-d H:i:s')
+                              , html_escape($value["buyerStoreName"])
+                              , $value["orderQuantity"]
+                              , ucwords(strtolower($value["paymentMethod"]))
+                              , number_format((float)$value["totalOrderProduct"], 2, '.', '')
+                              , $prodSpecs
+            ]);
             $prodSpecs = "";
         }
     }
@@ -514,24 +509,16 @@ class Memberpage extends MY_Controller
      *  Export Buy transactions to CSV file
      */
     public function exportBuyTransactions()
-    {       
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'), 
-                                                                                          (bool)$this->input->get("isOngoing"),
-                                                                                          0,
-                                                                                          10,
-                                                                                          $this->input->get("invoiceNo"),
-                                                                                          $this->input->get("paymentMethod"));
-
-        
-        foreach($boughTransactions["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                array_push($boughTransactions["transactions"][$key], array("attributes" => $attr));
-            }
-        }      
+    {             
+        $boughTransactions["transactions"] = $this->transactionManager
+                                                  ->getBoughtTransactionDetails(
+                                                                                $this->session->userdata('member_id'),
+                                                                                (bool) $this->input->get("isOngoing"),
+                                                                                0,
+                                                                                PHP_INT_MAX,
+                                                                                $this->input->get("invoiceNo"),
+                                                                                $this->input->get("paymentMethod")
+                                                                              );      
 
         $prodSpecs = "";
         header('Content-Type: text/csv; charset=utf-8');
@@ -548,24 +535,27 @@ class Memberpage extends MY_Controller
                                 ,'Product Specifications']);
 
         foreach($boughTransactions["transactions"] as $value) {
-            if(isset($value["0"])) {
-                foreach($value["0"]["attributes"] as $attr) {
-                     $prodSpecs .= ucwords($attr["attrName"]).":".ucwords($attr["attrValue"])." / ";
+            foreach ($value["product"] as $product) {
+                if(isset($product["attr"])) {
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                    }
                 }
-            }
-            else {
-                $prodSpecs = "N/A";
+                else {
+                    $prodSpecs = "N/A";
+                    break;
+                }               
             }
 
-            fputcsv($output, array( $value["invoiceNo"]
-                                    , $value["productname"]
-                                    , $value["dateadded"]->format('Y-m-d H:i:s')
-                                    , $value["fullname"]
-                                    , $value["orderQuantity"]
-                                    , ucwords(strtolower($value["paymentMethod"]))
-                                    , number_format((float)$value["total"], 2, '.', '')
-                                    , $prodSpecs
-            ));
+            fputcsv($output, [ $value["invoiceNo"]
+                               , html_escape($value["productname"])
+                               , $value["dateadded"]->format('Y-m-d H:i:s')
+                               , html_escape($value["fullname"])
+                               , $value["orderQuantity"]
+                               , ucwords(strtolower($value["paymentMethod"]))
+                               , number_format((float)$value["total"], 2, '.', '')
+                               , $prodSpecs
+            ]);
             $prodSpecs = "";
         }
     }
@@ -576,22 +566,15 @@ class Memberpage extends MY_Controller
      */
     public function printBuyTransactions()
     {   
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder');
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $boughTransactions["transactions"] = $EsOrderRepository->getUserBoughtTransactions($this->session->userdata('member_id'),
-                                                                                           (bool) $this->input->post("isOngoing"),
-                                                                                           0,
-                                                                                           10,
-                                                                                           $this->input->post("invoiceNo"),
-                                                                                           $this->input->post("paymentMethod"));
-        foreach($boughTransactions["transactions"] as $key => $value) {
-            $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-            if(count($attr) > 0) {
-                $boughTransactions["transactions"][$key][] = ["attributes" => $attr];
-            }
-        }
-
+        $boughTransactions["transactions"] = $this->transactionManager
+                                                  ->getBoughtTransactionDetails(
+                                                                                $this->session->userdata('member_id'),
+                                                                                (bool) $this->input->post("isOngoing"),
+                                                                                0,
+                                                                                PHP_INT_MAX,
+                                                                                $this->input->post("invoiceNo"),
+                                                                                $this->input->post("paymentMethod")
+                                                                              );
         $this->load->view("pages/user/printboughttransactions", $boughTransactions);
     }
 
@@ -601,23 +584,16 @@ class Memberpage extends MY_Controller
      */
     public function printSellTransactions()
     {
-        $this->em = $this->serviceContainer['entity_manager'];
-        $EsOrderRepository = $this->em->getRepository('EasyShop\Entities\EsOrder'); 
-        $EsOrderProductAttributeRepository = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr');
-        $soldTransaction["transactions"] = $EsOrderRepository->getUserSoldTransactions($this->session->userdata('member_id'), 
-                                                                                       (bool) $this->input->post("isOngoing"),
-                                                                                       0,
-                                                                                       10,
-                                                                                       $this->input->post("invoiceNo"),
-                                                                                       $this->input->post("paymentMethod"));
 
-            foreach($soldTransaction["transactions"] as $key => $value) {
-                $attr = $EsOrderProductAttributeRepository->getOrderProductAttributes($value["idOrder"]);
-                if(count($attr) > 0) {
-                    $soldTransaction["transactions"][$key][] = ["attributes" => $attr];                    
-                }
-            }
-           
+        $soldTransaction["transactions"] = $this->transactionManager
+                                                ->getSoldTransactionDetails(
+                                                                          $this->session->userdata('member_id'),
+                                                                          (bool) $this->input->post("isOngoing"),
+                                                                          0,
+                                                                          PHP_INT_MAX,
+                                                                          $this->input->post("invoiceNo"),
+                                                                          $this->input->post("paymentMethod")
+                                                                          );  
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
     }
     
@@ -633,43 +609,40 @@ class Memberpage extends MY_Controller
      */
     public function upload_img()
     {
-        $data = array(
+        $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-        );
-        $isVendor = $this->input->post('vendor') ? true : false;
-        $vendorLink = html_escape($this->input->post('url'));
+        ];
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         
-        //echo error may be here: $result['error']
         $result = $this->memberpage_model->upload_img($uid, $data);
+        $image = $this->serviceContainer['user_manager']
+                      ->getUserImage($uid);
+
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
         
-        if($isVendor){
-            $temp = $this->memberpage_model->get_member_by_id($uid);
+        
+        $response = [
+            'isSuccessful' => true,
+            'image' => $image,
+        ];
+        
+        if(isset($result['error'])){
+            $response['isSuccessful'] = false;
         }
 
-        if(isset($result['error'])){
-            echo "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
-            }
-            else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
-            }
-        }
-        else{
-            if($isVendor){
-                redirect($temp['userslug'] . "/" . $vendorLink);
-            }
-            else{
-                redirect('me');
-            }
-        }
+
+        echo json_encode($response);
     }
 
     /**
@@ -884,17 +857,17 @@ class Memberpage extends MY_Controller
                                 $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
                                 break;
                         }
-
-                        if($hasNotif){
-                            $emailService->setRecipient($parseData['email'])
-                                         ->setSubject($emailSubject)
-                                         ->setMessage($emailMsg, $imageArray)
-                                         ->sendMail();
-                            $smsService->setMobile($parseData['mobile'])
-                                       ->setMessage($smsMsg)
-                                       ->sendSms();
-                        }
                     }
+                }
+
+                if($hasNotif){
+                    $emailService->setRecipient($parseData['email'])
+                                 ->setSubject($emailSubject)
+                                 ->setMessage($emailMsg, $imageArray)
+                                 ->sendMail();
+                    $smsService->setMobile($parseData['mobile'])
+                               ->setMessage($smsMsg)
+                               ->sendSms();
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
@@ -1183,29 +1156,38 @@ class Memberpage extends MY_Controller
      *  Used for uploading banner in vendor page. 
      */
     public function banner_upload()
-    {
-        $data = array(
+    {    
+        $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-        );
+        ];
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         $result = $this->memberpage_model->banner_upload($uid, $data);
-        $data = $this->memberpage_model->get_member_by_id($uid);
-
-        $vendorLink = html_escape($this->input->post('url'));
-
+        $banner = $this->serviceContainer['user_manager']
+                       ->getUserImage($uid, 'banner');
+                       
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'banner' => $banner,
+        ];
+        
         if(isset($result['error'])){
-            print "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            print "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$data['userslug']."'},3000);</script>";
+            $response['isSuccessful'] = false;
         }
-        else{
-            redirect($data['userslug'] . "/" . $vendorLink);
-        }
+
+        echo json_encode($response);
     }
         
     
