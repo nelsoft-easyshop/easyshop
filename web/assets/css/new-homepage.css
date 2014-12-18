@@ -241,6 +241,10 @@ header {
     height: auto;
 }
 
+.search-container {
+    margin: 0 8px 0 85px;
+}
+
 .col-md-80p {
     width: 80%;
     padding-left: 15px;
