@@ -1765,7 +1765,7 @@ class Memberpage extends MY_Controller
                                                           $paymentMethod,
                                                           $transactionNumber
                                                       );
-                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount['transactionsCount'] / $this->transactionRowCount);
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
