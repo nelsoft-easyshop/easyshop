@@ -200,6 +200,48 @@ class Store extends MY_Controller
 
         echo json_encode($response);
     }    
+
+
+
+    /**
+     *  Used for uploading banner in vendor page. 
+     */
+    public function banner_upload()
+    {    
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+        $uid = $this->session->userdata('member_id');
+        $this->load->library('upload');
+        $this->load->library('image_lib');
+        $this->load->model("memberpage_model");            
+        $result = $this->memberpage_model->banner_upload($uid, $data);
+        $banner = $this->serviceContainer['user_manager']
+                       ->getUserImage($uid, 'banner');
+                       
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'banner' => $banner,
+        ];
+        
+        if(isset($result['error'])){
+            $response['isSuccessful'] = false;
+        }
+
+        echo json_encode($response);
+    }
+
     
     /**
      * Transition controller action for old vendor page
