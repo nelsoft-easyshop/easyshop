@@ -22,30 +22,6 @@ class Home extends MY_Controller
     public function __construct() 
     {
         parent::__construct();
-        
-        $query = 'iphone 5c 32GB';
-        
-        $sphinx = $this->serviceContainer['sphinx_client'];
-        
-        $sphinx->SetMatchMode('SPH_MATCH_ANY');
-        $sphinx->SetFieldWeights([
-            'name' => 50, 
-            'store_name' => 30,
-            'search_keyword' => 10,
-        ]);
-        $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-        $sphinx->AddQuery($query, 'products');
-        
-        $result = $sphinx->RunQueries();
-        if($result === false){
-            var_dump( $sphinx->GetLastError() );
-        }
-        else{
-            print('<pre>');
-            print_r($result);
-            print('</pre>');
-        }
-        exit();
     }
 
     /**
