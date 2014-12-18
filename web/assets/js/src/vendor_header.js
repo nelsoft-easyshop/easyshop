@@ -304,7 +304,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    var action = '/memberpage/'+formAction;
+                    var action = '/store/'+formAction;
                     $('#form_image').ajaxForm({
                         url: action,
                         dataType: "json",
