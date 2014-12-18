@@ -421,7 +421,9 @@ class TransactionManager
             }
         }
 
-        return ["transactionsCount" => count($soldTransactionDetails),
-                "productCount" => $orderProductCount];
+        return [
+                "transactionsCount" => count($soldTransactionDetails),
+                "productCount" => $orderProductCount
+            ];
     }
 }
