@@ -855,12 +855,12 @@ class Memberpage extends MY_Controller
 
                 if($hasNotif){
                     $emailService->setRecipient($parseData['email'])
-                        ->setSubject($emailSubject)
-                        ->setMessage($emailMsg, $imageArray)
-                        ->sendMail();
+                                 ->setSubject($emailSubject)
+                                 ->setMessage($emailMsg, $imageArray)
+                                 ->sendMail();
                     $smsService->setMobile($parseData['mobile'])
-                        ->setMessage($smsMsg)
-                        ->sendSms();
+                               ->setMessage($smsMsg)
+                               ->sendSms();
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
