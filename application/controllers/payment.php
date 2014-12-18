@@ -1638,6 +1638,7 @@ class Payment extends MY_Controller{
 
     function resetPriceAndQty($condition = FALSE)
     {   
+        $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $qtysuccess = 0;
@@ -1646,8 +1647,9 @@ class Payment extends MY_Controller{
 
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-            
+
             $product_array =  $this->product_model->getProductById($productId);
+            $product = $productManager->getProductDetails($productId);
   
             /** NEW QUANTITY **/
             $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition, $product_array['start_promo']);
@@ -1657,7 +1659,7 @@ class Payment extends MY_Controller{
             $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
 
             /** NEW PRICE **/
-            $promoPrice = $product_array['price']; 
+            $promoPrice = $product->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
