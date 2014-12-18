@@ -125,7 +125,8 @@ class ProductShippingLocationManager
                                     $intersectArray['attr'][] = $attr2;
                                 }
                             }
-                            $isExist = $hasDuplicate = false; 
+                            $isExist = false;
+                            $hasDuplicate = false; 
                             foreach( $finalarr as $fkey=>$farr ){
                                 $sizeOfIntersect = count($intersectArray['location']);
                                 $sizeOfLocGroup = count($farr['location']);
