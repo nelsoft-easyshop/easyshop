@@ -12,40 +12,40 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsPromo
 {
-    /**
-     * @var integer
-     */
-    const NO_PROMO = 0;
-
-    /**
-     * @var integer
-     */
-    const COUNTDOWN_SALE = 1;
-
-    /**
-     * @var integer
-     */
-    const FIXED_DISCOUNT = 2;
-
-    /**
-     * @var integer
-     */
-    const PEAK_HOUR_SALE = 3;
-
-    /**
-     * @var integer
-     */
-    const LISTING_PROMO = 4;
-
-    /**
-     * @var integer
-     */
-    const SCRATCH_AND_WIN = 5;
-
-    /**
-     * @var integer
-     */
-    const BUY_AT_ZERO = 6;
+//    /**
+//     * @var integer
+//     */
+//    const NO_PROMO = 0;
+//
+//    /**
+//     * @var integer
+//     */
+//    const COUNTDOWN_SALE = 1;
+//
+//    /**
+//     * @var integer
+//     */
+//    const FIXED_DISCOUNT = 2;
+//
+//    /**
+//     * @var integer
+//     */
+//    const PEAK_HOUR_SALE = 3;
+//
+//    /**
+//     * @var integer
+//     */
+//    const LISTING_PROMO = 4;
+//
+//    /**
+//     * @var integer
+//     */
+//    const SCRATCH_AND_WIN = 5;
+//
+//    /**
+//     * @var integer
+//     */
+//    const BUY_AT_ZERO = 6;
 
     /**
      * @var integer
