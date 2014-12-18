@@ -1681,40 +1681,40 @@ class Payment extends MY_Controller{
         }
     }
 
-    function resetPriceAndQty($condition = FALSE)
-    {   
+    /**
+     * reset price and quantity data on session
+     * @param  boolean $condition
+     * @return integer
+     */
+    private function resetPriceAndQty($condition = false)
+    {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
-        $qtysuccess = 0;
+        $qtySuccess = 0;
 
-        foreach ($itemArray as $key => $value) {
-
+        foreach ($itemArray as $value) {
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-
-            $product_array =  $this->product_model->getProductById($productId);
             $product = $productManager->getProductDetails($productId);
-  
-            /** NEW QUANTITY **/
-            $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition, $product_array['start_promo']);
-            $maxqty = $newQty[$itemId]['quantity'];
-            $qty = $value['qty']; 
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
+            $productInventory = $productManager->getProductInventory($product);
 
-            /** NEW PRICE **/
-            $promoPrice = $product->getFinalPrice(); 
-            $additionalPrice = $value['additional_fee'];
-            $finalPromoPrice = $promoPrice + $additionalPrice;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $maxqty = $productInventory[$itemId]['quantity'];
+            $qty = $value['qty'];
+            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
             $subtotal = $finalPromoPrice * $qty;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
-        }
 
+            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+
+            if($maxqty >= $qty){
+                $qtySuccess++;
+            }
+        }
         $this->session->set_userdata('choosen_items', $itemArray);
 
-        return $qtysuccess;
+        return $qtySuccess;
     }
 
     function generateFlash($txnId,$message,$status)
