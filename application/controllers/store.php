@@ -32,6 +32,20 @@ class Store extends MY_Controller
     public $followerPerPage = 6;
 
     /**
+     * Default Avatar Image filename
+     *
+     * @var string
+     */
+    public $avatarImageFilname = "usersize.png";    
+
+    /**
+     * Default Banner Image filename
+     *
+     * @var string
+     */
+    public $bannerImageFilname = "banner.png";        
+
+    /**
      * Renders vendorpage
      *
      * @param string $tab
@@ -174,7 +188,6 @@ class Store extends MY_Controller
         ];
         $this->upload = $this->serviceContainer['image_upload'];
         $uid = $this->session->userdata('member_id');
-        $this->upload->uploadImage($uid,$data);
         $memberObj = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsMember')
                                     ->find($uid); 
@@ -184,21 +197,18 @@ class Store extends MY_Controller
         }   
         if(!is_dir($path))
         {
-            echo "makeDire";
-          // mkdir($path,0755,TRUE); 
+          mkdir($path,0755,TRUE); 
         }          
-        var_dump($path);
-        exit();
+        $uploadReturn = $this->upload->uploadImage($path, $this->avatarImageFilname);  
 
+        if($data['w'] > 0 && $data['h'] > 0) {
+            
+        }
 
         if(!(bool)$this->input->post('isAjax')){
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->find($uid);
             $vendorLink = $this->input->post('vendorLink');
-            redirect($member->getSlug().'/'.html_escape($vendorLink));
+            redirect($memberObj->getSlug().'/'.html_escape($vendorLink));
         }
-        
         
         $response = [
             'isSuccessful' => true,
