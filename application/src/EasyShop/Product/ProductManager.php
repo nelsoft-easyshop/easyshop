@@ -777,5 +777,20 @@ class ProductManager
             'productOptions' => $productAttributes
         ];
     }
+
+    public function increaseClickCount($product, $memberId)
+    {
+        $numberOfViewsToday = $this->em->getRepository('EasyShop\Entities\EsProductHistoryView')
+                                ->getCountProductViewsByMemberToday($product->getIdProduct(), $memberId);
+
+        if((int)$memberId !== $product->getMember()->getIdMember()
+            && $numberOfViewsToday <= 0){
+            $product->setClickcount($product->getClickcount() + 1);
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
+    }
 }
 

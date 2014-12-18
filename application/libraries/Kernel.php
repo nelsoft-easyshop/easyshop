@@ -85,6 +85,36 @@ class Kernel
                     $container['language_loader']
                 )
             );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductReviewListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsMemberFeedbackListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductShippingCommentListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsOrderProductListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
             return $em;
         };
 

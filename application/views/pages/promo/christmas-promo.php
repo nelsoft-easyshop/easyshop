@@ -62,7 +62,7 @@
                     </div>
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($product) && $product->getStartPromo()) : ?>
-                            <?PHP if ($product->getIsDelete()) : ?>
+                            <?PHP if ($product->getIsDelete() || $product->getIsSoldOut()) : ?>
                                 <div class="dc-tag sold-out"> SOLD </div>
                             <?PHP else : ?>
                                 <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
@@ -71,7 +71,7 @@
                                 <img alt ="<?=html_escape($product->getName())?> Image" src="/assets/images/promo-images/<?= isset($featuredVendor['productImageUrl']) ? $featuredVendor['productImageUrl'] . '?1.0' : ''?>">
                             </a>
                             <div>
-                                <?PHP if ($product->getIsDelete()) : ?>
+                                <?PHP if ($product->getIsDelete() || $product->getIsSoldOut()) : ?>
                                     <div class="price"> &nbsp; </div>
                                 <?PHP else : ?>
                                      <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
