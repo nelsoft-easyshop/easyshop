@@ -23,5 +23,10 @@ class Version20141215213105 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("
+            UPDATE `es_activity_type` SET `activity_phrase`='' WHERE `id_activity_type`='1';
+            UPDATE `es_activity_type` SET `activity_phrase`='' WHERE `id_activity_type`='2';
+            UPDATE `es_activity_type` SET `activity_phrase`='' WHERE `id_activity_type`='3';
+        ");
     }
 }
