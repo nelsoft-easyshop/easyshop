@@ -154,6 +154,52 @@ class Store extends MY_Controller
         }
 
     }
+
+    /**
+     *  Used to upload avatar image on both Member page and Vendor page
+     *  Reloads page on success.
+     *
+     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
+     *      and displays an error for 3 seconds, then reloads the page to the original URL,
+     *      member page or vendor page
+     */
+    public function upload_img()
+    {
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+        $uid = $this->session->userdata('member_id');
+        $this->load->library('upload');
+        $this->load->library('image_lib');
+        $this->load->model("memberpage_model");        
+        $result = $this->memberpage_model->upload_img($uid, $data);
+        $image = $this->serviceContainer['user_manager']
+                      ->getUserImage($uid);
+
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
+        
+        $response = [
+            'isSuccessful' => true,
+            'image' => $image,
+        ];
+        
+        if(isset($result['error'])){
+            $response['isSuccessful'] = false;
+        }
+
+
+        echo json_encode($response);
+    }    
     
     /**
      * Transition controller action for old vendor page
