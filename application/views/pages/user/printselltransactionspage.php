@@ -46,7 +46,7 @@
 
                                     </thead>
                                     <tr>
-                                      <?php foreach($transactions as $key => $value): ?>
+                                      <?php foreach($transactions as $value): ?>
                                         <tr style="text-align:center;border: black 1px solid;">
 
                                             <td>
@@ -59,7 +59,7 @@
                                                 <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
                                             </td>                                        
                                             <td>
-                                               <?php echo ucwords(strtolower(html_escape($value["fullname"]))) ?>
+                                               <?php echo ucwords(strtolower(html_escape($value["buyerStoreName"]))) ?>
                                             </td>     
                                             <td >
                                                 <?php echo $value["orderQuantity"] ?>
@@ -70,14 +70,14 @@
                                             <td >
                                                PHP <?php echo number_format((float)$value["totalOrderProduct"], 2, '.', '')  ?>
                                             </td>
-                                            <td style='text-align:left;'>
-                                                <?php if(isset($value["0"])): ?>
-                                                        <?php foreach($value["0"]["attributes"] as $attr): ?>
-                                                            <?php echo ucwords(html_escape($attr["attrName"])).":".ucwords(html_escape($attr["attrValue"]))."<br/>" ?>
-                                                        <?php endforeach; ?>
-                                                    <?php else: ?>
-                                                        <?php echo "N/A" ?>
-                                                <?php endif; ?>
+                                            <td style='text-align:left;padding-left:2px;'>
+                                                <?php foreach($value["product"] as $value): ?>
+                                                    <?php if(isset($value["attr"]) && count($value["attr"] > 0)): ?>
+                                                            <?php foreach($value["attr"] as $attr => $attrValue ): ?>
+                                                                <?php echo ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))."<br/>" ?>
+                                                            <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                 <?php endforeach; ?>
                                             </td>                                                                                             
                                         </tr>
                                         <?php endforeach; ?>
