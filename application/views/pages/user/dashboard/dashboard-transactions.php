@@ -57,10 +57,10 @@
             <!---------------------------------------------------------------ongoing sold starts here---------------------------------------------------------------->
                 <div class="transaction-title-sold mrgn-top-12 transaction-button-head" data-method="ongoing-sold">
                     <span class="trans-title">Sold</span>
-                    <span class="count"><?=$ongoingSoldTransactionsCount?></span>
+                    <span class="count"><?=$ongoingSoldTransactionsCount["transactionsCount"]?></span>
                 </div>
                 <div class="on-going-transaction-list-sold list-container">
-                    <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
+                    <?PHP if ( (int) $ongoingSoldTransactionsCount["transactionsCount"] >= 1) : ?>
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
                             <div class="col-md-9 transaction-top-btns">
                                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
@@ -137,10 +137,10 @@
             <!---------------------------------------------------------------completed sold starts here---------------------------------------------------------------->
                 <div class="transaction-title-sold-completed mrgn-top-12 transaction-button-head" data-method="complete-sold">
                     <span class="trans-title">Sold</span>
-                    <span class="count"><?=$completeSoldTransactionsCount?></span>
+                    <span class="count"><?=$completeSoldTransactionsCount["transactionsCount"]?></span>
                 </div>
                 <div class="on-going-transaction-list-sold-completed list-container">
-                    <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
+                    <?PHP if ( (int) $completeSoldTransactionsCount["transactionsCount"] >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
                         <div class="col-md-9">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
