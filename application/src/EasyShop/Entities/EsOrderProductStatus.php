@@ -47,6 +47,10 @@ class EsOrderProductStatus
      */
     const STATUS_REJECT = 99;
 
+    const IS_REJECT_ACTIVE = 1;
+
+    const IS_REJECT_NOT_ACTIVE = 0;
+
     /**
      * Get idOrderProductStatus
      *

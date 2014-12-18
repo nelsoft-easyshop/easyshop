@@ -141,6 +141,15 @@ $lang['EsAddress'] = [
         'lng' => 'Longitude Location',
     ];
 
+$lang['EsProductShippingComment'] = [
+        'courier' => 'Courier',
+        'trackingNum' => 'Tracking Number',
+        'comment' => 'Comment',
+        'expectedDate' => 'Expected Date',
+        'deliveryDate' => 'Delivery Date',
+        'invoiceNo' => 'Invoice Number', 
+    ];
+
 $lang['EsProduct'] = [
         'name' => 'Product Name',
     ];
@@ -165,7 +174,14 @@ $lang['update_feedback'] = [
     ];
 
 $lang['update_transaction'] = [
-        'buy' => 'you have purchased an item with :phrase'
+        'buy' => 'You have purchased an item with :phrase',
+        'add_ship_detail' => 'You have added shipment details on order :phrase ',
+        'edit_ship_detail' => 'You have modified shipment details on order :phrase',
+        'item_received' => 'You received an item with :phrase',
+        'item_reject' => 'You rejected item with :phrase',
+        'item_unreject' => 'You rejected item with :phrase',
+        'item_cancel' => 'You cancelled an item with :phrase',
+        'completed' => 'You marked a transaction as completed with :phrase',
     ];
 ?>
 
