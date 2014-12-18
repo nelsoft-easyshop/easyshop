@@ -18,6 +18,8 @@ class EsActivityType
 
     const TRANSACTION_UPDATE = 3;
 
+    const FEEDBACK_UPDATE = 4;
+
     /**
      * @var integer
      *

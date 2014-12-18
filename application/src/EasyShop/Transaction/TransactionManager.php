@@ -394,11 +394,12 @@ class TransactionManager
      * @param bool $isOngoing
      * @param string $paymentMethod
      * @param string $transactionNumber
-     * @return int
+     * @return Array
      */
     public function getSoldTransactionCount ($memberId, $isOngoing = true, $paymentMethod = '', $transactionNumber = '')
     {
-        $soldTransactionDetails = array();
+        $soldTransactionDetails = [];
+        $orderProductCount = 0;
         $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing, $paymentMethod, $transactionNumber);
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
@@ -411,6 +412,7 @@ class TransactionManager
                     }
                     if (!isset($soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']])) {
                         $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']] = $product;
+                        $orderProductCount++;
                     }
                     if ($product['attrName']) {
                         $soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']]['attr'][$product['attrName']] = $product['attrValue'];
@@ -419,6 +421,9 @@ class TransactionManager
             }
         }
 
-        return count($soldTransactionDetails);
+        return [
+                "transactionsCount" => count($soldTransactionDetails),
+                "productCount" => $orderProductCount
+            ];
     }
 }
