@@ -633,43 +633,40 @@ class Memberpage extends MY_Controller
      */
     public function upload_img()
     {
-        $data = array(
+        $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-        );
-        $isVendor = $this->input->post('vendor') ? true : false;
-        $vendorLink = html_escape($this->input->post('url'));
+        ];
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         
-        //echo error may be here: $result['error']
         $result = $this->memberpage_model->upload_img($uid, $data);
+        $image = $this->serviceContainer['user_manager']
+                      ->getUserImage($uid);
+
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
         
-        if($isVendor){
-            $temp = $this->memberpage_model->get_member_by_id($uid);
+        
+        $response = [
+            'isSuccessful' => true,
+            'image' => $image,
+        ];
+        
+        if(isset($result['error'])){
+            $response['isSuccessful'] = false;
         }
 
-        if(isset($result['error'])){
-            echo "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            if($isVendor){
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$temp['userslug']."'},3000);</script>";
-            }
-            else{
-                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='/me'},3000);</script>";
-            }
-        }
-        else{
-            if($isVendor){
-                redirect($temp['userslug'] . "/" . $vendorLink);
-            }
-            else{
-                redirect('me');
-            }
-        }
+
+        echo json_encode($response);
     }
 
     /**
@@ -1183,29 +1180,38 @@ class Memberpage extends MY_Controller
      *  Used for uploading banner in vendor page. 
      */
     public function banner_upload()
-    {
-        $data = array(
+    {    
+        $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-        );
+        ];
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         $result = $this->memberpage_model->banner_upload($uid, $data);
-        $data = $this->memberpage_model->get_member_by_id($uid);
-
-        $vendorLink = html_escape($this->input->post('url'));
-
+        $banner = $this->serviceContainer['user_manager']
+                       ->getUserImage($uid, 'banner');
+                       
+        if(!(bool)$this->input->post('isAjax')){
+            $member = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($uid);
+            $vendorLink = $this->input->post('vendorLink');
+            redirect($member->getSlug().'/'.html_escape($vendorLink));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'banner' => $banner,
+        ];
+        
         if(isset($result['error'])){
-            print "<h2 style='color:red;'>Unable to upload image.</h2>
-            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-            print "<script type='text/javascript'>setTimeout(function(){window.location.href='/".$data['userslug']."'},3000);</script>";
+            $response['isSuccessful'] = false;
         }
-        else{
-            redirect($data['userslug'] . "/" . $vendorLink);
-        }
+
+        echo json_encode($response);
     }
         
     

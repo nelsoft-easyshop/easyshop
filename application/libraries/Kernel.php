@@ -228,7 +228,10 @@ class Kernel
 
         //Request Service
         $container['http_request'] = function ($c) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+            $trustedProxies = require APPPATH . '/config/param/proxies.php';
+            $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+            $request->setTrustedProxies($trustedProxies);
+            return $request;
         };
 
         //Bug Reporter Service
@@ -241,10 +244,6 @@ class Kernel
             return new \EasyShop\PointTracker\PointTracker($container['entity_manager']);
         };
 
-        // Http foundation
-        $container['request'] = function ($c) use($container) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-        };
 
         //Cart Manager
         $container['cart_manager'] = function ($c) use ($container) {
@@ -385,7 +384,7 @@ class Kernel
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
                             $container['entity_manager'],
-                            $container['request'],
+                            $container['http_request'],
                             $container['point_tracker'],
                             $container['promo_manager'],
                             $container['product_manager']
