@@ -17,4 +17,12 @@ class Version20141217140812 extends AbstractMigration
             INSERT INTO `es_activity_type` (`id_activity_type`, `activity_description`, `activity_phrase`) VALUES ('4', 'feedback', 'update_feedback');
         ");
     }
+
+    public function down(Schema $schema)
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("
+            DELETE FROM `es_activity_type` WHERE `id_activity_type`='4';
+        ");
+    }
 }
