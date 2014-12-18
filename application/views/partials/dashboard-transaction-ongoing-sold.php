@@ -3,17 +3,17 @@
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
-            <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
+            <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && !$soldTransactionDetails['isFlag'] ) : ?>
                 <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
                 <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
                 <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
             <?PHP else : ?>
                 <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
-                    <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
+                    <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
-                    <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
+                    <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
-                    <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
+                    <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
                 <?php endif;?>
             <?PHP endif; ?>
         </div>
@@ -102,7 +102,7 @@
             <div class="col-xs-12 col-sm-3 trans-right-panel">
                 <div class="transaction-right-content">
                     <?PHP if ( (int) $productKey === (int) array_shift(array_keys($soldTransactionDetails['product']))) : ?>
-                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] !== (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && (int) $soldTransactionDetails['isFlag'] === 0 ) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] !== (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && (int) !$soldTransactionDetails['isFlag'] ) : ?>
                         <div class="transaction-profile-wrapper">
                             <h4>Sold To:</h4>
                             <div>
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <?PHP endif; ?>
-                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && (int) $soldTransactionDetails['isFlag'] === 0) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && !$soldTransactionDetails['isFlag']) : ?>
                         <div class="trans-btn-wrapper trans-btn-con1">
                                 <button class="btn btn-default-1 isform shipment-detail-button txt_buttons">Ship Item</button>
                                 <div class="shipping-details">
