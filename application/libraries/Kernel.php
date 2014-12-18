@@ -64,9 +64,27 @@ class Kernel
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
-        $container['entity_manager'] = function ($c) use ($dbConfig, $config){
+        $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
             return $em;
         };
 
@@ -450,6 +468,28 @@ class Kernel
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
                             $container['entity_manager']
+                        );
+        };
+
+        $container['language_loader'] = function ($c) {
+            $languageImplementation = new \EasyShop\LanguageLoader\CodeigniterLanguage();
+            return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
+        };
+
+        $container['activity_manager'] = function ($c) use ($container) { 
+            return new \EasyShop\Activity\ActivityManager(
+                            $container['language_loader']
+                        );
+        };
+
+        // Checkout Service
+        $container['checkout_service'] = function ($c) use ($container) {
+            return new \EasyShop\Checkout\CheckoutService(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['promo_manager'],
+                            $container['cart_manager'],
+                            $container['payment_service']
                         );
         };
 

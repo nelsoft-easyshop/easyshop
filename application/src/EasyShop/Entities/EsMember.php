@@ -300,7 +300,6 @@ class EsMember
      */
     const DEFAULT_IMG_BANNER = 'banner.png';
 
-    
     /**
      *  @var string
      */

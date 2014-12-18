@@ -108,7 +108,7 @@ else {
     $route['(?i)sell/finishupload'] = 'productUpload/finishProductPreview'; #js
 
     # USER
-    $route['(?i)me'] = 'memberpage/newMemberpage';
+    $route['(?i)me'] = 'memberpage';
     $route['(?i)me/product/next'] = 'memberpage/productMemberPagePaginate';
     $route['(?i)me/product/delete-soft'] = 'memberpage/softDeleteProduct';
     $route['(?i)me/product/delete-hard'] = 'memberpage/hardDeleteProduct';
@@ -178,8 +178,13 @@ else {
     $route['accountservice'] = 'webservice/accountservice';
     $route['synccsvimage'] = 'webservice/synccsvimage';
     $route['mobilewebservice'] = 'webservice/mobilewebservice';
-    
+
+    #MOBILE
+    $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
+    $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
+
 }
 
 /* End of file routes.php */

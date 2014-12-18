@@ -88,13 +88,15 @@ class product_search extends MY_Controller {
         $response['defaultCondition'] = $this->lang->line('product_condition');
         $response['getParameter'] = $this->input->get();
 
-        $data = array(
+        $headerData = [
             'title' => 'Easyshop.com - Advanced Search',
+            'metadescription' => '',
+            'relCanonical' => '',
             'render_searchbar' => false
-        );
-        $data = array_merge($data, $this->fill_header()); 
+        ];
 
-        $this->load->view('templates/header', $data); 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/advance_search_main',$response);
         $this->load->view('templates/footer');
     }
@@ -163,14 +165,13 @@ class product_search extends MY_Controller {
                     'environment' => 'mobile'
                 ], true );
 
-        $data = [
-                'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
-                ];
+        $headerData = [
+            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
+        ];
 
-        $data = array_merge($data, $this->fill_header());
-
-        // Load view
-        $this->load->view('templates/header', $data); 
+       
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/product_search_by_searchbox',$response);
         $this->load->view('templates/footer'); 
     }
