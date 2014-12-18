@@ -6,7 +6,7 @@
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg">
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -14,7 +14,7 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div class="vendor-profile-photo-wrapper">
-                                <img src="<?=$avatarImage?>" alt="Profile Photo">
+                                <img src="<?=$avatarImage?>" class="avatar-image" alt="Profile Photo">
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" alt="Banner Image">
+            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
         <div class="main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -86,14 +86,21 @@
                                     <input type='hidden' name='h' value='0' id='image_h'>
                                     <input type='hidden' name='vendor' value='1' id='vendor-hidden'>
                                     <input type="hidden" name="url" value="<?=$vendorLink?>">
+                                    <input type="hidden" id="isAjax" name="isAjax" value="true"/>
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
-                                    <h1>Position and scale your photo</h1>
-                                    <div class="img-editor-container">
-                                        <img src="" id="user_image_prev">
+                                    <div class="avatar-modal-loading">
+                                        <img src="/assets/images/loading/preloader-whiteBG.gif"/>
                                     </div>
-                                    <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
-                                    <button class="btn btn-default-3">Apply</button>
+                                    
+                                    <div class="avatar-modal-content">
+                                        <h1>Position and scale your photo</h1>
+                                        <div class="img-editor-container">
+                                            <img src="" id="user_image_prev">
+                                        </div>
+                                        <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+                                        <button class="btn btn-default-3">Apply</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -107,7 +114,7 @@
                                 <div><a id="avatar_edit" href="javascript:void(0)">Upload Photo</a></div>
                                 <div><a id="avatar_remove" href="javascript:void(0)">Remove Photo</a></div>
                             </div>
-                            <img id="imageCropPreview" src="<?=$avatarImage?>" alt="Profile Photo">
+                            <img id="imageCropPreview" class="avatar-image" src="<?=$avatarImage?>" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
@@ -184,4 +191,5 @@
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
 <script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>

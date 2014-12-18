@@ -480,7 +480,7 @@ class Store extends MY_Controller
         $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
         
         $orderRelations = array();
-        
+        $viewer = null;
         if($viewerId !== 0){
             $orderRelations = $this->serviceContainer['entity_manager']
                                    ->getRepository('EasyShop\Entities\EsOrder')

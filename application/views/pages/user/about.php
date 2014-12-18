@@ -120,7 +120,7 @@
                             <?php echo form_open('/store/doCreateFeedback', ['id' => 'feedback-form']); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
+                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer->getUsername()); ?>" readonly/>
                                 </div>
                             </div>                            
                             <div class="row">
