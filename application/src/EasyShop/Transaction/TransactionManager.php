@@ -394,7 +394,7 @@ class TransactionManager
      * @param bool $isOngoing
      * @param string $paymentMethod
      * @param string $transactionNumber
-     * @return int
+     * @return Array
      */
     public function getSoldTransactionCount ($memberId, $isOngoing = true, $paymentMethod = '', $transactionNumber = '')
     {
