@@ -165,17 +165,17 @@ class Store extends MY_Controller
      */
     public function upload_img()
     {
+
         $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
+        $this->upload = $this->serviceContainer['image_upload'];
         $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        $this->load->model("memberpage_model");        
-        $result = $this->memberpage_model->upload_img($uid, $data);
+        $this->upload->uploadImage($uid,$data);
+        exit();
         $image = $this->serviceContainer['user_manager']
                       ->getUserImage($uid);
 
