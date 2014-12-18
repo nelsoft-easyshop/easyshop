@@ -169,11 +169,11 @@ $lang['update_transaction'] = [
         'buy' => 'You have purchased an item with :phrase',
         'add_ship_detail' => 'You have added shipment details on order :phrase ',
         'edit_ship_detail' => 'You have modified shipment details on order :phrase',
-        'item_received' => '',
-        'item_reject' => '',
-        'item_unreject' => '',
-        'item_cancel' => 'You cancelled',
-        'completed' => 'You marked as completed',
+        'item_received' => 'You received an item with :phrase',
+        'item_reject' => 'You rejected item with :phrase',
+        'item_unreject' => 'You rejected item with :phrase',
+        'item_cancel' => 'You cancelled an item with :phrase',
+        'completed' => 'You marked a transaction as completed with :phrase',
     ];
 ?>
 
