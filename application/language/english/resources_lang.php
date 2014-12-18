@@ -145,11 +145,19 @@ $lang['EsProduct'] = [
         'name' => 'Product Name',
     ];
 
+$lang['EsOrder'] = [
+        'invoiceNo' => 'Invoice Number',
+    ];
+
 $lang['update_information'] = "You have updated your :phrase.";
 $lang['update_product'] = [
         'update' => 'You have successfully added one product to your active listing :phrase.',
         'trash' => 'You have deleted permanently your item :phrase.',
         'delete' => 'You have moved your product to deleted items :phrase.',
+    ];
+
+$lang['update_transaction'] = [
+        'buy' => 'you have purchased an item with :phrase'
     ];
 ?>
 
