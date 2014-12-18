@@ -250,7 +250,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/memberpage/'+formAction;
+            document.getElementById('form_image').action = '/store/'+formAction;
             $('#isAjax').val('false');
             $('#form_image').submit();
         }
