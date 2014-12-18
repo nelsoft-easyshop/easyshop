@@ -86,6 +86,7 @@
                                     <input type='hidden' name='h' value='0' id='image_h'>
                                     <input type='hidden' name='vendor' value='1' id='vendor-hidden'>
                                     <input type="hidden" name="url" value="<?=$vendorLink?>">
+                                    <input type="hidden" id="isAjax" name="isAjax" value="true"/>
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
                                     <div class="avatar-modal-loading">

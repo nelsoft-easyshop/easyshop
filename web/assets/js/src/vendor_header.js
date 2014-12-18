@@ -251,6 +251,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
         if (oldIE || isSafari){
             document.getElementById('form_image').action = '/memberpage/'+formAction;
+            $('#isAjax').val('false');
             $('#form_image').submit();
         }
         else{
