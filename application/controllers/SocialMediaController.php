@@ -44,32 +44,27 @@ class SocialMediaController extends MY_Controller
                 redirect('/', 'refresh');
             }
             else if ($esMember && !$doesAccountMerged) {
-                $data = $this->encrypt->encode(
-                                            $esMember->getIdMember().
-                                            '~'.
-                                            $facebookType.
-                                            '~'.
-                                            $facebookData->getId()
-                                        );
-                redirect('SocialMediaController/mergeEmail?h=' . $data, 'refresh');
+                $data = serialize([
+                    'memberId' => $esMember->getIdMember(),
+                    'socialMediaProvider' => $facebookType,
+                    'socialMediaId' => $facebookData->getId(),
+                ]);
+                $hashedData = $this->encrypt->encode($data);
+                redirect('SocialMediaController/mergeEmail?h=' . $hashedData, 'refresh');
             }
             else if (!$esMember && !$doesAccountMerged) {
                 $username = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
                 $gender =  $facebookData->getProperty('gender') === 'male' ? 'M' : 'F';
-                $data = $this->encrypt->encode(
-                    $facebookType.
-                    '~'.
-                    $facebookData->getId().
-                    '~'.
-                    $username.
-                    '~'.
-                    $facebookData->getName().
-                    '~'.
-                    $gender.
-                    '~'.
-                    $facebookData->getProperty('email')
-                );
-                redirect('SocialMediaController/register?h=' . $data, 'refresh');
+                $data = serialize([
+                    'socialMediaProvider' => $facebookType,
+                    'socialMediaId' => $facebookData->getId(),
+                    'username' => $username,
+                    'fullname' => $facebookData->getName(),
+                    'gender' => $gender,
+                    'email' => $facebookData->getProperty('email')
+                ]);
+                $hashedData = $this->encrypt->encode($data);
+                redirect('SocialMediaController/register?h=' . $hashedData, 'refresh');
             }
             else {
                 redirect('/login', 'refresh');
@@ -116,31 +111,26 @@ class SocialMediaController extends MY_Controller
                 redirect('/', 'refresh');
             }
             else if ($esMember && !$doesAccountMerged) {
-                $data = $this->encrypt->encode(
-                                            $esMember->getIdMember().
-                                            '~'.
-                                            $googleType.
-                                            '~'.
-                                            $googleData->getId()
-                                        );
-                redirect('SocialMediaController/mergeEmail?h=' . $data, 'refresh');
+                $data = serialize([
+                    'memberId' => $esMember->getIdMember(),
+                    'socialMediaProvider' => $googleType,
+                    'socialMediaId' => $googleData->getId(),
+                ]);
+                $hashedData = $this->encrypt->encode($data);
+                redirect('SocialMediaController/mergeEmail?h=' . $hashedData, 'refresh');
             }
             else if (!$esMember) {
                 $username = $this->stringUtility->cleanString(strtolower($googleData->getGivenName()));
-                $data = $this->encrypt->encode(
-                                            $googleType.
-                                            '~'.
-                                            $googleData->getId().
-                                            '~'.
-                                            $username.
-                                            '~'.
-                                            $googleData->getName().
-                                            '~'.
-                                            ''.
-                                            '~'.
-                                            $googleData->getEmail()
-                                        );
-                redirect('SocialMediaController/register?h=' . $data, 'refresh');
+                $data = serialize([
+                    'socialMediaProvider' => $googleType,
+                    'socialMediaId' => $googleData->getId(),
+                    'username' => $username,
+                    'fullname' => $googleData->getName(),
+                    'gender' => '',
+                    'email' => $googleData->getEmail()
+                ]);
+                $hashedData = $this->encrypt->encode($data);
+                redirect('SocialMediaController/register?h=' . $hashedData, 'refresh');
             }
             else {
                 redirect('/login', 'refresh');
@@ -184,30 +174,25 @@ class SocialMediaController extends MY_Controller
     {
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
-
-        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+        if (intval($getData['socialMediaId']) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
 
-        $data = array(
+        $headerData = [
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-        );
-        $data = array_merge($data, $this->fill_header());
+        ];
         $data['member'] = $this->entityManager
-                                    ->getRepository('EasyShop\Entities\EsMember')
-                                    ->findOneBy([
-                                        'idMember' => $getData[0]
-                                    ]);
-        $data['oauthProvider'] = $getData[1];
-        $data['oauthId'] = $getData[2];
+                               ->getRepository('EasyShop\Entities\EsMember')
+                               ->find($getData['memberId']);
+        $data['oauthProvider'] = $getData['socialMediaProvider'];
+        $data['oauthId'] = $getData['socialMediaId'];
 
-        $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-        $footerData = [ 'facebook' => $socialMediaLinks["facebook"],
-                        'twitter' => $socialMediaLinks["twitter"], ];
-        $this->load->view('templates/header_new', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaMerge', $data);
-        $this->load->view('templates/footer_primary', $footerData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
+        
     }
 
     /**
@@ -223,19 +208,19 @@ class SocialMediaController extends MY_Controller
         $result = false;
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
                                       ->findOneBy(['email' => $this->input->post('email')]);
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         if ($member) {
             $result = true;
             $this->load->library('parser');
+            $data = serialize([
+                'memberId' => $member->getIdMember(),
+                'socialMediaId' => $this->input->post('oauthId'),
+                'socialMediaProvider' => $this->input->post('oauthProvider')
+            ]);
             $parseData = [
                 'username' => $member->getUsername(),
-                'hash' => $this->encrypt->encode(
-                    $member->getIdMember() .
-                    '~' .
-                    $this->input->post('oauthId') .
-                    '~' .
-                    $this->input->post('oauthProvider')
-                ),
+                'hash' => $this->encrypt->encode($data),
                 'site_url' => site_url('SocialMediaController/mergeAccount'),
                 'error_in' => $this->input->post('error'),
                 'facebook' => $socialMediaLinks["facebook"],
@@ -266,23 +251,21 @@ class SocialMediaController extends MY_Controller
         $getData = $hashUtility->decode($this->input->get('h'));
         $memberObj = $this->entityManager
                             ->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy([
-                                'idMember' => $getData[0]
-                            ]);
+                            ->find($getData['memberId']);
         $socialMediaProvider = $this->entityManager
                                     ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
-                                    ->find($getData[2]);
+                                    ->find($getData['socialMediaProvider']);
         $doesSocialMediaAccountExists = $this->entityManager
-                                            ->getRepository('EasyShop\Entities\EsMemberMerge')
-                                            ->findOneBy([
-                                                'socialMediaId' => $getData[1],
-                                                'socialMediaProvider' => $getData[2]
-                                            ]);
-        if (intval($getData[0]) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider || $doesSocialMediaAccountExists) {
+                                             ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                             ->findOneBy([
+                                                 'socialMediaId' => $getData['socialMediaId'],
+                                                 'socialMediaProvider' => $getData['socialMediaProvider']
+                                             ]);
+        if (intval($getData['socialMediaId']) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider || $doesSocialMediaAccountExists) {
             redirect('/login', 'refresh');
         }
 
-        $member = $this->socialMediaManager->mergeAccount($memberObj, $getData[1], $socialMediaProvider);
+        $member = $this->socialMediaManager->mergeAccount($memberObj, $getData['socialMediaId'], $socialMediaProvider);
         $this->login($member);
         redirect('/', 'refresh');
     }
@@ -294,40 +277,38 @@ class SocialMediaController extends MY_Controller
     {
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
-        if (intval($getData[0]) === 0 || !isset($getData[1]) || !$this->input->get('h')) {
+        if (intval($getData['socialMediaProvider']) === 0 || !isset($getData['socialMediaProvider']) || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
 
         $doesSocialMediaAccountExists = $this->entityManager
-                                            ->getRepository('EasyShop\Entities\EsMemberMerge')
-                                            ->findOneBy([
-                                                'socialMediaId' => $getData[1],
-                                                'socialMediaProvider' => $getData[2]
-                                            ]);
+                                             ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                             ->findOneBy([
+                                                 'socialMediaId' => $getData['socialMediaId'],
+                                                 'socialMediaProvider' => $getData['socialMediaProvider']
+                                             ]);
         if ($doesSocialMediaAccountExists) {
             redirect('/', 'refresh');
         }
 
-        $data = array(
+        $headerData = [
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $userData = array (
-            'social_media_type'=> $getData[0],
-            'social_media_id'=> $getData[1],
-            'username'=> $getData[2],
-            'fullname'=> $getData[3],
-            'gender'=> $getData[4],
-            'email'=> $getData[5]
-        );
+        ];
         
-        $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-        $footerData = [ 'facebook' => $socialMediaLinks["facebook"],
-                    'twitter' => $socialMediaLinks["twitter"], ];
-        $this->load->view('templates/header_new', $data);
+        $userData = [
+            'social_media_type'=> $getData['socialMediaProvider'],
+            'social_media_id'=> $getData['socialMediaId'],
+            'username'=> $getData['username'],
+            'fullname'=> $getData['fullname'],
+            'gender'=> $getData['gender'],
+            'email'=> $getData['email']
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_new',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaRegistration', $userData);
-        $this->load->view('templates/footer_primary', $footerData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
     }
 
     /**
@@ -376,12 +357,12 @@ class SocialMediaController extends MY_Controller
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
                                       ->findOneBy(['email' => $this->input->post('email')]);
         if ($member) {
-            $result = array(
+            $result = [
                 'username' => $member->getUsername(),
                 'email' => $member->getEmail(),
                 'location' => '',
                 'image' =>  $this->userManager->getUserImage($member->getIdMember())
-            );
+            ];
         }
 
         echo json_encode($result);

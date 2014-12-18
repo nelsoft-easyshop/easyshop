@@ -52,18 +52,18 @@ $lang['payment_bd_buyer'] = "Your order has been placed at Easyshop.ph and is cu
 the bank account listed below to complete the purchase of your items.
 <br><br>
 <table>
-	<tr>
-		<td>Bank : </td>
-		<td><strong>{bank_name}</strong></td>
-	</tr>
-	<tr>
-		<td>Bank Account Name : </td>
-		<td><strong>{bank_accname}</strong></td>
-	</tr>
-	<tr>
-		<td>Bank Account # :</td>
-		<td><strong>{bank_accnum}</strong></td>
-	</tr>
+    <tr>
+        <td>Bank : </td>
+        <td><strong>{bank_name}</strong></td>
+    </tr>
+    <tr>
+        <td>Bank Account Name : </td>
+        <td><strong>{bank_accname}</strong></td>
+    </tr>
+    <tr>
+        <td>Bank Account # :</td>
+        <td><strong>{bank_accnum}</strong></td>
+    </tr>
 </table>
 <br>
 Once complete, you will need to enter the deposit details at your transaction page by going to <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions.
@@ -114,5 +114,42 @@ $lang['deactivate_subject'] = 'Easyshop.ph - Account Activation';
 
 #Notification shipping comment provided
 $lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
+
+$lang['EsMember'] = [
+        'storeName' => 'Store Name',
+        'password' => 'Password',
+        'contactno' => 'Contact Number',
+        'isEmailVerify' => 'Email Verification',
+        'gender' => 'Gender',
+        'email' => 'Email Address',
+        'birthday' => 'Birthday',
+        'fullname' => 'Full name',
+        'storeDesc' => 'Store Description',
+        'slug' => 'Store URL',
+        'website' => 'Website',
+    ];
+
+$lang['EsAddress'] = [
+        'stateregion' => 'State Region',
+        'city' => 'City',
+        'country' => 'country',
+        'address' => 'Address',
+        'telephone' => 'Telephone Number',
+        'mobile' => 'Mobile Number',
+        'consignee' => 'Consignee Full name',
+        'lat' => 'Latitude Location',
+        'lng' => 'Longitude Location',
+    ];
+
+$lang['EsProduct'] = [
+        'name' => 'Product Name',
+    ];
+
+$lang['update_information'] = "You have updated your :phrase.";
+$lang['update_product'] = [
+        'update' => 'You have successfully added one product to your active listing :phrase.',
+        'trash' => 'You have deleted permanently your item :phrase.',
+        'delete' => 'You have moved your product to deleted items :phrase.',
+    ];
 ?>
 

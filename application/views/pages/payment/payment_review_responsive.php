@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+
+
 <script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
     <h2 class="checkout_title">Payment</h2>
@@ -919,6 +922,6 @@
 </script>
 
 <script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
 

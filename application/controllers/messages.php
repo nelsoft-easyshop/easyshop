@@ -43,22 +43,21 @@ class messages extends MY_Controller
     public function index()
     {
         if ($this->session->userdata('usersession')) {
-            $result = $this->messages_model->get_all_messages($this->userId);
-            $title = (!isset($result['unread_msgs']) || $result['unread_msgs'] == 0
-                    ? 'Message | Easyshop.ph'
-                    : 'Message (' . $result['unread_msgs'] . ') | Easyshop.ph' );
-            $data['title'] = $title;
-            $data['result'] = $result;
-            $data = array_merge($data, $this->fill_header());
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/messages/inbox_view');
+            $messages = $this->messages_model->get_all_messages($this->userId);
+            $title = !isset($messages['unread_msgs']) || (int)$messages['unread_msgs'] === 0
+                    ? 'Messages | Easyshop.ph'
+                    : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
+            $headerData = [
+                'title' => $title,  
+                'metadescription' => '',
+                'relCanonical' => '',
+                'renderSearchbar' => false,
+            ];
 
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/messages/inbox_view',  ['result' => $messages ]);
+            $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view')); 
         }
         else {
             redirect('/', 'refresh');
@@ -117,7 +116,8 @@ class messages extends MY_Controller
                 $imageArray[] = "/assets/images/appbar.home.png";
                 $imageArray[] = "/assets/images/appbar.message.png";
 
-                $socialMediaLinks = $this->getSocialMediaLinks();
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();
                 $parseData = array(
                     'user' => $memberEntity->getUsername()
                     , 'recipient' => $qResult['username']

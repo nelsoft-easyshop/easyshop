@@ -736,6 +736,7 @@ class ProductManager
 
         if($product && $product->getMember()->getIdMember() === (int) $memberId){
             $product->setIsDelete($isDeleteStatus); 
+            $product->setLastmodifieddate(date_create());
             $this->em->flush();
             return true;
         }
