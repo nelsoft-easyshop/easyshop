@@ -175,9 +175,21 @@ class Store extends MY_Controller
         $this->upload = $this->serviceContainer['image_upload'];
         $uid = $this->session->userdata('member_id');
         $this->upload->uploadImage($uid,$data);
+        $memberObj = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($uid); 
+        $path = $memberObj->getImgurl();                           
+        if(trim($memberObj->getImgurl()) === ''){
+            $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
+        }   
+        if(!is_dir($path))
+        {
+            echo "makeDire";
+          // mkdir($path,0755,TRUE); 
+        }          
+        var_dump($path);
         exit();
-        $image = $this->serviceContainer['user_manager']
-                      ->getUserImage($uid);
+
 
         if(!(bool)$this->input->post('isAjax')){
             $member = $this->serviceContainer['entity_manager']
