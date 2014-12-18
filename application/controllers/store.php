@@ -5,6 +5,7 @@ if (!defined('BASEPATH')){
 }
 
 use EasyShop\Entities\EsAddress as EsAddress; 
+use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
     
 class Store extends MY_Controller
@@ -36,14 +37,14 @@ class Store extends MY_Controller
      *
      * @var string
      */
-    public $avatarImageFilname = "usersize.png";    
+    public $avatarImageFilname = "/usersize.png";    
 
     /**
      * Default Banner Image filename
      *
      * @var string
      */
-    public $bannerImageFilname = "banner.png";        
+    public $bannerImageFilname = "/banner.png";        
 
     /**
      * Renders vendorpage
@@ -179,15 +180,16 @@ class Store extends MY_Controller
      */
     public function upload_img()
     {
-
         $data = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
+
         $this->upload = $this->serviceContainer['image_upload'];
         $uid = $this->session->userdata('member_id');
+        $imageUtility = $this->serviceContainer['image_utility'];            
         $memberObj = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsMember')
                                     ->find($uid); 
@@ -202,20 +204,49 @@ class Store extends MY_Controller
         $uploadReturn = $this->upload->uploadImage($path, $this->avatarImageFilname);  
 
         if($data['w'] > 0 && $data['h'] > 0) {
-
+            $imageUtility->imageCrop($path.$this->avatarImageFilname,
+                                     $data["x"],
+                                     $data["y"],
+                                     $data["w"],
+                                     $data["h"]
+                                     );
+        }
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];              
+        if($uploadReturn["uploadData"]["image_width"] > 1024 || $uploadReturn["uploadData"]["image_width"] > 768) {
+            $imageUtility->imageResize($path.$this->avatarImageFilname, 
+                                       $path.$this->avatarImageFilname, 
+                                       $imageDimensionsConfig["usersize"]
+                                       );
         }
 
-        if(!(bool)$this->input->post('isAjax')){
+        $imageUtility->imageResize($path.$this->avatarImageFilname, 
+                                   $path.EsMember::DEFAULT_IMG_NORMAL_SIZE, 
+                                   $imageDimensionsConfig["normalsize"]
+                                   );
+
+        $imageUtility->imageResize($path.$this->avatarImageFilname, 
+                                   $path.EsMember::DEFAULT_IMG_SMALL_SIZE, 
+                                   $imageDimensionsConfig["smallsize"]
+                                   );    
+        $this->serviceContainer['entity_manager']
+             ->getRepository('EasyShop\Entities\EsMember')
+             ->updateMemberImageUrl($memberObj, $path);  
+
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($uid);                                                             
+
+        if(!(bool)$this->input->post('isAjax')) {
             $vendorLink = $this->input->post('vendorLink');
             redirect($memberObj->getSlug().'/'.html_escape($vendorLink));
         }
         
         $response = [
             'isSuccessful' => true,
-            'image' => $image,
+            'image' => $userImage,
         ];
         
-        if(isset($result['error'])){
+        if(!$userImage){
             $response['isSuccessful'] = false;
         }
 
