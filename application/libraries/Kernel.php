@@ -257,6 +257,7 @@ class Kernel
             $httpRequest = $container['http_request'];
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
+            $sphinxClient = $container['sphinx_client'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
@@ -266,6 +267,7 @@ class Kernel
                                                         ,$httpRequest
                                                         ,$promoManager
                                                         ,$configLoader
+                                                        ,$sphinxClient
                                                     );
         };
 
