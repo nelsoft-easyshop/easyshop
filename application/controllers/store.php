@@ -236,8 +236,7 @@ class Store extends MY_Controller
                           ->getUserImage($uid);                                                             
 
         if(!(bool)$this->input->post('isAjax')) {
-            $vendorLink = $this->input->post('vendorLink');
-            redirect($memberObj->getSlug().'/'.html_escape($vendorLink));
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
         }
         
         $response = [
