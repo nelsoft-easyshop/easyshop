@@ -17,6 +17,14 @@ $config = [
                             60,
                             80,
             ], 
+            'normalsize' => [
+                            157,
+                            150,
+            ],   
+            'smallsize' => [
+                            60,
+                            60,
+            ],                        
             'adsImage' => [
                             570,
                             270,
