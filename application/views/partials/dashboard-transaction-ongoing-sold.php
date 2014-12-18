@@ -127,17 +127,17 @@
                                         </div>
                                         <div class="pd-tb-8">
                                             <strong>State/Region:</strong>
-                                            <span><?=$soldTransactionDetails['location']?></span>
+                                            <span><?=html_escape($soldTransactionDetails['location'])?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="pd-tb-8">
                                             <strong>Telephone:</strong>
-                                            <span><?=$soldTransactionDetails['telephone']?></span>
+                                            <span><?=html_escape($soldTransactionDetails['telephone'])?></span>
                                         </div>
                                         <div class="pd-tb-8">
                                             <strong>State/Region:</strong>
-                                            <span><?=$soldTransactionDetails['city']?></span>
+                                            <span><?=html_escape($soldTransactionDetails['city'])?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-12 pd-tb-8">
