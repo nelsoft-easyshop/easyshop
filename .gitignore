@@ -43,6 +43,7 @@ application/logs/*
 !/sphinx/logs/*.md
 /sphinx/data/*
 !/sphinx/data/*.md
-
+/sphinx/etc/*
+!/sphix/etc/*.md
 
 
