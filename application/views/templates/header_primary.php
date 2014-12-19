@@ -208,8 +208,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <input type="submit" value="" class="span_bg">
                                         </div>
                                         <div class="nav-searchfield-width">
-                                          <div class="search-container">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                            <div class="search-container">
+                                                <input type="text" name="q_str" id="primary-search" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                            </div>
+                                            <div class="suggested-result-container">
+                                                <ul>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -320,10 +339,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
-                                                 <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
-                                                    <input type="submit" value="" class="span_bg">
-                                                </form>
+                                                    <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                        <input type="text" name="q_str" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                                        <input type="submit" value="" class="span_bg">
+                                                    </form>
+                                                    <div class="suggested-result-container2">
+                                                        <ul>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                                 <div class="header-cart-container">
                                                     <a href="/cart" class="header-cart-wrapper">
@@ -436,3 +474,56 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 
+<script type="text/javascript">
+
+(function ($) {
+
+    var $primarySearch= $("#primary-search");
+    var $suggestedResult= $(".suggested-result-container");
+
+    $(document).mouseup(function (e) {
+
+        if (!$suggestedResult.is(e.target) 
+            && $suggestedResult.has(e.target).length === 0)
+        {
+           $suggestedResult.hide(1);
+        }
+    });
+
+        $("#primary-search").on('click input keypress',function() {
+        if($(this).val().length >= 3) {
+             $(".suggested-result-container").slideDown(300);
+        } 
+        if ($(this).val().length <= 2) {
+             $(".suggested-result-container").slideUp(300);
+        }
+    });
+
+    $(".suggested-result-container").hide();
+
+    var $primarySearch2= $("#primary-search2");
+    var $suggestedResult2= $(".suggested-result-container2");
+
+    $(document).mouseup(function (e) {
+
+        if (!$suggestedResult2.is(e.target) 
+            && $suggestedResult2.has(e.target).length === 0)
+        {
+           $suggestedResult2.hide(1);
+        }
+    });
+
+        $("#primary-search2").on('click input keypress',function() {
+        if($(this).val().length >= 3) {
+             $(".suggested-result-container2").slideDown(300);
+        } 
+        if ($(this).val().length <= 2) {
+             $(".suggested-result-container2").slideUp(300);
+        }
+    });
+
+    $(".suggested-result-container2").hide();
+
+}(jQuery));
+
+</script>
