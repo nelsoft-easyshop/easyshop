@@ -1769,9 +1769,20 @@ td.td-view.p-view2.color-default{
 
 .actions-list,
 .mobile-left-wing,
-.categories-modal
+.categories-modal,
+.filter-modal
 {
     display: none;
+}
+
+.filter-modal h1,
+.categories-modal h1
+{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: none;
+    text-align: center;
 }
 /* ----------------------------------------------------------------------------- */
 /* ------------------------------    FOOTER CSS   ------------------------------ */
@@ -1959,9 +1970,6 @@ td.td-view.p-view2.color-default{
 
 /** Responsive vendor style **/
 @media only screen and (max-width : 979px) { 
-    .col-left-wing{
-        display: none;
-    }
     
     .div-products{
         margin-left: 0px;
@@ -2161,6 +2169,7 @@ td.td-view.p-view2.color-default{
         bottom: 0;
         background: #4370cc;
         z-index: 999999;
+        z-index:1000;
     }
     
     .row-left-wing{
@@ -2187,6 +2196,28 @@ td.td-view.p-view2.color-default{
     .col-categories:hover,
     .col-filter:hover{
         background: #355ba9;
+    }
+    
+    .input-filter-price{
+        width: 68px;
+    }
+    
+    .col-left-wing{
+        padding: 15px !important;
+    }
+    
+    .category-list{
+        padding: 10px;
+    }
+    
+    .list-category{
+        padding: 10px !important;
+        overflow-y: scroll;
+        height: 224px;
+    }
+    
+    .list-category > a:first-child > li{
+        border-top: none;
     }
 }
 
