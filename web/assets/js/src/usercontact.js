@@ -1,6 +1,36 @@
 (function ($) {
     $(document).ready (function(){
-        window.cities = JSON.parse($( "#cityList" ).val());
+       
+        $( ".drop-user-details" ).click(function() {
+          $( ".user-details-container" ).slideToggle();
+        });
+        
+        $( ".fa-edit-icon" ).click(function() {
+          $( ".user-details-container" ).slideDown();
+        });
+        
+        $( ".fa-cancel-edit" ).click(function() {
+          $( ".user-details-container" ).slideDown();
+        });
+        
+        
+        var $window = $(window);
+
+        function checkWidth() {
+            var windowsize = $window.width();
+            if (windowsize > 440) {
+                //if the window is greater than 440px wide then turn on jScrollPane..
+                $( ".user-details-container" ).css("display","block");
+            }else{
+                $( ".user-details-container" ).css("display","none");
+            }
+        }
+        // Execute on load
+        checkWidth();
+        // Bind event listener
+        $(window).resize(checkWidth);
+            
+       window.cities = JSON.parse($( "#cityList" ).val());
         if($( "#isEditable" ).val() == false){
             // hide all fields that are empty
             if($( "p#validatedStoreName" ).html() == ""){
