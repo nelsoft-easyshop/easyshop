@@ -443,9 +443,10 @@ class NewHomeWebService extends MY_Controller
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
 
-            if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
+            if( $imageData['image_width'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][0] 
+                || $imageData['image_height'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][1] ){    
                 $imageUtility = $this->serviceContainer['image_utility'];     
-                $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"], false);                           
+                $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["cmsImagesSizes"]["adsImage"], false);                           
             }
 
 
@@ -511,9 +512,9 @@ class NewHomeWebService extends MY_Controller
                     $this->cropImage($imgDirectory, $imgDimensions);
                 }
 
-                if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
+                if( $imageData['image_width'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][1] ){    
                     $imageUtility = $this->serviceContainer['image_utility'];
-                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"], false);
+                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["cmsImagesSizes"]["adsImage"], false);
                 }
 
                 $map->adSection->ad[$index]->img = $value;
@@ -910,7 +911,7 @@ class NewHomeWebService extends MY_Controller
 
         $this->config->load('image_dimensions', true);        
         $imageDimensionsConfig = $this->config->config['image_dimensions'];        
-        $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);   
+        $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);   
         $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
                                                         $string,'/map/sliderSection/slide[last()]', 
                                                         "\t\t",
@@ -985,12 +986,12 @@ class NewHomeWebService extends MY_Controller
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
                 $imageUtility = $this->serviceContainer['image_utility'];
                 if($subIndex >= $subSliderCount) {
-                    $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
+                    $tempDimensions = end($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);
                     $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-                    reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+                    reset($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);                
                 }
                 else {
-                    $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subIndex];
+                    $tempDimensions = $imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"][$subIndex];
                     $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
                 }
 
@@ -1189,15 +1190,15 @@ class NewHomeWebService extends MY_Controller
 
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
-            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);
+            $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);
             $imageUtility = $this->serviceContainer['image_utility'];
             if($subSliderCount >= $defaultTemplateSliderCount) {
-                $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
+                $tempDimensions = end($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+                reset($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);                
             }
             else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount - 1];
+                $tempDimensions = $imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             }
 
