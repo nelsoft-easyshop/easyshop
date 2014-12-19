@@ -30,21 +30,7 @@ class Store extends MY_Controller
      *
      * @var integer
      */
-    public $followerPerPage = 6;
-
-    /**
-     * Default Avatar Image filename
-     *
-     * @var string
-     */
-    public $avatarImageFilname = "/usersize.png";    
-
-    /**
-     * Default Banner Image filename
-     *
-     * @var string
-     */
-    public $bannerImageFilname = "/banner.png";        
+    public $followerPerPage = 6;    
 
     /**
      * Renders vendorpage
@@ -229,7 +215,7 @@ class Store extends MY_Controller
                                    $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
                                    $imageDimensionsConfig["smallsize"]
                                    );   
-                                    
+
         $this->serviceContainer['entity_manager']
              ->getRepository('EasyShop\Entities\EsMember')
              ->updateMemberImageUrl($memberObj, $path);  
