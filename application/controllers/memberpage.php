@@ -1574,7 +1574,6 @@ class Memberpage extends MY_Controller
     }
 
 
-
     /**
      * Request first sales page
      * @return json
