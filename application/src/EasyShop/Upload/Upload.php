@@ -17,20 +17,6 @@ class Upload
     private $uploadLibrary;
 
     /**
-     * CI_Image_lib Instance
-     *
-     * @var CI_Image_lib
-     */
-    private $imageLibrary;  
-
-    /**
-     *  Entity Manager Instance
-     *
-     *  @var Doctrine\ORM\EntityManager
-     */
-    private $em;    
-
-    /**
      *  Upload Errors
      *
      *  @var array
@@ -55,11 +41,9 @@ class Upload
      * Constructor. Retrieves Upload Library instance
      * 
      */
-    public function __construct($uploadLibrary, $imageLibrary, $em)
+    public function __construct($uploadLibrary)
     {
         $this->uploadLibrary = $uploadLibrary;
-        $this->imageLibrary = $imageLibrary; 
-        $this->em = $em;               
     }
 
     public function uploadImage($path, 

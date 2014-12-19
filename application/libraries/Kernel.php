@@ -336,9 +336,7 @@ class Kernel
 
         $container['image_upload'] = function ($c) use ($container){
             $uploadLibrary = new \CI_Upload();            
-            return new \EasyShop\Upload\Upload($uploadLibrary
-                                              ,$container['image_utility']
-                                              ,$container['entity_manager']);
+            return new \EasyShop\Upload\Upload($uploadLibrary);
         };                            
 
         // Collection Helper
