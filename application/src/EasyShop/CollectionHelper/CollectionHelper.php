@@ -126,3 +126,4 @@ class CollectionHelper
         return $all;
     }
 }
+
