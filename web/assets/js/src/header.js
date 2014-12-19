@@ -174,7 +174,51 @@
             }
         });
  
-        
+        var $primarySearch= $("#primary-search");
+        var $suggestedResult= $(".suggested-result-container");
+
+        $(document).mouseup(function (e) {
+
+            if (!$suggestedResult.is(e.target) 
+                && $suggestedResult.has(e.target).length === 0)
+            {
+               $suggestedResult.hide(1);
+            }
+        });
+
+            $("#primary-search").on('click input keypress',function() {
+            if($(this).val().length >= 3) {
+                 $(".suggested-result-container").slideDown(300);
+            } 
+            if ($(this).val().length <= 2) {
+                 $(".suggested-result-container").slideUp(300);
+            }
+        });
+
+        $(".suggested-result-container").hide();
+
+        var $primarySearch2= $("#primary-search2");
+        var $suggestedResult2= $(".suggested-result-container2");
+
+        $(document).mouseup(function (e) {
+
+            if (!$suggestedResult2.is(e.target) 
+                && $suggestedResult2.has(e.target).length === 0)
+            {
+               $suggestedResult2.hide(1);
+            }
+        });
+
+            $("#primary-search2").on('click input keypress',function() {
+            if($(this).val().length >= 3) {
+                 $(".suggested-result-container2").slideDown(300);
+            } 
+            if ($(this).val().length <= 2) {
+                 $(".suggested-result-container2").slideUp(300);
+            }
+        });
+
+        $(".suggested-result-container2").hide();
 
 
 }(jQuery));
