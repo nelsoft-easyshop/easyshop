@@ -21,14 +21,14 @@ class Upload
      *
      *  @var array
      */
-    private $errors;    
+    private $errors = "";    
 
     /**
      *  Upload Data
      *
      *  @var array
      */
-    private $uploadData;     
+    private $uploadData = [];     
 
     /**
      *  Allowed Image Types
