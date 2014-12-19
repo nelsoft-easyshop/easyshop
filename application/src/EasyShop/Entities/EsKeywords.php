@@ -8,10 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
  * EsKeywords
  *
  * @ORM\Table(name="es_keywords", indexes={@ORM\Index(name="ft_es_keywords_idx", columns={"keywords"})})
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywords")
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsRepository")
  */
 class EsKeywords
 {
+    const SUGGESTION_LIMIT = 10;
+
     /**
      * @var integer
      *
