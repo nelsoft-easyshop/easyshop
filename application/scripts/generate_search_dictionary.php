@@ -94,15 +94,17 @@
     $preparedStatement->execute();
     
     $wordList =  $dictionary->getDictionary() ;
-    $insertSql = "INSERT INTO es_keywords (`keywords`) VALUES ";
+    $insertSql = "INSERT INTO es_keywords (`keywords`, `occurences`) VALUES ";
     foreach($wordList as $word){
-        $insertSql .= "(?),";
+        $insertSql .= "(?, ?),";
     }
     $insertSql = rtrim($insertSql, ',');
     $preparedStatement = $dbConnection->prepare($insertSql);
     $count = 1;
     foreach($wordList as $word => $occurence){
-        $preparedStatement->bindValue($count++, $word, PDO::PARAM_STR);
+        $preparedStatement->bindValue($count, $word, PDO::PARAM_STR);
+        $preparedStatement->bindValue($count+1, $occurence, PDO::PARAM_INT);
+        $count += 2;
     }
     $preparedStatement->execute();
     
