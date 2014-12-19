@@ -1846,7 +1846,7 @@ class Memberpage extends MY_Controller
             
             $profilePercentage = $userManager->getProfileCompletePercent($member);  
 
-            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
+            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId, false);
             $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
             $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
 
