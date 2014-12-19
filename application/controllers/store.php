@@ -292,7 +292,7 @@ class Store extends MY_Controller
              ->updateMemberImageUrl($memberObj, $path, false);  
 
         $userImage = $this->serviceContainer['user_manager']
-                          ->getUserImage($uid);                                                             
+                          ->getUserImage($uid, 'banner');                                                             
 
         if(!(bool)$this->input->post('isAjax')) {
             redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
