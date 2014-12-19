@@ -212,6 +212,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <input type="text" name="q_str" id="primary-search" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                             </div>
                                             <div class="suggested-result-container">
+                                                <p class="sr-title">Suggested search result:</p>
                                                 <ul>
                                                     <li>
                                                         <a href="">lorem ipsum</a>
@@ -344,6 +345,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <input type="submit" value="" class="span_bg">
                                                     </form>
                                                     <div class="suggested-result-container2">
+                                                        <p class="sr-title">Suggested search result:</p>
                                                         <ul>
                                                             <li>
                                                                 <a href="">lorem ipsum</a>
