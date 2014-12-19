@@ -4,10 +4,28 @@
     .vendor-footer-con{
         margin-bottom: 36px;
     }
-    #simplemodal-container{
+    #feedback-modal-container{
         min-height: 100px !important;
         padding: 10px; 
     }
+    
+    .filter-modal-container{
+        max-height: 381px !important;
+    }
+    @media only screen and (max-width : 500px) { 
+        .col-left-wing{
+            display: none;
+        }
+    }
+    #simplemodal-container.feedback-modal-container {
+        border-radius: 4px;
+        /*height:290px !important;*/
+        
+        max-height: 300px;
+        width:600px; 
+        background-color:#fff;
+    }
+
 </style>
 
 <div class="clear"></div>
@@ -179,7 +197,10 @@
     </div>
 </div>
 <div class="categories-modal">
-    
+    <h1>Categories</h1>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
 </div>
 
 		<!-- preload the images -->
