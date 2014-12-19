@@ -345,7 +345,7 @@ class Memberpage extends MY_Controller
         $um = $this->serviceContainer['user_manager'];
         $memberId = $this->session->userdata('member_id');
         $memberEntity = $em->find('EasyShop\Entities\EsMember', $memberId);
-        
+
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
@@ -1479,7 +1479,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1503,7 +1503,7 @@ class Memberpage extends MY_Controller
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1527,7 +1527,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1552,12 +1552,12 @@ class Memberpage extends MY_Controller
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
                                           ),
-                    'count' => $completeSoldTransactionsCount["getSoldTransactionCount"],
+                    'count' => $completeSoldTransactionsCount["transactionsCount"],
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
