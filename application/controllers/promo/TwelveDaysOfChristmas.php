@@ -70,12 +70,12 @@ class TwelveDaysOfChristmas extends MY_Controller
             ],
             '2014-12-20' => [
                 'slug' => 'eaglekinger',
-                'vendorImageUrl' => 'seller5.jpg',
+                'vendorImageUrl' => 'seller4.jpg',
                 'productImageUrl' => 'item7.jpg'
             ],
             '2014-12-21' => [
                 'slug' => 'eaglekinger',
-                'vendorImageUrl' => 'seller5.jpg',
+                'vendorImageUrl' => 'seller4.jpg',
                 'productImageUrl' => 'item8.jpg'
             ],
             '2014-12-22' => [
