@@ -130,7 +130,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param  integer $memberId
      * @return integer
      */
-    public function getUserTotalFeedBackCount($memberId)
+    public function getUserTotalFeedBackCount($memberId, $all = true)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -142,8 +142,12 @@ class EsMemberFeedbackRepository extends EntityRepository
             FROM
                 es_member_feedback
             WHERE
-                member_id = :member_id OR for_memberid = :member_id
+                for_memberid = :member_id
         ";
+
+        if($all){
+            $sql .= " OR member_id = :member_id";
+        }
         
         $query = $this->em->createNativeQuery($sql, $rsm);
         $query->setParameter('member_id', $memberId); 
