@@ -300,7 +300,7 @@ class Store extends MY_Controller
         
         $response = [
             'isSuccessful' => true,
-            'image' => $userImage,
+            'banner' => $userImage,
         ];
         
         if(!$userImage){
