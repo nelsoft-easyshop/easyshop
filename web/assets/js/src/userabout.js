@@ -153,5 +153,51 @@
     });
     
 
+    $('.feedback-from-seller').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideToggle();
+         $('html, body').animate({
+            scrollTop: $(this).offset().top
+        }, 500);
+    });
     
+    $('.feedback-from-buyer').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $('.feedback-mobile-2').slideToggle();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideUp();
+         $('html, body').animate({
+            scrollTop: $(this).offset().top
+        }, 500);
+    });
+    
+    $('.feedback-for-seller').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideToggle();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideUp();
+         $('html, body').animate({
+            scrollTop: $(this).offset().top
+        }, 500);
+    });
+    
+    $('.feedback-for-buyer').click(function() {
+        $(this).toggleClass("active-bar",0);
+        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideToggle();
+        $('.feedback-mobile-1').slideUp();
+         $('html, body').animate({
+            scrollTop: $(".feedback-for-buyer").offset().top
+        }, 500);
+    });
 })(jQuery);
