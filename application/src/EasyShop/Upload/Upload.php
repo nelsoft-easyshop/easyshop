@@ -33,15 +33,14 @@ class Upload
     }
 
     /**
-     * Initiatest upload image method
-     * @param string $path
-     * @param string $filename
-     * @param bool $isOverWriteImage
-     * @param int $maxSize
-     * @param int $maxWidth
-     * @param int $maxHeight
-     * @return array
-     * 
+     * Initiatest Upload Image
+     * @param  string  $path             
+     * @param  string  $filename         
+     * @param  boolean $isOverWriteImage 
+     * @param  integer $maxSize          
+     * @param  integer $maxWidth         
+     * @param  integer $maxHeight        
+     * @return Array                    
      */
     public function uploadImage($path, 
                                 $filename, 
