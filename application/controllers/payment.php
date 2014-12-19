@@ -1860,11 +1860,12 @@ class Payment extends MY_Controller{
     public function sendEmail($token = null)
     {
         if($token === 'sam'){
-            $data = [
-                'member_id' => '2', 
-                'order_id' => '1',
-                'invoice_no' => '1-2-1407060930',
+             $data = [
+                'member_id' => '23948', 
+                'order_id' => '1646',
+                'invoice_no' => '1646-23948-1412170334',
             ];
+            
             
             $this->sendNotification($data);
             echo 'emails sent';
