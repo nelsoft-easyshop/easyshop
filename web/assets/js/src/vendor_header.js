@@ -420,6 +420,55 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
     });
 
+    var $mobilesearchbtn= $(".mobile-search");
+    var $mobilesearchform= $(".search-form");
+    $(document).mouseup(function (e) {
+
+        if (!$mobilesearchform.is(e.target) 
+            && $mobilesearchform.has(e.target).length === 0)
+        {
+           $mobilesearchform.hide(1);
+        }
+
+    });
+
+    $mobilesearchbtn.click(function() {
+        $mobilesearchform.show();
+    });
+
+    var $mobilevendorcart= $(".mobile-vendor-cart");
+    var $mobilecartitemlist= $(".header-cart-item-list");
+    $(document).mouseup(function (e) {
+
+        if (!$mobilecartitemlist.is(e.target) 
+            && $mobilecartitemlist.has(e.target).length === 0)
+        {
+           $mobilecartitemlist.hide(1);
+        }
+
+    });
+
+    $mobilevendorcart.click(function() {
+        $mobilecartitemlist.show();
+    });
+
+
+    var $mobileloginbtn= $(".vendor-out-con2");
+    var $mobileloginuser= $(".mobile-user-login");
+    $(document).mouseup(function (e) {
+
+        if (!$mobileloginuser.is(e.target) 
+            && $mobileloginuser.has(e.target).length === 0)
+        {
+           $mobileloginuser.hide(1);
+        }
+
+    });
+
+    $mobileloginbtn.click(function() {
+        $mobileloginuser.show();
+    });
+
 })(jQuery);
 
 function proceedPayment(obj)
