@@ -480,7 +480,7 @@ class SearchProduct
                  $suggestions[] = $word['keyword'];
             }
         }
-        else{
+        else if(isset($sphinxResult[0]['matches'])){
             foreach($sphinxResult[0]['matches'] as $match){
                 $suggestions[] = $match['attrs']['keywordattr'];
             }
