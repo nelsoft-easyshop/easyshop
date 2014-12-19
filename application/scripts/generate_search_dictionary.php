@@ -70,7 +70,6 @@
                         HAVING brandOccurences >= :brandOccurenceLimit
     ";
 
-    
     $preparedStatement = $dbConnection->prepare($productsWithBrandsSql);
     $memberStatus = EasyShop\Entities\EsMember::DEFAULT_ACTIVE;
     $deleteStatus = EasyShop\Entities\EsProduct::ACTIVE;
@@ -87,10 +86,27 @@
     $brands = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach($brands as $brand){
-        $dictionary->insertWordIntoDictionary($brand['brandName'],$brand['brandOccurences'] );
+        $dictionary->insertWordIntoDictionary($brand['brandName'],$brand['brandOccurences']);
     }
     
-    print_r($dictionary->getDictionary());
+    $deleteSql = "DELETE FROM es_keywords WHERE 1";
+    $preparedStatement = $dbConnection->prepare($deleteSql);
+    $preparedStatement->execute();
+    
+    $wordList =  $dictionary->getDictionary() ;
+    $insertSql = "INSERT INTO es_keywords (`keywords`) VALUES ";
+    foreach($wordList as $word){
+        $insertSql .= "(?),";
+    }
+    $insertSql = rtrim($insertSql, ',');
+    $preparedStatement = $dbConnection->prepare($insertSql);
+    $count = 1;
+    foreach($wordList as $word => $occurence){
+        $preparedStatement->bindValue($count++, $word, PDO::PARAM_STR);
+    }
+    $preparedStatement->execute();
+    
+    echo "Dictionary updated";
     
 /**
  * Class to generate dictionary array
