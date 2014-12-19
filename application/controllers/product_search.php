@@ -26,33 +26,21 @@ class product_search extends MY_Controller {
     public $per_page = 15; 
 
      /**
-     *   Returns recommended keywords for search bar
-     */
-    function sch_onpress()
+      * Returns recommended keywords for search bar
+      * @return JSON
+      */
+    public function suggest()
     {  
-        header('Content-Type: text/plain'); 
-        if($this->input->get('q')){
-
-            $html = "";
-            $stringData =  $this->input->get('q'); 
-            $string = ltrim($stringData);  
-            $words = explode(" ",trim($string)); 
-            $keywords = $this->search_model->itemKeySearch($words);
-           
-            if(count($keywords) <= 0){
-                $html = 0;
-            }else{
-                $html .= "<ul>";
-                foreach ($keywords as $value) {
-                    $showValue = $this->highlights($value,$stringData);
-                    $html .= "<li><a href='/search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
-
-                }
-                $html .= "</ul>";
-            }
-
-            echo $html;
+        $response = [];
+        if($this->input->get('query')){
+            $queryString =  $this->input->get('query'); 
+            $queryString = trim($queryString);  
+            $searchSuggestions = $this->serviceContainer['search_product']
+                                      ->getKeywordSuggestions($queryString);
+            $response = $searchSuggestions;
         }
+        
+        echo json_encode($response);
     }
 
     /**
