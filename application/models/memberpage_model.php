@@ -232,72 +232,7 @@ class memberpage_model extends CI_Model
         
         return $result;
     }
-    
-    /**
-     *  Used for uploading banner in vendor page
-     *  Includes resizing of image and processing of cropped image
-     */
-    public function banner_upload($uid, $data=array()){
-        $query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':id', $uid);
-        $sth->execute();
-        $row = $sth->fetch(PDO::FETCH_ASSOC);
-        $path = $row['imgurl'];	
-        
-        if(trim($path) === ''){
-            $path = $this->config->item('user_img_directory').$path.$row['id_member'].'_'.$row['username'];
-        }
-        if(!is_dir($path)){
-          mkdir($path,0755,TRUE); 
-        }
-        $config['overwrite'] = TRUE;
-        $config['file_name'] = 'banner.png';
-        $config['upload_path'] = $path; 
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['max_size']	= '5000';
-        $config['max_width']  = '5000';
-        $config['max_height']  = '5000';
-        $this->upload->initialize($config);
-        
-        if ( ! $this->upload->do_upload()){
-            return array('error' => $this->upload->display_errors());
-        }
-        else{
-            $config['image_library'] = 'gd2';
-            $config['source_image'] = $path.'/banner.png';
-            $config['maintain_ratio'] = false;
-            
-            $imageData = $this->upload->data();
-            
-            // If cropped
-            if($data['w'] > 0 && $data['h'] > 0){
-                $config['new_image'] = $path.'/banner.png';
-                $config['width'] = $data['w'];
-                $config['height'] = $data['h'];
-                $config['x_axis'] = $data['x'];
-                $config['y_axis'] = $data['y'];
-                $this->image_lib->initialize($config);  
-                $this->image_lib->image_process_gd('crop');
-                $config['x_axis'] = $config['y_axis'] = '';
-            }
-            
-            //Resize to standard banner size
-            $config['new_image'] = $path.'/banner.png';
-            $config['width'] = 1475;
-            $config['height'] = 366;
-            $this->image_lib->initialize($config);  
-            $this->image_lib->resize();	
 
-            $isHide = 0;
-            $query = $this->xmlmap->getFilenameID('sql/users', 'update_imgurl_banner');
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':path', $path);
-            $sth->bindParam(':id_member', $uid);
-            $sth->bindParam(':is_hide_banner', $isHide);
-            $sth->execute();
-        }
-    }
     
     /**
      *  Used for editing work info in Personal Information tab
