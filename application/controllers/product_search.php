@@ -32,7 +32,7 @@ class product_search extends MY_Controller {
     public function suggest()
     {  
         $response = [];
-        if($this->input->get('query')){
+        if($this->input->post('query')){
             $queryString =  $this->input->get('query'); 
             $queryString = trim($queryString);  
             $searchSuggestions = $this->serviceContainer['search_product']
