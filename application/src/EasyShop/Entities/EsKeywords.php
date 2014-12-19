@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsKeywords
  *
- * @ORM\Table(name="es_keywords", indexes={@ORM\Index(name="fulltext", columns={"keywords"})})
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsRepository")
+ * @ORM\Table(name="es_keywords", indexes={@ORM\Index(name="ft_es_keywords_idx", columns={"keywords"})})
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywords")
  */
 class EsKeywords
 {
@@ -24,9 +24,16 @@ class EsKeywords
     /**
      * @var string
      *
-     * @ORM\Column(name="keywords", type="text", nullable=true)
+     * @ORM\Column(name="keywords", type="text", length=65535, nullable=true)
      */
     private $keywords;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="occurences", type="integer", nullable=false)
+     */
+    private $occurences = '0';
 
 
 
@@ -61,5 +68,28 @@ class EsKeywords
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set occurences
+     *
+     * @param integer $occurences
+     * @return EsKeywords
+     */
+    public function setOccurences($occurences)
+    {
+        $this->occurences = $occurences;
+
+        return $this;
+    }
+
+    /**
+     * Get occurences
+     *
+     * @return integer 
+     */
+    public function getOccurences()
+    {
+        return $this->occurences;
     }
 }

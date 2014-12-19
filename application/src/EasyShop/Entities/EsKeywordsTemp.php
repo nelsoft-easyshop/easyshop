@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsKeywordsTemp
  *
  * @ORM\Table(name="es_keywords_temp")
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsTempRepository")
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsTemp")
  */
 class EsKeywordsTemp
 {
@@ -78,7 +78,7 @@ class EsKeywordsTemp
     }
 
     /**
-     * set ipAddress
+     * Set ipAddress
      *
      * @param string $ipAddress
      * @return EsKeywordsTemp
