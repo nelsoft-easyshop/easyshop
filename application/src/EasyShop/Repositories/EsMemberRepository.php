@@ -278,4 +278,24 @@ class EsMemberRepository extends EntityRepository
         return $member;
     }    
 
+    /**
+     * Update User Avatar
+     * @param int $member
+     * @param string $imagePath
+     * @param bool $isForAvatar
+     * @return Easyshop\Entities\EsMember
+     */
+    public function updateMemberImageUrl($member, $imagePath, $isForAvatar = true)
+    {
+        $em = $this->_em;        
+        $member->setImgurl(rtrim($imagePath,"/"));
+        if($isForAvatar) {
+            $member->setIsHideAvatar(EsMember::DEFAULT_AVATAR_VISIBILITY);
+        }
+        else {
+            $member->setIsHideBanner(EsMember::DEFAULT_AVATAR_VISIBILITY);
+        }
+        $em->flush();
+    }            
+
 }

@@ -521,22 +521,22 @@ class productUpload extends MY_Controller
 
                 $imageUtility->imageResize($pathDirectory.$filenames_ar[$i], 
                                            $pathDirectory."small/".$filenames_ar[$i],
-                                           $imageDimensions["small"]);
+                                           $imageDimensions["productImagesSizes"]["small"]);
 
                 $imageUtility->imageResize($pathDirectory."small/".$filenames_ar[$i], 
                                            $pathDirectory."categoryview/".$filenames_ar[$i],
-                                           $imageDimensions["categoryview"]);
+                                           $imageDimensions["productImagesSizes"]["categoryview"]);
 
                 $imageUtility->imageResize($pathDirectory."categoryview/".$filenames_ar[$i], 
                                            $pathDirectory."thumbnail/".$filenames_ar[$i],
-                                           $imageDimensions["thumbnail"]);
+                                           $imageDimensions["productImagesSizes"]["thumbnail"]);
 
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
                         $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
                                                    $pathDirectory.$file_data[$i]['file_name'],
-                                                   $imageDimensions["usersize"]);
+                                                   $imageDimensions["productImagesSizes"]["usersize"]);
                     }
                 }
             }
@@ -609,15 +609,15 @@ class productUpload extends MY_Controller
 
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
-                                       $imageDimensions["small"]);
+                                       $imageDimensions["productImagesSizes"]["small"]);
 
             $imageUtility->imageResize($pathDirectory."small/".$filename, 
                                        $pathDirectory."categoryview/".$filename,
-                                       $imageDimensions["categoryview"]);
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
 
             $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
                                        $pathDirectory."thumbnail/".$filename,
-                                       $imageDimensions["thumbnail"]);
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
 
             die('{"result":"ok"}');
         }
