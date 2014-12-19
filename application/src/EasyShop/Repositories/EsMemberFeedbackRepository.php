@@ -128,6 +128,7 @@ class EsMemberFeedbackRepository extends EntityRepository
     /**
      * Get total count of feedback per user
      * @param  integer $memberId
+     * @param  boolean $all
      * @return integer
      */
     public function getUserTotalFeedBackCount($memberId, $all = true)
