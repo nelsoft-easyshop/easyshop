@@ -131,7 +131,7 @@ class EsMemberFeedbackRepository extends EntityRepository
      * @param  boolean $all
      * @return integer
      */
-    public function getUserTotalFeedBackCount($memberId, $all = true)
+    public function getUserTotalFeedBackCount($memberId, $includeOwnFeedback = true)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -146,7 +146,7 @@ class EsMemberFeedbackRepository extends EntityRepository
                 for_memberid = :member_id
         ";
 
-        if($all){
+        if($includeOwnFeedback){
             $sql .= " OR member_id = :member_id";
         }
         
