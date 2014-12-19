@@ -15,21 +15,7 @@ class Upload
      * @var CI_Upload
      */
     private $uploadLibrary;
-
-    /**
-     *  Upload Errors
-     *
-     *  @var array
-     */
-    private $errors = [];    
-
-    /**
-     *  Upload Data
-     *
-     *  @var array
-     */
-    private $uploadData = [];     
-
+   
     /**
      *  Allowed Image Types
      *
@@ -46,6 +32,17 @@ class Upload
         $this->uploadLibrary = $uploadLibrary;
     }
 
+    /**
+     * Initiatest upload image method
+     * @param string $path
+     * @param string $filename
+     * @param bool $isOverWriteImage
+     * @param int $maxSize
+     * @param int $maxWidth
+     * @param int $maxHeight
+     * @return array
+     * 
+     */
     public function uploadImage($path, 
                                 $filename, 
                                 $isOverWriteImage = true, 
@@ -61,17 +58,18 @@ class Upload
         $config['max_width']  = $maxWidth;
         $config['max_height']  = $maxHeight;
         $this->uploadLibrary->initialize($config);  
-
+        $errors = [];
+        $uploadData = [];
         if (!$this->uploadLibrary->do_upload()){
-            $this->errors = $this->uploadLibrary->display_errors();
+            $errors = $this->uploadLibrary->display_errors();
         }
         else {
-            $this->uploadData = $this->uploadLibrary->data();
+            $uploadData = $this->uploadLibrary->data();
         }
         return [
-                'errors' => $this->errors,
-                'uploadData' => $this->uploadData
-            ];        
+            'errors' => $errors,
+            'uploadData' => $uploadData
+        ];        
     }
 }
 
