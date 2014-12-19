@@ -21,7 +21,7 @@ class Upload
      *
      *  @var array
      */
-    private $errors = "";    
+    private $errors = [];    
 
     /**
      *  Upload Data
