@@ -169,7 +169,7 @@
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
                                 <a href="/<?=$product->getMember()->getSlug();?>/contact" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
-                            <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromo::BUY_AT_ZERO && $product->getStartPromo() == 1): ?>
+                            <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromoType::BUY_AT_ZERO && (bool) $product->getStartPromo() ): ?>
                                 <!--Changed button tag-->
                                 <input type="button" id='send_registration' data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
                                 <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span>
@@ -279,7 +279,7 @@
 <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
 
-<?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromo::BUY_AT_ZERO ):?>
+<?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromoType::BUY_AT_ZERO ):?>
     <script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 <?php endif; ?>
 
