@@ -1857,6 +1857,23 @@ class Payment extends MY_Controller{
         echo 'result=OK'; 
     }
 
+    public function sendEmail($token = null)
+    {
+        if($token === 'sam'){
+            $data = [
+                'member_id' => '2', 
+                'order_id' => '1',
+                'invoice_no' => '1-2-1407060930',
+            ];
+            
+            $this->sendNotification($data);
+            echo 'emails sent';
+        }
+        else{
+            echo 'wrong token';
+        }
+    }
+    
 }
 
 
