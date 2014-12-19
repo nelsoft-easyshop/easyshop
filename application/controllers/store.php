@@ -5,6 +5,7 @@ if (!defined('BASEPATH')){
 }
 
 use EasyShop\Entities\EsAddress as EsAddress; 
+use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
     
 class Store extends MY_Controller
@@ -29,7 +30,7 @@ class Store extends MY_Controller
      *
      * @var integer
      */
-    public $followerPerPage = 6;
+    public $followerPerPage = 6;    
 
     /**
      * Renders vendorpage
@@ -154,6 +155,162 @@ class Store extends MY_Controller
         }
 
     }
+
+    /**
+     *  Used to upload avatar image on both Member page and Vendor page
+     *  Reloads page on success.
+     *
+     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
+     *      and displays an error for 3 seconds, then reloads the page to the original URL,
+     *      member page or vendor page
+     */
+    public function upload_img()
+    {
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+
+        $this->upload = $this->serviceContainer['image_upload'];
+        $uid = $this->session->userdata('member_id');
+        $imageUtility = $this->serviceContainer['image_utility'];            
+        $memberObj = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($uid); 
+        $path = $memberObj->getImgurl();                           
+        if(trim($path) === '') {
+            $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
+        }   
+        if(!is_dir($path)) {
+            mkdir($path,0755,true); 
+        }          
+        $avatarFileName = $path."/".EsMember::DEFAULT_IMG_AVATAR;
+        $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_AVATAR);  
+        if($data['w'] > 0 && $data['h'] > 0) {
+            $imageUtility->imageCrop($avatarFileName,
+                                     $data["x"],
+                                     $data["y"],
+                                     $data["w"],
+                                     $data["h"]
+                                     );
+        }
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];              
+        if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][0]
+           || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][1]) {
+            $imageUtility->imageResize($avatarFileName, 
+                                       $avatarFileName, 
+                                       $imageDimensionsConfig["userImagesSizes"]["usersize"]
+                                       );
+        }
+
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_NORMAL_SIZE, 
+                                   $imageDimensionsConfig["userImagesSizes"]["normalsize"]
+                                   );
+
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
+                                   $imageDimensionsConfig["userImagesSizes"]["smallsize"]
+                                   );   
+
+        $this->serviceContainer['entity_manager']
+             ->getRepository('EasyShop\Entities\EsMember')
+             ->updateMemberImageUrl($memberObj, $path);  
+
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($uid);                                                             
+
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'image' => $userImage,
+        ];
+        
+        if(!$userImage){
+            $response['isSuccessful'] = false;
+        }
+
+
+        echo json_encode($response);
+    }    
+
+
+
+    /**
+     *  Used for uploading banner in vendor page. 
+     *  @return JSON
+     */
+    public function banner_upload()
+    {    
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+
+        $this->upload = $this->serviceContainer['image_upload'];
+        $uid = $this->session->userdata('member_id');
+        $imageUtility = $this->serviceContainer['image_utility'];            
+        $memberObj = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($uid); 
+        $path = $memberObj->getImgurl();                           
+        if(trim($memberObj->getImgurl()) === '') {
+            $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
+        }   
+        if(!is_dir($path)) {
+            mkdir($path,0755,true); 
+        }     
+
+        $bannerFileName = $path."/".EsMember::DEFAULT_IMG_BANNER;
+        $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_BANNER);  
+        if($data['w'] > 0 && $data['h'] > 0) {
+            $imageUtility->imageCrop($bannerFileName,
+                                     $data["x"],
+                                     $data["y"],
+                                     $data["w"],
+                                     $data["h"]
+                                     );
+        }
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];              
+
+        $imageUtility->imageResize($bannerFileName, 
+                                   $bannerFileName, 
+                                   $imageDimensionsConfig["userImagesSizes"]["bannersize"]
+                                   );
+  
+        $this->serviceContainer['entity_manager']
+             ->getRepository('EasyShop\Entities\EsMember')
+             ->updateMemberImageUrl($memberObj, $path, false);  
+
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($uid, 'banner');                                                             
+
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'banner' => $userImage,
+        ];
+        
+        if(!$userImage){
+            $response['isSuccessful'] = false;
+        }
+
+
+        echo json_encode($response);
+    }
+
     
     /**
      * Transition controller action for old vendor page
