@@ -85,28 +85,61 @@
     $preparedStatement->bindParam("brandOccurenceLimit", $brandOccurenceLimit);
     $preparedStatement->execute();
     $brands = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
-    
-    var_dump($brands);
-    
+
     foreach($brands as $brand){
         $dictionary->insertWordIntoDictionary($brand['brandName'],$brand['brandOccurences'] );
     }
     
     print_r($dictionary->getDictionary());
     
+/**
+ * Class to generate dictionary array
+ *
+ */
 class Dictionary
 {
-
+    /**
+     * Minimum length for word to enter the dictionary
+     *
+     * @var integer
+     */
     const WORD_MIN_LENGTH = 2;
     
+    /**
+     * Minimum occurences for word to enter the dictionary (DEV)
+     *
+     * @var integer
+     */
     const DEV_MIN_OCCURENCES = 3;
     
+    /**
+     * Minimum occurences for word to enter the dictionary (PROD)
+     *
+     * @var integer
+     */
     const PROD_MIN_OCCURENCES = 20;
         
+    /**
+     * Dictionrary array
+     *
+     * @var string[]
+     */
     private $dictionary;
     
+    /**
+     * Minimum occurences for word to enter the dictionary
+     * Depends on the environement
+     * 
+     * @var integer
+     */
     private $occurencesMinimum;
     
+    /**
+     * Minimum occurences for word to enter the dictionary
+     * Depends on the environement
+     * 
+     * @var integer
+     */
     public function initialize()
     {
         $this->dictionary = [];
@@ -118,11 +151,22 @@ class Dictionary
         }
     }
     
+    /**
+     * Gets the occrences limit
+     *
+     * @var integer
+     */
     public function getOccurencesLimit()
     {
         return $this->occurencesMinimum;
     }
 
+    /**
+     * Inserts a word into the dictionary
+     *
+     * @param string $word
+     * @param integer $sqlOccurences
+     */
     public function insertWordIntoDictionary($word, $sqlOccurences = null)
     {
         if(strlen(trim($word)) >= self::WORD_MIN_LENGTH){
@@ -147,7 +191,12 @@ class Dictionary
         }
     }
     
-
+    /**
+     * Retuns the dictionary array
+     *
+     * @param boolean $isRaw
+     * @return string[]
+     */
     public function getDictionary($isRaw = false)
     {
         foreach($this->dictionary as $index=>$word){
