@@ -198,22 +198,22 @@ class Store extends MY_Controller
         }
         $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];              
-        if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["usersize"][0]
-           || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["usersize"][1]) {
+        if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][0]
+           || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][1]) {
             $imageUtility->imageResize($avatarFileName, 
                                        $avatarFileName, 
-                                       $imageDimensionsConfig["usersize"]
+                                       $imageDimensionsConfig["userImagesSizes"]["usersize"]
                                        );
         }
 
         $imageUtility->imageResize($avatarFileName, 
                                    $path."/".EsMember::DEFAULT_IMG_NORMAL_SIZE, 
-                                   $imageDimensionsConfig["normalsize"]
+                                   $imageDimensionsConfig["userImagesSizes"]["normalsize"]
                                    );
 
         $imageUtility->imageResize($avatarFileName, 
                                    $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
-                                   $imageDimensionsConfig["smallsize"]
+                                   $imageDimensionsConfig["userImagesSizes"]["smallsize"]
                                    );   
 
         $this->serviceContainer['entity_manager']
@@ -284,7 +284,7 @@ class Store extends MY_Controller
 
         $imageUtility->imageResize($bannerFileName, 
                                    $bannerFileName, 
-                                   $imageDimensionsConfig["bannersize"]
+                                   $imageDimensionsConfig["userImagesSizes"]["bannersize"]
                                    );
   
         $this->serviceContainer['entity_manager']
