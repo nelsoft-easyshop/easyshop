@@ -103,7 +103,7 @@ class CollectionHelper
      * @param array $all   The final container (used internally).
      * @param array $group The sub container (used internally).
      * @param mixed $val   The value to append (used internally).
-     * @param int   $i     The key index (used internally).
+     * @param int   $index     The key index (used internally).
      */
     public function generateCombinations(array $data, array &$all = [], array $group = [], $value = null, $index = 0)
     {
