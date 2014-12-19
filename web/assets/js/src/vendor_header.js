@@ -309,8 +309,8 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         url: action,
                         dataType: "json",
                         beforeSubmit : function(){
-                            // $('.avatar-modal-content').hide();
-                            // $('.avatar-modal-loading').fadeIn();
+                            $('.avatar-modal-content').hide();
+                            $('.avatar-modal-loading').fadeIn();
                         },
                         uploadProgress : function(event, position, total, percentComplete) {
                             console.log(percentComplete);
@@ -325,13 +325,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                                     var avatarImage = $('img.avatar-image');
                                     avatarImage.attr('src',xhrResponse.image);
                                 }
-                                // $.modal.close();
+                                $.modal.close();
                                 $('#banner-cancel-changes').trigger('click');
                             }
                             else{
-                                // $.modal.close();
+                                $.modal.close();
                                 $('#banner-cancel-changes').trigger('click');
-                                // alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                                alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
                             }
                             
                         },
