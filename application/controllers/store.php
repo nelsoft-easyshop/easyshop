@@ -180,11 +180,11 @@ class Store extends MY_Controller
                                     ->getRepository('EasyShop\Entities\EsMember')
                                     ->find($uid); 
         $path = $memberObj->getImgurl();                           
-        if(trim($memberObj->getImgurl()) === '') {
+        if(trim($path) === '') {
             $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
         }   
         if(!is_dir($path)) {
-            mkdir($path,0755,TRUE); 
+            mkdir($path,0755,true); 
         }          
         $avatarFileName = $path."/".EsMember::DEFAULT_IMG_AVATAR;
         $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_AVATAR);  
@@ -199,7 +199,7 @@ class Store extends MY_Controller
         $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];              
         if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["usersize"][0]
-                                     || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["usersize"][1]) {
+           || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["usersize"][1]) {
             $imageUtility->imageResize($avatarFileName, 
                                        $avatarFileName, 
                                        $imageDimensionsConfig["usersize"]
@@ -266,7 +266,7 @@ class Store extends MY_Controller
             $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
         }   
         if(!is_dir($path)) {
-            mkdir($path,0755,TRUE); 
+            mkdir($path,0755,true); 
         }     
 
         $bannerFileName = $path."/".EsMember::DEFAULT_IMG_BANNER;
