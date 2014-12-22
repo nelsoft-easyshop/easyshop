@@ -1846,7 +1846,8 @@ class Memberpage extends MY_Controller
             
             $profilePercentage = $userManager->getProfileCompletePercent($member);  
 
-            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId, false);
+            $reviewTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId, false);
+            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
             $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
             $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
 
@@ -1871,6 +1872,7 @@ class Memberpage extends MY_Controller
                 'activeProductView' => $activeProductView,
                 'memberRating' => $memberRating,
                 'feedBackTotalCount' => $feedBackTotalCount,
+                'reviewTotalCount' => $reviewTotalCount,
                 'profilePercentage' => $profilePercentage,
                 'allFeedBackView' => $allFeedBackView,
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
