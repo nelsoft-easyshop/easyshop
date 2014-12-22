@@ -213,7 +213,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                             <div class="suggested-result-container">
                                                 <p class="sr-title">Suggested search result:</p>
-                                                <ul>
+                                                <ul id="suggested-search-result">
                                                     <li>
                                                         <a href="">lorem ipsum</a>
                                                     </li>
@@ -346,7 +346,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </form>
                                                     <div class="suggested-result-container2">
                                                         <p class="sr-title">Suggested search result:</p>
-                                                        <ul>
+                                                        <ul id="suggested-search-result2">
                                                             <li>
                                                                 <a href="">lorem ipsum</a>
                                                             </li>

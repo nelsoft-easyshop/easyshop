@@ -258,13 +258,27 @@
     box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
 }
 
+/*.suggested-result-container ul li,
+.suggested-result-container2 ul li {
+	padding-left: 10px;
+}*/
+
 .sr-title {
 	background-color: #e2e2e2;
 	padding: 0 10px;
 }
 
+.sr-bold {
+	font-weight: 900;
+}
+
 .suggested-result-container2 li {
 	line-height: 24px;
+}
+
+#suggested-search-result strong,
+#suggested-search-result2 strong {
+	font-weight: 900;
 }
 
 .suggested-result-container a,
