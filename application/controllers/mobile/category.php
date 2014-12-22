@@ -11,12 +11,6 @@ class Category extends MY_Controller {
     {
         parent::__construct();
 
-        //Loading helpers
-        $this->load->helper('htmlpurifier');
-
-        //Loading Models
-        $this->load->model('product_model'); 
-
         // Load entity manager
         $this->em = $this->serviceContainer['entity_manager']; 
 
@@ -74,25 +68,24 @@ class Category extends MY_Controller {
      */
     public function getCategoriesProduct()
     {
-        $perPage = $this->per_page;
+        $searchProductService = $this->serviceContainer['search_product'];
+        $esCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
         $categorySlug = $this->input->get('slug');
         $page = ($this->input->get('page')) ? $this->input->get('page') : 0 ;
-        $category_array = $this->product_model->getCategoryBySlug($categorySlug);
-        $categoryId = $category_array['id_cat'];  
-
-        $searchProductService = $this->serviceContainer['search_product'];
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
-
-        $getParameter['page'] = $page;
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE); 
-        $search = $searchProductService->getProductBySearch($getParameter);
-        $products = $search['collection'];
+        $category = $esCatRepository->findOneBy(['slug' => $categorySlug]);
         $formattedRelatedItems = [];
+        if($category){
+            $getParameter['page'] = $page;
+            $getParameter['category'] = $category->getIdCat(); 
+            $search = $searchProductService->getProductBySearch($getParameter);
+            $products = $search['collection'];
 
-        foreach ($products as $key => $value) {
-            $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
+            foreach ($products as $key => $value) {
+                $formattedRelatedItems[] = $this->serviceContainer['api_formatter']
                                                 ->formatDisplayItem($value->getIdProduct());
-        }  
+            }
+        }
 
         print(json_encode($formattedRelatedItems,JSON_PRETTY_PRINT));
     }

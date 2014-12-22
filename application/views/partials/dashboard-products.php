@@ -18,16 +18,24 @@
                             </td>
                             <td class="td-meta-info">
                                 <p class="item-list-name">
-                                    <?php if($product->getName()): ?>
-                                    <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
-                                        <?php if(strlen($product->getName()) > 40): ?>
-                                            <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
-                                        <?php else: ?>
-                                            <?=html_escape($product->getName());?>
-                                        <?php endif; ?>
-                                    </a>
+                                    <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
+                                            <?php if(strlen($product->getName()) > 40): ?>
+                                                <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
+                                            <?php else: ?>
+                                                <?=html_escape($product->getName());?>
+                                            <?php endif; ?>
                                     <?php else: ?>
-                                        (NO NAME)
+                                        <?php if($product->getName()): ?>
+                                        <a class="color-default" target="_blank" href="/item/<?=$product->getSlug();?>">
+                                            <?php if(strlen($product->getName()) > 40): ?>
+                                                <?=substr_replace( html_escape($product->getName()), "...", 40); ?>
+                                            <?php else: ?>
+                                                <?=html_escape($product->getName());?>
+                                            <?php endif; ?>
+                                        </a>
+                                        <?php else: ?>
+                                            (NO NAME)
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
@@ -68,11 +76,11 @@
                                     </div> 
                                     <div class="row row-action-mobile">
                                         <div class="col-md-12">
-                                            <?php if($product->getIsDelete() === 0): ?>
+                                            <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
                                             <button class="btn btn-action-edit btn-edit-product"
                                             data-productid="<?=$product->getIdProduct(); ?>"
                                             data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                            data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                             >
                                                 <i class="icon-edit"></i>edit
                                             </button>
@@ -81,7 +89,7 @@
                                                 <i class="icon-delete"></i>Restore
                                             </button>
                                             <?php endif; ?> 
-                                            <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
+                                            <button data-id=<?=$product->getIdProduct(); ?> class="<?=(int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT ? 'hard-delete' : 'soft-delete';?> btn btn-action-delete btn-delete">
                                                 <i class="icon-delete"></i>delete
                                             </button> 
                                         </div>
@@ -97,11 +105,11 @@
                                 <?php endfor; ?>
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
-                                <?php if($product->getIsDelete() === 0): ?>
+                                <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
                                 <button class="btn btn-action-edit btn-edit-product"
                                 data-productid="<?=$product->getIdProduct(); ?>"
                                 data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                data-othercategoryname="<?=$product->getCatOtherName(); ?>"
+                                data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
                                 >
                                     <i class="icon-edit"></i>edit
                                 </button>
@@ -110,7 +118,7 @@
                                     <i class="icon-delete"></i>Restore
                                 </button>
                                 <?php endif; ?>
-                                <button data-id=<?=$product->getIdProduct(); ?> class="<?=$product->getIsDelete() === 0 ? 'soft-delete' : 'hard-delete' ;?> btn btn-action-delete btn-delete">
+                                <button data-id=<?=$product->getIdProduct(); ?> class="<?=(int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT ? 'hard-delete' : 'soft-delete';?> btn btn-action-delete btn-delete">
                                     <i class="icon-delete"></i>delete
                                 </button> 
                             </td>
@@ -118,7 +126,7 @@
                         <tr class="tr-attributes-drop">
                             <td></td>
                             <td colspan="2" class="td-attributes">
-                                <?php if(!empty($product->attributes)): ?>
+                                <?php if(empty($product->attributes) === false): ?>
                                 <div class="info-main-cont">
                                     <div class="toggle-info more-info-attribute">
                                         <i class="info-item-icon fa fa-plus-circle"></i> <span class="text-info-icon">more info</span>

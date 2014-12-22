@@ -25,7 +25,8 @@ class TwelveDaysOfChristmas extends MY_Controller
             'product' => $product,
             'featuredVendor' => $this->getFeaturedVendorData($dateTimeToday)
         ];
-        $this->load->view('/pages/web/christmas-promo', $promoData);
+
+        $this->load->view('/pages/promo/christmas-promo', $promoData);
     }
 
     /**
@@ -68,12 +69,12 @@ class TwelveDaysOfChristmas extends MY_Controller
                 'productImageUrl' => 'item6.jpg'
             ],
             '2014-12-20' => [
-                'slug' => '05272014',
+                'slug' => 'eaglekinger',
                 'vendorImageUrl' => 'seller4.jpg',
                 'productImageUrl' => 'item7.jpg'
             ],
             '2014-12-21' => [
-                'slug' => '05272014',
+                'slug' => 'eaglekinger',
                 'vendorImageUrl' => 'seller4.jpg',
                 'productImageUrl' => 'item8.jpg'
             ],

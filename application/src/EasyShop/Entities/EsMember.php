@@ -303,7 +303,17 @@ class EsMember
     /**
      *  @var string
      */
-    const DEFAULT_ACTIVE = 1;
+    const DEFAULT_IMG_AVATAR = 'usersize.png';    
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 1; 
+
+    /**
+     *  @var int
+     */
+    const DEFAULT_AVATAR_VISIBILITY = 0;       
 
     /**
      * @var \Doctrine\Common\Collections\Collection

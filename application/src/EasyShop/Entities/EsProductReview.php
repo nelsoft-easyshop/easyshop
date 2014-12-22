@@ -90,7 +90,7 @@ class EsProductReview
      */
     private $product;
 
-
+    const PRODUCT_REVIEW_DEFAULT = 0;
 
     /**
      * Get idReview

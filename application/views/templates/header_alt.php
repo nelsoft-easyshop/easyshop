@@ -19,7 +19,7 @@
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
-    <link type="text/css" href="/assets/css/vendor-header-alt-css.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
+    <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -86,6 +86,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
                     <?php endif; ?>
                 </a>
+<<<<<<< HEAD
             </div>
             <div class="vendor-header-left">
                 <div class="search-container">
@@ -136,6 +137,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="header-cart-shipping-total">
                                         <p>Item(s) in cart: <span><?=$cartSize?></span></p>
                                         <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
+=======
+                <?PHP if ((int)sizeof($cartItems) !== 0 ) : ?>
+                <div class="header-cart-item-list">
+                        <p>Recently added item(s)</p>
+                        <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                        <?php for($i = 0 ; $i < 2; $i++): ?>
+                                <?php if(!isset($cartItemsReversed[$i])) break; ?>
+                                <div class="mrgn-bttm-15">
+                                    <div class="header-cart-item-img">
+                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                        </a>
+>>>>>>> dev
                                     </div>
                                     <div class="header-cart-buttons">
                                         <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -147,6 +161,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <?PHP endif;?>
                     </div>
                 </div>
+<<<<<<< HEAD
                 
                 <?php if(isset($logged_in) && $logged_in): ?>
                 <div class="vendor-log-in-wrapper">
@@ -155,6 +170,48 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span id="unread-messages-count" class="msg_countr message-count-con">
                         <?=$msgs['unread_msgs'];?>
                         </span>
+=======
+                <?PHP endif;?>
+            </div>
+        </div>
+        
+        <?php if(isset($logged_in) && $logged_in): ?>
+        <div class="vendor-log-in-wrapper">
+            <div class="vendor-login-con user-login">
+                <?php if((int)$unreadMessageCount !== 0) : ?>
+                    <span id="unread-messages-count" class="msg_countr message-count-con">
+                <?php echo $unreadMessageCount; ?>
+                </span>
+                <?php endif;?>
+                <img src="/assets/images/img-default-icon-user.jpg"> 
+                <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
+                    <span>
+                        <strong><?php echo html_escape($user->getUsername()); ?></strong>
+                    </span>
+                </a>
+                <div class="new-user-nav-dropdown">
+                    <span class="user-nav-dropdown">Account Settings</span>
+                </div>
+                <ul class="nav-dropdown">
+                    <li>
+                        <a href="/me">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/me?tab=ongoing">On-going Transactions</a>
+                    </li>
+                    <li>
+                        <a href="/?view=basic">Go to homepage</a>
+                    </li>
+                    <li class="nav-dropdown-border">
+                        <a href="/me?tab=settings">Settings</a>
+                    </li>
+                    <li class="nav-dropdown-border pos-rel">
+                        <a href="/messages">Message</a>
+                        <?php if((int)$unreadMessageCount !== 0) : ?>
+                        <div id="unread-messages-count" class="msg_countr message-count-con">
+                        <?php echo $unreadMessageCount ;?>
+                        </div>
+>>>>>>> dev
                         <?php endif;?>
                         <img src="/assets/images/img-default-icon-user.jpg"> 
                         <a href="/<?php echo html_escape($user['slug'])?>" class="vendor-login-name">

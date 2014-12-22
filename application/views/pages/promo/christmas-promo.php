@@ -62,7 +62,7 @@
                     </div>
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($product) && $product->getStartPromo()) : ?>
-                            <?PHP if ($product->getIsDelete()) : ?>
+                            <?PHP if ($product->getIsDelete() || $product->getIsSoldOut()) : ?>
                                 <div class="dc-tag sold-out"> SOLD </div>
                             <?PHP else : ?>
                                 <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
@@ -71,10 +71,33 @@
                                 <img alt ="<?=html_escape($product->getName())?> Image" src="/assets/images/promo-images/<?= isset($featuredVendor['productImageUrl']) ? $featuredVendor['productImageUrl'] . '?1.0' : ''?>">
                             </a>
                             <div>
-                                <?PHP if ($product->getIsDelete()) : ?>
+                                <?PHP if ($product->getIsDelete() || $product->getIsSoldOut()) : ?>
                                     <div class="price"> &nbsp; </div>
                                 <?PHP else : ?>
-                                    <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                     <div class="price">Php <?=number_format( $product->getFinalPrice(), 2, '.', ',')?></div>
+                                     <div class="timer">
+                                        <table id="table-countdown" align="center">
+                                            <tr>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">DAYS</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">HOURS</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">MINUTES</td>
+                                                </td>
+                                                <td class="td-time-num">
+                                                    <span class="span-time-num">00</span>
+                                                    <span class="span-time-label">SECONDS</td>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                   
                                 <?PHP endif; ?>
                             </div>
                         <?PHP else : ?>
@@ -158,10 +181,15 @@
                 <p>Copyright &copy; 2014 Easyshop.ph<br>All rights reserved.</p>
             </section>
         </footer>
+        <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
+        <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
         <div id="fb-root"></div>
         <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     </body>
 </html>

@@ -60,9 +60,10 @@
                             <div id="errorsRegionDiv" style="display:none;">
                                 <span class="val-error-icon"><i class="fa fa-times"></i></span>
                                 <span class="val-error" id="errorTextRegion"></span>
-                            </div>                                
+                            </div>
+                            <br/>
                         </div>
-                        <div class="col-sm-4 col-city">
+                        <div class="col-sm-4">
                             <select class="text-info text-address address_dropdown cityselect" id="delivery_city" name="c_city">
                                 <option value="">--- Select City ---</option>
                                 <option class="optionclone" value="" style="display:none;" disabled></option>
@@ -72,7 +73,8 @@
                             <div id="errorsCityDiv" style="display:none;">
                                 <span class="val-error-icon"><i class="fa fa-times"></i></span>
                                 <span class="val-error" id="errorTextCity"></span>
-                            </div>                               
+                            </div>
+                            <br/>
                         </div>
                 
                     </div>
