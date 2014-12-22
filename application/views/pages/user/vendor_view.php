@@ -1,9 +1,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <style>
-    .vendor-footer-con{
-        margin-bottom: 36px;
-    }
+    
     #feedback-modal-container{
         min-height: 100px !important;
         padding: 10px; 
@@ -12,9 +10,13 @@
     .filter-modal-container{
         max-height: 381px !important;
     }
-    @media only screen and (max-width : 500px) { 
+    @media only screen and (max-width : 768px) { 
         .col-left-wing{
             display: none;
+        }
+        
+        .vendor-footer-con{
+            margin-bottom: 36px;
         }
     }
     #simplemodal-container.feedback-modal-container {
