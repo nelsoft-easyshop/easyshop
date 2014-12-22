@@ -3,7 +3,18 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.easyshop.ph/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.easyshop.ph/search/search.html?q_str={search_term}",
+    "query-input": "required name=search_term"
+  }
+}
+</script>
 <section id="content">
     <div class="main-slider-container">    
     <div id="slider-edge">
