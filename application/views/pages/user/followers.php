@@ -24,7 +24,7 @@
                     <div id="follower-container" class="row" style="min-height: 675px;">
                         <?php if(intval($followerCount) <= 0): ?>
                             <!--will appear if the vendor has no follower-->
-                            <div class="container">
+                            
                                 <div class="panel-no-followers">
                                     <div class="jumbotron no-feedback-list">
                                         <center>
@@ -32,7 +32,7 @@
                                         </center>
                                     </div>
                                 </div>
-                            </div>
+                            
                             <!--end of div-->
                         <?php else:?>
                             <div id="follow-div-page-0">
