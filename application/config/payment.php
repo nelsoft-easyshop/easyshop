@@ -14,8 +14,8 @@ $config = [
                         'merchant_password' => 'UT78W5VQ'
                     ],
                     'Easydeal' => [
-                        'return_url' => 'http://nelsoft.dyndns.org:81/payment/dragonPayReturn',
-                        'postback_url' => 'http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'
+                        'return_url' => 'http://staging.easydeal.ph/payment/dragonPayReturn',
+                        'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack'
                     ]
                 ]
             ]
