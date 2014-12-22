@@ -1,10 +1,10 @@
 <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
-    <div class="container-non-responsive bg-product-section">
+    <div class="container bg-product-section">
         <div class="row row-contact">
             <?php echo $userDetails; ?>
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="panel-contact-message">
                     <?PHP if ( !isset($user['username']) ) : ?>
                         <div class="jumbotron no-feedback-list">
@@ -30,9 +30,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <center>
-                                    <input type="submit" class="btn btn-send" id="btn-send-msg" value="SEND MESSAGE">
-                                </center>
+                                <div class="col-xs-12">
+                                    <center>
+                                        <input type="submit" class="btn btn-send" id="btn-send-msg" value="SEND MESSAGE">
+                                    </center>
+                                </div>
                             </div>
                         </div>
                         <?php echo form_close();?>

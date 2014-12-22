@@ -19,7 +19,7 @@
                 $catObj = $objProduct->getCat();
                 $immediateCat = $catObj->getIdCat() === 1 ? html_escape($objProduct->getCatOtherName()) : html_escape($catObj->getName());
             ?>
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 thumb">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 thumb">
                     <div class="panel-item">
                         <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                             <div class="div-item">
@@ -122,7 +122,24 @@
                                     <?php echo $immediateCat?>
                                 </p>
                                 <div class="div-list-desc-container">
-                                    <?php echo $briefDesc;?>
+                                    
+                                    <?php echo html_escape((strlen($briefDesc)>75) ? substr_replace($briefDesc, "...", 75): $briefDesc) ;?>
+                                </div>
+                                <div class="actions-list">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <p class="p-list-price p-list-price-mobile"> P <?php echo $productPrice?> </p>
+                                            <div class="clear"></div>
+                                            <p class="p-list-discount p-list-discount-mobile">
+                                                <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
+                                            </p>
+                                        </div>
+                                        <div class="col-xs-6">
+                                             <a class="btn btn-default-1 btn-list-buy-now-mobile" target="_blank" href="/item/<?=$productSlug; ?>" >
+                                                <span class="fa icon-cart"></span> BUY NOW
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                             <td width="25%" class="td-list-price">

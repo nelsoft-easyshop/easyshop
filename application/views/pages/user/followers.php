@@ -2,9 +2,9 @@
 <link type="text/css" href='/assets/css/followers.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
-    <div class="container-non-responsive bg-product-section">
+    <div class="container bg-product-section">
             <div class="row row-contact">
-            <div class="col-xs-3 no-padding col-left-wing">
+            <div class="col-md-3 no-padding col-left-wing">
                 <div class="left-wing-contact">
                     <div class="panel-contact-details">
                         <p class="panel-title-contact">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="followers-container">
                     <div class="loading_div" style="text-align:center;display:none;">
                         <img src="/assets/images/orange_loader.gif">
@@ -24,11 +24,13 @@
                     <div id="follower-container" class="row" style="min-height: 675px;">
                         <?php if(intval($followerCount) <= 0): ?>
                             <!--will appear if the vendor has no follower-->
-                            <div class="panel-no-followers">
-                                <div class="jumbotron no-feedback-list">
-                                    <center>
-                                        <strong>Oops, <?php echo html_escape($storeName); ?> doesn't seem to have any followers. Be the first to follow.</strong> 
-                                    </center>
+                            <div class="container">
+                                <div class="panel-no-followers">
+                                    <div class="jumbotron no-feedback-list">
+                                        <center>
+                                            <strong>Oops, <?php echo html_escape($storeName); ?> doesn't seem to have any followers. Be the first to follow.</strong> 
+                                        </center>
+                                    </div>
                                 </div>
                             </div>
                             <!--end of div-->

@@ -1,6 +1,32 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
+<style>
+    .vendor-footer-con{
+        margin-bottom: 36px;
+    }
+    #feedback-modal-container{
+        min-height: 100px !important;
+        padding: 10px; 
+    }
+    
+    .filter-modal-container{
+        max-height: 381px !important;
+    }
+    @media only screen and (max-width : 500px) { 
+        .col-left-wing{
+            display: none;
+        }
+    }
+    #simplemodal-container.feedback-modal-container {
+        border-radius: 4px;
+        /*height:290px !important;*/
+        
+        max-height: 300px;
+        width:600px; 
+        background-color:#fff;
+    }
 
+</style>
 
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
@@ -111,7 +137,7 @@
                     data-productcount="<?=$arrCat['non_categorized_count']?>"
                     data-catType="<?php echo $arrCat['cat_type']?>"
                 >
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
+                    <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/loading/preloader-grayBG.gif"></div>
 
                     <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
                         <span>No items available for this category.</span>
@@ -136,7 +162,7 @@
                         data-productcount="<?=$arrCat['non_categorized_count']?>"
                         data-catType="<?php echo $arrCat['cat_type']?>"
                     >
-                        <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/orange_loader.gif"></div>
+                        <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/loading/preloader-grayBG.gif"></div>
 
                         <?php if($arrCat['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
@@ -151,13 +177,36 @@
                 <?php endforeach;?>
 
             </div>
+            
         </div>
     </div>
 </div>
- 
-    
 </section>
+<div class="mobile-left-wing">
+    <div class="row row-left-wing">
+        <a href="#">
+            <div class="col-xs-6 col-categories">
+                Categories
+            </div>
+        </a>
+        <a href="">
+            <div class="col-xs-6 col-filter">
+                Filter
+            </div>
+        </a>
+    </div>
+</div>
+<div class="categories-modal">
+    <h1>Categories</h1>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
+</div>
 
+		<!-- preload the images -->
+		<div style='display:none'>
+			<img src='img/basic/x.png' alt='' />
+		</div>
  
 <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
