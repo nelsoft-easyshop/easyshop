@@ -20,6 +20,7 @@
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
     <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -86,7 +87,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
                     <?php endif; ?>
                 </a>
-<<<<<<< HEAD
             </div>
             <div class="vendor-header-left">
                 <div class="search-container">
@@ -112,17 +112,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </span>
                             <span class="header-cart-icon-con span_bg cart-icon"></span>
                         </a>
-                        <?PHP if ((intval(sizeof($cartItems))) !== 0 ) : ?>
-                        <div class="header-cart-item-list">
-                                <p>Recently added item(s)</p>
-                                <?php $cartItemsReversed = array_reverse($cartItems); ?>
-                                <?php for($i = 0 ; $i < 2; $i++): ?>
-                                        <?php if(!isset($cartItemsReversed[$i])) break; ?>
-                                        <div class="mrgn-bttm-15">
-                                            <div class="header-cart-item-img">
-                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                    <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
-                                                </a>
+                <?PHP if ((int)sizeof($cartItems) !== 0 ) : ?>
+                <div class="header-cart-item-list">
+                        <p>Recently added item(s)</p>
+                        <?php $cartItemsReversed = array_reverse($cartItems); ?>
+                        <?php for($i = 0 ; $i < 2; $i++): ?>
+                                <?php if(!isset($cartItemsReversed[$i])) break; ?>
+                                <div class="mrgn-bttm-15">
+                                    <div class="header-cart-item-img">
+                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
+                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                        </a>
                                             </div>
                                             <div class="header-cart-item-con">
                                                 <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
@@ -137,19 +137,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="header-cart-shipping-total">
                                         <p>Item(s) in cart: <span><?=$cartSize?></span></p>
                                         <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
-=======
-                <?PHP if ((int)sizeof($cartItems) !== 0 ) : ?>
-                <div class="header-cart-item-list">
-                        <p>Recently added item(s)</p>
-                        <?php $cartItemsReversed = array_reverse($cartItems); ?>
-                        <?php for($i = 0 ; $i < 2; $i++): ?>
-                                <?php if(!isset($cartItemsReversed[$i])) break; ?>
-                                <div class="mrgn-bttm-15">
-                                    <div class="header-cart-item-img">
-                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
-                                        </a>
->>>>>>> dev
                                     </div>
                                     <div class="header-cart-buttons">
                                         <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
@@ -161,62 +148,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <?PHP endif;?>
                     </div>
                 </div>
-<<<<<<< HEAD
-                
+
+        
                 <?php if(isset($logged_in) && $logged_in): ?>
                 <div class="vendor-log-in-wrapper">
                     <div class="vendor-login-con user-login">
-                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                            <span id="unread-messages-count" class="msg_countr message-count-con">
-                        <?=$msgs['unread_msgs'];?>
-                        </span>
-=======
-                <?PHP endif;?>
-            </div>
-        </div>
-        
-        <?php if(isset($logged_in) && $logged_in): ?>
-        <div class="vendor-log-in-wrapper">
-            <div class="vendor-login-con user-login">
-                <?php if((int)$unreadMessageCount !== 0) : ?>
-                    <span id="unread-messages-count" class="msg_countr message-count-con">
-                <?php echo $unreadMessageCount; ?>
-                </span>
-                <?php endif;?>
-                <img src="/assets/images/img-default-icon-user.jpg"> 
-                <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
-                    <span>
-                        <strong><?php echo html_escape($user->getUsername()); ?></strong>
-                    </span>
-                </a>
-                <div class="new-user-nav-dropdown">
-                    <span class="user-nav-dropdown">Account Settings</span>
-                </div>
-                <ul class="nav-dropdown">
-                    <li>
-                        <a href="/me">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/me?tab=ongoing">On-going Transactions</a>
-                    </li>
-                    <li>
-                        <a href="/?view=basic">Go to homepage</a>
-                    </li>
-                    <li class="nav-dropdown-border">
-                        <a href="/me?tab=settings">Settings</a>
-                    </li>
-                    <li class="nav-dropdown-border pos-rel">
-                        <a href="/messages">Message</a>
                         <?php if((int)$unreadMessageCount !== 0) : ?>
-                        <div id="unread-messages-count" class="msg_countr message-count-con">
-                        <?php echo $unreadMessageCount ;?>
-                        </div>
->>>>>>> dev
+                            <span id="unread-messages-count" class="msg_countr message-count-con">
+                        <?php echo $unreadMessageCount; ?>
+                        </span>
                         <?php endif;?>
                         <img src="/assets/images/img-default-icon-user.jpg"> 
-                        <a href="/<?php echo html_escape($user['slug'])?>" class="vendor-login-name">
+                        <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
                             <span>
-                                <strong><?php echo html_escape($user['username']); ?></strong>
+                                <strong><?php echo html_escape($user->getUsername()); ?></strong>
                             </span>
                         </a>
                         <div class="new-user-nav-dropdown">
@@ -230,17 +175,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <a href="/me?tab=ongoing">On-going Transactions</a>
                             </li>
                             <li>
-                                <a href="/?view=basic">Easyshop.ph</a>
+                                <a href="/?view=basic">Go to homepage</a>
                             </li>
                             <li class="nav-dropdown-border">
                                 <a href="/me?tab=settings">Settings</a>
                             </li>
                             <li class="nav-dropdown-border pos-rel">
                                 <a href="/messages">Message</a>
-                                <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                <div id="unread-messages-count" class="msg_countr message-count-con">
-                                <?=$msgs['unread_msgs'];?>
-                                </div>
+                                <?php if((int)$unreadMessageCount !== 0) : ?>
+                                    <div id="unread-messages-count" class="msg_countr message-count-con">
+                                    <?php echo $unreadMessageCount ;?>
+                                    </div>
                                 <?php endif;?>
                             </li>
                             <li class="nav-dropdown-border">
@@ -248,26 +193,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </li>
                         </ul>
                         <div class="clear"></div>
+                        <?php else: ?>
+                        <div class="vendor-log-in-wrapper">
+                            <div class="vendor-login-con vendor-out-con">
+                                <img src="/assets/images/img-default-icon-user.jpg"> 
+                                <a href="/login"><strong>login</strong></a>  or 
+                                <a href="/register"><strong>Create an account</strong></a>
+                            </div>
+                            <div class="vendor-out-con2">
+                                <img src="/assets/images/img-default-icon-user.jpg">
+                            </div>
+                            <div class="mobile-user-login">
+                                <a href="/login" class="btn btn-default-3"><strong>login</strong></a>  or 
+                                <a href="/register" class="btn btn-default-1"><strong>Create an account</strong></a>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                     </div>
+                    <div class="clear"></div>
                 </div>
-                <?php else: ?>
-                <div class="vendor-log-in-wrapper">
-                    <div class="vendor-login-con vendor-out-con">
-                        <img src="/assets/images/img-default-icon-user.jpg"> 
-                        <a href="/login"><strong>login</strong></a>  or 
-                        <a href="/register"><strong>Create an account</strong></a>
-                    </div>
-                    <div class="vendor-out-con2">
-                        <img src="/assets/images/img-default-icon-user.jpg">
-                    </div>
-                    <div class="mobile-user-login">
-                        <a href="/login" class="btn btn-default-3"><strong>login</strong></a>  or 
-                        <a href="/register" class="btn btn-default-1"><strong>Create an account</strong></a>
-                    </div>
-                </div>
-                <?php endif; ?>
             </div>
-            <div class="clear"></div>
         </div>
     </div>
 </header>
