@@ -173,7 +173,11 @@ header {
     }
 
     .search-bar-input {
-        width: 62% !important;
+        width: 70% !important;
+    }
+
+    .submitSearch {
+        display: none;
     }
 
     .mobile-search,

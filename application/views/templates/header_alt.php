@@ -221,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div class="persistent-nav-container">
 <?php endif; ?>
 
-    <div class="main-container">
+    <div class="main-container container">
         <ul class="sticky-nav">
             <li>
                 <div class="vendor-profile-img-con">

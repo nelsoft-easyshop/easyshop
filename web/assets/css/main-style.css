@@ -723,6 +723,10 @@ textarea {
     box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
 }
 
+.persistent-nav-container .main-container {
+    padding: 10px 0px 0px;
+}
+
 .vendor-nav {
     list-style: none;
     margin-left: 347px;
@@ -818,21 +822,22 @@ textarea {
 }
 
 .sticky-nav li:first-child {
-    width: 342px;
+    width: 25%;
     text-align: left;
 }
 
 .sticky-nav li:nth-child(2) {
-    width: 95px;
+    width: 11%;
 }
 
 .sticky-nav li:nth-child(3) {
     text-align: right;
-    width: 542px;
+    margin-right: 1%;
+    width: 43%;
 }
 
 .sticky-nav li:nth-child(4) {
-    width: 204px;
+    width: 20%;
     text-align: right;
 }
 
@@ -867,8 +872,9 @@ textarea {
     padding: 0 10px;
     text-overflow: ellipsis;
     vertical-align: middle;
-    width: 284px;
+    max-width: 240px;
     white-space: nowrap;
+    width: 80%;
 }
 
 .sticky-nav li:nth-child(2) a {
@@ -888,7 +894,7 @@ textarea {
     margin-right: -5px;
     padding: 7px 12px;
     vertical-align: middle;
-    width: 128px;
+    width: 26%;
 }
 
 .sticky-nav li:nth-child(3) input,
