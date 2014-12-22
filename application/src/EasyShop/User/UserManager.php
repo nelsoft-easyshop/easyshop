@@ -760,7 +760,7 @@ class UserManager
             $counter++;
         }
 
-        if($memberEntity->getContactno() !== ""){ 
+        if((string)$memberEntity->getContactno() !== ""){ 
             $counter++;
         }
 
