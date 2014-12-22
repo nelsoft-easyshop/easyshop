@@ -18,6 +18,11 @@
         .vendor-footer-con{
             margin-bottom: 36px;
         }
+        
+        
+        .search-bar-input{
+            width: 70% !important;
+        }
     }
     #simplemodal-container.feedback-modal-container {
         border-radius: 4px;
@@ -49,14 +54,14 @@
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
                                     <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories">
+                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
                                                 <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
                                         </a>
                                     <?php endforeach;?>
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
                                                 <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
@@ -96,7 +101,7 @@
                                     </li>
                                     <li>
                                         <center>
-                                            <input id="filter-btn" type="button" class="btn-filter" value="filter"/>
+                                            <input class="btn-filter simplemodal-close" id="filter-btn" type="button" value="filter"/>
                                         </center>
                                     </li>
                                 </ul>
