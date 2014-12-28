@@ -16,7 +16,7 @@ $configService = new EasyShop\Core\Configuration\Configuration();
 | If this is not set then CodeIgniter will guess the protocol, domain and
 | path to your installation.
 |
-| The base_url variable defined in base_url will take precedence over anything.
+| The base_url variable defined in config.php will take precedence over anything.
 | It is advised that you set this otherwise the application will attempt to
 | guess the application's base URL. This does not always work so it's better to
 | to just set in config.php in the root of the application
