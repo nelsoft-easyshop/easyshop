@@ -17,7 +17,7 @@
     <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"> 
         <meta itemprop="ratingValue" content="<?=$averageRating; ?>" />
         <meta itemprop="ratingCount" content="<?=$reviewCount; ?>" /> 
-        <meta itemprop="bestRating" content="5" />
+        <meta itemprop="bestRating" content="<?=EasyShop\Entities\EsProductReview::REVIEW_BEST_RATING; ?>" />
     </div>
 </div>
 
