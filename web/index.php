@@ -24,7 +24,6 @@
     $configService = new EasyShop\Core\Configuration\Configuration();
 
     if($configService->isConfigFileExists()){
-
         $serverEnvironment = $configService->getConfigValue('environment');
         if(strlen($serverEnvironment) > 0){
             define('ENVIRONMENT', $serverEnvironment);
@@ -51,7 +50,6 @@
 if (defined('ENVIRONMENT')){
     switch (ENVIRONMENT){
         case 'development':
-            //error_reporting(0);
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
             break;
@@ -61,7 +59,6 @@ if (defined('ENVIRONMENT')){
         case 'production':
             error_reporting(0);
             break;
-
         default:
             exit('The application environment is not set correctly.');
     }
@@ -141,7 +138,7 @@ if (defined('ENVIRONMENT')){
  * Un-comment the $assign_to_config array below to use this feature
  *
  */
-	// $assign_to_config['name_of_config_item'] = 'value of config item';
+// $assign_to_config['name_of_config_item'] = 'value of config item';
 
 
 
@@ -155,7 +152,7 @@ if (defined('ENVIRONMENT')){
  * ---------------------------------------------------------------
  */
 
-	// Set the current directory correctly for CLI requests
+    // Set the current directory correctly for CLI requests
     if (defined('STDIN')){
         chdir(dirname(__FILE__));
     }

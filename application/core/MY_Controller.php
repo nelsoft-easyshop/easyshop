@@ -19,16 +19,11 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
-
         $url = uri_string();
-        
         if($url !== 'login' && $url !== 'register'){
             $this->session->set_userdata('uri_string', $url);
         }
-        
         if (isset ($this->kernel)) {
-            
             /* This way service container is more accessible to child classes */
             $this->serviceContainer = $this->kernel->serviceContainer;
             $this->load->helper('view_helper');
