@@ -748,19 +748,19 @@ class UserManager
     {
         $counter = 0;
 
-        if($memberEntity->getFullname()){
+        if($memberEntity->getFullname() !== ""){
             $counter++;
         }
 
-        if($memberEntity->getGender() > 0){
+        if((string)$memberEntity->getGender() !== "0"){
             $counter++;
         }
 
-        if($memberEntity->getBirthday() === "0001-01-01"){
+        if((string)$memberEntity->getBirthday()->format('Y-m-d') !== "0001-01-01"){
             $counter++;
         }
 
-        if($memberEntity->getContactno()){
+        if((string)$memberEntity->getContactno() !== ""){ 
             $counter++;
         }
 
@@ -790,7 +790,7 @@ class UserManager
             $counter++;
         }
 
-        $percentage = ceil($counter/12 * 100);
+        $percentage = ceil($counter/11 * 100);
 
         return $percentage;
     }

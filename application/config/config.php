@@ -1,5 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
+$configService = new EasyShop\Core\Configuration\Configuration();
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -8,17 +11,32 @@
 | URL to your CodeIgniter root. Typically this will be your base URL,
 | WITH a trailing slash:
 |
-|	http://example.com/
+|   http://example.com/
 |
 | If this is not set then CodeIgniter will guess the protocol, domain and
 | path to your installation.
 |
-| The base_url setting is ignored here. base_url is set in the constructor of the super
-| class MY_controller in ./application/core/MY_controller
-| - Sam Gavinio
-|
+| The base_url variable defined in config.php will take precedence over anything.
+| It is advised that you set this otherwise the application will attempt to
+| guess the application's base URL. This does not always work so it's better to
+| to just set in config.php in the root of the application
 */
-$config['base_url']	= 'https://localhost/';
+
+
+$protocol = 'http';
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+    $protocol .= 's'; 
+}
+$baseUrl = $protocol.'://'.$_SERVER['SERVER_NAME'].'/';
+
+if($configService->isConfigFileExists()){
+    $configBaseUrl = $configService->getConfigValue('base_url');
+    if(strlen($configBaseUrl) > 0){
+        $baseUrl = $configBaseUrl;
+    }
+}
+
+$config['base_url'] = $baseUrl;
 /*
 |--------------------------------------------------------------------------
 | Index File
