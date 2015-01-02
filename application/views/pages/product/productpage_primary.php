@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
 <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css?ver=<?=ES_FILE_VERSION?>">
-
+<?=$snippetMarkUp;?>
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
