@@ -231,8 +231,9 @@ class product extends MY_Controller
         $stringUtility = $this->serviceContainer['string_utility'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
+        $productEntity = $esProductRepo->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
         $viewerId =  $this->session->userdata('member_id');
         $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($viewerId);
@@ -321,6 +322,14 @@ class product extends MY_Controller
 
             $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
+            $snipperMarkUpData = [
+                'product' => $product,
+                'breadCrumbs' => $breadcrumbs,
+                'reviewCount' => count($productReviews),
+                'averageRating' => $esProductRepo->getProductAverageRating($productId),
+            ];
+            $snippetMarkUp = $this->load->view('templates/seo/product_markup', $snipperMarkUpData, true);
+
             $bodyData = [
                 'product' => $product,
                 'breadCrumbs' => $breadcrumbs,
@@ -342,7 +351,8 @@ class product extends MY_Controller
                 'noMoreSelection' => $noMoreSelection, 
                 'needToSelect' => $needToSelect,
                 'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                'url' => base_url() .'item/' . $product->getSlug()
+                'url' => base_url() .'item/' . $product->getSlug(),
+                'snippetMarkUp' => $snippetMarkUp,
             ];
 
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getBrief();
