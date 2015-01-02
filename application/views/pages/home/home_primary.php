@@ -7,10 +7,10 @@
 {
   "@context": "http://schema.org",
   "@type": "WebSite",
-  "url": "https://www.easyshop.ph/",
+  "url": "<?=base_url();?>",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://www.easyshop.ph/search/search.html?q_str={search_term}",
+    "target": "<?=base_url();?>search/search.html?q_str={search_term}",
     "query-input": "required name=search_term"
   }
 }
