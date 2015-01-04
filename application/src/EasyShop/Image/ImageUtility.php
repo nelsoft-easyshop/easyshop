@@ -42,7 +42,7 @@ class ImageUtility
         $config['image_library'] = 'GD2';
         $config['source_image'] = $imageDirectory;
         $config['maintain_ratio'] = $isRatioMainted;
-        $config['quality'] = '85%';
+        $config['quality'] = '100%';
         $config['new_image'] = $newDirectory;
         $config['width'] = $dimension[0];
         $config['height'] = $dimension[1]; 
