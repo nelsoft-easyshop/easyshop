@@ -1214,6 +1214,7 @@
         var txStatus = $(this).parent().parent().parent().parent().parent().find('span.status-class');
         var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
+        var msg = "";
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
@@ -1248,17 +1249,21 @@
                     txResponseBtn.val(buttonText);
                     txResponseBtn.addClass('enabled').removeClass('loading');
                 }
-                else{
-                    if(txResponseBtn.hasClass('tx_forward')){
+                else {
+                    if (txResponseBtn.hasClass('tx_forward')) {
                         txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
-                    }else if(txResponseBtn.hasClass('tx_return')){
-                        alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
-                    }else if(txResponseBtn.hasClass('tx_cod')){
-                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                        msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    txResponseBtn.remove();
-                    txResponseBtn.parent().parent().find('.txt_buttons').hide();
-                    txResponseBtn.parent().parent().find('.reject_item').remove();
+                    else if (txResponseBtn.hasClass('tx_return')) {
+                        alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        msg = "<h3>ORDER CANCELED</h3> <br> Transaction has been moved to completed tab.";
+                    }
+                    else if (txResponseBtn.hasClass('tx_cod')) {
+                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
+                        msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
+                    }
+                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success" id="wipeOut" role="alert">' + msg + '</div>');
+                    $('#wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
             }

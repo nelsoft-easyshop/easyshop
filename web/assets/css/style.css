@@ -7734,3 +7734,41 @@ div.sold_prod_container {
     display: inline !important;
     width: inherit !important;
 }
+
+.old-suggested-result-container {
+    background-color: rgb(255, 255, 255);
+    padding-bottom: 10px;
+    position: absolute;
+    width: 492px;
+    z-index: 9991;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+}
+
+.old-suggested-result-container .sr-title {
+    background-color: #e2e2e2;
+    font-size: 11px;
+    padding: 6px 10px;
+}
+
+.old-suggested-result-container ul {
+    list-style: none;
+}
+
+.old-suggested-result-container li {
+    line-height: 24px;
+}
+
+.old-suggested-result-container a {
+    color: #565656;
+    display: block;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+.old-suggested-result-container a:hover {
+    background-color: #868686;
+    color: #fff;
+    text-decoration: none;
+}

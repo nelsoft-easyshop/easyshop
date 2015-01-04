@@ -250,7 +250,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/memberpage/'+formAction;
+            document.getElementById('form_image').action = '/store/'+formAction;
             $('#isAjax').val('false');
             $('#form_image').submit();
         }
@@ -304,7 +304,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    var action = '/memberpage/'+formAction;
+                    var action = '/store/'+formAction;
                     $('#form_image').ajaxForm({
                         url: action,
                         dataType: "json",

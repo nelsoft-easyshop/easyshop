@@ -334,7 +334,12 @@ class Kernel
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
-        };            
+        };    
+
+        $container['image_upload'] = function ($c) use ($container){
+            $uploadLibrary = new \CI_Upload();            
+            return new \EasyShop\Upload\Upload($uploadLibrary);
+        };                            
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
