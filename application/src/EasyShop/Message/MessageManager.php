@@ -19,7 +19,7 @@ class MessageManager {
     }
 
     /**
-     * Add message
+     * Send message
      * @param $sender
      * @param $recipient
      * @param $userMessage
@@ -42,5 +42,24 @@ class MessageManager {
 
         return $message ? TRUE : FALSE;
     }
-    
+
+    public function getAllMessages($member)
+    {
+
+    }
+
+    public function getConversation($sender, $recipient)
+    {
+
+    }
+
+    public function updateMessageToSeen($sender, $recipient)
+    {
+
+    }
+
+    public function deleteMessage($member)
+    {
+
+    }
 }
