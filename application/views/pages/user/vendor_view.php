@@ -1,39 +1,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-<style>
-    
-    #feedback-modal-container{
-        min-height: 100px !important;
-        padding: 10px; 
-    }
-    
-    .filter-modal-container{
-        max-height: 381px !important;
-    }
-    @media only screen and (max-width : 768px) { 
-        .col-left-wing{
-            display: none;
-        }
-        
-        .vendor-footer-con{
-            margin-bottom: 36px;
-        }
-        
-        
-        .search-bar-input{
-            width: 70% !important;
-        }
-    }
-    #simplemodal-container.feedback-modal-container {
-        border-radius: 4px;
-        /*height:290px !important;*/
-        
-        max-height: 300px;
-        width:600px; 
-        background-color:#fff;
-    }
-
-</style>
+<link rel="stylesheet" type="text/css" href="/assets/css/vendorview.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>

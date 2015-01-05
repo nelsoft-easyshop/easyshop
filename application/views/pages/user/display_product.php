@@ -108,21 +108,20 @@
                             </td>
                             <td width="55%" class="td-list-item-info">
                                 <p class="p-list-item-name">
-                                    <?php if(strlen($escapeName)>35): ?>
+                                    <?php if(strlen($escapeName)>50): ?>
                                         <a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo '/item/' . $productSlug?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo $escapeName;?>">
-                                            <?php echo substr_replace( $escapeName, "...", 35);?>
+                                            <?php echo substr_replace( $escapeName, "...", 50);?>
                                         </a>
                                     <?php else: ?>
                                         <a class="color-default" target="_blank" href="<?php echo '/item/' . $productSlug?>">
-                                            <?php echo $escapeName;?>
+                                            <?php echo  html_escape($escapeName);?>
                                         </a>
                                     <?php endif;?>
                                 </p>
                                 <p class="p-list-item-category">
-                                    <?php echo $immediateCat?>
+                                    <?php echo $immediateCat;?>
                                 </p>
                                 <div class="div-list-desc-container">
-                                    
                                     <?php echo html_escape((strlen($briefDesc)>75) ? substr_replace($briefDesc, "...", 75): $briefDesc) ;?>
                                 </div>
                                 <div class="actions-list">

@@ -13,24 +13,7 @@
           $( ".user-details-container" ).slideDown();
         });
         
-        
-        var $window = $(window);
-
-        function checkWidth() {
-            var windowsize = $window.width();
-            if (windowsize > 440) {
-                //if the window is greater than 440px wide then turn on jScrollPane..
-                $( ".user-details-container" ).css("display","block");
-            }else{
-                $( ".user-details-container" ).css("display","none");
-            }
-        }
-        // Execute on load
-        checkWidth();
-        // Bind event listener
-        $(window).resize(checkWidth);
-            
-       window.cities = JSON.parse($( "#cityList" ).val());
+        window.cities = JSON.parse($( "#cityList" ).val());
         if($( "#isEditable" ).val() == false){
             // hide all fields that are empty
             if($( "p#validatedStoreName" ).html() == ""){
@@ -54,7 +37,7 @@
                     $( "#websiteRow" ).hide();
                 }
             }
-        }        
+        }
      });
 
     $(" #contactNo ").numeric(
@@ -125,5 +108,24 @@
         var addr = $("#postStreetAddr").val();
         $( "#streetAddr" ).val(addr == "" ? "" : addr.substring(0, addr.length - 2));
      });
+
+    var $window = $(window);
+
+    function checkWidth() {
+        var windowsize = $window.width();
+        if (windowsize > 440) {
+            //if the window is greater than 440px wide then turn on jScrollPane..
+            $( ".user-details-container" ).css("display","block");
+        }
+        else{
+            $( ".user-details-container" ).css("display","none");
+        }
+    }
+
+    // Execute on load
+    checkWidth();
+    // Bind event listener
+    $window.resize(checkWidth);
 })(jQuery);
+
 
