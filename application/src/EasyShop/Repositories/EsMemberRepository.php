@@ -156,6 +156,7 @@ class EsMemberRepository extends EntityRepository
         $rsm->addScalarResult('username', 'username');
         $rsm->addScalarResult('contactno', 'contactno');
         $rsm->addScalarResult('email', 'email');
+        $rsm->addScalarResult('address', 'address');
         $rsm->addScalarResult('stateregion', 'stateregion');
         $rsm->addScalarResult('city', 'city');
         $rsm->addScalarResult('id_member', 'id_member');
@@ -172,6 +173,7 @@ class EsMemberRepository extends EntityRepository
                 , m.username
                 , IF(m.contactno != '', CONCAT('0',m.contactno), '') as contactno
                 , m.email
+                , a.address
                 , a.stateregion
                 , a.city
                 , l1.location as stateregionname
