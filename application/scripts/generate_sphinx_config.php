@@ -106,8 +106,6 @@
 
     searchd {
 
-        compat_sphinxql_magics = 0
-
         log = '.$sphinxDirectory.'/logs/searchd.log
         query_log = '.$sphinxDirectory.'/logs/query.log
         pid_file = '.$sphinxDirectory.'/logs/searchd.pid
