@@ -212,10 +212,9 @@ class Dictionary
     /**
      * Retuns the dictionary array
      *
-     * @param boolean $isRaw
      * @return string[]
      */
-    public function getDictionary($isRaw = false)
+    public function getDictionary()
     {
         foreach($this->dictionary as $index=>$word){
             if($word < $this->occurencesMinimum){
