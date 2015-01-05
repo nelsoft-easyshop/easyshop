@@ -47,7 +47,7 @@ else{
     $fileVersion = '9.3.2';
 }
 define('ES_FILE_VERSION',$fileVersion);
-define('ES_ENABLE_CHRISTMAS_MODS', true);
+define('ES_ENABLE_CHRISTMAS_MODS', false);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
