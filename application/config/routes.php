@@ -84,7 +84,7 @@ else {
     #SEARCHING
     $route['(?i)search/(:any)'] = 'product_search/searchfaster/$1'; # ryan vasquez
     $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
-    $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
+    $route['search/suggest'] = 'product_search/suggest';
 
     #ADVANCE SEARCH
     $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
