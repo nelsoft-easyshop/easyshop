@@ -19,7 +19,7 @@ class Home extends MY_Controller
      * Load class dependencies
      *
      */
-    function __construct() 
+    public function __construct() 
     {
         parent::__construct();
     }

@@ -22,12 +22,13 @@ $configService = new EasyShop\Core\Configuration\Configuration();
 | to just set in config.php in the root of the application
 */
 
-
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
     $protocol .= 's'; 
 }
-$baseUrl = $protocol.'://'.$_SERVER['SERVER_NAME'].'/';
+
+$serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : htmlentities(php_uname('n'));
+$baseUrl = $protocol.'://'.$serverName.'/';
 
 if($configService->isConfigFileExists()){
     $configBaseUrl = $configService->getConfigValue('base_url');

@@ -22,7 +22,7 @@
 !/web/assets/user/default
 
 
-config.php
+/config.php
 /application/config/param/controllers.php
 .DS_Store
 
@@ -37,3 +37,13 @@ application/logs/*
 /bower_components/
 /node_modules/
 /web/assets/js/min
+
+
+/sphinx/logs/*
+!/sphinx/logs/*.md
+/sphinx/data/*
+!/sphinx/data/*.md
+/sphinx/etc/*
+!/sphinx/etc/*.md
+
+

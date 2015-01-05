@@ -5,6 +5,7 @@ namespace EasyShop\Search;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsProductShippingHead;
 use EasyShop\Entities\EsKeywordsTemp;
+use EasyShop\Entities\EsKeywords as EsKeywords;
 use EasyShop\Entities\EsProductImage as EsProductImage;
 use Doctrine\Common\Collections\ArrayCollection;
 /**
@@ -67,6 +68,14 @@ class SearchProduct
      * @var EasyShop\ConfigLoader\ConfigLoader
      */
     private $configLoader;
+    
+    
+    /**
+     * Sphinx Search Client
+     *
+     * @var sphinxapi
+     */
+    private $sphinxClient;
 
 
     /**
@@ -79,7 +88,8 @@ class SearchProduct
                                 $categoryManager,
                                 $httpRequest,
                                 $promoManager,
-                                $configLoader)
+                                $configLoader,
+                                $sphinxClient)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
@@ -88,6 +98,7 @@ class SearchProduct
         $this->httpRequest = $httpRequest;
         $this->promoManager = $promoManager;
         $this->configLoader = $configLoader;
+        $this->sphinxClient = $sphinxClient;
     }
 
     /**
@@ -106,31 +117,50 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-        $stringCollection = [];
-        $ids = $productIds;
-
-        if(trim($clearString)){
-            $explodedString = explode(' ', trim($clearString));
-            $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-
-            $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
-            $wildCardString = !implode('* +', $explodedStringWithRegEx)
-                              ? "" 
-                              : '+'.implode('* +', $explodedStringWithRegEx) .'*';
-            $stringCollection[] = str_replace("+*", "", $wildCardString);
-            $stringCollection[] = '"'.trim($clearString).'"'; 
-
-            $isLimit = strlen($clearString) > 1;
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                 ->findByKeyword($stringCollection,$productIds,$isLimit);
-
-            $ids = [];
-            foreach ($products as $product) {
-                $ids[] = $product['idProduct']; 
+        $ids = [];
+  
+        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+        $this->sphinxClient->SetFieldWeights([
+            'name' => 50, 
+            'store_name' => 30,
+            'search_keyword' => 10,
+        ]);
+    
+        $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
+        $this->sphinxClient->SetFilter('productid', $productIds);
+        $this->sphinxClient->AddQuery($queryString, 'products');
+        
+        $sphinxResult =  $this->sphinxClient->RunQueries();
+        
+        $products = [];
+        if($sphinxResult === false){
+            $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
+            $stringCollection = [];
+            $ids = $productIds;
+            if(trim($clearString)){
+                $explodedString = explode(' ', trim($clearString));
+                $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+                $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+                $wildCardString = !implode('* +', $explodedStringWithRegEx)
+                                ? "" 
+                                : '+'.implode('* +', $explodedStringWithRegEx) .'*';
+                $stringCollection[] = str_replace("+*", "", $wildCardString);
+                $stringCollection[] = '"'.trim($clearString).'"'; 
+                $isLimit = strlen($clearString) > 1;
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->findByKeyword($stringCollection,$productIds,$isLimit);
+                $ids = [];
+                foreach ($products as $product) {
+                    $ids[] = $product['idProduct']; 
+                }
             }
         }
-        
+        else if(isset($sphinxResult[0]['matches'])){
+            foreach ($sphinxResult[0]['matches'] as $productId => $product) {
+                $ids[] = $productId; 
+            }
+        }
+
         return $ids;
     }
 
@@ -415,6 +445,43 @@ class SearchProduct
         }
 
         return $subCategoryList;
+    }
+    
+    /**
+     * Retrieves suggested words for search string
+     *
+     * @param string $queryString
+     * @return string[]
+     */
+    public function getKeywordSuggestions($queryString)
+    {
+        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+        $this->sphinxClient->SetFieldWeights([
+            'keywords' => 50,
+        ]);
+    
+        $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
+        $this->sphinxClient->AddQuery($queryString, 'suggestions');
+        $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
+        $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
+        
+        $sphinxResult =  $this->sphinxClient->RunQueries();
+        $suggestions = [];
+        if($sphinxResult === false)
+        {
+            $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
+                                 ->getSimilarKeywords($queryString, $suggestionLimit);
+            foreach($keywords as $word){
+                 $suggestions[] = $word['keyword'];
+            }
+        }
+        else if(isset($sphinxResult[0]['matches'])){
+            foreach($sphinxResult[0]['matches'] as $match){
+                $suggestions[] = $match['attrs']['keywordattr'];
+            }
+        }
+
+        return $suggestions;
     }
 
 }
