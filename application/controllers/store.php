@@ -142,7 +142,9 @@ class Store extends MY_Controller
                     $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
                 }
 
-                $this->load->spark('decorator');    
+                $bannerData['snippetMarkUp'] = $this->load->view('templates/seo/person_markup', $bannerData['arrVendorDetails']);
+
+                $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
