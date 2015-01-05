@@ -11,11 +11,25 @@
     $hostname = $CI->db->hostname;
     $sphinxDirectory =  __DIR__.'/../../sphinx';
 
+    $hostArray = explode(';' , $CI->db->hostname);
+    $hostname = null;
+    foreach($hostArray as $hostField){
+        $keyLocation = strpos($hostField, 'host=');
+        if($keyLocation !== -1){
+            $hostname = substr($hostField, $keyLocation + strlen('host='));
+            break;
+        }
+    }
+    
+    if($hostname === null){
+        echo 'Error: hostname cannot be found';
+    }
+
     $configString = '
     
     source products { 
             type = mysql
-            sql_host = '.$CI->db->hostname.'
+            sql_host = '.$hostname.'
             sql_user = '.$CI->db->username.'
             sql_pass = '.$CI->db->password.'
             sql_db = '.$CI->db->database.'
@@ -42,7 +56,7 @@
     source suggestions {   
 
         type = mysql
-        sql_host = '.$CI->db->hostname.'
+        sql_host = '.$hostname.'
         sql_user = '.$CI->db->username.'
         sql_pass = '.$CI->db->password.'
         sql_db = '.$CI->db->database.'
