@@ -135,37 +135,32 @@ class SearchProduct
         $products = [];
         if($sphinxResult === false){
             $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-            
             $stringCollection = [];
             $ids = $productIds;
-
             if(trim($clearString)){
                 $explodedString = explode(' ', trim($clearString));
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-
                 $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
                 $wildCardString = !implode('* +', $explodedStringWithRegEx)
                                 ? "" 
                                 : '+'.implode('* +', $explodedStringWithRegEx) .'*';
                 $stringCollection[] = str_replace("+*", "", $wildCardString);
                 $stringCollection[] = '"'.trim($clearString).'"'; 
-
                 $isLimit = strlen($clearString) > 1;
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findByKeyword($stringCollection,$productIds,$isLimit);
+                $ids = [];
                 foreach ($products as $product) {
                     $ids[] = $product['idProduct']; 
                 }
             }
         }
         else if(isset($sphinxResult[0]['matches'])){
-        
             foreach ($sphinxResult[0]['matches'] as $productId => $product) {
                 $ids[] = $productId; 
             }
-            
         }
-        
+
         return $ids;
     }
 
