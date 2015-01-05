@@ -429,7 +429,7 @@ a{
     text-align: right;
 }
 
-.select-filter-item{
+.select-filter-item {
     height: 34px;
     padding: 6px 12px;
     font-size: 12px;
@@ -1809,6 +1809,11 @@ a{
     vertical-align: middle;
 }
 
+#transactions .select-filter-item {
+    max-width: 120px;
+    width: 54%;
+}
+
 .on-going-transaction-list-bought,
 .on-going-transaction-list-sold,
 .on-going-transaction-list-bought-completed,
@@ -2282,9 +2287,6 @@ label.css-label {
 }
 
 /** =============== Responsive CSS style =============== **/
-
-
-=======
 .chosen-container{
     width: 100% !important;
 }
@@ -2859,6 +2861,13 @@ label.css-label {
         max-width: 555px;
     }
 
+    .feedback-content .raty-error {
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 117px;
+    }
+
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {
@@ -2881,10 +2890,6 @@ label.css-label {
 }
 
 @media screen and (max-width: 991px) {
-    .transaction-top-btns {
-        margin-bottom: 12px;
-    }
-
     .view-delivery-details .col-md-6 span,
     .view-delivery-details .col-md-12 span {
         width: 76%;
@@ -2928,6 +2933,10 @@ label.css-label {
 }
 
 @media screen and (max-width: 767px) {
+    .transaction-top-btns {
+        margin-bottom: 12px;
+    }
+
     .trans-left-panel.trans-btn-con1-1 {
         margin-top: 150px !important;
     }

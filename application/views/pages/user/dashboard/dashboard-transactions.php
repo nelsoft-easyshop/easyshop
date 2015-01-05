@@ -24,7 +24,7 @@
                 <div class="on-going-transaction-list-bought list-container">
                     <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
-                            <div class="col-md-9 transaction-top-btns">
+                            <div class="col-sm-8 transaction-top-btns">
                                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-bought" placeholder="Enter transaction no.">
                                 <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions" data-isongoing = "1">
                                     <i class="icon-fax"></i> <span>Print</span>
@@ -33,7 +33,7 @@
                                     <i class="icon-file"></i> <span>Export CSV</span>
                                 </button>
                             </div>
-                            <div class="col-md-3 text-right">
+                            <div class="col-sm-4 text-right">
                                 <span>Payment Filter:</span>
                                 <select class="select-filter-item payment-filter" data="ongoing-bought">
                                     <option value="all" selected=selected>Show all</option>
@@ -62,7 +62,7 @@
                 <div class="on-going-transaction-list-sold list-container">
                     <?PHP if ( (int) $ongoingSoldTransactionsCount >= 1) : ?>
                         <div class="mrgn-top-20 mrgn-bttm-15 row">
-                            <div class="col-md-9 transaction-top-btns">
+                            <div class="col-sm-8 transaction-top-btns">
                                 <input type="text" class="ui-form-control transaction-search search-transaction-num" data="ongoing-sold" placeholder="Enter transaction no.">
                                 <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions" data-isongoing = "1">
                                     <i class="icon-fax"></i> <span>Print</span>
@@ -71,7 +71,7 @@
                                     <i class="icon-file"></i> <span>Export CSV</span>
                                 </button>
                             </div>
-                            <div class="col-md-3 text-right">
+                            <div class="col-sm-4 text-right">
                                 <span>Payment Filter:</span>
                                 <select class="select-filter-item payment-filter" data="ongoing-sold">
                                     <option value="all" selected=selected>Show all</option>
@@ -104,7 +104,7 @@
                 <div class="on-going-transaction-list-bought-completed list-container">
                     <?PHP if ( (int) $completeBoughtTransactionsCount >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
-                        <div class="col-md-9 transaction-top-btns">
+                        <div class="col-sm-8 transaction-top-btns">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-bought" placeholder="Enter transaction no.">
                             <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printBuyTransactions" data-isongoing = "0">
                                 <i class="icon-fax"></i> <span>Print</span>
@@ -113,7 +113,7 @@
                                 <i class="icon-file"></i> <span>Export CSV</span>
                             </button>                            
                         </div>
-                        <div class="col-md-3 text-right">
+                        <div class="col-sm-4 text-right">
                             <span>Payment Filter:</span>
                             <select class="select-filter-item payment-filter" data="complete-bought">
                                 <option value="all" selected=selected>Show all</option>
@@ -142,7 +142,7 @@
                 <div class="on-going-transaction-list-sold-completed list-container">
                     <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
-                        <div class="col-md-9">
+                        <div class="col-sm-8">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
                             <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions" data-isongoing = "0">
                                 <i class="icon-fax"></i> <span>Print</span>
@@ -151,7 +151,7 @@
                                 <i class="icon-file"></i> <span>Export CSV</span>
                             </button>                                 
                         </div>
-                        <div class="col-md-3 text-right">
+                        <div class="col-sm-4 text-right">
                             <span>Payment Filter:</span>
                             <select class="select-filter-item payment-filter" data="complete-sold">
                                 <option value="all" selected=selected>Show all</option>
