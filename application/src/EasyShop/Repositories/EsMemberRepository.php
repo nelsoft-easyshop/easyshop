@@ -159,6 +159,7 @@ class EsMemberRepository extends EntityRepository
         $rsm->addScalarResult('address', 'address');
         $rsm->addScalarResult('stateregion', 'stateregion');
         $rsm->addScalarResult('city', 'city');
+        $rsm->addScalarResult('country', 'country');
         $rsm->addScalarResult('id_member', 'id_member');
         $rsm->addScalarResult('stateregionname', 'stateregionname');
         $rsm->addScalarResult('cityname', 'cityname');
@@ -175,9 +176,10 @@ class EsMemberRepository extends EntityRepository
                 , m.email
                 , a.address
                 , a.stateregion
-                , a.city
+                , a.city 
                 , l1.location as stateregionname
                 , l2.location as cityname
+                , l3.location as country
                 , DATE_FORMAT(datecreated, '%M %Y') as datecreated
                 , imgurl
                 , store_desc
@@ -187,6 +189,7 @@ class EsMemberRepository extends EntityRepository
             LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
             LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
             LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
+            LEFT JOIN es_location_lookup l3 ON a.country = l3.id_location
             WHERE m.slug=:vendorslug
             LIMIT 1
         ";
