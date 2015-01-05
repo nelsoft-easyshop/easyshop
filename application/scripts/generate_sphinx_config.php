@@ -102,4 +102,7 @@
 
     }';
     
-    echo $configString;
+    $file = $sphinxDirectory.'/etc/sphinx.conf';
+    file_put_contents($file, $configString);
+    
+    echo 'sphinx.conf has been generated in /sphinx/etc/sphinx.conf';
