@@ -105,6 +105,8 @@
     }
 
     searchd {
+    
+        max_filter_values = 16384
 
         log = '.$sphinxDirectory.'/logs/searchd.log
         query_log = '.$sphinxDirectory.'/logs/query.log
