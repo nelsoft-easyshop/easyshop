@@ -255,11 +255,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
         
 
+<script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
+
 <script>
 
 
     (function ($) { 
-        
+
+        $('input#main_search').typeahead({
+            ajax: { 
+                url: '/search/suggest',
+                triggerLength: 3, // This is the minimum length of text to take action on
+                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+            },
+            items: 10, // The maximum number of items to show in the results. 
+            menu: '<ul class="typeahead dropdown-menu"></ul>' ,
+            item: '<li><a href="#"></a></li>'
+        });
+
         $(document).ready(function(){
 
             var $user_nav_dropdown = $(".user-nav-dropdown");
@@ -332,15 +345,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         });
 
-        $("#main_search").on('click input keypress',function() {
-
-            if($(this).val().length >= 3) {
-                $(".old-suggested-result-container").slideDown(300);
-            } 
-            if ($(this).val().length <= 2) {
-                 $(".old-suggested-result-container").slideUp(300);
-            }
-        });
         
     })(jQuery);
 
