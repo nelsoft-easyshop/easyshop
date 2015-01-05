@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
 
+<?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
 
 <section>
