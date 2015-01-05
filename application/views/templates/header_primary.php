@@ -208,8 +208,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <input type="submit" value="" class="span_bg">
                                         </div>
                                         <div class="nav-searchfield-width">
-                                          <div class="search-container">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                            <div class="search-container">
+                                                <input type="text" name="q_str" id="primary-search" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                            </div>
+                                            <div class="suggested-result-container">
+                                                <p class="sr-title">Suggested search result:</p>
+                                                <ul id="suggested-search-result">
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">lorem ipsum</a>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -320,10 +340,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
-                                                 <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
-                                                    <input type="submit" value="" class="span_bg">
-                                                </form>
+                                                    <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                        <input type="text" name="q_str" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                                        <input type="submit" value="" class="span_bg">
+                                                    </form>
+                                                    <div class="suggested-result-container2">
+                                                        <p class="sr-title">Suggested search result:</p>
+                                                        <ul id="suggested-search-result2">
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">lorem ipsum</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                                 <div class="header-cart-container">
                                                     <a href="/cart" class="header-cart-wrapper">
@@ -435,4 +475,3 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-

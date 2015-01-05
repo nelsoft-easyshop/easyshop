@@ -139,15 +139,15 @@ class ApiFormatter
         }
 
         $productAttributes = $this->collectionHelper->organizeArray($productAttributes,true);
-
+        $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
-        foreach ($productAttributes as $key => $productOption) {
+        foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
             for ($i=0; $i < count($productOption) ; $i++) {
-                $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
-                $newKey = $type.'_'.$productAttributes[$key][$i]['attr_id'];
+                $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
+                $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
                 $newArrayOption[] = [
                                 'value' => $productOption[$i]['attr_value'],
                                 'price'=> $productOption[$i]['attr_price'],
@@ -208,9 +208,29 @@ class ApiFormatter
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
-            $temporaryArray[$key]['combinationId'] = ($newCombinationKey[0] == "a_0") ? [] : $newCombinationKey;
             $temporaryArray[$key]['id'] = $key;
             $temporaryArray[$key]['price'] = floatval(number_format($totalPrice + $product->getFinalPrice(), 2,'.',''));
+            if($newCombinationKey[0] === "a_0"){
+                if(empty($productAttributes) === false){
+                    $allCombination = $this->collectionHelper
+                                           ->generateCombinations($productAttributes);
+                    foreach ($allCombination as $keyComb => $combination) {
+                        foreach ($combination as $value) {
+                            $type = ($value['attr_id'] == '0') ? 'a' : 'b';
+                            $temporaryArray[$keyComb]['combinationId'][] = $type . '_' . $value['attr_id'];
+                        }
+                        $temporaryArray[$key]['combinationId'] = $temporaryArray[$keyComb]['combinationId'];
+                        $productQuantity[] = $temporaryArray[$key];
+                    }
+                }
+                else{
+                    $temporaryArray[$key]['combinationId'] = [];
+                    $productQuantity[] = $temporaryArray[$key];
+                }
+                break;
+            }
+
+            $temporaryArray[$key]['combinationId'] = $newCombinationKey;
             $productQuantity[] = $temporaryArray[$key];
         }
 

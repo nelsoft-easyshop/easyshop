@@ -127,7 +127,7 @@
                                     <tr>
                                         <td class="td-criteria">Total Reviews: </td>
                                         <td class="td-total-review" align="center">
-                                            <?=$feedBackTotalCount <= 0 ? "No Rating." : $feedBackTotalCount; ?>
+                                            <?=$reviewTotalCount <= 0 ? "No Rating." : $reviewTotalCount; ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -170,7 +170,7 @@
                                     <span class="span-criteria-mobile">Total Reviews</span>
                                     <br/>
                                     <span class="span-star-mobile">
-                                        <?=$feedBackTotalCount <= 0 ? "No Rating." : $feedBackTotalCount; ?>
+                                        <?=$reviewTotalCount <= 0 ? "No Rating." : $reviewTotalCount; ?>
                                     </span>
                                 </div>
                             </div>

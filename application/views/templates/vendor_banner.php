@@ -78,7 +78,7 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div id="hidden-form">
-                                <?php echo form_open_multipart('/memberpage/upload_img', 'id="form_image"');?>
+                                <?php echo form_open_multipart('/store/upload_img', 'id="form_image"');?>
                                     <input type="file" data-type="avatar" style="visibility:hidden; height:0px; width:0px; position:absolute;" id="imgupload" accept="image/*" name="userfile"/> 
                                     <input type='hidden' name='x' value='0' id='image_x'>
                                     <input type='hidden' name='y' value='0' id='image_y'>

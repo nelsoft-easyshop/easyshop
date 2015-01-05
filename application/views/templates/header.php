@@ -225,6 +225,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="/advsrch" class="adv_srch_lnk">Advance Search</a>
                 </div>
                 <div id="main_search_drop_content"></div> 
+                <div class="old-suggested-result-container">
+                    <p class="sr-title">Suggested search result:</p>
+                    <ul>
+                        <li>
+                            <a href="">lorem ipsum</a>
+                        </li>
+                        <li>
+                            <a href="">lorem ipsum</a>
+                        </li>
+                        <li>
+                            <a href="">lorem ipsum</a>
+                        </li>
+                        <li>
+                            <a href="">lorem ipsum</a>
+                        </li>
+                        <li>
+                            <a href="">lorem ipsum</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         <?php endif; ?>
         </div>
@@ -296,6 +316,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             });
             
+        });
+
+        $(".old-suggested-result-container").hide();
+ 
+        var $primarySearch= $("#main_search");
+        var $suggestedResult= $(".old-suggested-result-container");
+
+        $(document).mouseup(function (e) {
+
+            if (!$suggestedResult.is(e.target) 
+                && $suggestedResult.has(e.target).length === 0)
+            {
+               $suggestedResult.hide(1);
+            }
+        });
+
+        $("#main_search").on('click input keypress',function() {
+
+            if($(this).val().length >= 3) {
+                $(".old-suggested-result-container").slideDown(300);
+            } 
+            if ($(this).val().length <= 2) {
+                 $(".old-suggested-result-container").slideUp(300);
+            }
         });
         
     })(jQuery);

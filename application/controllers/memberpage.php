@@ -345,7 +345,7 @@ class Memberpage extends MY_Controller
         $um = $this->serviceContainer['user_manager'];
         $memberId = $this->session->userdata('member_id');
         $memberEntity = $em->find('EasyShop\Entities\EsMember', $memberId);
-        
+
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
@@ -597,54 +597,6 @@ class Memberpage extends MY_Controller
                                                                           $this->input->post("paymentMethod")
                                                                           );  
         $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
-    }
-    
-
-
-    /**
-     *  Used to upload avatar image on both Member page and Vendor page
-     *  Reloads page on success.
-     *
-     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
-     *      and displays an error for 3 seconds, then reloads the page to the original URL,
-     *      member page or vendor page
-     */
-    public function upload_img()
-    {
-        $data = [
-            'x' => $this->input->post('x'),
-            'y' => $this->input->post('y'),
-            'w' => $this->input->post('w'),
-            'h' => $this->input->post('h')
-        ];
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        
-        $result = $this->memberpage_model->upload_img($uid, $data);
-        $image = $this->serviceContainer['user_manager']
-                      ->getUserImage($uid);
-
-        if(!(bool)$this->input->post('isAjax')){
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->find($uid);
-            $vendorLink = $this->input->post('vendorLink');
-            redirect($member->getSlug().'/'.html_escape($vendorLink));
-        }
-        
-        
-        $response = [
-            'isSuccessful' => true,
-            'image' => $image,
-        ];
-        
-        if(isset($result['error'])){
-            $response['isSuccessful'] = false;
-        }
-
-
-        echo json_encode($response);
     }
 
     /**
@@ -1152,47 +1104,6 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-
-
-    /**
-     *  Used for uploading banner in vendor page. 
-     */
-    public function banner_upload()
-    {    
-        $data = [
-            'x' => $this->input->post('x'),
-            'y' => $this->input->post('y'),
-            'w' => $this->input->post('w'),
-            'h' => $this->input->post('h')
-        ];
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        $result = $this->memberpage_model->banner_upload($uid, $data);
-        $banner = $this->serviceContainer['user_manager']
-                       ->getUserImage($uid, 'banner');
-                       
-        if(!(bool)$this->input->post('isAjax')){
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->find($uid);
-            $vendorLink = $this->input->post('vendorLink');
-            redirect($member->getSlug().'/'.html_escape($vendorLink));
-        }
-        
-        $response = [
-            'isSuccessful' => true,
-            'banner' => $banner,
-        ];
-        
-        if(isset($result['error'])){
-            $response['isSuccessful'] = false;
-        }
-
-        echo json_encode($response);
-    }
-        
-    
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
@@ -1479,7 +1390,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1503,7 +1414,7 @@ class Memberpage extends MY_Controller
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               true,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1527,7 +1438,7 @@ class Memberpage extends MY_Controller
                                           ->getBoughtTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
@@ -1546,17 +1457,18 @@ class Memberpage extends MY_Controller
                                                           $transactionNumber
                                                       );
                 $paginationData['lastPage'] = ceil($completeSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
+
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
                                               $memberId,
                                               false,
-                                              $this->transactionRowCount * $page,
+                                              $this->transactionRowCount * ($page - 1),
                                               $this->transactionRowCount,
                                               $transactionNumber,
                                               $paymentMethod
                                           ),
-                    'count' => $completeSoldTransactionsCount["getSoldTransactionCount"],
+                    'count' => $completeSoldTransactionsCount["transactionsCount"],
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
