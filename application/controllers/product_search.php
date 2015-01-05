@@ -30,16 +30,15 @@ class product_search extends MY_Controller {
       * @return JSON
       */
     public function suggest()
-    {  
+    {
         $response = [];
-        if($this->input->post('query')){
-            $queryString =  $this->input->get('query'); 
-            $queryString = trim($queryString);  
+        if($this->input->get('query')){
+            $queryString = trim($this->input->get('query'));
             $searchSuggestions = $this->serviceContainer['search_product']
                                       ->getKeywordSuggestions($queryString);
-            $response = $searchSuggestions;
+            $response = $searchSuggestions; 
         }
-        
+
         echo json_encode($response);
     }
 
