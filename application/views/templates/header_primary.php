@@ -487,7 +487,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             items: 10, // The maximum number of items to show in the results. 
             menu: '<ul class="typeahead suggested-result-container"></ul>' ,
             item: '<li><a href="#"></a></li>'
+        })
+        .focusout(function() {
+            $('.suggested-result-container').hide();
         });
+
         $('input#primary-search2').typeahead({
             ajax: { 
                 url: '/search/suggest',
@@ -497,6 +501,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             items: 10, // The maximum number of items to show in the results. 
             menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
             item: '<li><a href="#"></a></li>'
+        })
+        .focusout(function() {
+            $('.suggested-result-container').hide();
         });
+
     })(jQuery);
 </script>
