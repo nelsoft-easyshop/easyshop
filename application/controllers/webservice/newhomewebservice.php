@@ -38,7 +38,7 @@ class NewHomeWebService extends MY_Controller
      * Handles if the request is authenticated
      * @var bool
      */    
-    private $isAuthenticated; 
+    private $isAuthenticated = false; 
 
     public function __construct() 
     {
