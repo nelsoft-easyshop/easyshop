@@ -193,7 +193,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'header-theme-bg' : ''?>">
 
-        <div class="res_wrapper wrapper search_wrapper">
+        <div class="container old-page-container">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> 
@@ -209,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        
         <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
-                <div>
+                <div class="pos-rel">
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?= $this->input->get('q_str') ? html_escape(trim($this->input->get('q_str'))) : "" ; ?>" autocomplete="off">
                 
@@ -269,7 +269,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
             },
             items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead dropdown-menu"></ul>' ,
+            menu: '<ul class="typeahead old-suggested-result-container"></ul>' ,
             item: '<li><a href="#"></a></li>'
         });
 
