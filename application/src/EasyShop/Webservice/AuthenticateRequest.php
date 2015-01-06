@@ -66,7 +66,7 @@ class AuthenticateRequest
             $this->hash .= $adminUser->getPassword();            
         }
 
-        return (sha1($this->hash) != $postedHash) ? false : true;
+        return (sha1($this->hash) !== $postedHash) ? false : true;
     }
 
 }
