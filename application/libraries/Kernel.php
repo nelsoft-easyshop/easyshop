@@ -334,7 +334,6 @@ class Kernel
             return new \EasyShop\Image\ImageUtility($imageLibrary);
         };  
 
-        //Webservice Authentication
         $container['webservice_manager'] = function ($c) use ($container){
             $em = $container['entity_manager'];   
             return new \EasyShop\Webservice\AuthenticateRequest($em);                     
