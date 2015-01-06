@@ -15,7 +15,7 @@ $config = [
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
-                        'postback_url' => 'https://staging.easydeal.ph/payment/dragonPayPostBack'
+                        'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack'
                     ]
                 ]
             ]
