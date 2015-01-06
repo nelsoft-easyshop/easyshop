@@ -216,7 +216,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                                   ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
                                                       'WITH', 'orderTransaction.idOrder = fb.order')
                                   ->where('fb.member = :fromMemberId')
-                                  ->andWhere('fb.feedbKind = 0')
+                                  ->andWhere('fb.feedbKind = :feedbackFlag')
+                                  ->setParameter('feedbackFlag', EsMemberFeedback::REVIEWER_AS_BUYER)
                                   ->setParameter('fromMemberId', $memberId)
                                   ->addOrderBy('fb.dateadded', 'DESC')
                                   ->addOrderBy('orderTransaction.idOrder', 'DESC') 
@@ -255,7 +256,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                                   ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
                                                       'WITH', 'orderTransaction.idOrder = fb.order')
                                   ->where('fb.member = :fromMemberId')
-                                  ->andWhere('fb.feedbKind = 1')
+                                  ->andWhere('fb.feedbKind = :feedbackFlag')
+                                  ->setParameter('feedbackFlag', EsMemberFeedback::REVIEWER_AS_SELLER)
                                   ->setParameter('fromMemberId', $memberId)
                                   ->addOrderBy('fb.dateadded', 'DESC')
                                   ->addOrderBy('orderTransaction.idOrder', 'DESC') 
@@ -295,7 +297,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                                   ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
                                                       'WITH', 'orderTransaction.idOrder = fb.order')
                                   ->where('fb.forMemberid = :forMemberid')
-                                  ->andWhere('fb.feedbKind = 1')
+                                  ->andWhere('fb.feedbKind = :feedbackFlag')
+                                  ->setParameter('feedbackFlag', EsMemberFeedback::REVIEWER_AS_SELLER)
                                   ->setParameter('forMemberid', $memberId)
                                   ->orderBy('fb.dateadded', 'DESC')
                                   ->addOrderBy('orderTransaction.idOrder', 'DESC') 
@@ -335,7 +338,8 @@ class EsMemberFeedbackRepository extends EntityRepository
                                   ->leftJoin('EasyShop\Entities\EsOrder', 'orderTransaction',
                                                       'WITH', 'orderTransaction.idOrder = fb.order')
                                   ->where('fb.forMemberid = :forMemberid')
-                                  ->andWhere('fb.feedbKind = 0')
+                                  ->andWhere('fb.feedbKind = :feedbackFlag')
+                                  ->setParameter('feedbackFlag', EsMemberFeedback::REVIEWER_AS_BUYER)
                                   ->setParameter('forMemberid', $memberId)
                                   ->orderBy('fb.dateadded', 'DESC')
                                   ->addOrderBy('orderTransaction.idOrder', 'DESC')
