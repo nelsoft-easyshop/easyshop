@@ -82,7 +82,7 @@ class MessageController extends MY_Controller
         else {
             $msg = trim($this->input->post("msg"));
             $result = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
-            if ($result === 1) {
+            if ($result) {
                 $result = $this->messageManager->getAllMessage($this->userId);
                 $recipientMessages = $this->messageManager->getAllMessage($this->userId, true);
 
@@ -129,8 +129,14 @@ class MessageController extends MY_Controller
      */
     public function delete()
     {
-        $messageId = (int) $this->input->post("id_msg");
-        $message = $this->em->getRepository("EasyShop\Entities\EsMessages")->delete($messageId, $this->userId);
+        $messageId = $this->input->post("id_msg");
+        $messageIdArray = [$messageId];
+        if ( (bool) stripos($messageId, ',')) {
+            $messageIds = explode(',', $messageId);
+            $messageIdArray = $messageIds;
+        }
+
+        $message = $this->em->getRepository("EasyShop\Entities\EsMessages")->delete($messageIdArray, $this->userId);
         $result = '';
 
         if ( (bool) $message) {
@@ -157,7 +163,13 @@ class MessageController extends MY_Controller
     public function updateMessageToSeen()
     {
         $messageId = $this->input->post('checked');
-        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")->updateToSeen($this->userId, $messageId);
+        $messageIdArray = [$messageId];
+        if ( (bool) stripos($messageId, ',')) {
+            $messageIds = explode(',', $messageId);
+            $messageIdArray = $messageIds;
+        }
+
+        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")->updateToSeen($this->userId, $messageIdArray);
 
         echo json_encode($result);
     }

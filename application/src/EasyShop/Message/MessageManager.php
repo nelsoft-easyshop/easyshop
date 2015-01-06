@@ -28,8 +28,8 @@ class MessageManager {
     public function send($sender, $recipient, $userMessage)
     {
         $message = new EsMessages();
-        $message->setTo($sender);
-        $message->setFrom($recipient);
+        $message->setTo($recipient);
+        $message->setFrom($sender);
         $message->setMessage($userMessage);
         $message->setTimeSent(new DateTime('now'));
 

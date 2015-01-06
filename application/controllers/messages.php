@@ -6,9 +6,7 @@ if (!defined('BASEPATH'))
 /**
  * Messaging controller
  * 
- * This class is marked for a complete re-factor.
- * Messaging functionality is to be moved to
- * a separate class.
+ * Refactored Class is moved in MessageController.
  */ 
 class messages extends MY_Controller
 {
@@ -40,7 +38,7 @@ class messages extends MY_Controller
         $this->messageManager = $this->serviceContainer['message_manager'];
     }
 
-    public function index()
+    public function oldMessage()
     {
         if ($this->session->userdata('usersession')) {
             $messages = $this->messages_model->get_all_messages($this->userId);

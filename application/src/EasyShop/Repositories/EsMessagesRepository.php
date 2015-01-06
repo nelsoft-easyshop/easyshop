@@ -97,9 +97,9 @@ class EsMessagesRepository extends EntityRepository
     }
 
     /**
-     * Soft deletes message/s or conversation/s
+     * Soft deletes message/conversation
      * @param $messageId
-     * @param $memberId
+     * @param $memberId array
      * @return int
      */
     public function delete($messageId, $memberId)
@@ -121,8 +121,8 @@ class EsMessagesRepository extends EntityRepository
     /**
      * Update message/s to seen
      * @param $memberId
-     * @param $messageId
-     * @return int
+     * @param $messageId array
+     * @return boolean
      */
     public function updateToSeen($memberId, $messageId)
     {
@@ -143,7 +143,7 @@ class EsMessagesRepository extends EntityRepository
                 \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
             ]);
 
-        return $count;
+        return (bool) $count;
     }
 
 }

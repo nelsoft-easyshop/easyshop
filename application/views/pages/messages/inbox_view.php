@@ -23,7 +23,7 @@
             </thead>
             <tbody>
             <?PHP foreach($result['messages'] as $key => $row) { ?>
-                <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "reciever" ? "NS" : "")?>">
+                <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "receiver" ? "NS" : "")?>">
                     <td>
                         <div class="img-wrapper-div">
                             <span class="img-wrapper-span">
@@ -189,7 +189,7 @@ function Reload()
         asycn :true,
         type:"POST",
         dataType : "json",
-        url : "/messages/retrieve_msgs",
+        url : "/MessageController/getAllMessage",
         data : {csrfname:csrftoken,todo:todo},
         success : function(d)
         {
@@ -278,7 +278,7 @@ function send_msg(recipient,msg)
         type : "POST",
         dataType : "json",
         async: false,
-        url : "/messages/send_msg",
+        url : "/MessageController/send",
         beforeSend :function(){
             $("#msg_textarea img").show();
             $("#send_btn").hide();
@@ -311,7 +311,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
 
     $("#msg_field").empty();
     $.each(D,function(key,val){
-        if (val.status == "reciever") {
+        if (val.status == "receiver") {
             html += '<span class="float_left">';
         }
         else {
@@ -347,7 +347,7 @@ function specific_msgs()
     var objDiv = document.getElementById("msg_field");
     $("#msg_field").empty();
     $.each(all_messages,function(key,val){
-        if (val.status == "reciever") {
+        if (val.status == "receiver") {
             html += '<span class="float_left">';
         } else {
             html += '<span class="float_right">';
@@ -401,7 +401,7 @@ function onFocus_Reload(msgs)
             if($(".dataTables_empty").length){
                 $(".dataTables_empty").parent().remove();
             }
-            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
+            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd">';
             html +='<td class=" sorting_1">';
             if (Nav_msg.status == "sender") {
                 html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
@@ -470,7 +470,7 @@ function delete_data(ids)
             $("#modal-background").show();
             $("#modal-background img").show();
         },
-        url : "/messages/delete_msg",
+        url : "/MessageController/delete",
         data : {id_msg:ids,csrfname:csrftoken},
         success : function(d) {
             data = d;
@@ -492,7 +492,7 @@ function seened(obj)
             async : false,
             type : "POST",
             dataType : "json",
-            url : "/messages/is_seened",
+            url : "/MessageController/updateMessageToSeen",
             data : {checked:checked,csrfname:csrftoken},
             success : function(data) {
                 if (data === true) {
