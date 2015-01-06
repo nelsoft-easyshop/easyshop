@@ -148,7 +148,7 @@ class SearchProduct
                 $stringCollection[] = '"'.trim($clearString).'"'; 
                 $isLimit = strlen($clearString) > 1;
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findByKeyword($stringCollection,$productIds,$isLimit);
+                                     ->findByKeyword($stringCollection,$productIds,$isLimit);
                 $ids = [];
                 foreach ($products as $product) {
                     $ids[] = $product['idProduct']; 
@@ -199,21 +199,21 @@ class SearchProduct
     {
         // array of parameters that will disregard on filtering
         $unsetParam = [
-                        'q_str'
-                        ,'category'
-                        ,'condition'
-                        ,'startprice'
-                        ,'endprice'
-                        ,'brand'
-                        ,'seller'
-                        ,'location'
-                        ,'sort'
-                        ,'typeview'
-                        ,'page'
-                        ,'limit'
-                        ,'sortby'
-                        ,'sorttype'
-                      ];
+            'q_str'
+            ,'category'
+            ,'condition'
+            ,'startprice'
+            ,'endprice'
+            ,'brand'
+            ,'seller'
+            ,'location'
+            ,'sort'
+            ,'typeview'
+            ,'page'
+            ,'limit'
+            ,'sortby'
+            ,'sorttype'
+        ];
 
         $finalizedParamter = [];
         $addtionString = "";
@@ -240,7 +240,7 @@ class SearchProduct
             if(!empty($parameter)){
                 $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. $havingCounter; 
                 $result = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
+                                   ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
                 $resultNeeded = array_map(function($value) { return $value['product_id']; }, $result);
 
                 return $resultNeeded;
@@ -405,7 +405,14 @@ class SearchProduct
                     'count' => $totalCount,
                 ];
 
+        $this->sortResultByTopic($products,$queryString);
         return $returnArray;
+    }
+
+    public function sortResultByTopic($products, $queryString)
+    {
+        $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
+                               ->findBy(['topic' => $queryString]);
     }
 
     /**
