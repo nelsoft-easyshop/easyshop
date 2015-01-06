@@ -329,8 +329,6 @@ class Kernel
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
         
-
-        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
