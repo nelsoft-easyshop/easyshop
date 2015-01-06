@@ -96,7 +96,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <option value="1">On Seller's Page</option>
                             <option value="2">Main Page</option> 
                         </select>
-                        <input type="text" class="search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                        <input type="text" class="search-bar-input ui-form-control" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
                         <input type="submit"  value="" class="submitSearch span_bg">
                     </form>
                 </div>

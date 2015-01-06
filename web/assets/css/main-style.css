@@ -2217,14 +2217,6 @@ td.td-view.p-view2.color-default{
         font-size: 10px;
         padding: 0 21px;
     }
-    
-    .search-form{
-        margin: 0 !important;
-        width: 100% !important;
-        box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35) !important;
-        padding: 15px 5px;
-    }
-    
 }
 
 
@@ -2398,6 +2390,8 @@ header {
     }
 
     .search-form {
+        box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35) !important;
+        padding: 15px 5px;
         text-align: center;
     }
 

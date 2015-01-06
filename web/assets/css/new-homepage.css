@@ -599,6 +599,7 @@ header {
     height: 34px;
     line-height: 34px;
     padding: 0 !important;
+    width: 148px;
 }
 
 .header-cart-wrapper {
@@ -3150,6 +3151,10 @@ h3 > b{
 }
 
 @media only screen and (min-width: 991px) {
+    .search-container {
+        width: 47%;
+    }
+
     .new-user-nav-dropdown {
         float: right;
         width: 42%;
@@ -3169,6 +3174,10 @@ h3 > b{
     }
 }
 @media screen and (min-width: 1200px) {
+    .search-container {
+        width: 57%;
+    }
+
     .main-slider-container {
         height: 470px;
     }
@@ -3242,6 +3251,12 @@ h3 > b{
     }
 }
 
+@media only screen and (max-width: 480px) {
+    .vendor-login-name, .new-user-nav-dropdown {
+        display: block !important;
+    }
+}
+
 @media only screen and (max-width: 323px) {
     .main-slider-container {
         height: 266px;
@@ -3254,9 +3269,6 @@ h3 > b{
 }
 
 @media only screen and (max-width: 1200px) {
-    .nav-searchfield-width input[type="text"] {
-        width: 55%;
-    }
     .sticky-nav-fixed #main-nav .menu {
         width: 22%;
     } 
