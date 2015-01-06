@@ -132,10 +132,7 @@
         $(this).nextAll().removeClass("star-active");
         $('#feedback-star-error').addClass('hide');
     });
-    
 
-    
-    
     $( ".fa-edit-about" ).click(function() {
         $(".div-about-edit-area").css("display","inline");
         $(".p-about").css("display","none");
@@ -152,8 +149,9 @@
         $(".fa-edit-about").css("display","inline");
     });
     
-
+    //For feedback from seller mobile
     $('.feedback-from-seller').click(function() {
+        $("#ab").trigger("click");
         $(this).toggleClass("active-bar",0);
         $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
@@ -161,23 +159,25 @@
         $('.feedback-mobile-4').slideUp();
         $('.feedback-mobile-1').slideToggle();
          $('html, body').animate({
-            scrollTop: $(this).offset().top
+            scrollTop: $(".feedback-from-seller").offset().top
         }, 500);
     });
     
     $('.feedback-from-buyer').click(function() {
+        $("#as").trigger("click");
         $(this).toggleClass("active-bar",0);
         $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
         $('.feedback-mobile-2').slideToggle();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
         $('.feedback-mobile-1').slideUp();
-         $('html, body').animate({
+        $('html, body').animate({
             scrollTop: $(this).offset().top
         }, 500);
     });
     
     $('.feedback-for-seller').click(function() {
+        $("#fob").trigger("click");
         $(this).toggleClass("active-bar",0);
         $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
@@ -190,6 +190,7 @@
     });
     
     $('.feedback-for-buyer').click(function() {
+        $("#fos").trigger("click");
         $(this).toggleClass("active-bar",0);
         $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
