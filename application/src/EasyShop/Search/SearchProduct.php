@@ -399,20 +399,45 @@ class SearchProduct
             });
             $products = new ArrayCollection(iterator_to_array($iterator));
         }
+        else{
+            $products = $this->sortResultByTopic($products,$queryString);
+        }
 
         $returnArray = [
-                    'collection' => $products,
-                    'count' => $totalCount,
-                ];
+            'collection' => $products,
+            'count' => $totalCount,
+        ];
 
-        $this->sortResultByTopic($products,$queryString);
         return $returnArray;
     }
 
+    /**
+     * Sort product object using search topic table
+     * @param  object $products 
+     * @param  string $queryString 
+     * @return object
+     */
     public function sortResultByTopic($products, $queryString)
     {
         $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
-                               ->findBy(['topic' => $queryString]);
+                               ->getTopicOrderByWord($queryString);
+
+        $categoryOrder = [];
+        foreach ($wordResult as $result) {
+            $categoryOrder[] = $result->getCategory()->getIdCat();
+        }
+
+        $data = new ArrayCollection($products);
+        $iterator = $data->getIterator();
+        $iterator->uasort(function ($a, $b) use($categoryOrder) {
+   
+            $positionA = array_search($a->getCat()->getIdCat(), $categoryOrder);
+            $positionB = array_search($b->getCat()->getIdCat(), $categoryOrder);
+            return $positionA - $positionB;
+        });
+        $products = new ArrayCollection(iterator_to_array($iterator));
+
+        return $products;
     }
 
     /**
