@@ -29,7 +29,14 @@ class AuthenticateRequest
      *
      *  @var string
      */
-    private $exceptionalData = ["hash", "_token", "csrfname", "callback", "password", "_", "checkuser"];  
+    private $exceptionalData = ["hash", 
+                                "_token", 
+                                "csrfname", 
+                                "callback", 
+                                "password", 
+                                "_", 
+                                "checkuser"
+                                ];  
 
     /**
      * Constructor. Retrieves Entity Manager instance
@@ -51,22 +58,19 @@ class AuthenticateRequest
     {
 
         foreach ($postedData as $data => $value) {
-            if(in_array($data, $this->exceptionalData)) {
-                 continue;               
-            }
-            else{
-                $this->hash .= $value;
+            if(!in_array($data, $this->exceptionalData)) {
+                $this->hash .= $value;            
             }
         }
 
         if($isAdminRequest) {
             $adminUser = $this->em->getRepository("EasyShop\Entities\EsAdminMember")
-                                            ->find($postedData["userid"]);
+                                  ->find($postedData["userid"]);
 
             $this->hash .= $adminUser->getPassword();            
         }
 
-        return (sha1($this->hash) !== $postedHash) ? false : true;
+        return (sha1($this->hash) === $postedHash);
     }
 
 }
