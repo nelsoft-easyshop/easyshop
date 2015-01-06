@@ -10,16 +10,26 @@
         $("[rel='tooltip']").tooltip();
     });
     
-    $('.tab-content').on('click','.pagination-items li', function(){
+    $('.tab-content, .feedback-mobile').on('click','.pagination-items li', function(){
 
         var page = $(this).data('page');
         var memberid = $('#memberid').val();
+        
+        
+        var isMobileView = $(this).closest('.pagination-container').hasClass('mobile-pagination');
+        
         var $tabPane = $(this).closest('.tab-pane');
-        var tab = $tabPane.attr('id');
+        if(isMobileView){
+            var tab = $tabPane.data('identifier'); 
+        }
+        else{
+            var tab = $tabPane.attr('id');   
+        }
+
         $.ajax({
             url: '/store/feedback',
             method: 'GET',
-            data: {page:page, memberid:memberid, tab:tab},
+            data: {page:page, memberid:memberid, tab:tab, isMobile: isMobileView},
             success : function(data) {
                 $tabPane.replaceWith(data);
             }
@@ -149,56 +159,88 @@
         $(".fa-edit-about").css("display","inline");
     });
     
-    //For feedback from seller mobile
-    $('.feedback-from-seller').click(function() {
-        $("#ab").trigger("click");
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+    $('.feedback-mobile').on('click', '.feedback-from-seller',  function() {
+        $(".feedback-cat-mobile").not(".feedback-from-seller").removeClass("active-bar",0);
+        $(".feedback-from-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
-        $('.feedback-mobile-1').slideToggle();
-         $('html, body').animate({
+        $('.feedback-mobile-1').slideDown();
+        $('html, body').animate({
             scrollTop: $(".feedback-from-seller").offset().top
         }, 500);
     });
     
-    $('.feedback-from-buyer').click(function() {
-        $("#as").trigger("click");
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
-        $('.feedback-mobile-2').slideToggle();
+     $( "#ab" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-from-seller").removeClass("active-bar",0);
+        $(".feedback-from-seller").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideDown();
+     });
+    
+    $('.feedback-mobile').on('click', '.feedback-from-buyer',  function() {
+        $(".feedback-cat-mobile").not(".feedback-from-buyer").removeClass("active-bar",0);
+        $('.feedback-from-buyer').addClass("active-bar",0);
+        $('.feedback-mobile-2').slideDown();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
         $('.feedback-mobile-1').slideUp();
         $('html, body').animate({
-            scrollTop: $(this).offset().top
+            scrollTop: $(".feedback-from-buyer").offset().top
         }, 500);
     });
     
-    $('.feedback-for-seller').click(function() {
-        $("#fob").trigger("click");
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
-        $('.feedback-mobile-2').slideUp();
-        $('.feedback-mobile-3').slideToggle();
+    $( "#as" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-from-buyer").removeClass("active-bar",0);
+        $(".feedback-from-buyer").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideDown();
+        $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
         $('.feedback-mobile-1').slideUp();
-         $('html, body').animate({
-            scrollTop: $(this).offset().top
+     });
+    
+    $('.feedback-mobile').on('click', '.feedback-for-seller',  function() {
+        $(".feedback-cat-mobile").not(".feedback-for-seller").removeClass("active-bar",0);
+        $(".feedback-for-seller").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-4').slideDown();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-1').slideUp();
+        $('html, body').animate({
+            scrollTop: $(".feedback-for-seller").offset().top
         }, 500);
     });
     
-    $('.feedback-for-buyer').click(function() {
-        $("#fos").trigger("click");
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+    $( "#fos" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-for-seller").removeClass("active-bar",0);
+        $(".feedback-for-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
         $('.feedback-mobile-3').slideUp();
-        $('.feedback-mobile-4').slideToggle();
+        $('.feedback-mobile-4').slideDown();
         $('.feedback-mobile-1').slideUp();
-         $('html, body').animate({
+     });
+    
+    $('.feedback-mobile').on('click', '.feedback-for-buyer',  function() {
+        $( "#fob" ).trigger("click");
+        $(".feedback-cat-mobile").not(".feedback-for-buyer").removeClass("active-bar",0);
+        $('.feedback-for-buyer').addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-3').slideDown();
+        $('.feedback-mobile-1').slideUp();
+        $('html, body').animate({
             scrollTop: $(".feedback-for-buyer").offset().top
         }, 500);
     });
+    
+     $( "#fob" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-for-buyer").removeClass("active-bar",0);
+        $(".feedback-for-buyer").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideDown();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideUp();
+     });
 })(jQuery);
