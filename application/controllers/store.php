@@ -590,7 +590,7 @@ class Store extends MY_Controller
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
+                                                                   'isHyperLink' => false), true);
         $subViewData = [
             'isActive' => true,
             'feedbacks' => $feedbacks,
@@ -599,15 +599,15 @@ class Store extends MY_Controller
             'ratingHeaders' => $ratingHeaders,
             'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
         ];
-        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE); 
+        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true); 
         $subViewData['isActive'] = false;
-        $feedbackTabsMobile['asBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, TRUE);  
+        $feedbackTabsMobile['asBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);  
         
         
         $feedbacks  = $this->serviceContainer['user_manager']
                            ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
+                                                                   'isHyperLink' => false), true);
         $subViewData = [
             'isActive' => false,
             'feedbacks' => $feedbacks,
@@ -616,13 +616,13 @@ class Store extends MY_Controller
             'ratingHeaders' => $ratingHeaders,
             'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
         ];
-        $feedbackTabsDesktop['asSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE);
-        $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, TRUE);
+        $feedbackTabsDesktop['asSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
+                                                                   'isHyperLink' => false), true);
         $subViewData = [
             'isActive' => false,
             'feedbacks' => $feedbacks,
@@ -632,13 +632,13 @@ class Store extends MY_Controller
             'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
         ];
         
-        $feedbackTabsDesktop['forOthersAsSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE);                                                          
-        $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, TRUE);    
+        $feedbackTabsDesktop['forOthersAsSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);                                                          
+        $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);    
                                                                 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
+                                                                   'isHyperLink' => false), true);
         $subViewData = [
             'isActive' => false,
             'feedbacks' => $feedbacks,
@@ -648,8 +648,8 @@ class Store extends MY_Controller
             'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER,
         ];
         
-        $feedbackTabsDesktop['forOthersAsBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE);
-        $feedbackTabsMobile['forOthersAsBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, TRUE);
+        $feedbackTabsDesktop['forOthersAsBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['forOthersAsBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
         
