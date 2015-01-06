@@ -1144,7 +1144,7 @@ class Payment extends MY_Controller{
         $message = $this->input->get('message');
         $digest = $this->input->get('digest');
         $client = trim($this->input->get('param1'));
-        $redirectUrl = "";
+        $redirectUrl = ""; 
 
         if($client === "Easyshop"){
             if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
@@ -1171,7 +1171,7 @@ class Payment extends MY_Controller{
                              ? $this->config->item('production', 'payment')
                              : $this->config->item('testing', 'payment');
             $redirectUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['return_url'];
-            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=$message&digest=$digest";
+            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=".urlencode($message)."&digest=$digest";
         }
         else{
             show_404();
