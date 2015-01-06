@@ -350,7 +350,7 @@ class SearchProduct
 
         $finalizedProductIds =  ($startPrice || $endPrice) ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
-
+        $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
 
         $offset = (int) $pageNumber * (int) $perPage;
@@ -398,10 +398,7 @@ class SearchProduct
                 return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
             });
             $products = new ArrayCollection(iterator_to_array($iterator));
-        }
-        else{
-            $products = $this->sortResultByTopic($products,$queryString);
-        }
+        } 
 
         $returnArray = [
             'collection' => $products,
@@ -417,28 +414,32 @@ class SearchProduct
      * @param  string $queryString 
      * @return object
      */
-    public function sortResultByTopic($products, $queryString)
+    public function sortResultByTopic($productIds, $queryString) 
     {
         $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
                                ->getTopicOrderByWord($queryString);
 
+        $sortedIds = [];
         $categoryOrder = [];
         foreach ($wordResult as $result) {
             $categoryOrder[] = $result->getCategory()->getIdCat();
         }
+    
+        $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                             ->getProductCategoryIdByIds($productIds);
 
-        $data = new ArrayCollection($products);
-        $iterator = $data->getIterator();
-        $iterator->uasort(function ($a, $b) use($categoryOrder) {
-   
-            $positionA = array_search($a->getCat()->getIdCat(), $categoryOrder);
-            $positionB = array_search($b->getCat()->getIdCat(), $categoryOrder);
+        usort($products, function ($a, $b) use ($categoryOrder) {
+            $positionA = array_search($a['cat_id'], $categoryOrder);
+            $positionB = array_search($b['cat_id'], $categoryOrder);
             return $positionA - $positionB;
-        });
-        $products = new ArrayCollection(iterator_to_array($iterator));
+        }); 
 
-        return $products;
+        foreach ($products as $product) {
+            $sortedIds[] = $product['id_product'];
+        }
+        return $sortedIds; 
     }
+ 
 
     /**
      * Get popular product of the given category

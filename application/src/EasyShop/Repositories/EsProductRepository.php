@@ -79,38 +79,33 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Get all product details with given product id
-     * @param  array   $productIds
-     * @param  integer $offset
-     * @param  integer $perPage
-     * @param  boolean $applyLimit
+     * Get all product categoryid with given product id
+     * @param  array   $productIds 
      * @return mixed
      */
-    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
+    public function getProductCategoryIdByIds($productIds = [])
     {   
         if(!empty($productIds)){
-                $this->em =  $this->_em;
+            $this->em = $this->_em;
+            $rsm = new ResultSetMapping(); 
+            $rsm->addScalarResult('id_product', 'id_product');
+            $rsm->addScalarResult('cat_id', 'cat_id');
 
-                $sql = "
-                    SELECT 
-                        p
-                    FROM 
-                        EasyShop\Entities\EsProduct p 
-                    WHERE p.idProduct IN (:ids)
-                ";
-                $query = $this->em->createQuery($sql)
-                                    ->setParameter('ids', $productIds);
-                if($applyLimit){
-                    $query->setFirstResult($offset*$perPage)
-                        ->setMaxResults($perPage);
-                }
-                
-                $results = $query->getResult();
-
-                return $results;
-            }
+            $sql = "
+                SELECT cat_id, id_product
+                FROM 
+                    es_product
+                WHERE id_product IN (:ids)
+            ";
             
-        return array();
+            $query = $this->em->createNativeQuery($sql, $rsm);
+            $query->setParameter('ids', $productIds); 
+            $result = $query->getResult();
+
+            return $result;
+        }
+
+        return [];
     }
 
     /**
